@@ -220,7 +220,7 @@ export function IssueRow({
   // scheduler is actually running from one whose due time simply passed.
   const recoveryIndicator = issue.interruption?.responsibility === "system" && issue.interruption.state !== "resolved"
     ? <span className="text-xs text-muted-foreground" data-testid="issue-row-interruption">
-        {issue.interruption.state === "working" ? "Thinking"
+        {issue.interruption.state === "working" ? t("issueRow.thinking")
           : issue.interruption.state === "retry_scheduled" ? "Trying again soon" : "Retry available"}
       </span>
     : recoveryAction && !requiresExecutionReconciliation(recoveryAction.cause)

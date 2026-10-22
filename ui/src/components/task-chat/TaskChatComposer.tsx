@@ -312,7 +312,7 @@ function modePlaceholder(mode: IssueWorkMode, agentName: string, mobile: boolean
     case "ask":
       return `Ask ${agentName} a question — read-only, nothing runs…`;
     default:
-      return `Message ${agentName} — describe what you want done…`;
+      return t("taskChat.messageAgentnameDescribeWhatYou", { agentName });
   }
 }
 
@@ -699,9 +699,9 @@ export function TaskChatComposer({
       const url = onAttachImage
         ? attachment?.contentPath
         : await onImageUpload?.(file);
-      if (!url) throw new Error("Upload did not return a file URL");
+      if (!url) throw new Error(t("taskChat.uploadDidNotReturnA"));
       if (!attachmentsRef.current.some((item) => item.id === id))
-        throw new Error("Attachment was removed");
+        throw new Error(t("taskChat.attachmentWasRemoved"));
       setAttachments((prev) =>
         prev.map((item) =>
           item.id === id
@@ -722,7 +722,7 @@ export function TaskChatComposer({
             ? {
                 ...item,
                 status: "error",
-                error: err instanceof Error ? err.message : "Upload failed",
+                error: err instanceof Error ? err.message : t("taskChat.uploadFailed"),
               }
             : item,
         ),
@@ -755,7 +755,7 @@ export function TaskChatComposer({
       }
       const attachment = await onAttachImage(file);
       if (!attachment?.contentPath)
-        throw new Error("Upload did not return a file URL");
+        throw new Error(t("taskChat.uploadDidNotReturnA"));
       const name = attachment?.originalFilename ?? file.name;
       setAttachments((prev) =>
         prev.map((item) =>
@@ -777,7 +777,7 @@ export function TaskChatComposer({
             ? {
                 ...item,
                 status: "error",
-                error: err instanceof Error ? err.message : "Upload failed",
+                error: err instanceof Error ? err.message : t("taskChat.uploadFailed"),
               }
             : item,
         ),
@@ -896,7 +896,7 @@ export function TaskChatComposer({
       try {
         await creation.onSubmit(bodyRef.current, pendingMode, runSettings);
       } catch (error) {
-        setActionError(error instanceof Error ? error.message : "Failed to create task. Try again.");
+        setActionError(error instanceof Error ? error.message : t("taskChat.failedToCreateTaskTry"));
       } finally {
         submittingRef.current = false;
         setSubmitting(false);
@@ -971,7 +971,7 @@ export function TaskChatComposer({
         setActionError(
           error instanceof Error
             ? error.message
-            : "The goal action could not be applied.",
+            : t("taskChat.theGoalActionCouldNot"),
         );
       }
       return;
@@ -1132,7 +1132,7 @@ export function TaskChatComposer({
     if (!uncertainSubmission) return;
     setReviewError(false);
     try {
-      if (!onReviewConversation) throw new Error("Review unavailable");
+      if (!onReviewConversation) throw new Error(t("taskChat.reviewUnavailable"));
       await onReviewConversation();
       if (mountedTaskKey.current !== draftKey) return;
       const reviewed = { ...uncertainSubmission, reviewed: true };
@@ -1165,7 +1165,7 @@ export function TaskChatComposer({
       setTakeoverError(
         cause instanceof Error
           ? cause.message
-          : "This request could not be skipped.",
+          : t("taskChat.thisRequestCouldNotBe"),
       );
     });
   }
@@ -1259,7 +1259,7 @@ export function TaskChatComposer({
           className="flex h-11 min-w-0 items-center gap-2 px-2.5"
           data-testid="task-chat-composer-context"
           role="group"
-          aria-label="Task project and worktrees"
+          aria-label={t("taskChat.taskProjectAndWorktrees")}
         >
           {creation.contextBar}
         </TaskChatComposerBar>
@@ -1308,7 +1308,7 @@ export function TaskChatComposer({
             Review conversation
           </Button>
           {reviewError ? (
-            <p>Couldn’t refresh the conversation. Try reviewing it again.</p>
+            <p>{t("taskChat.couldnTRefreshTheConversation")}</p>
           ) : null}
           {uncertainSubmission.reviewed ? (
             <>
@@ -1347,7 +1347,7 @@ export function TaskChatComposer({
           {pause && conversationMode ? (
             <div className="space-y-2">
               <TaskChatPausedTakeover {...pause} hasDraft={Boolean(body.trim() || attachments.length)} />
-              <p className="text-xs text-muted-foreground">Send /new to start a fresh session and resume this conversation.</p>
+              <p className="text-xs text-muted-foreground">{t("taskChat.sendNewToStartA")}</p>
             </div>
           ) : null}
           <div data-testid="task-chat-composer-input">
@@ -1364,7 +1364,7 @@ export function TaskChatComposer({
               mentions={mentions}
               actionCommands={creation ? [] : conversationMode ? [{
                 id: "action:new", kind: "action", command: "new", name: "New session",
-                description: "Start fresh context here, preserving conversation history.", aliases: ["new"],
+                description: t("taskChat.startFreshContextHerePreserving"), aliases: ["new"],
                 disabled,
               }] : [goalCommandOption]}
               onSubmit={() => void submit()}
@@ -1428,7 +1428,7 @@ export function TaskChatComposer({
                         {attachment.status === "uploading"
                           ? "Uploading…"
                           : attachment.status === "error"
-                            ? (attachment.error ?? "Upload failed")
+                            ? (attachment.error ?? t("taskChat.uploadFailed"))
                             : [kind.label, sizeLabel]
                                 .filter(Boolean)
                                 .join(" · ")}
@@ -1522,7 +1522,7 @@ export function TaskChatComposer({
                 mobileTitle="Select assignee"
                 noneLabel="No assignee"
                 searchPlaceholder="Search assignees…"
-                emptyMessage="No matches."
+                emptyMessage={t("taskChat.noMatches")}
                 onChange={updatePendingAssignee}
                 disabled={disabled}
                 triggerTestId="task-chat-composer-assignee"

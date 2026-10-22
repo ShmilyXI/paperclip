@@ -1,9 +1,10 @@
+import { t } from "@/i18n";
 export type TaskDateGroup = "today" | "yesterday" | "earlier";
 
 export const taskDateGroupLabels: Record<TaskDateGroup, string> = {
-  today: "Today",
-  yesterday: "Yesterday",
-  earlier: "Earlier",
+  today: t("dateGroups.today"),
+  yesterday: t("dateGroups.yesterday"),
+  earlier: t("dateGroups.earlier"),
 };
 
 function localCalendarOrdinal(date: Date): number {
@@ -25,7 +26,7 @@ export function taskDateGroup(value: Date | string | number, now: Date = new Dat
 
 /**
  * Returns the label to insert before the current row. A list made entirely of
- * older work does not begin with a redundant "Earlier" heading.
+ * older work does not begin with a redundant t("dateGroups.earlier") heading.
  */
 export function taskDateGroupSeparator(
   previous: TaskDateGroup | null,
