@@ -100,7 +100,7 @@ export function webhookAgentInstructions(
   ].join("\n");
 }
 export function describeSchedule(draft: TriggerDraft) {
-  return `${draft.frequency === "daily" ? "Every day" : draft.frequency === "weekly" ? `Every ${draft.weekday}` : "Every weekday"} at ${draft.time}`;
+  return `${draft.frequency === "daily" ? t("triggers.everyDay") : draft.frequency === "weekly" ? `Every ${draft.weekday}` : "Every weekday"} at ${draft.time}`;
 }
 export function RoutineTriggerWizard({
   initialDraft,
@@ -142,7 +142,7 @@ export function RoutineTriggerWizard({
         setSaveError(
           error instanceof Error
             ? error.message
-            : "Couldn’t save. Please try again.",
+            : t("triggers.couldnTSavePleaseTry"),
         );
       } finally {
         setBusy(false);
@@ -171,14 +171,14 @@ export function RoutineTriggerWizard({
           saveAndExit();
         },
       },
-      { label: "Add trigger" },
+      { label: t("triggers.addTrigger") },
     ]);
   }, [saveAndExit, setBreadcrumbs, routineTitle, routineId]);
   const schedule = draft.kind === "schedule";
   const github = draft.sender === "github";
   const labels = schedule
-    ? ["Choose trigger", "Set schedule", "Review schedule"]
-    : ["Choose trigger", "Connect your app", "Check connection"];
+    ? ["Choose trigger", "Set schedule", t("triggers.reviewSchedule")]
+    : ["Choose trigger", "Connect your app", t("triggers.checkConnection")];
   function patch(values: Partial<TriggerDraft>) {
     setDraft((current) => ({ ...current, ...values }));
   }
@@ -203,7 +203,7 @@ export function RoutineTriggerWizard({
           ? "Set a schedule"
           : "Review your schedule"
         : draft.step === 1
-          ? `Connect ${github ? "GitHub" : "your app"}`
+          ? `Connect ${github ? t("triggers.github") : "your app"}`
           : "Check your connection";
   const subtitle =
     draft.step === 0
@@ -227,7 +227,7 @@ export function RoutineTriggerWizard({
       <SetupWizardNavigation
         takeover
         disabled={busy}
-        ariaLabel="Trigger setup progress"
+        ariaLabel={t("triggers.triggerSetupProgress")}
         labels={labels}
         step={draft.step}
         availableStep={draft.availableStep}
@@ -241,20 +241,20 @@ export function RoutineTriggerWizard({
         {!schedule && draft.step > 0 && <WebhookUrlWarning url={webhookUrl} />}
         {draft.step === 0 && (
           <fieldset className="space-y-3">
-            <legend className="sr-only">Trigger type</legend>
+            <legend className="sr-only">{t("triggers.triggerType")}</legend>
             {(
               [
                 {
                   kind: "schedule",
-                  label: "On a schedule",
-                  detail: "Every day, on weekdays, or once a week.",
+                  label: t("triggers.onASchedule"),
+                  detail: t("triggers.everyDayOnWeekdaysOr"),
                   Icon: CalendarClock,
                 },
                 {
                   kind: "webhook",
-                  label: "When another app sends a webhook",
+                  label: t("triggers.whenAnotherAppSendsA"),
                   detail:
-                    "When something happens in GitHub, another app, or a script.",
+                    t("triggers.whenSomethingHappensInGithub"),
                   Icon: Webhook,
                 },
               ] as const
@@ -298,20 +298,20 @@ export function RoutineTriggerWizard({
           <div className="space-y-5">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="repeat">Repeat</Label>
+                <Label htmlFor="repeat">{t("triggers.repeat")}</Label>
                 <select
                   id="repeat"
                   className={selectClass}
                   value={draft.frequency}
                   onChange={(event) => patch({ frequency: event.target.value })}
                 >
-                  <option value="daily">Every day</option>
+                  <option value="daily">{t("triggers.everyDay")}</option>
                   <option value="weekdays">Weekdays (Monday–Friday)</option>
-                  <option value="weekly">Every week</option>
+                  <option value="weekly">{t("triggers.everyWeek")}</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="run-time">Time</Label>
+                <Label htmlFor="run-time">{t("triggers.time")}</Label>
                 <Input
                   id="run-time"
                   type="time"
@@ -344,7 +344,7 @@ export function RoutineTriggerWizard({
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="timezone">Time zone</Label>
+              <Label htmlFor="timezone">{t("triggers.timeZone")}</Label>
               <select
                 id="timezone"
                 className={selectClass}
@@ -365,7 +365,7 @@ export function RoutineTriggerWizard({
                 ))}
               </select>
               <p className="text-xs text-muted-foreground">
-                The time follows this zone, including daylight saving changes.
+                {t("triggers.theTimeFollowsThisZone")}
               </p>
             </div>
           </div>
@@ -382,25 +382,24 @@ export function RoutineTriggerWizard({
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Each scheduled run creates a task for the routine’s assigned
-              agent. Any existing webhook triggers will continue to work.
+              {t("triggers.eachScheduledRunCreatesA")}
             </p>
           </div>
         )}
         {draft.step === 0 && draft.kind === "webhook" && (
           <fieldset className="space-y-2">
             <legend className="mb-2 text-sm font-medium">
-              What’s sending the webhook?
+              {t("triggers.whatSSendingTheWebhook")}
             </legend>
             <div className="grid gap-2 sm:grid-cols-2">
               {(
                 [
                   {
                     sender: "custom",
-                    label: "Another app or script",
+                    label: t("triggers.anotherAppOrScript"),
                     Icon: Globe,
                   },
-                  { sender: "github", label: "GitHub", Icon: GitBranch },
+                  { sender: "github", label: t("triggers.github"), Icon: GitBranch },
                 ] as const
               ).map(({ sender, label, Icon }) => (
                 <label
@@ -431,7 +430,7 @@ export function RoutineTriggerWizard({
         )}
         {draft.kind === "webhook" && draft.step === 0 && (
           <p className="text-sm text-muted-foreground">
-            Public services need a publicly reachable HTTPS webhook URL.
+            {t("triggers.publicServicesNeedAPublicly")}
           </p>
         )}
         {!schedule && draft.step === 1 && (
@@ -449,7 +448,7 @@ export function RoutineTriggerWizard({
               />
             )}
             <CopyField
-              label={github ? "Payload URL" : "Webhook URL"}
+              label={github ? "Payload URL" : t("triggers.webhookUrl")}
               value={webhookUrl}
             />
             {!github && draft.signingMode !== "bearer" && (
@@ -469,14 +468,13 @@ export function RoutineTriggerWizard({
             ) : (
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  The key is hidden after leaving setup. If you haven’t saved it
-                  in your app, generate a replacement.
+                  {t("triggers.theKeyIsHiddenAfter")}
                 </p>
                 <Button
                   variant="outline"
                   onClick={() => void perform(() => onRotateKey?.())}
                 >
-                  Generate new key
+                  {t("triggers.generateNewKey")}
                 </Button>
               </div>
             )}
@@ -487,13 +485,12 @@ export function RoutineTriggerWizard({
             <div className="space-y-1 rounded-md border border-border p-4">
               <p className="text-sm font-medium">Connection test only</p>
               <p className="text-sm text-muted-foreground">
-                Events received during setup won’t start the routine or create
-                tasks.
+                {t("triggers.eventsReceivedDuringSetupWon")}
               </p>
             </div>
             <div className="space-y-2">
               <p className="text-sm font-medium">
-                Send an event from {github ? "GitHub" : "your app"}
+                Send an event from {github ? t("triggers.github") : "your app"}
               </p>
               <p className="text-sm text-muted-foreground">
                 {github
@@ -536,14 +533,13 @@ export function RoutineTriggerWizard({
             </div>
             <details>
               <summary className="cursor-pointer text-xs text-muted-foreground">
-                Troubleshoot delivery
+                {t("triggers.troubleshootDelivery")}
               </summary>
               <div className="space-y-3 pt-3">
                 <p className="text-xs text-muted-foreground">
-                  Check that the webhook is enabled in your sending app and that
-                  its URL matches. Scripts must send POST with a JSON body.
+                  {t("triggers.checkThatTheWebhookIs")}
                 </p>
-                <CopyField label="Webhook URL" value={webhookUrl} />
+                <CopyField label={t("triggers.webhookUrl")} value={webhookUrl} />
               </div>
             </details>
           </div>
@@ -557,8 +553,7 @@ export function RoutineTriggerWizard({
         )}
         {schedule && draft.step === 2 && !routineActive && (
           <p className="text-sm text-muted-foreground">
-            The routine is paused. Enable its automatic triggers when you’re
-            ready to use this schedule.
+            {t("triggers.theRoutineIsPausedEnable")}
           </p>
         )}
         {saveError && (
@@ -575,15 +570,15 @@ export function RoutineTriggerWizard({
           ) : schedule ? (
             draft.step === 1 ? (
               <Button disabled={!draft.time} onClick={advance}>
-                Review schedule
+                {t("triggers.reviewSchedule")}
               </Button>
             ) : (
               <Button onClick={() => void perform(() => onFinish(draft))}>
-                Add schedule
+                {t("triggers.addSchedule")}
               </Button>
             )
           ) : draft.step === 1 ? (
-            <Button onClick={advance}>Check connection</Button>
+            <Button onClick={advance}>{t("triggers.checkConnection")}</Button>
           ) : (
             <Button onClick={() => void perform(() => onFinish(draft))}>
               {checkResult === "received"

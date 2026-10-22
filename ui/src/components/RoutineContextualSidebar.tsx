@@ -38,9 +38,9 @@ export type RoutineContextualNavItem = {
 
 export const ROUTINE_CONTEXTUAL_NAV_ITEMS: readonly RoutineContextualNavItem[] = [
   { view: "overview", label: t("common.overview"), icon: LayoutDashboard },
-  { view: "triggers", label: "Triggers", icon: CalendarClock },
-  { view: "variables", label: "Variables", icon: Braces },
-  { view: "delivery", label: "Delivery", icon: Send },
+  { view: "triggers", label: t("routineNav.triggers"), icon: CalendarClock },
+  { view: "variables", label: t("routineNav.variables"), icon: Braces },
+  { view: "delivery", label: t("routineNav.delivery"), icon: Send },
   { view: "secrets", label: t("common.secrets"), icon: KeyRound },
 ];
 
@@ -88,7 +88,7 @@ export function RoutineContextualSidebar({
       showHeader={false}
       className="border-r border-border bg-background"
     >
-      <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-2" aria-label="Routine navigation">
+      <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-2" aria-label={t("routineNav.routineNavigation")}>
         <div className="flex flex-col gap-0.5">
           {ROUTINE_CONTEXTUAL_NAV_ITEMS.map((item) => (
             <SidebarNavItem
@@ -102,7 +102,7 @@ export function RoutineContextualSidebar({
         </div>
 
         <p className="px-4 pb-1 pt-5 text-(length:--text-nano) font-mono font-medium uppercase tracking-widest text-muted-foreground/60">
-          Operate
+          {t("routineNav.operate")}
         </p>
         <div className="flex flex-col gap-0.5">
           <SidebarNavItem

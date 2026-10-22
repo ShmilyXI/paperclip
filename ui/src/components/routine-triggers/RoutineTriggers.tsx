@@ -45,7 +45,7 @@ function saveDraft(key: string, draft: TriggerDraft) {
     sessionStorage.setItem(key, JSON.stringify(draft));
   } catch {
     throw new Error(
-      "Couldn’t save your draft in this browser. Keep this page open and try again.",
+      t("triggers.couldnTSaveYourDraft"),
     );
   }
 }
@@ -92,7 +92,7 @@ export function RoutineTriggers() {
       setError(
         cause instanceof Error
           ? cause.message
-          : "Couldn’t save the trigger. Please try again.",
+          : t("triggers.couldnTSaveTheTrigger"),
       );
     } finally {
       setBusy(false);
@@ -107,7 +107,7 @@ export function RoutineTriggers() {
         <p role="alert">
           This trigger is no longer available.{" "}
           <Button variant="link" onClick={closeSetup}>
-            Back to triggers
+            {t("triggers.backToTriggers")}
           </Button>
         </p>
       );
@@ -116,7 +116,7 @@ export function RoutineTriggers() {
         <p>
           This trigger is ready.{" "}
           <Button variant="link" onClick={closeSetup}>
-            Back to triggers
+            {t("triggers.backToTriggers")}
           </Button>
         </p>
       );
@@ -124,7 +124,7 @@ export function RoutineTriggers() {
       <div className="space-y-4">
         {statusError && (
           <p role="alert" className="text-sm text-destructive">
-            Connection status is unavailable. Retrying…
+            {t("triggers.connectionStatusIsUnavailableRetrying")}
           </p>
         )}
         <TriggerSetup
@@ -148,12 +148,12 @@ export function RoutineTriggers() {
         </p>
         <Button size="sm" onClick={() => startSetup("new")}>
           <Plus className="mr-1.5 h-3.5 w-3.5" />
-          Add trigger
+          {t("triggers.addTrigger")}
         </Button>
       </div>
       {(error || statusError) && (
         <p role="alert" className="text-sm text-destructive">
-          {error || "Connection status is unavailable. Retrying…"}
+          {error || t("triggers.connectionStatusIsUnavailableRetrying")}
         </p>
       )}
       {removed.map((trigger) => (
@@ -194,8 +194,8 @@ export function RoutineTriggers() {
           <p className="text-sm font-medium">{ctx.secretMessage.title}</p>
           {ctx.secretMessage.entries.map((entry) => (
             <div key={entry.webhookUrl} className="space-y-3">
-              <CopyField label="Webhook URL" value={entry.webhookUrl} />
-              <CopyField label="Secret key" value={entry.webhookSecret} />
+              <CopyField label={t("triggers.webhookUrl")} value={entry.webhookUrl} />
+              <CopyField label={t("triggers.secretKey")} value={entry.webhookSecret} />
             </div>
           ))}
           <Button variant="outline" onClick={() => ctx.setSecretMessage(null)}>
@@ -205,7 +205,7 @@ export function RoutineTriggers() {
       )}
       {routine.triggers.length === 0 && (
         <p className="py-6 text-sm text-muted-foreground">
-          Run this routine on a schedule or when another app sends a webhook.
+          {t("triggers.runThisRoutineOnA")}
         </p>
       )}
       <fieldset disabled={busy} className="min-w-0 space-y-3">
@@ -252,7 +252,7 @@ export function RoutineTriggers() {
                           : "Ready · Waiting for an event"
             }
             expanded={expanded === trigger.id}
-            editLabel={trigger.setupPending ? "Resume setup" : undefined}
+            editLabel={trigger.setupPending ? t("triggers.resumeSetup") : undefined}
             onEdit={() =>
               trigger.setupPending
                 ? startSetup(trigger.id)
@@ -267,7 +267,7 @@ export function RoutineTriggers() {
           >
             {trigger.setupPending ? (
               <Button onClick={() => startSetup(trigger.id)}>
-                Resume setup
+                {t("triggers.resumeSetup")}
               </Button>
             ) : trigger.kind === "schedule" ? (
               <ScheduleSettings
@@ -281,7 +281,7 @@ export function RoutineTriggers() {
               />
             ) : trigger.kind === "api" ? (
               <p className="text-sm text-muted-foreground">
-                This trigger starts the routine through the API.
+                {t("triggers.thisTriggerStartsTheRoutine")}
               </p>
             ) : (
               <WebhookSettings
@@ -398,7 +398,7 @@ function TriggerSetup({
         });
       else {
         if (!createdRef.current)
-          throw new Error("Create the webhook before finishing setup.");
+          throw new Error(t("triggers.createTheWebhookBeforeFinishing"));
         await routinesApi.updateTrigger(createdRef.current.id, {
           setupPending: false,
         });
@@ -464,7 +464,7 @@ function ScheduleSettings({
         onValidityChange={setValid}
       />
       <Label>
-        Time zone
+        {t("triggers.timeZone")}
         <Input
           value={timezone}
           onChange={(event) => setTimezone(event.target.value)}
@@ -487,14 +487,14 @@ function ScheduleSettings({
               setError(
                 cause instanceof Error
                   ? cause.message
-                  : "Couldn’t save schedule.",
+                  : t("triggers.couldnTSaveSchedule"),
               );
             } finally {
               setBusy(false);
             }
           }}
         >
-          Save schedule
+          {t("triggers.saveSchedule")}
         </Button>
         <Button variant="outline" onClick={onCancel}>
           {t("common.cancel")}
@@ -537,7 +537,7 @@ function WebhookSettings({
           )}
         />
       )}
-      <CopyField label="Webhook URL" value={trigger.webhookUrl ?? ""} />
+      <CopyField label={t("triggers.webhookUrl")} value={trigger.webhookUrl ?? ""} />
       {trigger.signingMode !== "none" && (
         <div className="space-y-2">
           {secret ? (
@@ -545,7 +545,7 @@ function WebhookSettings({
               label={
                 trigger.signingMode === "bearer"
                   ? "Authorization header value"
-                  : "Secret key"
+                  : t("triggers.secretKey")
               }
               value={
                 trigger.signingMode === "bearer" ? `Bearer ${secret}` : secret
@@ -553,22 +553,22 @@ function WebhookSettings({
             />
           ) : (
             <p className="text-sm text-muted-foreground">
-              The secret key is hidden.
+              {t("triggers.theSecretKeyIsHidden")}
             </p>
           )}
           <Button variant="outline" size="sm" onClick={() => setReplace(true)}>
-            Replace key
+            {t("triggers.replaceKey")}
           </Button>
           {secret && (
             <Button variant="ghost" size="sm" onClick={() => setSecret("")}>
-              Hide key
+              {t("triggers.hideKey")}
             </Button>
           )}
         </div>
       )}
       {trigger.signingMode === "none" && (
         <p className="text-sm text-muted-foreground">
-          This webhook uses its URL as the shared secret.
+          {t("triggers.thisWebhookUsesItsUrl")}
         </p>
       )}
       {trigger.signingMode === "hmac_sha256" && (
@@ -584,15 +584,14 @@ function WebhookSettings({
           setCheckBaseline(trigger.lastWebhookDelivery?.receivedAt ?? "")
         }
       >
-        Check connection
+        {t("triggers.checkConnection")}
       </Button>
       <Dialog open={replace} onOpenChange={setReplace}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Replace the webhook key?</DialogTitle>
+            <DialogTitle>{t("triggers.replaceTheWebhookKey")}</DialogTitle>
             <DialogDescription>
-              The old key will stop working. Update your sending app with the
-              new key.
+              {t("triggers.theOldKeyWillStop")}
             </DialogDescription>
           </DialogHeader>
           {error && (
@@ -616,14 +615,14 @@ function WebhookSettings({
                 setError(
                   cause instanceof Error
                     ? cause.message
-                    : "Couldn’t replace the key.",
+                    : t("triggers.couldnTReplaceTheKey"),
                 );
               } finally {
                 setBusy(false);
               }
             }}
           >
-            Replace key
+            {t("triggers.replaceKey")}
           </Button>
         </DialogContent>
       </Dialog>
@@ -635,10 +634,9 @@ function WebhookSettings({
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Check connection</DialogTitle>
+            <DialogTitle>{t("triggers.checkConnection")}</DialogTitle>
             <DialogDescription>
-              This webhook is already enabled. Events sent now can start the
-              routine. Send an event from your app to check delivery.
+              {t("triggers.thisWebhookIsAlreadyEnabled")}
             </DialogDescription>
           </DialogHeader>
           <p role="status" className="text-sm">

@@ -44,14 +44,14 @@ const NAV_GROUPS: NavGroup[] = [
     label: t("common.routine"),
     items: [
       { key: "overview", label: t("common.overview"), icon: Circle },
-      { key: "triggers", label: "Triggers", icon: Clock3 },
-      { key: "variables", label: "Variables", icon: LayoutGrid },
+      { key: "triggers", label: t("routineNav.triggers"), icon: Clock3 },
+      { key: "variables", label: t("routineNav.variables"), icon: LayoutGrid },
       { key: "secrets", label: t("common.secrets"), icon: KeyRound },
-      { key: "delivery", label: "Delivery", icon: Send },
+      { key: "delivery", label: t("routineNav.delivery"), icon: Send },
     ],
   },
   {
-    label: "Operate",
+    label: t("routineNav.operate"),
     items: [
       { key: "runs", label: t("common.runs"), icon: Play },
       { key: "activity", label: t("common.activity"), icon: ActivityIcon },
@@ -110,7 +110,7 @@ export function RoutineSubSidebar({
 
   return (
     <nav
-      aria-label="Routine sections"
+      aria-label={t("routineNav.routineSections")}
       className="hidden h-full w-52 shrink-0 flex-col gap-4 overflow-y-auto border-r border-border bg-background px-3 py-4 md:flex"
     >
       {NAV_GROUPS.map((group) => (
@@ -186,7 +186,7 @@ export function RoutineSectionPicker({
           }
         }}
       >
-        <SelectTrigger className="h-11 w-full" aria-label="Routine section">
+        <SelectTrigger className="h-11 w-full" aria-label={t("routineNav.routineSection")}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

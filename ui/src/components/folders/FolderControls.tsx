@@ -121,7 +121,7 @@ function selectionLabel({
   allLabel: string;
 }) {
   if (selection === "all") return allLabel;
-  if (selection === "unfiled") return "Unfiled";
+  if (selection === "unfiled") return t("folders.unfiled");
   return folders.find((folder) => folder.id === selection)?.name ?? allLabel;
 }
 
@@ -226,7 +226,7 @@ export function FolderRail({
     <nav aria-label={`${itemLabelPlural} folders`} className="hidden w-(--sz-folder-rail) shrink-0 border-r border-border pr-3 md:block">
       <div className="mb-2 flex items-center justify-between gap-2">
         <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">{t("common.folders")}</div>
-        <Button variant="ghost" size="icon-sm" title="New folder" onClick={onCreate}>
+        <Button variant="ghost" size="icon-sm" title={t("folders.newFolder")} onClick={onCreate}>
           <Plus className="h-3.5 w-3.5" />
         </Button>
       </div>
@@ -258,7 +258,7 @@ export function FolderRail({
           <div className="px-2 pb-1 pt-3 text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
             {t("common.system")}
           </div>
-          {renderVirtualRow("unfiled", "Unfiled", result?.unfiledCount ?? 0, <FolderSwatch color={null} className="mt-0.5" />)}
+          {renderVirtualRow("unfiled", t("folders.unfiled"), result?.unfiledCount ?? 0, <FolderSwatch color={null} className="mt-0.5" />)}
         </div>
       )}
     </nav>
@@ -342,7 +342,7 @@ export function FolderRailItem({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={onStartRename}>{t("common.rename")}</DropdownMenuItem>
-          <DropdownMenuItem onSelect={onEdit}>Edit color</DropdownMenuItem>
+          <DropdownMenuItem onSelect={onEdit}>{t("folders.editColor")}</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onSelect={onDelete}>
             <Trash2 className="h-3.5 w-3.5" />
@@ -393,9 +393,9 @@ export function AllUnfiledBanner({
         Group these {itemLabelPlural} into folders to keep things tidy.
       </span>
       <Button size="sm" variant="outline" onClick={onCreateFolder}>
-        Create your first folder
+        {t("folders.createYourFirstFolder")}
       </Button>
-      <Button size="icon-sm" variant="ghost" aria-label="Dismiss folder suggestion" onClick={dismiss}>
+      <Button size="icon-sm" variant="ghost" aria-label={t("folders.dismissFolderSuggestion")} onClick={dismiss}>
         <X className="h-3.5 w-3.5" />
       </Button>
     </div>
@@ -478,7 +478,7 @@ export function MobileFolderSheet({
           )}
           <MobileFolderRow
             id="unfiled"
-            label="Unfiled"
+            label={t("folders.unfiled")}
             count={result?.unfiledCount ?? 0}
             selected={selection === "unfiled"}
             onSelect={select}
@@ -487,7 +487,7 @@ export function MobileFolderSheet({
         <div className="border-t border-border px-4 pt-3">
           <Button size="sm" variant="outline" className="w-full" onClick={onCreate}>
             <Plus className="mr-2 h-3.5 w-3.5" />
-            New folder
+            {t("folders.newFolder")}
           </Button>
         </div>
       </SheetContent>
@@ -539,7 +539,7 @@ export function MoveToMenu({
 }) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger>Move to...</DropdownMenuSubTrigger>
+      <DropdownMenuSubTrigger>{t("folders.moveTo")}</DropdownMenuSubTrigger>
       <DropdownMenuSubContent className="w-56">
         <MoveToMenuItems
           folders={folders}
@@ -578,7 +578,7 @@ function MoveToMenuItems({
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => event.stopPropagation()}
-            placeholder="Search folders"
+            placeholder={t("folders.searchFolders")}
             className="h-7 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
         </div>
@@ -596,12 +596,12 @@ function MoveToMenuItems({
           </DropdownMenuItem>
         ))}
         {visibleFolders.length === 0 ? (
-          <div className="px-2 py-2 text-xs text-muted-foreground">No folders match.</div>
+          <div className="px-2 py-2 text-xs text-muted-foreground">{t("folders.noFoldersMatch")}</div>
         ) : null}
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={onCreateAndMove}>
           <Plus className="h-3.5 w-3.5" />
-          New folder...
+          {t("folders.newFolder2")}
         </DropdownMenuItem>
     </>
   );
@@ -715,7 +715,7 @@ export function DeleteFolderDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete folder</AlertDialogTitle>
+          <AlertDialogTitle>{t("folders.deleteFolder")}</AlertDialogTitle>
           <AlertDialogDescription>
             The {folder?.itemCount ?? 0} {itemLabelPlural} in this folder won't be deleted. They'll move to Unfiled.
           </AlertDialogDescription>
@@ -730,7 +730,7 @@ export function DeleteFolderDialog({
               onConfirm();
             }}
           >
-            {pending ? t("common.deleting") : "Delete folder"}
+            {pending ? t("common.deleting") : t("folders.deleteFolder")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -759,7 +759,7 @@ export function BulkBar({
       <span className="mr-auto text-sm text-muted-foreground">{selectedCount} selected</span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="outline">Move to...</Button>
+          <Button size="sm" variant="outline">{t("folders.moveTo")}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <MoveToMenuItems
@@ -770,7 +770,7 @@ export function BulkBar({
           />
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button size="sm" variant="ghost" onClick={onClear}>Deselect all</Button>
+      <Button size="sm" variant="ghost" onClick={onClear}>{t("folders.deselectAll")}</Button>
       <Button size="sm" onClick={onDone}>{t("common.done")}</Button>
     </div>
   );

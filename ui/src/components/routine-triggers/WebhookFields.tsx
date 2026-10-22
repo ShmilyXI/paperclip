@@ -50,7 +50,7 @@ export function CopyField({
       {error && (
         <div className="space-y-2">
           <p role="alert" className="text-xs text-destructive">
-            Copy failed. Select and copy the text below.
+            {t("triggers.copyFailedSelectAndCopy")}
           </p>
           <textarea
             readOnly
@@ -68,21 +68,20 @@ export function CopyField({
 export function AgentInstructions({ value }: { value: string }) {
   return (
     <section
-      aria-label="Agent instructions"
+      aria-label={t("triggers.agentInstructions")}
       className="space-y-3 rounded-md bg-muted/40 p-4"
     >
       <div className="space-y-1">
-        <h2 className="text-sm font-medium">Agent instructions</h2>
+        <h2 className="text-sm font-medium">{t("triggers.agentInstructions")}</h2>
         <p className="text-sm text-muted-foreground">
-          Give your agent everything it needs to connect this webhook: the URL,
-          authentication key, and step-by-step instructions.
+          {t("triggers.giveYourAgentEverythingIt")}
         </p>
       </div>
       <AgentSetupPrompt
         prompt={value}
-        label="Copy for your agent"
-        title="Webhook setup"
-        description="Paste this into your agent to connect this webhook to your routine."
+        label={t("triggers.copyForYourAgent")}
+        title={t("triggers.webhookSetup")}
+        description={t("triggers.pasteThisIntoYourAgent")}
       />
     </section>
   );
