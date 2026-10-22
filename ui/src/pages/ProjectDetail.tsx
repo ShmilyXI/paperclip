@@ -111,7 +111,7 @@ function ProjectTilePicker({
         <button
           type="button"
           className="shrink-0 rounded-lg cursor-pointer hover:ring-2 hover:ring-foreground/20 transition-(--tp-box-shadow)"
-          aria-label="Change project icon and color"
+          aria-label={t("projectDetail.changeProjectIconAndColor")}
         >
           <ProjectTile color={color} icon={icon} size="md" />
         </button>
@@ -120,7 +120,7 @@ function ProjectTilePicker({
         {/* Icon search + grid */}
         <p className="text-xs font-medium text-muted-foreground mb-2">{t("common.icon")}</p>
         <Input
-          placeholder="Search icons..."
+          placeholder={t("projectDetail.searchIcons")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="mb-2 h-8 text-sm"
@@ -142,7 +142,7 @@ function ProjectTilePicker({
             </button>
           ))}
           {filteredIcons.length === 0 && (
-            <p className="col-span-7 text-xs text-muted-foreground text-center py-2">No icons match</p>
+            <p className="col-span-7 text-xs text-muted-foreground text-center py-2">{t("projectDetail.noIconsMatch")}</p>
           )}
         </div>
 
@@ -159,8 +159,8 @@ function ProjectTilePicker({
                   ? "ring-2 ring-foreground ring-offset-1 ring-offset-background rounded-md"
                   : ""
               }`}
-              aria-label="Reset to neutral gray"
-              title="Neutral (default)"
+              aria-label={t("projectDetail.resetToNeutralGray")}
+              title={t("projectDetail.neutralDefault")}
             >
               <ProjectTile color={null} size="sm" />
             </button>
@@ -470,10 +470,10 @@ export function ProjectDetail() {
       invalidateProject();
       const name = updatedProject?.name ?? project?.name ?? t("common.project");
       if (archived) {
-        pushToast({ title: `"${name}" has been archived`, tone: "success" });
+        pushToast({ title: t("projectDetail.nameHasBeenArchived", { name }), tone: "success" });
         navigate("/dashboard");
       } else {
-        pushToast({ title: `"${name}" has been unarchived`, tone: "success" });
+        pushToast({ title: t("projectDetail.nameHasBeenUnarchived", { name }), tone: "success" });
       }
     },
     onError: (_, archived) => {
@@ -486,7 +486,7 @@ export function ProjectDetail() {
 
   const uploadImage = useMutation({
     mutationFn: async (file: File) => {
-      if (!resolvedCompanyId) throw new Error("No organization selected");
+      if (!resolvedCompanyId) throw new Error(t("projectDetail.noOrganizationSelected"));
       return assetsApi.uploadImage(resolvedCompanyId, file, `projects/${projectLookupRef || "draft"}`);
     },
   });
@@ -753,7 +753,7 @@ export function ProjectDetail() {
           <button
             type="button"
             className="h-6 w-6 shrink-0 text-yellow-900/70 hover:text-yellow-900 dark:text-yellow-100/70 dark:hover:text-yellow-100"
-            aria-label="Dismiss project membership notice"
+            aria-label={t("projectDetail.dismissProjectMembershipNotice")}
             onClick={() => setDismissedLeftProjectIds((current) => new Set(current).add(project.id))}
           >
             ×
@@ -809,8 +809,8 @@ export function ProjectDetail() {
         companyId={resolvedCompanyId}
         scopeKind="project"
         scopeId={project.id}
-        title="Project summary"
-        description="Summarizer keeps the latest project status, next step, and operator-needed items here."
+        title={t("projectDetail.projectSummary")}
+        description={t("projectDetail.summarizerKeepsTheLatestProject")}
       />
 
       <PluginSlotOutlet
@@ -849,7 +849,7 @@ export function ProjectDetail() {
           items={[
             { value: "list", label: t("common.tasks") },
 
-            ...(project.managedByPlugin ? [{ value: "plugin-operations", label: "Plugin operations" }] : []),
+            ...(project.managedByPlugin ? [{ value: "plugin-operations", label: t("projectDetail.pluginOperations") }] : []),
             ...(showWorkspacesTab ? [{ value: "workspaces", label: t("common.workspaces") }] : []),
             { value: "configuration", label: t("common.configuration") },
             { value: "budget", label: t("common.budget") },
@@ -891,7 +891,7 @@ export function ProjectDetail() {
             />
           )
         ) : (
-          <p className="text-sm text-muted-foreground">Loading workspaces...</p>
+          <p className="text-sm text-muted-foreground">{t("projectDetail.loadingWorkspaces")}</p>
         )
       ) : null}
 
