@@ -9,7 +9,7 @@ import { CTA_LABEL_IN, CTA_WIDTH } from "./onboarding-motion";
 export type FooterPrimaryIcon = "arrow" | "spinner" | "none";
 
 /**
- * Shared footer for the arc's step cards: a ghost pill t("common.back") and a primary
+ * Shared footer for the arc's step cards: a ghost pill "Back" and a primary
  * pill CTA that shows a spinner and a loading label while its action runs.
  *
  * `onBack` is optional — a run that entered on this step has nowhere behind it
@@ -17,7 +17,7 @@ export type FooterPrimaryIcon = "arrow" | "spinner" | "none";
  * boundary.
  *
  * The primary button animates between labels rather than swapping them. The
- * connect step walks it through four (t("common.next") → "Sign in to Claude" → "Waiting
+ * connect step walks it through four ("Next" → "Sign in to Claude" → "Waiting
  * for code" → "Connecting"), which are very different widths, and a control
  * that changes size instantly reads as a different control appearing. See
  * `CTA_WIDTH` and `CTA_LABEL_*` for why the two halves are timed apart.

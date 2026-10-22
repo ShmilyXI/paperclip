@@ -107,14 +107,14 @@ export function ConnectModelPreview({
         <div className="pt-6">
           <OnboardingHeading
             center
-            title="Connect a model"
+            title={t("onboarding.connectAModel")}
             lede="Paperclip works with your existing subscription or API keys."
           />
         </div>
 
         <div className="space-y-2 pt-12">
           <ModelSourceTiles
-            label="Model source"
+            label={t("onboarding.modelSource")}
             sources={MODEL_SOURCES}
             mode={mode}
             selectedId={selectedId}
@@ -134,7 +134,7 @@ export function ConnectModelPreview({
                 onCheckedChange={(checked) => setUseApiKeys(checked === true)}
               />
               <span className="text-sm font-medium text-foreground">
-                Use API keys instead
+                {t("onboarding.useApiKeysInstead")}
               </span>
             </label>
           )}
