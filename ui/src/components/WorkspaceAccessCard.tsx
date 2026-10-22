@@ -10,7 +10,7 @@ import type { WorkspaceAccessState } from "../lib/workspace-access-state";
  *
  * One card per workspace that names the state, the cause, and the single safe
  * next action. It replaces the previous behavior where a cloned workspace whose
- * database was missing still rendered a plain t("common.open") link and answered with
+ * database was missing still rendered a plain "Open" link and answered with
  * "invalid email or password".
  */
 

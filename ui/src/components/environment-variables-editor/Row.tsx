@@ -117,7 +117,7 @@ export function EnvironmentVariableRow({
     onFocusConsumed();
   }, [focusRequest, onFocusConsumed, row.source]);
 
-  // Auto-expire the 5s t("common.undo") affordance after a Secret→Text switch (§6.3).
+  // Auto-expire the 5s "Undo" affordance after a Secret→Text switch (§6.3).
   useEffect(() => {
     if (!undoPrev) return;
     const handle = window.setTimeout(() => setUndoPrev(null), 5000);

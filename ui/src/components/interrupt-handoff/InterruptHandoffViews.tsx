@@ -87,7 +87,7 @@ export function AssigneeChip({
   );
 }
 
-/** The t("common.wake") sub-row that makes each handoff state self-describing: a queued
+/** The "Wake" sub-row that makes each handoff state self-describing: a queued
  * agent wake, a board-user handoff with no wake, or no agent selected. */
 export function HandoffWakeRow({
   to,

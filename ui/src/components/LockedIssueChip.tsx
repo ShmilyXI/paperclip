@@ -31,7 +31,7 @@ export function LockedIssueChip({
   unavailable?: boolean;
 }) {
   // Identifier is the only viewer-safe field on the stub. When the server
-  // withheld even that, fall back to a neutral t("common.private") label so the chip
+  // withheld even that, fall back to a neutral "Private" label so the chip
   // still reads as a locked reference rather than an empty box.
   const label = identifier ?? (unavailable ? "Unavailable" : t("common.private"));
   const Icon = unavailable ? CircleHelp : Lock;

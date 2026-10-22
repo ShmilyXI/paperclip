@@ -318,7 +318,7 @@ export function Dashboard() {
   }
 
   // Same rule as the auto-offer above: a list still being refreshed may be the
-  // empty one cached before the first hire, and the banner's t("dashboard.createOneHere")
+  // empty one cached before the first hire, and the banner's "Create one here"
   // opens the same agent step the offer does.
   const hasNoAgents = agents !== undefined && !agentsRefreshing && agents.length === 0;
   const pausedBanner = derivePausedAgentBanner(agents);

@@ -554,7 +554,7 @@ const dispositionToneClass: Record<string, string> = {
 };
 
 /**
- * t("routineSections.next5Fires") preview (§3.5) — the strongest "what does this policy mean?"
+ * "Next 5 fires" preview (§3.5) — the strongest "what does this policy mean?"
  * surface. Picks the soonest-firing schedule trigger, computes its next fires
  * client-side, and annotates each with how the chosen concurrency policy would
  * treat it.

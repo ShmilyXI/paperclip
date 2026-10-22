@@ -24,7 +24,7 @@ interface DecisionDateChipsProps {
  * Date-range chips (PAP-16032 §4.2 / wireframe screen 1, annotation 2). Filter
  * the desk on activity date; the resolved bounds go to the server
  * (`activitySince`/`activityUntil`) so the page never ships the whole feed to
- * filter on the client. t("common.custom") opens a from/to range picker.
+ * filter on the client. "Custom" opens a from/to range picker.
  */
 export function DecisionDateChips({ value, custom, onChange }: DecisionDateChipsProps) {
   const [open, setOpen] = useState(false);

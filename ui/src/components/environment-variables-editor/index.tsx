@@ -38,7 +38,7 @@ const DEFAULT_HINT =
 // Canonical entries for dirty comparison. Must mirror the emit semantics of
 // valueFromRows (trimmed names, incomplete refs dropped, last-writer-wins on
 // trimmed duplicates) — otherwise a saved value that round-trips lossily shows
-// a phantom t("common.unsavedChanges") banner the moment the form opens.
+// a phantom "Unsaved changes" banner the moment the form opens.
 function normalizedEnvEntries(
   value: Record<string, EnvBinding> | null | undefined,
 ): Array<[string, Record<string, unknown>]> {

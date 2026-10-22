@@ -1120,7 +1120,7 @@ export function DiscoveryGrid({
   onOpenMobileFolders?: () => void;
   /** Create a folder under `parentId` (null = top level), used by the tree rail. */
   onCreateFolderIn?: (parentId: string | null) => void;
-  /** Provision the caller's personal t("skills.mySkills") root on demand. */
+  /** Provision the caller's personal "My Skills" root on demand. */
   onEnsureMyFolder?: () => void;
   /** Open the rich move-to-folder dialog for a single card. */
   onOpenMoveCard?: (card: DiscoveryCard) => void;
@@ -2843,7 +2843,7 @@ export function SkillDetailPage({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSharingScope, setSettingsSharingScope] = useState<Exclude<CompanySkillSharingScope, "public_link">>("company");
   const [settingsCategoryDraft, setSettingsCategoryDraft] = useState("");
-  // Top-level description is clamped to four lines; t("common.viewAll") expands it. We
+  // Top-level description is clamped to four lines; "View all" expands it. We
   // only surface the toggle when the text actually overflows the clamp.
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
   const [descExpanded, setDescExpanded] = useState(false);
@@ -4807,7 +4807,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     }
   }
 
-  // Provision the signed-in user's personal t("skills.mySkills") root, then select it.
+  // Provision the signed-in user's personal "My Skills" root, then select it.
   const ensureMyFolder = useMutation({
     mutationFn: () => foldersApi.ensureMy(selectedCompanyId!),
     onSuccess: async (folder) => {
@@ -5100,7 +5100,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     }
   }
 
-  // t("skills.backToStore") returns to the discovery grid while keeping the tab /
+  // "Back to store" returns to the discovery grid while keeping the tab /
   // category / source filters the user arrived with (PAP-10907).
   const backToStoreParams = new URLSearchParams(searchParams);
   backToStoreParams.delete("catalog");

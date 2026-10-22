@@ -823,7 +823,7 @@ export interface InboxSurfaceProps {
   tab?: InboxTab;
   /** Replaces the inbox tab bar in the toolbar's context slot. */
   toolbarContext?: ReactNode;
-  /** Breadcrumb and back-link label; t("common.inbox") when standalone, t("common.tasks") when hosted. */
+  /** Breadcrumb and back-link label; "Inbox" when standalone, "Tasks" when hosted. */
   surfaceLabel?: string;
 }
 

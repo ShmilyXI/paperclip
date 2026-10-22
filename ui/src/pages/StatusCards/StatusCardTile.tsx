@@ -65,7 +65,7 @@ export function StatusCardTile({
   const presentation = STATUS_CARD_LIFECYCLE_PRESENTATION[lifecycle];
   // A setup run is actually in flight when the card is compiling AND has a
   // generation task. When it's null the first run stalled/died and the card
-  // needs a manual re-kick — the only case where t("common.runNow") is offered.
+  // needs a manual re-kick — the only case where "Run now" is offered.
   const setupRunning = lifecycle === "compiling" && Boolean(card.generatingIssueId);
 
   // Stream the in-flight update into the delta banner (reuses the Summarizer
@@ -160,7 +160,7 @@ export function StatusCardTile({
             <p className="mt-1 line-clamp-2 text-muted-foreground">“{card.interestPrompt}”</p>
             {setupRunning ? (
               // The setup run is live — link to the task instead of offering
-              // t("common.runNow"), which would kick a duplicate run and race it.
+              // "Run now", which would kick a duplicate run and race it.
               <Link
                 to={`/issues/${card.generatingIssueId}`}
                 onClick={(event) => event.stopPropagation()}

@@ -379,7 +379,7 @@ export function DraftNumberInput({
 }
 
 /**
- * t("common.choose") button that opens a dialog explaining the user must manually
+ * "Choose" button that opens a dialog explaining the user must manually
  * type the path due to browser security limitations.
  */
 export function ChoosePathButton() {

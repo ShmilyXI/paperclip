@@ -89,7 +89,7 @@ export function StatusCardSettingsForm({
   const { refreshPolicy: policy } = value;
   // Change triggers, active-hours, and the daily token cap only govern
   // *automatic* updates. In Manual mode none of them apply, so the whole
-  // t("common.advanced") group is hidden rather than shown-but-dimmed.
+  // "Advanced" group is hidden rather than shown-but-dimmed.
   const autoUpdating = policy.mode !== "manual";
   const costEstimate = estimateStatusCardCost(policy);
 

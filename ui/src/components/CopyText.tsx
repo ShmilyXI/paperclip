@@ -11,7 +11,7 @@ interface CopyTextProps {
   className?: string;
   ariaLabel?: string;
   title?: string;
-  /** Tooltip message shown after copying. Default: t("common.copied2") */
+  /** Tooltip message shown after copying. Default: "Copied!" */
   copiedLabel?: string;
 }
 

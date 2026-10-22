@@ -18,13 +18,13 @@ import {
  * Which shell a login panel draws itself in.
  *
  * `panel` is the settings-side chrome the login panels have always had: a
- * titled card with its own t("common.signIn") button, sitting under an environment test
+ * titled card with its own "Sign in" button, sitting under an environment test
  * in the agent configuration form. It stays the default, because two surfaces
  * (the agent form and the new-agent page) render the panel that way and neither
  * is being redesigned here.
  *
  * `onboarding` is the connect step's card. The difference is not skin-deep: the
- * step's own footer button starts the login, so the panel has no t("common.signIn")
+ * step's own footer button starts the login, so the panel has no "Sign in"
  * control of its own, and success is not something the card reports — the step
  * moves on. What is left is the part the customer acts on, which is the
  * instruction, the link, and the code.
@@ -213,7 +213,7 @@ function LoginCardCopyButton({
  *
  * The claim is made only when the write actually succeeded. A clipboard write
  * needs transient user activation, and this one happens a beat after the press
- * that started the sign-in, so a browser may well refuse it; t("common.copied2") over an
+ * that started the sign-in, so a browser may well refuse it; "Copied!" over an
  * empty clipboard would send someone to paste nothing. The button beside it is
  * the path that always works, and is why the failure is quiet rather than an
  * error.
@@ -240,7 +240,7 @@ export function OnboardingLoginCodeRow({
     // An empty code is not a code. The row renders before the server's one-time
     // prompt has a value on some paths, and the previous version latched on
     // that first run — so the copy that mattered never ran, and the card said
-    // t("common.copied2") over an empty clipboard.
+    // "Copied!" over an empty clipboard.
     if (!autoCopy || autoCopiedRef.current || !code) return;
 
     let cancelled = false;

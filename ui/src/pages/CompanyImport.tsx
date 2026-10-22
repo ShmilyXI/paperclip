@@ -365,7 +365,7 @@ function deriveSourcePrefix(
   return null;
 }
 
-/** Generate a prefix-based rename: e.g. "gstack" + t("common.ceo") → "gstack-CEO" */
+/** Generate a prefix-based rename: e.g. "gstack" + "CEO" → "gstack-CEO" */
 function prefixedName(prefix: string | null, originalName: string): string {
   if (!prefix) return originalName;
   return `${prefix}-${originalName}`;

@@ -2102,7 +2102,7 @@ function RequestSecretProposalCard({
  * The single approval grammar shared by every plan / task-approval card
  * (PAP-418): **Approve · Revise… · Reject**. "Revise…" reveals an attached text
  * field for the changes you want (the former "decline with a reason" path);
- * bare t("common.reject") sends the work back with no note. These are the default words —
+ * bare "Reject" sends the work back with no note. These are the default words —
  * producers may still override the accept/reject labels for domain-specific
  * confirmations (e.g. "Delete selected"), but the shape stays consistent.
  */
@@ -2363,7 +2363,7 @@ function connectionAuthorizationStatusClasses(
  *
  * This is deliberately *not* the generic Approve / Revise… / Reject grammar it
  * used to fall through to. Authorization is not a review: there is nothing to
- * revise, t("common.reject") is the wrong word for declining to link your own account,
+ * revise, "Reject" is the wrong word for declining to link your own account,
  * and only one person in the company can answer at all. So the card composes
  * one title, one body, and exactly the affordances the reader legitimately has:
  *

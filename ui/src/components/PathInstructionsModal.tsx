@@ -121,7 +121,7 @@ export function PathInstructionsModal({
 }
 
 /**
- * Small t("common.choose") button that opens the PathInstructionsModal.
+ * Small "Choose" button that opens the PathInstructionsModal.
  * Drop-in replacement for the old showDirectoryPicker buttons.
  */
 export function ChoosePathButton({ className }: { className?: string }) {

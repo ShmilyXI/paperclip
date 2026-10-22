@@ -309,7 +309,7 @@ export function TaskChatStatusPill({
         ? null
         : statusLabelIcon(item.label);
     // Whimsy fills gaps, never replaces signal: only the generic
-    // t("common.running")/"Working" labels — and the interstitial-streaming state, whose
+    // "Running"/"Working" labels — and the interstitial-streaming state, whose
     // text renders on the row above — swap for a deterministic whimsical
     // gerund (seeded by the run-scoped item id, rotating ~10s via the live
     // tick).

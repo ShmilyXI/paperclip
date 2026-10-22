@@ -63,7 +63,7 @@ import type { Agent } from "@paperclipai/shared";
 
 /**
  * When no agent is running, the sidebar falls back to showing at most this many
- * recently-active agents plus a t("sidebar.seeAllAgents") link (IA Phase 5).
+ * recently-active agents plus a "See all agents" link (IA Phase 5).
  */
 const RECENT_AGENT_LIMIT = 3;
 const LIVE_AGENT_LINGER_MS = 120_000;
@@ -423,7 +423,7 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
   // active agents. Agents that just stopped running linger briefly so clustered
   // run boundaries do not make rows pop out and the section does not immediately
   // swap to the recent fallback during short all-idle gaps. Otherwise fall back
-  // to up to RECENT_AGENT_LIMIT agents. Either way a t("sidebar.seeAllAgents") link is
+  // to up to RECENT_AGENT_LIMIT agents. Either way a "See all agents" link is
   // shown so the full list is always reachable.
   // Classic mode (PAP-89, flag OFF) restores the show-all behavior.
   const runningAgents = useMemo(() => {
@@ -441,7 +441,7 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
     : hasActiveAgents
       ? runningAgents
       : sortedAgents.slice(0, RECENT_AGENT_LIMIT);
-  // Always expose t("sidebar.seeAllAgents") whenever the displayed list is a subset of all
+  // Always expose "See all agents" whenever the displayed list is a subset of all
   // agents, so users never lose the entry point to the full list. In classic mode
   // every agent is already shown, so the link is unnecessary.
   const showSeeAllLink = streamlined && sortedAgents.length > 0;

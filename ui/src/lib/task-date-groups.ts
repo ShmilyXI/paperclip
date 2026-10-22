@@ -26,7 +26,7 @@ export function taskDateGroup(value: Date | string | number, now: Date = new Dat
 
 /**
  * Returns the label to insert before the current row. A list made entirely of
- * older work does not begin with a redundant t("dateGroups.earlier") heading.
+ * older work does not begin with a redundant "Earlier" heading.
  */
 export function taskDateGroupSeparator(
   previous: TaskDateGroup | null,

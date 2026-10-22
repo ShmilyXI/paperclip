@@ -198,7 +198,7 @@ export function ConfigureBuiltInAgentModal({
           </details>}
 
           {modelRequired && (
-            // ModelDropdown supplies its own t("common.model") Field label + hint.
+            // ModelDropdown supplies its own "Model" Field label + hint.
             <ModelDropdown
               models={models}
               value={model}

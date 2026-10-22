@@ -636,7 +636,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
       const toolUseId = entry.toolUseId ?? extractToolUseId(entry.input);
       // Streaming runtimes (e.g. ACPX) re-emit the same tool call as its
       // status progresses. Fold updates into the existing running card
-      // instead of stacking duplicate t("common.running") blocks.
+      // instead of stacking duplicate "Running" blocks.
       const pending = toolUseId ? pendingToolBlocks.get(toolUseId) : undefined;
       if (pending && pending.status === "running") {
         pending.input = mergeToolInput(pending.input, entry.input);

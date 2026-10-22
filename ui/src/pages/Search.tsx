@@ -288,7 +288,7 @@ export function Search() {
     [parsedCommittedQuery.query, scope, sort],
   );
 
-  // t("common.clearAll") drops both URL filters and any typed operator tokens (keeping the
+  // "Clear all" drops both URL filters and any typed operator tokens (keeping the
   // plain text query), so the results snap back to the unfiltered set.
   const handleClearAllFilters = useCallback(() => {
     const plain = parsedCommittedQuery.query;

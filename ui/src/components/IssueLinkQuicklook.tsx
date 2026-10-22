@@ -129,7 +129,7 @@ function QuicklookSeparator({ className }: { className?: string }) {
   );
 }
 
-/** "in_review" -> t("common.inReview"). The card states the status as a word, not a chip. */
+/** "in_review" -> "In review". The card states the status as a word, not a chip. */
 function statusLabel(status: string): string {
   const words = status.replace(/_/g, " ");
   return words.charAt(0).toUpperCase() + words.slice(1);

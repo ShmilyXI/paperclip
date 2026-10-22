@@ -125,7 +125,7 @@ function AuditActor({
   // directory used by this page. The basic audit tier strips privileged
   // attribution (`agentId`) but retains the acting principal (`actorId`), so
   // use that principal to avoid presenting a trivially joinable identity as
-  // an anonymous t("common.agent") in the UI.
+  // an anonymous "Agent" in the UI.
   const actorAgentId = record.agentId
     ?? (record.actorType === "agent" ? record.actorId : null);
   const agent = actorAgentId ? agentMap.get(actorAgentId) : null;
@@ -148,7 +148,7 @@ function AuditActor({
       />
     );
   }
-  // Fall back to the actor *type*, never a blanket t("common.system"). This still covers
+  // Fall back to the actor *type*, never a blanket "System". This still covers
   // deleted or authorization-filtered agents that are absent from the directory.
   const label =
     record.actorType === "plugin"
@@ -450,7 +450,7 @@ export function AuditFeed({
   // them, so `hasMixedAccessTiers` would stay true forever. Only call the feed
   // "recovering" while that attempt is outstanding; once it has settled, fall
   // through to normal rendering. Otherwise the banner permanently hides the
-  // error state and its t("common.tryAgain") button, with no way off the page. Falling
+  // error state and its "Try again" button, with no way off the page. Falling
   // through is safe because `items` already excludes the privileged pages, so
   // an unrecovered cache renders as a plain basic-tier feed.
   const downgradeRecoveryExhausted = Boolean(

@@ -28,7 +28,7 @@ export function StatusCards() {
 
   const [showArchived, setShowArchived] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
-  // Which tab the detail drawer opens to (the tile's "Query debug"/t("common.edit")
+  // Which tab the detail drawer opens to (the tile's "Query debug"/"Edit"
   // actions deep-link into Settings).
   const [detailTab, setDetailTab] = useState("summary");
   const [actionError, setActionError] = useState<string | null>(null);

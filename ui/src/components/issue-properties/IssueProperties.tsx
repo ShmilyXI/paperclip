@@ -1731,7 +1731,7 @@ export function IssueProperties({
   );
 
   // Grouped picker options (design surface 2): a board-users section and an
-  // agents section, plus the t("issueProps.noAssignee") reset. Agents stay recency-sorted
+  // agents section, plus the "No assignee" reset. Agents stay recency-sorted
   // within their group via `sortedAgents`.
   const userAssigneeOptions = [
     ...(currentUserId
@@ -3070,7 +3070,7 @@ export function IssueProperties({
   }
 
   // Flag ON: wrap the same body in a Properties | Plan | Artifacts tab shell
-  // (v5 decision: singular t("issueProps.plan"), Docs merged into Artifacts). The Properties
+  // (v5 decision: singular "Plan", Docs merged into Artifacts). The Properties
   // tab is unchanged. Panel hosts portal the strip into the pane header bar;
   // portals keep React context, so the Tabs root still drives it.
   // Fall back to Properties if the selected tab's content went away (or the

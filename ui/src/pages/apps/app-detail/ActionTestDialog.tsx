@@ -54,7 +54,7 @@ function seconds(ms: number): string {
   return `${(ms / 1000).toFixed(1)}s`;
 }
 
-/** relativeTime() returns "just now"; the spec capitalizes it (t("common.justNow")). */
+/** relativeTime() returns "just now"; the spec capitalizes it ("Just now"). */
 function relTime(date: Date): string {
   const t = relativeTime(date);
   return t.charAt(0).toUpperCase() + t.slice(1);

@@ -218,7 +218,7 @@ export function StatusCardDetailDrawer({
                 variant="outline"
                 size="sm"
                 onClick={() => recompileMutation.mutate()}
-                // While the setup run is live, t("common.runNow") is disabled — kicking a
+                // While the setup run is live, "Run now" is disabled — kicking a
                 // second run would race the one already building the card.
                 disabled={recompileMutation.isPending || setupRunning}
               >
