@@ -38,3 +38,8 @@ if (typeof window !== "undefined" && window.localStorage !== globalThis.localSto
 if (typeof Element !== "undefined" && typeof Element.prototype.scrollIntoView !== "function") {
   Element.prototype.scrollIntoView = function scrollIntoView() {};
 }
+
+// The app defaults to zh-CN; existing UI tests assert the English strings.
+const { i18n } = await import("./src/i18n");
+await i18n.changeLanguage("en");
+export {};

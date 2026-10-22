@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@/lib/router";
@@ -139,7 +140,7 @@ function statusBadge(status: string) {
   };
   return (
     <Badge variant="ghost" className={cn("text-(length:--text-nano) px-1.5", colors[status] ?? colors.idle)}>
-      {status.replace(/_/g, " ")}
+      {statusLabel(status)}
     </Badge>
   );
 }

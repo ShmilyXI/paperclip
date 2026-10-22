@@ -1,3 +1,4 @@
+import { statusLabel as localizedStatusLabel } from "@/lib/i18n-labels";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ActivityEvent, Issue, Agent, ProviderTraceMetadata } from "@paperclipai/shared";
 import {
@@ -280,7 +281,7 @@ function mergeRuns(
 }
 
 function statusLabel(status: string) {
-  return status.replace(/_/g, " ");
+  return localizedStatusLabel(status);
 }
 
 function isActiveRun(run: Pick<LedgerRun, "status" | "isLive">) {

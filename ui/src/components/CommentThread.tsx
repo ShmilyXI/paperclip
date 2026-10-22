@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import { AgentIdentity } from "./AgentIdentity";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { memo, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
@@ -217,7 +218,7 @@ function formatRunStatusLabel(status: string) {
     case "timed_out":
       return "timed out";
     default:
-      return status.replace(/_/g, " ");
+      return statusLabel(status);
   }
 }
 

@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import { isAgentCreatedIssue, type ExternalObjectSummary, type Issue } from "@paperclipai/shared";
 
 export type IssueFilterWorkspaceLookup = {
@@ -87,7 +88,7 @@ export const issueQuickFilterPresets = [
 ];
 
 export function issueFilterLabel(value: string): string {
-  return value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  return statusLabel(value, true);
 }
 
 export function issueFilterArraysEqual(a: string[], b: string[]): boolean {

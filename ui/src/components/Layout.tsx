@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useDesignSandbox } from "@/context/DesignSandboxContext";
 import { DesignSandboxSidebar } from "./DesignSandboxSidebar";
 import { BoardDialogs } from "./BoardDialogs";
@@ -309,8 +310,8 @@ export function Layout({ sidebarSections }: { sidebarSections?: ReactNode }) {
     });
     if (bounce) {
       pushToast?.({
-        title: `${matchedCompany.name} is archived`,
-        body: `Switched to ${bounce.name}.`,
+        title: t("layout.nameIsArchived", { name: matchedCompany.name }),
+        body: t("layout.switchedToName", { name: bounce.name }),
         tone: "info",
         dedupeKey: `archived-company-bounce:${matchedCompany.id}`,
       });
@@ -597,7 +598,7 @@ export function Layout({ sidebarSections }: { sidebarSections?: ReactNode }) {
             type="button"
             className="fixed inset-0 z-40 bg-black/50"
             onClick={() => setSidebarOpen(false)}
-            aria-label="Close sidebar"
+            aria-label={t("layout.closeSidebar")}
           />
         )}
 

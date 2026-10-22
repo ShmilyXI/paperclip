@@ -14,8 +14,16 @@ describe("locale validation", () => {
   it("accepts registered locale files", () => {
     expect(Object.keys(localeMessages)).toContain("en");
     for (const [locale, messages] of Object.entries(localeMessages)) {
-      expect(validateLocaleMessages(messages), locale).toEqual([]);
+      const complete = locale === "en" || locale === "zh-CN";
+      expect(validateLocaleMessages(messages, en, { allowMissing: !complete }), locale).toEqual([]);
     }
+  });
+
+  it("allows partial locales to omit keys but still rejects extra keys", () => {
+    expect(validateLocaleMessages({ app: {} }, en, { allowMissing: true })).toEqual([]);
+    expect(validateLocaleMessages({ app: { other: "x" } }, en, { allowMissing: true })).toEqual([
+      "app.other is not defined in English",
+    ]);
   });
 
   it("rejects missing and extra nested keys", () => {

@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import { useState } from "react";
 import { Link } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -28,7 +29,7 @@ function PropertyRow({ label, children }: { label: string; children: React.React
 }
 
 function label(s: string): string {
-  return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  return statusLabel(s, true);
 }
 
 function PickerButton({

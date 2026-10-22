@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { Clock3, FileDiff, GitCommit, type LucideIcon } from "lucide-react";
 import { healthApi, type HealthStatus } from "@/api/health";
@@ -128,12 +129,12 @@ export function SidebarServerInfo() {
       </p>
       <ServerInfoRow
         icon={Clock3}
-        label="Last restarted"
+        label={t("sidebar.lastRestarted")}
         value={lastRestartedLabel}
         dateTime={!healthUnavailable && !isWaitingForHealth && restartedAtIsValid ? restartedAt : null}
       />
-      <ServerInfoRow icon={GitCommit} label="Running commit" value={commit} />
-      <ServerInfoRow icon={FileDiff} label="Checkout state" value={localChanges} />
+      <ServerInfoRow icon={GitCommit} label={t("sidebar.runningCommit")} value={commit} />
+      <ServerInfoRow icon={FileDiff} label={t("sidebar.checkoutState")} value={localChanges} />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+import { statusLabel as localizedStatusLabel } from "@/lib/i18n-labels";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { memo, useMemo } from "react";
 import { Link } from "@/lib/router";
@@ -23,13 +25,13 @@ const EMPTY_TRANSCRIPT: TranscriptEntry[] = [];
 const EMPTY_RUNS: LiveRunForIssue[] = [];
 
 const runStatusLabels: Record<string, string> = {
-  running: "Running",
-  queued: "Queued",
-  succeeded: "Succeeded",
-  failed: "Failed",
-  timed_out: "Timed out",
-  cancelled: "Cancelled",
-  interrupted: "Interrupted",
+  running: t("activeAgents.running"),
+  queued: t("activeAgents.queued"),
+  succeeded: t("activeAgents.succeeded"),
+  failed: t("activeAgents.failed"),
+  timed_out: t("activeAgents.timedOut"),
+  cancelled: t("activeAgents.cancelled"),
+  interrupted: t("activeAgents.interrupted"),
 };
 
 interface ActiveAgentsPanelProps {
@@ -49,13 +51,13 @@ interface ActiveAgentsPanelProps {
 
 export function ActiveAgentsPanel({
   companyId,
-  title = "Agents",
+  title = t("activeAgents.agents"),
   minRunCount = MIN_DASHBOARD_RUNS,
   fetchLimit,
   cardLimit = DASHBOARD_RUN_CARD_LIMIT,
   gridClassName,
   cardClassName,
-  emptyMessage = "No recent agent runs.",
+  emptyMessage = t("activeAgents.noRecentAgentRuns"),
   queryScope = "dashboard",
   showMoreLink = true,
   showTranscripts = false,
@@ -160,7 +162,7 @@ export function ActiveAgentsPanel({
           <Link to="/dashboard/live" className="hover:text-foreground hover:underline">
             {hiddenRunCount > 0
               ? `${hiddenRunCount} more active/recent run${hiddenRunCount === 1 ? "" : "s"}`
-              : "View all runs"}
+              : t("activeAgents.viewAllRuns")}
           </Link>
         </div>
       )}
@@ -190,10 +192,10 @@ export const AgentRunCard = memo(function AgentRunCard({
   const statusLabel = runStatusLabels[run.status] ?? run.status.replace(/[_-]/g, " ");
   const runUrl = `/agents/${run.agentId}/runs/${run.id}`;
   const timestamp = run.finishedAt
-    ? `Finished ${relativeTime(run.finishedAt)}`
-    : run.startedAt ? `Started ${relativeTime(run.startedAt)}` : `Queued ${relativeTime(run.createdAt)}`;
+    ? t("activeAgents.finishedFinishedat", { finishedAt: relativeTime(run.finishedAt) })
+    : run.startedAt ? t("activeAgents.startedStartedat", { startedAt: relativeTime(run.startedAt) }) : t("activeAgents.queuedCreatedat", { createdAt: relativeTime(run.createdAt) });
   const taskStatus = issue?.status === "in_review" && issue.externalConversationState === "waiting" ? "idle" : issue?.status ?? "backlog";
-  const taskTitle = issue?.title ?? (issueLoadFailed ? "Task unavailable" : "Loading task…");
+  const taskTitle = issue?.title ?? (issueLoadFailed ? t("activeAgents.taskUnavailable") : t("activeAgents.loadingTask"));
 
   return (
     <div className={cn(
@@ -226,7 +228,7 @@ export const AgentRunCard = memo(function AgentRunCard({
                   status={taskStatus}
                   size="md"
                   className="self-center"
-                  title={issue ? `Task ${taskStatus.replace(/_/g, " ")}` : undefined}
+                  title={issue ? t("activeAgents.taskStatus", { status: localizedStatusLabel(taskStatus) }) : undefined}
                 />
                 <span className="truncate">{taskTitle}</span>
               </span>

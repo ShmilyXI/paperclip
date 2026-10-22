@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import { useMemo } from "react";
 import { User, UserX } from "lucide-react";
 import {
@@ -48,7 +49,7 @@ const OPEN_STATUS_PRESET: IssueStatus[] = ISSUE_STATUSES.filter(
 );
 
 function humanize(value: string): string {
-  return value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  return statusLabel(value, true);
 }
 
 function count(record: Record<string, number> | undefined, key: string): number | undefined {

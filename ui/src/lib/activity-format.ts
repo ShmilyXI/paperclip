@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+import { statusLabel } from "./i18n-labels";
 import type { Agent } from "@paperclipai/shared";
 import type { CompanyUserProfile } from "./company-members";
 import { formatReviewPolicyValue } from "./review-policy";
@@ -23,187 +25,187 @@ interface ActivityFormatOptions {
 }
 
 const ACTIVITY_ROW_VERBS: Record<string, string> = {
-  "case.created": "created",
-  "case.updated": "updated",
-  "case.fields_changed": "updated details on",
-  "case.status_changed": "changed status on",
-  "case.issue_linked": "linked a task to",
-  "case.issue_unlinked": "unlinked a task from",
-  "case.child_linked": "linked a child to",
-  "case.attachment_added": "attached a file to",
-  "case.label_added": "added a label to",
-  "case.label_removed": "removed a label from",
-  "case.document_revised": "updated a document on",
-  "case.handoff_requested": "requested a handoff for",
-  "case.handoff_applied": "handed off",
-  "case.handoff_delivered": "delivered a handoff for",
-  "case.handoff_retry_requested": "retried a handoff for",
-  "case.handoff_cancelled": "cancelled a handoff for",
-  "case.handoff_completed": "completed",
-  "issue.created": "created",
-  "issue.updated": "updated",
-  "issue.read_marked": "read",
-  "issue.read_unmarked": "marked unread",
-  "issue.checked_out": "checked out",
-  "issue.released": "released",
-  "issue.comment_added": "commented on",
-  "issue.comment_cancelled": "cancelled a queued comment on",
-  "issue.queued_comment_edited": "edited a queued comment on",
-  "issue.queued_comments_reordered": "reordered queued comments on",
-  "issue.queued_comment_discarded": "discarded a queued comment on",
-  "issue.comment_deleted": "deleted a comment on",
-  "issue.attachment_added": "attached file to",
-  "issue.attachment_removed": "removed attachment from",
-  "issue.document_created": "created document for",
-  "issue.document_updated": "updated document on",
-  "issue.document_locked": "locked document on",
-  "issue.document_unlocked": "unlocked document on",
-  "issue.document_deleted": "deleted document from",
-  "issue.monitor_scheduled": "scheduled monitor on",
-  "issue.monitor_triggered": "triggered monitor for",
-  "issue.monitor_cleared": "cleared monitor on",
-  "issue.monitor_skipped": "skipped monitor for",
-  "issue.monitor_exhausted": "exhausted monitor on",
-  "issue.monitor_recovery_wake_queued": "queued monitor recovery for",
-  "issue.monitor_recovery_issue_created": "created monitor recovery for",
-  "issue.monitor_escalated_to_board": "escalated monitor for",
-  "issue.commented": "commented on",
-  "issue.deleted": "deleted",
-  "issue.successful_run_handoff_required": "flagged missing next step on",
-  "issue.successful_run_handoff_resolved": "recorded next step chosen on",
-  "issue.successful_run_handoff_escalated": "escalated missing next step on",
+  "case.created": t("activity.created"),
+  "case.updated": t("activity.updated"),
+  "case.fields_changed": t("activity.updatedDetailsOn"),
+  "case.status_changed": t("activity.changedStatusOn"),
+  "case.issue_linked": t("activity.linkedATaskTo"),
+  "case.issue_unlinked": t("activity.unlinkedATaskFrom"),
+  "case.child_linked": t("activity.linkedAChildTo"),
+  "case.attachment_added": t("activity.attachedAFileTo"),
+  "case.label_added": t("activity.addedALabelTo"),
+  "case.label_removed": t("activity.removedALabelFrom"),
+  "case.document_revised": t("activity.updatedADocumentOn"),
+  "case.handoff_requested": t("activity.requestedAHandoffFor"),
+  "case.handoff_applied": t("activity.handedOff"),
+  "case.handoff_delivered": t("activity.deliveredAHandoffFor"),
+  "case.handoff_retry_requested": t("activity.retriedAHandoffFor"),
+  "case.handoff_cancelled": t("activity.cancelledAHandoffFor"),
+  "case.handoff_completed": t("activity.completed"),
+  "issue.created": t("activity.created"),
+  "issue.updated": t("activity.updated"),
+  "issue.read_marked": t("activity.read"),
+  "issue.read_unmarked": t("activity.markedUnread"),
+  "issue.checked_out": t("activity.checkedOut"),
+  "issue.released": t("activity.released"),
+  "issue.comment_added": t("activity.commentedOn"),
+  "issue.comment_cancelled": t("activity.cancelledAQueuedCommentOn"),
+  "issue.queued_comment_edited": t("activity.editedAQueuedCommentOn"),
+  "issue.queued_comments_reordered": t("activity.reorderedQueuedCommentsOn"),
+  "issue.queued_comment_discarded": t("activity.discardedAQueuedCommentOn"),
+  "issue.comment_deleted": t("activity.deletedACommentOn"),
+  "issue.attachment_added": t("activity.attachedFileTo"),
+  "issue.attachment_removed": t("activity.removedAttachmentFrom"),
+  "issue.document_created": t("activity.createdDocumentFor"),
+  "issue.document_updated": t("activity.updatedDocumentOn"),
+  "issue.document_locked": t("activity.lockedDocumentOn"),
+  "issue.document_unlocked": t("activity.unlockedDocumentOn"),
+  "issue.document_deleted": t("activity.deletedDocumentFrom"),
+  "issue.monitor_scheduled": t("activity.scheduledMonitorOn"),
+  "issue.monitor_triggered": t("activity.triggeredMonitorFor"),
+  "issue.monitor_cleared": t("activity.clearedMonitorOn"),
+  "issue.monitor_skipped": t("activity.skippedMonitorFor"),
+  "issue.monitor_exhausted": t("activity.exhaustedMonitorOn"),
+  "issue.monitor_recovery_wake_queued": t("activity.queuedMonitorRecoveryFor"),
+  "issue.monitor_recovery_issue_created": t("activity.createdMonitorRecoveryFor"),
+  "issue.monitor_escalated_to_board": t("activity.escalatedMonitorFor"),
+  "issue.commented": t("activity.commentedOn"),
+  "issue.deleted": t("activity.deleted"),
+  "issue.successful_run_handoff_required": t("activity.flaggedMissingNextStepOn"),
+  "issue.successful_run_handoff_resolved": t("activity.recordedNextStepChosenOn"),
+  "issue.successful_run_handoff_escalated": t("activity.escalatedMissingNextStepOn"),
   "issue.accepted_plan_decomposition_updated": "updated accepted-plan decomposition on",
-  "issue.recovery_action_opened": "opened a recovery action on",
-  "issue.workspace_recovered": "recovered saved work for",
-  "issue.workspace_recovery_requested": "requested workspace recovery for",
-  "issue.recovery_action_resolved": "resolved the recovery action on",
-  "issue.recovery_action_escalated": "escalated the recovery action on",
-  "agent.created": "created",
-  "agent.updated": "updated",
-  "agent.paused": "paused",
-  "agent.resumed": "resumed",
-  "agent.error_cleared": "cleared error on",
-  "agent.terminated": "terminated",
-  "agent.key_created": "created API key for",
-  "agent.budget_updated": "updated budget for",
-  "agent.runtime_session_reset": "reset session for",
-  "heartbeat.invoked": "invoked heartbeat for",
-  "heartbeat.cancelled": "cancelled heartbeat for",
+  "issue.recovery_action_opened": t("activity.openedARecoveryActionOn"),
+  "issue.workspace_recovered": t("activity.recoveredSavedWorkFor"),
+  "issue.workspace_recovery_requested": t("activity.requestedWorkspaceRecoveryFor"),
+  "issue.recovery_action_resolved": t("activity.resolvedTheRecoveryActionOn"),
+  "issue.recovery_action_escalated": t("activity.escalatedTheRecoveryActionOn"),
+  "agent.created": t("activity.created"),
+  "agent.updated": t("activity.updated"),
+  "agent.paused": t("activity.paused"),
+  "agent.resumed": t("activity.resumed"),
+  "agent.error_cleared": t("activity.clearedErrorOn"),
+  "agent.terminated": t("activity.terminated"),
+  "agent.key_created": t("activity.createdApiKeyFor"),
+  "agent.budget_updated": t("activity.updatedBudgetFor"),
+  "agent.runtime_session_reset": t("activity.resetSessionFor"),
+  "heartbeat.invoked": t("activity.invokedHeartbeatFor"),
+  "heartbeat.cancelled": t("activity.cancelledHeartbeatFor"),
   "heartbeat.output_stale_source_resolved": "system-folded stale run on",
   "heartbeat.output_stale_recovery_recursion_refused": "refused recovery-on-recovery for",
-  "approval.created": "requested approval",
-  "approval.approved": "approved",
-  "approval.rejected": "rejected",
+  "approval.created": t("activity.requestedApproval"),
+  "approval.approved": t("activity.approved"),
+  "approval.rejected": t("activity.rejected"),
   // Interaction outcomes (PAP-16506). An agent may now resolve one — including a
   // review of its own work — so these must read as outcomes in the feed instead
   // of falling through to the raw "issue thread interaction accepted" action id.
   // `details.interactionKind` sharpens the wording; see INTERACTION_OUTCOME_LABELS.
-  "issue.thread_interaction_created": "asked for a decision on",
-  "issue.thread_interaction_accepted": "accepted the request on",
-  "issue.thread_interaction_rejected": "rejected the request on",
-  "issue.thread_interaction_answered": "answered the request on",
-  "issue.thread_interaction_withdrawn": "withdrew the request on",
-  "issue.thread_interaction_cancelled": "cancelled the request on",
-  "issue.thread_interaction_skipped": "skipped the request on",
-  "issue.thread_interaction_expired": "expired the request on",
-  "issue.thread_interaction_item_verdicts_submitted": "submitted verdicts on",
-  "issue.stalled_review_decided": "recorded a review verdict on",
-  "project.created": "created",
-  "project.updated": "updated",
-  "project.deleted": "deleted",
-  "goal.created": "created",
-  "goal.updated": "updated",
-  "goal.deleted": "deleted",
-  "cost.reported": "reported cost for",
-  "cost.recorded": "recorded cost for",
-  "company.created": "created organization",
-  "company.updated": "updated organization",
-  "company.archived": "archived",
-  "company.reactivated": "reactivated",
-  "company.budget_updated": "updated budget for",
-  "audit.exported": "exported the agent audit log for",
-  "tool_app.connected": "connected",
-  "tool_app.oauth_connected": "connected credentials for",
-  "tool_app.oauth_failed": "failed to connect credentials for",
-  "tool_app.oauth_access_finalized": "finished credential access for",
-  "tool_app.finished": "finished setup for",
-  "tool_app.reconnected": "reconnected",
-  "tool_connection.created": "created",
-  "tool_connection.updated": "updated",
-  "tool_connection.archived": "removed",
-  "tool_connection.catalog_refresh": "refreshed actions for",
-  "tool_connection.installs_synced": "changed agent installs for",
-  "tool_connection.install_access_extended": "extended agent access for",
-  "tool_connection.grant_audience_replaced": "changed human access for",
-  "tool_connection.grant_added": "added credentials to",
-  "tool_connection.grant_revoked": "revoked credentials from",
-  "tool_connection.grant_delegated": "delegated credentials for",
-  "tool_connection.grant_delegation_revoked": "revoked credential delegation for",
+  "issue.thread_interaction_created": t("activity.askedForADecisionOn"),
+  "issue.thread_interaction_accepted": t("activity.acceptedTheRequestOn"),
+  "issue.thread_interaction_rejected": t("activity.rejectedTheRequestOn"),
+  "issue.thread_interaction_answered": t("activity.answeredTheRequestOn"),
+  "issue.thread_interaction_withdrawn": t("activity.withdrewTheRequestOn"),
+  "issue.thread_interaction_cancelled": t("activity.cancelledTheRequestOn"),
+  "issue.thread_interaction_skipped": t("activity.skippedTheRequestOn"),
+  "issue.thread_interaction_expired": t("activity.expiredTheRequestOn"),
+  "issue.thread_interaction_item_verdicts_submitted": t("activity.submittedVerdictsOn"),
+  "issue.stalled_review_decided": t("activity.recordedAReviewVerdictOn"),
+  "project.created": t("activity.created"),
+  "project.updated": t("activity.updated"),
+  "project.deleted": t("activity.deleted"),
+  "goal.created": t("activity.created"),
+  "goal.updated": t("activity.updated"),
+  "goal.deleted": t("activity.deleted"),
+  "cost.reported": t("activity.reportedCostFor"),
+  "cost.recorded": t("activity.recordedCostFor"),
+  "company.created": t("activity.createdOrganization"),
+  "company.updated": t("activity.updatedOrganization"),
+  "company.archived": t("activity.archived"),
+  "company.reactivated": t("activity.reactivated"),
+  "company.budget_updated": t("activity.updatedBudgetFor"),
+  "audit.exported": t("activity.exportedTheAgentAuditLog"),
+  "tool_app.connected": t("activity.connected"),
+  "tool_app.oauth_connected": t("activity.connectedCredentialsFor"),
+  "tool_app.oauth_failed": t("activity.failedToConnectCredentialsFor"),
+  "tool_app.oauth_access_finalized": t("activity.finishedCredentialAccessFor"),
+  "tool_app.finished": t("activity.finishedSetupFor"),
+  "tool_app.reconnected": t("activity.reconnected"),
+  "tool_connection.created": t("activity.created"),
+  "tool_connection.updated": t("activity.updated"),
+  "tool_connection.archived": t("activity.removed"),
+  "tool_connection.catalog_refresh": t("activity.refreshedActionsFor"),
+  "tool_connection.installs_synced": t("activity.changedAgentInstallsFor"),
+  "tool_connection.install_access_extended": t("activity.extendedAgentAccessFor"),
+  "tool_connection.grant_audience_replaced": t("activity.changedHumanAccessFor"),
+  "tool_connection.grant_added": t("activity.addedCredentialsTo"),
+  "tool_connection.grant_revoked": t("activity.revokedCredentialsFrom"),
+  "tool_connection.grant_delegated": t("activity.delegatedCredentialsFor"),
+  "tool_connection.grant_delegation_revoked": t("activity.revokedCredentialDelegationFor"),
 };
 
 const ISSUE_ACTIVITY_LABELS: Record<string, string> = {
-  "issue.created": "created the issue",
-  "issue.updated": "updated the issue",
-  "issue.checked_out": "checked out the issue",
-  "issue.released": "released the issue",
-  "issue.comment_added": "added a comment",
-  "issue.comment_cancelled": "cancelled a queued comment",
-  "issue.queued_comment_edited": "edited a queued comment",
-  "issue.queued_comments_reordered": "reordered queued comments",
-  "issue.queued_comment_discarded": "discarded a queued comment",
-  "issue.comment_deleted": "deleted a comment",
-  "issue.feedback_vote_saved": "saved feedback on an AI output",
-  "issue.attachment_added": "added an attachment",
-  "issue.attachment_removed": "removed an attachment",
-  "issue.document_created": "created a document",
-  "issue.document_updated": "updated a document",
-  "issue.document_locked": "locked a document",
-  "issue.document_unlocked": "unlocked a document",
-  "issue.document_deleted": "deleted a document",
-  "issue.monitor_scheduled": "scheduled a monitor",
-  "issue.monitor_triggered": "triggered a monitor",
-  "issue.monitor_cleared": "cleared a monitor",
-  "issue.monitor_skipped": "skipped a monitor",
-  "issue.monitor_exhausted": "exhausted a monitor",
-  "issue.monitor_recovery_wake_queued": "queued a monitor recovery wake",
-  "issue.monitor_recovery_issue_created": "created a monitor recovery issue",
-  "issue.monitor_escalated_to_board": "escalated a monitor to the board",
-  "issue.deleted": "deleted the issue",
-  "issue.successful_run_handoff_required": "Run finished without a clear next step",
-  "issue.successful_run_handoff_resolved": "Next step chosen",
-  "issue.successful_run_handoff_escalated": "Run finished without a next step - recovery escalated",
-  "issue.cross_issue_influence_cap_rejected": "hit the per-run cross-task write cap",
-  "issue.cross_issue_influence_observed": "made a cross-task write",
-  "issue.attribution_spoof_rejected": "tried to choose its own responsible user",
-  "issue.recovery_action_opened": "Opened a source-scoped recovery action",
-  "issue.workspace_recovered": "Saved work recovered.",
-  "issue.workspace_recovery_requested": "Requested workspace recovery",
-  "issue.recovery_action_resolved": "Resolved the recovery action",
-  "issue.recovery_action_escalated": "Escalated the recovery action",
-  "issue.accepted_plan_decomposition_updated": "updated the accepted-plan decomposition",
-  "agent.created": "created an agent",
-  "agent.updated": "updated the agent",
-  "agent.paused": "paused the agent",
-  "agent.resumed": "resumed the agent",
-  "agent.error_cleared": "cleared the agent error",
-  "agent.terminated": "terminated the agent",
-  "heartbeat.invoked": "invoked a heartbeat",
-  "heartbeat.cancelled": "cancelled a heartbeat",
-  "heartbeat.output_stale_source_resolved": "System folded a stale run",
-  "heartbeat.output_stale_recovery_recursion_refused": "Refused recovery-on-recovery escalation",
-  "approval.created": "requested approval",
-  "approval.approved": "approved",
-  "approval.rejected": "rejected",
-  "issue.thread_interaction_created": "asked for a decision",
-  "issue.thread_interaction_accepted": "accepted the request",
-  "issue.thread_interaction_rejected": "rejected the request",
-  "issue.thread_interaction_answered": "answered the request",
-  "issue.thread_interaction_withdrawn": "withdrew the request",
-  "issue.thread_interaction_cancelled": "cancelled the request",
-  "issue.thread_interaction_skipped": "skipped the request",
-  "issue.thread_interaction_expired": "expired the request",
-  "issue.thread_interaction_item_verdicts_submitted": "submitted verdicts on the request",
-  "issue.stalled_review_decided": "recorded a review verdict",
+  "issue.created": t("activity.createdTheIssue"),
+  "issue.updated": t("activity.updatedTheIssue"),
+  "issue.checked_out": t("activity.checkedOutTheIssue"),
+  "issue.released": t("activity.releasedTheIssue"),
+  "issue.comment_added": t("activity.addedAComment"),
+  "issue.comment_cancelled": t("activity.cancelledAQueuedComment"),
+  "issue.queued_comment_edited": t("activity.editedAQueuedComment"),
+  "issue.queued_comments_reordered": t("activity.reorderedQueuedComments"),
+  "issue.queued_comment_discarded": t("activity.discardedAQueuedComment"),
+  "issue.comment_deleted": t("activity.deletedAComment"),
+  "issue.feedback_vote_saved": t("activity.savedFeedbackOnAnAi"),
+  "issue.attachment_added": t("activity.addedAnAttachment"),
+  "issue.attachment_removed": t("activity.removedAnAttachment"),
+  "issue.document_created": t("activity.createdADocument"),
+  "issue.document_updated": t("activity.updatedADocument"),
+  "issue.document_locked": t("activity.lockedADocument"),
+  "issue.document_unlocked": t("activity.unlockedADocument"),
+  "issue.document_deleted": t("activity.deletedADocument"),
+  "issue.monitor_scheduled": t("activity.scheduledAMonitor"),
+  "issue.monitor_triggered": t("activity.triggeredAMonitor"),
+  "issue.monitor_cleared": t("activity.clearedAMonitor"),
+  "issue.monitor_skipped": t("activity.skippedAMonitor"),
+  "issue.monitor_exhausted": t("activity.exhaustedAMonitor"),
+  "issue.monitor_recovery_wake_queued": t("activity.queuedAMonitorRecoveryWake"),
+  "issue.monitor_recovery_issue_created": t("activity.createdAMonitorRecoveryIssue"),
+  "issue.monitor_escalated_to_board": t("activity.escalatedAMonitorToThe"),
+  "issue.deleted": t("activity.deletedTheIssue"),
+  "issue.successful_run_handoff_required": t("activity.runFinishedWithoutAClear"),
+  "issue.successful_run_handoff_resolved": t("activity.nextStepChosen"),
+  "issue.successful_run_handoff_escalated": t("activity.runFinishedWithoutANext"),
+  "issue.cross_issue_influence_cap_rejected": t("activity.hitThePerRunCross"),
+  "issue.cross_issue_influence_observed": t("activity.madeACrossTaskWrite"),
+  "issue.attribution_spoof_rejected": t("activity.triedToChooseItsOwn"),
+  "issue.recovery_action_opened": t("activity.openedASourceScopedRecovery"),
+  "issue.workspace_recovered": t("activity.savedWorkRecovered"),
+  "issue.workspace_recovery_requested": t("activity.requestedWorkspaceRecovery"),
+  "issue.recovery_action_resolved": t("activity.resolvedTheRecoveryAction"),
+  "issue.recovery_action_escalated": t("activity.escalatedTheRecoveryAction"),
+  "issue.accepted_plan_decomposition_updated": t("activity.updatedTheAcceptedPlanDecomposition"),
+  "agent.created": t("activity.createdAnAgent"),
+  "agent.updated": t("activity.updatedTheAgent"),
+  "agent.paused": t("activity.pausedTheAgent"),
+  "agent.resumed": t("activity.resumedTheAgent"),
+  "agent.error_cleared": t("activity.clearedTheAgentError"),
+  "agent.terminated": t("activity.terminatedTheAgent"),
+  "heartbeat.invoked": t("activity.invokedAHeartbeat"),
+  "heartbeat.cancelled": t("activity.cancelledAHeartbeat"),
+  "heartbeat.output_stale_source_resolved": t("activity.systemFoldedAStaleRun"),
+  "heartbeat.output_stale_recovery_recursion_refused": t("activity.refusedRecoveryOnRecoveryEscalation"),
+  "approval.created": t("activity.requestedApproval"),
+  "approval.approved": t("activity.approved"),
+  "approval.rejected": t("activity.rejected"),
+  "issue.thread_interaction_created": t("activity.askedForADecision"),
+  "issue.thread_interaction_accepted": t("activity.acceptedTheRequest"),
+  "issue.thread_interaction_rejected": t("activity.rejectedTheRequest"),
+  "issue.thread_interaction_answered": t("activity.answeredTheRequest"),
+  "issue.thread_interaction_withdrawn": t("activity.withdrewTheRequest"),
+  "issue.thread_interaction_cancelled": t("activity.cancelledTheRequest"),
+  "issue.thread_interaction_skipped": t("activity.skippedTheRequest"),
+  "issue.thread_interaction_expired": t("activity.expiredTheRequest"),
+  "issue.thread_interaction_item_verdicts_submitted": t("activity.submittedVerdictsOnTheRequest"),
+  "issue.stalled_review_decided": t("activity.recordedAReviewVerdict"),
 };
 
 /**
@@ -212,9 +214,9 @@ const ISSUE_ACTIVITY_LABELS: Record<string, string> = {
  * Mirrors `StalledReviewDecisionAction` in shared.
  */
 const STALLED_REVIEW_DECISION_LABELS: Record<string, string> = {
-  approve: "approved the review",
-  request_changes: "requested changes on the review",
-  send_back: "sent the review back to work",
+  approve: t("activity.approvedTheReview"),
+  request_changes: t("activity.requestedChangesOnTheReview"),
+  send_back: t("activity.sentTheReviewBackTo"),
 };
 
 /**
@@ -225,17 +227,17 @@ const STALLED_REVIEW_DECISION_LABELS: Record<string, string> = {
  * is also the fallback for an event that carries no kind.
  */
 const INTERACTION_ACCEPTED_LABELS: Record<string, string> = {
-  request_confirmation: "approved the request",
-  request_checkbox_confirmation: "approved the request",
-  suggest_tasks: "accepted the task suggestions",
-  ask_user_questions: "accepted the answers",
+  request_confirmation: t("activity.approvedTheRequest"),
+  request_checkbox_confirmation: t("activity.approvedTheRequest"),
+  suggest_tasks: t("activity.acceptedTheTaskSuggestions"),
+  ask_user_questions: t("activity.acceptedTheAnswers"),
 };
 
 const INTERACTION_REJECTED_LABELS: Record<string, string> = {
-  request_confirmation: "rejected the request",
-  request_checkbox_confirmation: "rejected the request",
-  suggest_tasks: "declined the task suggestions",
-  ask_user_questions: "declined the questions",
+  request_confirmation: t("activity.rejectedTheRequest"),
+  request_checkbox_confirmation: t("activity.rejectedTheRequest"),
+  suggest_tasks: t("activity.declinedTheTaskSuggestions"),
+  ask_user_questions: t("activity.declinedTheQuestions"),
 };
 
 /**
@@ -259,8 +261,8 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 }
 
 function humanizeValue(value: unknown): string {
-  if (typeof value !== "string") return String(value ?? "none");
-  return value.replace(/_/g, " ");
+  if (typeof value !== "string") return String(value ?? t("activity.none"));
+  return statusLabel(value).toLowerCase();
 }
 
 function isActivityParticipant(value: unknown): value is ActivityParticipant {
@@ -286,17 +288,17 @@ function readIssueReferences(details: ActivityDetails, key: string): ActivityIss
 }
 
 function formatUserLabel(userId: string | null | undefined, options: ActivityFormatOptions = {}): string {
-  if (!userId || userId === "local-board") return "Board";
-  if (options.currentUserId && userId === options.currentUserId) return "You";
+  if (!userId || userId === "local-board") return t("activity.board");
+  if (options.currentUserId && userId === options.currentUserId) return t("activity.you");
   const profile = options.userProfileMap?.get(userId);
   if (profile) return profile.label;
-  return `user ${userId.slice(0, 5)}`;
+  return t("activity.user", { id: userId.slice(0, 5) });
 }
 
 function formatParticipantLabel(participant: ActivityParticipant, options: ActivityFormatOptions): string {
   if (participant.type === "agent") {
     const agentId = participant.agentId ?? "";
-    return options.agentMap?.get(agentId)?.name ?? "agent";
+    return options.agentMap?.get(agentId)?.name ?? t("activity.agentFallback");
   }
   return formatUserLabel(participant.userId, options);
 }
@@ -305,7 +307,7 @@ function formatIssueReferenceLabel(reference: ActivityIssueReference): string {
   if (reference.identifier) return reference.identifier;
   if (reference.title) return reference.title;
   if (reference.id) return reference.id.slice(0, 8);
-  return "task";
+  return t("activity.taskFallback");
 }
 
 function formatChangedEntityLabel(
@@ -314,8 +316,8 @@ function formatChangedEntityLabel(
   labels: string[],
 ): string {
   if (labels.length <= 0) return plural;
-  if (labels.length === 1) return `${singular} ${labels[0]}`;
-  return `${labels.length} ${plural}`;
+  if (labels.length === 1) return t("activity.entitySingle", { singular, label: labels[0] });
+  return t("activity.entityMany", { count: labels.length, plural });
 }
 
 function readNumber(value: unknown): number | null {
@@ -353,14 +355,14 @@ function formatIssueUpdatedVerb(details: ActivityDetails): string | null {
     const from = previous.status;
     const to = humanizeValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
     return from
-      ? `changed status from ${humanizeValue(from)} to ${to} on`
-      : `changed status to ${to} on`;
+      ? t("activity.changedStatusFromTo", { from: humanizeValue(from), to })
+      : t("activity.changedStatusTo", { to });
   }
   if (details.priority !== undefined) {
     const from = previous.priority;
     return from
-      ? `changed priority from ${humanizeValue(from)} to ${humanizeValue(details.priority)} on`
-      : `changed priority to ${humanizeValue(details.priority)} on`;
+      ? t("activity.changedPriorityFromTo", { from: humanizeValue(from), to: humanizeValue(details.priority) })
+      : t("activity.changedPriorityTo", { to: humanizeValue(details.priority) });
   }
   return null;
 }
@@ -370,7 +372,7 @@ function formatAssigneeName(details: ActivityDetails, options: ActivityFormatOpt
   const agentId = details.assigneeAgentId;
   const userId = details.assigneeUserId;
   if (typeof agentId === "string" && agentId) {
-    return options.agentMap?.get(agentId)?.name ?? "agent";
+    return options.agentMap?.get(agentId)?.name ?? t("activity.agentFallback");
   }
   if (typeof userId === "string" && userId) {
     return formatUserLabel(userId, options);
@@ -388,29 +390,29 @@ function formatIssueUpdatedAction(details: ActivityDetails, options: ActivityFor
     const to = humanizeValue(details.status === "in_review" && details.externalConversationState === "waiting" ? "idle" : details.status);
     parts.push(
       from
-        ? `changed the status from ${humanizeValue(from)} to ${to}`
-        : `changed the status to ${to}`,
+        ? t("activity.changedTheStatusFromTo", { from: humanizeValue(from), to })
+        : t("activity.changedTheStatusTo", { to }),
     );
   }
   if (details.priority !== undefined) {
     const from = previous.priority;
     parts.push(
       from
-        ? `changed the priority from ${humanizeValue(from)} to ${humanizeValue(details.priority)}`
-        : `changed the priority to ${humanizeValue(details.priority)}`,
+        ? t("activity.changedThePriorityFromTo", { from: humanizeValue(from), to: humanizeValue(details.priority) })
+        : t("activity.changedThePriorityTo", { to: humanizeValue(details.priority) }),
     );
   }
   if (details.assigneeAgentId !== undefined || details.assigneeUserId !== undefined) {
     const assigneeName = formatAssigneeName(details, options);
-    parts.push(assigneeName ? `made ${assigneeName} responsible for the task` : "cleared the responsible");
+    parts.push(assigneeName ? t("activity.madeResponsible", { name: assigneeName }) : t("activity.clearedResponsible"));
   }
   if (details.reviewPolicy !== undefined) {
     // `null` is the default ("anyone can approve"), so it must not read as
     // "changed the review policy to none" (PAP-16506).
-    parts.push(`changed who can approve to ${formatReviewPolicyValue(details.reviewPolicy)}`);
+    parts.push(t("activity.changedWhoCanApprove", { value: formatReviewPolicyValue(details.reviewPolicy) }));
   }
-  if (details.title !== undefined) parts.push("updated the title");
-  if (details.description !== undefined) parts.push("updated the description");
+  if (details.title !== undefined) parts.push(t("activity.updatedTheTitle"));
+  if (details.description !== undefined) parts.push(t("activity.updatedTheDescription"));
 
   return parts.length > 0 ? parts.join(", ") : null;
 }
@@ -428,30 +430,30 @@ function formatStructuredIssueChange(input: {
     const added = readIssueReferences(details, "addedBlockedByIssues").map(formatIssueReferenceLabel);
     const removed = readIssueReferences(details, "removedBlockedByIssues").map(formatIssueReferenceLabel);
     if (added.length > 0 && removed.length === 0) {
-      const changed = formatChangedEntityLabel("blocker", "blockers", added);
-      return input.forIssueDetail ? `added ${changed}` : `added ${changed} to`;
+      const changed = formatChangedEntityLabel(t("activity.blocker"), t("activity.blockersPlain"), added);
+      return input.forIssueDetail ? t("activity.addedEntity", { entity: changed }) : t("activity.addedEntityTo", { entity: changed });
     }
     if (removed.length > 0 && added.length === 0) {
-      const changed = formatChangedEntityLabel("blocker", "blockers", removed);
-      return input.forIssueDetail ? `removed ${changed}` : `removed ${changed} from`;
+      const changed = formatChangedEntityLabel(t("activity.blocker"), t("activity.blockersPlain"), removed);
+      return input.forIssueDetail ? t("activity.removedEntity", { entity: changed }) : t("activity.removedEntityFrom", { entity: changed });
     }
-    return input.forIssueDetail ? "updated blockers" : "updated blockers on";
+    return input.forIssueDetail ? t("activity.updatedBlockers") : t("activity.updatedBlockersOn");
   }
 
   if (input.action === "issue.reviewers_updated" || input.action === "issue.approvers_updated") {
     const added = readParticipants(details, "addedParticipants").map((participant) => formatParticipantLabel(participant, input.options));
     const removed = readParticipants(details, "removedParticipants").map((participant) => formatParticipantLabel(participant, input.options));
-    const singular = input.action === "issue.reviewers_updated" ? "reviewer" : "approver";
-    const plural = input.action === "issue.reviewers_updated" ? "reviewers" : "approvers";
+    const singular = input.action === "issue.reviewers_updated" ? t("activity.reviewer") : t("activity.approver");
+    const plural = input.action === "issue.reviewers_updated" ? t("activity.reviewers") : t("activity.approvers");
     if (added.length > 0 && removed.length === 0) {
       const changed = formatChangedEntityLabel(singular, plural, added);
-      return input.forIssueDetail ? `added ${changed}` : `added ${changed} to`;
+      return input.forIssueDetail ? t("activity.addedEntity", { entity: changed }) : t("activity.addedEntityTo", { entity: changed });
     }
     if (removed.length > 0 && added.length === 0) {
       const changed = formatChangedEntityLabel(singular, plural, removed);
-      return input.forIssueDetail ? `removed ${changed}` : `removed ${changed} from`;
+      return input.forIssueDetail ? t("activity.removedEntity", { entity: changed }) : t("activity.removedEntityFrom", { entity: changed });
     }
-    return input.forIssueDetail ? `updated ${plural}` : `updated ${plural} on`;
+    return input.forIssueDetail ? t("activity.updatedEntity", { entity: plural }) : t("activity.updatedEntityOn", { entity: plural });
   }
 
   return null;

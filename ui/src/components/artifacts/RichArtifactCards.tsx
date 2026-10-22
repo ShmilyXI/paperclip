@@ -1,3 +1,4 @@
+import { dateLocale } from "@/i18n";
 import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -139,12 +140,12 @@ function Diff({ additions, deletions, filesChanged }: DiffProps) {
     <div className="flex flex-wrap gap-2 font-mono text-xs">
       {additions != null && (
         <span className="text-(--status-task-icon-done)">
-          +{additions.toLocaleString("en-US")}
+          +{additions.toLocaleString(dateLocale())}
         </span>
       )}
       {deletions != null && (
         <span className="text-(--status-task-icon-blocked)">
-          −{deletions.toLocaleString("en-US")}
+          −{deletions.toLocaleString(dateLocale())}
         </span>
       )}
       {filesChanged != null && (

@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import { Link } from "@/lib/router";
 import type { ExecutionWorkspace } from "@paperclipai/shared";
 import { Button } from "@/components/ui/button";
@@ -88,7 +89,7 @@ export function ProjectWorkspaceSummaryCard({
               ) : null}
               {summary.executionWorkspaceStatus ? (
                 <Badge variant="outline" className="border-border/70 bg-background px-2.5 py-1 text-muted-foreground">
-                  {summary.executionWorkspaceStatus.replace(/_/g, " ")}
+                  {statusLabel(summary.executionWorkspaceStatus)}
                 </Badge>
               ) : null}
             </div>

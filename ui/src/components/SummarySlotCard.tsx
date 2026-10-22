@@ -1,3 +1,4 @@
+import { dateLocale } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -49,7 +50,7 @@ function revisionLabel(revision: SummarySlotRevision) {
 }
 
 function formatRevisionTimestamp(date: Date | string) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat(dateLocale(), {
     month: "short",
     day: "numeric",
     hour: "2-digit",

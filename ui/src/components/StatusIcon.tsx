@@ -1,3 +1,4 @@
+import { statusLabel as localizedStatusLabel } from "@/lib/i18n-labels";
 import { useState } from "react";
 import type { IssueBlockerAttention } from "@paperclipai/shared";
 import { cn } from "../lib/utils";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 const allStatuses = ["backlog", "todo", "in_progress", "in_review", "done", "cancelled", "blocked"];
 
 function statusLabel(status: string): string {
-  return status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  return localizedStatusLabel(status, true);
 }
 
 interface StatusIconProps {

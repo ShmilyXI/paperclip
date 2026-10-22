@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import type {
   IssueBlockerAttention,
   IssueRecoveryAction,
@@ -141,7 +142,7 @@ function SuccessfulRunRetryNowControl({
 const EMPTY_LIVE_IDS: ReadonlySet<string> = new Set<string>();
 
 function waitingTaskStatusLabel(status: string): string {
-  return status.replace(/_/g, " ").replace(/\b\w/g, (character) => character.toUpperCase());
+  return statusLabel(status, true);
 }
 
 function WaitingChipLink({

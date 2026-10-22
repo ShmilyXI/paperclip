@@ -5,6 +5,7 @@
  * (`GET /companies/:companyId/timeline`). Rendering is the board-locked
  * Direction C (PAP-12422): dense rows, mini-map brush, custom inline SVG.
  */
+import { dateLocale } from "@/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Bot, Clock3, Coins, GanttChartSquare, Minus, Plus, RotateCcw, type LucideIcon } from "lucide-react";
@@ -136,11 +137,11 @@ function rangeError(range: DateRangeState): string | null {
 }
 
 function formatInteger(value: number): string {
-  return new Intl.NumberFormat("en-US").format(value);
+  return new Intl.NumberFormat(dateLocale()).format(value);
 }
 
 function formatCompactInteger(value: number): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(dateLocale(), {
     notation: "compact",
     maximumFractionDigits: 1,
   }).format(value);

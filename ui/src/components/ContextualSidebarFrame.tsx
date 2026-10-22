@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ChevronLeft, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useCompany } from "@/context/CompanyContext";
@@ -52,7 +53,7 @@ export function ContextualSidebarFrame({
               type="button"
               onClick={goBack}
               className="flex items-center gap-1.5 rounded-md px-2 py-1 text-left text-xs text-muted-foreground transition-colors hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label={`Back from ${title}`}
+              aria-label={t("layout.backFromTitle", { title })}
             >
               <ChevronLeft className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               <span className="truncate">{selectedCompany?.name ?? "Organization"}</span>

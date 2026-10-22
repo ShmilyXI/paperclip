@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import {
   Activity,
@@ -42,10 +43,10 @@ const localIcons = {
 } satisfies Record<AgentLocalDetailView, typeof Sparkles>;
 
 const auditItems = [
-  { section: "activity", label: "Activity", icon: Activity },
-  { section: "runs", label: "Runs", icon: PlayCircle },
-  { section: "costs", label: "Costs", icon: ReceiptText },
-  { section: "budgets", label: "Budgets", icon: BadgeDollarSign },
+  { section: "activity", label: t("agentSidebar.activity"), icon: Activity },
+  { section: "runs", label: t("agentSidebar.runs"), icon: PlayCircle },
+  { section: "costs", label: t("agentSidebar.costs"), icon: ReceiptText },
+  { section: "budgets", label: t("agentSidebar.budgets"), icon: BadgeDollarSign },
 ] as const;
 
 export function AgentContextualSidebar({
@@ -113,7 +114,7 @@ export function AgentContextualSidebar({
         ))}
 
         {pluginTabs.length > 0 && <div data-slot="contextual-sidebar-section" className={contextualSidebarStyles.section}>
-          <p className={contextualSidebarStyles.sectionLabel}>Apps</p>
+          <p className={contextualSidebarStyles.sectionLabel}>{t("agentSidebar.apps")}</p>
           <div className={contextualSidebarStyles.group}>
             {pluginTabs.map(slot => <SidebarNavItem key={`${slot.pluginKey}:${slot.id}`} to={`/agents/${encodeURIComponent(agentRef)}/${encodeURIComponent(`plugin:${slot.pluginKey}:${slot.id}`)}`} label={slot.displayName} icon={Wrench} />)}
           </div>
@@ -134,7 +135,7 @@ export function AgentContextualSidebar({
                 icon={item.icon}
               />
             )) : (
-              <p className="px-2 py-1.5 text-xs text-muted-foreground">Loading audit links…</p>
+              <p className="px-2 py-1.5 text-xs text-muted-foreground">{t("agentSidebar.loadingAuditLinks")}</p>
             )}
           </div>
         </div>

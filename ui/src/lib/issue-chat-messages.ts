@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import type { ExecutionProjection } from "@paperclipai/shared";
 import type {
   ReasoningMessagePart,
@@ -553,7 +554,7 @@ function authorNameForComment(
 }
 
 function formatStatusLabel(status: string) {
-  return status.replace(/_/g, " ");
+  return statusLabel(status);
 }
 
 function createCommentMessage(args: {

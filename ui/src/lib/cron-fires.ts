@@ -1,3 +1,4 @@
+import { dateLocale } from "@/i18n";
 /**
  * Client-side "next N schedule fires" helper for the routine Delivery preview (§3.5).
  *
@@ -138,7 +139,7 @@ interface ZonedParts {
 }
 
 function getZonedMinuteParts(date: Date, timeZone: string): ZonedParts {
-  const formatter = new Intl.DateTimeFormat("en-US", {
+  const formatter = new Intl.DateTimeFormat(dateLocale(), {
     timeZone,
     year: "numeric",
     month: "2-digit",

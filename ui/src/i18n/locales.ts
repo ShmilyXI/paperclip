@@ -2,6 +2,9 @@ import type { Resource } from "i18next";
 
 import { assertValidLocaleMessages } from "./locale-validation";
 
+/** Locales that must define every English key; all others may be partial and fall back to English. */
+const COMPLETE_LOCALES = ["en", "zh-CN"];
+
 export const DEFAULT_LOCALE = "en" as const;
 
 const localeModules = import.meta.glob("./locales/*.json", {
@@ -25,7 +28,7 @@ if (!(DEFAULT_LOCALE in localeMessages)) {
 
 for (const [locale, messages] of Object.entries(localeMessages)) {
   try {
-    assertValidLocaleMessages(messages);
+    assertValidLocaleMessages(messages, undefined, { allowMissing: !COMPLETE_LOCALES.includes(locale) });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Invalid ${locale} locale messages: ${message}`);

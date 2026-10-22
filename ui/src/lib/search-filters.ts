@@ -1,3 +1,4 @@
+import { statusLabel } from "@/lib/i18n-labels";
 import {
   COMPANY_SEARCH_SORTS,
   type CompanySearchSort,
@@ -105,7 +106,7 @@ export interface FilterChip {
 }
 
 function humanize(value: string): string {
-  return value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  return statusLabel(value, true);
 }
 
 function assigneeChipLabel(filters: SearchFilters, lookups: FilterChipLookups): string {
