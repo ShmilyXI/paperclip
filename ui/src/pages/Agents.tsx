@@ -28,7 +28,8 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { AgentsToolbar } from "../components/AgentsToolbar";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Bot } from "lucide-react";
-import { AGENT_ROLE_LABELS, type Agent, type Environment, type EnvironmentCapabilities } from "@paperclipai/shared";
+import { type Agent, type Environment, type EnvironmentCapabilities } from "@paperclipai/shared";
+import { localizedRoleLabels } from "@/lib/role-labels";
 import {
   resourceMembershipState,
   useResourceMemberships,
@@ -37,7 +38,7 @@ import { usePublishSharedQueryData, useSharedPollingQuery } from "../hooks/useSh
 
 import { agentDisplayAdapterType, getAdapterLabel } from "../adapters/adapter-display-registry";
 
-const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
+const roleLabels = localizedRoleLabels as Record<string, string>;
 
 // Lazy-loaded so the roster page doesn't statically pull in the full
 // AgentConfigForm module graph (the modal reuses its adapter/model pickers).

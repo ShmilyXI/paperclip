@@ -1,5 +1,5 @@
 import { t } from "@/i18n";
-import { statusLabel } from "./i18n-labels";
+import { actionFallbackLabel, statusLabel } from "./i18n-labels";
 import type { Agent } from "@paperclipai/shared";
 import type { CompanyUserProfile } from "./company-members";
 import { formatReviewPolicyValue } from "./review-policy";
@@ -503,7 +503,7 @@ export function formatActivityVerb(
   });
   if (structuredChange) return structuredChange;
 
-  return ACTIVITY_ROW_VERBS[action] ?? action.replace(/[._]/g, " ");
+  return ACTIVITY_ROW_VERBS[action] ?? actionFallbackLabel(action);
 }
 
 export function formatIssueActivityAction(
@@ -542,7 +542,7 @@ export function formatIssueActivityAction(
     const serviceName = typeof details.serviceName === "string" && details.serviceName.trim()
       ? details.serviceName.trim()
       : null;
-    const base = ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " ");
+    const base = ISSUE_ACTIVITY_LABELS[action] ?? actionFallbackLabel(action);
     return serviceName ? `${base} for ${serviceName}` : base;
   }
 
@@ -561,5 +561,5 @@ export function formatIssueActivityAction(
     return `${ISSUE_ACTIVITY_LABELS[action] ?? action} ${key}${title}`;
   }
 
-  return ISSUE_ACTIVITY_LABELS[action] ?? action.replace(/[._]/g, " ");
+  return ISSUE_ACTIVITY_LABELS[action] ?? actionFallbackLabel(action);
 }

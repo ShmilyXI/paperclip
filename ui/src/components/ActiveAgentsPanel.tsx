@@ -161,7 +161,7 @@ export function ActiveAgentsPanel({
         <div className="mt-3 flex justify-end text-xs text-muted-foreground">
           <Link to="/dashboard/live" className="hover:text-foreground hover:underline">
             {hiddenRunCount > 0
-              ? `${hiddenRunCount} more active/recent run${hiddenRunCount === 1 ? "" : "s"}`
+              ? t("activeAgents.moreRuns", { count: hiddenRunCount })
               : t("activeAgents.viewAllRuns")}
           </Link>
         </div>

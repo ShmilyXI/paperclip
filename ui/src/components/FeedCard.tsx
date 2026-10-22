@@ -1,3 +1,4 @@
+import { actionFallbackLabel } from "@/lib/i18n-labels";
 import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { Link } from "@/lib/router";
@@ -126,7 +127,7 @@ function formatVerb(
       return "updated organization budget";
 
     default:
-      return action.replace(/[._]/g, " ");
+      return actionFallbackLabel(action);
   }
 }
 

@@ -2,7 +2,8 @@ import { t } from "@/i18n";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@/lib/router";
-import { AGENT_ROLE_LABELS, type Agent, type AgentRuntimeState } from "@paperclipai/shared";
+import { type Agent, type AgentRuntimeState } from "@paperclipai/shared";
+import { localizedRoleLabels } from "@/lib/role-labels";
 import { agentsApi } from "../api/agents";
 import { useCompany } from "../context/CompanyContext";
 import { agentDisplayAdapterType, getAdapterLabel } from "../adapters/adapter-display-registry";
@@ -17,7 +18,7 @@ interface AgentPropertiesProps {
   runtimeState?: AgentRuntimeState;
 }
 
-const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
+const roleLabels = localizedRoleLabels as Record<string, string>;
 
 function PropertyRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (

@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "../components/EmptyState";
 import { PageSkeleton } from "../components/PageSkeleton";
 import { Download, Maximize2, Minus, Network, Plus, Upload } from "lucide-react";
-import { AGENT_ROLE_LABELS, type Agent } from "@paperclipai/shared";
+import { type Agent } from "@paperclipai/shared";
+import { localizedRoleLabels } from "@/lib/role-labels";
 import { useCloudInstance } from "@/hooks/useCloudInstance";
 import { useHiddenSettings } from "@/hooks/useHiddenSettings";
 
@@ -634,7 +635,7 @@ export function OrgChart() {
   );
 }
 
-const roleLabels: Record<string, string> = AGENT_ROLE_LABELS;
+const roleLabels: Record<string, string> = localizedRoleLabels;
 
 function roleLabel(role: string): string {
   return roleLabels[role] ?? role;

@@ -25,3 +25,12 @@ export function statusLabel(status: string | null | undefined, titleCase = false
 export function priorityLabel(priority: string | null | undefined, titleCase = false): string {
   return translated("priority", priority, titleCase);
 }
+
+/** Fallback label for an activity action with no explicit wording, e.g. "environment.lease_released". */
+export function actionFallbackLabel(action: string): string {
+  const words = action.split(/[._]/).filter(Boolean);
+  if (i18n.language === "en") return words.join(" ");
+  return words
+    .map((word) => (i18n.exists(`activityTokens.${word}`) ? t(`activityTokens.${word}`) : word))
+    .join(" ");
+}

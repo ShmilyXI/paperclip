@@ -1,6 +1,7 @@
 import { t } from "@/i18n";
 import { useId } from "react";
-import { AGENT_ROLES, AGENT_ROLE_LABELS } from "@paperclipai/shared";
+import { AGENT_ROLES, } from "@paperclipai/shared";
+import { localizedRoleLabels } from "@/lib/role-labels";
 import type { MuseInvitationDraft } from "@/lib/muse-invitation-draft";
 import { Input } from "../ui/input";
 import { Link } from "@/lib/router";
@@ -214,7 +215,7 @@ export function ExternalAgentInviteContent({
             <select id={`${detailsId}-role`} disabled={busy} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm" value={museDraft.role} onChange={event => {
               const role = AGENT_ROLES.find(value => value === event.target.value);
               if (role) onMuseDraftChange?.({ ...museDraft, role });
-            }}>{AGENT_ROLES.map(role => <option key={role} value={role}>{AGENT_ROLE_LABELS[role]}</option>)}</select>
+            }}>{AGENT_ROLES.map(role => <option key={role} value={role}>{localizedRoleLabels[role]}</option>)}</select>
           </div>
           <p className="text-xs text-muted-foreground">Muse uses its own approved tools. Provider usage and cost are unavailable to Paperclip.</p>
         </form>
