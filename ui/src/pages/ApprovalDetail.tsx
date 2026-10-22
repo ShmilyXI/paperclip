@@ -93,7 +93,7 @@ export function ApprovalDetail() {
       refresh();
       navigate(`/approvals/${approvalId}?resolved=approved`, { replace: true });
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Approve failed"),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.approveFailed")),
   });
 
   const rejectMutation = useMutation({
@@ -102,7 +102,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Reject failed"),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.rejectFailed")),
   });
 
   const revisionMutation = useMutation({
@@ -111,7 +111,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Revision request failed"),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.revisionRequestFailed")),
   });
 
   const resubmitMutation = useMutation({
@@ -120,7 +120,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Resubmit failed"),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.resubmitFailed")),
   });
 
   const addCommentMutation = useMutation({
@@ -130,7 +130,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Comment failed"),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.commentFailed")),
   });
 
   const deleteAgentMutation = useMutation({
@@ -140,11 +140,11 @@ export function ApprovalDetail() {
       refresh();
       navigate("/approvals");
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Delete failed"),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.deleteFailed")),
   });
 
   if (isLoading) return <PageSkeleton variant="detail" />;
-  if (!approval) return <p className="text-sm text-muted-foreground">Approval not found.</p>;
+  if (!approval) return <p className="text-sm text-muted-foreground">{t("approvals.approvalNotFound")}</p>;
 
   const payload = approval.payload as Record<string, unknown>;
   const linkedAgentId = typeof payload.agentId === "string" ? payload.agentId : null;
@@ -164,11 +164,11 @@ export function ApprovalDetail() {
         }
       : linkedAgentId
         ? {
-            label: "Open hired agent",
+            label: t("approvals.openHiredAgent"),
             to: `/agents/${linkedAgentId}`,
           }
         : {
-            label: "Back to approvals",
+            label: t("approvals.backToApprovals"),
             to: "/approvals",
           };
 
@@ -183,7 +183,7 @@ export function ApprovalDetail() {
                 <Sparkles className="h-3 w-3 text-green-500 dark:text-green-200 absolute -right-2 -top-1 animate-pulse" />
               </div>
               <div>
-                <p className="text-sm text-green-800 dark:text-green-100 font-medium">Approval confirmed</p>
+                <p className="text-sm text-green-800 dark:text-green-100 font-medium">{t("approvals.approvalConfirmed")}</p>
                 <p className="text-xs text-green-700 dark:text-green-200/90">
                   Requesting agent was notified to review this approval and linked tasks.
                 </p>
@@ -214,7 +214,7 @@ export function ApprovalDetail() {
         <div className="text-sm space-y-1">
           {approval.requestedByAgentId && (
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground text-xs">Requested by</span>
+              <span className="text-muted-foreground text-xs">{t("approvals.requestedBy")}</span>
               <AgentIdentity
                 agent={agents?.find((agent) => agent.id === approval.requestedByAgentId) ?? { id: approval.requestedByAgentId, name: t("common.agent") }}
                 size="sm"
@@ -242,7 +242,7 @@ export function ApprovalDetail() {
         {error && <p className="text-sm text-destructive">{error}</p>}
         {linkedIssues && linkedIssues.length > 0 && (
           <div className="pt-2 border-t border-border/60">
-            <p className="text-xs text-muted-foreground mb-1.5">Linked Tasks</p>
+            <p className="text-xs text-muted-foreground mb-1.5">{t("approvals.linkedTasks")}</p>
             <div className="space-y-1.5">
               {linkedIssues.map((issue) => (
                 <Link
@@ -314,7 +314,7 @@ export function ApprovalDetail() {
               variant="outline"
               className="text-destructive border-destructive/40"
               onClick={() => {
-                if (!window.confirm("Delete this disapproved agent? This cannot be undone.")) return;
+                if (!window.confirm(t("approvals.deleteThisDisapprovedAgentThis"))) return;
                 deleteAgentMutation.mutate(linkedAgentId);
               }}
               disabled={deleteAgentMutation.isPending}

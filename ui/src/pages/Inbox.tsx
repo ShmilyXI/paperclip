@@ -1789,7 +1789,7 @@ function StreamlinedInbox({
       navigate(`/approvals/${id}?resolved=approved`);
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to approve");
+      setActionError(err instanceof Error ? err.message : t("inbox.failedToApprove"));
     },
   });
 
@@ -1800,7 +1800,7 @@ function StreamlinedInbox({
       queryClient.invalidateQueries({ queryKey: queryKeys.approvals.list(selectedCompanyId!) });
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to reject");
+      setActionError(err instanceof Error ? err.message : t("inbox.failedToReject"));
     },
   });
 
@@ -1815,7 +1815,7 @@ function StreamlinedInbox({
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to approve join request");
+      setActionError(err instanceof Error ? err.message : t("inbox.failedToApproveJoinRequest"));
     },
   });
 
@@ -1828,7 +1828,7 @@ function StreamlinedInbox({
       queryClient.invalidateQueries({ queryKey: queryKeys.sidebarBadges(selectedCompanyId!) });
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to reject join request");
+      setActionError(err instanceof Error ? err.message : t("inbox.failedToRejectJoinRequest"));
     },
   });
 
@@ -1873,8 +1873,8 @@ function StreamlinedInbox({
     },
     onError: (error) => {
       pushToast({
-        title: "Run retry failed",
-        body: error instanceof Error ? error.message : "Unable to retry run",
+        title: t("inbox.runRetryFailed"),
+        body: error instanceof Error ? error.message : t("inbox.unableToRetryRun"),
         tone: "error",
       });
     },
@@ -1947,7 +1947,7 @@ function StreamlinedInbox({
       return { companyId: selectedCompanyId, previousData };
     },
     onError: (err, id, context) => {
-      setActionError(err instanceof Error ? err.message : "Failed to archive task");
+      setActionError(err instanceof Error ? err.message : t("inbox.failedToArchiveTask"));
       if (context?.companyId) clearLocalInboxArchive(context.companyId, id);
       setArchivingIssueIds((prev) => {
         const next = new Set(prev);
@@ -1988,7 +1988,7 @@ function StreamlinedInbox({
       return { companyId: selectedCompanyId };
     },
     onError: (err, id, context) => {
-      setActionError(err instanceof Error ? err.message : "Failed to undo inbox archive");
+      setActionError(err instanceof Error ? err.message : t("inbox.failedToUndoInboxArchive"));
       if (context?.companyId) {
         beginLocalInboxArchive(context.companyId, id);
         boundLocalInboxArchive(context.companyId, id);
@@ -2466,9 +2466,9 @@ function StreamlinedInbox({
           <Tabs value={tab} onValueChange={(value) => navigate(`/inbox/${value}`)}>
             <PageTabBar
               items={[
-                { value: "mine", label: "Mine" },
+                { value: "mine", label: t("inbox.mine") },
                 { value: "recent", label: t("common.recent") },
-                { value: "unread", label: "Unread" },
+                { value: "unread", label: t("inbox.unread") },
                 { value: "blocked", label: t("common.blocked") },
                 { value: "all", label: t("common.all") },
               ]}
@@ -2531,7 +2531,7 @@ function StreamlinedInbox({
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", blockedGroupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={t("inbox.group")}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2567,7 +2567,7 @@ function StreamlinedInbox({
                   }));
                 }}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which columns stay visible"
+                title={t("inbox.chooseWhichColumnsStayVisible")}
                 iconOnly
               />
               <Popover>
@@ -2650,7 +2650,7 @@ function StreamlinedInbox({
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", groupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={t("inbox.group")}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2692,7 +2692,7 @@ function StreamlinedInbox({
                   }));
                 }}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which columns stay visible"
+                title={t("inbox.chooseWhichColumnsStayVisible")}
                 iconOnly
                 rowPresentation={streamlinedUiEnabled ? "task" : "legacy"}
               />
@@ -2711,7 +2711,7 @@ function StreamlinedInbox({
                   <Dialog open={showMarkAllReadConfirm} onOpenChange={setShowMarkAllReadConfirm}>
                     <DialogContent className="sm:max-w-md">
                       <DialogHeader>
-                        <DialogTitle>Mark all as read?</DialogTitle>
+                        <DialogTitle>{t("inbox.markAllAsRead")}</DialogTitle>
                         <DialogDescription>
                           This will mark {unreadIssueIds.length} unread {unreadIssueIds.length === 1 ? "item" : "items"} as read.
                         </DialogDescription>

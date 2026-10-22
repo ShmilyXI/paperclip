@@ -135,9 +135,9 @@ export function BudgetOverridePayload({ payload }: { payload: Record<string, unk
   const observedAmount = typeof payload.observedAmount === "number" ? payload.observedAmount : null;
   return (
     <div className="mt-3 space-y-1.5 text-sm">
-      <PayloadField label="Scope" value={payload.scopeName ?? payload.scopeType} />
-      <PayloadField label="Window" value={payload.windowKind} />
-      <PayloadField label="Metric" value={payload.metric} />
+      <PayloadField label={t("approvals.scope")} value={payload.scopeName ?? payload.scopeType} />
+      <PayloadField label={t("approvals.window")} value={payload.windowKind} />
+      <PayloadField label={t("approvals.metric")} value={payload.metric} />
       {(budgetAmount !== null || observedAmount !== null) ? (
         <div className="rounded-md bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
           Limit {budgetAmount !== null ? formatCents(budgetAmount) : "—"} · Observed {observedAmount !== null ? formatCents(observedAmount) : "—"}
@@ -208,13 +208,13 @@ function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unkn
       )}
       {nextActionOnApproval && (
         <div className="rounded-lg border border-border/60 bg-background/60 px-3.5 py-3">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">On approval</p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{t("approvals.onApproval")}</p>
           <MarkdownBody className="mt-1 leading-6 text-foreground">{nextActionOnApproval}</MarkdownBody>
         </div>
       )}
       {risks.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">Risks</p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{t("approvals.risks")}</p>
           <ul className="space-y-1 text-sm text-muted-foreground">
             {risks.map((risk, index) => (
               <li key={`${index}-${risk}`} className="flex items-start gap-2">
