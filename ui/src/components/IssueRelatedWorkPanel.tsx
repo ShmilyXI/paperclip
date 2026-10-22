@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { IssueRelatedWorkItem, IssueRelatedWorkSummary } from "@paperclipai/shared";
 import { IssueReferencePill } from "./IssueReferencePill";
 import { ExternalObjectPill } from "./ExternalObjectPill";
@@ -126,7 +127,7 @@ function ExternalObjectsSection({
               onClick={onRetry}
               className="text-primary underline-offset-2 hover:underline"
             >
-              Retry
+              {t("common.retry")}
             </button>
           ) : null}
         </p>

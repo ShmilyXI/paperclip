@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -217,7 +218,7 @@ export function StatusCardDetailDrawer({
                 variant="outline"
                 size="sm"
                 onClick={() => recompileMutation.mutate()}
-                // While the setup run is live, "Run now" is disabled — kicking a
+                // While the setup run is live, t("common.runNow") is disabled — kicking a
                 // second run would race the one already building the card.
                 disabled={recompileMutation.isPending || setupRunning}
               >
@@ -226,7 +227,7 @@ export function StatusCardDetailDrawer({
                 ) : (
                   <Wand2 className="h-3.5 w-3.5" />
                 )}
-                {setupRunning ? "Setting up…" : recompileMutation.isPending ? "Running…" : "Run now"}
+                {setupRunning ? "Setting up…" : recompileMutation.isPending ? "Running…" : t("common.runNow")}
               </Button>
             ) : (
               <Button
@@ -236,7 +237,7 @@ export function StatusCardDetailDrawer({
                 disabled={refreshMutation.isPending || lifecycle === "updating"}
               >
                 <RefreshCw className={cn("h-3.5 w-3.5", refreshMutation.isPending && "animate-spin")} />
-                {refreshMutation.isPending ? "Refreshing…" : "Refresh"}
+                {refreshMutation.isPending ? "Refreshing…" : t("common.refresh")}
               </Button>
             )}
           </div>
@@ -248,10 +249,10 @@ export function StatusCardDetailDrawer({
 
         <Tabs value={tab} onValueChange={setTab} className="flex min-h-0 flex-1 flex-col gap-0">
           <TabsList variant="line" className="w-full justify-start gap-4 border-b border-border px-4">
-            <TabsTrigger value="summary">Summary</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+            <TabsTrigger value="summary">{t("common.summary")}</TabsTrigger>
+            <TabsTrigger value="settings">{t("common.settings")}</TabsTrigger>
             <TabsTrigger value="watched">Watched issues</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
+            <TabsTrigger value="history">{t("common.history")}</TabsTrigger>
           </TabsList>
 
           {actionError ? (
@@ -465,7 +466,7 @@ export function StatusCardDetailDrawer({
               </section>
 
               <section className="space-y-2">
-                <h3 className="text-sm font-semibold">Agent</h3>
+                <h3 className="text-sm font-semibold">{t("common.agent")}</h3>
                 <SummarizerAgentSelect
                   companyId={card.companyId}
                   value={summarizerAgentId}

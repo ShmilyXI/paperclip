@@ -1,7 +1,7 @@
 import { Languages } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { changeLocale, useTranslation } from "@/i18n";
+import { changeLocale, useTranslation, t } from "@/i18n";
 import { SELECTABLE_LOCALES } from "@/i18n/locale-constants";
 
 interface LanguageSwitcherProps {

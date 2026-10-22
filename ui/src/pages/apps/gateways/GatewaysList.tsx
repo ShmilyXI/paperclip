@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Search } from "lucide-react";
@@ -39,7 +40,7 @@ export function GatewaysList() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
+      { label: t("common.connectors"), href: "/apps" },
       { label: "Gateways" },
     ]);
     return () => setBreadcrumbs([]);
@@ -213,7 +214,7 @@ export function GatewaysList() {
                         <th className="whitespace-nowrap px-4 py-2.5">Gateway</th>
                         <th className="whitespace-nowrap px-4 py-2.5">Scope</th>
                         <th className="whitespace-nowrap px-4 py-2.5">Apps</th>
-                        <th className="whitespace-nowrap px-4 py-2.5">Tokens</th>
+                        <th className="whitespace-nowrap px-4 py-2.5">{t("common.tokens")}</th>
                         <th className="whitespace-nowrap px-4 py-2.5">Last used</th>
                         <th className="whitespace-nowrap px-4 py-2.5 text-right">On</th>
                       </tr>
@@ -270,7 +271,7 @@ export function GatewaysList() {
                         <MobileField label="Scope" value={scope} />
                         <MobileField label="Apps" value={appsLabel} />
                         <MobileField
-                          label="Tokens"
+                          label={t("common.tokens")}
                           value={`${active} active${expiring > 0 ? ` · ${expiring} expiring` : ""}`}
                         />
                         <MobileField

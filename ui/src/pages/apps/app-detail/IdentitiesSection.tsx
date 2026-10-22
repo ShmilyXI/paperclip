@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Building2, Loader2, Lock, RefreshCw, TriangleAlert, UserRound } from "lucide-react";
 import type {
@@ -564,7 +565,7 @@ export function AudienceDialog({
 
         <DialogFooter>
           <Button variant="ghost" onClick={onCancel} disabled={pending}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             disabled={pending || !canSave}
@@ -630,7 +631,7 @@ export function RevokeGrantDialog({
         {children}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={pending} autoFocus>
-            Cancel
+            {t("common.cancel")}
           </AlertDialogCancel>
           <AlertDialogAction
             disabled={pending}

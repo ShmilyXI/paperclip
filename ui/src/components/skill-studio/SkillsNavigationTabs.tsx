@@ -1,10 +1,11 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import { Link } from "@/lib/router";
 import { useStreamlinedUiEnabled } from "@/hooks/useStreamlinedUiEnabled";
 import { SKILLS_NAVIGATION_HREFS, type SkillsNavigationView } from "@/pages/skills/skills-navigation";
 
 const views = [
-  { value: "installed", label: "Installed" },
+  { value: "installed", label: t("common.installed") },
   { value: "discover", label: "Discover" },
   { value: "authored", label: "My Skills" },
 ] as const;

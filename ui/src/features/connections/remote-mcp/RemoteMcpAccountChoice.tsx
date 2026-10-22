@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { InlineBanner } from "@/components/InlineBanner";
 import { ConnectionChoiceList } from "../ConnectionChoiceList";
@@ -62,7 +63,7 @@ export function RemoteMcpAccountChoice({
           disabled={Boolean(pendingId)}
           onClick={onCancel}
         >
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button disabled={Boolean(pendingId)} onClick={onConnectNew}>
           Connect new

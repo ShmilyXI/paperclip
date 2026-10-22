@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ToolProfileWithDetails } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
 import { cn } from "@/lib/utils";
@@ -33,8 +34,8 @@ export function AppsToolsPanel({
             <thead>
               <tr className="border-b border-border bg-muted/40 text-left text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
                 <th className="px-4 py-2.5">App</th>
-                <th className="px-4 py-2.5">Tools</th>
-                <th className="px-4 py-2.5">Status</th>
+                <th className="px-4 py-2.5">{t("common.tools")}</th>
+                <th className="px-4 py-2.5">{t("common.status")}</th>
                 <th className="px-4 py-2.5 text-right" />
               </tr>
             </thead>

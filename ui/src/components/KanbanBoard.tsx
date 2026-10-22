@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { statusLabel as localizedStatusLabel } from "@/lib/i18n-labels";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { useMemo, useState } from "react";
@@ -343,7 +344,7 @@ function KanbanCard({
               aria-label="Needs next step"
             >
               <AlertTriangle className="h-3 w-3" />
-              Next step
+              {t("common.nextStep")}
             </Badge>
           ) : null}
           {isLive && (

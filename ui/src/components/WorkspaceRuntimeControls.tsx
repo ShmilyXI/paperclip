@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type {
   WorkspaceCommandDefinition,
   RuntimeExposureStatus,
@@ -373,12 +374,12 @@ function CommandActionButtons({
         const request = buildRequest(item, action);
         const Icon = action === "stop" ? Square : action === "restart" ? RotateCcw : Play;
         const label = action === "run"
-          ? "Run"
+          ? t("common.run")
           : action === "start"
-            ? "Start"
+            ? t("common.start")
             : action === "stop"
-              ? "Stop"
-              : "Restart";
+              ? t("common.stop")
+              : t("common.restart");
         const showSpinner = isPending && requestMatchesPending(pendingRequest, request);
         const disabled =
           isPending

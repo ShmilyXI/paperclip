@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { agentsApi } from "@/api/agents";
@@ -61,7 +62,7 @@ function CompanyAgentChats({ companyId, userId }: { companyId: string | null; us
           mutation.mutate({
             resourceType: "agent",
             resourceId: id,
-            resourceName: agents.find((agent) => agent.id === id)?.name ?? "Agent",
+            resourceName: agents.find((agent) => agent.id === id)?.name ?? t("common.agent"),
             starred: !stars.includes(id),
           });
         }}

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState, type ReactNode } from "react";
 import {
   AlertTriangle,
@@ -271,18 +272,18 @@ export function DecisionCard({
             : "failed";
 
   const badgeLabel = open
-    ? "Pending"
+    ? t("common.pending")
     : decision.status === "expired"
       ? "Expired"
       : decision.status === "cancelled"
-        ? "Cancelled"
+        ? t("common.cancelled")
         : dismissed
           ? "Dismissed"
           : decision.executionStatus === "succeeded"
             ? "Decided"
             : decision.executionStatus === "partial"
               ? "Partial"
-              : "Failed";
+              : t("common.failed");
 
   const requiredUnmet = (decision.inputs ?? []).some(
     (field) => field.required && !(inputValues[field.id] ?? "").trim(),
@@ -521,7 +522,7 @@ export function DecisionCard({
                       </p>
                     )}
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Type <span className="font-mono font-medium text-foreground">{confirmToken}</span> to confirm.
+                      {t("common.type")} <span className="font-mono font-medium text-foreground">{confirmToken}</span> to confirm.
                     </p>
                     <Input
                       value={confirmText}
@@ -540,7 +541,7 @@ export function DecisionCard({
                           setConfirmText("");
                         }}
                       >
-                        Cancel
+                        {t("common.cancel")}
                       </Button>
                       <Button
                         variant="destructive"

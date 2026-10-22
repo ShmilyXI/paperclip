@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AiConnectionPoolConnector } from "@/components/ai-connections/AiConnectionPoolConnector";
 import { aiConnectionRouterPluginKey } from "@paperclipai/shared";
 import { ConnectionInstructionsSettings } from "@/features/connections/ConnectionInstructions";
@@ -251,7 +252,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
   useEffect(() => {
     if (!activeTab) return;
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
+      { label: t("common.connectors"), href: "/apps" },
       { label: appName, href: appTabHref(connectionId, "permissions") },
       { label: appTabLabel(activeTab) },
     ]);
@@ -284,7 +285,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       queryClient.invalidateQueries({ queryKey: queryKeys.apps.attention(selectedCompanyId!) });
       navigate("/apps");
     },
-    onError: (error) => pushToast({ title: "Couldn't disconnect", body: error instanceof Error ? error.message : "Please try again.", tone: "error" }),
+    onError: (error) => pushToast({ title: "Couldn't disconnect", body: error instanceof Error ? error.message : t("common.pleaseTryAgain"), tone: "error" }),
   });
   const [pending, setPending] = useState(false);
   const persist = useMutation({
@@ -317,7 +318,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     onError: (error) =>
       pushToast({
         title: "Couldn't save that",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
     onSettled: () => setPending(false),
@@ -336,7 +337,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     onError: (error) =>
       pushToast({
         title: "Couldn't rename the app",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -353,7 +354,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       } catch (error) {
         pushToast({
           title: "Couldn't start sign-in",
-          body: error instanceof Error ? error.message : "Please try again.",
+          body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
           tone: "error",
         });
       }
@@ -361,7 +362,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     onError: (error) =>
       pushToast({
         title: "Couldn't start sign-in",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -395,7 +396,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       } catch (error) {
         pushToast({
           title: "Couldn't start sign-in",
-          body: error instanceof Error ? error.message : "Please try again.",
+          body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
           tone: "error",
         });
       }
@@ -403,7 +404,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     onError: (error) =>
       pushToast({
         title: "Couldn't start sign-in",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -453,7 +454,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     onError: (error) =>
       pushToast({
         title: "Couldn't refresh actions",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -471,7 +472,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     },
     onError: (error) => pushToast({
       title: "Couldn't refresh GitHub access",
-      body: error instanceof Error ? error.message : "Please try again.",
+      body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
       tone: "error",
     }),
   });
@@ -800,10 +801,10 @@ export function AppDetailHeader({
                 autoFocus
               />
               <Button type="submit" size="sm" disabled={renamePending || !nameDraft.trim()}>
-                {renamePending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Save"}
+                {renamePending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : t("common.save")}
               </Button>
               <Button type="button" size="sm" variant="ghost" onClick={onRenameCancel} disabled={renamePending}>
-                Cancel
+                {t("common.cancel")}
               </Button>
             </form>
           ) : (
@@ -855,7 +856,7 @@ function ToolsLoadError({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="space-y-3 py-8">
       <p className="text-sm text-destructive">Couldn’t load tools for this app.</p>
-      <Button size="sm" variant="outline" onClick={onRetry}>Try again</Button>
+      <Button size="sm" variant="outline" onClick={onRetry}>{t("common.tryAgain")}</Button>
     </div>
   );
 }
@@ -886,12 +887,12 @@ type StatusInfo = { label: string; tone: "connected" | "attention" | "paused" };
 
 function statusFor(connection: ToolConnection): StatusInfo {
   if (connection.enabled === false || connection.status === "disabled") {
-    return { label: "Paused", tone: "paused" };
+    return { label: t("common.paused"), tone: "paused" };
   }
   if (isAttentionHealthStatus(connection.healthStatus) || (connection.connectionPurpose === "ai" && (connection.healthStatus !== "ok" || aiSubscriptionNeedsIsolatedLogin(connection.config)))) {
     return { label: "Needs attention", tone: "attention" };
   }
-  return { label: "Connected", tone: "connected" };
+  return { label: t("common.connected"), tone: "connected" };
 }
 
 function StatusBadge({ status }: { status: StatusInfo }) {

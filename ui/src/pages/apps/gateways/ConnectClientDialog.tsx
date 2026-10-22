@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type ComponentType, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -145,7 +146,7 @@ export function ConnectClientDialog({
   async function copyText(value: string, label: string) {
     try {
       await copyTextToClipboard(value);
-      pushToast({ title: "Copied", body: label, tone: "success" });
+      pushToast({ title: t("common.copied"), body: label, tone: "success" });
     } catch (error) {
       pushToast({
         title: "Copy failed",
@@ -304,7 +305,7 @@ export function ConnectClientDialog({
                     </code>
                     <Button variant="outline" size="sm" onClick={() => void copyText(endpoint, "Endpoint URL")}>
                       <Copy className="mr-1 h-3.5 w-3.5" />
-                      Copy
+                      {t("common.copy")}
                     </Button>
                   </div>
                 </div>
@@ -326,7 +327,7 @@ export function ConnectClientDialog({
                     onClick={() => copyConfigText && void copyText(copyConfigText, `${activeSnippet.label} config`)}
                   >
                     <Copy className="mr-1 h-3.5 w-3.5" />
-                    Copy
+                    {t("common.copy")}
                   </Button>
                 </div>
                 <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words rounded-md bg-muted p-3 font-mono text-xs text-muted-foreground">
@@ -352,7 +353,7 @@ export function ConnectClientDialog({
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)}>
             <Check className="mr-1.5 h-4 w-4" />
-            Done
+            {t("common.done")}
           </Button>
         </DialogFooter>
       </DialogContent>

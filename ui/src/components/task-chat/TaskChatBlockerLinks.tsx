@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type {
   IssueBlockerAttentionIssueSummary,
   IssueRelationIssueSummary,
@@ -130,7 +131,7 @@ function BlockerRow({
 }
 
 function LiveWorkGlyph({ status }: { status: WaitingBlockerStatus }) {
-  const label = status === "done" ? "Done" : status === "running" ? "Running" : "Waiting";
+  const label = status === "done" ? t("common.done") : status === "running" ? t("common.running") : "Waiting";
   if (status === "done") {
     return (
       <CheckCircle2
@@ -193,7 +194,7 @@ export function TaskChatBlockerLinks({
   placement: "top" | "bottom";
 }) {
   const streamlined = useStreamlinedTaskChatPresentation();
-  const directLabel = streamlined && placement === "bottom" ? "Still blocked by" : "Blocked by";
+  const directLabel = streamlined && placement === "bottom" ? "Still blocked by" : t("common.blockedBy");
   const rootLabel = streamlined
     ? placement === "bottom" ? "Root blocker remains" : "Root blocker"
     : "Ultimately blocked by";

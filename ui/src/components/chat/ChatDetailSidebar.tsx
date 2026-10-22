@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { chatEndpointsApi } from "@/api/chatEndpoints";
 import { queryKeys } from "@/lib/queryKeys";
@@ -36,7 +37,7 @@ export function ChatDetailSidebar({
         >
           <NavItem
             to={`/apps/chat/${endpointId}/settings`}
-            label="Settings"
+            label={t("common.settings")}
             icon={Settings}
             end
           />
@@ -61,7 +62,7 @@ export function ChatDetailSidebar({
           />
           <NavItem
             to={`/apps/chat/${endpointId}/activity`}
-            label="Activity"
+            label={t("common.activity")}
             icon={Activity}
             end
           />

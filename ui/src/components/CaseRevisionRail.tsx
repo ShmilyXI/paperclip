@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@/lib/router";
@@ -16,7 +17,7 @@ import { Diff } from "lucide-react";
 
 /** Author + via-issue attribution line for a revision. */
 function RevisionByline({ revision }: { revision: CaseDocumentRevision }) {
-  const author = revision.actorAgentName ?? (revision.createdByAgentId ? "Agent" : revision.createdByUserId ? "User" : "System");
+  const author = revision.actorAgentName ?? (revision.createdByAgentId ? t("common.agent") : revision.createdByUserId ? t("common.user") : t("common.system"));
   return (
     <span className="flex flex-wrap items-center gap-x-1 text-(length:--text-micro) text-muted-foreground">
       <span>{author}</span>
@@ -105,7 +106,7 @@ function CaseDocumentDiffModal({
               </Select>
             </div>
             <div className="flex min-w-0 items-center gap-2">
-              <span className="shrink-0 rounded-full border border-green-500/30 bg-green-500/10 px-2 py-0.5 text-(length:--text-nano) font-medium uppercase tracking-(--tracking-caps) text-green-400">New</span>
+              <span className="shrink-0 rounded-full border border-green-500/30 bg-green-500/10 px-2 py-0.5 text-(length:--text-nano) font-medium uppercase tracking-(--tracking-caps) text-green-400">{t("common.new")}</span>
               <Select value={effectiveRightId ?? ""} onValueChange={setRightRevisionId}>
                 <SelectTrigger aria-label="New revision" className="min-w-0 w-full border-border/60 data-[size=default]:h-11 md:w-60 md:text-xs md:data-[size=default]:h-9">
                   <SelectValue className="min-w-0 truncate" placeholder="Select revision" />
@@ -131,7 +132,7 @@ function CaseDocumentDiffModal({
             <div className="font-mono text-xs leading-6">
               <div className="grid grid-cols-(--gtc-1) border-b border-border/60 bg-muted/30 px-3 py-2 text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">
                 <span>Old</span>
-                <span>New</span>
+                <span>{t("common.new")}</span>
                 <span />
                 <span>Content</span>
               </div>

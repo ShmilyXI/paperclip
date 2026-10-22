@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { statusLabel as localizedStatusLabel } from "@/lib/i18n-labels";
 import { useState } from "react";
 import type { IssueBlockerAttention } from "@paperclipai/shared";
@@ -26,7 +27,7 @@ interface StatusIconProps {
 }
 
 function blockedAttentionLabel(blockerAttention: IssueBlockerAttention | null | undefined) {
-  if (!blockerAttention || blockerAttention.state === "none") return "Blocked";
+  if (!blockerAttention || blockerAttention.state === "none") return t("common.blocked");
 
   if (blockerAttention.reason === "active_child") {
     const count = blockerAttention.coveredBlockerCount;
@@ -64,7 +65,7 @@ function blockedAttentionLabel(blockerAttention: IssueBlockerAttention | null | 
     return `Blocked · ${attentionCopy}`;
   }
 
-  return "Blocked";
+  return t("common.blocked");
 }
 
 /** Shared accessible/tooltip copy, including waiting and covered-blocker states. */

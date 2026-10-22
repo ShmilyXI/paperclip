@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { SUBSCRIPTION_CURRENCIES, centsToUsd, usdToCents, type SubscriptionAccountReport, type SubscriptionCostReport, type SubscriptionUsage } from "@paperclipai/shared";
@@ -44,14 +45,14 @@ function SubscriptionEditor({ account, accounts, companyId, onDone }: {
     <form className="space-y-4" onSubmit={event => { event.preventDefault(); save.mutate(); }}>
       <div className="space-y-2"><Label htmlFor="subscription-plan">Plan</Label><Input id="subscription-plan" value={plan} onChange={event => setPlan(event.target.value)} required maxLength={100} /></div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2"><Label htmlFor="subscription-price">Price per billing period</Label><Input id="subscription-price" type="number" min="0" step="any" value={amount} placeholder="Unknown" onChange={event => setAmount(event.target.value)} /></div>
+        <div className="space-y-2"><Label htmlFor="subscription-price">Price per billing period</Label><Input id="subscription-price" type="number" min="0" step="any" value={amount} placeholder={t("common.unknown")} onChange={event => setAmount(event.target.value)} /></div>
         <div className="space-y-2"><Label htmlFor="subscription-currency">Currency</Label><select id="subscription-currency" className={selectClass} value={currency} onChange={event => setCurrency(event.target.value)}>{SUBSCRIPTION_CURRENCIES.map(code => <option key={code}>{code}</option>)}</select></div>
-        <div className="space-y-2"><Label htmlFor="subscription-cadence">Billed</Label><select id="subscription-cadence" className={selectClass} value={cadence} onChange={event => setCadence(event.target.value as typeof cadence)}><option value="month">Monthly</option><option value="year">Annually</option></select></div>
-        <div className="space-y-2"><Label htmlFor="subscription-status">Tracking</Label><select id="subscription-status" className={selectClass} value={status} onChange={event => setStatus(event.target.value as typeof status)}><option value="active">Active</option><option value="ended">Subscription ended</option><option value="excluded">Exclude from this organization</option></select></div>
+        <div className="space-y-2"><Label htmlFor="subscription-cadence">Billed</Label><select id="subscription-cadence" className={selectClass} value={cadence} onChange={event => setCadence(event.target.value as typeof cadence)}><option value="month">{t("common.monthly")}</option><option value="year">Annually</option></select></div>
+        <div className="space-y-2"><Label htmlFor="subscription-status">Tracking</Label><select id="subscription-status" className={selectClass} value={status} onChange={event => setStatus(event.target.value as typeof status)}><option value="active">{t("common.active")}</option><option value="ended">Subscription ended</option><option value="excluded">Exclude from this organization</option></select></div>
       </div>
       <p className="text-xs text-muted-foreground">Enter the full amount for one account or seat. Annual prices are divided by 12. Changes apply from now. Ending tracking here does not cancel your provider subscription.</p>
       {save.error && <p role="alert" className="text-sm text-destructive">Could not save this price. Check the amount, or reopen the account if another person updated it.</p>}
-      <div className="flex items-center justify-between"><Button type="button" variant="ghost" disabled={busy} onClick={onDone}>Cancel</Button><Button type="submit" disabled={busy}>{save.isPending ? "Saving…" : "Save price"}</Button></div>
+      <div className="flex items-center justify-between"><Button type="button" variant="ghost" disabled={busy} onClick={onDone}>{t("common.cancel")}</Button><Button type="submit" disabled={busy}>{save.isPending ? t("common.saving2") : "Save price"}</Button></div>
     </form>
     {targets.length > 0 && <div className="space-y-2 border-t border-border pt-4">
       <Label htmlFor="subscription-link">Same subscription as another account?</Label>

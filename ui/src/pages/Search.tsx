@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search as SearchIcon, AlertTriangle, FileQuestion, Plus, X } from "lucide-react";
@@ -58,13 +59,13 @@ const SEARCH_DEBOUNCE_MS = 250;
 const IDENTIFIER_PATTERN = /^[A-Z]+-\d+$/;
 
 const SCOPE_LABELS: Record<CompanySearchScope, string> = {
-  all: "All",
-  issues: "Tasks",
-  comments: "Comments",
-  documents: "Documents",
+  all: t("common.all"),
+  issues: t("common.tasks"),
+  comments: t("common.comments"),
+  documents: t("common.documents"),
   artifacts: "Artifacts",
-  agents: "Agents",
-  projects: "Projects",
+  agents: t("common.agents"),
+  projects: t("common.projects"),
 };
 
 function isCompanySearchScope(value: string | null): value is CompanySearchScope {
@@ -156,7 +157,7 @@ export function Search() {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Search" }]);
+    setBreadcrumbs([{ label: t("common.search2") }]);
   }, [setBreadcrumbs]);
 
   useEffect(() => {
@@ -287,7 +288,7 @@ export function Search() {
     [parsedCommittedQuery.query, scope, sort],
   );
 
-  // "Clear all" drops both URL filters and any typed operator tokens (keeping the
+  // t("common.clearAll") drops both URL filters and any typed operator tokens (keeping the
   // plain text query), so the results snap back to the unfiltered set.
   const handleClearAllFilters = useCallback(() => {
     const plain = parsedCommittedQuery.query;
@@ -545,7 +546,7 @@ export function Search() {
   return (
     <div className="flex h-full min-h-0 flex-col" data-page="search">
       <div className="border-b border-border px-4 py-3 sm:px-6">
-        <h1 className="sr-only">Search</h1>
+        <h1 className="sr-only">{t("common.search2")}</h1>
         <div className="relative">
           <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -819,7 +820,7 @@ function SearchTabContent({
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
           <Button onClick={refetch} variant="default" size="sm">
-            Retry
+            {t("common.retry")}
           </Button>
           <Button onClick={navigateIssuesFallback} variant="outline" size="sm">
             Open Tasks filter view

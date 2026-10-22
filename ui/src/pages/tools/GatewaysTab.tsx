@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type FormEvent, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -72,7 +73,7 @@ function formatOwner(gateway: ToolMcpGatewayWithTokens, agentNames: Map<string, 
     return agentNames.get(gateway.createdByAgentId) ?? `Agent ${shortId(gateway.createdByAgentId)}`;
   }
   if (gateway.createdByUserId) return `Board user ${shortId(gateway.createdByUserId)}`;
-  return "Board";
+  return t("common.board");
 }
 
 function formatScope(
@@ -92,7 +93,7 @@ function formatScope(
   if (gateway.projectId) return `Project ${projectNames.get(gateway.projectId) ?? shortId(gateway.projectId)}`;
   if (gateway.issueId) return `Issue ${shortId(gateway.issueId)}`;
   if (gateway.agentId) return `Agent ${agentNames.get(gateway.agentId) ?? shortId(gateway.agentId)}`;
-  return "Company";
+  return t("common.company");
 }
 
 function formatAllowedTools(profile: ToolProfileWithDetails | undefined) {
@@ -314,7 +315,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
             </label>
           </div>
           <label className="space-y-1.5 text-sm">
-            <span className="text-xs font-medium text-muted-foreground">Description</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("common.description")}</span>
             <textarea
               className="min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={createDraft.description}
@@ -327,10 +328,10 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
           ) : null}
           <div className="flex flex-wrap justify-end gap-2">
             <Button type="button" variant="ghost" size="sm" onClick={() => setCreating(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" size="sm" disabled={createDisabled || !createDraft.name.trim() || !createDraft.profileId}>
-              {createGatewayMutation.isPending ? "Creating..." : "Create gateway"}
+              {createGatewayMutation.isPending ? t("common.creating2") : "Create gateway"}
             </Button>
           </div>
         </form>
@@ -380,7 +381,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
 
                 <dl className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
                   <div>
-                    <dt className="text-xs font-medium text-muted-foreground">Owner</dt>
+                    <dt className="text-xs font-medium text-muted-foreground">{t("common.owner")}</dt>
                     <dd className="mt-0.5 text-foreground">{formatOwner(gateway, agentNames)}</dd>
                   </div>
                   <div>
@@ -486,7 +487,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                     </div>
                     <div className="flex flex-wrap justify-end gap-2">
                       <Button type="button" variant="ghost" size="sm" onClick={() => setIssuingGatewayId(null)}>
-                        Cancel
+                        {t("common.cancel")}
                       </Button>
                       <Button
                         type="submit"
@@ -524,7 +525,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                   <div>
                     <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                       <KeyRound className="h-3.5 w-3.5" />
-                      Tokens
+                      {t("common.tokens")}
                     </div>
                     <div className="space-y-1 text-sm">
                       {gateway.tokens.length === 0 ? (
@@ -582,7 +583,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                                     onClick={() => setConfirmingRevokeTokenId(null)}
                                   >
                                     <X className="mr-1 h-3.5 w-3.5" />
-                                    Cancel
+                                    {t("common.cancel")}
                                   </Button>
                                   <Button
                                     type="button"
@@ -593,7 +594,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                                     disabled={revokeTokenMutation.isPending}
                                   >
                                     <Check className="mr-1 h-3.5 w-3.5" />
-                                    Confirm
+                                    {t("common.confirm")}
                                   </Button>
                                 </div>
                               ) : null}
@@ -628,7 +629,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                                 }}
                               >
                                 <Copy className="mr-1 h-3.5 w-3.5" />
-                                Copy
+                                {t("common.copy")}
                               </Button>
                             </summary>
                             <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap break-words rounded bg-background p-3 text-xs text-muted-foreground">

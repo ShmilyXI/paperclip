@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type FormEvent, type ReactNode, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Copy, KeyRound, Plus } from "lucide-react";
@@ -159,7 +160,7 @@ export function TokensPanel({
   async function copyToken(value: string) {
     try {
       await copyTextToClipboard(value);
-      pushToast({ title: "Copied", body: "Access token", tone: "success" });
+      pushToast({ title: t("common.copied"), body: "Access token", tone: "success" });
     } catch (error) {
       pushToast({
         title: "Copy failed",
@@ -227,7 +228,7 @@ export function TokensPanel({
           </label>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="ghost" size="sm" onClick={() => setMinting(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" size="sm" disabled={createMutation.isPending || !name.trim()}>
               {createMutation.isPending ? "Issuing…" : "Issue token"}
@@ -246,7 +247,7 @@ export function TokensPanel({
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={() => setCreated(null)} aria-label="Dismiss new token">
-              Dismiss
+              {t("common.dismiss")}
             </Button>
           </div>
           <div className="flex items-center gap-2">
@@ -256,10 +257,10 @@ export function TokensPanel({
             {revealed ? (
               <Button variant="outline" size="sm" onClick={() => void copyToken(created.token)}>
                 <Copy className="mr-1 h-3.5 w-3.5" />
-                Copy
+                {t("common.copy")}
               </Button>
             ) : (
-              <Button variant="outline" size="sm" onClick={() => setRevealed(true)}>Show</Button>
+              <Button variant="outline" size="sm" onClick={() => setRevealed(true)}>{t("common.show")}</Button>
             )}
           </div>
         </div>
@@ -286,11 +287,11 @@ export function TokensPanel({
                   <thead>
                     <tr className="border-b border-border bg-muted/40 text-left text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
                       <th className="px-4 py-2.5">Token</th>
-                      <th className="px-4 py-2.5">Owner</th>
-                      <th className="px-4 py-2.5">Created</th>
+                      <th className="px-4 py-2.5">{t("common.owner")}</th>
+                      <th className="px-4 py-2.5">{t("common.created")}</th>
                       <th className="px-4 py-2.5">Last used</th>
                       <th className="px-4 py-2.5">Expiry</th>
-                      <th className="px-4 py-2.5">Status</th>
+                      <th className="px-4 py-2.5">{t("common.status")}</th>
                       <th className="px-4 py-2.5 text-right" />
                     </tr>
                   </thead>
@@ -342,8 +343,8 @@ export function TokensPanel({
                         <StatusBadge status={status} />
                       </div>
                       <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                        <TokenField label="Owner" value={token.clientLabel || token.ownerNote || "—"} />
-                        <TokenField label="Created" value={<RelativeTime value={token.createdAt} />} />
+                        <TokenField label={t("common.owner")} value={token.clientLabel || token.ownerNote || "—"} />
+                        <TokenField label={t("common.created")} value={<RelativeTime value={token.createdAt} />} />
                         <TokenField label="Last used" value={token.lastUsedAt ? <RelativeTime value={token.lastUsedAt} /> : "—"} />
                         <TokenField label="Expiry" value={<ExpiryValue token={token} />} />
                       </dl>
@@ -420,7 +421,7 @@ export function TokensPanel({
                   setRevokeName("");
                 }}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button
                 variant="destructive"

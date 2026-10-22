@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { TaskChatExpansionState, useTaskChatExpansion } from "./expansion-state";
 import { useContext, useEffect, type ReactNode } from "react";
 import { Brain, ChevronRight, CircleEllipsis } from "lucide-react";
@@ -94,7 +95,7 @@ export function TaskChatActivityPhase({
         <button
           type="button"
           aria-expanded={open}
-          aria-label={`${open ? "Collapse" : "Expand"} activity: ${item.summary}`}
+          aria-label={`${open ? t("common.collapse") : t("common.expand")} activity: ${item.summary}`}
           onClick={() => setOpen((value) => !value)}
           className={cn(
             runnerAppearance

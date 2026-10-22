@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Agent } from "@paperclipai/shared";
 import { AgentIcon } from "@/components/AgentIconPicker";
@@ -70,7 +71,7 @@ function AgentChatPickerResults({ agents, onSelect, onComplete, loading, error, 
       {error ? (
         <div role="alert" className="flex flex-col items-start gap-2 p-4 text-sm">
           <p>Couldn’t load agents. Try again.</p>
-          {onRetry && <Button variant="outline" size="sm" onClick={onRetry}>Retry</Button>}
+          {onRetry && <Button variant="outline" size="sm" onClick={onRetry}>{t("common.retry")}</Button>}
         </div>
       ) : loading ? (
         <p role="status" className="p-4 text-sm text-muted-foreground">Loading agents…</p>
@@ -101,8 +102,8 @@ function AgentChatPickerResults({ agents, onSelect, onComplete, loading, error, 
                   <span className="truncate text-xs text-muted-foreground">{agent.title ?? agent.role}</span>
                 </span>
                 {existingChatAgentIds && <span className="shrink-0 text-xs text-muted-foreground">{existingChatAgentIds.includes(agent.id) ? "Open chat" : "New chat"}</span>}
-                {agent.status === "paused" && <span className="text-xs text-(--status-agent-paused)">Paused</span>}
-                {agent.status === "terminated" && <span className="text-xs text-muted-foreground">Terminated</span>}
+                {agent.status === "paused" && <span className="text-xs text-(--status-agent-paused)">{t("common.paused")}</span>}
+                {agent.status === "terminated" && <span className="text-xs text-muted-foreground">{t("common.terminated")}</span>}
                 {agent.status === "pending_approval" && <span className="text-xs text-muted-foreground">Awaiting approval</span>}
               </CommandItem>
             ))}

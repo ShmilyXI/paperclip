@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from 'react';
 import type { SkillSourceCandidate } from '@paperclipai/shared';
 import { FileTree, buildFileTree, collectAllPaths, type FileTreeNode } from '@/components/FileTree';
@@ -108,7 +109,7 @@ export function SkillSourceTree({ candidates, selected, excludedFolders, onChang
           disabled={disabled || candidates.length === 0} onChange={() => toggleCheck('')} />
         <span>{selectedCount} of {candidates.length} selected</span>
       </label>
-      <Button type="button" variant="ghost" size="xs" className="font-normal text-muted-foreground" disabled={disabled || Boolean(search) || allDirs.size === 0} onClick={() => setExpansion(new Map([...allDirs].map(path => [path, allCollapsed])))}>{allCollapsed ? 'Expand all' : 'Collapse all'}</Button>
+      <Button type="button" variant="ghost" size="xs" className="font-normal text-muted-foreground" disabled={disabled || Boolean(search) || allDirs.size === 0} onClick={() => setExpansion(new Map([...allDirs].map(path => [path, allCollapsed])))}>{allCollapsed ? t("common.expandAll") : t("common.collapseAll")}</Button>
     </div>
     <div className="min-h-0 max-h-(--sz-480px) overflow-auto py-1">
       <FileTree layout="explorer" wrapLabels={false}
@@ -138,7 +139,7 @@ export function SkillSourceTree({ candidates, selected, excludedFolders, onChang
         renderNodeExtra={node => {
           const skill = skillsByPath.get(node.path);
           if (!skill) return node.kind === 'file' ? <span className="text-xs text-muted-foreground">Included</span> : null;
-          const label = skill.error ? 'Needs setup' : skill.note === 'New skill' ? 'New' : skill.note === 'Already imported' ? 'Installed' : skill.note?.startsWith('Removed from source') ? 'Removed' : skill.note;
+          const label = skill.error ? 'Needs setup' : skill.note === 'New skill' ? t("common.new") : skill.note === 'Already imported' ? t("common.installed") : skill.note?.startsWith('Removed from source') ? 'Removed' : skill.note;
           const count = skill.inspection?.files.length ?? skill.fileCount;
           return <>
             {label && <Badge variant="outline" className="hidden font-normal text-muted-foreground sm:inline-flex" title={skill.error ?? skill.note}>{label}</Badge>}

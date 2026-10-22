@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useId, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -121,7 +122,7 @@ export function FastResponseSettingsView({
           id: c.grantId,
           name: c.name,
           description:
-            c.status === "connected" ? "Connected" : "Needs attention",
+            c.status === "connected" ? t("common.connected") : "Needs attention",
           icon: <AppLogo name={c.provider} brandKey={c.provider} size={24} />,
         }))}
         onSelect={(grantId) => {
@@ -167,7 +168,7 @@ export function FastResponseSettingsView({
               htmlFor={`${modelListId}-input`}
               className="text-sm font-medium"
             >
-              Model
+              {t("common.model")}
             </label>
             <Input
               id={`${modelListId}-input`}
@@ -256,7 +257,7 @@ export function FastResponseSettingsView({
             }
             onClick={() => onSave(draft)}
           >
-            {saving ? "Saving…" : "Save fast response"}
+            {saving ? t("common.saving2") : "Save fast response"}
           </Button>
         )}
       </div>
@@ -320,7 +321,7 @@ export function FastResponseSettingsSection({
           Could not load fast response settings.
         </p>
         <Button variant="outline" onClick={() => void query.refetch()}>
-          Try again
+          {t("common.tryAgain")}
         </Button>
       </div>
     );

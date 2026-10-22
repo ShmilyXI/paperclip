@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -87,13 +88,13 @@ export function buildRoutineProjectOptions(
 }
 
 const SECTION_TITLES: Record<RoutineSectionKey, string> = {
-  overview: "Overview",
+  overview: t("common.overview"),
   triggers: "Triggers",
   variables: "Variables",
-  secrets: "Secrets",
+  secrets: t("common.secrets"),
   delivery: "Delivery",
-  runs: "Runs",
-  activity: "Activity",
+  runs: t("common.runs"),
+  activity: t("common.activity"),
   history: "Version history",
 };
 
@@ -329,7 +330,7 @@ export function RoutineDetail() {
 
   useEffect(() => {
     if (!routine) return;
-    if (!triggerSetup) setBreadcrumbs([{ label: "Routines", href: "/routines" }, { label: routine.title }]);
+    if (!triggerSetup) setBreadcrumbs([{ label: t("common.routines"), href: "/routines" }, { label: routine.title }]);
     if (!routineDefaults) return;
     const changedRoutine = hydratedRoutineIdRef.current !== routine.id;
     if (changedRoutine || !isEditDirty) {
@@ -686,12 +687,12 @@ export function RoutineDetail() {
   const automationToggleDisabled = updateRoutineStatus.isPending || routine.status === "archived";
   const automationLabel =
     routine.status === "archived"
-      ? "Archived"
+      ? t("common.archived")
       : !routine.assigneeAgentId
-        ? "Draft"
+        ? t("common.draft")
         : automationEnabled
-          ? "Active"
-          : "Paused";
+          ? t("common.active")
+          : t("common.paused");
   const automationLabelClassName =
     routine.status === "archived"
       ? "text-muted-foreground"
@@ -849,7 +850,7 @@ export function RoutineDetail() {
                 onClick={() => navigate(routineDetailHref(routine.id, "history"))}
               >
                 <History className="h-3.5 w-3.5" />
-                History
+                {t("common.history")}
               </Button>
             )}
             {section === "overview" ? (

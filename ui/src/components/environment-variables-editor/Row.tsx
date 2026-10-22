@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
@@ -116,7 +117,7 @@ export function EnvironmentVariableRow({
     onFocusConsumed();
   }, [focusRequest, onFocusConsumed, row.source]);
 
-  // Auto-expire the 5s "Undo" affordance after a Secret→Text switch (§6.3).
+  // Auto-expire the 5s t("common.undo") affordance after a Secret→Text switch (§6.3).
   useEffect(() => {
     if (!undoPrev) return;
     const handle = window.setTimeout(() => setUndoPrev(null), 5000);
@@ -367,7 +368,7 @@ export function EnvironmentVariableRow({
                             event.stopPropagation();
                             setVersionOpen((prev) => !prev);
                           }}
-                          aria-label="Version"
+                          aria-label={t("common.version")}
                           className={cn(
                             "absolute right-8 top-1/2 z-10 -translate-y-1/2 rounded px-1.5 py-0.5 text-(length:--text-nano) font-medium",
                             versionPinned
@@ -464,8 +465,8 @@ export function EnvironmentVariableRow({
                     onChange={(event) => onPatch({ required: event.target.value === "required" })}
                     className="border-l border-border bg-transparent px-2 py-1.5 text-xs font-medium text-muted-foreground outline-none disabled:pointer-events-none"
                   >
-                    <option value="required">Required</option>
-                    <option value="optional">Optional</option>
+                    <option value="required">{t("common.required")}</option>
+                    <option value="optional">{t("common.optional")}</option>
                   </select>
                 </div>
               )}
@@ -542,7 +543,7 @@ export function EnvironmentVariableRow({
                 setUndoPrev(null);
               }}
             >
-              Undo
+              {t("common.undo")}
             </button>
           </p>
         ) : null}
@@ -567,7 +568,7 @@ export function EnvironmentVariableRow({
             <DropdownMenuTrigger asChild disabled={disabled}>
               <button
                 type="button"
-                aria-label="More actions"
+                aria-label={t("common.moreActions")}
                 className="rounded p-1 text-muted-foreground opacity-100 hover:bg-accent hover:text-foreground @[40rem]/env:opacity-0 @[40rem]/env:group-hover/row:opacity-100 @[40rem]/env:group-focus-within/row:opacity-100"
               >
                 <MoreHorizontal className="size-4" />

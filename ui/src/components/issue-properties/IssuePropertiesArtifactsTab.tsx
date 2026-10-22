@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { TextAttachmentContext } from "@/context/TextAttachmentContext";
 import { useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ArtifactUploadContent, type ArtifactUploadEntry } from "@/components/artifacts/ArtifactUploadControls";
@@ -60,16 +61,16 @@ function workProductStatusBadge(
   switch (status) {
     case "active":
     case "draft":
-      return { label: "In progress", cssVar: "--status-task-in_progress" };
+      return { label: t("common.inProgress"), cssVar: "--status-task-in_progress" };
     case "ready_for_review":
       return { label: "For review", cssVar: "--status-task-in_review" };
     case "approved":
     case "merged":
-      return { label: "Done", cssVar: "--status-task-done" };
+      return { label: t("common.done"), cssVar: "--status-task-done" };
     case "changes_requested":
       return { label: "Changes requested", cssVar: "--status-task-todo" };
     case "failed":
-      return { label: "Failed", cssVar: "--status-task-blocked" };
+      return { label: t("common.failed"), cssVar: "--status-task-blocked" };
     default:
       return null;
   }
@@ -193,7 +194,7 @@ function MarkdownWorkProductRow({
               ensure.mutate();
             }}
           >
-            Retry
+            {t("common.retry")}
           </button>
         ) : null}
       </div>
@@ -261,7 +262,7 @@ function MarkdownWorkProductRow({
               <a
                 href={metadata.downloadPath}
                 aria-label={`Download ${workProduct.title}`}
-                title="Download"
+                title={t("common.download")}
                 className="shrink-0 py-1.5 pr-2 pl-0.5 text-muted-foreground hover:text-foreground"
               >
                 <Download className="h-3 w-3" />
@@ -505,7 +506,7 @@ export function IssuePropertiesArtifactsTab({
           void refetchDocuments();
         }}
       >
-        Retry
+        {t("common.retry")}
       </button>
     </div>
   ) : loading ? (

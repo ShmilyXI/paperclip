@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
 import { usePaneWidthReset } from "@/hooks/usePaneWidthReset";
 

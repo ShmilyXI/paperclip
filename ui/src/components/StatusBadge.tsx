@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { statusLabel } from "@/lib/i18n-labels";
 import type { CSSProperties } from "react";
 import { cn } from "../lib/utils";
@@ -17,7 +18,7 @@ function scStyle(cssVar: string): CSSProperties {
   return { "--sc": `var(${cssVar})` } as CSSProperties;
 }
 
-/** "in_review" → "In review" (sentence case). */
+/** "in_review" → t("common.inReview") (sentence case). */
 function sentenceCaseStatus(status: string): string {
   const s = statusLabel(status);
   return s.charAt(0).toUpperCase() + s.slice(1);

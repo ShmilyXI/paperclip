@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { isCsvFile } from "@/lib/csv-preview";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -68,7 +69,7 @@ export function TaskWorkspaceFilePanel({
               variant="ghost"
               size="icon-sm"
               aria-label="Copy file contents"
-              title={copied ? "Copied" : "Copy file contents"}
+              title={copied ? t("common.copied") : "Copy file contents"}
               onClick={() => {
                 void copyTextToClipboard(contentQuery.data!.content.data).then(() => {
                   setCopied(true);

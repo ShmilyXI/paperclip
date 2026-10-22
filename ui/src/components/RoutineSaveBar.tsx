@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -145,7 +146,7 @@ export function RoutineSaveBar({
                 disabled={isSaving || disabled}
                 onClick={() => setConfirmDiscardOpen(true)}
               >
-                Discard
+                {t("common.discard")}
               </Button>
               <Button
                 size="sm"
@@ -174,7 +175,7 @@ export function RoutineSaveBar({
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" size="sm" onClick={() => setConfirmDiscardOpen(false)}>
-              Keep editing
+              {t("common.keepEditing")}
             </Button>
             <Button
               variant="destructive"
@@ -184,7 +185,7 @@ export function RoutineSaveBar({
                 setConfirmDiscardOpen(false);
               }}
             >
-              Discard changes
+              {t("common.discardChanges")}
             </Button>
           </DialogFooter>
         </DialogContent>

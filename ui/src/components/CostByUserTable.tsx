@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { CostByUserReport } from "@paperclipai/shared";
 import { CostAmount } from "./CostAmount";
 import { Identity } from "./Identity";
@@ -15,11 +16,11 @@ export function CostByUserTable({ report }: { report: CostByUserReport }) {
           <table aria-label="Costs by user" className="w-full text-sm">
             <thead className="text-muted-foreground">
               <tr className="border-b border-border">
-                <th scope="col" className="py-2 pr-4 text-left font-medium">User</th>
-                <th scope="col" className="px-4 py-2 text-right font-medium">Runs</th>
+                <th scope="col" className="py-2 pr-4 text-left font-medium">{t("common.user")}</th>
+                <th scope="col" className="px-4 py-2 text-right font-medium">{t("common.runs")}</th>
                 <th scope="col" className="px-4 py-2 text-right font-medium">Input</th>
-                <th scope="col" className="px-4 py-2 text-right font-medium">Output</th>
-                <th scope="col" className="py-2 pl-4 text-right font-medium">Cost</th>
+                <th scope="col" className="px-4 py-2 text-right font-medium">{t("common.output")}</th>
+                <th scope="col" className="py-2 pl-4 text-right font-medium">{t("common.cost")}</th>
               </tr>
             </thead>
             <tbody>

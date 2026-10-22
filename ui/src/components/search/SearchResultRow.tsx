@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "../AgentAvatar";
 import { AgentIdentity } from "../AgentIdentity";
 import { memo, type ComponentType, type SVGProps } from "react";
@@ -15,10 +16,10 @@ type SnippetStyle = {
 };
 
 const SNIPPET_STYLES: Record<string, SnippetStyle> = {
-  comment: { Icon: MessageSquare, label: "Comment" },
+  comment: { Icon: MessageSquare, label: t("common.comment") },
   document: { Icon: FileText, label: "Doc" },
   artifact: { Icon: Paperclip, label: "Artifact" },
-  description: { Icon: Quote, label: "Description" },
+  description: { Icon: Quote, label: t("common.description") },
 };
 
 function snippetStyle(field: string, fallbackLabel: string): SnippetStyle {
@@ -79,7 +80,7 @@ function SearchResultRowImpl({
               text={result.snippets[0]?.text ?? result.snippet}
               highlights={result.snippets[0]?.highlights}
               field="agent"
-              fallbackLabel={result.sourceLabel ?? "Agent"}
+              fallbackLabel={result.sourceLabel ?? t("common.agent")}
             />
           ) : null}
         </div>
@@ -102,7 +103,7 @@ function SearchResultRowImpl({
               text={result.snippets[0]?.text ?? result.snippet}
               highlights={result.snippets[0]?.highlights}
               field="project"
-              fallbackLabel={result.sourceLabel ?? "Project"}
+              fallbackLabel={result.sourceLabel ?? t("common.project")}
             />
           ) : null}
         </div>

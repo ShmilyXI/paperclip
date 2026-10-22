@@ -4,6 +4,7 @@
  * Adapters are simpler than plugins: no workers, no events, no manifests.
  * They just register a ServerAdapterModule that provides model discovery and execution.
  */
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, Cpu, Plus, Power, Trash2, FolderOpen, Package, RefreshCw, Download } from "lucide-react";
@@ -243,7 +244,7 @@ function ReinstallDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={onCancel} disabled={isReinstalling}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button disabled={isReinstalling} onClick={onConfirm}>
             {isReinstalling ? "Reinstalling..." : "Reinstall"}
@@ -269,8 +270,8 @@ export function AdapterManager() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Organization", href: "/dashboard" },
-      { label: "Settings", href: "/company/settings" },
+      { label: selectedCompany?.name ?? t("common.organization"), href: "/dashboard" },
+      { label: t("common.settings"), href: "/company/settings" },
       { label: "Adapters" },
     ]);
   }, [selectedCompany?.name, setBreadcrumbs]);
@@ -495,7 +496,7 @@ export function AdapterManager() {
               )}
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setInstallDialogOpen(false)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setInstallDialogOpen(false)}>{t("common.cancel")}</Button>
               <Button
                 onClick={() =>
                   installMutation.mutate({
@@ -506,7 +507,7 @@ export function AdapterManager() {
                 }
                 disabled={!installPackage || installMutation.isPending}
               >
-                {installMutation.isPending ? "Installing..." : "Install"}
+                {installMutation.isPending ? "Installing..." : t("common.install")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -654,7 +655,7 @@ export function AdapterManager() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRemoveType(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setRemoveType(null)}>{t("common.cancel")}</Button>
             <Button
               variant="destructive"
               disabled={removeMutation.isPending}
@@ -666,7 +667,7 @@ export function AdapterManager() {
                 }
               }}
             >
-              {removeMutation.isPending ? "Removing..." : "Remove"}
+              {removeMutation.isPending ? "Removing..." : t("common.remove")}
             </Button>
           </DialogFooter>
         </DialogContent>

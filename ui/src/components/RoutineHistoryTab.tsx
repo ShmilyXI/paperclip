@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { History as HistoryIcon, RotateCcw, Search } from "lucide-react";
@@ -208,7 +209,7 @@ export function RoutineHistoryTab({
           </p>
         </div>
         <Button size="sm" variant="outline" onClick={() => revisionsQuery.refetch()}>
-          Retry
+          {t("common.retry")}
         </Button>
       </div>
     );
@@ -383,7 +384,7 @@ function ConflictBanner({
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="sm" onClick={onDiscard}>
-            Discard changes
+            {t("common.discardChanges")}
           </Button>
           <Button size="sm" onClick={onSave}>
             Save and continue
@@ -523,19 +524,19 @@ function RevisionPreview({
   const fieldRows: Array<{ key: string; label: string; value: string; differs: boolean }> = [
     {
       key: "title",
-      label: "Title",
+      label: t("common.title"),
       value: snapshot.title,
       differs: !!currentSnapshot && currentSnapshot.title !== snapshot.title,
     },
     {
       key: "priority",
-      label: "Priority",
+      label: t("common.priority"),
       value: snapshot.priority,
       differs: !!currentSnapshot && currentSnapshot.priority !== snapshot.priority,
     },
     {
       key: "status",
-      label: "Status",
+      label: t("common.status"),
       value: snapshot.status,
       differs: !!currentSnapshot && currentSnapshot.status !== snapshot.status,
     },
@@ -547,13 +548,13 @@ function RevisionPreview({
     },
     {
       key: "projectId",
-      label: "Project",
+      label: t("common.project"),
       value: resolveProjectName(snapshot.projectId, projects),
       differs: !!currentSnapshot && currentSnapshot.projectId !== snapshot.projectId,
     },
     {
       key: "concurrencyPolicy",
-      label: "Concurrency",
+      label: t("common.concurrency"),
       value: snapshot.concurrencyPolicy.replaceAll("_", " "),
       differs: !!currentSnapshot && currentSnapshot.concurrencyPolicy !== snapshot.concurrencyPolicy,
     },
@@ -624,7 +625,7 @@ function RevisionPreview({
 
       <div className={`${cardWrapper} p-3 space-y-2`}>
         <p className="text-xs font-medium uppercase tracking-(--tracking-caps) text-muted-foreground">
-          Description
+          {t("common.description")}
         </p>
         <div className="rounded-md bg-background/40 p-3 text-sm leading-7">
           {snapshot.description ? (
@@ -759,7 +760,7 @@ function RestoreConfirmDialog({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={pending}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button onClick={onConfirm} disabled={pending}>
             <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
@@ -832,7 +833,7 @@ function RoutineRevisionDiffModal({
             tone="red"
           />
           <RevisionPicker
-            label="New"
+            label={t("common.new")}
             value={rightId}
             onChange={setRightId}
             revisions={revisions}
@@ -880,7 +881,7 @@ function RoutineRevisionDiffModal({
         </div>
         <DialogFooter className="justify-between sm:justify-between">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Close
+            {t("common.close")}
           </Button>
           {leftIsHistorical && left && (
             <Button onClick={() => onRestore(left)}>
@@ -954,7 +955,7 @@ function DiffTable({ rows }: { rows: DiffRow[] }) {
     <div className="rounded-md border border-border text-xs font-mono leading-6 overflow-hidden">
       <div className="grid grid-cols-(--gtc-1) border-b border-border/60 bg-muted/30 px-3 py-2 text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
         <span>Old</span>
-        <span>New</span>
+        <span>{t("common.new")}</span>
         <span />
         <span>Content</span>
       </div>
@@ -988,7 +989,7 @@ function getActorLabel(revision: RoutineRevision): string {
 }
 
 function resolveAgentName(agentId: string | null, lookup: AgentLookup) {
-  if (!agentId) return "Unassigned";
+  if (!agentId) return t("common.unassigned");
   return lookup.get(agentId)?.name ?? agentId;
 }
 
@@ -1057,8 +1058,8 @@ function computeFieldChanges(
       changes.push({ field: label, oldValue: transform(oldVal), newValue: transform(newVal) });
     }
   };
-  compareScalar("title", "Title", oldRoutine.title, newRoutine.title);
-  compareScalar("priority", "Priority", oldRoutine.priority, newRoutine.priority);
+  compareScalar("title", t("common.title"), oldRoutine.title, newRoutine.title);
+  compareScalar("priority", t("common.priority"), oldRoutine.priority, newRoutine.priority);
   compareScalar(
     "assigneeAgentId",
     "Default agent",
@@ -1067,13 +1068,13 @@ function computeFieldChanges(
   );
   compareScalar(
     "projectId",
-    "Project",
+    t("common.project"),
     resolveProjectName(oldRoutine.projectId, projects),
     resolveProjectName(newRoutine.projectId, projects),
   );
-  compareScalar("concurrencyPolicy", "Concurrency", oldRoutine.concurrencyPolicy, newRoutine.concurrencyPolicy);
+  compareScalar("concurrencyPolicy", t("common.concurrency"), oldRoutine.concurrencyPolicy, newRoutine.concurrencyPolicy);
   compareScalar("catchUpPolicy", "Catch-up", oldRoutine.catchUpPolicy, newRoutine.catchUpPolicy);
-  compareScalar("status", "Status", oldRoutine.status, newRoutine.status);
+  compareScalar("status", t("common.status"), oldRoutine.status, newRoutine.status);
   if (JSON.stringify(oldRoutine.variables) !== JSON.stringify(newRoutine.variables)) {
     changes.push({
       field: "Variables",

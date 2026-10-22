@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { CsvPreview } from "./CsvPreview";
 import { isCsvFile } from "@/lib/csv-preview";
 import {
@@ -82,7 +83,7 @@ function normalizeError(error: unknown): FileViewerErrorShape {
   if (error instanceof Error) {
     return { status: 0, code: "", message: error.message };
   }
-  return { status: 0, code: "", message: "Something went wrong." };
+  return { status: 0, code: "", message: t("common.somethingWentWrong") };
 }
 
 function formatBytes(size: number | null | undefined): string | null {
@@ -853,7 +854,7 @@ export function FileViewerSheet({
                 onClick={() => handleOpenChange(false)}
                 className="h-7 w-7"
                 aria-label="Close file viewer"
-                title="Close"
+                title={t("common.close")}
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -993,7 +994,7 @@ export function FileViewerBody({
                 </Button>
               ) : null}
               <Button type="button" variant="ghost" size="sm" onClick={onRetry}>
-                <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> Retry
+                <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> {t("common.retry")}
               </Button>
             </>
           }
@@ -1017,7 +1018,7 @@ export function FileViewerBody({
         body={denial.body}
         actions={
           <Button type="button" variant="ghost" size="sm" onClick={onRetry}>
-            <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> Retry
+            <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> {t("common.retry")}
           </Button>
         }
       />
@@ -1056,7 +1057,7 @@ export function FileViewerBody({
         body={denial.body}
         actions={
           <Button type="button" variant="ghost" size="sm" onClick={onRetry}>
-            <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> Retry
+            <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> {t("common.retry")}
           </Button>
         }
       />

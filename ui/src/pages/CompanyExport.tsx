@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
@@ -404,8 +405,8 @@ function FrontmatterCard({
 // ── Client-side README generation ────────────────────────────────────
 
 const ROLE_LABELS: Record<string, string> = {
-  ceo: "CEO", cto: "CTO", cmo: "CMO", cfo: "CFO", coo: "COO",
-  vp: "VP", manager: "Manager", engineer: "Engineer", agent: "Agent",
+  ceo: t("common.ceo"), cto: t("common.cto"), cmo: "CMO", cfo: "CFO", coo: "COO",
+  vp: "VP", manager: t("common.manager"), engineer: t("common.engineer"), agent: t("common.agent"),
 };
 
 /**
@@ -447,10 +448,10 @@ function generateReadmeFromSelection(
   lines.push("");
 
   const counts: Array<[string, number]> = [];
-  if (agents.length > 0) counts.push(["Agents", agents.length]);
-  if (projects.length > 0) counts.push(["Projects", projects.length]);
-  if (skills.length > 0) counts.push(["Skills", skills.length]);
-  if (tasks.length > 0) counts.push(["Tasks", tasks.length]);
+  if (agents.length > 0) counts.push([t("common.agents"), agents.length]);
+  if (projects.length > 0) counts.push([t("common.projects"), projects.length]);
+  if (skills.length > 0) counts.push([t("common.skills"), skills.length]);
+  if (tasks.length > 0) counts.push([t("common.tasks"), tasks.length]);
 
   if (counts.length > 0) {
     lines.push("| Content | Count |");
@@ -733,9 +734,9 @@ export function CompanyExport() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Organization", href: "/dashboard" },
-      { label: "Settings", href: "/company/settings" },
-      { label: "Export" },
+      { label: selectedCompany?.name ?? t("common.organization"), href: "/dashboard" },
+      { label: t("common.settings"), href: "/company/settings" },
+      { label: t("common.export") },
     ]);
   }, [selectedCompany?.name, setBreadcrumbs]);
 
@@ -915,7 +916,7 @@ export function CompanyExport() {
 
     // Regenerate README.md based on checked selection
     if (typeof exportData.files["README.md"] === "string") {
-      const companyName = exportData.manifest.company?.name ?? selectedCompany?.name ?? "Company";
+      const companyName = exportData.manifest.company?.name ?? selectedCompany?.name ?? t("common.company");
       const companyDescription = exportData.manifest.company?.description ?? null;
       filtered["README.md"] = generateReadmeFromSelection(
         exportData.manifest,
@@ -1084,7 +1085,7 @@ export function CompanyExport() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <span className="font-medium">
-              {selectedCompany?.name ?? "Organization"} export
+              {selectedCompany?.name ?? t("common.organization")} export
             </span>
             <span className="text-muted-foreground">
               Exporting {selectedCount.toLocaleString()} of {totalFiles.toLocaleString()} file{totalFiles === 1 ? "" : "s"}

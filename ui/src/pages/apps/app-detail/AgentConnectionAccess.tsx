@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import type { Agent, ToolCatalogEntry, ToolPolicy, ToolProfileWithDetails } from "@paperclipai/shared";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -49,8 +50,8 @@ export function AgentConnectionAccess({ connectionId, profiles, policies, catalo
       return <div key={profile.id} className="space-y-3 rounded-lg border border-border p-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <AgentAvatar agent={agent ?? { id: agentId, name: "Agent" }} size={32} />
-            <span className="text-sm font-medium">{agent?.name ?? "Agent"}</span>
+            <AgentAvatar agent={agent ?? { id: agentId, name: t("common.agent") }} size={32} />
+            <span className="text-sm font-medium">{agent?.name ?? t("common.agent")}</span>
           </div>
           {canManage && <Button variant="outline" size="sm" disabled={pending !== null} onClick={() => void remove(profile.id)}>
             {pending === profile.id ? "Removing…" : "Remove grant"}

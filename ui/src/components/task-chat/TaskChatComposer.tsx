@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "../AgentAvatar";
 import {
   useEffect,
@@ -642,7 +643,7 @@ export function TaskChatComposer({
   );
   const assigneeValue = creation ? currentAssigneeValue : pendingAssignee ?? suggestedAssigneeValue ?? currentAssigneeValue;
   const assigneeLabel =
-    reassignOptions?.find((o) => o.id === assigneeValue)?.label ?? "Unassigned";
+    reassignOptions?.find((o) => o.id === assigneeValue)?.label ?? t("common.unassigned");
   const assigneeName =
     assigneeLabel === "Unassigned" ? "the agent" : assigneeLabel;
   const effectivePlaceholder = queuedEdit
@@ -653,7 +654,7 @@ export function TaskChatComposer({
     id: "action:goal",
     kind: "action",
     command: "goal",
-    name: "Goal",
+    name: t("common.goal"),
     description:
       !runnerGoalCapability || runnerGoalCapability.verified === false
         ? "Support will be verified when the session starts."
@@ -1517,7 +1518,7 @@ export function TaskChatComposer({
               <InlineEntitySelector
                 value={assigneeValue}
                 options={reassignOptions ?? []}
-                placeholder="Assignee"
+                placeholder={t("common.assignee")}
                 mobileTitle="Select assignee"
                 noneLabel="No assignee"
                 searchPlaceholder="Search assignees…"
@@ -1568,7 +1569,7 @@ export function TaskChatComposer({
                 disabled={submitting}
                 className="h-8 shrink-0 rounded-md px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-50"
               >
-                Cancel
+                {t("common.cancel")}
               </button>
             ) : null}
             <button
@@ -1605,12 +1606,12 @@ export function TaskChatComposer({
                 showStop
                   ? stopControl.stopping
                     ? "Stopping…"
-                    : "Stop"
+                    : t("common.stop")
                   : queuedEdit
                     ? queuedEdit.stale
                       ? "Queue as new message"
                       : "Save queued message"
-                    : creation?.submitLabel ?? "Send"
+                    : creation?.submitLabel ?? t("common.send")
               }
               aria-busy={submitting}
               className={cn(

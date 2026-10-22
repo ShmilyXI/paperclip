@@ -1,4 +1,4 @@
-import { dateLocale } from "@/i18n";
+import { dateLocale, t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -364,7 +364,7 @@ export function SummarySlotCard({
           title="Summary could not be loaded"
           actions={
             <Button type="button" size="sm" variant="outline" onClick={() => void slotQuery.refetch()}>
-              Retry
+              {t("common.retry")}
             </Button>
           }
         >
@@ -383,7 +383,7 @@ export function SummarySlotCard({
               onClick={startGeneration}
               disabled={!selector || generateMutation.isPending}
             >
-              {generateMutation.isPending ? "Retrying..." : "Retry"}
+              {generateMutation.isPending ? "Retrying..." : t("common.retry")}
             </Button>
           }
         >

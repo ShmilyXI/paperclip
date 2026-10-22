@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Check, Layers } from "lucide-react";
 import type { ArtifactGroupBy, ArtifactKindFilter } from "@/api/artifacts";
 import { TabFilters, type TabSize } from "@/components/TabBar";
@@ -7,22 +8,22 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { cn } from "@/lib/utils";
 
 export const ARTIFACT_KIND_FILTERS: { value: ArtifactKindFilter; label: string }[] = [
-  { value: "all", label: "All" },
+  { value: "all", label: t("common.all") },
   { value: "image", label: "Images" },
   { value: "video", label: "Videos" },
-  { value: "document", label: "Documents" },
+  { value: "document", label: t("common.documents") },
   { value: "text", label: "Text" },
-  { value: "file", label: "Files" },
+  { value: "file", label: t("common.files") },
 ];
 
 export const ARTIFACT_GROUP_OPTIONS: { value: ArtifactGroupBy; label: string }[] = [
-  { value: "none", label: "None" },
-  { value: "task", label: "Task" },
+  { value: "none", label: t("common.none") },
+  { value: "task", label: t("common.task") },
   { value: "parent_task", label: "Parent task" },
 ];
 
 export function artifactGroupByLabel(value: ArtifactGroupBy): string {
-  return ARTIFACT_GROUP_OPTIONS.find((option) => option.value === value)?.label ?? "None";
+  return ARTIFACT_GROUP_OPTIONS.find((option) => option.value === value)?.label ?? t("common.none");
 }
 
 /** Canonical collection filters; compact standalone, standard in the toolbar. */
@@ -64,7 +65,7 @@ export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQue
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-44">
-            <DropdownMenuLabel>Group by</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("common.groupBy")}</DropdownMenuLabel>
             {ARTIFACT_GROUP_OPTIONS.map((option) => (
               <DropdownMenuItem
                 key={option.value}

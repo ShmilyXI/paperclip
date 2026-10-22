@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId } from "react";
 import { Plus, UserRound } from "lucide-react";
 import {
@@ -108,7 +109,7 @@ export function AiConnectionSelect({
   return (
     <div className="space-y-2">
       <label className="text-xs text-muted-foreground" htmlFor={selectId}>
-        Connection
+        {t("common.connection")}
       </label>
       <Select
         value={
@@ -119,7 +120,7 @@ export function AiConnectionSelect({
         onValueChange={change}
         disabled={readOnly || loading || Boolean(error)}
       >
-        <SelectTrigger id={selectId} aria-label="Connection" className="w-full">
+        <SelectTrigger id={selectId} aria-label={t("common.connection")} className="w-full">
           <SelectValue
             placeholder={
               loading ? "Loading connections…" : "Choose a connection"

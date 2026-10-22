@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { IssueComment } from "@paperclipai/shared";
@@ -28,7 +29,7 @@ function detectHiringPlan(body: string): boolean {
     /##?\s*(hiring|team|org|roles|plan)/i,
     /##?\s*(proposed|recommended)\s*(roles|hires|team)/i,
     /\n-\s+\*\*[^*]+\*\*/g, // bullet list with bold items (role names)
-    /\|\s*role\s*\|/i, // markdown table with "Role" header
+    /\|\s*role\s*\|/i, // markdown table with t("common.role") header
   ];
   return planPatterns.some((pattern) => pattern.test(body));
 }

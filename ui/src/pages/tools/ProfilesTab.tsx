@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, Layers, Plus, Pencil, Trash2, Link2, ShieldCheck } from "lucide-react";
@@ -63,15 +64,15 @@ const SELECTOR_TYPES: Array<{ value: ToolProfileEntrySelectorType; label: string
   { value: "tool_name", label: "Tool name" },
   { value: "risk_level", label: "Risk level" },
   { value: "application", label: "Application" },
-  { value: "connection", label: "Connection" },
+  { value: "connection", label: t("common.connection") },
   { value: "catalog_entry", label: "Catalog entry ID" },
 ];
 
 const TARGET_TYPES: Array<{ value: ToolProfileBindingTargetType; label: string }> = [
-  { value: "company", label: "Company" },
-  { value: "agent", label: "Agent" },
-  { value: "project", label: "Project" },
-  { value: "routine", label: "Routine" },
+  { value: "company", label: t("common.company") },
+  { value: "agent", label: t("common.agent") },
+  { value: "project", label: t("common.project") },
+  { value: "routine", label: t("common.routine") },
   { value: "issue", label: "Issue ID" },
 ];
 
@@ -156,7 +157,7 @@ function bindingLabel(
     routinesById: Map<string, string>;
   },
 ) {
-  if (targetType === "company") return targetId === labels.companyId ? "Company" : targetId;
+  if (targetType === "company") return targetId === labels.companyId ? t("common.company") : targetId;
   if (targetType === "agent") return labels.agentsById.get(targetId) ?? targetId;
   if (targetType === "project") return labels.projectsById.get(targetId) ?? targetId;
   if (targetType === "routine") return labels.routinesById.get(targetId) ?? targetId;
@@ -423,7 +424,7 @@ function EntryFields({
       ) : null}
       {selectorType === "connection" ? (
         <div className="space-y-1.5 sm:col-span-2">
-          <Label>Connection</Label>
+          <Label>{t("common.connection")}</Label>
           <Select value={connectionId} onValueChange={setConnectionId}>
             <SelectTrigger>
               <SelectValue placeholder="Select a connection" />
@@ -484,7 +485,7 @@ export function EffectiveAgentPanel({ companyId, agentOptions }: { companyId: st
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
       <div className="space-y-1.5">
-        <Label>Agent</Label>
+        <Label>{t("common.agent")}</Label>
         <AgentSelect agents={agentOptions} value={agentId} onChange={setAgentId} />
       </div>
       {!agentId ? (
@@ -587,9 +588,9 @@ function AllowList({ rows, catalogLoading }: { rows: AllowListRow[]; catalogLoad
                 <tr className="border-b border-border text-left text-xs text-muted-foreground">
                   <th className="px-3 py-2.5 font-medium">Tool</th>
                   <th className="px-3 py-2.5 font-medium">Application</th>
-                  <th className="px-3 py-2.5 font-medium">Capabilities</th>
+                  <th className="px-3 py-2.5 font-medium">{t("common.capabilities")}</th>
                   <th className="px-3 py-2.5 font-medium">Risk</th>
-                  <th className="px-3 py-2.5 font-medium">Source</th>
+                  <th className="px-3 py-2.5 font-medium">{t("common.source")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -1018,7 +1019,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
           <div className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="profile-name">Name</Label>
+                <Label htmlFor="profile-name">{t("common.name")}</Label>
                 <Input
                   id="profile-name"
                   value={name}
@@ -1030,12 +1031,12 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="profile-key">Key</Label>
+                <Label htmlFor="profile-key">{t("common.key")}</Label>
                 <Input id="profile-key" value={profileKey} onChange={(event) => setProfileKey(event.target.value)} />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="profile-description">Description</Label>
+              <Label htmlFor="profile-description">{t("common.description")}</Label>
               <Textarea
                 id="profile-description"
                 value={description}
@@ -1057,15 +1058,15 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label>Status</Label>
+                <Label>{t("common.status")}</Label>
                 <Select value={status} onValueChange={(value) => setStatus(value as ToolProfileStatus)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="disabled">Disabled</SelectItem>
-                    <SelectItem value="archived">Archived</SelectItem>
+                    <SelectItem value="active">{t("common.active")}</SelectItem>
+                    <SelectItem value="disabled">{t("common.disabled")}</SelectItem>
+                    <SelectItem value="archived">{t("common.archived")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1098,10 +1099,10 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
               resetProfileForm();
               resetEntryForm();
             }}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button disabled={!name.trim() || createProfile.isPending || updateProfile.isPending} onClick={saveProfile}>
-              {editProfile ? "Save" : createProfile.isPending ? "Creating..." : "Create"}
+              {editProfile ? t("common.save") : createProfile.isPending ? t("common.creating2") : t("common.create")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1137,7 +1138,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
             connections={connectionOptions}
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEntryProfile(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setEntryProfile(null)}>{t("common.cancel")}</Button>
             <Button disabled={addEntry.isPending} onClick={saveEntry}>
               Add entry
             </Button>
@@ -1171,13 +1172,13 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
             </div>
             {targetType === "agent" ? (
               <div className="space-y-1.5">
-                <Label>Agent</Label>
+                <Label>{t("common.agent")}</Label>
                 <AgentSelect agents={agentOptions} value={targetAgentId} onChange={setTargetAgentId} />
               </div>
             ) : null}
             {targetType === "project" ? (
               <div className="space-y-1.5">
-                <Label>Project</Label>
+                <Label>{t("common.project")}</Label>
                 <Select value={targetProjectId} onValueChange={setTargetProjectId}>
                   <SelectTrigger><SelectValue placeholder="Select a project" /></SelectTrigger>
                   <SelectContent>
@@ -1188,7 +1189,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
             ) : null}
             {targetType === "routine" ? (
               <div className="space-y-1.5">
-                <Label>Routine</Label>
+                <Label>{t("common.routine")}</Label>
                 <Select value={targetRoutineId} onValueChange={setTargetRoutineId}>
                   <SelectTrigger><SelectValue placeholder="Select a routine" /></SelectTrigger>
                   <SelectContent>
@@ -1204,12 +1205,12 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
               </div>
             ) : null}
             <div className="space-y-1.5">
-              <Label htmlFor="profile-priority">Priority</Label>
+              <Label htmlFor="profile-priority">{t("common.priority")}</Label>
               <Input id="profile-priority" type="number" min={0} max={10000} value={priority} onChange={(event) => setPriority(event.target.value)} />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setBindProfileFor(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setBindProfileFor(null)}>{t("common.cancel")}</Button>
             <Button disabled={bind.isPending} onClick={saveBinding}>
               Bind
             </Button>
@@ -1282,7 +1283,7 @@ function ProfileDetail({
           <div className="flex shrink-0 flex-wrap gap-1.5">
             <Button size="sm" variant="outline" onClick={onEdit}>
               <Pencil className="mr-1 h-3.5 w-3.5" />
-              Edit
+              {t("common.edit")}
             </Button>
             <Button size="sm" variant="outline" onClick={onAddEntry}>
               <Plus className="mr-1 h-3.5 w-3.5" />
@@ -1324,7 +1325,7 @@ function ProfileDetail({
           <h4 className="text-sm font-semibold text-foreground">Effective scope</h4>
           <div className="flex flex-wrap gap-2 text-xs">
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
-              Default <span className="font-medium text-foreground">{profile.defaultAction}</span>
+              {t("common.default")} <span className="font-medium text-foreground">{profile.defaultAction}</span>
             </span>
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
               <span className="font-medium text-foreground">{rows.length}</span> tools allowed

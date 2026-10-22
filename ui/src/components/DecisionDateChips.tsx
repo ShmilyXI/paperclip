@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { cloneElement, isValidElement, useState } from "react";
 import { CalendarRange } from "lucide-react";
 import {
@@ -23,7 +24,7 @@ interface DecisionDateChipsProps {
  * Date-range chips (PAP-16032 §4.2 / wireframe screen 1, annotation 2). Filter
  * the desk on activity date; the resolved bounds go to the server
  * (`activitySince`/`activityUntil`) so the page never ships the whole feed to
- * filter on the client. "Custom" opens a from/to range picker.
+ * filter on the client. t("common.custom") opens a from/to range picker.
  */
 export function DecisionDateChips({ value, custom, onChange }: DecisionDateChipsProps) {
   const [open, setOpen] = useState(false);
@@ -42,7 +43,7 @@ export function DecisionDateChips({ value, custom, onChange }: DecisionDateChips
               <CalendarRange className="h-3.5 w-3.5" />
               {value === "custom" && (custom.from || custom.to)
                 ? `${custom.from ?? "…"} → ${custom.to ?? "…"}`
-                : "Custom"}
+                : t("common.custom")}
             </button>
           </ChipButton>
         </PopoverTrigger>
@@ -81,7 +82,7 @@ export function DecisionDateChips({ value, custom, onChange }: DecisionDateChips
                 setOpen(false);
               }}
             >
-              Clear
+              {t("common.clear")}
             </Button>
           </div>
         </PopoverContent>

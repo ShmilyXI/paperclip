@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import { SidebarShell } from "./SidebarShell";
 import { DesignPageAside } from "./DesignPageAside";
@@ -27,7 +28,7 @@ export function DesignPageShell({
   sidebarStorageKey = "paperclip.design-proposal.sidebar-width",
   headerActions,
   rightSidebar,
-  rightSidebarTitle = "Details",
+  rightSidebarTitle = t("common.details"),
   rightSidebarHeader,
   rightSidebarControls,
   rightSidebarMaximized = false,

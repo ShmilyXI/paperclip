@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type SyntheticEvent, useEffect, useRef, useState } from "react";
 import { Download, ExternalLink, Paperclip, Play } from "lucide-react";
 import type { CompanyArtifact } from "@/api/artifacts";
@@ -37,7 +38,7 @@ type PreviewArtifact = Pick<CompanyArtifact, "mediaKind" | "contentPath" | "titl
 function ImagePreview({ artifact }: { artifact: PreviewArtifact }) {
   const [errored, setErrored] = useState(false);
   if (errored || !artifact.contentPath) {
-    return <PlaceholderPreview label="Image" />;
+    return <PlaceholderPreview label={t("common.image")} />;
   }
   return (
     <PreviewFrame>
@@ -136,7 +137,7 @@ function VideoPreview({ artifact }: { artifact: PreviewArtifact }) {
 function TextPreview({ artifact }: { artifact: PreviewArtifact }) {
   const preview = artifact.previewText?.trim();
   if (!preview) {
-    return <PlaceholderPreview label={artifact.source === "document" ? "Document" : "Text"} />;
+    return <PlaceholderPreview label={artifact.source === "document" ? t("common.document") : "Text"} />;
   }
   return (
     <PreviewFrame className="bg-card">
@@ -160,7 +161,7 @@ export function ArtifactPreview({ artifact }: { artifact: PreviewArtifact }) {
     case "document":
       return <TextPreview artifact={artifact} />;
     case "file":
-      return <PlaceholderPreview label="File" />;
+      return <PlaceholderPreview label={t("common.file")} />;
     case "empty":
     default:
       return <PlaceholderPreview />;

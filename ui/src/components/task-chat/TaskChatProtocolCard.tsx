@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
@@ -337,7 +338,7 @@ function ProviderActivityCard({
           )}
         >
           <summary className="flex cursor-pointer list-none items-center gap-1 text-xs font-medium text-muted-foreground">
-            <ChevronDown aria-hidden className="h-3.5 w-3.5" /> Details
+            <ChevronDown aria-hidden className="h-3.5 w-3.5" /> {t("common.details")}
           </summary>
           {item.details.length > 0 ? (
             <dl className="mt-2 flex min-w-0 flex-col gap-1.5 text-xs">
@@ -512,7 +513,7 @@ function WorkspaceFileCard({ item }: { item: TaskChatWorkspaceFileItem }) {
     ? item.displayName.split(".").at(-1)?.toUpperCase()
     : "FILE";
   const label =
-    item.presentation === "generic" ? "File" : titleCaseKey(item.presentation);
+    item.presentation === "generic" ? t("common.file") : titleCaseKey(item.presentation);
   const workspaceFileRef = useMemo(
     () => ({
       path: item.path,
@@ -546,7 +547,7 @@ function WorkspaceFileCard({ item }: { item: TaskChatWorkspaceFileItem }) {
             variant="outline"
             onClick={() => setOpen(true)}
           >
-            Preview
+            {t("common.preview")}
           </Button>
         </div>
       </CardShell>
@@ -860,7 +861,7 @@ function RuntimeRequestCard({
                 disabled={!onDecision || submitting}
                 onClick={() => void submit({ action: "cancel" })}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             ) : null}
           </div>

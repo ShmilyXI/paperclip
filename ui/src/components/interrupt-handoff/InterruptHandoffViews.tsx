@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AlertTriangle, Info, PauseCircle, User, X } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { AgentAvatar, type AvatarAgent } from "../AgentAvatar";
@@ -38,7 +39,7 @@ function agentIcon(agentId: string, resolvers: HandoffChipResolvers): string | n
 
 function userLabel(userId: string, resolvers: HandoffChipResolvers): string {
   const label = resolvers.resolveUserLabel?.(userId) ?? null;
-  const base = label ?? "Board";
+  const base = label ?? t("common.board");
   return resolvers.currentUserId && resolvers.currentUserId === userId ? `${base} (you)` : base;
 }
 
@@ -59,7 +60,7 @@ export function AssigneeChip({
   if (assignee.agentId) {
     return (
       <span className={cn(CHIP_CLASS, className)} data-testid="handoff-assignee-chip" data-kind="agent">
-        <span className="sr-only">Agent </span>
+        <span className="sr-only">{t("common.agent")} </span>
         <AgentAvatar agent={{ ...resolvers.agentMap?.get(assignee.agentId), id: assignee.agentId }} size={16} />
         <span className="max-w-(--sz-12rem) truncate">{agentName(assignee.agentId, resolvers)}</span>
       </span>
@@ -68,7 +69,7 @@ export function AssigneeChip({
   if (assignee.userId) {
     return (
       <span className={cn(CHIP_CLASS, className)} data-testid="handoff-assignee-chip" data-kind="user">
-        <span className="sr-only">User </span>
+        <span className="sr-only">{t("common.user")} </span>
         <User className="h-3 w-3 shrink-0 text-muted-foreground" />
         <span className="max-w-(--sz-12rem) truncate">{userLabel(assignee.userId, resolvers)}</span>
       </span>
@@ -81,12 +82,12 @@ export function AssigneeChip({
       data-kind="unassigned"
     >
       <span className="sr-only">No responsible — </span>
-      Unassigned
+      {t("common.unassigned")}
     </span>
   );
 }
 
-/** The "Wake" sub-row that makes each handoff state self-describing: a queued
+/** The t("common.wake") sub-row that makes each handoff state self-describing: a queued
  * agent wake, a board-user handoff with no wake, or no agent selected. */
 export function HandoffWakeRow({
   to,
@@ -107,7 +108,7 @@ export function HandoffWakeRow({
       data-testid="handoff-wake-row"
       data-kind={info.kind}
     >
-      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Wake</span>
+      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t("common.wake")}</span>
       <span className={cn(info.kind === "agent_wake" ? "text-foreground" : "text-muted-foreground")}>
         {info.wakeText}
       </span>

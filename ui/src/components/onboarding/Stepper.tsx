@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { cn } from "../../lib/utils";
 
 /**
@@ -16,7 +17,7 @@ export const AGENT_ARC_TOTAL_STEPS = 3;
 export const AGENT_ARC_STEP_LABELS = [
   "Create your first agent",
   "Connect a model",
-  "Review",
+  t("common.review"),
 ] as const;
 
 /** Wizard step numbers that make up the arc, in order. */
@@ -38,7 +39,7 @@ export const ONBOARDING_STEP_LABELS = [
   "Name your organization",
   "Create your first agent",
   "Connect a model",
-  "Review",
+  t("common.review"),
 ] as const;
 
 /**

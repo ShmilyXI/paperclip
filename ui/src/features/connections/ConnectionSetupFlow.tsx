@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { StepHeader } from "./ConnectionSetupHeader";
 import { GoogleWorkspaceServicesDialog } from "./GoogleWorkspaceServices";
 import type { GoogleWorkspaceServiceSelection } from "@paperclipai/shared";
@@ -358,7 +359,7 @@ const ZAPIER_STEP_LABELS = ["Add MCP URL"];
 // waiting screen reuses the step model of the flow that opened it. It must not
 // append a trailing step the flow never lands on: a stepper that grows from one
 // dot to two the moment you press Connect reads as a step you missed.
-const OAUTH_SIGN_IN_STEP_LABELS = ["Sign in"];
+const OAUTH_SIGN_IN_STEP_LABELS = [t("common.signIn")];
 
 /**
  * Which identity a fresh connection should default to (PAP-17835).
@@ -612,7 +613,7 @@ export function ConnectionSetupFlow(props: ConnectionSetupFlowProps = {}) {
   const provider = source || existing.data?.config?.sourceTemplateKey;
   const method = searchParams.get("method") || existing.data?.config?.connectionMethodKey;
   if (lookup && existing.isPending) return <p className="p-6 text-sm text-muted-foreground">Loading connection…</p>;
-  if (lookup && existing.isError) return <div role="alert" className="space-y-3 p-6"><p>Could not load this connection. Your saved access and credentials have not changed.</p><Button variant="outline" onClick={() => void existing.refetch()}>Try again</Button></div>;
+  if (lookup && existing.isError) return <div role="alert" className="space-y-3 p-6"><p>Could not load this connection. Your saved access and credentials have not changed.</p><Button variant="outline" onClick={() => void existing.refetch()}>{t("common.tryAgain")}</Button></div>;
   if (gatedDefinitions.length) {
     if (!availability.loaded) return <p role="status" className="p-6 text-sm text-muted-foreground">Loading connection settings…</p>;
     if (availability.failed) return <p role="alert" className="p-6 text-destructive text-sm">Could not load connector availability. Refresh to try again.</p>;
@@ -1037,7 +1038,7 @@ function StandardConnectionSetupFlow({
   useEffect(() => {
     if (host !== "page") return;
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
+      { label: t("common.connectors"), href: "/apps" },
       { label: vercelConnectMode ? "Vercel Connect" : byoOnly ? "Connect your own tool" : "Connect an app" },
     ]);
     return () => setBreadcrumbs([]);
@@ -1916,7 +1917,7 @@ function StandardConnectionSetupFlow({
       setAppStep("key");
       pushToast({
         title: "Couldn’t finish setup",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       });
     },
@@ -1950,7 +1951,7 @@ function StandardConnectionSetupFlow({
               }
             }}
           >
-            Try again
+            {t("common.tryAgain")}
           </Button>
           <Button type="button" variant="outline" onClick={() => navigate("/apps")}>
             Back to apps
@@ -2024,7 +2025,7 @@ function StandardConnectionSetupFlow({
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
           <Button type="button" onClick={() => void galleryQuery.refetch()}>
-            Try again
+            {t("common.tryAgain")}
           </Button>
           <Button type="button" variant="outline" onClick={() => navigate("/apps")}>
             Back to apps
@@ -2110,7 +2111,7 @@ function StandardConnectionSetupFlow({
           <Button type="button" variant="outline" onClick={() => setShowConnectionChoice(false)}>
             {configuredConnection ? "Review connection setup" : "Connect new"}
           </Button>
-          {onCancel ? <Button type="button" variant="ghost" onClick={onCancel}>Cancel</Button> : null}
+          {onCancel ? <Button type="button" variant="ghost" onClick={onCancel}>{t("common.cancel")}</Button> : null}
         </div>
       </div>
     );
@@ -2446,7 +2447,7 @@ function StandardConnectionSetupFlow({
     : entry && setupCredentialSourceMethods.length > 1
       ? ["Choose connection"]
     : entry && setupCredentialSourceMethods[0]?.auth === "oauth"
-      ? ["Sign in"]
+      ? [t("common.signIn")]
     : isGoogleSheetsRobotMethod(entry, connectionMethodKey)
       ? ["Share sheet"]
       : entry
@@ -2532,7 +2533,7 @@ function StandardConnectionSetupFlow({
             </Button>
           ) : null}
           <div className="mt-6 flex items-center justify-between gap-3">
-            <Button type="button" variant="ghost" onClick={backToGallery}>Back</Button>
+            <Button type="button" variant="ghost" onClick={backToGallery}>{t("common.back")}</Button>
             <Button type="button" disabled={galleryQuery.isFetching} onClick={() => void galleryQuery.refetch()}>
               {galleryQuery.isFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               Try again
@@ -2579,7 +2580,7 @@ function StandardConnectionSetupFlow({
             {connectionDefaults}
             <div className="mt-6 flex items-center justify-between gap-3">
               <Button type="button" variant="ghost" onClick={backToGallery}>
-                Back
+                {t("common.back")}
               </Button>
               <Button
                 type="button"
@@ -2595,7 +2596,7 @@ function StandardConnectionSetupFlow({
               >
                 {startConnectorEnrollment.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 {connectorEnrollmentQuery.data?.status === "pending"
-                  ? "Continue"
+                  ? t("common.continue")
                   : "Connect with Paperclip"}
               </Button>
             </div>
@@ -2925,7 +2926,7 @@ export function OAuthConnectStateScreen({
             <Button type="button" onClick={onRetry} disabled={!settingsValid}>
               {phase === "entry"
                 ? resuming ? `Finish with ${serverName}` : `Continue to ${serverName}`
-                : "Try again"}
+                : t("common.tryAgain")}
               {phase === "entry" ? <ArrowUpRight className="h-4 w-4" aria-hidden="true" /> : null}
             </Button>
           ) : (
@@ -2934,7 +2935,7 @@ export function OAuthConnectStateScreen({
             </Button>
           )}
           {authorizationUrl ? <Button variant="outline" asChild><a href={authorizationUrl} target="_blank" rel="noopener noreferrer" onClick={onOpenAuthorization}>Open sign-in in a new tab</a></Button> : null}
-          <Button type="button" variant="ghost" onClick={onBack}>Back</Button>
+          <Button type="button" variant="ghost" onClick={onBack}>{t("common.back")}</Button>
         </div>
       </div>
     </div>
@@ -2987,7 +2988,7 @@ function ZapierConnectStep({
 
       <div className="mt-6 flex items-center justify-between">
         <Button variant="ghost" onClick={onBack} disabled={submitting}>
-          Back
+          {t("common.back")}
         </Button>
         <Button onClick={onConnect} disabled={submitting || !isZapierLink}>
           {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -3216,7 +3217,7 @@ function GalleryStep({
                 {matchedEntry.availability?.available === false
                   ? "Not available"
                   : matchedEntry.slug === "zapier"
-                    ? "Continue"
+                    ? t("common.continue")
                     : `Use ${matchedEntry.name}`}
               </Button>
             </div>
@@ -3243,7 +3244,7 @@ function GalleryStep({
               className="h-10"
             />
             <Button type="button" variant="outline" onClick={continueWithLink}>
-              Continue
+              {t("common.continue")}
             </Button>
           </div>
           {linkError && <div className="text-xs text-destructive">{linkError}</div>}
@@ -3436,7 +3437,7 @@ function LinkConnectStep({
                       autoComplete="off"
                       value={row.value}
                       onChange={(e) => updateHeader(row.id, { value: e.target.value })}
-                      placeholder="Value"
+                      placeholder={t("common.value")}
                       aria-label={row.name.trim() ? `Value for ${row.name.trim()}` : "Header value"}
                       className="h-10 font-mono"
                     />
@@ -3448,7 +3449,7 @@ function LinkConnectStep({
                       onClick={() => onHeadersChange(headers.filter((candidate) => candidate.id !== row.id))}
                       disabled={headers.length === 1}
                     >
-                      Remove
+                      {t("common.remove")}
                     </Button>
                   </div>
                 ))}
@@ -3479,7 +3480,7 @@ function LinkConnectStep({
                     value={oauthClientId}
                     onChange={(e) => onOAuthClientIdChange(e.target.value)}
                     autoComplete="off"
-                    placeholder="Optional"
+                    placeholder={t("common.optional")}
                     className="mt-2 h-11 font-mono"
                   />
                 </div>
@@ -3493,7 +3494,7 @@ function LinkConnectStep({
                     autoComplete="off"
                     value={oauthClientSecret}
                     onChange={(e) => onOAuthClientSecretChange(e.target.value)}
-                    placeholder="Optional"
+                    placeholder={t("common.optional")}
                     className="mt-2 h-11 font-mono"
                   />
                 </div>
@@ -3507,7 +3508,7 @@ function LinkConnectStep({
 
       <div className="mt-8 flex items-center justify-between">
         <Button variant="ghost" onClick={onBack} disabled={submitting}>
-          Back
+          {t("common.back")}
         </Button>
         <Button onClick={onConnect} disabled={submitting || !canSubmit || Boolean(headerError)}>
           {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -3887,11 +3888,11 @@ function KeyStep({
 
         <div className="mt-8 flex items-center justify-between">
           <Button variant="ghost" onClick={onBack} disabled={submitting}>
-            Back
+            {t("common.back")}
           </Button>
           <Button onClick={onConnect} disabled={submitting || !canConnect}>
             {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {submitting ? "Checking…" : "Connect"}
+            {submitting ? "Checking…" : t("common.connect")}
           </Button>
         </div>
       </div>
@@ -4028,7 +4029,7 @@ function KeyStep({
 
       <div className="mt-8 flex items-center justify-between">
         <Button variant="ghost" onClick={onBack} disabled={submitting}>
-          Back
+          {t("common.back")}
         </Button>
         <Button onClick={onConnect} disabled={submitting || !settingsValid || !hasMethodSelection || !allFilled || !oauthClientFilled || !vercelConnectorFilled || !configFilled || !configRequirementMet}>
           {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -4038,7 +4039,7 @@ function KeyStep({
               ? method?.auth === "oauth" ? "Validate and continue" : "Validate and connect"
               : method?.auth === "oauth"
                 ? entry.slug === "github" ? "Continue to GitHub" : "Continue to sign in"
-                : "Connect"}
+                : t("common.connect")}
         </Button>
       </div>
     </div>
@@ -4061,7 +4062,7 @@ function CopyValueButton({ value, ariaLabel }: { value: string; ariaLabel: strin
       onClick={() => void copy(value)}
     >
       {copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
-      {copied ? "Copied" : failed ? "Copy failed" : "Copy"}
+      {copied ? t("common.copied") : failed ? "Copy failed" : t("common.copy")}
     </Button>
   );
 }
@@ -4139,7 +4140,7 @@ function OAuthClientFields({
           value={clientId}
           onChange={(event) => onClientIdChange(event.target.value)}
           autoComplete="off"
-          placeholder={required ? "Required" : "Optional"}
+          placeholder={required ? t("common.required") : t("common.optional")}
           className="mt-2 h-11 font-mono"
         />
       </div>
@@ -4153,7 +4154,7 @@ function OAuthClientFields({
           value={clientSecret}
           onChange={(event) => onClientSecretChange(event.target.value)}
           autoComplete="off"
-          placeholder={method.oauthClientSecretRequired ? "Required" : "Optional for public clients"}
+          placeholder={method.oauthClientSecretRequired ? t("common.required") : "Optional for public clients"}
           className="mt-2 h-11 font-mono"
         />
       </div>
@@ -4507,7 +4508,7 @@ export function AccessStepContent({
           reading order; desktop keeps Back on the left. */}
       {hideFooter ? null : <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
         <Button variant="ghost" className="w-full sm:w-auto" onClick={onBack} disabled={pending}>
-          Back
+          {t("common.back")}
         </Button>
         <Button
           className="w-full sm:w-auto"
@@ -4658,7 +4659,7 @@ export function accessSummaryLines(input: {
     { label: "Identity", value: identity },
     { label: "Available to", value: availableTo },
     {
-      label: "Actions",
+      label: t("common.actions"),
       value: `${input.enabledCount} ${input.enabledCount === 1 ? "action" : "actions"} on`,
     },
   ];

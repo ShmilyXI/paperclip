@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentConversationSidebar } from "./AgentConversationSidebar";
 import { useAgentChatNavigation, useOpenAgentChat } from "@/hooks/useAgentChatNavigation";
 import { useLocation, useNavigate } from "@/lib/router";

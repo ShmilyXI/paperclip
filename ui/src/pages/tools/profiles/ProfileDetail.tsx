@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArchiveRestore, Copy, Pencil, PlugZap, ShieldCheck, Trash2, UserMinus } from "lucide-react";
@@ -184,11 +185,11 @@ export function ProfileDetail({
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" disabled={archived} onClick={() => setDialog("edit")}>
               <Pencil className="mr-1.5 h-4 w-4" />
-              Edit
+              {t("common.edit")}
             </Button>
             <Button variant="outline" disabled={archived} onClick={() => setDialog("duplicate")}>
               <Copy className="mr-1.5 h-4 w-4" />
-              Duplicate
+              {t("common.duplicate")}
             </Button>
             {archived ? (
               <Button variant="outline" onClick={() => setDialog("restore")}>
@@ -196,11 +197,11 @@ export function ProfileDetail({
                 Restore
               </Button>
             ) : (
-              <Button variant="outline" onClick={() => setDialog("archive")}>Archive</Button>
+              <Button variant="outline" onClick={() => setDialog("archive")}>{t("common.archive")}</Button>
             )}
             <Button variant="outline" className="text-destructive hover:text-destructive" onClick={() => setDialog("delete")}>
               <Trash2 className="mr-1.5 h-4 w-4" />
-              Delete
+              {t("common.delete")}
             </Button>
           </div>
         }
@@ -208,7 +209,7 @@ export function ProfileDetail({
 
       <div className="flex flex-wrap items-center gap-3 text-sm">
         <Badge variant={archived ? "outline" : "default"}>{STATUS_LABEL[profile.status]}</Badge>
-        <span className="text-muted-foreground">Updated <RelativeTime value={profile.updatedAt} /></span>
+        <span className="text-muted-foreground">{t("common.updated")} <RelativeTime value={profile.updatedAt} /></span>
         <span className="text-muted-foreground">{allowsLabel(profile.summary)}</span>
       </div>
 
@@ -222,10 +223,10 @@ export function ProfileDetail({
           </div>
           <div className="flex gap-2">
             <Button size="sm" onClick={() => navigate(`/apps/advanced/profiles/${profile.id}/edit?step=3`)}>
-              Assign
+              {t("common.assign")}
             </Button>
             <Button size="sm" variant="ghost" onClick={() => setSearchParams({})}>
-              Dismiss
+              {t("common.dismiss")}
             </Button>
           </div>
         </div>
@@ -260,7 +261,7 @@ export function ProfileDetail({
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-base font-semibold text-foreground">Who has it</h2>
           <Button variant="outline" size="sm" disabled={archived} onClick={() => navigate(`/apps/advanced/profiles/${profile.id}/edit?step=3`)}>
-            Assign
+            {t("common.assign")}
           </Button>
         </div>
         <Assignments
@@ -345,7 +346,7 @@ function NewToolsReviewBanner({
         </p>
         <p className="text-amber-900/80">Choose which ones this profile should allow.</p>
       </div>
-      <Button size="sm" onClick={onReview}>Review</Button>
+      <Button size="sm" onClick={onReview}>{t("common.review")}</Button>
     </div>
   );
 }
@@ -433,7 +434,7 @@ function NewToolsReviewDialog({
           </div>
         )}
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t("common.cancel")}</Button>
           <Button disabled={pending || loading || tools.length === 0} onClick={onSubmit}>
             Submit review
           </Button>
@@ -458,8 +459,8 @@ function AllowList({ rows, total }: { rows: AllowRow[]; total: number }) {
           <tr className="border-b border-border bg-muted/40 text-left text-xs font-medium text-muted-foreground">
             <th className="px-3 py-2 font-medium">Tool</th>
             <th className="px-3 py-2 font-medium">App</th>
-            <th className="px-3 py-2 font-medium">Capabilities</th>
-            <th className="px-3 py-2 font-medium">Source</th>
+            <th className="px-3 py-2 font-medium">{t("common.capabilities")}</th>
+            <th className="px-3 py-2 font-medium">{t("common.source")}</th>
           </tr>
         </thead>
         <tbody>
@@ -546,7 +547,7 @@ function Assignments({
           </div>
           <Button variant="ghost" size="sm" disabled={archived} onClick={() => onRemove(binding)}>
             <UserMinus className="mr-1.5 h-4 w-4" />
-            Remove
+            {t("common.remove")}
           </Button>
         </div>
       ))}
@@ -641,16 +642,16 @@ function ProfileDialogs({
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-profile-name">Name</Label>
+              <Label htmlFor="edit-profile-name">{t("common.name")}</Label>
               <Input id="edit-profile-name" value={name} onChange={(e) => setName(e.target.value)} />
               {duplicateName ? <p className="text-xs text-destructive">Another profile already uses this name.</p> : null}
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="edit-profile-description">Description</Label>
+              <Label htmlFor="edit-profile-description">{t("common.description")}</Label>
               <Textarea id="edit-profile-description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
             </div>
             <button type="button" className="text-sm font-medium text-muted-foreground hover:text-foreground" onClick={() => setAdvancedOpen((v) => !v)}>
-              Advanced
+              {t("common.advanced")}
             </button>
             {advancedOpen ? (
               <div className="space-y-1.5">
@@ -660,9 +661,9 @@ function ProfileDialogs({
             ) : null}
           </div>
           <DialogFooter>
-            <Button variant="ghost" onClick={onClose}>Cancel</Button>
+            <Button variant="ghost" onClick={onClose}>{t("common.cancel")}</Button>
             <Button disabled={!name.trim() || duplicateName || pending} onClick={() => onUpdate({ name: name.trim(), description: description.trim() || null, profileKey: profileKey.trim() })}>
-              Save
+              {t("common.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -680,7 +681,7 @@ function ProfileDialogs({
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="copy-profile-name">Name</Label>
+              <Label htmlFor="copy-profile-name">{t("common.name")}</Label>
               <Input id="copy-profile-name" value={copyName} onChange={(e) => setCopyName(e.target.value)} />
               {duplicateCopyName ? <p className="text-xs text-destructive">Another profile already uses this name.</p> : null}
             </div>
@@ -690,9 +691,9 @@ function ProfileDialogs({
             </label>
           </div>
           <DialogFooter>
-            <Button variant="ghost" onClick={onClose}>Cancel</Button>
+            <Button variant="ghost" onClick={onClose}>{t("common.cancel")}</Button>
             <Button disabled={!copyName.trim() || duplicateCopyName || pending} onClick={() => onDuplicate({ name: copyName.trim(), includeAssignments: copyAssignments })}>
-              Duplicate
+              {t("common.duplicate")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -738,8 +739,8 @@ function RemoveAssignmentDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button disabled={pending} onClick={onConfirm}>Remove</Button>
+          <Button variant="ghost" onClick={onClose}>{t("common.cancel")}</Button>
+          <Button disabled={pending} onClick={onConfirm}>{t("common.remove")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -838,14 +839,14 @@ function assignmentLabel(
   if (binding.targetType === "agent") return maps.agentsById.get(binding.targetId) ?? "Unknown agent";
   if (binding.targetType === "project") return maps.projectsById.get(binding.targetId) ?? "Unknown project";
   if (binding.targetType === "routine") return maps.routinesById.get(binding.targetId) ?? "Unknown routine";
-  if (binding.targetId === companyId) return "Organization";
+  if (binding.targetId === companyId) return t("common.organization");
   return binding.targetId;
 }
 
 function assignmentTypeLabel(type: ToolProfileBinding["targetType"]): string {
   if (type === "company") return "Organization default";
-  if (type === "agent") return "Agent";
-  if (type === "project") return "Project";
-  if (type === "routine") return "Routine";
+  if (type === "agent") return t("common.agent");
+  if (type === "project") return t("common.project");
+  if (type === "routine") return t("common.routine");
   return "Scoped assignment";
 }

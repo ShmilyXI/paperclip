@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Shield, ShieldCheck } from "lucide-react";
@@ -22,8 +23,8 @@ export function InstanceAccess() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Settings", href: "/company/settings" },
-      { label: "Instance settings", href: "/company/settings/instance/general" },
+      { label: t("common.settings"), href: "/company/settings" },
+      { label: t("common.instanceSettings"), href: "/company/settings/instance/general" },
       { label: "Access" },
     ]);
   }, [setBreadcrumbs]);
@@ -110,7 +111,7 @@ export function InstanceAccess() {
     return (
       <div className="space-y-3">
         <p className="text-sm text-destructive">Failed to load organizations. Try again before changing access.</p>
-        <Button onClick={() => void companiesQuery.refetch()}>Try again</Button>
+        <Button onClick={() => void companiesQuery.refetch()}>{t("common.tryAgain")}</Button>
       </div>
     );
   }
@@ -232,7 +233,7 @@ export function InstanceAccess() {
                     onClick={() => updateCompanyAccessMutation.mutate()}
                     disabled={updateCompanyAccessMutation.isPending}
                   >
-                    {updateCompanyAccessMutation.isPending ? "Saving…" : "Save organization access"}
+                    {updateCompanyAccessMutation.isPending ? t("common.saving2") : "Save organization access"}
                   </Button>
                 </div>
               </div>

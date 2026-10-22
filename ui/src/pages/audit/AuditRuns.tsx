@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { HeartbeatRun, RoutineRunSummary } from "@paperclipai/shared";
@@ -69,7 +70,7 @@ function RoutineScopedRuns({
     return (
       <div className="flex flex-col items-center gap-3 border-y border-border py-14 text-center">
         <p className="text-sm text-muted-foreground">{error.message}</p>
-        <Button variant="outline" size="sm" onClick={onRetry}>Try again</Button>
+        <Button variant="outline" size="sm" onClick={onRetry}>{t("common.tryAgain")}</Button>
       </div>
     );
   }
@@ -201,7 +202,7 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg font-semibold text-foreground">Runs</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("common.runs")}</h2>
         <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
           Recent agent executions across the organization. Open a run to inspect its transcript,
           output, and task context.
@@ -210,7 +211,7 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
 
       <div className="flex flex-wrap items-end gap-3 border-y border-border py-3">
         <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-          <span>Agent</span>
+          <span>{t("common.agent")}</span>
           <Select value={agentId} onValueChange={(value) => updateFilter("agentId", value)}>
             <SelectTrigger className="w-48">
               <SelectValue placeholder="All agents" />
@@ -226,7 +227,7 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
           </Select>
         </label>
         <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-          <span>Status</span>
+          <span>{t("common.status")}</span>
           <Select value={status} onValueChange={(value) => updateFilter("runStatus", value)}>
             <SelectTrigger className="w-40">
               <SelectValue placeholder="All statuses" />
@@ -258,7 +259,7 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
             {runs.error instanceof Error ? runs.error.message : "Failed to load runs."}
           </p>
           <Button variant="outline" size="sm" onClick={() => runs.refetch()}>
-            Try again
+            {t("common.tryAgain")}
           </Button>
         </div>
       ) : visibleRuns.length === 0 ? (

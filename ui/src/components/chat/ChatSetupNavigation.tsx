@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { GitHubAppWizardState } from "@paperclipai/shared";
 import { githubChatApi } from "@/api/githubChat";

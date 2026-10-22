@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect } from "react";
 import { useParams } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -118,8 +119,8 @@ export function GoalDetail() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Goals", href: "/goals" },
-      { label: goal?.title ?? goalId ?? "Goal" }
+      { label: t("common.goals"), href: "/goals" },
+      { label: goal?.title ?? goalId ?? t("common.goal") }
     ]);
   }, [setBreadcrumbs, goal, goalId]);
 

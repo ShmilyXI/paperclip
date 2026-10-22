@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { CaseSummary } from "@/api/cases";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { EntityRow } from "@/components/EntityRow";
@@ -22,11 +23,11 @@ export function CaseListRow({
   const show = new Set(columns);
   const showWork = show.has("phase") || show.has("assignee");
   const assignee = task?.assigneeAgentId
-    ? { id: task.assigneeAgentId, name: task.assigneeAgentName ?? "Agent" }
+    ? { id: task.assigneeAgentId, name: task.assigneeAgentName ?? t("common.agent") }
     : null;
   const work = task ? <>
     {show.has("phase") && caseData.phase ? <span className="text-xs text-muted-foreground">{caseData.phase}</span> : null}
-    {show.has("assignee") && (assignee ? <AgentIdentity agent={assignee} size="xs" /> : <span className="text-xs text-muted-foreground">Unassigned</span>)}
+    {show.has("assignee") && (assignee ? <AgentIdentity agent={assignee} size="xs" /> : <span className="text-xs text-muted-foreground">{t("common.unassigned")}</span>)}
   </> : <span className="text-xs text-muted-foreground">{caseData.workIssueId ? "Task unavailable" : "No task linked"}</span>;
   const subtitle = [show.has("identifier") ? caseData.identifier : null, show.has("type") ? caseData.caseType : null,
     show.has("project") ? projectName : null].filter(Boolean);

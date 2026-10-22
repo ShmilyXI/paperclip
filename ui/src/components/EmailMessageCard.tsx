@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { createContext, useContext, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Mail, Paperclip } from "lucide-react";
@@ -132,7 +133,7 @@ export function EmailMessageCard({
               : publication.outcome === "uncertain"
                 ? "Delivery uncertain"
                 : publication.outcome === "queued"
-                  ? "Queued"
+                  ? t("common.queued")
                   : "Sent"}
           {publication.error ? ` · ${publication.error}` : ""}
         </p>

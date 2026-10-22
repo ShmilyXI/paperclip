@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type ReactNode } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Sun } from "lucide-react";
@@ -82,7 +83,7 @@ export function AgingItemRow({
     onError: (error) =>
       pushToast({
         title: "Could not keep this decision",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });

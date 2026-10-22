@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { statusLabel } from "@/lib/i18n-labels";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { CheckCircle2, XCircle, Clock } from "lucide-react";
@@ -121,7 +122,7 @@ export function ApprovalCard({
                   onClick={onApprove}
                   disabled={isPending}
                 >
-                  {pendingAction === "approve" ? "Approving..." : "Approve"}
+                  {pendingAction === "approve" ? "Approving..." : t("common.approve")}
                 </Button>
                 <Button
                   variant="destructive"
@@ -129,7 +130,7 @@ export function ApprovalCard({
                   onClick={onReject}
                   disabled={isPending}
                 >
-                  {pendingAction === "reject" ? "Rejecting..." : "Reject"}
+                  {pendingAction === "reject" ? "Rejecting..." : t("common.reject")}
                 </Button>
               </>
             )}

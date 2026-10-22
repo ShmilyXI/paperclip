@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { statusLabel as localizedStatusLabel } from "@/lib/i18n-labels";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ActivityEvent, Issue, Agent, ProviderTraceMetadata } from "@paperclipai/shared";
@@ -98,7 +99,7 @@ const LIVENESS_COPY: Record<RunLivenessState, LivenessCopy> = {
     description: "Task reached a terminal state.",
   },
   advanced: {
-    label: "Advanced",
+    label: t("common.advanced"),
     tone: "border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300",
     description: "Run produced concrete evidence of progress.",
   },
@@ -113,12 +114,12 @@ const LIVENESS_COPY: Record<RunLivenessState, LivenessCopy> = {
     description: "Run finished without useful output.",
   },
   blocked: {
-    label: "Blocked",
+    label: t("common.blocked"),
     tone: "border-yellow-500/30 bg-yellow-500/10 text-yellow-700 dark:text-yellow-300",
     description: "Run or task declared a blocker.",
   },
   failed: {
-    label: "Failed",
+    label: t("common.failed"),
     tone: "border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-300",
     description: "Run ended unsuccessfully.",
   },
@@ -865,7 +866,7 @@ export function IssueRunLedgerContent({
                 className="space-y-1.5 rounded-lg border border-border/60 px-3 py-2 text-xs text-muted-foreground"
               >
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="font-medium text-foreground">Run</span>
+                  <span className="font-medium text-foreground">{t("common.run")}</span>
                   <Link
                     to={`/agents/${run.agentId}/runs/${run.runId}`}
                     className="min-w-0 max-w-full truncate font-mono text-foreground hover:underline"
@@ -960,7 +961,7 @@ export function IssueRunLedgerContent({
                     {lastUsefulActionLabel(run)}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-foreground">Stop</span>{" "}
+                    <span className="text-foreground">{t("common.stop")}</span>{" "}
                     {stopStatusLabel(run, stopReason)}
                   </div>
                 </div>

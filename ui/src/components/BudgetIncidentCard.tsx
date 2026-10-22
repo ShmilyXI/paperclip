@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import type { BudgetIncident } from "@paperclipai/shared";
 import { AlertOctagon, AlertTriangle, ArrowUpRight, PauseCircle } from "lucide-react";
@@ -21,8 +22,8 @@ function incidentStateLabel(incident: BudgetIncident) {
   if (incident.status === "resolved") return "Resolved";
   if (incident.status === "dismissed") return "Dismissed";
   if (incident.approvalStatus === "revision_requested") return "Escalated";
-  if (incident.approvalStatus === "pending") return "Pending approval";
-  return "Open";
+  if (incident.approvalStatus === "pending") return t("common.pendingApproval");
+  return t("common.open");
 }
 
 export function BudgetIncidentCard({

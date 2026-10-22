@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { isRetiredComposioConnection, RETIRED_COMPOSIO_MESSAGE } from "@paperclipai/shared";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -57,7 +58,7 @@ const BROWSE_HREF = "/apps";
 type StatusFilter = "all" | "attention";
 
 type AppStatus = {
-  label: "Healthy" | "Needs attention" | "Paused" | "Not connected" | "Retired";
+  label: string;
   tone: "connected" | "attention" | "paused" | "not_connected";
 };
 
@@ -90,7 +91,7 @@ function statusFor(application: ToolApplication, connections: ToolConnection[]):
     application.status === "archived" ||
     connections.every((connection) => connection.enabled === false || connection.status === "disabled")
   ) {
-    return { label: "Paused", tone: "paused" };
+    return { label: t("common.paused"), tone: "paused" };
   }
   if (connections.some((connection) => isAttentionHealthStatus(connection.healthStatus))) {
     return { label: "Needs attention", tone: "attention" };
@@ -127,8 +128,8 @@ export function Connections() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
-      { label: "Connections" },
+      { label: t("common.connectors"), href: "/apps" },
+      { label: t("common.connections") },
     ]);
     return () => setBreadcrumbs([]);
   }, [setBreadcrumbs]);
@@ -198,7 +199,7 @@ export function Connections() {
     onError: (error) =>
       pushToast({
         title: "Couldn't delete the connection",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -334,7 +335,7 @@ export function Connections() {
         <div className="space-y-5">
           <header className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">Connections</h1>
+              <h1 className="text-2xl font-bold tracking-tight">{t("common.connections")}</h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 The tools you’ve connected, and whether they’re working.
               </p>
@@ -398,11 +399,11 @@ export function Connections() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/40 text-left text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
-                  <th className="px-4 py-2.5">Connection</th>
-                  <th className="px-4 py-2.5">Type</th>
+                  <th className="px-4 py-2.5">{t("common.connection")}</th>
+                  <th className="px-4 py-2.5">{t("common.type")}</th>
                   <th className="px-4 py-2.5">Connected by</th>
-                  <th className="px-4 py-2.5">Status</th>
-                  <th className="px-4 py-2.5">Actions</th>
+                  <th className="px-4 py-2.5">{t("common.status")}</th>
+                  <th className="px-4 py-2.5">{t("common.actions")}</th>
                   <th className="px-4 py-2.5">Last used</th>
                   <th className="px-4 py-2.5" />
                 </tr>
@@ -428,11 +429,11 @@ export function Connections() {
                     ? `/apps/${connection.id}/permissions`
                     : `/apps/app/${application.id}/permissions`;
                   const actionLabel = !connection
-                    ? "Connect"
-                    : connection && isRetiredComposioConnection(connection) ? "Review"
+                    ? t("common.connect")
+                    : connection && isRetiredComposioConnection(connection) ? t("common.review")
                     : status.tone === "attention"
                       ? "Reconnect"
-                      : "Permissions";
+                      : t("common.permissions");
                   return (
                     <tr
                       key={connection?.id ?? application.id}
@@ -554,7 +555,7 @@ export function Connections() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteConnection.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleteConnection.isPending}>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               disabled={!connectionToDelete || deleteConnection.isPending}
@@ -564,7 +565,7 @@ export function Connections() {
               }}
             >
               {deleteConnection.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-              {deleteConnection.isPending ? "Deleting..." : "Delete connection"}
+              {deleteConnection.isPending ? t("common.deleting") : "Delete connection"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -618,7 +619,7 @@ function CloudConnectorEnrollmentBanner({
       </div>
       <Button variant="outline" size="sm" disabled={busy} onClick={onEnable}>
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-        {status?.status === "pending" ? "Continue enrollment" : "Enable"}
+        {status?.status === "pending" ? "Continue enrollment" : t("common.enable")}
       </Button>
     </div>
   );
@@ -675,7 +676,7 @@ function EmptyConnections({ onBrowse }: { onBrowse: () => void }) {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-bold tracking-tight">Connections</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t("common.connections")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           The tools you’ve connected, and whether they’re working.
         </p>

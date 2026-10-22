@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { usePrimaryAgentPresentation } from "@/components/primary-agent/PrimaryAgentPresentation";
 import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
@@ -62,7 +63,7 @@ function AgentChatsContent({ companyId, userId, enabled, loaded, agents, chats, 
       <h1 className="text-xl font-semibold">Who would you like to talk to?</h1>
       <p className="text-sm leading-relaxed text-muted-foreground">Ask a question, think through an idea, or plan the next step with your team.</p>
     </div>
-    {error ? <div role="alert" className="flex flex-col items-start gap-3"><p className="text-sm">Couldn’t load your chats.</p><Button variant="outline" onClick={() => { void agents.refetch(); void chats.refetch(); void session.refetch(); }}>Try again</Button></div>
+    {error ? <div role="alert" className="flex flex-col items-start gap-3"><p className="text-sm">Couldn’t load your chats.</p><Button variant="outline" onClick={() => { void agents.refetch(); void chats.refetch(); void session.refetch(); }}>{t("common.tryAgain")}</Button></div>
       : agents.isPending || session.isPending ? <p role="status" className="text-sm text-muted-foreground">Loading agents…</p>
       : <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {(agents.data ?? []).slice(0, 6).map(agent => <button key={agent.id} type="button" disabled={openingId !== null}

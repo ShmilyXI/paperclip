@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { lazy, useEffect } from "react";
 import { useDialogActions, useDialogState } from "../context/DialogContext";
 import { useLocation } from "../lib/router";

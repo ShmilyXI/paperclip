@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { statusLabel } from "@/lib/i18n-labels";
 import { useMemo } from "react";
 import { User, UserX } from "lucide-react";
@@ -99,7 +100,7 @@ export function buildSearchFilterOptions({
   }
   assignee.push({
     value: "none",
-    label: "Unassigned",
+    label: t("common.unassigned"),
     icon: <UserX className="h-3.5 w-3.5 text-muted-foreground" />,
     searchText: "unassigned none nobody",
   });
@@ -164,7 +165,7 @@ export function SearchFilterBar({
   return (
     <div className="flex flex-wrap items-center gap-1.5" data-testid="search-filter-bar">
       <SearchFilterMenu
-        label="Status"
+        label={t("common.status")}
         multi
         options={options.status}
         selected={filters.status ?? []}
@@ -173,7 +174,7 @@ export function SearchFilterBar({
         presets={[{ label: "Open items", values: OPEN_STATUS_PRESET }]}
       />
       <SearchFilterMenu
-        label="Assignee"
+        label={t("common.assignee")}
         options={options.assignee}
         selected={selectedAssignee ? [selectedAssignee] : []}
         onSelect={(value) => onChange(applyAssigneeToken(filters, value, data.currentUserId))}
@@ -182,7 +183,7 @@ export function SearchFilterBar({
         emptyMessage="No assignees"
       />
       <SearchFilterMenu
-        label="Project"
+        label={t("common.project")}
         options={options.project}
         selected={filters.projectId ? [filters.projectId] : []}
         onSelect={(value) => onChange({ ...filters, projectId: value })}
@@ -202,7 +203,7 @@ export function SearchFilterBar({
       {/* PAP-411: Priority filter menu hidden behind SHOW_TASK_PRIORITY_UI (search DSL stays intact). */}
       {SHOW_TASK_PRIORITY_UI && (
       <SearchFilterMenu
-        label="Priority"
+        label={t("common.priority")}
         multi
         options={options.priority}
         selected={filters.priority ?? []}
@@ -211,7 +212,7 @@ export function SearchFilterBar({
       />
       )}
       <SearchFilterMenu
-        label="Updated"
+        label={t("common.updated")}
         options={options.updated}
         selected={filters.updatedWithin ? [filters.updatedWithin] : []}
         onSelect={(value) => onChange({ ...filters, updatedWithin: value })}

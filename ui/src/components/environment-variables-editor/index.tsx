@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   forwardRef,
   useCallback,
@@ -37,7 +38,7 @@ const DEFAULT_HINT =
 // Canonical entries for dirty comparison. Must mirror the emit semantics of
 // valueFromRows (trimmed names, incomplete refs dropped, last-writer-wins on
 // trimmed duplicates) — otherwise a saved value that round-trips lossily shows
-// a phantom "Unsaved changes" banner the moment the form opens.
+// a phantom t("common.unsavedChanges") banner the moment the form opens.
 function normalizedEnvEntries(
   value: Record<string, EnvBinding> | null | undefined,
 ): Array<[string, Record<string, unknown>]> {
@@ -450,8 +451,8 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
         <>
           {/* Header (desktop only) */}
           <div className="hidden gap-x-1.5 @[40rem]/env:grid @[40rem]/env:grid-cols-(--gtc-14)">
-            <span className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">Name</span>
-            <span className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">Value</span>
+            <span className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">{t("common.name")}</span>
+            <span className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">{t("common.value")}</span>
             <span />
           </div>
 
@@ -529,7 +530,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
           <div className="flex min-w-0 flex-col gap-0.5">
             <div className="flex items-center gap-2 text-sm font-medium">
               <span className="size-2 rounded-full bg-amber-500 shadow-(--shadow-extract-13)" />
-              <span>Unsaved changes</span>
+              <span>{t("common.unsavedChanges")}</span>
             </div>
             {changeSummaryText ? (
               <p className="min-w-0 truncate pl-4 text-xs text-amber-950/80 dark:text-amber-100/80" title={changeSummaryText}>
@@ -552,7 +553,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
               className="inline-flex h-9 items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
               <Save className="size-4" />
-              Save
+              {t("common.save")}
             </button>
           </div>
         </div>

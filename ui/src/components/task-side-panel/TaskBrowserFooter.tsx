@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   Clock3,
   LoaderCircle,
@@ -73,7 +74,7 @@ export function TaskBrowserFooter({
     viewport === "fit"
       ? "Fit to pane"
       : (BROWSER_USE_VIEWPORT_PRESETS.find((p) => p.id === viewport)?.label ??
-        "Default");
+        t("common.default"));
   if (!live) return null;
 
   return (

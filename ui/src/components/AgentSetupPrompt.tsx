@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useId, useLayoutEffect, useRef, useState, type Ref, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Check, Copy, Terminal, X } from "lucide-react";
@@ -201,7 +202,7 @@ export function AgentSetupPrompt({
             {status === "copied" ? <Check className="agent-setup-check size-4" /> : <Terminal className="size-4 text-muted-foreground" />}
             <span className="relative min-w-0">
               <span className={status === "copied" ? "invisible" : undefined}>{label}</span>
-              {status === "copied" && <span className="agent-setup-confirmation absolute inset-0 flex items-center">Copied!</span>}
+              {status === "copied" && <span className="agent-setup-confirmation absolute inset-0 flex items-center">{t("common.copied2")}</span>}
             </span>
             <span className="agent-setup-trigger-logos" data-single={Boolean(agent)}><AgentLogos agents={agents} ref={triggerLogos} hidden={open || Boolean(flight)} /></span>
           </Button>

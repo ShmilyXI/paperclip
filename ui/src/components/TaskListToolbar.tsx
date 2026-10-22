@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ComponentProps, Ref } from "react";
 import { ChevronDown, CirclePlus, Columns3, List, ListTree } from "lucide-react";
 import { IssueFiltersPopover } from "./IssueFiltersPopover";
@@ -33,16 +34,16 @@ export function TaskListToolbar({ view, onViewChange, query, onQueryChange, sear
           </FlyoutOptions></DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ToolbarSearch query={query} onQueryChange={onQueryChange} inputRef={searchRef} label="Search tasks" placeholder="Search tasks…" />
+      <ToolbarSearch query={query} onQueryChange={onQueryChange} inputRef={searchRef} label={t("common.searchTasks")} placeholder="Search tasks…" />
       <div className="design-view-toggle" role="group" aria-label="Task layout">
-        {[{ value: "list", label: "List view", icon: List }, { value: "board", label: "Board view", icon: Columns3 }].map(({ value, label, icon: Icon }) => (
+        {[{ value: "list", label: t("common.listView"), icon: List }, { value: "board", label: t("common.boardView"), icon: Columns3 }].map(({ value, label, icon: Icon }) => (
           <Tooltip key={value}><TooltipTrigger asChild><Button variant="ghost" className="design-toolbar-button design-toolbar-icon" aria-label={label} aria-pressed={layout === value} onClick={() => onLayoutChange(value as "list" | "board")}><Icon aria-hidden /></Button></TooltipTrigger><TooltipContent>{label}</TooltipContent></Tooltip>
         ))}
       </div>
       <div className="design-toolbar-actions">
         <Tooltip><TooltipTrigger asChild><Button variant="outline" className="design-toolbar-button design-toolbar-icon" disabled={layout !== "list"} aria-label={allExpanded ? "Collapse all tasks" : "Expand all tasks"} onClick={onToggleExpanded}><ListTree aria-hidden /></Button></TooltipTrigger><TooltipContent>{allExpanded ? "Collapse all tasks" : "Expand all tasks"}</TooltipContent></Tooltip>
         <div className="design-toolbar-filter"><IssueFiltersPopover {...filters} presentation="refreshed" buttonVariant="outline" iconOnly enableExternalObjectFilters={false} /></div>
-        <Button className="design-toolbar-button design-new-task" onClick={onNewTask}><CirclePlus aria-hidden />New Task</Button>
+        <Button className="design-toolbar-button design-new-task" onClick={onNewTask}><CirclePlus aria-hidden />{t("common.newTask")}</Button>
       </div>
     </div>
   );

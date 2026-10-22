@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, Copy } from "lucide-react";
@@ -14,25 +15,25 @@ import { Badge } from "@/components/ui/badge";
 const inviteRoleOptions = [
   {
     value: "viewer",
-    label: "Viewer",
+    label: t("common.viewer"),
     description: "Can view organization work and follow along.",
     gets: "View-only organization membership.",
   },
   {
     value: "operator",
-    label: "Operator",
+    label: t("common.operator"),
     description: "Can edit organization work and invite people.",
     gets: "Full editing and audit access. Cannot approve join requests or manage member permissions.",
   },
   {
     value: "admin",
-    label: "Admin",
+    label: t("common.admin"),
     description: "Recommended for operators who need to invite people, create agents, and approve joins.",
     gets: "Can create agents, invite users, assign tasks, and approve join requests.",
   },
   {
     value: "owner",
-    label: "Owner",
+    label: t("common.owner"),
     description: "Full organization access, including membership management.",
     gets: "Everything in Admin, plus managing members.",
   },
@@ -206,7 +207,7 @@ export function InvitesSection() {
                       <span className="text-sm font-medium">{option.label}</span>
                       {option.value === "operator" ? (
                         <Badge variant="outline" className="border-border text-muted-foreground">
-                          Default
+                          {t("common.default")}
                         </Badge>
                       ) : null}
                     </span>
@@ -225,7 +226,7 @@ export function InvitesSection() {
 
         <div className="flex flex-wrap items-center gap-3">
           <Button onClick={() => createInviteMutation.mutate()} disabled={createInviteMutation.isPending}>
-            {createInviteMutation.isPending ? "Creating…" : "Create invite"}
+            {createInviteMutation.isPending ? t("common.creating") : "Create invite"}
           </Button>
           <span className="text-sm text-muted-foreground">Invite history below keeps the audit trail.</span>
         </div>
@@ -238,7 +239,7 @@ export function InvitesSection() {
                 {latestInviteCopied ? (
                   <div className="inline-flex items-center gap-1 text-xs font-medium text-foreground">
                     <Check className="h-3.5 w-3.5" />
-                    Copied
+                    {t("common.copied")}
                   </div>
                 ) : null}
               </div>
@@ -302,7 +303,7 @@ export function InvitesSection() {
                     <th className="px-5 py-3 font-medium text-muted-foreground">State</th>
                     <th className="px-5 py-3 font-medium text-muted-foreground">For</th>
                     <th className="px-5 py-3 font-medium text-muted-foreground">Invited by</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Created</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("common.created")}</th>
                     <th className="px-5 py-3 font-medium text-muted-foreground">Join request</th>
                     <th className="px-5 py-3 text-right font-medium text-muted-foreground">Action</th>
                   </tr>
@@ -377,7 +378,7 @@ function formatInviteState(state: "active" | "accepted" | "expired" | "revoked")
 }
 
 function formatInviteAudience(invite: Awaited<ReturnType<typeof accessApi.listInvites>>["invites"][number]) {
-  if (invite.allowedJoinTypes === "agent") return "Agent";
+  if (invite.allowedJoinTypes === "agent") return t("common.agent");
   if (invite.allowedJoinTypes === "both") return invite.humanRole ? `Human or agent · ${invite.humanRole}` : "Human or agent";
   return invite.humanRole ?? "Human";
 }

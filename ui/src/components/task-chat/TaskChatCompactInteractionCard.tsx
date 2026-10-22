@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   useEffect,
   useMemo,
@@ -88,7 +89,7 @@ export interface TaskChatCompactInteractionCardProps extends SharedInteractionPr
 const KIND_COPY = {
   suggest_tasks: {
     fallbackTitle: "Suggested tasks",
-    label: "Tasks",
+    label: t("common.tasks"),
     icon: GitBranch,
   },
   ask_user_questions: {
@@ -108,12 +109,12 @@ const KIND_COPY = {
   },
   request_item_verdicts: {
     fallbackTitle: "Review items",
-    label: "Review",
+    label: t("common.review"),
     icon: MessageSquareQuote,
   },
   connection_intent: {
     fallbackTitle: "Connect service",
-    label: "Connection",
+    label: t("common.connection"),
     icon: Plug,
   },
 } as const;
@@ -239,7 +240,7 @@ function Details({ children }: { children?: ReactNode }) {
   return (
     <details className="mt-2">
       <summary className="flex cursor-pointer list-none items-center gap-1 text-xs font-medium text-muted-foreground">
-        <ChevronDown aria-hidden className="h-3.5 w-3.5" /> Details
+        <ChevronDown aria-hidden className="h-3.5 w-3.5" /> {t("common.details")}
       </summary>
       <div className="mt-2 rounded-sm bg-muted/40 px-2.5 py-2 text-sm text-muted-foreground">
         {children}
@@ -1004,7 +1005,7 @@ function ConfirmationCard({
                 setRejecting(false);
               }}
             >
-              Back
+              {t("common.back")}
             </Button>
             <Button
               type="button"
@@ -1022,7 +1023,7 @@ function ConfirmationCard({
               {working === "reject" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {interaction.payload.rejectLabel ?? "Reject"}
+              {interaction.payload.rejectLabel ?? t("common.reject")}
             </Button>
           </>
         ) : (
@@ -1038,7 +1039,7 @@ function ConfirmationCard({
                   : void resolve("reject")
               }
             >
-              {interaction.payload.rejectLabel ?? "Reject"}
+              {interaction.payload.rejectLabel ?? t("common.reject")}
             </Button>
             <Button
               type="button"
@@ -1049,7 +1050,7 @@ function ConfirmationCard({
               {working === "accept" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {interaction.payload.acceptLabel ?? "Approve"}
+              {interaction.payload.acceptLabel ?? t("common.approve")}
             </Button>
           </>
         )}
@@ -1243,7 +1244,7 @@ function CheckboxConfirmationCard({
               disabled={working !== null}
               onClick={() => setRejecting(false)}
             >
-              Back
+              {t("common.back")}
             </Button>
             <Button
               type="button"
@@ -1506,7 +1507,7 @@ function SuggestedTasksCard({
               disabled={working !== null}
               onClick={() => setRejecting(false)}
             >
-              Back
+              {t("common.back")}
             </Button>
             <Button
               type="button"
@@ -1768,7 +1769,7 @@ function ItemVerdictsCard({
             href={itemHref}
             className="text-xs font-medium text-primary hover:underline"
           >
-            Open
+            {t("common.open")}
           </a>
         ) : null}
       </div>

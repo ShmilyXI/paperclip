@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { Bot, User, Cog, ChevronDown, ListFilter } from "lucide-react";
@@ -36,9 +37,9 @@ const EVENT_LABEL: Record<CaseEventKind, string> = {
 
 /** Human label for the actor, preferring the resolved agent name. */
 function actorLabel(event: CaseEvent): string {
-  if (event.actorType === "agent") return event.actorAgentName ?? "Agent";
-  if (event.actorType === "user") return "User";
-  return "System";
+  if (event.actorType === "agent") return event.actorAgentName ?? t("common.agent");
+  if (event.actorType === "user") return t("common.user");
+  return t("common.system");
 }
 
 function ActorIcon({ event }: { event: CaseEvent }) {

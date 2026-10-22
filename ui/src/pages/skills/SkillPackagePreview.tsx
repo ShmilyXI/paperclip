@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, FileImage, AlertTriangle } from 'lucide-react';
@@ -45,7 +46,7 @@ export function SkillPackagePreview({ companyId, repository, commitSha, skill, i
         <h3 className="flex items-center gap-2 font-medium"><AlertTriangle className="size-4" />Files not included</h3>
         <ul className="mt-2 space-y-2">
           {inspection!.references.map(reference => <li key={`${reference.fromPath}:${reference.resolvedPath}`} className="break-all text-xs">
-            <span className="font-mono">{reference.target}</span> · {reference.kind === 'outside_package' ? 'Outside this package' : 'Not found'}
+            <span className="font-mono">{reference.target}</span> · {reference.kind === 'outside_package' ? 'Outside this package' : t("common.notFound")}
             <span className="text-muted-foreground"> · referenced in {reference.fromPath}</span>
           </li>)}
         </ul>
@@ -66,7 +67,7 @@ export function SkillPackagePreview({ companyId, repository, commitSha, skill, i
           </div>
           <div className="max-h-(--sz-480px) min-h-40 overflow-auto p-3">
             {preview.isFetching && <p role="status" className="text-sm text-muted-foreground">Loading preview…</p>}
-            {preview.error && <div role="alert" className="space-y-2 text-sm"><p className="text-destructive">{preview.error.message}</p><Button variant="outline" size="sm" onClick={() => void preview.refetch()}>Try again</Button> <Link to="/apps" className="underline">Manage GitHub access</Link></div>}
+            {preview.error && <div role="alert" className="space-y-2 text-sm"><p className="text-destructive">{preview.error.message}</p><Button variant="outline" size="sm" onClick={() => void preview.refetch()}>{t("common.tryAgain")}</Button> <Link to="/apps" className="underline">Manage GitHub access</Link></div>}
             {preview.data?.file.encoding === 'base64' && <div className="flex flex-col items-center gap-3 py-8 text-sm text-muted-foreground"><FileImage className="size-6" /><p>Binary asset · included without changes</p><p className="text-xs">Open on GitHub to preview or download this file.</p></div>}
             {preview.data?.content !== null && preview.data?.content !== undefined && <pre className="whitespace-pre-wrap break-words font-mono text-xs leading-relaxed">{preview.data.content}</pre>}
             {preview.data?.truncated && <p className="mt-3 text-xs text-muted-foreground">Showing the first 64 KB. The complete file is imported.</p>}

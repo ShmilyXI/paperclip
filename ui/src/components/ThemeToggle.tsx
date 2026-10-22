@@ -3,7 +3,7 @@ import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "../context/ThemeContext";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type ThemeToggleVariant = "icon" | "menu-action" | "compact-menu-action";
 

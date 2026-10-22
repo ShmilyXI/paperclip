@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -415,7 +416,7 @@ export function FailedRunInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-blue-500/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={t("common.markAsRead")}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -474,14 +475,14 @@ export function FailedRunInboxRow({
             disabled={isRetrying}
           >
             <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-            {isRetrying ? "Thinking" : "Retry"}
+            {isRetrying ? "Thinking" : t("common.retry")}
           </Button>}
           {!showUnreadSlot && (
             <button
               type="button"
               onClick={onDismiss}
               className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover:opacity-100"
-              aria-label="Dismiss"
+              aria-label={t("common.dismiss")}
             >
               <X className="h-4 w-4" />
             </button>
@@ -498,14 +499,14 @@ export function FailedRunInboxRow({
           disabled={isRetrying}
         >
           <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-          {isRetrying ? "Thinking" : "Retry"}
+          {isRetrying ? "Thinking" : t("common.retry")}
         </Button>}
         {!showUnreadSlot && (
           <button
             type="button"
             onClick={onDismiss}
             className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-            aria-label="Dismiss"
+            aria-label={t("common.dismiss")}
           >
             <X className="h-4 w-4" />
           </button>
@@ -564,7 +565,7 @@ function ApprovalInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-blue-500/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={t("common.markAsRead")}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -613,7 +614,7 @@ function ApprovalInboxRow({
                   onClick={onApprove}
                   disabled={isPending}
                 >
-                  Approve
+                  {t("common.approve")}
                 </Button>
                 <Button
                   variant="destructive"
@@ -622,7 +623,7 @@ function ApprovalInboxRow({
                   onClick={onReject}
                   disabled={isPending}
                 >
-                  Reject
+                  {t("common.reject")}
                 </Button>
               </>
             ) : null}
@@ -637,7 +638,7 @@ function ApprovalInboxRow({
             onClick={onApprove}
             disabled={isPending}
           >
-            Approve
+            {t("common.approve")}
           </Button>
           <Button
             variant="destructive"
@@ -646,7 +647,7 @@ function ApprovalInboxRow({
             onClick={onReject}
             disabled={isPending}
           >
-            Reject
+            {t("common.reject")}
           </Button>
         </div>
       ) : null}
@@ -697,7 +698,7 @@ function JoinRequestInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-blue-500/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={t("common.markAsRead")}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -736,7 +737,7 @@ function JoinRequestInboxRow({
             onClick={onApprove}
             disabled={isPending}
           >
-            Approve
+            {t("common.approve")}
           </Button>
           <Button
             variant="destructive"
@@ -745,7 +746,7 @@ function JoinRequestInboxRow({
             onClick={onReject}
             disabled={isPending}
           >
-            Reject
+            {t("common.reject")}
           </Button>
         </div>
       </div>
@@ -756,7 +757,7 @@ function JoinRequestInboxRow({
           onClick={onApprove}
           disabled={isPending}
         >
-          Approve
+          {t("common.approve")}
         </Button>
         <Button
           variant="destructive"
@@ -765,7 +766,7 @@ function JoinRequestInboxRow({
           onClick={onReject}
           disabled={isPending}
         >
-          Reject
+          {t("common.reject")}
         </Button>
       </div>
     </div>
@@ -822,7 +823,7 @@ export interface InboxSurfaceProps {
   tab?: InboxTab;
   /** Replaces the inbox tab bar in the toolbar's context slot. */
   toolbarContext?: ReactNode;
-  /** Breadcrumb and back-link label; "Inbox" when standalone, "Tasks" when hosted. */
+  /** Breadcrumb and back-link label; t("common.inbox") when standalone, t("common.tasks") when hosted. */
   surfaceLabel?: string;
 }
 
@@ -834,7 +835,7 @@ export function Inbox(props: InboxSurfaceProps = {}) {
 function StreamlinedInbox({
   tab: tabOverride,
   toolbarContext,
-  surfaceLabel = "Inbox",
+  surfaceLabel = t("common.inbox"),
 }: InboxSurfaceProps) {
   const streamlinedUiEnabled = true;
   const { selectedCompanyId } = useCompany();
@@ -1187,7 +1188,7 @@ function StreamlinedInbox({
     if (currentUserId) {
       options.set(`user:${currentUserId}`, {
         id: `user:${currentUserId}`,
-        label: currentUserId === "local-board" ? "Board" : "Me",
+        label: currentUserId === "local-board" ? t("common.board") : "Me",
         kind: "user",
         searchText: currentUserId === "local-board" ? "board me human local-board" : `me board human ${currentUserId}`,
       });
@@ -2466,10 +2467,10 @@ function StreamlinedInbox({
             <PageTabBar
               items={[
                 { value: "mine", label: "Mine" },
-                { value: "recent", label: "Recent" },
+                { value: "recent", label: t("common.recent") },
                 { value: "unread", label: "Unread" },
-                { value: "blocked", label: "Blocked" },
-                { value: "all", label: "All" },
+                { value: "blocked", label: t("common.blocked") },
+                { value: "all", label: t("common.all") },
               ]}
             />
           </Tabs>
@@ -2576,7 +2577,7 @@ function StreamlinedInbox({
                     variant="outline"
                     size="icon"
                     className="h-8 w-8 shrink-0"
-                    title="Sort"
+                    title={t("common.sort")}
                   >
                     <ArrowUpDown className="h-3.5 w-3.5" />
                   </Button>
@@ -2657,11 +2658,11 @@ function StreamlinedInbox({
                 <PopoverContent align="end" className="w-40 p-2">
                   <div className="space-y-0.5">
                     {([
-                      ["none", "None"],
-                      ["type", "Type"],
+                      ["none", t("common.none")],
+                      ["type", t("common.type")],
                       ["assignee", "Responsible"],
-                      ["project", "Project"],
-                      ...(isolatedWorkspacesEnabled ? ([["workspace", "Workspace"]] as const) : []),
+                      ["project", t("common.project")],
+                      ...(isolatedWorkspacesEnabled ? ([["workspace", t("common.workspace")]] as const) : []),
                     ] as const).map(([value, label]) => (
                       <button
                         key={value}
@@ -2705,7 +2706,7 @@ function StreamlinedInbox({
                     onClick={() => setShowMarkAllReadConfirm(true)}
                     disabled={markAllReadMutation.isPending}
                   >
-                    {markAllReadMutation.isPending ? "Marking…" : "Mark all as read"}
+                    {markAllReadMutation.isPending ? "Marking…" : t("common.markAllAsRead")}
                   </Button>
                   <Dialog open={showMarkAllReadConfirm} onOpenChange={setShowMarkAllReadConfirm}>
                     <DialogContent className="sm:max-w-md">
@@ -2717,7 +2718,7 @@ function StreamlinedInbox({
                       </DialogHeader>
                       <DialogFooter>
                         <Button variant="outline" onClick={() => setShowMarkAllReadConfirm(false)}>
-                          Cancel
+                          {t("common.cancel")}
                         </Button>
                         <Button
                           onClick={() => {
@@ -2725,7 +2726,7 @@ function StreamlinedInbox({
                             markAllReadMutation.mutate(unreadIssueIds);
                           }}
                         >
-                          Mark all as read
+                          {t("common.markAllAsRead")}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -3004,7 +3005,7 @@ function StreamlinedInbox({
                       >
                         <div className="h-px flex-1 bg-border/80" />
                         <span className="shrink-0 text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
-                          {group.searchSection === "archived" ? "Archived" : "Other results"}
+                          {group.searchSection === "archived" ? t("common.archived") : "Other results"}
                         </span>
                         <div className="h-px flex-1 bg-border/80" />
                       </div>,
@@ -3346,7 +3347,7 @@ function StreamlinedInbox({
                     type="button"
                     onClick={() => dismissAlert("alert:agent-errors")}
                     className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover/alert:opacity-100"
-                    aria-label="Dismiss"
+                    aria-label={t("common.dismiss")}
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -3369,7 +3370,7 @@ function StreamlinedInbox({
                     type="button"
                     onClick={() => dismissAlert("alert:budget")}
                     className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover/alert:opacity-100"
-                    aria-label="Dismiss"
+                    aria-label={t("common.dismiss")}
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>

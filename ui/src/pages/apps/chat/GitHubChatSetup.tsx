@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExternalLink, Loader2 } from "lucide-react";
@@ -183,7 +184,7 @@ export function GitHubChatSetup() {
   }, [connected, bot, selectedAgent, state, queryClient, navigate]);
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
+      { label: t("common.connectors"), href: "/apps" },
       { label: "GitHub Code Review Bot" },
     ]);
     return () => setBreadcrumbs([]);
@@ -276,7 +277,7 @@ export function GitHubChatSetup() {
             Loading your draft…
           </p>
         )}
-        {footer(current.error ? "Try again" : undefined, async () => {
+        {footer(current.error ? t("common.tryAgain") : undefined, async () => {
           await current.refetch();
         })}
       </div>
@@ -351,7 +352,7 @@ export function GitHubChatSetup() {
             />
           )}
           {footer(
-            "Continue",
+            t("common.continue"),
             async () => {
               const created = await chatEndpointsApi.create(
                 selectedCompanyId!,
@@ -553,7 +554,7 @@ export function GitHubChatSetup() {
                 queryClient.setQueryData(["github-wizard", bot.id], result);
                 if (result.registration) setSubmitManifest(true);
               }, !appNotCreated)
-            : footer("Try again", refresh)}
+            : footer(t("common.tryAgain"), refresh)}
         </>
       ) : state?.state === "verify" ? (
         <>
@@ -579,7 +580,7 @@ export function GitHubChatSetup() {
           >
             Connection settings
           </Link>
-          {footer("Try again", refresh)}
+          {footer(t("common.tryAgain"), refresh)}
         </>
       ) : (
         <>
@@ -612,7 +613,7 @@ export function GitHubChatSetup() {
           </div>
           {accountChoice === "organization" && (
             <div className="space-y-2">
-              <Label htmlFor="github-owner-login">Organization</Label>
+              <Label htmlFor="github-owner-login">{t("common.organization")}</Label>
               <Input
                 id="github-owner-login"
                 disabled={busy || !!state?.registration}

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useId, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PROMPT_INJECTION_DEFAULT_MODEL, updatePromptInjectionPreventionSchema,
@@ -46,7 +47,7 @@ export function PromptInjectionPreventionSettingsView({ settings, choices, model
     <h2 className="text-lg font-semibold">Prompt Injection Prevention</h2>
     <p className="text-sm text-muted-foreground">Check tool results for instructions that could redirect your agents. The selected provider receives tool content and charges API usage. Built-in detection is used when the model is unavailable.</p>
     <ConnectionChoiceList selectedId={draft.grantId ?? undefined} disabled={saving || testing}
-      choices={choices.map(c => ({ id: c.grantId, name: c.name, description: c.status === "connected" ? "Connected" : "Needs attention",
+      choices={choices.map(c => ({ id: c.grantId, name: c.name, description: c.status === "connected" ? t("common.connected") : "Needs attention",
         icon: <AppLogo name="OpenRouter" brandKey="openrouter" size={24} /> }))}
       onSelect={grantId => {
         const c = choices.find(c => c.grantId === grantId)!;
@@ -61,7 +62,7 @@ export function PromptInjectionPreventionSettingsView({ settings, choices, model
     {draft.connectionId && <fieldset disabled={saving || testing} className="space-y-4">
       {(!selected || selected.status !== "connected") && <p role="status" className="text-sm text-muted-foreground">The saved connection is unavailable. Choose a replacement, disable model checks, or clear the selection. Built-in detection stays active.</p>}
       <div className="space-y-2">
-        <label htmlFor={`${modelId}-input`} className="text-sm font-medium">Model</label>
+        <label htmlFor={`${modelId}-input`} className="text-sm font-medium">{t("common.model")}</label>
         <Input id={`${modelId}-input`} list={modelId} value={draft.model} placeholder={PROMPT_INJECTION_DEFAULT_MODEL}
           onChange={e => setDraft(d => ({ ...d, model: e.target.value }))} />
         <datalist id={modelId}>{models.map(m => <option key={m.id} value={m.id}>{m.label ?? m.id}</option>)}</datalist>
@@ -82,7 +83,7 @@ export function PromptInjectionPreventionSettingsView({ settings, choices, model
         <p className="text-xs text-muted-foreground">{dirty ? "Save changes before testing." : "Tests two fixed samples with an API charge."}</p>
       </div>
       {dirty && <Button disabled={saving || testing || !updatePromptInjectionPreventionSchema.safeParse(draft).success || (draft.enabled && selected?.status !== "connected")}
-        onClick={() => onSave(draft)}>{saving ? "Saving…" : "Save prompt injection settings"}</Button>}
+        onClick={() => onSave(draft)}>{saving ? t("common.saving2") : "Save prompt injection settings"}</Button>}
     </div>
   </section>;
 }
@@ -101,7 +102,7 @@ export function PromptInjectionPreventionSettingsSection({ companyId }: { compan
   const save = useMutation({ mutationFn: (data: UpdatePromptInjectionPrevention) => promptInjectionPreventionApi.update(companyId, data),
     onSuccess: settings => { test.reset(); client.setQueryData(key, { ...query.data, settings }); } });
   if (query.isPending) return <p className="text-sm text-muted-foreground">Loading prompt injection settings…</p>;
-  if (query.error) return <div role="alert" className="space-y-2"><p className="text-sm text-destructive">Could not load prompt injection settings.</p><Button variant="outline" onClick={() => void query.refetch()}>Try again</Button></div>;
+  if (query.error) return <div role="alert" className="space-y-2"><p className="text-sm text-destructive">Could not load prompt injection settings.</p><Button variant="outline" onClick={() => void query.refetch()}>{t("common.tryAgain")}</Button></div>;
   if (!query.data?.canManage || !query.data.settings) return null;
   return <>
     <PromptInjectionPreventionSettingsView key={companyId} settings={query.data.settings} choices={query.data.choices} models={models.data}

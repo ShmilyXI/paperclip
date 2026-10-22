@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Download, ExternalLink, Maximize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -109,14 +110,14 @@ export function OutputPrimaryCard({ item, creatorName, onMediaClick }: OutputPri
               <Button asChild variant="outline" size="sm" className="max-md:flex-1">
                 <a href={meta.openPath} target="_blank" rel="noreferrer">
                   <ExternalLink className="h-4 w-4" />
-                  Open
+                  {t("common.open")}
                 </a>
               </Button>
             ) : null}
             <Button asChild size="sm" className="max-md:flex-1">
               <a href={meta.downloadPath} aria-label={`Download ${filename}`}>
                 <Download className="h-4 w-4" />
-                Download
+                {t("common.download")}
               </a>
             </Button>
           </div>

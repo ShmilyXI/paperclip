@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef } from "react";
 import {
   Activity as ActivityIcon,
@@ -40,21 +41,21 @@ type NavGroup = {
 
 const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Routine",
+    label: t("common.routine"),
     items: [
-      { key: "overview", label: "Overview", icon: Circle },
+      { key: "overview", label: t("common.overview"), icon: Circle },
       { key: "triggers", label: "Triggers", icon: Clock3 },
       { key: "variables", label: "Variables", icon: LayoutGrid },
-      { key: "secrets", label: "Secrets", icon: KeyRound },
+      { key: "secrets", label: t("common.secrets"), icon: KeyRound },
       { key: "delivery", label: "Delivery", icon: Send },
     ],
   },
   {
     label: "Operate",
     items: [
-      { key: "runs", label: "Runs", icon: Play },
-      { key: "activity", label: "Activity", icon: ActivityIcon },
-      { key: "history", label: "History", icon: HistoryIcon },
+      { key: "runs", label: t("common.runs"), icon: Play },
+      { key: "activity", label: t("common.activity"), icon: ActivityIcon },
+      { key: "history", label: t("common.history"), icon: HistoryIcon },
     ],
   },
 ];
@@ -152,7 +153,7 @@ export function RoutineSubSidebar({
                   <span className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500 motion-safe:animate-pulse" />
                 ) : dirty ? (
                   <span
-                    aria-label="Unsaved changes"
+                    aria-label={t("common.unsavedChanges")}
                     className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500 ring-2 ring-background"
                   />
                 ) : null}

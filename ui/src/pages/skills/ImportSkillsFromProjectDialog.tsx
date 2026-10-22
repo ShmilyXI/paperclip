@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -269,7 +270,7 @@ function CandidateStatusBadge({
           variant="outline"
           className="gap-1 px-1.5 py-0 font-normal text-emerald-600 border-emerald-500/40 dark:text-emerald-400"
         >
-          <CheckCircle2 className="h-3 w-3" /> New
+          <CheckCircle2 className="h-3 w-3" /> {t("common.new")}
         </Badge>
       );
   }
@@ -588,7 +589,7 @@ export function ImportSkillsFromProjectDialog({
                       disabled={selectableCandidates.length === 0}
                       data-testid="select-all"
                     >
-                      Select all
+                      {t("common.selectAll")}
                     </Button>
                     <Button
                       variant="ghost"
@@ -602,7 +603,7 @@ export function ImportSkillsFromProjectDialog({
                   </div>
                 )}
                 <Button variant="outline" size="sm" onClick={backToPick}>
-                  <ArrowLeft className="mr-1 h-3.5 w-3.5" /> Back
+                  <ArrowLeft className="mr-1 h-3.5 w-3.5" /> {t("common.back")}
                 </Button>
                 {!scanError && candidates.length > 0 && (
                   <Button
@@ -624,12 +625,12 @@ export function ImportSkillsFromProjectDialog({
             )}
             {step === "pick" && (
               <Button variant="ghost" size="sm" onClick={handleClose}>
-                Cancel
+                {t("common.cancel")}
               </Button>
             )}
             {step === "result" && (
               <Button size="sm" onClick={handleClose}>
-                Done
+                {t("common.done")}
               </Button>
             )}
           </div>
@@ -960,7 +961,7 @@ function SelectStep({
           </p>
           {!grant && (
             <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
-              Try again
+              {t("common.tryAgain")}
             </Button>
           )}
         </div>
@@ -1220,7 +1221,7 @@ function ResultStep({ result }: ResultStepProps) {
                     to={skillStudioRoute(skill.id)}
                     className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-foreground no-underline hover:underline"
                   >
-                    Open <ExternalLink className="h-3 w-3" />
+                    {t("common.open")} <ExternalLink className="h-3 w-3" />
                   </Link>
                 </li>
               ))}

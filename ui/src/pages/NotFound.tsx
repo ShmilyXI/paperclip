@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect } from "react";
 import { Link, useLocation } from "@/lib/router";
 import { AlertTriangle, Compass } from "lucide-react";
@@ -27,7 +28,7 @@ export function NotFoundPage({ scope = "global", requestedPrefix }: NotFoundPage
   const currentPath = `${location.pathname}${location.search}${location.hash}`;
   const normalizedPrefix = requestedPrefix?.toUpperCase();
 
-  const title = scope === "invalid_company_prefix" ? "Organization not found" : "Page not found";
+  const title = scope === "invalid_company_prefix" ? "Organization not found" : t("common.pageNotFound");
   const description =
     scope === "invalid_company_prefix"
       ? `No organization matches prefix "${normalizedPrefix ?? "unknown"}".`

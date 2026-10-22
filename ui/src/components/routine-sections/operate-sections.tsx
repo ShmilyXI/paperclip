@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Activity as ActivityIcon } from "lucide-react";
@@ -42,7 +43,7 @@ export function RunsSection() {
       liveIssueIds={new Set(hasLiveRun && activeIssueId ? [activeIssueId] : [])}
       viewStateKey={`paperclip:routine-runs:${companyId}:${routine.id}`}
       searchFilters={filters}
-      issueLinkState={createIssueDetailLocationState("Runs", routineDetailHref(routine.id, "runs"))}
+      issueLinkState={createIssueDetailLocationState(t("common.runs"), routineDetailHref(routine.id, "runs"))}
       rowPresentation="task"
       toolbarPresentation="collection"
       onUpdateIssue={(id, data) => updateIssue.mutate({ id, data })}

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Check, ChevronDown, Plus, RotateCcw, Search, X, Zap } from "lucide-react";
@@ -144,7 +145,7 @@ export function ComposerRunSettingsPicker({
   const choices = composerEfforts(agent, model, models.map((item) => item.id));
   const effort = selected.effort && choices.includes(selected.effort) ? selected.effort : null;
   const effortIndex = effort ? choices.indexOf(effort) + 1 : 0;
-  const effortLabel = effort ? EFFORT_LABELS[effort] ?? effort : "Default";
+  const effortLabel = effort ? EFFORT_LABELS[effort] ?? effort : t("common.default");
   const fastAvailable = composerFastAvailable(agent, model);
   const effortChoicesKey = choices.join(",");
   useEffect(() => {
@@ -156,7 +157,7 @@ export function ComposerRunSettingsPicker({
     }
   }, [companyId, agentId, model, modelSupported, settings, base.model, base.effort, base.fast, effortChoicesKey, onSettingsChange]);
   const changed = Boolean(selected.model || selected.effort || selected.fast);
-  const assigneeOptions = [{ id: "", label: "No assignee", searchText: "Unassigned" }, ...options.filter((item) => item.id !== "")];
+  const assigneeOptions = [{ id: "", label: "No assignee", searchText: t("common.unassigned") }, ...options.filter((item) => item.id !== "")];
   const filteredAgents = assigneeOptions.filter((item) => {
     const optionAgent = agents.get(item.id.startsWith("agent:") ? item.id.slice(6) : "");
     return `${item.label} ${item.searchText ?? ""} ${optionAgent?.role ?? ""} ${harnessLabel(optionAgent)}`
@@ -206,8 +207,8 @@ export function ComposerRunSettingsPicker({
     <Trigger asChild><button ref={triggerRef} type="button" disabled={disabled} aria-label="Select assignee" data-testid="task-chat-composer-assignee"
       onClick={() => { setView("agents"); setHighlightedAssignee(0); }}
       className="flex h-8 min-w-0 max-w-full items-center gap-1.5 rounded-full px-2.5 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
-      {renderAssigneeIdentity?.(assigneeValue, agent?.name ?? "Unassigned", "trigger")}
-      <span data-testid="task-chat-composer-assignee-label" className="min-w-0 truncate">{assigneeOptions.find((item) => item.id === assigneeValue)?.label ?? "Unassigned"}</span>
+      {renderAssigneeIdentity?.(assigneeValue, agent?.name ?? t("common.unassigned"), "trigger")}
+      <span data-testid="task-chat-composer-assignee-label" className="min-w-0 truncate">{assigneeOptions.find((item) => item.id === assigneeValue)?.label ?? t("common.unassigned")}</span>
       {!modelSupported ? <ChevronDown className="size-3 shrink-0 text-muted-foreground" aria-hidden /> : null}
     </button></Trigger>
     {modelSupported ? <>
@@ -225,8 +226,8 @@ export function ComposerRunSettingsPicker({
     <div className="flex items-center gap-2">
       <button type="button" aria-label="Choose assignee" onClick={() => setView("agents")}
         className="flex min-w-0 flex-1 items-center gap-2 rounded-md px-1 py-1 text-left hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        {renderAssigneeIdentity?.(assigneeValue, agent?.name ?? "Unassigned", "option") ?? <span className="grid size-6 shrink-0 place-items-center rounded-md bg-secondary text-xs font-semibold text-secondary-foreground">{agent?.name.slice(0, 1) ?? "?"}</span>}
-        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{agent?.name ?? options.find((item) => item.id === assigneeValue)?.label ?? "Unassigned"}</span><span className="block truncate text-xs text-muted-foreground">{harnessLabel(agent)}</span></span>
+        {renderAssigneeIdentity?.(assigneeValue, agent?.name ?? t("common.unassigned"), "option") ?? <span className="grid size-6 shrink-0 place-items-center rounded-md bg-secondary text-xs font-semibold text-secondary-foreground">{agent?.name.slice(0, 1) ?? "?"}</span>}
+        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{agent?.name ?? options.find((item) => item.id === assigneeValue)?.label ?? t("common.unassigned")}</span><span className="block truncate text-xs text-muted-foreground">{harnessLabel(agent)}</span></span>
         <ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden />
       </button>
       {!choices.length && modelSupported ? <button type="button" aria-label="Reset to agent default" title="Reset to agent default" disabled={!changed} onClick={reset} className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-accent disabled:opacity-40"><RotateCcw className="size-4" /></button> : null}
@@ -234,7 +235,7 @@ export function ComposerRunSettingsPicker({
     </div>
     {modelSupported ? <>
       <button type="button" aria-label="Choose exact model" onClick={() => setView("models")} className="mt-3 flex w-full items-center gap-2 rounded-md px-1 py-1 text-left hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <span className="min-w-0 flex-1"><span className="block text-xs text-muted-foreground">Model</span><span className="block truncate text-sm font-medium">{modelName || "Default"}</span></span><ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+        <span className="min-w-0 flex-1"><span className="block text-xs text-muted-foreground">{t("common.model")}</span><span className="block truncate text-sm font-medium">{modelName || "Default"}</span></span><ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden />
       </button>
       {choices.length ? <div className="mt-3">
         <div className="flex items-center gap-2">

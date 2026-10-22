@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { TextAttachmentContext } from "@/context/TextAttachmentContext";
 import { isTextAttachment } from "@/lib/issue-attachments";
 import { useContext, useMemo, useState, type DragEvent, type ReactNode } from "react";
@@ -75,12 +76,12 @@ function AttachmentActions({
           <Maximize2 className="h-4 w-4" />
         </Button>
       ) : null}
-      <Button asChild variant="ghost" size="icon-sm" title="Open in new tab">
+      <Button asChild variant="ghost" size="icon-sm" title={t("common.openInNewTab")}>
         <a href={attachmentOpenPath(attachment)} onClick={openInPanel} target="_blank" rel="noreferrer" aria-label={`Open ${filename}`}>
           <ExternalLink className="h-4 w-4" />
         </a>
       </Button>
-      <Button asChild variant="ghost" size="icon-sm" title="Download">
+      <Button asChild variant="ghost" size="icon-sm" title={t("common.download")}>
         <a href={attachmentDownloadPath(attachment)} aria-label={`Download ${filename}`}>
           <Download className="h-4 w-4" />
         </a>
@@ -280,7 +281,7 @@ export function IssueAttachmentsSection({
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Paperclip className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
-          <h3 className="text-sm font-medium text-muted-foreground">Attachments</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">{t("common.attachments")}</h3>
           <span className="text-xs text-muted-foreground">{attachments.length}</span>
         </div>
         {uploadButton}
@@ -322,7 +323,7 @@ export function IssueAttachmentsSection({
                       }}
                       disabled={deletePending}
                     >
-                      Yes
+                      {t("common.yes")}
                     </button>
                     <button
                       type="button"
@@ -332,7 +333,7 @@ export function IssueAttachmentsSection({
                         setConfirmDeleteId(null);
                       }}
                     >
-                      No
+                      {t("common.no")}
                     </button>
                   </div>
                 </div>
@@ -399,10 +400,10 @@ export function IssueAttachmentsSection({
           <p className="text-sm font-medium text-destructive">Delete this attachment? This cannot be undone.</p>
           <div className="flex shrink-0 items-center gap-2">
             <Button variant="ghost" size="sm" onClick={() => setConfirmDeleteId(null)} disabled={deletePending}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button variant="destructive" size="sm" onClick={() => confirmDelete(confirmDeleteId)} disabled={deletePending}>
-              {deletePending ? "Deleting..." : "Delete"}
+              {deletePending ? t("common.deleting") : t("common.delete")}
             </Button>
           </div>
         </div>

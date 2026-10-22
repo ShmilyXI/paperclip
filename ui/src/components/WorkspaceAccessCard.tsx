@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ExternalLink, Loader2, Play, ScrollText, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +10,7 @@ import type { WorkspaceAccessState } from "../lib/workspace-access-state";
  *
  * One card per workspace that names the state, the cause, and the single safe
  * next action. It replaces the previous behavior where a cloned workspace whose
- * database was missing still rendered a plain "Open" link and answered with
+ * database was missing still rendered a plain t("common.open") link and answered with
  * "invalid email or password".
  */
 
@@ -36,7 +37,7 @@ const STATE_LABELS: Record<ActiveWorkspaceAccessState, string> = {
   ready: "Ready",
   degraded: "Degraded",
   repairing: "Repairing",
-  failed: "Failed",
+  failed: t("common.failed"),
 };
 
 const ACTION_ICONS = {

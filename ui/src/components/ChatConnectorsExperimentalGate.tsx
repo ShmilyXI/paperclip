@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { chatEndpointsApi } from "@/api/chatEndpoints";
@@ -28,7 +29,7 @@ function ProviderEndpointGate({
           {endpoint.error.message}
         </p>
         <Button variant="outline" onClick={() => void endpoint.refetch()}>
-          Retry
+          {t("common.retry")}
         </Button>
       </div>
     );

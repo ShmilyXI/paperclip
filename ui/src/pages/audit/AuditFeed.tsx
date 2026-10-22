@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
@@ -33,30 +34,30 @@ const ALL = "__all";
 /** Action-domain prefixes offered in the filter (server does a prefix match). */
 const ACTION_DOMAINS: { value: string; label: string }[] = [
   { value: ALL, label: "All actions" },
-  { value: "issue.", label: "Tasks" },
+  { value: "issue.", label: t("common.tasks") },
   { value: "case.", label: "Cases" },
-  { value: "agent.", label: "Agents" },
-  { value: "heartbeat.", label: "Runs" },
-  { value: "approval.", label: "Approvals" },
-  { value: "project.", label: "Projects" },
-  { value: "goal.", label: "Goals" },
+  { value: "agent.", label: t("common.agents") },
+  { value: "heartbeat.", label: t("common.runs") },
+  { value: "approval.", label: t("common.approvals") },
+  { value: "project.", label: t("common.projects") },
+  { value: "goal.", label: t("common.goals") },
   { value: "tool_", label: "Apps & tools" },
-  { value: "cost.", label: "Costs" },
-  { value: "company.", label: "Organization" },
+  { value: "cost.", label: t("common.costs") },
+  { value: "company.", label: t("common.organization") },
 ];
 
 /** Entity types offered in the filter (server does an exact match). */
 const ENTITY_TYPES: { value: string; label: string }[] = [
   { value: ALL, label: "All entities" },
-  { value: "issue", label: "Task" },
+  { value: "issue", label: t("common.task") },
   { value: "case", label: "Case" },
-  { value: "agent", label: "Agent" },
-  { value: "heartbeat_run", label: "Run" },
-  { value: "routine", label: "Routine" },
-  { value: "project", label: "Project" },
-  { value: "goal", label: "Goal" },
-  { value: "company", label: "Organization" },
-  { value: "tool_connection", label: "Connection" },
+  { value: "agent", label: t("common.agent") },
+  { value: "heartbeat_run", label: t("common.run") },
+  { value: "routine", label: t("common.routine") },
+  { value: "project", label: t("common.project") },
+  { value: "goal", label: t("common.goal") },
+  { value: "company", label: t("common.organization") },
+  { value: "tool_connection", label: t("common.connection") },
 ];
 
 /**
@@ -124,7 +125,7 @@ function AuditActor({
   // directory used by this page. The basic audit tier strips privileged
   // attribution (`agentId`) but retains the acting principal (`actorId`), so
   // use that principal to avoid presenting a trivially joinable identity as
-  // an anonymous "Agent" in the UI.
+  // an anonymous t("common.agent") in the UI.
   const actorAgentId = record.agentId
     ?? (record.actorType === "agent" ? record.actorId : null);
   const agent = actorAgentId ? agentMap.get(actorAgentId) : null;
@@ -140,23 +141,23 @@ function AuditActor({
     const profile = userProfileMap.get(record.actorId);
     return (
       <Identity
-        name={profile?.label ?? "User"}
+        name={profile?.label ?? t("common.user")}
         avatarUrl={profile?.image ?? null}
         size="sm"
         className="font-medium text-foreground"
       />
     );
   }
-  // Fall back to the actor *type*, never a blanket "System". This still covers
+  // Fall back to the actor *type*, never a blanket t("common.system"). This still covers
   // deleted or authorization-filtered agents that are absent from the directory.
   const label =
     record.actorType === "plugin"
       ? "Plugin"
       : record.actorType === "agent"
-        ? "Agent"
+        ? t("common.agent")
         : record.actorType === "user"
-          ? "User"
-          : "System";
+          ? t("common.user")
+          : t("common.system");
   return <Identity name={label} size="sm" className="font-medium text-foreground" />;
 }
 
@@ -251,7 +252,7 @@ function AuditRow({
           </p> : null}
           {documentKey ? (
             <p className="text-xs text-muted-foreground">
-              Document <span className="font-mono text-(length:--text-micro)">{documentKey}</span>
+              {t("common.document")} <span className="font-mono text-(length:--text-micro)">{documentKey}</span>
             </p>
           ) : null}
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
@@ -449,7 +450,7 @@ export function AuditFeed({
   // them, so `hasMixedAccessTiers` would stay true forever. Only call the feed
   // "recovering" while that attempt is outstanding; once it has settled, fall
   // through to normal rendering. Otherwise the banner permanently hides the
-  // error state and its "Try again" button, with no way off the page. Falling
+  // error state and its t("common.tryAgain") button, with no way off the page. Falling
   // through is safe because `items` already excludes the privileged pages, so
   // an unrecovered cache renders as a plain basic-tier feed.
   const downgradeRecoveryExhausted = Boolean(
@@ -560,7 +561,7 @@ export function AuditFeed({
       {!hideHeader ? (
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Activity</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("common.activity")}</h2>
             <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
               {resolvedMode === "agents"
                 ? "Every recorded agent action, newest first — with the responsible person and run behind each one."
@@ -573,7 +574,7 @@ export function AuditFeed({
       {showModeToggle ? (
         <Tabs value={resolvedMode} onValueChange={(value) => onModeChange?.(value as AuditFeedMode)}>
           <TabsList aria-label="Activity scope">
-            <TabsTrigger value="all">Activity</TabsTrigger>
+            <TabsTrigger value="all">{t("common.activity")}</TabsTrigger>
             <TabsTrigger
               value="agents"
               disabled={accessTier === "basic"}
@@ -600,10 +601,10 @@ export function AuditFeed({
       <div className="flex flex-wrap items-end gap-3 border-y border-border py-3">
         {canUseAdvancedControls && !lockedAgentId && !lockedRunId ? (
           <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-            <span>Agent</span>
+            <span>{t("common.agent")}</span>
             <Select value={agent} onValueChange={setAgent}>
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="Agent" />
+                <SelectValue placeholder={t("common.agent")} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={ALL}>All agents</SelectItem>
@@ -739,7 +740,7 @@ export function AuditFeed({
         </Card>
       ) : feed.isLoading ? (
         <Card>
-          <CardContent className="py-14 text-center text-sm text-muted-foreground">Loading…</CardContent>
+          <CardContent className="py-14 text-center text-sm text-muted-foreground">{t("common.loading2")}</CardContent>
         </Card>
       ) : feed.error ? (
         <Card>
@@ -748,7 +749,7 @@ export function AuditFeed({
               {feed.error instanceof Error ? feed.error.message : "Failed to load the audit log."}
             </p>
             <Button variant="outline" size="sm" onClick={() => feed.refetch()}>
-              Try again
+              {t("common.tryAgain")}
             </Button>
           </CardContent>
         </Card>
@@ -799,7 +800,7 @@ export function AuditFeed({
             onClick={() => feed.fetchNextPage()}
             disabled={feed.isFetchingNextPage}
           >
-            {feed.isFetchingNextPage ? "Loading…" : "Load more"}
+            {feed.isFetchingNextPage ? t("common.loading2") : "Load more"}
           </Button>
         </div>
       ) : null}

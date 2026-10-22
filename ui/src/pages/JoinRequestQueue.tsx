@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserPlus2 } from "lucide-react";
@@ -21,8 +22,8 @@ export function JoinRequestQueue() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Organization", href: "/dashboard" },
-      { label: "Inbox", href: "/inbox" },
+      { label: selectedCompany?.name ?? t("common.organization"), href: "/dashboard" },
+      { label: t("common.inbox"), href: "/inbox" },
       { label: "Join Requests" },
     ]);
   }, [selectedCompany?.name, setBreadcrumbs]);
@@ -88,7 +89,7 @@ export function JoinRequestQueue() {
 
       <Card className="flex-row flex-wrap gap-3 p-4">
         <label className="space-y-2 text-sm">
-          <span className="font-medium">Status</span>
+          <span className="font-medium">{t("common.status")}</span>
           <select
             className="rounded-md border border-border bg-background px-3 py-2"
             value={status}
@@ -96,9 +97,9 @@ export function JoinRequestQueue() {
               setStatus(event.target.value as "pending_approval" | "approved" | "rejected")
             }
           >
-            <option value="pending_approval">Pending approval</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
+            <option value="pending_approval">{t("common.pendingApproval")}</option>
+            <option value="approved">{t("common.approved")}</option>
+            <option value="rejected">{t("common.rejected")}</option>
           </select>
         </label>
         <label className="space-y-2 text-sm">
@@ -110,9 +111,9 @@ export function JoinRequestQueue() {
               setRequestType(event.target.value as "all" | "human" | "agent")
             }
           >
-            <option value="all">All</option>
+            <option value="all">{t("common.all")}</option>
             <option value="human">Human</option>
-            <option value="agent">Agent</option>
+            <option value="agent">{t("common.agent")}</option>
           </select>
         </label>
       </Card>
@@ -155,13 +156,13 @@ export function JoinRequestQueue() {
                       onClick={() => rejectMutation.mutate(request.id)}
                       disabled={rejectMutation.isPending}
                     >
-                      Reject
+                      {t("common.reject")}
                     </Button>
                     <Button
                       onClick={() => approveMutation.mutate(request.id)}
                       disabled={approveMutation.isPending}
                     >
-                      Approve
+                      {t("common.approve")}
                     </Button>
                   </div>
                 ) : null}

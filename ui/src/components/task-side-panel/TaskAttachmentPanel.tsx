@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Download } from "lucide-react";
@@ -89,14 +90,14 @@ export function TaskAttachmentPanel({ issueId, attachmentId }: { issueId: string
     retry: false,
   });
   if (attachments.isLoading) return <p className="p-4 text-sm" role="status">Loading file…</p>;
-  if (attachments.isError) return <div className="p-4" role="alert">Could not load attachment details. <Button onClick={() => void attachments.refetch()}>Retry</Button></div>;
+  if (attachments.isError) return <div className="p-4" role="alert">Could not load attachment details. <Button onClick={() => void attachments.refetch()}>{t("common.retry")}</Button></div>;
   if (!attachment) return <p className="p-4 text-sm" role="status">File no longer available. Close this tab or choose another file.</p>;
   const downloadUrl = attachmentDownloadPath(attachment);
   if (!eligible || content.isError) {
     return (
       <div className="space-y-3 p-4" role="alert">
         <p className="text-sm">{content.isError ? "Could not preview this file. Retry or download it." : "This file is too large or is not supported for text preview. Download it instead."}</p>
-        {eligible ? <Button onClick={() => void content.refetch()}>Retry</Button> : null}
+        {eligible ? <Button onClick={() => void content.refetch()}>{t("common.retry")}</Button> : null}
         <Button asChild variant="outline"><a href={downloadUrl} download>Download file</a></Button>
       </div>
     );

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import type { IssueWorkMode } from "@paperclipai/shared";
 import { Check, ClipboardList, MessageCircleQuestion, Lock, Paperclip, Plus, Target, X, type LucideIcon } from "lucide-react";
@@ -48,7 +49,7 @@ export function ComposerAddMenu({
   const actions: Array<{ id: string; label: string; detail?: string; Icon: LucideIcon; select: () => void; disabled?: boolean; selected?: boolean }> = [
     ...(onAttachFile ? [{ id: "composer-add-file", label: "Files and images", Icon: Paperclip, select: onAttachFile, disabled: attachDisabled }] : []),
     ...(privacy ? [{ id: "composer-add-private", label: "Private task", detail: privacy.inherited, Icon: Lock, select: () => privacy.onChange(!privacy.private), selected: privacy.private, disabled: Boolean(privacy.inherited) }] : []),
-    ...(onGoal ? [{ id: "composer-add-goal", label: "Goal", detail: "Keep pursuing", Icon: Target, select: onGoal }] : []),
+    ...(onGoal ? [{ id: "composer-add-goal", label: t("common.goal"), detail: "Keep pursuing", Icon: Target, select: onGoal }] : []),
     ...(onModeChange ? [
       { id: "composer-add-plan", label: "Plan mode", detail: "Plan before acting", Icon: ClipboardList, select: () => onModeChange(mode === "planning" ? "standard" : "planning"), selected: mode === "planning" },
       { id: "composer-add-ask", label: "Ask mode", detail: "Answer without changes", Icon: MessageCircleQuestion, select: () => onModeChange(mode === "ask" ? "standard" : "ask"), selected: mode === "ask" },
@@ -70,7 +71,7 @@ export function ComposerAddMenu({
       onCloseAutoFocus={(event) => { if (goalFocusRef.current) { event.preventDefault(); goalFocusRef.current = false; } }}
       className="composer-mobile-dialog flex flex-col translate-y-0 gap-0 overflow-hidden p-0 md:translate-y-0">
       <div className="flex shrink-0 items-center gap-2 px-3 py-2">
-        <DialogTitle className="min-w-0 flex-1 text-sm font-medium">Add</DialogTitle>
+        <DialogTitle className="min-w-0 flex-1 text-sm font-medium">{t("common.add")}</DialogTitle>
         <DialogClose asChild><button type="button" aria-label="Close Add menu" className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-accent"><X className="size-4" /></button></DialogClose>
       </div>
       <div className="min-h-0 overflow-y-auto overscroll-contain p-2 pt-0">{actions.map((action) => <button key={action.id} type="button" disabled={action.disabled} data-testid={action.id}
@@ -84,7 +85,7 @@ export function ComposerAddMenu({
     <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
     <DropdownMenuContent side="top" align="start" sideOffset={8} data-testid={menuTestId}
       className="w-(--sz-300px) rounded-xl p-1.5 shadow-sm">
-      <div className="px-2 py-1 text-xs text-muted-foreground">Add</div>
+      <div className="px-2 py-1 text-xs text-muted-foreground">{t("common.add")}</div>
       {actions.map((action) => <DropdownMenuItem key={action.id} onSelect={action.select} disabled={action.disabled} data-testid={action.id}>
         {content(action)}
       </DropdownMenuItem>)}
@@ -129,7 +130,7 @@ export function ComposerPrivacyChip({ inherited, onRemove, disabled }: { inherit
           disabled={disabled || Boolean(inherited)} data-testid="composer-private-chip"
           className="inline-flex h-8 shrink-0 items-center gap-1 rounded-full border border-border bg-muted px-2 text-xs font-medium text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
           <Lock className="size-3.5" aria-hidden />
-          <span className="max-sm:sr-only">Private</span>
+          <span className="max-sm:sr-only">{t("common.private")}</span>
           {!inherited ? <X className="size-3.5" aria-hidden /> : null}
         </button>
       </span>

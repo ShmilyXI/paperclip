@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState, type ReactNode } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Loader2, RotateCcw, Undo2 } from "lucide-react";
@@ -72,7 +73,7 @@ export function StalledReviewActions({
     onError: (error) => {
       pushToast({
         title: "Could not record the review decision",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       });
     },

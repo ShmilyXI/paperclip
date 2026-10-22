@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { useNavigate } from "@/lib/router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -52,7 +53,7 @@ import type {
 export function RunButton({
   onClick,
   disabled,
-  label = "Run now",
+  label = t("common.runNow"),
   size = "sm",
 }: {
   onClick: () => void;
@@ -85,7 +86,7 @@ export function PauseResumeButton({
     return (
       <Button variant="outline" size={size} onClick={onResume} disabled={disabled}>
         <Play className="h-3.5 w-3.5 sm:mr-1" />
-        <span className="hidden sm:inline">Resume</span>
+        <span className="hidden sm:inline">{t("common.resume")}</span>
       </Button>
     );
   }
@@ -93,7 +94,7 @@ export function PauseResumeButton({
   return (
     <Button variant="outline" size={size} onClick={onPause} disabled={disabled}>
       <Pause className="h-3.5 w-3.5 sm:mr-1" />
-      <span className="hidden sm:inline">Pause</span>
+      <span className="hidden sm:inline">{t("common.pause")}</span>
     </Button>
   );
 }
@@ -160,7 +161,7 @@ export function AgentActionButtons({
   companyId,
   size = "sm",
   assignLabel = "Assign Task",
-  runLabel = "Run now",
+  runLabel = t("common.runNow"),
   showStatus = true,
   showRun = true,
   actionsDisabled = false,
@@ -458,7 +459,7 @@ export function AgentActionButtons({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
               <AlertDialogAction onClick={() => agentAction.mutate("pause")}>
                 Pause anyway
               </AlertDialogAction>
@@ -523,7 +524,7 @@ export function AgentActionButtons({
               }}
             >
               <Trash2 className="h-3 w-3" />
-              Terminate
+              {t("common.terminate")}
             </button>
           )}
         </PopoverContent>

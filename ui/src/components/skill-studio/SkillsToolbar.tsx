@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ToolbarSearch } from "@/components/ToolbarSearch";
 import type { ReactNode } from "react";
 import { ChevronDown, Compass, FolderSearch, Globe, Pencil, Plus, RefreshCw } from "lucide-react";
@@ -14,7 +15,7 @@ const DISCOVERY_SORT_LABELS: Record<DiscoverySort, string> = {
   stars: "Most stars",
   forks: "Most forks",
   recent: "Recently updated",
-  alphabetical: "Alphabetical",
+  alphabetical: t("common.alphabetical"),
 };
 
 const DISCOVERY_SORTS: DiscoverySort[] = ["agents", "stars", "forks", "recent", "alphabetical"];
@@ -55,7 +56,7 @@ export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search,
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
-            <span className="text-muted-foreground">Sort</span>
+            <span className="text-muted-foreground">{t("common.sort")}</span>
             <span>{DISCOVERY_SORT_LABELS[sort]}</span>
             <ChevronDown className="ml-1 h-3.5 w-3.5" />
           </Button>
@@ -74,11 +75,11 @@ export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search,
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
-              <span className="text-muted-foreground">Source</span>
+              <span className="text-muted-foreground">{t("common.source")}</span>
               <span>
                 {sourceBadgeFilter === "all"
-                  ? "All"
-                  : availableSources.find((source) => source.value === sourceBadgeFilter)?.label ?? "All"}
+                  ? t("common.all")
+                  : availableSources.find((source) => source.value === sourceBadgeFilter)?.label ?? t("common.all")}
               </span>
               <ChevronDown className="ml-1 h-3.5 w-3.5" />
             </Button>
@@ -114,14 +115,14 @@ export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search,
       ) : null}
       {onToggleSelectMode ? (
         <Button variant="outline" size="sm" aria-pressed={selectMode} onClick={onToggleSelectMode}>
-          {selectMode ? "Done" : "Select"}
+          {selectMode ? t("common.done") : t("common.select")}
         </Button>
       ) : null}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="sm" variant="default" data-toolbar-primary>
             <Plus className="mr-1 h-3.5 w-3.5" />
-            New
+            {t("common.new")}
             <ChevronDown className="ml-1 h-3.5 w-3.5" />
           </Button>
         </DropdownMenuTrigger>

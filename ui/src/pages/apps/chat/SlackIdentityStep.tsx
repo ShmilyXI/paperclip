@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Copy, ExternalLink, Loader2 } from "lucide-react";
@@ -54,7 +55,7 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
         <code className="text-sm">{connectCommand}</code>
         <Button variant="ghost" size="sm" onClick={() => {
           void copyTextToClipboard(connectCommand).then(() => { setCopied(true); setCopyError(false); }, () => setCopyError(true));
-        }}><Copy className="size-4" />{copied ? "Copied" : "Copy command"}</Button>
+        }}><Copy className="size-4" />{copied ? t("common.copied") : "Copy command"}</Button>
       </div>
       {copyError && <p role="alert" className="text-sm text-destructive">Couldn&apos;t copy the command. Select and copy it above.</p>}
       <p className="text-sm">

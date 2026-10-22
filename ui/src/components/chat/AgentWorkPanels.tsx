@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowUpDown, File, FileText, Image, Search, Video } from "lucide-react";
@@ -35,10 +36,10 @@ const ARTIFACT_MAX_PAGES = 5;
 export type AgentTaskSortField = "updated" | "created" | "status" | "title";
 
 const SORT_OPTIONS: ReadonlyArray<[AgentTaskSortField, string]> = [
-  ["updated", "Last updated"],
-  ["created", "Created"],
-  ["status", "Status"],
-  ["title", "Title"],
+  ["updated", t("common.lastUpdated")],
+  ["created", t("common.created")],
+  ["status", t("common.status")],
+  ["title", t("common.title")],
 ];
 
 export function sortAgentTasks(
@@ -157,8 +158,8 @@ export function AgentTasksPanel({
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search tasks"
-            aria-label="Search tasks"
+            placeholder={t("common.searchTasks")}
+            aria-label={t("common.searchTasks")}
             className="h-8 pl-7 text-sm"
           />
         </div>
@@ -174,7 +175,7 @@ export function AgentTasksPanel({
         />
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="icon" className="h-8 w-8 shrink-0" title="Sort" aria-label="Sort tasks">
+            <Button variant="outline" size="icon" className="h-8 w-8 shrink-0" title={t("common.sort")} aria-label="Sort tasks">
               <ArrowUpDown className="h-3.5 w-3.5" />
             </Button>
           </PopoverTrigger>

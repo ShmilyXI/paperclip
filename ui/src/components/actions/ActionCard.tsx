@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import { Clock, Pencil, ShieldCheck } from "lucide-react";
 import type { ToolRiskLevel } from "@paperclipai/shared";
@@ -154,7 +155,7 @@ function bindingRows(binding: ActionCardBinding, isStale: boolean): BindingRow[]
         </span>
       ),
     },
-    { label: "Connection", value: binding.connection, mono: true },
+    { label: t("common.connection"), value: binding.connection, mono: true },
     { label: "Catalog", value: catalogValue, mono: !isStale },
     {
       label: "Payload",
@@ -203,7 +204,7 @@ export function ActionCard({
       className={mobile ? "w-full" : undefined}
       title={isStale ? "Re-issue the request before approving — the catalog hash changed." : undefined}
     >
-      Approve
+      {t("common.approve")}
     </Button>
   );
   const denyButton = (

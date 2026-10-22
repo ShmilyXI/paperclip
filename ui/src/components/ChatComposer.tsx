@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   forwardRef,
   useImperativeHandle,
@@ -105,7 +106,7 @@ function formatAttachmentSize(bytes: number | undefined): string {
 function dragHasFiles(evt: ReactDragEvent<HTMLDivElement>): boolean {
   const types = evt.dataTransfer?.types;
   if (!types) return false;
-  return Array.from(types).includes("Files");
+  return Array.from(types).includes(t("common.files"));
 }
 
 export const ChatComposer = forwardRef<ChatComposerHandle, ChatComposerProps>(function ChatComposer(

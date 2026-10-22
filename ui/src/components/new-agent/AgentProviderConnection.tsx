@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { healthApi } from "@/api/health";
 import { aiConnectionsApi } from "@/api/ai-connections";
 import { useLocalAiLogin } from "../ai-connections/useLocalAiLogin";
@@ -255,7 +256,7 @@ export function AgentProviderConnection({
         sources={advancedConnection ? [
           { id: "subscription", label: provider, icon: <AdapterMark type={adapterType} />, credentialMode: "subscription" },
           { id: "api", label: provider, icon: <AdapterMark type={adapterType} />, credentialMode: "api" },
-          { id: "advanced", label: "Advanced", icon: <Cable className="size-6 text-muted-foreground" />, credentialMode: "advanced" },
+          { id: "advanced", label: t("common.advanced"), icon: <Cable className="size-6 text-muted-foreground" />, credentialMode: "advanced" },
         ] : [
           {
             id: adapterType,
@@ -441,7 +442,7 @@ export function AgentProviderConnection({
               ? "Use saved subscription"
               : method === "api" && selectedKey
                 ? "Use saved API key"
-                : "Connect"
+                : t("common.connect")
         }
         primaryDisabled={
           managedAccount?.disabled ||

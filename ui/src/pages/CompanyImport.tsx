@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -364,7 +365,7 @@ function deriveSourcePrefix(
   return null;
 }
 
-/** Generate a prefix-based rename: e.g. "gstack" + "CEO" → "gstack-CEO" */
+/** Generate a prefix-based rename: e.g. "gstack" + t("common.ceo") → "gstack-CEO" */
 function prefixedName(prefix: string | null, originalName: string): string {
   if (!prefix) return originalName;
   return `${prefix}-${originalName}`;
@@ -1121,9 +1122,9 @@ export function CompanyImport() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Company", href: "/dashboard" },
-      { label: "Settings", href: "/company/settings" },
-      { label: "Import" },
+      { label: selectedCompany?.name ?? t("common.company"), href: "/dashboard" },
+      { label: t("common.settings"), href: "/company/settings" },
+      { label: t("common.import") },
     ]);
   }, [selectedCompany?.name, setBreadcrumbs]);
 
@@ -2091,7 +2092,7 @@ export function CompanyImport() {
           </Field>
         )}
 
-        <Field label="Target" hint="Import into this organization or create a new one.">
+        <Field label={t("common.target")} hint="Import into this organization or create a new one.">
           <select
             className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
             value={targetMode}

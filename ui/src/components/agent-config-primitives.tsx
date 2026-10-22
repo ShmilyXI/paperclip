@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
   Tooltip,
@@ -378,7 +379,7 @@ export function DraftNumberInput({
 }
 
 /**
- * "Choose" button that opens a dialog explaining the user must manually
+ * t("common.choose") button that opens a dialog explaining the user must manually
  * type the path due to browser security limitations.
  */
 export function ChoosePathButton() {
@@ -390,7 +391,7 @@ export function ChoosePathButton() {
         className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground hover:bg-accent/50 transition-colors shrink-0"
         onClick={() => setOpen(true)}
       >
-        Choose
+        {t("common.choose")}
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
@@ -429,15 +430,15 @@ export function ChoosePathButton() {
             <section className="space-y-1.5">
               <p className="font-medium">Terminal fallback (macOS/Linux)</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
-                <li>Run <code>cd /path/to/folder</code>.</li>
-                <li>Run <code>pwd</code>.</li>
+                <li>{t("common.run")} <code>cd /path/to/folder</code>.</li>
+                <li>{t("common.run")} <code>pwd</code>.</li>
                 <li>Copy the output and paste it into the path input.</li>
               </ol>
             </section>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              OK
+              {t("common.ok")}
             </Button>
           </DialogFooter>
         </DialogContent>

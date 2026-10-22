@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import type { SummarySlotIssueRef } from "@paperclipai/shared";
@@ -64,7 +65,7 @@ export function StatusCardTile({
   const presentation = STATUS_CARD_LIFECYCLE_PRESENTATION[lifecycle];
   // A setup run is actually in flight when the card is compiling AND has a
   // generation task. When it's null the first run stalled/died and the card
-  // needs a manual re-kick — the only case where "Run now" is offered.
+  // needs a manual re-kick — the only case where t("common.runNow") is offered.
   const setupRunning = lifecycle === "compiling" && Boolean(card.generatingIssueId);
 
   // Stream the in-flight update into the delta banner (reuses the Summarizer
@@ -128,14 +129,14 @@ export function StatusCardTile({
               </DropdownMenuItem>
               {(lifecycle === "compiling" && !setupRunning) || lifecycle === "error" ? (
                 <DropdownMenuItem onSelect={onRecompile} disabled={recompilePending}>
-                  Run now
+                  {t("common.runNow")}
                 </DropdownMenuItem>
               ) : null}
               <DropdownMenuItem onSelect={onEditInterest}>Edit interest &amp; settings</DropdownMenuItem>
               <DropdownMenuItem onSelect={onOpenDebug}>Query debug</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={onArchive} variant="destructive">
-                Archive
+                {t("common.archive")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -159,7 +160,7 @@ export function StatusCardTile({
             <p className="mt-1 line-clamp-2 text-muted-foreground">“{card.interestPrompt}”</p>
             {setupRunning ? (
               // The setup run is live — link to the task instead of offering
-              // "Run now", which would kick a duplicate run and race it.
+              // t("common.runNow"), which would kick a duplicate run and race it.
               <Link
                 to={`/issues/${card.generatingIssueId}`}
                 onClick={(event) => event.stopPropagation()}
@@ -178,7 +179,7 @@ export function StatusCardTile({
                 className="mt-2 inline-flex items-center gap-1.5 font-medium text-foreground underline-offset-2 hover:underline disabled:opacity-60"
               >
                 <Wand2 className={cn("h-3.5 w-3.5", recompilePending && "animate-pulse")} />
-                {recompilePending ? "Starting…" : "Run now"}
+                {recompilePending ? "Starting…" : t("common.runNow")}
               </button>
             )}
           </div>
@@ -218,7 +219,7 @@ export function StatusCardTile({
             <span>
               {card.pendingChangeCount} {card.pendingChangeCount === 1 ? "change" : "changes"} since last update
             </span>
-            <span className="shrink-0 font-medium text-amber-700 dark:text-amber-400">Refresh</span>
+            <span className="shrink-0 font-medium text-amber-700 dark:text-amber-400">{t("common.refresh")}</span>
           </button>
         ) : null}
 
@@ -230,10 +231,10 @@ export function StatusCardTile({
             </span>
             <span className="flex shrink-0 items-center gap-3">
               <button type="button" onClick={stopClick(onRefresh)} disabled={refreshPending} className="font-medium text-destructive hover:underline disabled:opacity-60">
-                Retry
+                {t("common.retry")}
               </button>
               <button type="button" onClick={stopClick(onOpen)} className="text-muted-foreground hover:underline">
-                Details
+                {t("common.details")}
               </button>
             </span>
           </div>

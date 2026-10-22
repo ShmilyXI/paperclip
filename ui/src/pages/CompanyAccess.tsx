@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -87,9 +88,9 @@ export function CompanyAccess() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Organization", href: "/dashboard" },
-      { label: "Settings", href: "/company/settings" },
-      { label: "Members" },
+      { label: selectedCompany?.name ?? t("common.organization"), href: "/dashboard" },
+      { label: t("common.settings"), href: "/company/settings" },
+      { label: t("common.members") },
     ]);
   }, [selectedCompany?.name, setBreadcrumbs]);
 
@@ -296,7 +297,7 @@ export function CompanyAccess() {
         {!hideInvitesTab && (
           <PageTabBar
             items={[
-              { value: "members", label: "Members" },
+              { value: "members", label: t("common.members") },
               { value: "invites", label: "Invites" },
             ]}
             align="start"
@@ -361,10 +362,10 @@ export function CompanyAccess() {
           <table className="w-full min-w-(--sz-44rem) text-left text-sm">
             <thead>
               <tr className="border-b border-border text-muted-foreground">
-                <th className="px-3 py-2 font-medium">Name</th>
-                <th className="px-3 py-2 font-medium">Email</th>
-                <th className="px-3 py-2 font-medium">Role</th>
-                <th className="px-3 py-2 font-medium">Status</th>
+                <th className="px-3 py-2 font-medium">{t("common.name")}</th>
+                <th className="px-3 py-2 font-medium">{t("common.email")}</th>
+                <th className="px-3 py-2 font-medium">{t("common.role")}</th>
+                <th className="px-3 py-2 font-medium">{t("common.status")}</th>
                 <th className="px-3 py-2 text-right font-medium">Action</th>
               </tr>
             </thead>
@@ -406,7 +407,7 @@ export function CompanyAccess() {
                     <td className="px-3 py-3 text-right">
                       <div className="flex justify-end gap-2">
                         <Button size="sm" variant="outline" onClick={() => setEditingMemberId(member.id)}>
-                          Edit
+                          {t("common.edit")}
                         </Button>
                         <span
                           className="inline-flex"
@@ -420,7 +421,7 @@ export function CompanyAccess() {
                             title={!canArchive ? removalReason ?? undefined : undefined}
                           >
                             <Trash2 className="mr-1 h-3.5 w-3.5" />
-                            Remove
+                            {t("common.remove")}
                           </Button>
                         </span>
                       </div>
@@ -470,8 +471,8 @@ export function CompanyAccess() {
                       setDraftStatus(event.target.value as EditableMemberStatus)
                     }
                   >
-                    <option value="active">Active</option>
-                    <option value="pending">Pending</option>
+                    <option value="active">{t("common.active")}</option>
+                    <option value="pending">{t("common.pending")}</option>
                     <option value="suspended">Suspended</option>
                   </select>
                 </label>
@@ -480,7 +481,7 @@ export function CompanyAccess() {
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditingMemberId(null)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               onClick={() => {
@@ -493,7 +494,7 @@ export function CompanyAccess() {
               }}
               disabled={updateMemberMutation.isPending}
             >
-              {updateMemberMutation.isPending ? "Saving…" : "Save member"}
+              {updateMemberMutation.isPending ? t("common.saving2") : "Save member"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -538,7 +539,7 @@ export function CompanyAccess() {
                       </optgroup>
                     ) : null}
                     {activeReassignmentAgents.length > 0 ? (
-                      <optgroup label="Agents">
+                      <optgroup label={t("common.agents")}>
                         {activeReassignmentAgents.map((agent) => (
                           <option key={agent.id} value={`agent:${agent.id}`}>
                             {agent.name} ({agent.role})
@@ -566,7 +567,7 @@ export function CompanyAccess() {
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setRemovingMemberId(null)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -606,7 +607,7 @@ export function CompanyAccessLegacyRoute() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Settings", href: "/company/settings" },
+      { label: t("common.settings"), href: "/company/settings" },
       { label: "Access" },
     ]);
   }, [setBreadcrumbs]);

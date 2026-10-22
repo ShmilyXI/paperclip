@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "./AgentAvatar";
 import { Identity } from "./Identity";
 import { renderAccessIdentity, type AccessSelectOption } from "./AccessSelectIdentity";
@@ -55,7 +56,7 @@ export function ProjectAccessMembers({ project, canManage }: { project: Project;
       .map((agent) => ({ key: `agent:${agent.id}`, value: `agent:${agent.id}`, label: agent.name, identity: <><AgentAvatar agent={agent} size={24} /><span className="truncate">{agent.name}</span></> }));
     return [
       ...(people.length ? [{ id: "people", label: "People", options: people }] : []),
-      ...(agentOptions.length ? [{ id: "agents", label: "Agents", options: agentOptions }] : []),
+      ...(agentOptions.length ? [{ id: "agents", label: t("common.agents"), options: agentOptions }] : []),
     ];
   }, [activeKeys, agentsQuery.data, directoryQuery.data]);
   const selectedAgent = selection.startsWith("agent:")
@@ -118,7 +119,7 @@ export function ProjectAccessMembers({ project, canManage }: { project: Project;
                 className="min-w-0 flex-1"
               />
               <Button size="sm" disabled={!canManage || !selection || addMember.isPending} onClick={() => addMember.mutate()}>
-                <UserPlus className="h-3.5 w-3.5" aria-hidden="true" /> Add
+                <UserPlus className="h-3.5 w-3.5" aria-hidden="true" /> {t("common.add")}
               </Button>
             </div>
             {sharingWithSharedAgent ? (
@@ -135,7 +136,7 @@ export function ProjectAccessMembers({ project, canManage }: { project: Project;
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-sm font-medium">{member.subjectDisplayName ?? "Unknown member"}</div>
                       <div className="text-xs text-muted-foreground">
-                        {isPersonalOwner ? "Owner" : member.subjectType === "agent" ? "Agent" : "Person"}
+                        {isPersonalOwner ? t("common.owner") : member.subjectType === "agent" ? t("common.agent") : "Person"}
                       </div>
                     </div>
                     {!isPersonalOwner ? (

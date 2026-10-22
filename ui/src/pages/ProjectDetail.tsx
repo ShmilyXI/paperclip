@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useShowAgentCreatedTasks } from "../hooks/useShowAgentCreatedTasks";
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Link, useParams, useNavigate, useLocation, Navigate } from "@/lib/router";
@@ -117,7 +118,7 @@ function ProjectTilePicker({
       </PopoverTrigger>
       <PopoverContent className="w-72 p-3" align="start">
         {/* Icon search + grid */}
-        <p className="text-xs font-medium text-muted-foreground mb-2">Icon</p>
+        <p className="text-xs font-medium text-muted-foreground mb-2">{t("common.icon")}</p>
         <Input
           placeholder="Search icons..."
           value={search}
@@ -147,7 +148,7 @@ function ProjectTilePicker({
 
         {/* Color swatches */}
         <div className="mt-3 border-t border-border pt-3">
-          <p className="text-xs font-medium text-muted-foreground mb-2">Color</p>
+          <p className="text-xs font-medium text-muted-foreground mb-2">{t("common.color")}</p>
           <div className="grid grid-cols-5 gap-1.5">
             {/* Neutral / reset-to-gray option */}
             <button
@@ -467,7 +468,7 @@ export function ProjectDetail() {
       ),
     onSuccess: (updatedProject, archived) => {
       invalidateProject();
-      const name = updatedProject?.name ?? project?.name ?? "Project";
+      const name = updatedProject?.name ?? project?.name ?? t("common.project");
       if (archived) {
         pushToast({ title: `"${name}" has been archived`, tone: "success" });
         navigate("/dashboard");
@@ -500,8 +501,8 @@ export function ProjectDetail() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Projects", href: "/projects" },
-      { label: project?.name ?? routeProjectRef ?? "Project" },
+      { label: t("common.projects"), href: "/projects" },
+      { label: project?.name ?? routeProjectRef ?? t("common.project") },
     ]);
   }, [setBreadcrumbs, project, routeProjectRef]);
 
@@ -608,7 +609,7 @@ export function ProjectDetail() {
       companyId: resolvedCompanyId ?? "",
       scopeType: "project",
       scopeId: project?.id ?? routeProjectRef,
-      scopeName: project?.name ?? "Project",
+      scopeName: project?.name ?? t("common.project"),
       metric: "billed_cents",
       windowKind: "lifetime",
       amount: 0,
@@ -846,12 +847,12 @@ export function ProjectDetail() {
       <Tabs value={activeTab ?? "list"} onValueChange={(value) => handleTabChange(value as ProjectTab)}>
         <PageTabBar
           items={[
-            { value: "list", label: "Tasks" },
+            { value: "list", label: t("common.tasks") },
 
             ...(project.managedByPlugin ? [{ value: "plugin-operations", label: "Plugin operations" }] : []),
-            ...(showWorkspacesTab ? [{ value: "workspaces", label: "Workspaces" }] : []),
-            { value: "configuration", label: "Configuration" },
-            { value: "budget", label: "Budget" },
+            ...(showWorkspacesTab ? [{ value: "workspaces", label: t("common.workspaces") }] : []),
+            { value: "configuration", label: t("common.configuration") },
+            { value: "budget", label: t("common.budget") },
             ...pluginTabItems.map((item) => ({
               value: item.value,
               label: item.label,

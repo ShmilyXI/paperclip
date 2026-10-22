@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef } from "react";
 
 const CHARS = [" ", ".", "·", "▪", "▫", "○"] as const;

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
@@ -66,8 +67,8 @@ export function ApprovalDetail() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Approvals", href: "/approvals" },
-      { label: approval?.id?.slice(0, 8) ?? approvalId ?? "Approval" },
+      { label: t("common.approvals"), href: "/approvals" },
+      { label: approval?.id?.slice(0, 8) ?? approvalId ?? t("common.approval") },
     ]);
   }, [setBreadcrumbs, approval, approvalId]);
 
@@ -215,7 +216,7 @@ export function ApprovalDetail() {
             <div className="flex items-center gap-2">
               <span className="text-muted-foreground text-xs">Requested by</span>
               <AgentIdentity
-                agent={agents?.find((agent) => agent.id === approval.requestedByAgentId) ?? { id: approval.requestedByAgentId, name: "Agent" }}
+                agent={agents?.find((agent) => agent.id === approval.requestedByAgentId) ?? { id: approval.requestedByAgentId, name: t("common.agent") }}
                 size="sm"
               />
             </div>
@@ -270,7 +271,7 @@ export function ApprovalDetail() {
                 onClick={() => approveMutation.mutate()}
                 disabled={approveMutation.isPending}
               >
-                Approve
+                {t("common.approve")}
               </Button>
               <Button
                 variant="destructive"
@@ -278,7 +279,7 @@ export function ApprovalDetail() {
                 onClick={() => rejectMutation.mutate()}
                 disabled={rejectMutation.isPending}
               >
-                Reject
+                {t("common.reject")}
               </Button>
             </>
           )}
@@ -333,12 +334,12 @@ export function ApprovalDetail() {
                 {comment.authorAgentId ? (
                   <Link to={`/agents/${comment.authorAgentId}`} className="hover:underline">
                     <AgentIdentity
-                      agent={agents?.find((agent) => agent.id === comment.authorAgentId) ?? { id: comment.authorAgentId, name: "Agent" }}
+                      agent={agents?.find((agent) => agent.id === comment.authorAgentId) ?? { id: comment.authorAgentId, name: t("common.agent") }}
                       size="sm"
                     />
                   </Link>
                 ) : (
-                  <Identity name="Board" size="sm" />
+                  <Identity name={t("common.board")} size="sm" />
                 )}
                 <span className="text-xs text-muted-foreground">
                   {new Date(comment.createdAt).toLocaleString()}
@@ -351,7 +352,7 @@ export function ApprovalDetail() {
         <Textarea
           value={commentBody}
           onChange={(e) => setCommentBody(e.target.value)}
-          placeholder="Add a comment..."
+          placeholder={t("common.addAComment")}
           rows={3}
         />
         <div className="flex justify-end">

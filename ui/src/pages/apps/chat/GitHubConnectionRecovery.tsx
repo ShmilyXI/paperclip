@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { AlertTriangle, CircleHelp, ExternalLink, Loader2 } from "lucide-react";
 import type { ChatEndpoint } from "@/api/chatEndpoints";
@@ -87,7 +88,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, onConnect, onExit }: {
       </div>
       <div className="space-y-2">
         <CredentialLabel id="github-app-id" label="App ID" help="The numeric App ID on the GitHub App’s settings page. This is different from its Client ID or installation ID." />
-        <p id="github-app-id-help" className="text-sm text-muted-foreground">Copy <strong>App ID</strong> from the App’s settings page. {reconnect && "The saved ID is filled in when available."}</p>
+        <p id="github-app-id-help" className="text-sm text-muted-foreground">{t("common.copy")} <strong>App ID</strong> from the App’s settings page. {reconnect && "The saved ID is filled in when available."}</p>
         <Input id="github-app-id" aria-describedby="github-app-id-help" inputMode="numeric" value={credentials.appId} disabled={pending} aria-invalid={appIdInvalid} onChange={event => setCredentials({ ...credentials, appId: event.target.value })} />
         {appIdInvalid && <p role="alert" className="text-sm text-destructive">Use the numeric App ID, not the Client ID.</p>}
       </div>
@@ -125,7 +126,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, onConnect, onExit }: {
     <SetupWizardFooter onSaveExit={onExit} disabled={pending}>
       <Button aria-label={actionLabel} disabled={pending || incomplete} onClick={() => void connect()}>
         {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
-        <span className="sm:hidden" aria-hidden="true">{pending ? "Checking…" : reconnect ? "Reconnect" : "Connect"}</span>
+        <span className="sm:hidden" aria-hidden="true">{pending ? "Checking…" : reconnect ? "Reconnect" : t("common.connect")}</span>
         <span className="hidden sm:inline" aria-hidden="true">{actionLabel}</span>
       </Button>
     </SetupWizardFooter>

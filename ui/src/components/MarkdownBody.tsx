@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { MarkdownWordStreaming, rehypeStreamingWords } from "./MarkdownWordStreaming";
 import { isValidElement, memo, useContext, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -656,7 +657,7 @@ function CodeBlock({
     }, 1500);
   }, [children]);
 
-  const copyLabel = failed ? "Copy failed" : copied ? "Copied!" : "Copy";
+  const copyLabel = failed ? "Copy failed" : copied ? t("common.copied2") : t("common.copy");
   const wrapLabel = wrapLines ? "Unwrap lines" : "Wrap lines";
 
   return (

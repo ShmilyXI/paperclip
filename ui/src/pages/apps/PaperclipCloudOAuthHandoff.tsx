@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useState } from "react";
 import { Link2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,7 @@ export function ManagedOAuthHandoffState({
           </p>
           {failed ? (
             <div className="mt-6 flex items-center gap-2">
-              <Button type="button" onClick={onRetry}>Try again</Button>
+              <Button type="button" onClick={onRetry}>{t("common.tryAgain")}</Button>
               <Button type="button" variant="ghost" onClick={onCancel}>Return to Paperclip</Button>
             </div>
           ) : null}

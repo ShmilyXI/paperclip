@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PROJECT_COLORS, type ProjectRepository } from "@paperclipai/shared";
@@ -62,8 +63,8 @@ export function NewProjectForm({ companyId, onClose }: { companyId: string; onCl
         </div>
         {create.isError && <p role="alert" className="px-5 pt-3 text-sm text-destructive">{create.error.message}</p>}
         <div className="flex shrink-0 justify-end gap-2 px-5 py-5">
-          <Button type="button" variant="ghost" disabled={create.isPending} onClick={onClose}>Cancel</Button>
-          <Button type="submit" disabled={!name.trim() || create.isPending}>{create.isPending ? "Creating…" : "Create project"}</Button>
+          <Button type="button" variant="ghost" disabled={create.isPending} onClick={onClose}>{t("common.cancel")}</Button>
+          <Button type="submit" disabled={!name.trim() || create.isPending}>{create.isPending ? t("common.creating") : "Create project"}</Button>
         </div>
       </form>}
     </DialogContent>

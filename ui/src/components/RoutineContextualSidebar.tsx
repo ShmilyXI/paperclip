@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import {
   Activity,
@@ -36,11 +37,11 @@ export type RoutineContextualNavItem = {
 };
 
 export const ROUTINE_CONTEXTUAL_NAV_ITEMS: readonly RoutineContextualNavItem[] = [
-  { view: "overview", label: "Overview", icon: LayoutDashboard },
+  { view: "overview", label: t("common.overview"), icon: LayoutDashboard },
   { view: "triggers", label: "Triggers", icon: CalendarClock },
   { view: "variables", label: "Variables", icon: Braces },
   { view: "delivery", label: "Delivery", icon: Send },
-  { view: "secrets", label: "Secrets", icon: KeyRound },
+  { view: "secrets", label: t("common.secrets"), icon: KeyRound },
 ];
 
 export function isRoutineDetailView(value: string | null | undefined): value is RoutineDetailView {
@@ -76,7 +77,7 @@ export function RoutineContextualSidebar({
     queryFn: () => routinesApi.get(routineId),
     enabled: Boolean(routineId && !title),
   });
-  const frameTitle = title ?? routine?.title ?? "Routine";
+  const frameTitle = title ?? routine?.title ?? t("common.routine");
 
   return (
     <ContextualSidebarFrame
@@ -106,12 +107,12 @@ export function RoutineContextualSidebar({
         <div className="flex flex-col gap-0.5">
           <SidebarNavItem
             to={routineDetailHref(routineId, "runs")}
-            label="Runs"
+            label={t("common.runs")}
             icon={Play}
           />
           <SidebarNavItem
             to={routineDetailHref(routineId, "activity")}
-            label="Activity"
+            label={t("common.activity")}
             icon={Activity}
           />
         </div>

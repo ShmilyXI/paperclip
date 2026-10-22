@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Loader2, ShieldQuestion, OctagonX, Ban, Scissors } from "lucide-react";
@@ -308,7 +309,7 @@ export function TaskChatStatusPill({
         ? null
         : statusLabelIcon(item.label);
     // Whimsy fills gaps, never replaces signal: only the generic
-    // "Running"/"Working" labels — and the interstitial-streaming state, whose
+    // t("common.running")/"Working" labels — and the interstitial-streaming state, whose
     // text renders on the row above — swap for a deterministic whimsical
     // gerund (seeded by the run-scoped item id, rotating ~10s via the live
     // tick).

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlarmClock, CalendarClock, ChevronDown, Loader2, Plus, UserPlus, X } from "lucide-react";
@@ -95,7 +96,7 @@ export function DecisionTriageStrip({ item, companyId, agents }: DecisionTriageS
   const onError = (verb: string) => (error: unknown) =>
     pushToast({
       title: `Could not ${verb}`,
-      body: error instanceof Error ? error.message : "Please try again.",
+      body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
       tone: "error",
     });
 
@@ -239,7 +240,7 @@ export function DecisionTriageStrip({ item, companyId, agents }: DecisionTriageS
               disabled={pending}
               onClick={() => setSnooze.mutate(null)}
             >
-              Clear
+              {t("common.clear")}
             </button>
           </span>
         ) : (
@@ -336,7 +337,7 @@ function QueuePicker({
     onError: (error) =>
       pushToast({
         title: "Could not create queue",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -367,7 +368,7 @@ function QueuePicker({
             />
             <div className="flex justify-end gap-1">
               <Button type="button" variant="ghost" size="xs" onClick={() => setCreating(false)}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button type="button" size="xs" disabled={!title.trim() || create.isPending} onClick={() => create.mutate(title)}>
                 {create.isPending && <Loader2 className="h-3 w-3 animate-spin" />}

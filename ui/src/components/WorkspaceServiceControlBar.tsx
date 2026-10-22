@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import {
   Check,
@@ -75,11 +76,11 @@ function statusMeta(entry: WorkspaceServiceControlEntry): { label: string; unhea
     case "restarting":
       return { label: "Restarting…", unhealthy: false };
     case "failed":
-      return { label: "Failed", unhealthy: false };
+      return { label: t("common.failed"), unhealthy: false };
     case "running":
       return entry.healthStatus === "unhealthy"
         ? { label: "Unhealthy", unhealthy: true }
-        : { label: "Running", unhealthy: false };
+        : { label: t("common.running"), unhealthy: false };
     default:
       return { label: "Stopped", unhealthy: false };
   }
@@ -181,10 +182,10 @@ function UrlSegment({ entry, compact }: { entry: WorkspaceServiceControlEntry; c
           size="icon-xs"
           disabled={!live}
           className="text-muted-foreground hover:text-foreground"
-          title="Open in new tab"
+          title={t("common.openInNewTab")}
         >
           {live ? (
-            <a href={entry.url ?? undefined} target="_blank" rel="noreferrer" aria-label="Open in new tab">
+            <a href={entry.url ?? undefined} target="_blank" rel="noreferrer" aria-label={t("common.openInNewTab")}>
               <ExternalLink className="size-3" />
             </a>
           ) : (
@@ -214,11 +215,11 @@ function ActionSlots({
         className="w-13 justify-center"
         disabled={!canStart}
         onClick={() => onAction("start")}
-        aria-label="Start"
-        title="Start"
+        aria-label={t("common.start")}
+        title={t("common.start")}
       >
         <Play className="size-3" />
-        Start
+        {t("common.start")}
       </Button>
     );
   }
@@ -231,8 +232,8 @@ function ActionSlots({
           size="icon-xs"
           disabled={!canStart}
           onClick={() => onAction("start")}
-          aria-label="Start"
-          title="Start"
+          aria-label={t("common.start")}
+          title={t("common.start")}
         >
           <Play className="size-3" />
         </Button>
@@ -241,8 +242,8 @@ function ActionSlots({
           size="icon-xs"
           disabled={!canStart}
           onClick={() => onAction("restart")}
-          aria-label="Restart"
-          title="Restart"
+          aria-label={t("common.restart")}
+          title={t("common.restart")}
           className="border border-border text-foreground"
         >
           <RotateCcw className="size-3" />
@@ -258,8 +259,8 @@ function ActionSlots({
         size="icon-xs"
         disabled={transitional}
         onClick={() => onAction("stop")}
-        aria-label="Stop"
-        title="Stop"
+        aria-label={t("common.stop")}
+        title={t("common.stop")}
         className="border border-border text-foreground"
       >
         <Square className="size-3" />
@@ -269,8 +270,8 @@ function ActionSlots({
         size="icon-xs"
         disabled={transitional || !canStart}
         onClick={() => onAction("restart")}
-        aria-label="Restart"
-        title="Restart"
+        aria-label={t("common.restart")}
+        title={t("common.restart")}
         className="border border-border text-foreground"
       >
         <RotateCcw className="size-3" />

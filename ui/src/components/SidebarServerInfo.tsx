@@ -109,17 +109,17 @@ export function SidebarServerInfo() {
   const lastRestartedLabel = healthUnavailable
     ? "Health unavailable"
     : isWaitingForHealth
-      ? "Loading..."
+      ? t("common.loading")
       : formatTimestamp(restartedAt);
   const commit = healthUnavailable
     ? "Health unavailable"
     : isWaitingForHealth
-      ? "Loading..."
+      ? t("common.loading")
       : commitLabel(health);
   const localChanges = healthUnavailable
     ? "Health unavailable"
     : isWaitingForHealth
-      ? "Loading..."
+      ? t("common.loading")
       : localChangesLabel(health);
 
   return (

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useTaskRetry } from "../hooks/useTaskRetry";
 import { grokBotApi } from "@/api/grokBot";
 import { WorkspaceBaseRefRecoveryProvider } from "../components/WorkspaceBaseRefRecovery";
@@ -689,12 +690,12 @@ function ActorIdentity({
     const agent = agentMap.get(id);
     return <AgentIdentity agent={agent ?? { id, name: id.slice(0, 8) }} size="sm" />;
   }
-  if (evt.actorType === "system") return <Identity name="System" size="sm" />;
+  if (evt.actorType === "system") return <Identity name={t("common.system")} size="sm" />;
   if (evt.actorType === "user") {
     const profile = userProfileMap?.get(id);
     return (
       <Identity
-        name={profile?.label ?? "Board"}
+        name={profile?.label ?? t("common.board")}
         avatarUrl={profile?.image}
         size="sm"
       />
@@ -723,7 +724,7 @@ function AttributionAvatar({
   actor,
   via,
 }: {
-  label: "Assignee" | "Originating";
+  label: string;
   actor: AttributionActor;
   via?: string | null;
 }) {
@@ -804,7 +805,7 @@ function IssueAttributionByline({
           name:
             formatUserLabel(issue.assigneeUserId, userLabelMap) ??
             userProfileMap.get(issue.assigneeUserId)?.label ??
-            "User",
+            t("common.user"),
           avatarUrl: userProfileMap.get(issue.assigneeUserId)?.image ?? null,
         }
       : null;
@@ -825,7 +826,7 @@ function IssueAttributionByline({
           name:
             formatUserLabel(originatingActor.id, userLabelMap) ??
             userProfileMap.get(originatingActor.id)?.label ??
-            "User",
+            t("common.user"),
           avatarUrl: userProfileMap.get(originatingActor.id)?.image ?? null,
         }
     : null;
@@ -844,7 +845,7 @@ function IssueAttributionByline({
         data-testid="issue-attribution-avatar-stack"
       >
         {assignee ? (
-          <AttributionAvatar label="Assignee" actor={assignee} />
+          <AttributionAvatar label={t("common.assignee")} actor={assignee} />
         ) : null}
         {originator ? (
           <AttributionAvatar
@@ -1019,7 +1020,7 @@ function IssueDetailLoadingState({
                   title={`Routine execution from routine ${headerSeed.originId}`}
                 >
                   <Repeat className="h-3 w-3" />
-                  Routine
+                  {t("common.routine")}
                 </Badge>
               ) : null}
               {/* Seeded header — same anatomy as the resolved one below, so the
@@ -1154,7 +1155,7 @@ function InboxMobileToolbar({
 
         <Popover open={menuOpen} onOpenChange={setMenuOpen}>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon-sm" aria-label="More actions">
+            <Button variant="ghost" size="icon-sm" aria-label={t("common.moreActions")}>
               <MoreVertical className="h-5 w-5" />
             </Button>
           </PopoverTrigger>
@@ -1177,7 +1178,7 @@ function InboxMobileToolbar({
               }}
             >
               <SlidersHorizontal className="h-3 w-3" />
-              Properties
+              {t("common.properties")}
             </button>
             {issueIdProp && (
               <button
@@ -3445,7 +3446,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
   const sourceBreadcrumb = useMemo(
     () =>
       readIssueDetailBreadcrumb(issueId, location.state, location.search) ?? {
-        label: "Tasks",
+        label: t("common.tasks"),
         href: "/issues",
       },
     [issueId, location.state, location.search],
@@ -3733,9 +3734,9 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         roleLabel,
       });
     };
-    pushUser(issue.responsibleUserId, "Owner");
-    pushAgent(issue.assigneeAgentId, "Assignee");
-    pushUser(issue.assigneeUserId, "Assignee");
+    pushUser(issue.responsibleUserId, t("common.owner"));
+    pushAgent(issue.assigneeAgentId, t("common.assignee"));
+    pushUser(issue.assigneeUserId, t("common.assignee"));
     return list;
   }, [issue, userProfileMap, agentMap]);
   const mentionOptions = useMemo<MentionOption[]>(() => {
@@ -3996,7 +3997,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       }),
     [comments, optimisticComments],
   );
-  const breadcrumbTitle = issue?.title ?? issueId ?? "Task";
+  const breadcrumbTitle = issue?.title ?? issueId ?? t("common.task");
   const breadcrumbIdentifier =
     issue?.identifier ?? issueHeaderSeed?.identifier ?? undefined;
   const breadcrumbStatus = issue?.status;
@@ -4678,7 +4679,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
             issue,
             currentUserId,
           )}
-          createIssueLabel="Sub-task"
+          createIssueLabel={t("common.subTask")}
           defaultSortField="workflow"
           showProgressSummary
           parentIssueIdForCostSummary={issue.id}
@@ -5647,7 +5648,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         title: "Task archived from inbox",
         tone: "success",
         action: {
-          label: "Undo",
+          label: t("common.undo"),
           onClick: () => {
             void undoInboxArchive(
               id,
@@ -7017,7 +7018,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     const badges = new Map<string, string>();
     for (const child of childIssues) {
       if (!heldIssueIds.has(child.id)) continue;
-      badges.set(child.id, "Paused");
+      badges.set(child.id, t("common.paused"));
     }
     return badges;
   }, [childIssues, heldIssueIds]);
@@ -7161,7 +7162,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         ) : (
           <>
             <span className="hidden sm:inline">Upload attachment</span>
-            <span className="sm:hidden">Upload</span>
+            <span className="sm:hidden">{t("common.upload")}</span>
           </>
         )}
       </Button>
@@ -7322,7 +7323,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
             title={`Routine execution from routine ${issue.originId}`}
           >
             <Repeat className="h-3 w-3" />
-            Routine
+            {t("common.routine")}
           </Link>
         )}
 
@@ -7452,7 +7453,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
               variant="ghost"
               size="icon-xs"
               onClick={() => setMobilePropsOpen(true)}
-              title="Properties"
+              title={t("common.properties")}
             >
               <SlidersHorizontal className="h-4 w-4" />
             </Button>
@@ -7848,7 +7849,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-sm font-medium text-muted-foreground">
-                  Sub-tasks
+                  {t("common.subTasks")}
                 </h3>
               </div>
               <IssuesList
@@ -7871,7 +7872,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                   issue,
                   currentUserId,
                 )}
-                createIssueLabel="Sub-task"
+                createIssueLabel={t("common.subTask")}
                 defaultSortField="workflow"
                 showProgressSummary
                 parentIssueIdForCostSummary={issue.id}
@@ -8077,7 +8078,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                 </TabsTrigger>
                 <TabsTrigger value="activity" className="gap-1.5">
                   <ActivityIcon className="h-3.5 w-3.5" />
-                  Activity
+                  {t("common.activity")}
                 </TabsTrigger>
                 <TabsTrigger value="related-work" className="gap-1.5">
                   <ListTree className="h-3.5 w-3.5" />
@@ -8151,7 +8152,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                           author: issue.createdByAgentId ? "agent" : "human",
                           authorName: issue.createdByAgentId
                             ? (agentMap.get(issue.createdByAgentId)?.name ??
-                              "Agent")
+                              t("common.agent"))
                             : undefined,
                           agent: issue.createdByAgentId ? agentMap.get(issue.createdByAgentId) ?? { id: issue.createdByAgentId } : undefined,
                         agentIcon: issue.createdByAgentId
@@ -8598,7 +8599,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                     <SheetTitle className="text-sm">
                       {documentDeepLink?.documentKey === "plan"
                         ? "Plan"
-                        : "Properties"}
+                        : t("common.properties")}
                     </SheetTitle>
                   </SheetHeader>
                   <ScrollArea className="flex-1 overflow-y-auto">

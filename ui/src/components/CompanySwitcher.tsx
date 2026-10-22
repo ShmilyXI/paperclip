@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ChevronsUpDown, Plus, RefreshCw, Settings } from "lucide-react";
 import { Link } from "@/lib/router";
 import { useCompany } from "../context/CompanyContext";
@@ -57,7 +58,7 @@ export function CompanySwitcher({ open: controlledOpen, onOpenChange }: CompanyS
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-(--sz-220px)">
-        <DropdownMenuLabel>Organizations</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("common.organizations")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {sidebarCompanies.map((company) => (
           <DropdownMenuItem
@@ -84,7 +85,7 @@ export function CompanySwitcher({ open: controlledOpen, onOpenChange }: CompanyS
                 }}
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Try again
+                {t("common.tryAgain")}
               </DropdownMenuItem>
             </>
           ) : (
@@ -95,7 +96,7 @@ export function CompanySwitcher({ open: controlledOpen, onOpenChange }: CompanyS
         <DropdownMenuItem asChild>
           <Link to="/company/settings" className="no-underline text-inherit">
             <Settings className="h-4 w-4 mr-2" />
-            Settings
+            {t("common.settings")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

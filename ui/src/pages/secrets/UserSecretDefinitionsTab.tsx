@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { SecretStatus, UserSecretDefinition } from "@paperclipai/shared";
@@ -130,7 +131,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
       setDialogOpen(false);
     },
     onError: (err) =>
-      setError(err instanceof ApiError || err instanceof Error ? err.message : "Failed to save"),
+      setError(err instanceof ApiError || err instanceof Error ? err.message : t("common.failedToSave")),
   });
 
   const remove = useMutation({
@@ -174,7 +175,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
             <AlertCircle className="h-4 w-4" /> Failed to load definitions:{" "}
             {(definitionsQuery.error as Error).message}
             <Button variant="ghost" size="sm" onClick={() => definitionsQuery.refetch()}>
-              Retry
+              {t("common.retry")}
             </Button>
           </div>
         ) : definitions.length === 0 && !definitionsQuery.isPending ? (
@@ -244,7 +245,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
 
           <div className="space-y-3">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Name</label>
+              <label className="text-xs font-medium text-foreground">{t("common.name")}</label>
               <Input
                 value={form.name}
                 onChange={(event) => {
@@ -260,7 +261,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Key</label>
+              <label className="text-xs font-medium text-foreground">{t("common.key")}</label>
               <Input
                 value={form.key}
                 onChange={(event) => {
@@ -276,7 +277,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
               </p>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Description</label>
+              <label className="text-xs font-medium text-foreground">{t("common.description")}</label>
               <Input
                 value={form.description}
                 onChange={(event) =>
@@ -300,7 +301,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
             </div>
             {editing ? (
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground">Status</label>
+                <label className="text-xs font-medium text-foreground">{t("common.status")}</label>
                 <Select
                   value={form.status}
                   onValueChange={(status) =>
@@ -311,9 +312,9 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="disabled">Disabled</SelectItem>
-                    <SelectItem value="archived">Archived</SelectItem>
+                    <SelectItem value="active">{t("common.active")}</SelectItem>
+                    <SelectItem value="disabled">{t("common.disabled")}</SelectItem>
+                    <SelectItem value="archived">{t("common.archived")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -323,10 +324,10 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
 
           <DialogFooter>
             <Button variant="ghost" onClick={() => setDialogOpen(false)} disabled={save.isPending}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button onClick={() => save.mutate()} disabled={!canSave || save.isPending}>
-              {save.isPending ? "Saving…" : editing ? "Save changes" : "Create"}
+              {save.isPending ? t("common.saving2") : editing ? t("common.saveChanges") : t("common.create")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -344,14 +345,14 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setDeleteTarget(null)} disabled={remove.isPending}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               variant="destructive"
               onClick={() => deleteTarget && remove.mutate(deleteTarget)}
               disabled={remove.isPending}
             >
-              {remove.isPending ? "Removing…" : "Remove"}
+              {remove.isPending ? "Removing…" : t("common.remove")}
             </Button>
           </DialogFooter>
         </DialogContent>

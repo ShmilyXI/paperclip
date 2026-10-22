@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { FastResponseHistory } from "../components/fast-responses/FastResponseHistory";
 import { DecisionHistory } from "../components/decision-models/DecisionHistory";
 import { SubscriptionCostCard, SubscriptionTokenUsage } from "../components/SubscriptionCostCard";
@@ -206,7 +207,7 @@ export function Costs({
   } = useDateRange();
 
   useEffect(() => {
-    if (!embedded) setBreadcrumbs([{ label: "Costs" }]);
+    if (!embedded) setBreadcrumbs([{ label: t("common.costs") }]);
   }, [embedded, setBreadcrumbs]);
 
   useEffect(() => {
@@ -619,9 +620,9 @@ export function Costs({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
               {embedded ? (
-                <h2 className="text-lg font-semibold text-foreground">Costs</h2>
+                <h2 className="text-lg font-semibold text-foreground">{t("common.costs")}</h2>
               ) : (
-                <h1 className="text-3xl font-semibold tracking-tight">Costs</h1>
+                <h1 className="text-3xl font-semibold tracking-tight">{t("common.costs")}</h1>
               )}
             </div>
 
@@ -675,11 +676,11 @@ export function Costs({
             />
             <SubscriptionCostCard key={companyId} companyId={companyId} report={subscriptions} error={subscriptionError} onChanged={invalidateSubscriptions} />
             <MetricTile
-              label="Budget"
+              label={t("common.budget")}
               value={activeBudgetIncidents.length > 0 ? String(activeBudgetIncidents.length) : (
                 spendData?.summary.budgetCents && spendData.summary.budgetCents > 0
                   ? preset === "mtd" ? `${spendData.summary.utilizationPercent}%` : formatCents(spendData.summary.budgetCents)
-                  : "Open"
+                  : t("common.open")
               )}
               subtitle={
                 activeBudgetIncidents.length > 0
@@ -741,8 +742,8 @@ export function Costs({
         {!lockTab ? (
           <div className="max-w-full overflow-x-auto pb-2">
             <TabsList variant="line" className="justify-start">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              {!hideBudgetsTab ? <TabsTrigger value="budgets">Budgets</TabsTrigger> : null}
+              <TabsTrigger value="overview">{t("common.overview")}</TabsTrigger>
+              {!hideBudgetsTab ? <TabsTrigger value="budgets">{t("common.budgets")}</TabsTrigger> : null}
               <TabsTrigger value="providers">Providers</TabsTrigger>
               <TabsTrigger value="billers">Billers</TabsTrigger>
               <TabsTrigger value="finance">Finance</TabsTrigger>

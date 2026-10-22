@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { Brain, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -70,7 +71,7 @@ export function TaskChatThinking({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={`${open ? "Collapse" : "Expand"} ${baseLabel.toLowerCase()}: ${preview}`}
+        aria-label={`${open ? t("common.collapse") : t("common.expand")} ${baseLabel.toLowerCase()}: ${preview}`}
         onClick={() => setOpen((value) => !value)}
         className={cn("group/thinking -mx-1.5 flex w-full min-w-0 max-w-full items-center gap-2 overflow-hidden rounded-sm px-1.5 py-0.5 text-left font-normal text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", rowClassName)}
       >

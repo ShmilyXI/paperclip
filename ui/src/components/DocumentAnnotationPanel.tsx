@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "./AgentAvatar";
 import { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import type {
@@ -293,7 +294,7 @@ export function AnnotationPanelBody(props: AnnotationPanelProps) {
                 setComposerValue("");
               }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               type="button"
@@ -306,7 +307,7 @@ export function AnnotationPanelBody(props: AnnotationPanelProps) {
               }
               onClick={() => createThread.mutate(composerValue.trim())}
             >
-              {createThread.isPending ? "Posting…" : "Comment"}
+              {createThread.isPending ? "Posting…" : t("common.comment")}
             </Button>
           </div>
         </div>
@@ -398,7 +399,7 @@ export function ThreadCard(props: {
               >
                 {thread.status === "resolved" ? (
                   <>
-                    <RotateCcw className="h-3 w-3" /> Reopen
+                    <RotateCcw className="h-3 w-3" /> {t("common.reopen")}
                   </>
                 ) : (
                   <>
@@ -412,7 +413,7 @@ export function ThreadCard(props: {
                 disabled={!props.replyDraft.trim() || props.pendingReply}
                 onClick={props.onSubmitReply}
               >
-                {props.pendingReply ? "Sending…" : "Reply"}
+                {props.pendingReply ? "Sending…" : t("common.reply")}
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -421,7 +422,7 @@ export function ThreadCard(props: {
                     variant="ghost"
                     size="icon-xs"
                     className="text-muted-foreground"
-                    title="More actions"
+                    title={t("common.moreActions")}
                     aria-label="More thread actions"
                   >
                     <MoreHorizontal className="h-3.5 w-3.5" />
@@ -523,7 +524,7 @@ function resolveAuthor(
       imageUrl: profile?.image ?? null,
     };
   }
-  return { name: comment.authorType === "agent" ? "Agent" : "Board", role: comment.authorType === "agent" ? "agent" : "board" };
+  return { name: comment.authorType === "agent" ? t("common.agent") : t("common.board"), role: comment.authorType === "agent" ? "agent" : "board" };
 }
 
 export function truncate(value: string, limit: number) {

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown, CircleDot, OctagonX, Square, Flag, KeyRound } from "lucide-react";
@@ -105,7 +106,7 @@ export function TaskChatMarker({
               disabled={tryAgainPending}
               data-testid="task-chat-run-failed-try-again"
             >
-              {tryAgainPending ? "Trying again..." : "Try again"}
+              {tryAgainPending ? "Trying again..." : t("common.tryAgain")}
             </Button>
           ) : null}
         </div>
@@ -140,7 +141,7 @@ export function TaskChatMarker({
                     disabled={tryAgainPending}
                     data-testid="task-chat-run-failed-try-again"
                   >
-                    {tryAgainPending ? "Trying again..." : "Try again"}
+                    {tryAgainPending ? "Trying again..." : t("common.tryAgain")}
                   </Button>
                 ) : null}
               </div>
@@ -179,7 +180,7 @@ export function TaskChatMarker({
             disabled={tryAgainPending}
             data-testid="task-chat-run-failed-try-again"
           >
-            {tryAgainPending ? "Trying again..." : "Try again"}
+            {tryAgainPending ? "Trying again..." : t("common.tryAgain")}
           </Button>
         ) : null}
       </span>

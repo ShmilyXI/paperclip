@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef, type ReactNode } from "react";
 import { FileUp, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -50,7 +51,7 @@ export function ArtifactUploadContent({ children, empty = false, entries = [], o
           </span>
         </div>
         {entry.status === "error" ? <div className="flex shrink-0 items-center gap-1">
-          {onRetry ? <Button variant="ghost" size="sm" onClick={() => onRetry(entry.id)}>Retry</Button> : null}
+          {onRetry ? <Button variant="ghost" size="sm" onClick={() => onRetry(entry.id)}>{t("common.retry")}</Button> : null}
           {onDismiss ? <Button variant="ghost" size="icon-sm" aria-label={`Dismiss upload: ${entry.filename}`} onClick={() => onDismiss(entry.id)}><X aria-hidden="true" /></Button> : null}
         </div> : null}
       </li>)}

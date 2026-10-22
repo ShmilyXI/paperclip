@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type {
   Issue,
   IssuePriority,
@@ -174,13 +175,13 @@ export function RoutineOverview() {
         />
         <OverviewFact
           icon={Clock3}
-          label="Next run"
+          label={t("common.nextRun")}
           value={schedule.nextRunAt ? formatRoutineTimestamp(schedule.nextRunAt) : hasWebhook ? "On webhook delivery" : "Not scheduled"}
           detail={schedule.nextRunAt ? "Scheduled" : hasWebhook ? "Waiting for an incoming request" : "Add or enable a schedule"}
         />
         <OverviewFact
           icon={Play}
-          label="Last run"
+          label={t("common.lastRun")}
           value={lastRun ? <StatusBadge status={lastRun.status} /> : "No runs yet"}
           detail={lastRun ? formatRoutineTimestamp(lastRun.triggeredAt) : "Run manually or wait for a trigger"}
         />
@@ -202,7 +203,7 @@ export function RoutineOverview() {
       </section>
 
       <section className="flex flex-col gap-2" aria-labelledby="routine-description-heading">
-        <h2 id="routine-description-heading" className="text-sm font-semibold">Description</h2>
+        <h2 id="routine-description-heading" className="text-sm font-semibold">{t("common.description")}</h2>
         {routine.description?.trim() ? (
           <MarkdownBody className="text-sm text-foreground" linkIssueReferences>
             {routine.description}

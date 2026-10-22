@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   useCallback,
   useEffect,
@@ -88,7 +89,7 @@ const VIEW_OPTIONS: Array<{
   label: string;
   icon: typeof Layers3;
 }> = [
-  { value: "overview", label: "Overview", icon: Layers3 },
+  { value: "overview", label: t("common.overview"), icon: Layers3 },
   { value: "pipeline", label: "Pipeline", icon: ArrowRight },
   { value: "trace", label: "Exact trace", icon: FileJson2 },
 ];
@@ -596,7 +597,7 @@ function typedPrpFields(event: HeartbeatRunEvent) {
     ["Source event", text(prp.sourceEventId)],
     ["Sequence", scalar(prp.sourceSequence) || String(event.seq)],
     ["Item type", text(item.type) || text(payload.kind)],
-    ["Status", text(payload.status) || text(item.status)],
+    [t("common.status"), text(payload.status) || text(item.status)],
     ["Query", text(payload.query) || text(item.query)],
   ].filter(([, value]) => Boolean(value));
 }

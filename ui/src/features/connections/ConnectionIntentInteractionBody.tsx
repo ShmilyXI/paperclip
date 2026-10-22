@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -382,7 +383,7 @@ export function ConnectionIntentInteractionBody({
                     variant="outline"
                     onClick={() => setupQuery.refetch()}
                   >
-                    Try again
+                    {t("common.tryAgain")}
                   </Button>
                 </div>
               ) : setupProps ? (
@@ -520,8 +521,8 @@ export function ConnectionIntentInteractionBody({
                 {authorizing
                   ? "Continue setup"
                   : needsRetry
-                    ? "Try again"
-                    : setupQuery.data?.existingConnections.length ? "Connect / Use existing" : "Connect"}
+                    ? t("common.tryAgain")
+                    : setupQuery.data?.existingConnections.length ? "Connect / Use existing" : t("common.connect")}
               </Button>
             </DialogTrigger>
             <DialogContent

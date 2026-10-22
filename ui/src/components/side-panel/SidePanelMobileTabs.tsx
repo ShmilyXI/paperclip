@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { Check, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";

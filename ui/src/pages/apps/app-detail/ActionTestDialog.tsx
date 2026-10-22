@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -53,7 +54,7 @@ function seconds(ms: number): string {
   return `${(ms / 1000).toFixed(1)}s`;
 }
 
-/** relativeTime() returns "just now"; the spec capitalizes it ("Just now"). */
+/** relativeTime() returns "just now"; the spec capitalizes it (t("common.justNow")). */
 function relTime(date: Date): string {
   const t = relativeTime(date);
   return t.charAt(0).toUpperCase() + t.slice(1);
@@ -223,7 +224,7 @@ function TestLoadError({ message, onRetry }: { message: string; onRetry: () => v
     <div className="py-8 text-center">
       <p className="text-sm font-medium text-foreground">{message}</p>
       <Button className="mt-3" size="sm" variant="outline" onClick={onRetry}>
-        Try again
+        {t("common.tryAgain")}
       </Button>
     </div>
   );
@@ -270,7 +271,7 @@ function AgentPicker({
           <div className="relative">
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
-              aria-label="Search agents"
+              aria-label={t("common.searchAgents")}
               placeholder="Search agents…"
               className="h-8 pl-8 text-sm"
               value={search}
@@ -326,7 +327,7 @@ function AgentPicker({
             <li>
               <span className="font-medium text-foreground">Off</span> — won't run. Change it in{" "}
               <Link className="text-primary hover:underline" to={appTabHref(connectionId, "permissions")}>
-                Permissions
+                {t("common.permissions")}
               </Link>.
             </li>
           </ul>
@@ -553,12 +554,12 @@ function ActionTester({
             </>
           ) : (
             <>
-              <Play className="h-3.5 w-3.5" /> {outcome ? "Run again" : "Run"}
+              <Play className="h-3.5 w-3.5" /> {outcome ? t("common.runAgain") : t("common.run")}
             </>
           )}
         </Button>
         <Button onClick={onReset} disabled={running} size="sm" variant="ghost">
-          Reset
+          {t("common.reset")}
         </Button>
       </div>
 
@@ -570,7 +571,7 @@ function ActionTester({
 
       {run.isError && !running && (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-          Couldn't reach {agent.name}. {run.error instanceof Error ? run.error.message : "Please try again."}
+          Couldn't reach {agent.name}. {run.error instanceof Error ? run.error.message : t("common.pleaseTryAgain")}
         </div>
       )}
 
@@ -611,7 +612,7 @@ function RunningCard({
       <div className="mt-3 flex items-center justify-between">
         <span className="text-xs text-muted-foreground">Started {seconds(elapsedMs)} ago · Press cancel to stop</span>
         <Button onClick={onCancel} size="sm" variant="outline">
-          Cancel
+          {t("common.cancel")}
         </Button>
       </div>
     </div>
@@ -813,7 +814,7 @@ function resultPreview(value: unknown): { items: Array<{ label: string | null; v
         items.push({ label: (blocks?.length ?? 0) > 1 || (structured !== null && structured !== undefined) ? "Text" : null, value: parsed });
       }
     } else if (content.type === "image" || content.type === "audio") {
-      items.push({ label: content.type === "image" ? "Image" : "Audio", value: typeof content.mimeType === "string" ? content.mimeType : "Media attachment" });
+      items.push({ label: content.type === "image" ? t("common.image") : "Audio", value: typeof content.mimeType === "string" ? content.mimeType : "Media attachment" });
     } else if (content.type === "resource_link") {
       items.push({ label: "Resource", value: content.title ?? content.name ?? content.uri ?? "Resource link" });
     } else if (content.type === "resource" && content.resource && typeof content.resource === "object") {
@@ -872,7 +873,7 @@ function AllowedResult({
 
       {preview.items.some((item) => !isEmptyResult(item.value)) && (
         <div className="mt-3">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Preview</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("common.preview")}</p>
           <div className="mt-1.5">
             <div className="space-y-2">
               {preview.items.map((item, index) => (
@@ -1192,7 +1193,7 @@ function AskFirstResult({
       : phase === "denied"
         ? "Denied — see Review for why"
         : phase === "cancelled"
-          ? "Cancelled"
+          ? t("common.cancelled")
           : phase === "expired"
             ? "Expired — send it again"
             : `Waiting · ${relTime(requestedAt)}`;
@@ -1218,7 +1219,7 @@ function AskFirstResult({
           </div>
         )}
         <div className="flex gap-3">
-          <dt className="w-16 shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Status</dt>
+          <dt className="w-16 shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("common.status")}</dt>
           <dd className={cn("flex items-center gap-1.5 text-foreground", settled && "text-muted-foreground")}>
             {phase === "running" && <Loader2 className="h-3 w-3 animate-spin" />}
             {statusLabel}
@@ -1298,7 +1299,7 @@ function OffExplanation({
             <p className="mt-2">
               Want to test it? Turn it on for {agent.name} in{" "}
               <Link className="font-medium text-primary hover:underline" to={appTabHref(connectionId, "permissions")}>
-                Permissions
+                {t("common.permissions")}
               </Link>{" "}
               — set it to Allowed or Ask first.
             </p>

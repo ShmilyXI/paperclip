@@ -5,7 +5,7 @@
  * (`GET /companies/:companyId/timeline`). Rendering is the board-locked
  * Direction C (PAP-12422): dense rows, mini-map brush, custom inline SVG.
  */
-import { dateLocale } from "@/i18n";
+import { dateLocale, t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Bot, Clock3, Coins, GanttChartSquare, Minus, Plus, RotateCcw, type LucideIcon } from "lucide-react";
@@ -261,7 +261,7 @@ function TimelineLegend() {
           className="h-2.5 w-4 rounded-sm border border-dashed bg-transparent"
           style={{ borderColor: TIMELINE_COLORS.cancelled }}
         />
-        Cancelled
+        {t("common.cancelled")}
       </span>
       <span className="flex items-center gap-1.5">
         <span className="h-3.5 w-0.5" style={{ backgroundColor: TIMELINE_COLORS.now }} />
@@ -277,8 +277,8 @@ function TimelineSummaryStats({
   summary: ReturnType<typeof timelineSummary>;
 }) {
   const stats: { label: string; value: string; icon: LucideIcon }[] = [
-    { label: "Runs", value: formatInteger(summary.runs), icon: GanttChartSquare },
-    { label: "Agents", value: formatInteger(summary.agents), icon: Bot },
+    { label: t("common.runs"), value: formatInteger(summary.runs), icon: GanttChartSquare },
+    { label: t("common.agents"), value: formatInteger(summary.agents), icon: Bot },
     { label: "Run time", value: formatDuration(0, summary.activeMs), icon: Clock3 },
     {
       label: "Tokens used",
@@ -323,7 +323,7 @@ export function Timeline({ embedded = false }: { embedded?: boolean } = {}) {
 
   useEffect(() => {
     if (!embedded) {
-      setBreadcrumbs([{ label: scopedProjectId ? "Project Timeline" : "Timeline" }]);
+      setBreadcrumbs([{ label: scopedProjectId ? "Project Timeline" : t("common.timeline") }]);
     }
   }, [embedded, scopedProjectId, setBreadcrumbs]);
 
@@ -407,7 +407,7 @@ export function Timeline({ embedded = false }: { embedded?: boolean } = {}) {
           setDateRange(presetRange(preset));
         }}
         options={[
-          { value: "today", label: "Today" },
+          { value: "today", label: t("common.today") },
           { value: "7d", label: "7 days" },
           { value: "30d", label: "30 days" },
         ]}

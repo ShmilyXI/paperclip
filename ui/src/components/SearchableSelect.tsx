@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
@@ -98,9 +99,9 @@ export function SearchableSelect<
   groups,
   onValueChange,
   placeholder,
-  searchPlaceholder = "Search...",
+  searchPlaceholder = t("common.search"),
   emptyMessage = "No options found.",
-  loadingMessage = "Loading...",
+  loadingMessage = t("common.loading"),
   loading = false,
   disabled = false,
   className,

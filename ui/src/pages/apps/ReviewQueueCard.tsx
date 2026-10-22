@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Loader2, ShieldQuestion, X } from "lucide-react";
@@ -223,7 +224,7 @@ function failToast(
 ) {
   pushToast({
     title: "Couldn’t save that",
-    body: error instanceof Error ? error.message : "Please try again.",
+    body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
     tone: "error",
   });
 }

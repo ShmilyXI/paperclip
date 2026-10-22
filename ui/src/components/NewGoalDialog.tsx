@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { GOAL_STATUSES, GOAL_LEVELS } from "@paperclipai/shared";
@@ -27,10 +28,10 @@ import { MarkdownEditor, type MarkdownEditorRef } from "./MarkdownEditor";
 import { StatusBadge } from "./StatusBadge";
 
 const levelLabels: Record<string, string> = {
-  company: "Organization",
-  team: "Team",
-  agent: "Agent",
-  task: "Task",
+  company: t("common.organization"),
+  team: t("common.team"),
+  agent: t("common.agent"),
+  task: t("common.task"),
 };
 
 export function NewGoalDialog() {
@@ -273,7 +274,7 @@ export function NewGoalDialog() {
             disabled={!title.trim() || createGoal.isPending}
             onClick={handleSubmit}
           >
-            {createGoal.isPending ? "Creating…" : newGoalDefaults.parentId ? "Create sub-goal" : "Create goal"}
+            {createGoal.isPending ? t("common.creating") : newGoalDefaults.parentId ? "Create sub-goal" : "Create goal"}
           </Button>
         </div>
       </DialogContent>

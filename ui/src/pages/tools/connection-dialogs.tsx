@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { KeyRound, Stethoscope, Trash2, Vault } from "lucide-react";
@@ -464,7 +465,7 @@ export function AddConnectionDialog({
                         aria-label="Header name"
                       />
                       <Button type="button" size="sm" variant="outline" onClick={addCred} disabled={!pendingSecretId}>
-                        Add
+                        {t("common.add")}
                       </Button>
                     </div>
                     {pendingSecretId ? (
@@ -534,16 +535,16 @@ export function AddConnectionDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           {step === 1 && !locked ? (
             <Button disabled={!appChoiceValid} onClick={() => setStep(2)}>
-              Continue
+              {t("common.continue")}
             </Button>
           ) : !locked ? (
             <>
               <Button variant="outline" onClick={() => setStep(1)}>
-                Back
+                {t("common.back")}
               </Button>
               <Button disabled={!canCreate} onClick={() => create.mutate()}>
                 {create.isPending ? "Creating draft…" : "Create & probe"}

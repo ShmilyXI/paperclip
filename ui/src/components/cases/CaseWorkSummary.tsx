@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Clock3 } from "lucide-react";
 import type { CaseDetail, CaseHandoffView } from "@/api/cases";
 import { AgentIdentity } from "@/components/AgentIdentity";
@@ -17,7 +18,7 @@ export function CaseWorkSummary({ caseData, pendingHandoff, agents }: {
   const pending = pendingHandoff === undefined ? caseData.pendingHandoff : pendingHandoff;
   const assignee = task?.assigneeAgentId ? agents?.get(task.assigneeAgentId) ?? {
     id: task.assigneeAgentId,
-    name: task.assigneeAgentName ?? "Agent",
+    name: task.assigneeAgentName ?? t("common.agent"),
   } : null;
   const from = pending?.fromAgentId ? agents?.get(pending.fromAgentId)?.name ?? pending.fromAgentName ?? "the previous agent" : "the previous agent";
   const to = pending ? (pending.toAgentId ? agents?.get(pending.toAgentId)?.name : null) ?? pending.toAgentName ?? "the receiving agent" : null;
@@ -30,10 +31,10 @@ export function CaseWorkSummary({ caseData, pendingHandoff, agents }: {
     <h2 className="text-sm font-semibold">Work</h2>
     {caseData.workIssueId ? <div className="space-y-3">
       {task ? <div>
-        <PropertyRow label="Task"><IssueReferencePill issue={task} className="min-h-11 md:min-h-0" /></PropertyRow>
+        <PropertyRow label={t("common.task")}><IssueReferencePill issue={task} className="min-h-11 md:min-h-0" /></PropertyRow>
         <PropertyRow label="Workflow"><span className="text-sm">{caseData.workflow?.name ?? "Case instructions"}</span></PropertyRow>
         {caseData.phase && <PropertyRow label="Phase"><span className="text-sm">{caseData.phase}</span></PropertyRow>}
-        <PropertyRow label="Agent">{assignee ? <AgentIdentity agent={assignee} size="xs" /> : <span className="text-sm text-muted-foreground">Unassigned</span>}</PropertyRow>
+        <PropertyRow label={t("common.agent")}>{assignee ? <AgentIdentity agent={assignee} size="xs" /> : <span className="text-sm text-muted-foreground">{t("common.unassigned")}</span>}</PropertyRow>
         <PropertyRow label="Task status"><IssueStatusBadge status={task.status} /></PropertyRow>
       </div> : <p className="text-sm text-muted-foreground">The primary task is unavailable.</p>}
       {pending && pending.state !== "delivered" && pending.state !== "completed" && pending.state !== "cancelled" && <div className="flex items-start gap-2 text-sm">

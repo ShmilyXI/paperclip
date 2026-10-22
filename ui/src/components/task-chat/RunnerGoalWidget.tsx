@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Flag, Loader2, Pause, Play, Pencil, Trash2 } from "lucide-react";
@@ -308,9 +309,9 @@ export function RunnerGoalWidget({ control }: { control: RunnerGoalControl }) {
             </label>
             {mutationError ? <p className="text-sm text-destructive" role="alert">{mutationError}</p> : null}
             <DialogFooter>
-              <Button type="button" variant="outline" disabled={control.mutation?.isPending} onClick={() => control.setDialog(null)}>Cancel</Button>
+              <Button type="button" variant="outline" disabled={control.mutation?.isPending} onClick={() => control.setDialog(null)}>{t("common.cancel")}</Button>
               <Button type="submit" disabled={!control.dialog?.objective.trim() || control.mutation?.isPending}>
-                {control.mutation?.isPending ? "Saving…" : control.dialog?.action === "replace" ? "Replace goal" : "Save goal"}
+                {control.mutation?.isPending ? t("common.saving2") : control.dialog?.action === "replace" ? "Replace goal" : "Save goal"}
               </Button>
             </DialogFooter>
           </form>

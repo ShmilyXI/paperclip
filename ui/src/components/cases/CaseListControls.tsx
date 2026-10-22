@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import { ArrowUpDown, Check, Columns3, Filter, Layers } from "lucide-react";
 import type { CaseGroupBy, CaseSortField } from "@/api/cases";
@@ -20,7 +21,7 @@ export function CaseListControls({ filters, activeFilterCount, columns, onColumn
 }) {
   return <>
     <DropdownMenu>
-      <DropdownMenuTrigger asChild><Button variant="outline" size="icon" className="h-8 w-8 shrink-0" aria-label="Columns" title="Columns"><Columns3 aria-hidden className="h-3.5 w-3.5" /></Button></DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild><Button variant="outline" size="icon" className="h-8 w-8 shrink-0" aria-label={t("common.columns")} title={t("common.columns")}><Columns3 aria-hidden className="h-3.5 w-3.5" /></Button></DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuLabel>Visible fields</DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -33,22 +34,22 @@ export function CaseListControls({ filters, activeFilterCount, columns, onColumn
     </DropdownMenu>
     <Popover>
       <PopoverTrigger asChild><Button variant="outline" size="icon" className={cn("relative h-8 w-8 shrink-0", activeFilterCount > 0 && "text-(--collection-filter-active)")}
-        aria-label={activeFilterCount ? `Filter cases (${activeFilterCount} active)` : "Filter cases"} title="Filter">
+        aria-label={activeFilterCount ? `Filter cases (${activeFilterCount} active)` : "Filter cases"} title={t("common.filter")}>
         <Filter aria-hidden className="h-3.5 w-3.5" />
         {activeFilterCount > 0 && <span aria-hidden className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-(--collection-filter-badge) text-(length:--text-nano) font-bold text-(--collection-filter-badge-foreground)">{activeFilterCount}</span>}
       </Button></PopoverTrigger>
       <PopoverContent align="end" className="w-64 space-y-3" aria-label="Case filters">
-        <h2 className="text-sm font-medium">Filters</h2>
+        <h2 className="text-sm font-medium">{t("common.filters")}</h2>
         {filters}
       </PopoverContent>
     </Popover>
     <Popover>
-      <PopoverTrigger asChild><Button variant="outline" size="icon" className="h-8 w-8 shrink-0" aria-label="Sort" title="Sort"><ArrowUpDown aria-hidden className="h-3.5 w-3.5" /></Button></PopoverTrigger>
+      <PopoverTrigger asChild><Button variant="outline" size="icon" className="h-8 w-8 shrink-0" aria-label={t("common.sort")} title={t("common.sort")}><ArrowUpDown aria-hidden className="h-3.5 w-3.5" /></Button></PopoverTrigger>
       <PopoverContent align="end" className="w-48 p-2" aria-label="Sort cases">
         {CASE_SORT_OPTIONS.map(([value, label]) => <button key={value} type="button" aria-pressed={sortField === value}
           className={cn("flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-sm", sortField === value ? "bg-accent/50 text-foreground" : "text-muted-foreground hover:bg-accent/50")}
           onClick={() => onSortChange(value, sortField === value ? sortDir === "asc" ? "desc" : "asc" : "asc")}>
-          <span>{label}</span>{sortField === value && <span aria-label={sortDir === "asc" ? "Ascending" : "Descending"} className="text-xs text-muted-foreground">{sortDir === "asc" ? "↑" : "↓"}</span>}
+          <span>{label}</span>{sortField === value && <span aria-label={sortDir === "asc" ? t("common.ascending") : t("common.descending")} className="text-xs text-muted-foreground">{sortDir === "asc" ? "↑" : "↓"}</span>}
         </button>)}
       </PopoverContent>
     </Popover>

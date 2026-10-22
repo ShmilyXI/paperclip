@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ArrowUpDown, Check, Layers, Plus } from "lucide-react";
 import { Link } from "@/lib/router";
 import { ToolbarSearch } from "./ToolbarSearch";
@@ -26,18 +27,18 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
     <ToolbarSearch query={query} onQueryChange={onQueryChange} label="Search routines" placeholder="Search routines…" />
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" title="Sort">
+        <Button variant="outline" size="sm" title={t("common.sort")}>
           <ArrowUpDown className="h-3.5 w-3.5 sm:h-3 sm:w-3 sm:mr-1" />
-          <span >Sort</span>
+          <span >{t("common.sort")}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-44 p-0">
         <div className="p-2 space-y-0.5">
           {([
-            ["updated", "Updated"],
-            ["created", "Created"],
-            ["lastRun", "Last run"],
-            ["title", "Title"],
+            ["updated", t("common.updated")],
+            ["created", t("common.created")],
+            ["lastRun", t("common.lastRun")],
+            ["title", t("common.title")],
           ] as const).map(([field, label]) => (
             <button
                 type="button"
@@ -74,10 +75,10 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
       <PopoverContent align="end" className="w-44 p-0">
         <div className="p-2 space-y-0.5">
           {([
-            ["folder", "Folder"],
-            ["project", "Project"],
-            ["assignee", "Agent"],
-            ["none", "None"],
+            ["folder", t("common.folder")],
+            ["project", t("common.project")],
+            ["assignee", t("common.agent")],
+            ["none", t("common.none")],
           ] as const).map(([value, label]) => (
             <button
                 type="button"
@@ -97,7 +98,7 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
       </PopoverContent>
     </Popover>
     <div className="design-toolbar-actions">
-      {onToggleSelect && <Button variant="outline" size="sm" onClick={onToggleSelect}>{selectMode ? "Done" : "Select"}</Button>}
+      {onToggleSelect && <Button variant="outline" size="sm" onClick={onToggleSelect}>{selectMode ? t("common.done") : t("common.select")}</Button>}
       {runsHref && <Button variant="outline" size="sm" asChild><Link data-toolbar-control to={runsHref}>View all runs</Link></Button>}
       {onNewFolder && <Button variant="outline" size="sm" onClick={onNewFolder}><Plus className="h-4 w-4" />New folder</Button>}
       <Button variant="outline" size="sm" data-toolbar-primary onClick={onCreateRoutine}><Plus className="h-4 w-4" />Create routine</Button>

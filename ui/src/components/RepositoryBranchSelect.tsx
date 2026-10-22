@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { GitBranch, LoaderCircle } from 'lucide-react';
 import { SearchableSelect, type SearchableSelectGroup, type SearchableSelectOption } from '@/components/SearchableSelect';
 import { Button } from '@/components/ui/button';
@@ -43,12 +44,12 @@ export function RepositoryBranchSelect({ value, branches, loading, error, disabl
       renderOption={option => <>
         <GitBranch className="size-4 shrink-0 text-muted-foreground" />
         <span className="min-w-0 flex-1 truncate" title={option.value}>{option.entered ? `Use “${option.value}”` : option.label}</span>
-        {option.isDefault && <span className="text-xs text-muted-foreground">Default</span>}
+        {option.isDefault && <span className="text-xs text-muted-foreground">{t("common.default")}</span>}
       </>}
     />
     {loading && <p role="status" className="flex items-center gap-2 text-xs text-muted-foreground"><LoaderCircle className="size-3.5 animate-spin motion-reduce:animate-none" />Loading branches…</p>}
     {error && <div className="flex flex-wrap items-center gap-2"><p role="alert" className="text-sm text-destructive">{error} You can still enter a branch name.</p>
-      {onRetry && <Button type="button" size="sm" variant="ghost" disabled={loading || disabled} onClick={onRetry}>Try again</Button>}
+      {onRetry && <Button type="button" size="sm" variant="ghost" disabled={loading || disabled} onClick={onRetry}>{t("common.tryAgain")}</Button>}
     </div>}
   </div>;
 }

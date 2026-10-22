@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowUpRight, ChevronRight, Loader2, Lock } from "lucide-react";
@@ -177,7 +178,7 @@ export function ReconnectCard({
       } catch (error) {
         pushToast({
           title: "Couldn’t start sign-in",
-          body: error instanceof Error ? error.message : "Please try again.",
+          body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
           tone: "error",
         });
       }
@@ -185,7 +186,7 @@ export function ReconnectCard({
     onError: (error) =>
       pushToast({
         title: "Couldn’t start sign-in",
-        body: error instanceof Error ? error.message : "Please try again.",
+        body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -396,7 +397,7 @@ function ReconnectForm({
         </Button>
         {onCancel && (
           <Button size="sm" variant="ghost" onClick={onCancel} disabled={reconnect.isPending}>
-            Cancel
+            {t("common.cancel")}
           </Button>
         )}
       </div>
@@ -419,9 +420,9 @@ function TechnicalDetails({ connection }: { connection: ToolConnection }) {
         </CollapsibleTrigger>
         <CollapsibleContent>
           <dl className="mt-4 grid gap-2 pb-2 text-xs sm:grid-cols-(--gtc-59)">
-            <dt className="text-muted-foreground">Address</dt>
+            <dt className="text-muted-foreground">{t("common.address")}</dt>
             <dd className="break-all font-mono text-foreground">{connectionAddress(connection)}</dd>
-            <dt className="text-muted-foreground">Type</dt>
+            <dt className="text-muted-foreground">{t("common.type")}</dt>
             <dd className="text-foreground">{connectionTransportLabel(connection.transport)}</dd>
           </dl>
         </CollapsibleContent>
@@ -490,7 +491,7 @@ export function DangerZone({
             type="button"
             className="flex w-full items-center gap-3 py-1 text-left"
           >
-            <span className="min-w-0 flex-1 text-sm font-medium text-destructive">Danger zone</span>
+            <span className="min-w-0 flex-1 text-sm font-medium text-destructive">{t("common.dangerZone")}</span>
             <ChevronRight
               className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-90")}
             />
@@ -578,7 +579,7 @@ export function DangerZone({
               {confirming ? (
                 <div className="flex items-center gap-2">
                   <Button variant="ghost" size="sm" onClick={() => setConfirming(false)} disabled={removing}>
-                    Cancel
+                    {t("common.cancel")}
                   </Button>
                   <Button variant="destructive" size="sm" onClick={onRemove} disabled={removing}>
                     {removing && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
@@ -624,5 +625,5 @@ export function connectionAddress(connection: ToolConnection): string {
 export function connectionTransportLabel(transport: ToolConnection["transport"]): string {
   if (transport === "mcp_remote") return "Remote HTTP";
   if (transport === "local_stdio") return "Local command";
-  return "Unknown";
+  return t("common.unknown");
 }

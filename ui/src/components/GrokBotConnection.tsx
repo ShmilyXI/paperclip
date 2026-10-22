@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useId, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { DotPairing } from "@paperclipai/shared";
@@ -61,7 +62,7 @@ export function GrokBotConnection({ companyId, agentId }: { companyId?: string; 
     {binding?.connected ? <>
       <p>Agent access connected. {routine?.verified && !recovering ? "Routine round trip verified." : "Assignments require a verified routine round trip."}</p>
       <dl className="space-y-2 text-muted-foreground"><div><dt>Bot</dt><dd>{routine?.botName ?? "Not configured"}</dd></div><div><dt>Last verified exchange</dt><dd>{routine?.verifiedAt ? new Date(routine.verifiedAt).toLocaleString() : "Not yet verified"}</dd></div><div><dt>Last authenticated contact</dt><dd>{routine?.lastContactAt ? new Date(routine.lastContactAt).toLocaleString() : "Not yet observed"}</dd></div></dl>
-      {exchange && <p>Assignment delivered: {["accepted", "acknowledged"].includes(exchange.status) ? "Yes" : "Unconfirmed"}. Reply received: {exchange.acknowledgedAt ? "Yes" : "No"}.</p>}
+      {exchange && <p>Assignment delivered: {["accepted", "acknowledged"].includes(exchange.status) ? t("common.yes") : "Unconfirmed"}. Reply received: {exchange.acknowledgedAt ? t("common.yes") : t("common.no")}.</p>}
       {exchange?.status === "rejected" && <div className="space-y-2"><p>The routine rejected this delivery. Check the routine in Grok before retrying.</p><Button variant="outline" disabled={busy || recovering} onClick={() => retryDelivery.mutate(exchange.id)}>Retry rejected delivery</Button></div>}
       {!routine?.configured || replace ? <div className="space-y-3">
         <label className="block space-y-2"><span>Bot name in Grok</span><Input value={botName} onChange={e => setBotName(e.target.value)} maxLength={100} /></label>

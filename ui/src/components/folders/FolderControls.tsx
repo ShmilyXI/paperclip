@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   Check,
@@ -224,7 +225,7 @@ export function FolderRail({
   return (
     <nav aria-label={`${itemLabelPlural} folders`} className="hidden w-(--sz-folder-rail) shrink-0 border-r border-border pr-3 md:block">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">Folders</div>
+        <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">{t("common.folders")}</div>
         <Button variant="ghost" size="icon-sm" title="New folder" onClick={onCreate}>
           <Plus className="h-3.5 w-3.5" />
         </Button>
@@ -255,7 +256,7 @@ export function FolderRail({
             />
           ))}
           <div className="px-2 pb-1 pt-3 text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
-            System
+            {t("common.system")}
           </div>
           {renderVirtualRow("unfiled", "Unfiled", result?.unfiledCount ?? 0, <FolderSwatch color={null} className="mt-0.5" />)}
         </div>
@@ -340,12 +341,12 @@ export function FolderRailItem({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={onStartRename}>Rename</DropdownMenuItem>
+          <DropdownMenuItem onSelect={onStartRename}>{t("common.rename")}</DropdownMenuItem>
           <DropdownMenuItem onSelect={onEdit}>Edit color</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onSelect={onDelete}>
             <Trash2 className="h-3.5 w-3.5" />
-            Delete
+            {t("common.delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -466,10 +467,10 @@ export function MobileFolderSheet({
             <>
               {model.my ? renderBranch(model.my, "My Skills") : null}
               <div className="px-2 pb-0.5 pt-2 text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
-                Organization
+                {t("common.organization")}
               </div>
               {model.company.map((node) => renderBranch(node))}
-              {model.projects ? renderBranch(model.projects, "Projects") : null}
+              {model.projects ? renderBranch(model.projects, t("common.projects")) : null}
               {model.bundled ? renderBranch(model.bundled, "Bundled") : null}
             </>
           ) : (
@@ -642,7 +643,7 @@ export function FolderFormDialog({
         </DialogHeader>
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="folder-name">Name</label>
+            <label className="text-sm font-medium" htmlFor="folder-name">{t("common.name")}</label>
             <Input
               id="folder-name"
               value={name}
@@ -654,7 +655,7 @@ export function FolderFormDialog({
             />
           </div>
           <div className="space-y-2">
-            <div className="text-sm font-medium">Color</div>
+            <div className="text-sm font-medium">{t("common.color")}</div>
             <div className="flex flex-wrap gap-2">
               {FOLDER_COLORS.map((swatch) => (
                 <button
@@ -677,17 +678,17 @@ export function FolderFormDialog({
                 )}
                 onClick={() => setColor(null)}
               >
-                None
+                {t("common.none")}
               </button>
             </div>
           </div>
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)} disabled={pending}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button onClick={() => onSubmit({ name: name.trim(), color })} disabled={pending || !name.trim()}>
-            {pending ? "Saving..." : isEdit ? "Save" : "Create folder"}
+            {pending ? t("common.saving") : isEdit ? t("common.save") : "Create folder"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -720,7 +721,7 @@ export function DeleteFolderDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={pending}>{t("common.cancel")}</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             disabled={pending || !folder}
@@ -729,7 +730,7 @@ export function DeleteFolderDialog({
               onConfirm();
             }}
           >
-            {pending ? "Deleting..." : "Delete folder"}
+            {pending ? t("common.deleting") : "Delete folder"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -770,7 +771,7 @@ export function BulkBar({
         </DropdownMenuContent>
       </DropdownMenu>
       <Button size="sm" variant="ghost" onClick={onClear}>Deselect all</Button>
-      <Button size="sm" onClick={onDone}>Done</Button>
+      <Button size="sm" onClick={onDone}>{t("common.done")}</Button>
     </div>
   );
 }

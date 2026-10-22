@@ -56,7 +56,7 @@ export function ContextualSidebarFrame({
               aria-label={t("layout.backFromTitle", { title })}
             >
               <ChevronLeft className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              <span className="truncate">{selectedCompany?.name ?? "Organization"}</span>
+              <span className="truncate">{selectedCompany?.name ?? t("common.organization")}</span>
             </button>
             <div className="flex min-w-0 items-center gap-2 px-2 py-1">
               {Icon ? <Icon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" /> : null}

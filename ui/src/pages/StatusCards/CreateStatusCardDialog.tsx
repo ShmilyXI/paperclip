@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { defaultStatusCardRefreshPolicy } from "@paperclipai/shared";
@@ -112,7 +113,7 @@ export function CreateStatusCardDialog({
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-semibold">Agent</label>
+          <label className="block text-sm font-semibold">{t("common.agent")}</label>
           <SummarizerAgentSelect companyId={companyId} value={agentId} onChange={setAgentId} enabled={open} />
           <p className="text-xs text-muted-foreground">
             Runs this card's setup and updates. Leave on the default unless another agent should own it.
@@ -122,7 +123,7 @@ export function CreateStatusCardDialog({
         <DialogFooter>
           <div className="flex gap-2">
             <Button variant="outline" onClick={close} disabled={createMutation.isPending}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               onClick={() => createMutation.mutate()}

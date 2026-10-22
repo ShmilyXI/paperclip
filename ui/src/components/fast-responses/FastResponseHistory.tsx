@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { fastResponsesApi } from "@/api/fast-responses";
 import { DecisionHistoryTable } from "@/components/decision-models/DecisionHistory";
@@ -37,7 +38,7 @@ export function FastResponseHistory({
           Could not load fast responses.
         </p>
         <Button variant="outline" onClick={() => void query.refetch()}>
-          Try again
+          {t("common.tryAgain")}
         </Button>
       </div>
     );

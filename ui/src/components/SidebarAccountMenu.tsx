@@ -27,7 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn, SIDEBAR_RAIL_HIDDEN_LABEL } from "../lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import { SidebarServerInfo } from "./SidebarServerInfo";
 import { TruncatedText } from "./TruncatedText";
 

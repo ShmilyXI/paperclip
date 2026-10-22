@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { PrimaryAgentIndicator } from "@/components/primary-agent/PrimaryAgentPresentation";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useAgentChatEnabled } from "../hooks/useAgentChatEnabled";
@@ -51,10 +52,10 @@ export { AGENT_FILTER_TABS } from "../lib/agent-filter-tabs";
 type FilterTab = (typeof AGENT_FILTER_TABS)[number];
 
 const AGENT_FILTER_TAB_ITEMS: { value: FilterTab; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "active", label: "Active" },
-  { value: "paused", label: "Paused" },
-  { value: "error", label: "Error" },
+  { value: "all", label: t("common.all") },
+  { value: "active", label: t("common.active") },
+  { value: "paused", label: t("common.paused") },
+  { value: "error", label: t("common.error") },
   { value: "builtin", label: "Built-in" },
 ];
 
@@ -69,7 +70,7 @@ interface EnvironmentDescriptor {
 }
 
 const localEnvironmentDescriptor: EnvironmentDescriptor = {
-  label: "Local",
+  label: t("common.local"),
   detail: "Paperclip host",
   title: "Local - Paperclip host",
 };
@@ -129,7 +130,7 @@ function getSandboxProviderLabel(
   const provider = typeof environment.config.provider === "string"
     ? environment.config.provider.trim()
     : "";
-  if (!provider) return "Sandbox";
+  if (!provider) return t("common.sandbox");
   return capabilities?.sandboxProviders?.[provider]?.displayName ?? provider;
 }
 
@@ -327,7 +328,7 @@ export function Agents({ initialView = "list" }: { initialView?: AgentsView } = 
   }, [agents, environmentsById, environmentCapabilities, instanceSettings?.defaultEnvironmentId]);
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Agents" }]);
+    setBreadcrumbs([{ label: t("common.agents") }]);
   }, [setBreadcrumbs]);
 
   useEffect(() => {
@@ -462,7 +463,7 @@ export function Agents({ initialView = "list" }: { initialView?: AgentsView } = 
         <EmptyState
           icon={Bot}
           message="Create your first agent to get started."
-          action="New Agent"
+          action={t("common.newAgent2")}
           onAction={openNewAgent}
         />
       )}

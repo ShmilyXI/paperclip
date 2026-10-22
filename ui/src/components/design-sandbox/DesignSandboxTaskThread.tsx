@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { TaskChatShimmerScope } from "../task-chat/TaskChatShimmer";
 import { revealWords, wordCount } from "./word-reveal";
 import { MarkdownWordStreaming } from "../MarkdownWordStreaming";
@@ -163,8 +164,8 @@ function PreviewCase({ example, header, agentName, agent, replay, streamlined }:
         } : null}
         pendingTakeover={pending && takeoverDismissed ? { count: 1, label: "1 pending input", onOpen: () => setTakeoverDismissed(false) } : null}
         onAdd={async body => setMessages(current => [...current,
-          { id: `local-human-${current.length}`, kind: "message", author: "human", text: body, timestamp: "Just now", isCurrentUser: true },
-          { id: `local-agent-${current.length}`, kind: "message", author: "agent", authorName: agentName, agent, text: "Preview reply received. This exchange exists only in your browser; no agent was started.", timestamp: "Just now" },
+          { id: `local-human-${current.length}`, kind: "message", author: "human", text: body, timestamp: t("common.justNow"), isCurrentUser: true },
+          { id: `local-agent-${current.length}`, kind: "message", author: "agent", authorName: agentName, agent, text: "Preview reply received. This exchange exists only in your browser; no agent was started.", timestamp: t("common.justNow") },
         ])}
       />
     </TaskChatComposerDock> : null}

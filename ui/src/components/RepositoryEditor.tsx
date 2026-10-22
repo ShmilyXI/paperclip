@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import type { ProjectRepository } from "@paperclipai/shared";
 import { GitBranch, LockKeyhole, Plus, X } from "lucide-react";
@@ -70,12 +71,12 @@ export function RepositoryEditor({ selected, onChange, state = "ready", availabl
             renderOption={({ repo }) => <><GitBranch className="size-4 shrink-0 text-muted-foreground" /><span className="flex min-w-0 flex-1 flex-col gap-1"><span className="truncate">{repo.fullName}</span><span className="truncate text-xs text-muted-foreground">{repo.connections.join(" · ")}</span></span>{repo.private && <LockKeyhole className="size-3 shrink-0 text-muted-foreground" />}</>}
             onValueChange={(_, option) => { onChange([...selected, option.repo]); setShowPicker(false); }}
             createItem={state === "error"
-              ? { render: () => <>Try again</>, onSelect: () => { onRetry(); } }
+              ? { render: () => <>{t("common.tryAgain")}</>, onSelect: () => { onRetry(); } }
               : { render: () => <><Plus className="size-4" />Connect another GitHub account</>, onSelect: onConnect }}
           />
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs text-muted-foreground">{"All GitHub connections you can use."}</p>
-            <Button type="button" variant="ghost" size="sm" onClick={() => setShowPicker(false)}>Cancel</Button>
+            <Button type="button" variant="ghost" size="sm" onClick={() => setShowPicker(false)}>{t("common.cancel")}</Button>
           </div>
         </div>
       ) : <Button type="button" variant="outline" className={addClassName} onClick={() => setShowPicker(true)}><GithubIcon className="size-4" />{addLabel}</Button>}

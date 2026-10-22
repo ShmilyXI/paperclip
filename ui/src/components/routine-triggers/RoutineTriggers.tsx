@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CalendarClock, Plus, Webhook } from "lucide-react";
@@ -184,7 +185,7 @@ export function RoutineTriggers() {
               })
             }
           >
-            Undo
+            {t("common.undo")}
           </Button>
         </div>
       ))}
@@ -198,7 +199,7 @@ export function RoutineTriggers() {
             </div>
           ))}
           <Button variant="outline" onClick={() => ctx.setSecretMessage(null)}>
-            Done
+            {t("common.done")}
           </Button>
         </div>
       )}
@@ -238,7 +239,7 @@ export function RoutineTriggers() {
               trigger.setupPending
                 ? "Setup unfinished · Events only test the connection"
                 : !trigger.enabled
-                  ? "Paused"
+                  ? t("common.paused")
                   : trigger.kind === "schedule"
                     ? (trigger.timezone ?? "UTC")
                     : trigger.kind === "api"
@@ -496,7 +497,7 @@ function ScheduleSettings({
           Save schedule
         </Button>
         <Button variant="outline" onClick={onCancel}>
-          Cancel
+          {t("common.cancel")}
         </Button>
       </div>
     </fieldset>

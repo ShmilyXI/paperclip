@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState, type MouseEvent } from "react";
 import type { Issue, IssueLockedStub } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
@@ -146,7 +147,7 @@ export function RemovableIssueReferencePill({
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="outline">Cancel</Button>
+              <Button type="button" variant="outline">{t("common.cancel")}</Button>
             </DialogClose>
             <Button type="button" variant="destructive" onClick={confirmRemove}>
               Remove blocker
@@ -175,7 +176,7 @@ export function ExpandRelationListButton({
       onClick={onClick}
       aria-label={expanded ? "Show fewer items" : `Show ${hiddenCount} more items`}
     >
-      {expanded ? "Show less" : `Show ${hiddenCount} more`}
+      {expanded ? t("common.showLess") : `Show ${hiddenCount} more`}
     </button>
   );
 }

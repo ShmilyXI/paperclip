@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, RefreshCw } from "lucide-react";
@@ -76,7 +77,7 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
           const accounts = [...new Map(snapshots.flatMap(snapshot => snapshot.accounts).map(account => [account.id, account])).values()];
           const stale = loadFailed || syncFailed || unavailable || snapshots.some(snapshot => snapshot.freshness === "stale" || snapshot.errorAt);
           const connected = !stale && accounts.some(account => account.status === "ACTIVE");
-          const status = stale ? "Not verified" : connected ? "Connected"
+          const status = stale ? "Not verified" : connected ? t("common.connected")
             : accounts.some(account => account.status === "UNVERIFIED") ? "Not verified"
             : accounts.some(account => account.status === "INITIATED") ? "Waiting for sign-in" : "Needs sign-in";
           const logoUrl = catalogBySlug.get(app.appSlug)?.routes.find(route => route.provider === provider)?.logoUrl;

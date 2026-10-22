@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import type { Agent } from "@paperclipai/shared";
@@ -59,7 +60,7 @@ export function ConversationPlayback({ header, agentName, agent, onShowSavedThre
     <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border bg-background py-2 text-xs">
       <Button size="sm" variant="outline" disabled={!stepMs} onClick={() => !started || ended ? restart() : setPlaying(value => !value)}>
         {ended ? <RotateCcw /> : playing ? <Pause /> : <Play />}
-        {ended ? "Replay conversation" : playing ? "Pause" : started ? "Resume conversation" : "Play conversation"}
+        {ended ? "Replay conversation" : playing ? t("common.pause") : started ? "Resume conversation" : "Play conversation"}
       </Button>
       {started && !ended ? <Button size="sm" variant="ghost" onClick={restart}><RotateCcw />Replay</Button> : null}
       {onShowSavedThread ? <Button size="sm" variant="ghost" onClick={onShowSavedThread}>Show saved thread</Button> : null}

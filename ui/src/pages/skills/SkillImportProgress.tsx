@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AlertCircle, Check, FileText, LoaderCircle } from 'lucide-react';
 import type { SkillSourceCandidate, SkillSourceScanProgress } from '@paperclipai/shared';
 import { formatBytes } from '@/lib/issue-output';
@@ -42,7 +43,7 @@ export function SkillImportProgress({ repository, progress, found = [], importin
         ? <progress className="skill-import-progress h-1 w-full" value={progress?.checkedSkills ?? 0} max={total} aria-label="Skills checked" />
         : <div className="h-1 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label={importing ? 'Saving skill snapshots' : 'Scanning repository'}><div className="skill-import-sweep h-full rounded-full bg-foreground/30" /></div>}
       {!importing && <ol className="flex items-center justify-between gap-2 text-xs text-muted-foreground" aria-label="Scan stages">
-        {['Download', 'Find skills', 'Check files'].map((label, index) => <li key={label} className={`flex items-center gap-1.5 ${index === step ? 'text-foreground' : ''}`} aria-current={index === step ? 'step' : undefined}>
+        {[t("common.download"), 'Find skills', 'Check files'].map((label, index) => <li key={label} className={`flex items-center gap-1.5 ${index === step ? 'text-foreground' : ''}`} aria-current={index === step ? 'step' : undefined}>
           {index < step ? <Check className="size-3" aria-hidden /> : <span className={`size-1.5 rounded-full ${index === step ? 'bg-foreground motion-safe:animate-pulse' : 'bg-muted-foreground/40'}`} />}{label}
         </li>)}
       </ol>}

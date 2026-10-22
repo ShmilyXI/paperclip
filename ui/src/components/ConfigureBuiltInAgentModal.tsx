@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { agentHarnessType, agentRunner, type AgentRunnerChoice } from "@paperclipai/shared";
 import { adaptersApi } from "@/api/adapters";
@@ -190,7 +191,7 @@ export function ConfigureBuiltInAgentModal({
           </Field>
 
           {["codex_local", "claude_local", "opencode_local", "pi_local"].includes(adapterType) && <details className="space-y-3">
-            <summary className="cursor-pointer text-sm text-muted-foreground">Advanced</summary>
+            <summary className="cursor-pointer text-sm text-muted-foreground">{t("common.advanced")}</summary>
             <AgentRunnerSelect value={runner ?? (state.agent ? agentRunner(state.agent.adapterType) : "auto")}
               pending={adapters.isFetching} error={adapters.error?.message} onRetry={() => { void adapters.refetch(); }}
               defaultRunner={runnerAvailability?.defaultRunner} supportedRunners={runnerAvailability?.supportedRunners}
@@ -198,7 +199,7 @@ export function ConfigureBuiltInAgentModal({
           </details>}
 
           {modelRequired && (
-            // ModelDropdown supplies its own "Model" Field label + hint.
+            // ModelDropdown supplies its own t("common.model") Field label + hint.
             <ModelDropdown
               models={models}
               value={model}

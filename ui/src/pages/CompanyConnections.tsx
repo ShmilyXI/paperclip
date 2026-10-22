@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect } from "react";
 import { Link2 } from "lucide-react";
 import { useCompany } from "../context/CompanyContext";
@@ -14,9 +15,9 @@ export function CompanyConnections() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Company", href: "/dashboard" },
-      { label: "Settings", href: "/company/settings" },
-      { label: "Connections" },
+      { label: selectedCompany?.name ?? t("common.company"), href: "/dashboard" },
+      { label: t("common.settings"), href: "/company/settings" },
+      { label: t("common.connections") },
     ]);
   }, [setBreadcrumbs, selectedCompany?.name]);
 
@@ -32,7 +33,7 @@ export function CompanyConnections() {
     <div className="max-w-6xl space-y-8">
       <div className="flex items-center gap-2">
         <Link2 className="h-5 w-5 text-muted-foreground" />
-        <h1 className="text-lg font-semibold">Connections</h1>
+        <h1 className="text-lg font-semibold">{t("common.connections")}</h1>
       </div>
       <DecisionModelSettingsSection key={selectedCompanyId} companyId={selectedCompanyId} />
       <div className="max-w-2xl border-t border-border pt-8">

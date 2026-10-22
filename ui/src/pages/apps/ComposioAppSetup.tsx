@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ExternalLink } from "lucide-react";
@@ -59,14 +60,14 @@ export function ComposioAppSetup({ name, toolkit, connections, onClose, onBack, 
       <a href={result.authorizationUrl} target="_blank" rel="noopener noreferrer">Connect {name} in Composio<ExternalLink className="size-4" /></a>
     </Button> : null}
     <div className="flex items-center justify-between gap-2">
-      <Button variant="ghost" disabled={busy} onClick={onBack ?? onClose}>{onBack ? "Back" : "Cancel"}</Button>
+      <Button variant="ghost" disabled={busy} onClick={onBack ?? onClose}>{onBack ? t("common.back") : t("common.cancel")}</Button>
       <div className="flex items-center gap-2">
       {result && result.status !== "connected" ? <Button variant="ghost" disabled={busy} onClick={() => void submit({ action: "start" })}>Get a new link</Button> : null}
       <Button disabled={!settled || busy || (!connection && connectionId !== "__new__")} onClick={() => {
         if (connectionId === "__new__") onConnectNew();
         else void submit(result ? { action: "complete" } : { action: "start" });
       }}>
-        {busy ? "Checking…" : connectionId === "__new__" ? "Connect new account" : result ? "I’ve connected it" : "Continue"}
+        {busy ? "Checking…" : connectionId === "__new__" ? "Connect new account" : result ? "I’ve connected it" : t("common.continue")}
       </Button>
       </div>
     </div>

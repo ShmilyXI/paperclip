@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { COMPANY_SEARCH_SORTS, type CompanySearchSort } from "@paperclipai/shared";
@@ -138,19 +139,19 @@ export function SearchFilterSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="max-h-(--sz-85vh) gap-0 rounded-t-xl p-0" data-testid="search-filter-sheet">
         <SheetHeader className="flex-row items-center justify-between border-b border-border">
-          <SheetTitle className="text-base">Filters</SheetTitle>
+          <SheetTitle className="text-base">{t("common.filters")}</SheetTitle>
           <button
             type="button"
             className={cn("text-xs text-muted-foreground hover:text-foreground", activeCount === 0 && "invisible")}
             onClick={() => update({})}
           >
-            Clear all
+            {t("common.clearAll")}
           </button>
         </SheetHeader>
 
         <div className="flex-1 space-y-4 overflow-y-auto p-4">
           <ChipToggleGroup
-            title="Status"
+            title={t("common.status")}
             options={options.status}
             selected={draft.status ?? []}
             onToggle={(value) => toggleMulti("status", value)}
@@ -158,20 +159,20 @@ export function SearchFilterSheet({
           {/* PAP-411: Priority filter group hidden behind SHOW_TASK_PRIORITY_UI (search DSL stays intact). */}
           {SHOW_TASK_PRIORITY_UI && (
           <ChipToggleGroup
-            title="Priority"
+            title={t("common.priority")}
             options={options.priority}
             selected={draft.priority ?? []}
             onToggle={(value) => toggleMulti("priority", value)}
           />
           )}
           <ChipToggleGroup
-            title="Assignee"
+            title={t("common.assignee")}
             options={options.assignee}
             selected={selectedAssignee ? [selectedAssignee] : []}
             onToggle={toggleAssignee}
           />
           <ChipToggleGroup
-            title="Project"
+            title={t("common.project")}
             options={options.project}
             selected={draft.projectId ? [draft.projectId] : []}
             onToggle={(value) => toggleSingle("projectId", value)}
@@ -183,7 +184,7 @@ export function SearchFilterSheet({
             onToggle={(value) => toggleSingle("labelId", value)}
           />
           <ChipToggleGroup
-            title="Updated"
+            title={t("common.updated")}
             options={options.updated}
             selected={draft.updatedWithin ? [draft.updatedWithin] : []}
             onToggle={(value) => toggleSingle("updatedWithin", value)}
@@ -213,7 +214,7 @@ export function SearchFilterSheet({
         <SheetFooter className="flex-row gap-2 border-t border-border">
           <SheetClose asChild>
             <Button variant="outline" className="flex-1">
-              Cancel
+              {t("common.cancel")}
             </Button>
           </SheetClose>
           <Button

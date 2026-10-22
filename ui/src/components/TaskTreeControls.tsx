@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { PauseCircle, PlayCircle, Repeat, XCircle } from "lucide-react";
@@ -126,7 +127,7 @@ export function TaskTreeControlDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             {loading
-              ? "Loading…"
+              ? t("common.loading2")
               : cancel
                 ? `${tasks} will be cancelled.`
                 : `${tasks} will ${mode === "restore" ? "be restored" : "resume"}.`}
@@ -164,7 +165,7 @@ export function TaskTreeControlDialog({
             disabled={pending}
             onClick={() => onOpenChange(false)}
           >
-            {cancel ? "Keep tasks" : "Close"}
+            {cancel ? "Keep tasks" : t("common.close")}
           </Button>
           <Button
             variant={cancel ? "destructive" : "default"}

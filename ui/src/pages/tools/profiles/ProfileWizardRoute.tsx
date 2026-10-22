@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect } from "react";
 import { useParams, useSearchParams } from "@/lib/router";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
@@ -28,7 +29,7 @@ export function ProfileWizardRoute({ mode }: { mode: "new" | "edit" }) {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Organization", href: "/dashboard" },
+      { label: selectedCompany?.name ?? t("common.organization"), href: "/dashboard" },
       { label: "Apps", href: "/apps" },
       { label: "Access profiles", href: advancedTabHref("profiles") },
       { label: mode === "edit" ? "Resume draft" : "New profile" },

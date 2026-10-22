@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { Issue } from "@paperclipai/shared";
 import { Boxes, CircleCheck, CirclePlus, FolderOpen, History, LayoutDashboard, MessageCircle, Package, Repeat, Search, Unplug, Users } from "lucide-react";
 import { useCompany } from "@/context/CompanyContext";
@@ -28,21 +29,21 @@ export function DesignSidebar({ onNewTask, recentTasks = [] }: { onNewTask: () =
         </div>
         <nav className="design-sidebar-navigation" aria-label="Main navigation">
           <div className="design-sidebar-primary">
-            <Button variant="ghost" className="design-sidebar-new-task" onClick={onNewTask}><CirclePlus aria-hidden />New Task</Button>
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/dashboard`} label="Dashboard" icon={LayoutDashboard} />
+            <Button variant="ghost" className="design-sidebar-new-task" onClick={onNewTask}><CirclePlus aria-hidden />{t("common.newTask")}</Button>
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/dashboard`} label={t("common.dashboard")} icon={LayoutDashboard} />
             <SidebarNavItem className="design-sidebar-item" to={`${root}/chats`} label="Chat" icon={MessageCircle} />
           </div>
           <SidebarSection label="Work">
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/issues`} label="Tasks" icon={CircleCheck} />
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/projects`} label="Projects" icon={FolderOpen} />
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/routines`} label="Routines" icon={Repeat} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/issues`} label={t("common.tasks")} icon={CircleCheck} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/projects`} label={t("common.projects")} icon={FolderOpen} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/routines`} label={t("common.routines")} icon={Repeat} />
             <SidebarNavItem className="design-sidebar-item" to={`${root}/artifacts`} label="Artifacts" icon={Package} />
           </SidebarSection>
           <SidebarSection label="Org">
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/agents`} label="Agents" icon={Users} />
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/skills`} label="Skills" icon={Boxes} />
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/apps`} label="Connectors" icon={Unplug} />
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/activity`} label="Audit" icon={History} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/agents`} label={t("common.agents")} icon={Users} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/skills`} label={t("common.skills")} icon={Boxes} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/apps`} label={t("common.connectors")} icon={Unplug} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/activity`} label={t("common.audit")} icon={History} />
           </SidebarSection>
           {companyRecentTasks.length > 0 ? <div className="design-sidebar-recents">
             <SidebarSection label="Recent Tasks">

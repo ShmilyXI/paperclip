@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { resolveAgentAppearance } from "@paperclipai/shared";
 import { getPageVisibility, usePageVisibility } from "../lib/page-visibility";
 import {
@@ -186,10 +187,10 @@ function resolveActorLabel(
       `Agent ${shortId(actorId)}`
     );
   }
-  if (actorType === "system") return "System";
+  if (actorType === "system") return t("common.system");
   if (actorType === "user" && actorId) {
     return resolveUserName(queryClient, companyId, actorId) ??
-      (actorId === "board" || actorId === "local-board" ? "Board" : `User ${shortId(actorId)}`);
+      (actorId === "board" || actorId === "local-board" ? t("common.board") : `User ${shortId(actorId)}`);
   }
   return actorType === "plugin" ? "Plugin" : "Unknown actor";
 }
@@ -1055,7 +1056,7 @@ function buildJoinRequestToast(
     return null;
 
   const requestType = readString(details?.requestType);
-  const label = requestType === "agent" ? "Agent" : "Someone";
+  const label = requestType === "agent" ? t("common.agent") : "Someone";
 
   return {
     title: `${label} wants to join`,
@@ -1114,7 +1115,7 @@ function buildRunStatusToast(
   if (errorCode === "workspace_busy") return null;
   const contextSource = readString(payload.contextSource);
   const triggerDetail = readString(payload.triggerDetail);
-  const name = nameOf(agentId) ?? "Agent";
+  const name = nameOf(agentId) ?? t("common.agent");
   if (
     status === "failed" &&
     errorCode === "low_trust_isolation_unavailable" &&

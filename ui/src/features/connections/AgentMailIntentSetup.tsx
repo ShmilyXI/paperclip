@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { isUuidLike } from "@paperclipai/shared";
@@ -108,7 +109,7 @@ export function AgentMailIntentSetup({ companyId, agentId, requestId, savedCrede
     <div className="flex items-center justify-between gap-2">
       <Button type="button" variant="ghost" disabled={setup.isPending || changeKey.isPending || declining} onClick={onDecline}>Not now</Button>
       <Button type="submit" disabled={setup.isPending || changeKey.isPending || declining || (!credentialId && !selectedCredentialId && !inboxConnectionId && !apiKey.trim())}>
-        {setup.isPending ? "Connecting…" : inboxConnectionId ? "Continue" : credentialId ? "Finish setup" : "Connect AgentMail"}
+        {setup.isPending ? "Connecting…" : inboxConnectionId ? t("common.continue") : credentialId ? "Finish setup" : "Connect AgentMail"}
       </Button>
     </div>
   </form>;

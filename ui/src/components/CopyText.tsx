@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { copyTextToClipboard } from "@/lib/clipboard";
@@ -10,7 +11,7 @@ interface CopyTextProps {
   className?: string;
   ariaLabel?: string;
   title?: string;
-  /** Tooltip message shown after copying. Default: "Copied!" */
+  /** Tooltip message shown after copying. Default: t("common.copied2") */
   copiedLabel?: string;
 }
 
@@ -21,7 +22,7 @@ export function CopyText({
   className,
   ariaLabel,
   title,
-  copiedLabel = "Copied!",
+  copiedLabel = t("common.copied2"),
 }: CopyTextProps) {
   const [visible, setVisible] = useState(false);
   const [label, setLabel] = useState(copiedLabel);

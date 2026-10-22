@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ShortcutEntry {
@@ -15,7 +16,7 @@ interface ShortcutSection {
 
 const sections: ShortcutSection[] = [
   {
-    title: "Inbox",
+    title: t("common.inbox"),
     shortcuts: [
       { keys: ["j"], label: "Move down" },
       { keys: ["↓"], label: "Move down" },
@@ -26,8 +27,8 @@ const sections: ShortcutSection[] = [
       { keys: ["Enter"], label: "Open selected item" },
       { keys: ["a"], label: "Archive item" },
       { keys: ["y"], label: "Archive item" },
-      { keys: ["r"], label: "Mark as read" },
-      { keys: ["U"], label: "Mark as unread" },
+      { keys: ["r"], label: t("common.markAsRead") },
+      { keys: ["U"], label: t("common.markAsUnread") },
     ],
   },
   {
@@ -53,7 +54,7 @@ const sections: ShortcutSection[] = [
     title: "Global",
     shortcuts: [
       { keys: ["/"], label: "Search current page or quick search" },
-      { keys: ["c"], label: "New task" },
+      { keys: ["c"], label: t("common.newTask2") },
       { keys: ["["], label: "Toggle sidebar" },
       { keys: ["]"], label: "Toggle panel" },
       { keys: ["?"], label: "Show keyboard shortcuts" },

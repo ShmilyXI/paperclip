@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "./AgentAvatar";
 import { Identity } from "./Identity";
 import { renderAccessIdentity, type AccessSelectOption } from "./AccessSelectIdentity";
@@ -264,7 +265,7 @@ export function IssueShareSheet({
       }));
     const groups: SearchableSelectGroup<string, AccessSelectOption>[] = [];
     if (users.length > 0) groups.push({ id: "people", label: "People", options: users });
-    if (agents.length > 0) groups.push({ id: "agents", label: "Agents", options: agents });
+    if (agents.length > 0) groups.push({ id: "agents", label: t("common.agents"), options: agents });
     return groups;
   }, [directoryQuery.data, agentsQuery.data, grantedSubjectKeys]);
 
@@ -334,7 +335,7 @@ export function IssueShareSheet({
                   Couldn't load access.
                 </span>
                 <Button variant="ghost" size="sm" onClick={() => grantsQuery.refetch()}>
-                  <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Retry
+                  <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> {t("common.retry")}
                 </Button>
               </div>
             ) : isEmpty ? (
@@ -363,7 +364,7 @@ export function IssueShareSheet({
                   />
                 ))}
                 {activeGrants.map((grant) => {
-                  const displayName = grant.subjectDisplayName ?? "Unknown";
+                  const displayName = grant.subjectDisplayName ?? t("common.unknown");
                   const implicitPrincipal = implicitPrincipals.find(principal =>
                     principal.id === `${grant.subjectType}:${grant.subjectId}`);
                   const revocable = canManage && !grant.inherited && grantIsRevocable(grant.source);
@@ -458,10 +459,10 @@ export function IssueShareSheet({
                   setAddSelection("");
                 }}
               >
-                Back
+                {t("common.back")}
               </Button>
               <Button size="sm" onClick={submitAdd} disabled={!addSelection || addMutation.isPending}>
-                {addMutation.isPending ? "Adding…" : "Add"}
+                {addMutation.isPending ? "Adding…" : t("common.add")}
               </Button>
             </div>
           </div>
@@ -487,7 +488,7 @@ export function IssueShareSheet({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={(event) => {

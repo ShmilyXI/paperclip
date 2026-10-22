@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { TranscriptEntry } from "../../adapters";
 import type { ToolRunDecision } from "@paperclipai/shared";
@@ -348,7 +349,7 @@ function summarizeToolResult(result: string | undefined, isError: boolean | unde
     }
     if (structured.status === "completed") return "Completed";
     if (structured.status === "failed" || structured.status === "error") {
-      return structured.exitCode ? `Failed with exit code ${structured.exitCode}` : "Failed";
+      return structured.exitCode ? `Failed with exit code ${structured.exitCode}` : t("common.failed");
     }
   }
   const lines = result
@@ -418,13 +419,13 @@ function summarizeToolDecision(decision: ToolRunDecision | null): { label: strin
   }
   if (decision.invocation.status === "failed" || decision.invocation.status === "timed_out" || decision.outcome === "failure" || decision.outcome === "timeout") {
     return {
-      label: decision.invocation.status === "timed_out" || decision.outcome === "timeout" ? "Timed out" : "Failed",
+      label: decision.invocation.status === "timed_out" || decision.outcome === "timeout" ? t("common.timedOut") : t("common.failed"),
       className: "text-red-700 dark:text-red-300",
       detail: decision.denialReason ?? decision.reasonCode ?? undefined,
     };
   }
   if (decision.actionRequest?.status === "approved") {
-    return { label: "Approved", className: "text-emerald-700 dark:text-emerald-300" };
+    return { label: t("common.approved"), className: "text-emerald-700 dark:text-emerald-300" };
   }
   if (decision.actionRequest?.status === "executed") {
     return { label: "Executed", className: "text-emerald-700 dark:text-emerald-300" };
@@ -447,7 +448,7 @@ function parseSystemActivity(text: string): { activityId?: string; name: string;
   if (!match) return null;
   return {
     status: match[1].toLowerCase() === "started" ? "running" : "completed",
-    name: humanizeLabel(match[2] ?? "Activity"),
+    name: humanizeLabel(match[2] ?? t("common.activity")),
     activityId: match[3] || undefined,
   };
 }
@@ -635,7 +636,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
       const toolUseId = entry.toolUseId ?? extractToolUseId(entry.input);
       // Streaming runtimes (e.g. ACPX) re-emit the same tool call as its
       // status progresses. Fold updates into the existing running card
-      // instead of stacking duplicate "Running" blocks.
+      // instead of stacking duplicate t("common.running") blocks.
       const pending = toolUseId ? pendingToolBlocks.get(toolUseId) : undefined;
       if (pending && pending.status === "running") {
         pending.input = mergeToolInput(pending.input, entry.input);
@@ -917,7 +918,7 @@ function TranscriptMessageBlock({
       {!isAssistant && (
         <div className="mb-1.5 flex items-center gap-2 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
           <User className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
-          <span>User</span>
+          <span>{t("common.user")}</span>
         </div>
       )}
       <MarkdownBody
@@ -1039,7 +1040,7 @@ function TranscriptToolCard({
   const parsedResult = parseStructuredToolResult(block.result);
   const statusLabel =
     block.status === "running"
-      ? "Running"
+      ? t("common.running")
       : block.status === "error"
         ? "Errored"
         : "Completed";
@@ -1115,7 +1116,7 @@ function TranscriptToolCard({
               </div>
               <div>
                 <div className="mb-1 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-                  Result
+                  {t("common.result")}
                 </div>
                 <pre className={cn(
                   "overflow-x-auto whitespace-pre-wrap break-words font-mono text-(length:--text-micro)",
@@ -1396,7 +1397,7 @@ function TranscriptToolGroup({
                   : item.status === "error" ? "text-red-700 dark:text-red-300"
                   : "text-emerald-700 dark:text-emerald-300"
                 )}>
-                  {item.status === "running" ? "Running" : item.status === "error" ? "Errored" : "Completed"}
+                  {item.status === "running" ? t("common.running") : item.status === "error" ? "Errored" : "Completed"}
                 </span>
                 <ToolDecisionBadge decision={findToolDecision(toolDecisionMaps, item)} />
               </div>
@@ -1409,7 +1410,7 @@ function TranscriptToolGroup({
                 </div>
                 {item.result && (
                   <div>
-                    <div className="mb-0.5 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">Result</div>
+                    <div className="mb-0.5 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">{t("common.result")}</div>
                     <pre className={cn(
                       "overflow-x-auto whitespace-pre-wrap break-words font-mono text-(length:--text-micro)",
                       item.status === "error" ? "text-red-700 dark:text-red-300" : "text-foreground/80",

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   useEffect,
   useId,
@@ -1048,7 +1049,7 @@ export function WorkspaceFileBrowser({
             disabled={!queriesEnabled}
             onClick={() => void listQuery.refetch()}
           >
-            <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> Retry
+            <RefreshCcw aria-hidden="true" className="mr-1 h-3 w-3" /> {t("common.retry")}
           </Button>
         ) : null}
       />

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Mic, MicOff, Phone, PhoneOff, RotateCcw, Volume2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,7 @@ export function VoiceControls({ state, agentName, muted = false, busy = false, p
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       <div className="flex flex-wrap gap-2">
         {inactive ? (
-          <Button ref={startButton} size="sm" disabled={busy} onClick={onStart}><Phone aria-hidden="true" />{state === "failed" ? "Try again" : "Start voice"}</Button>
+          <Button ref={startButton} size="sm" disabled={busy} onClick={onStart}><Phone aria-hidden="true" />{state === "failed" ? t("common.tryAgain") : "Start voice"}</Button>
         ) : (
           <>
             <Button size="sm" variant="outline" aria-pressed={muted} disabled={busy || connecting || state === "ending" || state === "cleanup_failed"} onClick={onMute}>

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, type CSSProperties } from "react";
 import { Folder, GitBranch, GitBranchPlus, Monitor } from "lucide-react";
 import type { ExecutionWorkspaceSummary } from "@paperclipai/shared";
@@ -99,7 +100,7 @@ export function ComposerWorktreePicker({
           {loading ? "Loading existing worktrees…" : error ? (
             <span className="flex items-center justify-between gap-2">
               Couldn't load worktrees.
-              <button type="button" className="rounded px-2 py-1 text-foreground hover:bg-accent" onClick={onRetry}>Retry</button>
+              <button type="button" className="rounded px-2 py-1 text-foreground hover:bg-accent" onClick={onRetry}>{t("common.retry")}</button>
             </span>
           ) : "No existing worktrees yet. Choose New worktree to start one."}
         </div>

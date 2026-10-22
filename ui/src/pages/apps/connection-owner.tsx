@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { McpConnection, ToolConnection } from "@paperclipai/shared";
 import { humanizeConnectionDisplayName } from "@paperclipai/shared";
 import { Identity } from "@/components/Identity";
@@ -11,14 +12,14 @@ export function connectionOwnerProfile(
 ): ConnectionOwnerProfile | null {
   if (!connection.createdByUserId) return null;
   return profiles.get(connection.createdByUserId) ?? {
-    label: connection.createdByUserId === "local-board" ? "Board" : "Board member",
+    label: connection.createdByUserId === "local-board" ? t("common.board") : "Board member",
     image: null,
   };
 }
 
 function ownerGivenName(label: string): string {
   const trimmed = label.trim();
-  if (!trimmed) return "Board";
+  if (!trimmed) return t("common.board");
   const first = trimmed.split(/\s+/)[0] ?? trimmed;
   return first.includes("@") ? first.split("@")[0] || "Board" : first;
 }
@@ -60,7 +61,7 @@ export function assistantConnectionDisplayName(connection: McpConnection): strin
 }
 
 export function ConnectionOwnerIdentity({ owner }: { owner: ConnectionOwnerProfile | null }) {
-  if (!owner) return <span className="text-xs text-muted-foreground">Unknown</span>;
+  if (!owner) return <span className="text-xs text-muted-foreground">{t("common.unknown")}</span>;
   return (
     <Identity
       name={owner.label}

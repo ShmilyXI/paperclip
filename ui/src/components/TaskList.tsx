@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Fragment, useState, type ReactNode } from "react";
 import type { Issue } from "@paperclipai/shared";
 import { ChevronDown, ChevronRight, GitBranch } from "lucide-react";
@@ -87,7 +88,7 @@ export function TaskList({ items, allItems = items, initialColumns = defaultTask
           unreadState={item.unread ? "visible" : "hidden"}
           treeGuides={depth} chevronInGuide={depth > 0 && children.length > 0}
           leadingControl={children.length ? (
-            <Button variant="ghost" size="icon-xs" className="task-row-disclosure" aria-label={`${expanded ? "Collapse" : "Expand"} ${issue.title}`} aria-expanded={expanded} onClick={() => {
+            <Button variant="ghost" size="icon-xs" className="task-row-disclosure" aria-label={`${expanded ? t("common.collapse") : t("common.expand")} ${issue.title}`} aria-expanded={expanded} onClick={() => {
               const next = new Set(collapsed);
               if (next.has(issue.id)) next.delete(issue.id); else next.add(issue.id);
               setCollapsed(next);
@@ -95,7 +96,7 @@ export function TaskList({ items, allItems = items, initialColumns = defaultTask
           ) : undefined}
           columnValues={{
             createdBy: item.createdBy,
-            assignee: item.assignee ?? "Unassigned",
+            assignee: item.assignee ?? t("common.unassigned"),
             project: issue.project?.name,
             parentTask: parent ? <span><span className="font-mono">{parent.identifier}</span> {parent.title}</span> : undefined,
             tags: issue.labels?.length ? <span className="inline-flex items-center gap-1">{issue.labels.map(label => <Badge key={label.id} variant="secondary" className="shrink-0 px-1.5 py-0">{label.name}</Badge>)}</span> : undefined,

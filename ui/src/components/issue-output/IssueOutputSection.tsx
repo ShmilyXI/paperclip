@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Play } from "lucide-react";
 import type { IssueWorkProduct } from "@paperclipai/shared";
 import {
@@ -123,7 +124,7 @@ export function IssueOutputSection({ workProducts, resolveCreatorName, onMediaCl
     <section className="space-y-3" aria-label="Task outputs">
       <div className="flex items-center gap-2">
         <Play className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
-        <h3 className="text-sm font-medium text-muted-foreground">Output</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{t("common.output")}</h3>
         <span className="text-xs text-muted-foreground">{count}</span>
       </div>
 

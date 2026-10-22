@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentCharacter } from "../AgentCharacter";
 import { useState } from "react";
 import { MotionConfig } from "motion/react";
@@ -143,7 +144,7 @@ export function ConnectModelPreview({
             disabled rather than failing on press. */}
         <FooterNav
           onBack={() => {}}
-          primaryLabel="Connect"
+          primaryLabel={t("common.connect")}
           primaryDisabled={selectedId === null}
           onPrimary={() => {}}
         />

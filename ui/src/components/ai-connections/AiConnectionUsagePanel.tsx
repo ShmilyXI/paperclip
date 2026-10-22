@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMutation } from "@tanstack/react-query";
 import type { AiConnectionUsage, AiConnectionUsageLimit, AiManagedConnectionSummary } from "@paperclipai/shared";
 import { supportsAiConnectionUsage } from "@paperclipai/shared";
@@ -12,10 +13,10 @@ const amount = (value: number, unit: string | null) => unit === "USD"
   : `${usageNumber(value)}${unit ? ` ${unit}` : ""}`;
 
 function limitLabel(window: AiConnectionUsageLimit) {
-  const label = window.label.replace(/\b(\d+(?:\.\d+)?) hour limit\b/i, "$1h").replace(/\bweekly limit\b/i, "Weekly");
+  const label = window.label.replace(/\b(\d+(?:\.\d+)?) hour limit\b/i, "$1h").replace(/\bweekly limit\b/i, t("common.weekly"));
   if (window.windowDurationSeconds == null) return label;
   const hours = window.windowDurationSeconds / 3600;
-  const period = hours === 168 ? "Weekly" : `${usageNumber(hours)}h`;
+  const period = hours === 168 ? t("common.weekly") : `${usageNumber(hours)}h`;
   if (/\b(?:Primary|Secondary)$/.test(label)) return `${label} · ${period}`;
   if ((hours === 168 && /weekly/i.test(label)) || label.split(/[\s·()]+/).includes(period)) return label;
   return `${label} · ${period}`;
@@ -32,7 +33,7 @@ function limitValue(window: AiConnectionUsageLimit) {
 
 function limitDetails(window: AiConnectionUsageLimit) {
   const details: string[] = [];
-  if (window.allowed === false) details.push("Blocked");
+  if (window.allowed === false) details.push(t("common.blocked"));
   else if (window.limitReached === true) details.push("Limit reached");
   if (window.allowed === true && (window.limitReached === true || window.usedPercent == null)) details.push("Usage allowed");
   if (window.used == null || window.limit == null) {
@@ -50,7 +51,7 @@ function overageSummary(usage: AiConnectionUsage) {
     : overage.enabled === false ? "Off"
     : overage.available === false ? (overage.enabled === true ? "On · Unavailable" : "Unavailable")
     : overage.enabled === true ? "On · Availability unknown" : "Not reported"];
-  if (overage.unlimited === true) details.push("Unlimited");
+  if (overage.unlimited === true) details.push(t("common.unlimited"));
   else if (overage.balance != null && (overage.balance !== 0 || overage.enabled !== false)) details.push(amount(overage.balance, overage.unit));
   if (overage.remaining != null && (overage.remaining !== 0 || overage.enabled !== false)
     && !usage.limits.some((window) => window.scope === "overage" && window.remaining === overage.remaining && window.unit === overage.unit)) {
@@ -83,7 +84,7 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-sm font-semibold">Usage</h3>
         {supported && !cachedOnly && <Button variant="outline" size="sm" disabled={probe.isPending || account.status !== "connected"} onClick={() => probe.mutate()}>
-          {probe.isPending ? "Checking…" : usage?.status === "ok" ? "Refresh" : "Check usage"}
+          {probe.isPending ? "Checking…" : usage?.status === "ok" ? t("common.refresh") : "Check usage"}
         </Button>}
       </div>
       {cachedOnly && !usage && <p className="text-xs text-muted-foreground">Usage not observed.</p>}
@@ -108,7 +109,7 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
             <span className="text-muted-foreground">Overage</span>
             <span className="font-mono">{overageSummary(usage)}</span>
           </div>}
-          <p className="text-xs text-muted-foreground">Updated <time className="font-mono" dateTime={usage.checkedAt} title={formatDateTime(usage.checkedAt)}>{formatDateTime(usage.checkedAt, { includeYear: false })}</time>{usage.planType ? ` · ${usage.planType}` : ""}</p>
+          <p className="text-xs text-muted-foreground">{t("common.updated")} <time className="font-mono" dateTime={usage.checkedAt} title={formatDateTime(usage.checkedAt)}>{formatDateTime(usage.checkedAt, { includeYear: false })}</time>{usage.planType ? ` · ${usage.planType}` : ""}</p>
         </div>
       )}
     </section>

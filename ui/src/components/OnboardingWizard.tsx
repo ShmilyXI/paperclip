@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { COPILOT_MODEL_DISCOVERY_QUERY_OPTIONS } from "@/lib/copilot-task-model-catalog";
 import type { AgentRunner, AgentRunnerChoice } from "@paperclipai/shared";
 import { needsClaudeSetupQualification, qualifyClaudeSetup } from "../lib/qualify-claude-setup";
@@ -458,7 +459,7 @@ export function OnboardingWizard() {
   //
   // While in flight, not on failure. The companies query sets `retry: false`,
   // so a failed fetch stays failed; and with no companies the dashboard offers
-  // a "Get Started" button wired to onboarding, which a gate that returned null
+  // a t("common.getStarted2") button wired to onboarding, which a gate that returned null
   // here would make do nothing at all.
   //
   // Mounting does not cost the draft. The persist effect that would overwrite
@@ -1566,7 +1567,7 @@ function OnboardingWizardInner({
    */
   const connectSourceLabel = isCopilot ? "GitHub Copilot" : CONNECT_SOURCE_NAMES[adapterType] ?? adapterType;
   const connectCta: { label: string; icon: FooterPrimaryIcon; disabled: boolean } =
-    setupError ? { label: "Retry", icon: "arrow", disabled: false } : connectProgress
+    setupError ? { label: t("common.retry"), icon: "arrow", disabled: false } : connectProgress
       ? { label: adapterEnvLoading ? "Testing…" : connectProgress, icon: "spinner", disabled: true }
       : connectPhase === "waiting"
       ? { label: "Waiting for code", icon: "spinner", disabled: true }
@@ -1580,14 +1581,14 @@ function OnboardingWizardInner({
                 disabled: !connectAuthUrl,
               }
             : {
-                label: "Connect",
+                label: t("common.connect"),
                 icon: "arrow",
                 disabled:
                   !connectStepReady || (!isCopilot && credentialMode === "api" && !apiKey.trim() && !selectedApiKey && !restoredApiCredential && !managedBindingForStep()),
               }
           : // Nothing is chosen on arrival, and the row is what chooses. Until
             // it has been answered the button has nothing to do.
-            { label: "Next", icon: "arrow", disabled: true };
+            { label: t("common.next"), icon: "arrow", disabled: true };
 
   /**
    * Back, on the connect step, unwinds the sign-in before it leaves the step.
@@ -2555,7 +2556,7 @@ function OnboardingWizardInner({
       if (!isCurrent()) return;
       setCreatedAgentId(agent.id);
       // Advance to the Review step — the lead is now online. The user drives
-      // strategy + hiring from the planning chat after "Get started".
+      // strategy + hiring from the planning chat after t("common.getStarted").
       setStep(5);
     } catch (err) {
       if (!isCurrent()) return;
@@ -2934,7 +2935,7 @@ function OnboardingWizardInner({
               {step === 1 && (
                 <motion.div key="step-1" {...stepContentMotion} exit={stepHandoff ? stepContentMotion.exit : undefined} className="mx-auto flex w-full flex-col gap-9">
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="onboarding-company-name">Name</Label>
+                    <Label htmlFor="onboarding-company-name">{t("common.name")}</Label>
                     <Input
                       id="onboarding-company-name"
                       className="h-(--sz-44px) rounded-lg border-transparent bg-muted shadow-none dark:bg-muted"
@@ -3119,7 +3120,7 @@ function OnboardingWizardInner({
                             if (JSON.stringify(copilotConnection) === JSON.stringify(parsed.data)) void refreshAdapterModels();
                           }} />
                           {copilotConnection && <label className="block space-y-2 text-sm">
-                            <span>Model</span>
+                            <span>{t("common.model")}</span>
                             <select aria-label="Copilot model" className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={model} disabled={adapterModelsFetching} onChange={(event) => setModel(event.target.value)}>
                               <option value="">{adapterModelsFetching ? "Loading models…" : "Select a model"}</option>
                               {model && !adapterModels?.some((entry) => entry.id === model) && <option value={model}>{model} (unavailable)</option>}
@@ -3259,7 +3260,7 @@ function OnboardingWizardInner({
                   </motion.div>
 
                   {sourceSelected && ["codex_local", "claude_local", "opencode_local", "pi_local"].includes(adapterType) && <details className="space-y-3">
-                    <summary className="cursor-pointer text-sm text-muted-foreground">Advanced</summary>
+                    <summary className="cursor-pointer text-sm text-muted-foreground">{t("common.advanced")}</summary>
                     <AgentRunnerSelect value={runner} disabled={loading || adapterEnvLoading}
                       pending={runnerDiscovery.isFetching} error={runnerDiscovery.error?.message} onRetry={() => { void runnerDiscovery.refetch(); }}
                       defaultRunner={runnerDiscovery.data?.find(item => item.type === adapterType)?.defaultRunner}
@@ -3457,22 +3458,22 @@ function OnboardingWizardInner({
                         : undefined
                   }
                   // The prototype's cloud flow hires on this step and calls the
-                  // action "Create". Here the model step sits between, so this
+                  // action t("common.create"). Here the model step sits between, so this
                   // one advances — which is exactly the distinction the
-                  // prototype's own local flow draws with "Next".
+                  // prototype's own local flow draws with t("common.next").
                   primaryLabel={
                     step === 1
-                      ? "Continue"
+                      ? t("common.continue")
                       : step === 5
-                        ? "Get started"
+                        ? t("common.getStarted")
                         : step === 4
                           ? connectCta.label
-                          : "Next"
+                          : t("common.next")
                   }
                   primaryIcon={step === 4 ? connectCta.icon : undefined}
                   loadingLabel={
                     step === 1
-                      ? "Creating..."
+                      ? t("common.creating2")
                       : step === 4
                         ? "Connecting"
                         : "Launching..."
@@ -3523,7 +3524,7 @@ function AdapterEnvironmentResult({
       ? "Passed"
       : result.status === "warn"
       ? "Warnings"
-      : "Failed";
+      : t("common.failed");
   const statusClass =
     result.status === "pass"
       ? "text-green-700 dark:text-green-300 border-green-300 dark:border-green-500/40 bg-green-50 dark:bg-green-500/10"

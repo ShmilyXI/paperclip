@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -731,7 +732,7 @@ export function Secrets() {
   const [newFolderError, setNewFolderError] = useState<string | null>(null);
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Secrets" }]);
+    setBreadcrumbs([{ label: t("common.secrets") }]);
   }, [setBreadcrumbs]);
 
   const secretsQuery = useQuery({
@@ -1199,7 +1200,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Status update failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1215,7 +1216,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Status update failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1232,7 +1233,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Delete failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1250,7 +1251,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Delete failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1312,7 +1313,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Disable failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1332,7 +1333,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Remove failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1347,7 +1348,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Default update failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1362,7 +1363,7 @@ export function Secrets() {
     onError: (error) => {
       pushToast({
         title: "Health check failed",
-        body: error instanceof Error ? error.message : "Try again",
+        body: error instanceof Error ? error.message : t("common.tryAgain"),
         tone: "error",
       });
     },
@@ -1557,7 +1558,7 @@ export function Secrets() {
                 }
               >
                 {row.secret.status === "active" ? <Ban className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
-                {row.secret.status === "active" ? "Disable" : "Activate"}
+                {row.secret.status === "active" ? t("common.disable") : "Activate"}
               </DropdownMenuItem>
               <DropdownMenuItem
                 disabled={statusMutation.isPending}
@@ -1573,7 +1574,7 @@ export function Secrets() {
                 ) : (
                   <Archive className="h-4 w-4" />
                 )}
-                {row.secret.status === "archived" ? "Unarchive" : "Archive"}
+                {row.secret.status === "archived" ? t("common.unarchive") : t("common.archive")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onSelect={() => setDeleteConfirm(row.secret)}>
@@ -1616,7 +1617,7 @@ export function Secrets() {
                 ) : (
                   <CheckCircle2 className="h-4 w-4" />
                 )}
-                {row.definition.status === "active" ? "Disable" : "Activate"}
+                {row.definition.status === "active" ? t("common.disable") : "Activate"}
               </DropdownMenuItem>
               <DropdownMenuItem
                 disabled={definitionStatusMutation.isPending}
@@ -1632,7 +1633,7 @@ export function Secrets() {
                 ) : (
                   <Archive className="h-4 w-4" />
                 )}
-                {row.definition.status === "archived" ? "Unarchive" : "Archive"}
+                {row.definition.status === "archived" ? t("common.unarchive") : t("common.archive")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onSelect={() => setDefinitionDeleteConfirm(row.definition)}>
@@ -1808,7 +1809,7 @@ export function Secrets() {
     <div className="flex max-w-6xl flex-col gap-4">
       <div className="flex items-center gap-2">
         <KeyRound className="h-5 w-5 text-muted-foreground" />
-        <h1 className="text-lg font-semibold">Secrets</h1>
+        <h1 className="text-lg font-semibold">{t("common.secrets")}</h1>
       </div>
 
       <Tabs
@@ -1818,7 +1819,7 @@ export function Secrets() {
       >
         <PageTabBar
           items={[
-            { value: "secrets", label: "Secrets" },
+            { value: "secrets", label: t("common.secrets") },
             { value: "my-secrets", label: "My secrets" },
             ...(hideVaultsTab ? [] : [{ value: "vaults", label: "Provider vaults" }]),
             ...(hideProposalsTab
@@ -1948,7 +1949,7 @@ export function Secrets() {
                 Create folder
               </Button>
               <Button type="button" variant="ghost" size="sm" onClick={closeNewFolder}>
-                Cancel
+                {t("common.cancel")}
               </Button>
             </div>
           ) : null}
@@ -1965,7 +1966,7 @@ export function Secrets() {
                     void userDefinitionsQuery.refetch();
                   }}
                 >
-                  Retry
+                  {t("common.retry")}
                 </Button>
               </div>
             ) : unifiedRows.length === 0 &&
@@ -2021,7 +2022,7 @@ export function Secrets() {
                   <>
                 <div
                   role="table"
-                  aria-label="Secrets"
+                  aria-label={t("common.secrets")}
                   className="hidden min-w-0 @min-[40rem]:block"
                   data-testid="secrets-table-view"
                 >
@@ -2030,10 +2031,10 @@ export function Secrets() {
                     className="grid grid-cols-(--gtc-54) items-center gap-3 bg-muted/40 px-3 py-2 text-xs uppercase tracking-wide text-muted-foreground"
                   >
                     <div role="columnheader" className="font-medium">Secret</div>
-                    <div role="columnheader" className="font-medium">Status</div>
+                    <div role="columnheader" className="font-medium">{t("common.status")}</div>
                     <div role="columnheader" className="font-medium">Version / coverage</div>
-                    <div role="columnheader" className="font-medium">Updated</div>
-                    <div role="columnheader" className="sr-only">Actions</div>
+                    <div role="columnheader" className="font-medium">{t("common.updated")}</div>
+                    <div role="columnheader" className="sr-only">{t("common.actions")}</div>
                   </div>
                   <div role="rowgroup">
                     {showUpRow ? renderUpRow("table") : null}
@@ -2092,7 +2093,7 @@ export function Secrets() {
                             <div className="mt-1">
                               {row.kind === "company" ? (
                                 <MetaChip>
-                                  <ShieldCheck className="h-3 w-3" /> Organization
+                                  <ShieldCheck className="h-3 w-3" /> {t("common.organization")}
                                 </MetaChip>
                               ) : (
                                 <UserSecretChip label="Each user" />
@@ -2157,7 +2158,7 @@ export function Secrets() {
                           {row.kind === "company" ? (
                             <>
                               <MetaChip>
-                                <ShieldCheck className="h-3 w-3" /> Organization
+                                <ShieldCheck className="h-3 w-3" /> {t("common.organization")}
                               </MetaChip>
                               <SecretProviderIndicator
                                 secret={row.secret}
@@ -2268,12 +2269,12 @@ export function Secrets() {
                     className="h-7 shrink-0 px-2 text-xs"
                     onClick={() => copySecretKey(selectedSecret.key)}
                   >
-                    <Copy className="mr-1 h-3.5 w-3.5" /> Copy
+                    <Copy className="mr-1 h-3.5 w-3.5" /> {t("common.copy")}
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   <MetaChip>
-                    <ShieldCheck className="h-3 w-3" /> Organization
+                    <ShieldCheck className="h-3 w-3" /> {t("common.organization")}
                   </MetaChip>
                   <MetaChip>{modeLabel(selectedSecret.managedMode)}</MetaChip>
                   <MetaChip>{providerLabel(providers, selectedSecret.provider)}</MetaChip>
@@ -2294,7 +2295,7 @@ export function Secrets() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" aria-label={`More actions for ${selectedSecret.name}`}>
-                      <MoreHorizontal className="mr-1 h-3.5 w-3.5" /> More
+                      <MoreHorizontal className="mr-1 h-3.5 w-3.5" /> {t("common.more")}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-52">
@@ -2312,7 +2313,7 @@ export function Secrets() {
                       ) : (
                         <CheckCircle2 className="h-4 w-4" />
                       )}
-                      {selectedSecret.status === "active" ? "Disable" : "Activate"}
+                      {selectedSecret.status === "active" ? t("common.disable") : "Activate"}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       disabled={statusMutation.isPending}
@@ -2328,7 +2329,7 @@ export function Secrets() {
                       ) : (
                         <Archive className="h-4 w-4" />
                       )}
-                      {selectedSecret.status === "archived" ? "Unarchive" : "Archive"}
+                      {selectedSecret.status === "archived" ? t("common.unarchive") : t("common.archive")}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem variant="destructive" onSelect={() => setDeleteConfirm(selectedSecret)}>
@@ -2341,7 +2342,7 @@ export function Secrets() {
                 <div className="border-b border-border px-4">
                   <PageTabBar
                     items={[
-                      { value: "details", label: "Details" },
+                      { value: "details", label: t("common.details") },
                       { value: "usage", label: usageQuery.data ? `Usage (${usageQuery.data.bindings.length})` : "Usage" },
                       { value: "events", label: "Access events" },
                     ]}
@@ -2402,7 +2403,7 @@ export function Secrets() {
                     className="h-7 shrink-0 px-2 text-xs"
                     onClick={() => copySecretKey(selectedDefinition.key)}
                   >
-                    <Copy className="mr-1 h-3.5 w-3.5" /> Copy
+                    <Copy className="mr-1 h-3.5 w-3.5" /> {t("common.copy")}
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -2428,7 +2429,7 @@ export function Secrets() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" aria-label={`More actions for ${selectedDefinition.name}`}>
-                      <MoreHorizontal className="mr-1 h-3.5 w-3.5" /> More
+                      <MoreHorizontal className="mr-1 h-3.5 w-3.5" /> {t("common.more")}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-52">
@@ -2450,7 +2451,7 @@ export function Secrets() {
                       ) : (
                         <CheckCircle2 className="h-4 w-4" />
                       )}
-                      {selectedDefinition.status === "active" ? "Disable" : "Activate"}
+                      {selectedDefinition.status === "active" ? t("common.disable") : "Activate"}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       disabled={definitionStatusMutation.isPending}
@@ -2466,7 +2467,7 @@ export function Secrets() {
                       ) : (
                         <Archive className="h-4 w-4" />
                       )}
-                      {selectedDefinition.status === "archived" ? "Unarchive" : "Archive"}
+                      {selectedDefinition.status === "archived" ? t("common.unarchive") : t("common.archive")}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem variant="destructive" onSelect={() => setDefinitionDeleteConfirm(selectedDefinition)}>
@@ -2479,7 +2480,7 @@ export function Secrets() {
                 <div className="border-b border-border px-4">
                   <PageTabBar
                     items={[
-                      { value: "details", label: "Details" },
+                      { value: "details", label: t("common.details") },
                       { value: "coverage", label: "Coverage" },
                       { value: "usage", label: "Usage" },
                       { value: "events", label: "Access events" },
@@ -2605,7 +2606,7 @@ export function Secrets() {
                   }}
                 >
                   <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="company">Organization</TabsTrigger>
+                    <TabsTrigger value="company">{t("common.organization")}</TabsTrigger>
                     <TabsTrigger value="user">Each user</TabsTrigger>
                   </TabsList>
                 </Tabs>
@@ -2625,7 +2626,7 @@ export function Secrets() {
             ) : null}
 
             <div>
-              <label className="text-xs font-medium" htmlFor="new-secret-name">Name</label>
+              <label className="text-xs font-medium" htmlFor="new-secret-name">{t("common.name")}</label>
               {createNamePrefix && !editingDefinition ? (
                 <div className="flex h-9 w-full min-w-0 items-center gap-1.5 rounded-md border border-input bg-transparent px-2 shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-3">
                   <span
@@ -2691,7 +2692,7 @@ export function Secrets() {
 
             {secretValueProvider === "company" && createMode === "managed" ? (
               <div>
-                <label className="text-xs font-medium" htmlFor="new-secret-value">Value</label>
+                <label className="text-xs font-medium" htmlFor="new-secret-value">{t("common.value")}</label>
                 <Textarea
                   id="new-secret-value"
                   value={createForm.value}
@@ -2747,7 +2748,7 @@ export function Secrets() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-medium" htmlFor="new-secret-key">Key</label>
+                <label className="text-xs font-medium" htmlFor="new-secret-key">{t("common.key")}</label>
                 {!createKeyEditable && !editingDefinition ? (
                   <Button
                     type="button"
@@ -2756,7 +2757,7 @@ export function Secrets() {
                     className="h-5 px-1.5 text-(length:--text-micro) text-muted-foreground"
                     onClick={() => setCreateKeyEditable(true)}
                   >
-                    <Pencil className="mr-1 h-3 w-3" /> Edit
+                    <Pencil className="mr-1 h-3 w-3" /> {t("common.edit")}
                   </Button>
                 ) : null}
               </div>
@@ -2790,7 +2791,7 @@ export function Secrets() {
 
             <div>
               <label className="text-xs font-medium" htmlFor="new-secret-description">
-                Description <span className="text-muted-foreground/70">(optional)</span>
+                {t("common.description")} <span className="text-muted-foreground/70">(optional)</span>
               </label>
               <Input
                 id="new-secret-description"
@@ -2907,7 +2908,7 @@ export function Secrets() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               onClick={() => {
@@ -2925,7 +2926,7 @@ export function Secrets() {
             >
               {createMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> : null}
               {editingDefinition
-                ? "Save changes"
+                ? t("common.saveChanges")
                 : secretValueProvider === "user"
                   ? "Create user-provided secret"
                   : createMode === "managed"
@@ -2979,7 +2980,7 @@ export function Secrets() {
                 />
               </div>
               <div>
-                <label className="text-xs font-medium" htmlFor="vault-status">Status</label>
+                <label className="text-xs font-medium" htmlFor="vault-status">{t("common.status")}</label>
                 <select
                   id="vault-status"
                   className="h-9 w-full rounded-md border border-border bg-background px-2 text-sm outline-none"
@@ -2998,10 +2999,10 @@ export function Secrets() {
                     Ready
                   </option>
                   <option value="warning" disabled={vaultForm.provider === "gcp_secret_manager" || vaultForm.provider === "vault"}>
-                    Warning
+                    {t("common.warning")}
                   </option>
                   <option value="coming_soon">Coming soon</option>
-                  <option value="disabled">Disabled</option>
+                  <option value="disabled">{t("common.disabled")}</option>
                 </select>
               </div>
               <label className="flex items-center gap-2 pt-6 text-sm">
@@ -3045,7 +3046,7 @@ export function Secrets() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setVaultDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               onClick={() => {
@@ -3152,7 +3153,7 @@ export function Secrets() {
           {rotateError ? <p className="text-xs text-destructive">{rotateError}</p> : null}
           <DialogFooter>
             <Button variant="outline" onClick={() => setRotateOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               onClick={() => {
@@ -3185,7 +3186,7 @@ export function Secrets() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t("common.cancel")}</Button>
             <Button
               variant="destructive"
               onClick={() => deleteConfirm && deleteMutation.mutate(deleteConfirm.id)}
@@ -3211,7 +3212,7 @@ export function Secrets() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDefinitionDeleteConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDefinitionDeleteConfirm(null)}>{t("common.cancel")}</Button>
             <Button
               variant="destructive"
               onClick={() =>
@@ -3249,7 +3250,7 @@ export function Secrets() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRemoveVaultConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setRemoveVaultConfirm(null)}>{t("common.cancel")}</Button>
             <Button
               variant="destructive"
               onClick={() => removeVaultConfirm && removeVaultMutation.mutate(removeVaultConfirm.id)}
@@ -3312,10 +3313,10 @@ function SecretsFiltersPopover({
   };
 
   const statusOptions: Array<{ value: SecretStatus | "all"; label: string }> = [
-    { value: "active", label: "Active" },
+    { value: "active", label: t("common.active") },
     { value: "all", label: "All statuses" },
-    { value: "disabled", label: "Disabled" },
-    { value: "archived", label: "Archived" },
+    { value: "disabled", label: t("common.disabled") },
+    { value: "archived", label: t("common.archived") },
   ];
 
   return (
@@ -3325,7 +3326,7 @@ function SecretsFiltersPopover({
           variant="outline"
           size="icon"
           className={cn("relative h-8 w-8 shrink-0", activeFilterCount > 0 && "text-blue-600 dark:text-blue-400")}
-          title={activeFilterCount > 0 ? `Filters: ${activeFilterCount}` : "Filter"}
+          title={activeFilterCount > 0 ? `Filters: ${activeFilterCount}` : t("common.filter")}
         >
           <Filter className="h-3.5 w-3.5" />
           {activeFilterCount > 0 ? (
@@ -3341,7 +3342,7 @@ function SecretsFiltersPopover({
       >
         <div className="space-y-3 p-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Filters</span>
+            <span className="text-sm font-medium">{t("common.filters")}</span>
             {activeFilterCount > 0 ? (
               <button
                 type="button"
@@ -3349,14 +3350,14 @@ function SecretsFiltersPopover({
                 onClick={resetFilters}
               >
                 <X className="h-3 w-3" />
-                Clear
+                {t("common.clear")}
               </button>
             ) : null}
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="space-y-1">
-              <span className="text-xs text-muted-foreground">Status</span>
+              <span className="text-xs text-muted-foreground">{t("common.status")}</span>
               <div className="space-y-0.5">
                 {statusOptions.map((option) => (
                   <label key={option.value} className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -3375,7 +3376,7 @@ function SecretsFiltersPopover({
               <div className="space-y-0.5">
                 {[
                   { value: "all" as const, label: "All sources" },
-                  { value: "company" as const, label: "Organization" },
+                  { value: "company" as const, label: t("common.organization") },
                   { value: "user" as const, label: "Each user" },
                 ].map((option) => (
                   <label key={option.value} className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -3560,7 +3561,7 @@ export function ProviderVaultsTab({
       <div className="py-4 text-sm text-destructive flex items-center gap-2">
         <AlertCircle className="h-4 w-4" /> Failed to load provider vaults: {(error as Error).message}
         <Button variant="ghost" size="sm" onClick={onRetry}>
-          Retry
+          {t("common.retry")}
         </Button>
       </div>
     );
@@ -3667,7 +3668,7 @@ function ProviderVaultCard({
             {config.isDefault ? (
               <span className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
                 <Star className="h-3 w-3 fill-current" />
-                Default
+                {t("common.default")}
               </span>
             ) : null}
           </div>
@@ -3739,7 +3740,7 @@ function ProviderVaultCard({
           disabled={pending || config.status === "disabled"}
         >
           <Ban className="h-3.5 w-3.5 mr-1" />
-          Disable
+          {t("common.disable")}
         </Button>
         <Button
           variant="outline"
@@ -3749,7 +3750,7 @@ function ProviderVaultCard({
           disabled={pending}
         >
           <Trash2 className="h-3.5 w-3.5 mr-1" />
-          Remove
+          {t("common.remove")}
         </Button>
       </div>
     </div>
@@ -3800,7 +3801,7 @@ function ProviderVaultFields({
     return (
       <div className="grid gap-3 sm:grid-cols-2">
         <TextField label="Project id" value={form.projectId} onChange={(value) => setField("projectId", value)} placeholder="paperclip-prod" />
-        <TextField label="Location" value={form.location} onChange={(value) => setField("location", value)} placeholder="global" />
+        <TextField label={t("common.location")} value={form.location} onChange={(value) => setField("location", value)} placeholder="global" />
         <TextField label="Namespace" value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="production" />
         <TextField label="Secret name prefix" value={form.secretNamePrefix} onChange={(value) => setField("secretNamePrefix", value)} placeholder="paperclip" />
       </div>
@@ -3809,7 +3810,7 @@ function ProviderVaultFields({
 
   return (
     <div className="grid gap-3 sm:grid-cols-2">
-      <TextField label="Address" value={form.address} onChange={(value) => setField("address", value)} placeholder="https://vault.example.com" />
+      <TextField label={t("common.address")} value={form.address} onChange={(value) => setField("address", value)} placeholder="https://vault.example.com" />
       <TextField label="Namespace" value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="admin" />
       <TextField label="Mount path" value={form.mountPath} onChange={(value) => setField("mountPath", value)} placeholder="secret" />
       <TextField label="Secret path prefix" value={form.secretPathPrefix} onChange={(value) => setField("secretPathPrefix", value)} placeholder="paperclip/prod" />
@@ -3925,7 +3926,7 @@ function CopyDetailsButton({ text }: { text: string }) {
   const { copied, failed, copy } = useCopyAction();
   return (
     <Button type="button" variant="ghost" size="sm" onClick={() => void copy(text)}>
-      {copied ? "Copied" : failed ? "Copy failed" : "Copy"}
+      {copied ? t("common.copied") : failed ? "Copy failed" : t("common.copy")}
     </Button>
   );
 }
@@ -4197,7 +4198,7 @@ function CoverageInline({
     staleTime: 30_000,
   });
   const summary = coverageQuery.data;
-  if (coverageQuery.isPending) return <span className="text-muted-foreground">Loading…</span>;
+  if (coverageQuery.isPending) return <span className="text-muted-foreground">{t("common.loading2")}</span>;
   if (coverageQuery.isError) return <span className="text-destructive">Coverage unavailable</span>;
   return (
     <span className="inline-flex min-w-0 items-center gap-1 text-muted-foreground">
@@ -4227,14 +4228,14 @@ function UserSecretDetailsTab({
 }) {
   return (
     <dl className="divide-y divide-border/60 text-xs">
-      <DetailRow label="Description">
+      <DetailRow label={t("common.description")}>
         <span>{definition.description ?? <span className="text-muted-foreground">—</span>}</span>
       </DetailRow>
       <DetailRow label="Provided by">Each user</DetailRow>
-      <DetailRow label="Key">
+      <DetailRow label={t("common.key")}>
         <code>{definition.key}</code>
       </DetailRow>
-      <DetailRow label="Status"><StatusBadge status={definition.status} /></DetailRow>
+      <DetailRow label={t("common.status")}><StatusBadge status={definition.status} /></DetailRow>
       <DetailRow label="Coverage">
         <button
           type="button"
@@ -4245,8 +4246,8 @@ function UserSecretDetailsTab({
           <span className="shrink-0 text-muted-foreground">· View in Coverage</span>
         </button>
       </DetailRow>
-      <DetailRow label="Created">{formatRelative(definition.createdAt)}</DetailRow>
-      <DetailRow label="Updated">{formatRelative(definition.updatedAt)}</DetailRow>
+      <DetailRow label={t("common.created")}>{formatRelative(definition.createdAt)}</DetailRow>
+      <DetailRow label={t("common.updated")}>{formatRelative(definition.updatedAt)}</DetailRow>
       <DetailRow label="Usage guidance">
         {definition.usageGuidance ?? <span className="text-muted-foreground">—</span>}
       </DetailRow>
@@ -4270,7 +4271,7 @@ function UserSecretCoverageTab({
     staleTime: 30_000,
   });
   if (coverageQuery.isPending) {
-    return <div className="py-6 text-center text-xs text-muted-foreground">Loading…</div>;
+    return <div className="py-6 text-center text-xs text-muted-foreground">{t("common.loading2")}</div>;
   }
   if (coverageQuery.isError) {
     return <div className="py-6 text-center text-xs text-destructive">Coverage unavailable.</div>;
@@ -4567,7 +4568,7 @@ function AgentAccessSection({
                 className="text-(length:--text-micro) font-medium text-muted-foreground"
                 htmlFor="agent-access-agent"
               >
-                Agent
+                {t("common.agent")}
               </label>
               <AgentSelect
                 id="agent-access-agent"
@@ -4642,10 +4643,10 @@ function SecretDetailsTab({
 
   return (
     <dl className="divide-y divide-border/60 text-xs">
-      <DetailRow label="Description">
+      <DetailRow label={t("common.description")}>
         <span>{secret.description ?? <span className="text-muted-foreground">—</span>}</span>
       </DetailRow>
-      <DetailRow label="Provided by">Organization</DetailRow>
+      <DetailRow label="Provided by">{t("common.organization")}</DetailRow>
       <DetailRow label="Custody">{modeLabel(secret.managedMode)}</DetailRow>
       <DetailRow label="Provider">{providerLabel(providers, secret.provider)}</DetailRow>
       <DetailRow label="Provider vault">{providerVaultLabel(providerConfigs, secret.providerConfigId)}</DetailRow>
@@ -4667,8 +4668,8 @@ function SecretDetailsTab({
           <span className="text-muted-foreground">· View in Usage</span>
         </button>
       </DetailRow>
-      <DetailRow label="Created">{formatRelative(secret.createdAt)}</DetailRow>
-      <DetailRow label="Updated">{formatRelative(secret.updatedAt)}</DetailRow>
+      <DetailRow label={t("common.created")}>{formatRelative(secret.createdAt)}</DetailRow>
+      <DetailRow label={t("common.updated")}>{formatRelative(secret.updatedAt)}</DetailRow>
       <DetailRow label="Last rotated">{formatRelative(secret.lastRotatedAt)}</DetailRow>
       <DetailRow label="Last resolved">{formatRelative(secret.lastResolvedAt)}</DetailRow>
       <div className="mt-3 rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-(length:--text-micro) text-amber-700 dark:text-amber-300">
@@ -4696,7 +4697,7 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 
 export function SecretUsageTab({ loading, bindings }: { loading: boolean; bindings: CompanySecretUsageBinding[] }) {
   if (loading) {
-    return <div className="py-6 text-center text-xs text-muted-foreground">Loading…</div>;
+    return <div className="py-6 text-center text-xs text-muted-foreground">{t("common.loading2")}</div>;
   }
   if (bindings.length === 0) {
     return (
@@ -4794,7 +4795,7 @@ export function SecretEventsTab({
   };
 
   if (loading) {
-    return <div className="py-6 text-center text-xs text-muted-foreground">Loading…</div>;
+    return <div className="py-6 text-center text-xs text-muted-foreground">{t("common.loading2")}</div>;
   }
   if (events.length === 0) {
     return (

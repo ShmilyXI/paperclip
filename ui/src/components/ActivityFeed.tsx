@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useMemo, useState, useRef, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -113,10 +114,10 @@ type FilterValue = "all" | "in-progress" | "for-review" | "completed";
 type GroupMode = "flat" | "by-task";
 
 const FILTER_OPTIONS: Array<{ value: FilterValue; label: string }> = [
-  { value: "all", label: "All" },
-  { value: "in-progress", label: "In Progress" },
-  { value: "for-review", label: "In Review" },
-  { value: "completed", label: "Done" },
+  { value: "all", label: t("common.all") },
+  { value: "in-progress", label: t("common.inProgress2") },
+  { value: "for-review", label: t("common.inReview2") },
+  { value: "completed", label: t("common.done") },
 ];
 
 const FILTER_ACTIONS: Record<FilterValue, Set<string> | null> = {
@@ -258,9 +259,9 @@ function CollapsedFeedGroup({
     ? agentMap.get(group.latestEvent.actorId)
     : null;
   const actorName = actor?.name
-    ?? (group.latestEvent.actorType === "system" ? "System"
-      : group.latestEvent.actorType === "user" ? "Board"
-      : "Unknown");
+    ?? (group.latestEvent.actorType === "system" ? t("common.system")
+      : group.latestEvent.actorType === "user" ? t("common.board")
+      : t("common.unknown"));
   const entityName = entityNameMap.get(`${group.entityType}:${group.entityId}`);
 
   return (

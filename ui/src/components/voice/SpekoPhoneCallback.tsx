@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { voiceCallbacksApi } from "@/api/voiceCallbacks";
@@ -22,7 +23,7 @@ export function SpekoPhoneCallbackForm({ preference, loading, saving, error, sav
       <label className="flex items-center gap-2 text-sm"><Checkbox checked={enabled} disabled={loading || saving} onCheckedChange={value => setEnabled(value === true)} />Allow this agent to call me about my tasks</label>
       {invalid && <p id="speko-phone-error" role="alert" className="text-sm text-destructive">Use an international number beginning with + and the country code.</p>}
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <div className="flex items-center justify-between gap-3"><p role="status" className="text-sm text-muted-foreground">{loading ? "Loading your callback setting…" : saved ? "Callback setting saved" : ""}</p><Button type="submit" disabled={loading || saving}>{saving ? "Saving…" : "Save phone setting"}</Button></div>
+      <div className="flex items-center justify-between gap-3"><p role="status" className="text-sm text-muted-foreground">{loading ? "Loading your callback setting…" : saved ? "Callback setting saved" : ""}</p><Button type="submit" disabled={loading || saving}>{saving ? t("common.saving2") : "Save phone setting"}</Button></div>
     </form>
   </section>;
 }

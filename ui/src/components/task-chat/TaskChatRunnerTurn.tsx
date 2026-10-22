@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef } from "react";
 import type { ExecutionProjection } from "@paperclipai/shared";
 import { useSecondTick } from "@/hooks/useSecondTick";

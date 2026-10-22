@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Component, Suspense, type ErrorInfo, type ReactNode } from "react";
 import { useLocation, useNavigate } from "@/lib/router";
 import { Button } from "@/components/ui/button";
@@ -52,7 +53,7 @@ class RouteErrorBoundaryInner extends Component<RouteErrorBoundaryInnerProps, Ro
         </pre>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={this.props.onReset}>
-            Go back
+            {t("common.goBack")}
           </Button>
           <Button size="sm" onClick={() => window.location.reload()}>
             Reload page

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId, type ReactNode } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,7 +44,7 @@ export function RoutineTriggerCard({
             aria-controls={editorId}
             onClick={onEdit}
           >
-            {editLabel ?? (expanded ? "Close" : `Edit ${kind}`)}
+            {editLabel ?? (expanded ? t("common.close") : `Edit ${kind}`)}
           </Button>
           <Button
             variant="ghost"

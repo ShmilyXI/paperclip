@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Loader2, Settings2, X } from "lucide-react";
@@ -208,7 +209,7 @@ export function DecisionQueuePage() {
     onError: (err) =>
       pushToast({
         title: "Could not update seeding",
-        body: err instanceof Error ? err.message : "Please try again.",
+        body: err instanceof Error ? err.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -401,7 +402,7 @@ function SeedRulesCard({
         </div>
         <Button type="button" variant="outline" size="xs" className="h-7 shrink-0" disabled={pending} onClick={onToggle}>
           {pending && <Loader2 className="h-3 w-3 animate-spin" />}
-          {enabled ? "Disable" : "Enable"}
+          {enabled ? t("common.disable") : t("common.enable")}
         </Button>
       </div>
     </div>
@@ -455,7 +456,7 @@ function QueueItemRow({
     onError: (err) =>
       pushToast({
         title: "Could not exclude",
-        body: err instanceof Error ? err.message : "Please try again.",
+        body: err instanceof Error ? err.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
   });
@@ -480,7 +481,7 @@ function QueueItemRow({
             />
             <div className="flex justify-end gap-1">
               <Button type="button" variant="ghost" size="xs" onClick={() => setOpen(false)}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button
                 type="button"

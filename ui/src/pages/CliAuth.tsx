@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "@/lib/router";
@@ -154,7 +155,7 @@ export function CliAuthPage() {
 
         <div className="mt-5 space-y-3 text-sm">
           <div>
-            <div className="text-muted-foreground">Command</div>
+            <div className="text-muted-foreground">{t("common.command")}</div>
             <div className="font-mono text-foreground">{challenge.command}</div>
           </div>
           <div>
@@ -164,7 +165,7 @@ export function CliAuthPage() {
           <div>
             <div className="text-muted-foreground">Requested access</div>
             <div className="text-foreground">
-              {challenge.requestedAccess === "instance_admin_required" ? "Instance admin" : "Board"}
+              {challenge.requestedAccess === "instance_admin_required" ? "Instance admin" : t("common.board")}
             </div>
           </div>
           {challenge.requestedCompanyName && (
@@ -204,7 +205,7 @@ export function CliAuthPage() {
             onClick={() => cancelMutation.mutate()}
             disabled={approveMutation.isPending || cancelMutation.isPending}
           >
-            {cancelMutation.isPending ? "Cancelling..." : "Cancel"}
+            {cancelMutation.isPending ? "Cancelling..." : t("common.cancel")}
           </Button>
         </div>
       </Card>

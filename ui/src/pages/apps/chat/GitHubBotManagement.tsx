@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -118,7 +119,7 @@ export function GitHubRepositoryAccess({
             value={search} maxLength={200} onChange={(event) => setSearch(event.target.value)} />
         </div>
         <Button variant="outline" size="sm" disabled={pending || list.isFetching || !summary || !summary.totalCount || (!disableAll && !summary.availableCount)}
-          aria-label={`${disableAll ? "Disable" : "Enable"} all repositories`}
+          aria-label={`${disableAll ? t("common.disable") : t("common.enable")} all repositories`}
           onClick={() => onToggleAll(!disableAll)}>
           {disableAll ? "Disable all" : "Enable all"}
         </Button>
@@ -127,7 +128,7 @@ export function GitHubRepositoryAccess({
         {summary.enabledCount} of {summary.totalCount} repositories enabled. Toggle all applies across the entire connection.
       </p>}
       {list.isError && <p role="alert" className="text-sm text-destructive">
-        Could not load repositories. <Button variant="link" size="sm" onClick={() => void list.refetch()}>Try again</Button>
+        Could not load repositories. <Button variant="link" size="sm" onClick={() => void list.refetch()}>{t("common.tryAgain")}</Button>
       </p>}
       <div ref={scroller} role="region" aria-label="Repositories" tabIndex={0}
         className="max-h-96 overflow-y-auto overscroll-contain border-y border-border">
@@ -242,7 +243,7 @@ export function GitHubBotManagement({
             void query.refetch();
           }}
         >
-          Try again
+          {t("common.tryAgain")}
         </Button>
       </p>
     );
@@ -358,7 +359,7 @@ export function GitHubBotManagement({
               setError("");
             }}
           >
-            Discard changes
+            {t("common.discardChanges")}
           </Button>
           <Button
             disabled={pending || !scoreValid}
@@ -380,7 +381,7 @@ export function GitHubBotManagement({
               })
             }
           >
-            {pending ? "Saving…" : "Save changes"}
+            {pending ? t("common.saving2") : t("common.saveChanges")}
           </Button>
         </div>
       )}
@@ -405,7 +406,7 @@ export function gitHubReviewResultLabel(review: GitHubTaskReview) {
       }[review.conclusion]
     : "Awaiting check";
   const state = {
-    queued: "Queued",
+    queued: t("common.queued"),
     running: "Reviewing",
     completed: "Incomplete",
     incomplete: "Incomplete",
@@ -614,7 +615,7 @@ export function GitHubReviews({
       <p role="alert" className="text-sm text-destructive">
         {reviewId ? "This review could not be loaded or was not found in this connection." : "Reviews could not be loaded."}{" "}
         <Button variant="link" onClick={() => void query.refetch()}>
-          Try again
+          {t("common.tryAgain")}
         </Button>
       </p>
     );

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Agent } from "@paperclipai/shared";
 import { AlertTriangle, ArrowUpRight, Bot, Check, CheckCircle2, ChevronDown, ChevronRight, CircleDashed, Clock, ExternalLink, FileText, GitBranch, ImagePlus, KeyRound, Loader2, MessageSquareQuote, MinusCircle, ShieldAlert, ThumbsUp, TriangleAlert, Wrench, X, XCircle } from "lucide-react";
@@ -142,9 +143,9 @@ function resolveActorLabel(args: {
     return agentMap?.get(agentId)?.name ?? agentId.slice(0, 8);
   }
   if (userId) {
-    return formatAssigneeUserLabel(userId, currentUserId, userLabelMap) ?? "Board";
+    return formatAssigneeUserLabel(userId, currentUserId, userLabelMap) ?? t("common.board");
   }
-  return "Unknown";
+  return t("common.unknown");
 }
 
 /**
@@ -176,19 +177,19 @@ function getAdministrativeReason(interaction: IssueThreadInteraction): string | 
 function statusLabel(status: IssueThreadInteraction["status"]) {
   switch (status) {
     case "pending":
-      return "Pending";
+      return t("common.pending");
     case "accepted":
       return "Accepted";
     case "rejected":
-      return "Rejected";
+      return t("common.rejected");
     case "answered":
       return "Answered";
     case "cancelled":
-      return "Cancelled";
+      return t("common.cancelled");
     case "expired":
       return "Expired";
     case "failed":
-      return "Failed";
+      return t("common.failed");
     default:
       return status;
   }
@@ -293,7 +294,7 @@ function planStatusClasses(
       return {
         shell: "border-2 border-green-500/80 bg-transparent",
         badge: "border-green-500/60 bg-green-500/10 text-green-900 dark:bg-green-500/15 dark:text-green-100",
-        label: "Approved",
+        label: t("common.approved"),
         Icon: CheckCircle2,
       };
     case "rejected":
@@ -316,7 +317,7 @@ function planStatusClasses(
       return {
         shell: "border-2 border-violet-500/80 bg-transparent",
         badge: "border-violet-500/60 bg-violet-500/10 text-violet-900 dark:bg-violet-500/15 dark:text-violet-100",
-        label: "In review",
+        label: t("common.inReview"),
         Icon: FileText,
       };
   }
@@ -492,7 +493,7 @@ function toolActionStatusClasses(state: ToolActionCardState): {
       return {
         shell: "border-2 border-amber-500/70 bg-transparent",
         badge: "border-amber-500/60 bg-amber-500/10 text-amber-900 dark:bg-amber-500/15 dark:text-amber-100",
-        label: "Failed",
+        label: t("common.failed"),
         Icon: XCircle,
       };
     case "declined":
@@ -504,7 +505,7 @@ function toolActionStatusClasses(state: ToolActionCardState): {
         dimmed: true,
       };
     case "cancelled":
-      return { shell: "border-2 border-border bg-transparent", badge: "border-border bg-muted text-muted-foreground", label: "Cancelled", Icon: XCircle, dimmed: true };
+      return { shell: "border-2 border-border bg-transparent", badge: "border-border bg-muted text-muted-foreground", label: t("common.cancelled"), Icon: XCircle, dimmed: true };
     case "expired":
       return {
         shell: "border-2 border-border bg-transparent",
@@ -671,7 +672,7 @@ function TaskTreeNode({
               <TaskField label="Billing" value={node.task.billingCode} />
             ) : null}
             {node.task.projectId ? (
-              <TaskField label="Project" value={node.task.projectId} tone="subtle" />
+              <TaskField label={t("common.project")} value={node.task.projectId} tone="subtle" />
             ) : null}
             {labels.map((label) => (
               <TaskField key={label} label="Label" value={label} tone="subtle" />
@@ -928,7 +929,7 @@ function SuggestTasksCard({
                 disabled={!onRejectInteraction || working !== null}
                 onClick={() => setRejecting((current) => !current)}
               >
-                Reject
+                {t("common.reject")}
               </Button>
               {selectedCount < totalTasks ? (
                 <Button
@@ -961,7 +962,7 @@ function SuggestTasksCard({
                   {working === "reject" ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Saving...
+                      {t("common.saving")}
                     </>
                   ) : (
                     "Save rejection"
@@ -1266,7 +1267,7 @@ function AskUserQuestionsCard({
                 </div>
                 <TaskField
                   label={question.selectionMode === "single" ? "Pick" : "Pick many"}
-                  value={question.required ? "Required" : "Optional"}
+                  value={question.required ? t("common.required") : t("common.optional")}
                   tone="subtle"
                 />
               </div>
@@ -1700,11 +1701,11 @@ function ToolActionResolution({
   const labels = {
     pending: "Waiting for approval",
     running: "Approved · Running…",
-    executed: "Succeeded",
+    executed: t("common.succeeded"),
     failed: "Execution failed",
     declined: "Declined",
     expired: "Expired",
-    cancelled: "Cancelled",
+    cancelled: t("common.cancelled"),
   };
   const Icon = state === "running" ? Loader2 : state === "executed" ? CheckCircle2 : state === "failed" ? AlertTriangle : state === "expired" ? Clock : MinusCircle;
   const detail = state === "failed" ? result?.errorMessage?.trim() || "The action could not complete."
@@ -1792,7 +1793,7 @@ function RequestToolActionCard({
           </Button>
           <div className="inline-flex" role="group" aria-label="Approve request">
             <Button size="sm" variant={variant} className={payload.rememberActionScope ? "rounded-r-none" : undefined} disabled={!onAcceptInteraction || working !== null} onClick={() => void decide("accept")}>
-              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? "Saving…" : "Approving…"}</> : "Approve & run"}
+              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("common.saving2") : "Approving…"}</> : "Approve & run"}
             </Button>
             {payload.rememberActionScope ? (
               <DropdownMenu>
@@ -2072,7 +2073,7 @@ function RequestSecretProposalCard({
           resetKey={`${interaction.id}:${interaction.status}`}
           approveLabel={interaction.payload.acceptLabel ?? "Approve & bind"}
           reviseLabel="Add reason…"
-          rejectLabel={interaction.payload.rejectLabel ?? "Reject"}
+          rejectLabel={interaction.payload.rejectLabel ?? t("common.reject")}
           approveVariant="cta"
           allowRevise={interaction.payload.allowDeclineReason !== false}
           rejectRequiresReason={interaction.payload.rejectRequiresReason === true}
@@ -2101,13 +2102,13 @@ function RequestSecretProposalCard({
  * The single approval grammar shared by every plan / task-approval card
  * (PAP-418): **Approve · Revise… · Reject**. "Revise…" reveals an attached text
  * field for the changes you want (the former "decline with a reason" path);
- * bare "Reject" sends the work back with no note. These are the default words —
+ * bare t("common.reject") sends the work back with no note. These are the default words —
  * producers may still override the accept/reject labels for domain-specific
  * confirmations (e.g. "Delete selected"), but the shape stays consistent.
  */
-const CONFIRMATION_APPROVE_LABEL = "Approve";
+const CONFIRMATION_APPROVE_LABEL = t("common.approve");
 const CONFIRMATION_REVISE_LABEL = "Revise…";
-const CONFIRMATION_REJECT_LABEL = "Reject";
+const CONFIRMATION_REJECT_LABEL = t("common.reject");
 
 /**
  * The one action control every confirmation card renders (PAP-418), collapsing
@@ -2279,7 +2280,7 @@ function ConfirmationActionRow({
                 setAttempted(false);
               }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               size="sm"
@@ -2362,7 +2363,7 @@ function connectionAuthorizationStatusClasses(
  *
  * This is deliberately *not* the generic Approve / Revise… / Reject grammar it
  * used to fall through to. Authorization is not a review: there is nothing to
- * revise, "Reject" is the wrong word for declining to link your own account,
+ * revise, t("common.reject") is the wrong word for declining to link your own account,
  * and only one person in the company can answer at all. So the card composes
  * one title, one body, and exactly the affordances the reader legitimately has:
  *
@@ -2475,7 +2476,7 @@ function RequestConnectionAuthorizationCard({
                 {working ? (
                   <>
                     <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                    Saving…
+                    {t("common.saving2")}
                   </>
                 ) : (
                   "Not now"
@@ -2811,7 +2812,7 @@ function RequestCheckboxConfirmationResolution({
         {visibleLabels.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {visibleLabels.map((label, index) => (
-              <TaskField key={`${label}-${index}`} label="Selected" value={label} />
+              <TaskField key={`${label}-${index}`} label={t("common.selected")} value={label} />
             ))}
             {hasHiddenLabels ? (
               <button
@@ -2823,7 +2824,7 @@ function RequestCheckboxConfirmationResolution({
                 )}
                 aria-expanded={expanded}
               >
-                {expanded ? "Show less" : `+${hiddenCount} more`}
+                {expanded ? t("common.showLess") : `+${hiddenCount} more`}
               </button>
             ) : null}
           </div>
@@ -3063,7 +3064,7 @@ function RequestCheckboxConfirmationCard({
               disabled={working !== null || selectedCount === totalOptions || (maxSelected != null && selectedCount >= maxSelected)}
               onClick={handleSelectAll}
             >
-              Select all
+              {t("common.selectAll")}
             </Button>
             <Button
               size="sm"
@@ -3125,15 +3126,15 @@ function RequestCheckboxConfirmationCard({
 // --- Per-item verdicts (C3) ---------------------------------------------
 
 const VERDICT_LABEL: Record<RequestItemVerdictValue, string> = {
-  approve: "Approve",
-  reject: "Reject",
+  approve: t("common.approve"),
+  reject: t("common.reject"),
   defer: "Defer",
 };
 
 /** Present-tense past-participle label for a resolved verdict chip. */
 const VERDICT_RESOLVED_LABEL: Record<RequestItemVerdictValue, string> = {
-  approve: "Approved",
-  reject: "Rejected",
+  approve: t("common.approved"),
+  reject: t("common.rejected"),
   defer: "Deferred",
 };
 
@@ -4002,7 +4003,7 @@ function ResolvedByAgentChip() {
           data-testid="interaction-resolved-by-agent-chip"
         >
           <Bot className="h-3 w-3" />
-          Agent
+          {t("common.agent")}
         </Badge>
       </TooltipTrigger>
       <TooltipContent side="bottom" className="max-w-xs text-xs">

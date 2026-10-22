@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { TaskChatShimmerScope } from "@/components/task-chat/TaskChatShimmer";
 import { CommentSubmissionUnknownError } from "../lib/comment-submit-result";
 import {
@@ -3026,7 +3027,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                   {historyError ? "Some task history could not be loaded." : "Some task history is still loading."}
                   {historyError ? (
                     <Button variant="ghost" size="sm" onClick={retryHistory}>
-                      Retry
+                      {t("common.retry")}
                     </Button>
                   ) : null}
                 </div>

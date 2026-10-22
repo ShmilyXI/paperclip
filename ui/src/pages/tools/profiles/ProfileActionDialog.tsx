@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AlertTriangle } from "lucide-react";
 import type { ToolProfileWithDetails } from "@paperclipai/shared";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,7 @@ export function ProfileActionDialog({
     archive: {
       title: "Archive profile",
       body: `This profile stops applying to ${profile.summary.appliesToAgentCount} ${profile.summary.appliesToAgentCount === 1 ? "agent" : "agents"}. You can restore it later.`,
-      confirm: "Archive",
+      confirm: t("common.archive"),
       action: onArchive,
     },
     restore: {
@@ -50,7 +51,7 @@ export function ProfileActionDialog({
       body: defaultDeleteBlocked
         ? "This profile is the organization default. Reassign the organization default to another profile before deleting it."
         : `This permanently deletes the profile and removes ${profile.summary.assignmentCount} ${profile.summary.assignmentCount === 1 ? "assignment" : "assignments"}.`,
-      confirm: "Delete",
+      confirm: t("common.delete"),
       action: onDelete,
     },
   }[kind];
@@ -69,7 +70,7 @@ export function ProfileActionDialog({
           </div>
         ) : null}
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t("common.cancel")}</Button>
           <Button
             variant={kind === "delete" ? "destructive" : "default"}
             disabled={pending || defaultDeleteBlocked}

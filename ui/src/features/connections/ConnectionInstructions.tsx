@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -69,8 +70,8 @@ export function ConnectionInstructionsSettings({ connection, provider, template,
     <ConnectionInstructionsEditor provider={provider} template={template} value={value} onChange={setDraft} disabled={!canConfigure || mutation.isPending} />
     {mutation.isError && <div role="alert"><InlineBanner tone="danger">{mutation.error instanceof Error ? mutation.error.message : "Couldn’t save instructions. Try again."}</InlineBanner></div>}
     {dirty && <div className="flex items-center justify-between">
-      <Button variant="ghost" disabled={mutation.isPending} onClick={() => { setDraft(null); mutation.reset(); }}>Cancel</Button>
-      <Button disabled={!canConfigure || mutation.isPending || !value.text.trim()} onClick={() => mutation.mutate()}>{mutation.isPending ? "Saving…" : "Save instructions"}</Button>
+      <Button variant="ghost" disabled={mutation.isPending} onClick={() => { setDraft(null); mutation.reset(); }}>{t("common.cancel")}</Button>
+      <Button disabled={!canConfigure || mutation.isPending || !value.text.trim()} onClick={() => mutation.mutate()}>{mutation.isPending ? t("common.saving2") : "Save instructions"}</Button>
     </div>}
   </div>;
 }
@@ -79,7 +80,7 @@ export function AgentConnectionInstructions({ companyId, agentId }: { companyId:
   const query = useQuery({ queryKey: queryKeys.tools.effectiveProfilesForAgent(companyId, agentId), queryFn: () => toolsApi.getEffectiveProfilesForAgent(companyId, agentId) });
   const sources = query.data?.installedConnections.filter((connection) => connection.agentInstructions && connection.enabled && connection.status === "active") ?? [];
   if (query.isLoading) return <p className="text-sm text-muted-foreground">Loading connection instructions…</p>;
-  if (query.isError) return <InlineBanner tone="danger" actions={<Button variant="ghost" onClick={() => void query.refetch()}>Retry</Button>}>Couldn’t load connection instructions.</InlineBanner>;
+  if (query.isError) return <InlineBanner tone="danger" actions={<Button variant="ghost" onClick={() => void query.refetch()}>{t("common.retry")}</Button>}>Couldn’t load connection instructions.</InlineBanner>;
   if (!sources.length) return null;
   return <section className="mt-8 space-y-4" aria-label="From connections">
     <h3 className="text-sm font-medium">From connections</h3>

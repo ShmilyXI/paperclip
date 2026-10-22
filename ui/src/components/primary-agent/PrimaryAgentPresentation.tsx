@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { createContext, useContext } from "react";
 import { ArrowRight, Crown, Loader2 } from "lucide-react";
 import type { Agent } from "@paperclipai/shared";
@@ -86,7 +87,7 @@ export function SetPrimaryAgentButton({ agent }: {
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter className="flex-row justify-between sm:justify-between">
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
         <AlertDialogAction disabled={disabled} onClick={() => primary.onChange(agent.id)}>Set as my primary</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

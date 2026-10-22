@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight } from "lucide-react";
@@ -13,10 +14,10 @@ const PAGE_SIZE = 25;
 
 const OUTCOME_META: Record<ToolAuditOutcome, { label: string; status: string }> = {
   allowed: { label: "Allowed", status: "allowed" },
-  blocked: { label: "Blocked", status: "denied" },
+  blocked: { label: t("common.blocked"), status: "denied" },
   asked_first: { label: "Asked first", status: "require-approval" },
   waiting: { label: "Waiting", status: "deferred" },
-  failed: { label: "Failed", status: "failed" },
+  failed: { label: t("common.failed"), status: "failed" },
   unknown: { label: "Recorded", status: "unchecked" },
 };
 
@@ -111,10 +112,10 @@ function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
             {event.invocation?.status ? <Fact label="Call status" value={event.invocation.status} /> : null}
             {event.invocation?.policyDecision ? <Fact label="Decision" value={event.invocation.policyDecision} /> : null}
             {reason ? <Fact label="Reason" value={reason} mono /> : null}
-            {duration ? <Fact label="Duration" value={duration} /> : null}
+            {duration ? <Fact label={t("common.duration")} value={duration} /> : null}
             {event.invocation?.id ? <Fact label="Invocation ID" value={event.invocation.id} mono /> : null}
             {event.invocation?.errorCode ? <Fact label="Error code" value={event.invocation.errorCode} mono /> : null}
-            {event.invocation?.errorMessage ? <Fact label="Error" value={event.invocation.errorMessage} /> : null}
+            {event.invocation?.errorMessage ? <Fact label={t("common.error")} value={event.invocation.errorMessage} /> : null}
           </dl>
           {argumentsText ? (
             <div className="mt-2 space-y-1">
@@ -198,7 +199,7 @@ export function GatewayActivityPanel({
             onClick={() => activityQuery.fetchNextPage()}
             disabled={activityQuery.isFetchingNextPage}
           >
-            {activityQuery.isFetchingNextPage ? "Loading…" : "Load more"}
+            {activityQuery.isFetchingNextPage ? t("common.loading2") : "Load more"}
           </Button>
         </div>
       ) : null}

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { SpekoProviderSetup } from "@/components/voice/SpekoProviderSetup";
 import { NativeVoiceConversation } from "@/components/voice/NativeVoiceConversation";
 import { buildSlackAppManifest, defaultSlackAppConfiguration } from "@paperclipai/shared";
@@ -116,12 +117,12 @@ export function ChatConnectionPurpose({ provider, onChat, onTools, slackLabels }
 }) {
   const { setBreadcrumbs } = useBreadcrumbs();
   useEffect(() => {
-    setBreadcrumbs([{ label: "Connectors", href: "/apps" }, { label: "Choose connection" }]);
+    setBreadcrumbs([{ label: t("common.connectors"), href: "/apps" }, { label: "Choose connection" }]);
     return () => setBreadcrumbs([]);
   }, [setBreadcrumbs]);
   return (
       <div className="max-w-2xl space-y-6">
-        <ChatSetupNavigation labels={provider === "slack" ? slackLabels ?? ["Choose agent", "Connect"] : undefined} step={0} availableStep={0} onSelect={onChat} />
+        <ChatSetupNavigation labels={provider === "slack" ? slackLabels ?? ["Choose agent", t("common.connect")] : undefined} step={0} availableStep={0} onSelect={onChat} />
         <div>
           <h1 className="text-xl font-bold">Choose how to connect</h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -205,7 +206,7 @@ function ChatSdkEndpointSetup() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
+      { label: t("common.connectors"), href: "/apps" },
       { label: "Connect chat" },
     ]);
     return () => setBreadcrumbs([]);
@@ -570,7 +571,7 @@ function ChatSdkEndpointSetup() {
               >Use your own app</Button>}
             </SlackSetupAdvanced>}
             {isSlack && !endpoint && !slackChoices.data && (slackChoices.isError
-              ? <div role="alert" className="text-sm text-destructive">Couldn&apos;t load Slack setup. <Button variant="link" disabled={slackChoices.isFetching} onClick={() => void slackChoices.refetch()}>Retry</Button></div>
+              ? <div role="alert" className="text-sm text-destructive">Couldn&apos;t load Slack setup. <Button variant="link" disabled={slackChoices.isFetching} onClick={() => void slackChoices.refetch()}>{t("common.retry")}</Button></div>
               : <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Loading Slack…</p>)}
             {provider === "github" && <GitHubAgentTrustWarning agent={selectedAgent} />}
             <SetupWizardFooter disabled={agentStepBusy || isSlack && !endpoint && Boolean(agentId) && !slackChoices.data} onSaveExit={() => void continueFromAgent(true)}>
@@ -660,7 +661,7 @@ function ChatSdkEndpointSetup() {
             <div className="flex flex-col items-center gap-3">
               <h1 className="flex items-center gap-2 text-2xl font-bold">
                 <CheckCircle2 aria-hidden="true" className="size-6 text-(--status-task-done)" />
-                Success
+                {t("common.success")}
               </h1>
               <p className="flex flex-wrap items-center justify-center gap-2 text-base text-muted-foreground">
                 <span>You can now talk to {selectedAgent?.name ?? endpoint.assignedAgentName} in Slack</span>
@@ -1159,7 +1160,7 @@ function ProviderConnectStep({
               <strong>Directory (tenant) ID</strong>. Under{" "}
               <strong>Certificates &amp; secrets · Client secrets</strong>,
               select <strong>New client secret</strong> and copy its{" "}
-              <strong>Value</strong>, not its Secret ID.
+              <strong>{t("common.value")}</strong>, not its Secret ID.
             </li>
             <li>
               <strong>Azure · Create Azure Bot</strong>: set{" "}
@@ -1177,7 +1178,7 @@ function ProviderConnectStep({
               <strong>New app</strong>. Under{" "}
               <strong>Configure · App features · Bot</strong>, add an existing
               bot using the same Application ID; enable{" "}
-              <strong>Personal</strong>, <strong>Team</strong>, and{" "}
+              <strong>Personal</strong>, <strong>{t("common.team")}</strong>, and{" "}
               <strong>Group chat</strong> scopes plus file support. Under{" "}
               <strong>Configure · Permissions</strong>, add the two RSC{" "}
               <strong>Application</strong> permissions shown below. Complete the
@@ -1319,7 +1320,7 @@ function ProviderConnectStep({
               automatically; they are not selectable here.
             </li>
             <li>
-              Choose <strong>Only on this account</strong>, create the App, copy
+              {t("common.choose")} <strong>Only on this account</strong>, create the App, copy
               its App ID, generate one private key, then install it on the
               selected repositories.
             </li>
@@ -1528,8 +1529,8 @@ function ProviderConnectStep({
     );
   const slackRequestUrlInstructions = <ol className="list-decimal space-y-2 pl-5 text-sm">
       <li><a className="underline underline-offset-4" href={endpoint.setup?.slackRegistration?.appId ? `https://api.slack.com/apps/${encodeURIComponent(endpoint.setup.slackRegistration.appId)}/event-subscriptions` : "https://api.slack.com/apps"} target="_blank" rel="noopener noreferrer">Open Slack app Settings <ExternalLink className="inline size-3" /></a> and choose <strong>{slackApp.appName}</strong>.</li>
-      <li>Choose <strong>Event Subscriptions</strong>.</li>
-      <li>Beside the prefilled <strong>Request URL</strong>, click <strong>Retry</strong> if it isn&apos;t verified. Save changes if Slack asks.</li>
+      <li>{t("common.choose")} <strong>Event Subscriptions</strong>.</li>
+      <li>Beside the prefilled <strong>Request URL</strong>, click <strong>{t("common.retry")}</strong> if it isn&apos;t verified. Save changes if Slack asks.</li>
     </ol>;
   if (slackStage === "finish")
     return (
@@ -1694,7 +1695,7 @@ function ProviderConnectStep({
                 Open Slack app Settings <ExternalLink className="inline size-3" />
               </a> and choose <strong>{slackApp.appName}</strong>.
             </li>
-            <li>Choose <strong>OAuth &amp; Permissions</strong></li>
+            <li>{t("common.choose")} <strong>OAuth &amp; Permissions</strong></li>
             <li>Copy and paste your <strong>Bot OAuth Token</strong></li>
           </ul>
           <Input
@@ -1720,7 +1721,7 @@ function ProviderConnectStep({
                 Open Slack app Settings <ExternalLink className="inline size-3" />
               </a> and choose <strong>{slackApp.appName}</strong>.
             </li>
-            <li>Choose <strong>Basic Information</strong></li>
+            <li>{t("common.choose")} <strong>Basic Information</strong></li>
             <li>Copy and paste your <strong>Signing Secret</strong></li>
           </ul>
           <Input
@@ -1754,7 +1755,7 @@ function ProviderConnectStep({
               : onAction(repairing || slackCredentialsSaved ? "reconnect" : "configure", credentials)}
           >
             {pending && <Loader2 className="h-4 w-4 animate-spin" />}
-            {continueWithSavedSlackCredentials ? "Continue" : repairing || slackCredentialsSaved ? "Reconnect Slack app" : "Connect Slack app"}
+            {continueWithSavedSlackCredentials ? t("common.continue") : repairing || slackCredentialsSaved ? "Reconnect Slack app" : "Connect Slack app"}
           </Button>
         </div>
       </div>}
@@ -1945,7 +1946,7 @@ function TryStep({
                 <code>{slackTestMessage}</code>
                 <Button size="sm" variant="ghost" onClick={() => {
                   void copyTextToClipboard(slackTestMessage).then(() => { setCommandCopied(true); setCommandCopyError(false); }, () => setCommandCopyError(true));
-                }}><Copy className="size-4" />{commandCopied ? "Copied" : "Copy message"}</Button>
+                }}><Copy className="size-4" />{commandCopied ? t("common.copied") : "Copy message"}</Button>
               </div>
               {slackAccount?.status !== "linked" && <p className="mt-2 text-muted-foreground">Select the bot from Slack’s @mention suggestions.</p>}
             </li>

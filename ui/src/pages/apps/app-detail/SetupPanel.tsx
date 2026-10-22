@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState, type ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
 import type { ToolCatalogEntry, ToolConnection } from "@paperclipai/shared";
@@ -37,9 +38,9 @@ export function SetupPanel({
   return (
     <div className="space-y-10">
       {identities}
-      <SetupLinkSection title="Agents" summary={agentsSummary} onClick={onOpenPermissions} />
+      <SetupLinkSection title={t("common.agents")} summary={agentsSummary} onClick={onOpenPermissions} />
       <SetupLinkSection
-        title="Actions"
+        title={t("common.actions")}
         summary={permissionsLoading ? "Loading permissions…" : permissionsSummary ?? "Manage permissions"}
         onClick={onOpenPermissions}
       />
@@ -109,8 +110,8 @@ function PostHogConfigurationSection({ connection }: { connection: ToolConnectio
     ? raw as Record<string, unknown>
     : {};
   const method = connection.config?.connectionMethodKey === "mcp-oauth" ? "PostHog sign-in" : "Personal API key";
-  const features = typeof config.features === "string" ? config.features : "None";
-  const tools = typeof config.tools === "string" && config.tools ? config.tools : "None";
+  const features = typeof config.features === "string" ? config.features : t("common.none");
+  const tools = typeof config.tools === "string" && config.tools ? config.tools : t("common.none");
   const rows = [
     ["Connection method", method],
     ["Project pin", typeof config.projectId === "string" ? config.projectId : "Use active project"],
@@ -200,7 +201,7 @@ function GoogleSheetsAllowlistSection({
                   title={ids.length <= 1 ? "Add another sheet before removing this one." : undefined}
                   onClick={() => saveIds(ids.filter((current) => current !== id))}
                 >
-                  Remove
+                  {t("common.remove")}
                 </Button>
               </div>
             );
@@ -320,7 +321,7 @@ export function QuarantinedActionsReview({
           {selectedIds.length} of {count} will be on
         </span>
         <Button size="sm" disabled={disabled} onClick={() => onSubmit(selectedIds)}>
-          {disabled ? "Saving…" : "Save choices"}
+          {disabled ? t("common.saving2") : "Save choices"}
         </Button>
       </div>
     </section>

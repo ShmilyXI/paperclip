@@ -1,10 +1,11 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import { ChevronRight, CircleHelp } from "lucide-react";
 import { slackAppConfigurationSchema, type SlackAppConfiguration } from "@paperclipai/shared";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-export function SlackSetupAdvanced({ children, label = "Advanced" }: { children: ReactNode; label?: string }) {
+export function SlackSetupAdvanced({ children, label = t("common.advanced") }: { children: ReactNode; label?: string }) {
   return <details className="group text-sm">
     <summary className="flex cursor-pointer list-none items-center gap-1.5 text-muted-foreground hover:text-foreground">
       <ChevronRight className="size-4 transition-transform group-open:rotate-90" aria-hidden="true" />{label}

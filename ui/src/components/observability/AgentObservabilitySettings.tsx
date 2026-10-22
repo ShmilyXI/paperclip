@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -127,7 +128,7 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
               <Input className="min-w-0 flex-1" aria-label="Header name" value={row.name} onChange={event => setHeaders(rows => rows.map(item => item.id === row.id ? { ...item, name: event.target.value } : item))} autoComplete="off" />
               <Input className="min-w-0 flex-1" aria-label={`Value for ${row.name || "header"}`} type="password" value={row.value} placeholder={row.originalName && !requireFreshHeaders ? "Keep saved value" : "Header value"}
                 onChange={event => setHeaders(rows => rows.map(item => item.id === row.id ? { ...item, value: event.target.value } : item))} autoComplete="new-password" />
-              <Button type="button" size="sm" variant="ghost" aria-label={`Remove ${row.name || "header"}`} onClick={() => setHeaders(rows => rows.filter(item => item.id !== row.id))}>Remove</Button>
+              <Button type="button" size="sm" variant="ghost" aria-label={`Remove ${row.name || "header"}`} onClick={() => setHeaders(rows => rows.filter(item => item.id !== row.id))}>{t("common.remove")}</Button>
             </div>)}
           </div>
         </>}
@@ -144,11 +145,11 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
       {!dirty && receipt && <div role="status" className="space-y-1 text-sm">
         <p className="font-medium">{receipt.status === "accepted" ? "Test payload accepted" : receipt.status === "partial" ? "Some test records were rejected" : "Test payload failed"}</p>
         <p className="text-xs text-muted-foreground">{new Date(receipt.finishedAt).toLocaleString()} · Sent from the Paperclip server.</p>
-        {(["logs", "traces"] as const).map(signal => receipt.signals[signal].message && <p key={signal}>{signal === "logs" ? "Logs" : "Traces"}: {receipt.signals[signal].message}</p>)}
+        {(["logs", "traces"] as const).map(signal => receipt.signals[signal].message && <p key={signal}>{signal === "logs" ? t("common.logs") : "Traces"}: {receipt.signals[signal].message}</p>)}
       </div>}
       <div className="flex items-center justify-between gap-3">
-        <Button type="button" variant="ghost" disabled={busy || !dirty} onClick={reset}>Cancel</Button>
-        <Button type="button" disabled={busy || !dirty || hasConflict} onClick={() => save()}>{saving ? "Saving…" : "Save changes"}</Button>
+        <Button type="button" variant="ghost" disabled={busy || !dirty} onClick={reset}>{t("common.cancel")}</Button>
+        <Button type="button" disabled={busy || !dirty || hasConflict} onClick={() => save()}>{saving ? t("common.saving2") : t("common.saveChanges")}</Button>
       </div>
       {dirty && settings && <p className="text-xs text-muted-foreground">Save changes before testing.</p>}
       {settings && <div className="flex flex-wrap items-center gap-2">
@@ -184,7 +185,7 @@ function AgentObservabilitySettingsContainer({ companyId }: { companyId: string 
   }, onError: reject });
   useEffect(() => { setError(null); setConflict(false); save.reset(); test.reset(); remove.reset(); }, [companyId]);
   if (query.isPending) return <p className="text-sm text-muted-foreground">Loading agent observability…</p>;
-  if (!query.data) return <div role="alert" className="space-y-2 text-sm"><p>Agent observability settings could not be loaded.</p><Button variant="outline" size="sm" onClick={() => void query.refetch()}>Retry</Button></div>;
+  if (!query.data) return <div role="alert" className="space-y-2 text-sm"><p>Agent observability settings could not be loaded.</p><Button variant="outline" size="sm" onClick={() => void query.refetch()}>{t("common.retry")}</Button></div>;
   return <AgentObservabilitySettingsView key={companyId} companyId={companyId} settings={query.data.settings} canManage={query.data.canManage}
     saving={save.isPending} removing={remove.isPending} testing={test.isPending} error={error ?? (query.isError ? "Saved settings could not be refreshed. Your draft is unchanged." : null)} conflict={conflict} resetKey={resetKey}
     onSave={input => save.mutate(input)} onTest={() => { if (query.data.settings) test.mutate(query.data.settings.revision); }}

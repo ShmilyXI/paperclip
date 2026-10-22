@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId, useState } from "react";
 import {
   Download,
@@ -133,7 +134,7 @@ export function SlackAvatarContent({
               and choose <strong>{appName}</strong>.
             </li>
             <li>
-              Choose <strong>Basic Information</strong>, then scroll to{" "}
+              {t("common.choose")} <strong>Basic Information</strong>, then scroll to{" "}
               <strong>Display Information</strong>.
             </li>
             <li>

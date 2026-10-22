@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { AgentCommentaryEntry, AgentCommentaryKind } from "@paperclipai/shared";
@@ -33,7 +34,7 @@ function CommentaryRow({ entry, onOpen }: { entry: AgentCommentaryEntry; onOpen:
         <div className="hidden md:col-span-2 md:block"><MessageKind kind={entry.kind} /></div>
         <div className="flex min-w-0 flex-col gap-2 md:col-span-6">
           <p className="line-clamp-2 whitespace-pre-line break-words text-sm leading-relaxed text-foreground">{entry.preview.trim()}{entry.preview.length >= 280 ? "…" : ""}</p>
-          {entry.task && <span className="truncate text-xs text-muted-foreground"><span className="font-mono">{entry.task.identifier ?? "Task"}</span> · {entry.task.title}</span>}
+          {entry.task && <span className="truncate text-xs text-muted-foreground"><span className="font-mono">{entry.task.identifier ?? t("common.task")}</span> · {entry.task.title}</span>}
         </div>
         <time dateTime={entry.createdAt} title={new Date(entry.createdAt).toLocaleString()} className="font-mono text-xs text-muted-foreground md:col-span-2 md:text-right">{relativeTime(entry.createdAt)}</time>
       </button>
@@ -61,7 +62,7 @@ function CommentaryDetail({ companyId, id, onClose, triggerRef }: { companyId: s
           <DialogDescription>{entry ? `Submitted ${new Date(entry.createdAt).toLocaleString()}` : "Message details and source context."}</DialogDescription>
         </DialogHeader>
         {detail.isPending ? <p role="status" className="text-sm text-muted-foreground">Loading message…</p> : detail.error ? (
-          <div role="alert" className="flex flex-col items-start gap-3"><p className="text-sm text-destructive">{detail.error.message}</p><Button variant="outline" size="sm" onClick={() => void detail.refetch()}>Try again</Button></div>
+          <div role="alert" className="flex flex-col items-start gap-3"><p className="text-sm text-destructive">{detail.error.message}</p><Button variant="outline" size="sm" onClick={() => void detail.refetch()}>{t("common.tryAgain")}</Button></div>
         ) : entry ? <>
           <div className="flex shrink-0 flex-wrap items-center gap-3"><Link to={`/agents/${entry.agent.id}`}><AgentIdentity agent={entry.agent} size="sm" /></Link><MessageKind kind={entry.kind} /></div>
           <div className="min-h-0 overflow-y-auto overscroll-contain break-words pr-2"><MarkdownBody>{entry.body}</MarkdownBody></div>
@@ -124,19 +125,19 @@ export function AgentCommentary({ companyId }: { companyId: string }) {
         <Select value={kind ?? ALL} onValueChange={(value) => updateFilters({ kind: value })}><SelectTrigger aria-label="Filter by message type" className="min-w-36"><SelectValue /></SelectTrigger><SelectContent><SelectItem value={ALL}>All types</SelectItem><SelectItem value="suggestion">Suggestions</SelectItem><SelectItem value="complaint">Complaints</SelectItem></SelectContent></Select>
         {hasFilters && <Button variant="ghost" size="sm" onClick={clearFilters}>Clear filters</Button>}
       </div>
-      {agents.error && <p role="alert" className="text-sm text-destructive">Could not load agent filters. <button type="button" className="underline" onClick={() => void agents.refetch()}>Try again</button></p>}
+      {agents.error && <p role="alert" className="text-sm text-destructive">Could not load agent filters. <button type="button" className="underline" onClick={() => void agents.refetch()}>{t("common.tryAgain")}</button></p>}
       {messages.isPending ? <p role="status" className="py-12 text-center text-sm text-muted-foreground">Loading commentary…</p> : messages.error ? (
-        <div role="alert" className="flex flex-col items-center gap-3 py-12"><p className="text-sm text-destructive">{messages.error.message}</p><Button variant="outline" size="sm" onClick={() => void messages.refetch()}>Try again</Button></div>
+        <div role="alert" className="flex flex-col items-center gap-3 py-12"><p className="text-sm text-destructive">{messages.error.message}</p><Button variant="outline" size="sm" onClick={() => void messages.refetch()}>{t("common.tryAgain")}</Button></div>
       ) : messages.data?.items.length === 0 ? (
         <EmptyState icon={Lightbulb} message={offset > 0 ? "No messages on this page." : hasFilters ? "No messages match these filters." : "No agent commentary yet."} description={offset > 0 ? "Return to the newest messages." : hasFilters ? "Try another agent, message type, or search." : "Suggestions and complaints will appear here when agents submit them."} action={offset > 0 ? "Back to latest" : hasFilters ? "Clear filters" : undefined} onAction={offset > 0 ? () => updateFilters({ offset: "" }) : hasFilters ? clearFilters : undefined} hideActionIcon />
       ) : messages.data ? <>
         <div>
-          <div aria-hidden="true" className="hidden grid-cols-12 gap-4 border-b border-border px-3 pb-3 text-xs font-medium text-muted-foreground md:grid"><span className="col-span-2">Agent</span><span className="col-span-2">Type</span><span className="col-span-6">Message</span><span className="col-span-2 text-right">Submitted</span></div>
+          <div aria-hidden="true" className="hidden grid-cols-12 gap-4 border-b border-border px-3 pb-3 text-xs font-medium text-muted-foreground md:grid"><span className="col-span-2">{t("common.agent")}</span><span className="col-span-2">{t("common.type")}</span><span className="col-span-6">Message</span><span className="col-span-2 text-right">Submitted</span></div>
           <ul aria-label="Commentary messages" className="divide-y divide-border">{messages.data.items.map((entry) => <CommentaryRow key={entry.id} entry={entry} onOpen={(trigger) => { triggerRef.current = trigger; selectEntry(entry.id); }} />)}</ul>
         </div>
         <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
           <p role="status" className="font-mono text-xs text-muted-foreground">{offset + 1}–{offset + messages.data.items.length} of {messages.data.total} messages</p>
-          <div className="flex gap-2"><Button variant="outline" size="sm" aria-label="Previous page" disabled={offset === 0} onClick={() => updateFilters({ offset: String(Math.max(0, offset - PAGE_SIZE)) })}><ChevronLeft className="size-4" />Previous</Button><Button variant="outline" size="sm" aria-label="Next page" disabled={offset + messages.data.items.length >= messages.data.total} onClick={() => updateFilters({ offset: String(offset + PAGE_SIZE) })}>Next<ChevronRight className="size-4" /></Button></div>
+          <div className="flex gap-2"><Button variant="outline" size="sm" aria-label="Previous page" disabled={offset === 0} onClick={() => updateFilters({ offset: String(Math.max(0, offset - PAGE_SIZE)) })}><ChevronLeft className="size-4" />{t("common.previous")}</Button><Button variant="outline" size="sm" aria-label="Next page" disabled={offset + messages.data.items.length >= messages.data.total} onClick={() => updateFilters({ offset: String(offset + PAGE_SIZE) })}>{t("common.next")}<ChevronRight className="size-4" /></Button></div>
         </div>
       </> : null}
       <CommentaryDetail key={companyId} companyId={companyId} id={selectedId} onClose={() => selectEntry(null)} triggerRef={triggerRef} />

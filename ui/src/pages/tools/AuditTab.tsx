@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight, ScrollText } from "lucide-react";
@@ -31,28 +32,28 @@ const ALL = "__all";
 /** Outcome chip vocabulary (spec §4C / §5): Allowed · Blocked · Asked first · Failed · Waiting. */
 const OUTCOME_META: Record<ToolAuditOutcome, { label: string; status: string }> = {
   allowed: { label: "Allowed", status: "allowed" },
-  blocked: { label: "Blocked", status: "denied" },
+  blocked: { label: t("common.blocked"), status: "denied" },
   asked_first: { label: "Asked first", status: "require-approval" },
   waiting: { label: "Waiting", status: "deferred" },
-  failed: { label: "Failed", status: "failed" },
+  failed: { label: t("common.failed"), status: "failed" },
   unknown: { label: "Recorded", status: "unchecked" },
 };
 
 const OUTCOME_FILTERS: { value: string; label: string }[] = [
   { value: ALL, label: "All outcomes" },
   { value: "allowed", label: "Allowed" },
-  { value: "blocked", label: "Blocked" },
+  { value: "blocked", label: t("common.blocked") },
   { value: "asked_first", label: "Asked first" },
   { value: "waiting", label: "Waiting" },
-  { value: "failed", label: "Failed" },
+  { value: "failed", label: t("common.failed") },
 ];
 
 const WINDOW_FILTERS: { value: ToolAuditWindow; label: string }[] = [
-  { value: "all", label: "All time" },
+  { value: "all", label: t("common.allTime") },
   { value: "1h", label: "Last 1 hour" },
   { value: "24h", label: "Last 24 hours" },
-  { value: "7d", label: "Last 7 days" },
-  { value: "30d", label: "Last 30 days" },
+  { value: "7d", label: t("common.last7Days") },
+  { value: "30d", label: t("common.last30Days") },
 ];
 
 function detailString(details: Record<string, unknown> | null, key: string): string | undefined {
@@ -284,7 +285,7 @@ function ActivityRow({
                 {requestMethod && endpoint ? <DetailFact label="HTTP request" value={`${requestMethod} ${endpoint}`} mono /> : null}
                 {mcpMethod ? <DetailFact label="MCP method" value={mcpMethod} mono /> : null}
                 {requestId ? <DetailFact label="Request ID" value={requestId} mono /> : null}
-                {request ? <DetailFact label="Dispatched" value={request.dispatched === true ? "Yes" : "No"} /> : null}
+                {request ? <DetailFact label="Dispatched" value={request.dispatched === true ? t("common.yes") : t("common.no")} /> : null}
                 {httpStatus !== undefined ? <DetailFact label="HTTP status" value={String(httpStatus)} mono /> : null}
                 {contentType ? <DetailFact label="Content type" value={contentType} mono /> : null}
                 {responseBytes !== undefined ? <DetailFact label="Response size" value={`${responseBytes} bytes`} /> : null}
@@ -396,7 +397,7 @@ export function AuditTab({ companyId }: { companyId: string }) {
   return (
     <div className="space-y-4">
       <ToolsPageHeader
-        title="Activity"
+        title={t("common.activity")}
         description="What your agents actually did with your apps, newest first. Each line is one decision — allowed, blocked, asked first, waiting, or failed."
       />
 
@@ -510,7 +511,7 @@ export function AuditTab({ companyId }: { companyId: string }) {
             onClick={() => activity.fetchNextPage()}
             disabled={activity.isFetchingNextPage}
           >
-            {activity.isFetchingNextPage ? "Loading…" : "Load more"}
+            {activity.isFetchingNextPage ? t("common.loading2") : "Load more"}
           </Button>
         </div>
       ) : null}

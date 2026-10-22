@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { useEffect, useId, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -283,7 +284,7 @@ export function GitHubPolicyEditor({
           id={`${id}-github-instructions-heading`}
           className="text-base font-semibold"
         >
-          Instructions
+          {t("common.instructions")}
         </h2>
         <MarkdownEditor
           readOnly={readOnly}
@@ -452,7 +453,7 @@ export function GitHubPolicyEditor({
                   )}
                 </div>
               </GitHubSettingsDisclosure>
-              <GitHubSettingsDisclosure title="Labels">
+              <GitHubSettingsDisclosure title={t("common.labels")}>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {filterField(
                     "requiredLabels",
@@ -536,9 +537,9 @@ export function GitHubPolicyEditor({
                   )
                 }
               >
-                <option value="info">Info</option>
-                <option value="warning">Warning</option>
-                <option value="error">Error</option>
+                <option value="info">{t("common.info")}</option>
+                <option value="warning">{t("common.warning")}</option>
+                <option value="error">{t("common.error")}</option>
               </select>
               <p className="text-xs text-muted-foreground">
                 Hidden findings still count in the assessment.
@@ -822,7 +823,7 @@ export function GitHubAccessEditor({
                 className="underline underline-offset-4"
                 to={`/apps/chat/${endpointId}/settings`}
               >
-                Settings
+                {t("common.settings")}
               </Link>
               .
             </>
@@ -833,7 +834,7 @@ export function GitHubAccessEditor({
                 className="underline underline-offset-4"
                 to={`/apps/chat/${endpointId}/settings`}
               >
-                Settings
+                {t("common.settings")}
               </Link>
               . Authorized @mentions still work.
             </>
@@ -946,7 +947,7 @@ export function GitHubAccessEditor({
               void links.refetch();
             }}
           >
-            Try again
+            {t("common.tryAgain")}
           </Button>
         </div>
       )}
@@ -986,7 +987,7 @@ export function GitHubAccessEditor({
                 }}
               >
                 <Copy className="size-4" />
-                {linkCopied ? "Copied" : "Copy invitation link"}
+                {linkCopied ? t("common.copied") : "Copy invitation link"}
               </Button>
               <Link
                 ref={accountLink}
@@ -1078,7 +1079,7 @@ export function GitHubAccessEditor({
               )}
               <DialogFooter className="flex-row justify-between sm:justify-between">
                 <Button variant="ghost" onClick={() => setDialog(null)}>
-                  Cancel
+                  {t("common.cancel")}
                 </Button>
                 <Button
                   disabled={

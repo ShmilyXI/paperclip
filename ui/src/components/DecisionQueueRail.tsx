@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@/lib/router";
 import { decisionQueuesApi } from "../api/decisionQueues";
@@ -20,7 +21,7 @@ interface DecisionQueueRailProps {
 /**
  * Queue quicklinks (PAP-16032 §4.1 / wireframe screen 1, annotation 1). The
  * chips are *this company's queues*, ordered by most-recently-updated (the
- * server already sorts them that way) — not a hardcoded set of types. "All" is
+ * server already sorts them that way) — not a hardcoded set of types. t("common.all") is
  * the only fixed chip. A dot marks a queue with recent activity; the count is
  * the queue's pending items.
  */
@@ -32,7 +33,7 @@ export function DecisionQueueRail({ companyId, activeQueueKey = null }: Decision
   });
 
   // Nothing to show until at least one queue exists — the desk still works
-  // without the rail, so render nothing rather than a lone "All" chip.
+  // without the rail, so render nothing rather than a lone t("common.all") chip.
   if (!queues || queues.length === 0) {
     return null;
   }
@@ -41,7 +42,7 @@ export function DecisionQueueRail({ companyId, activeQueueKey = null }: Decision
 
   return (
     <nav className="flex flex-wrap items-center gap-1.5" aria-label="Decision queues" data-decision-queue-rail>
-      <Chip href={decisionsHref(null)} active={activeQueueKey == null} label="All" />
+      <Chip href={decisionsHref(null)} active={activeQueueKey == null} label={t("common.all")} />
       {queues.map((queue) => {
         const recent = now - new Date(queue.updatedAt).getTime() < RECENT_ACTIVITY_MS;
         return (

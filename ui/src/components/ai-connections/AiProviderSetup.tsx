@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Network, Monitor } from "lucide-react";
@@ -143,7 +144,7 @@ export function AiProviderSetup({
         : (provider ?? "openai");
   const name =
     reconnect?.name ??
-    `${ownership === "personal" ? "My" : "Company"} ${
+    `${ownership === "personal" ? "My" : t("common.company")} ${
       provider === "gateway" && baseUrl
         ? (() => {
             try {
@@ -271,17 +272,17 @@ export function AiProviderSetup({
   ) : undefined;
   const cancel = () => reconnect || initialProvider ? onCancel() : setStep("provider");
   if (!reconnect && accounts.isPending) return <p role="status">Loading connection permissions…</p>;
-  if (!reconnect && accounts.isError) return <p role="alert">Could not load connection permissions. <Button type="button" variant="ghost" onClick={() => void accounts.refetch()}>Retry</Button></p>;
+  if (!reconnect && accounts.isError) return <p role="alert">Could not load connection permissions. <Button type="button" variant="ghost" onClick={() => void accounts.refetch()}>{t("common.retry")}</Button></p>;
   return (
     <div className="mx-auto w-full max-w-2xl space-y-6" onSubmit={(event) => event.stopPropagation()}>
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">
           {step === "provider"
             ? "Connect a model provider"
-            : `${reconnect ? "Reconnect" : "Connect"} ${label}`}
+            : `${reconnect ? "Reconnect" : t("common.connect")} ${label}`}
         </h2>
       </div>
-      {agents.isError && <p role="alert" className="text-sm text-destructive">Could not load agents. <Button type="button" variant="ghost" onClick={() => void agents.refetch()}>Retry</Button></p>}
+      {agents.isError && <p role="alert" className="text-sm text-destructive">Could not load agents. <Button type="button" variant="ghost" onClick={() => void agents.refetch()}>{t("common.retry")}</Button></p>}
       {step === "provider" ? (
         <>
           {advancedOnly ? choices(true) : <>
@@ -294,7 +295,7 @@ export function AiProviderSetup({
           </details>
           </>}
           <Button type="button" variant="ghost" onClick={onCancel}>
-            Cancel
+            {t("common.cancel")}
           </Button>
         </>
       ) : !advanced ? (
@@ -444,7 +445,7 @@ export function AiProviderSetup({
               onClick={cancel}
               disabled={save.isPending}
             >
-              Back
+              {t("common.back")}
             </Button>
             <Button
               type="submit"
@@ -458,7 +459,7 @@ export function AiProviderSetup({
                 ? "Connecting…"
                 : reconnect
                   ? "Reconnect"
-                  : "Connect"}
+                  : t("common.connect")}
             </Button>
           </div>
         </form>

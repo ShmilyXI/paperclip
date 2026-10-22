@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, FileText, Loader2, Wrench } from "lucide-react";
 import { companySkillsApi } from "@/api/companySkills";
@@ -37,7 +38,7 @@ export function TaskSkillPanel({ companyId, skillId }: { companyId: string; skil
       <div className="space-y-3 py-8 text-sm text-muted-foreground" role="alert">
         <p>The skill could not be loaded.</p>
         <Button variant="outline" size="sm" onClick={() => void query.refetch()} disabled={query.isFetching}>
-          {query.isFetching ? "Retrying…" : "Retry"}
+          {query.isFetching ? "Retrying…" : t("common.retry")}
         </Button>
       </div>
     );

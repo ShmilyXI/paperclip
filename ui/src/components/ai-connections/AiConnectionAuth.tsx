@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -156,12 +157,12 @@ function AuthAttempt({
                 onCancel();
               }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
             {!unsupported &&
               (method === "api_key" ? (
                 <Button disabled={busy || !value.trim()} onClick={submit}>
-                  {busy ? "Connecting…" : "Connect"}
+                  {busy ? "Connecting…" : t("common.connect")}
                 </Button>
               ) : state.phase === "waiting" ? (
                 provider === "anthropic" ? (
@@ -178,8 +179,8 @@ function AuthAttempt({
                   {busy
                     ? "Preparing sign-in…"
                     : state.phase === "idle"
-                      ? "Sign in"
-                      : "Try again"}
+                      ? t("common.signIn")
+                      : t("common.tryAgain")}
                 </Button>
               ))}
           </div>

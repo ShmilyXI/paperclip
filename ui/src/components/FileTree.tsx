@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 import { useMemo, useRef, useState } from "react";
 import { cn } from "../lib/utils";
@@ -215,16 +216,16 @@ export function parseFrontmatter(content: string): { data: FrontmatterData; body
 }
 
 export const FRONTMATTER_FIELD_LABELS: Record<string, string> = {
-  name: "Name",
-  title: "Title",
+  name: t("common.name"),
+  title: t("common.title"),
   kind: "Kind",
-  reportsTo: "Reports to",
-  skills: "Skills",
-  status: "Status",
-  description: "Description",
-  priority: "Priority",
+  reportsTo: t("common.reportsTo"),
+  skills: t("common.skills"),
+  status: t("common.status"),
+  description: t("common.description"),
+  priority: t("common.priority"),
   assignee: "Responsible",
-  project: "Project",
+  project: t("common.project"),
   recurring: "Recurring",
   targetDate: "Target date",
 };
@@ -291,7 +292,7 @@ export function FileTree({
   loading = false,
   error,
   empty,
-  ariaLabel = "Files",
+  ariaLabel = t("common.files"),
 }: FileTreeProps) {
   const effectiveCheckedFiles = checkedFiles ?? new Set<string>();
   const visibleNodes = useMemo(
@@ -389,7 +390,7 @@ export function FileTree({
           </div>
           {error.retry && (
             <Button type="button" size="xs" variant="outline" onClick={error.retry}>
-              Retry
+              {t("common.retry")}
             </Button>
           )}
         </div>

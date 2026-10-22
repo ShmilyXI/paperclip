@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef, useState } from 'react';
 import { LoaderCircle } from 'lucide-react';
 import { RepositoryBranchSelect, type RepositoryBranch } from '@/components/RepositoryBranchSelect';
@@ -38,7 +39,7 @@ export function SkillSourceBranchRepairDialog({ repository, currentBranch, branc
           onChange={value => { setBranch(value); setError(null); }} onRetry={onRetry} />
         {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
         <div className="flex items-center justify-between gap-3">
-          <Button type="button" variant="ghost" disabled={pending} onClick={onClose}>Cancel</Button>
+          <Button type="button" variant="ghost" disabled={pending} onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" disabled={!branch || pending}>{pending && <LoaderCircle className="size-4 animate-spin motion-reduce:animate-none" />}{pending ? 'Changing branch…' : 'Change branch'}</Button>
         </div>
       </form>

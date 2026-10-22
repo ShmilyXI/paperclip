@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { SkillsPageNavigation } from "@/components/skill-studio/SkillsNavigationTabs";
 import { interactionReadinessRefetchInterval } from "@/lib/issue-thread-interactions";
 import { SkillBinaryFile } from "../components/SkillBinaryFile";
@@ -205,7 +206,7 @@ function useMutationErrorToast() {
         return;
       }
       const body =
-        error instanceof Error && error.message ? error.message : "Please try again.";
+        error instanceof Error && error.message ? error.message : t("common.pleaseTryAgain");
       toast?.pushToast({ tone: "error", title, body });
     },
     [toast],
@@ -310,18 +311,18 @@ export function SkillStudio() {
     setBreadcrumbs(
       isCreateMode
         ? [
-            { label: "Skills", href: "/skills" },
+            { label: t("common.skills"), href: "/skills" },
             { label: "Studio", href: "/skills/studio" },
             { label: "New skill" },
           ]
         : skill
         ? [
-            { label: "Skills", href: "/skills" },
+            { label: t("common.skills"), href: "/skills" },
             { label: "Studio", href: "/skills/studio" },
             { label: skill.name },
           ]
         : [
-            { label: "Skills", href: "/skills" },
+            { label: t("common.skills"), href: "/skills" },
             { label: "Studio" },
           ],
     );
@@ -548,7 +549,7 @@ function StudioNewSkillPanel({
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
-            <Label htmlFor="skill-name">Name</Label>
+            <Label htmlFor="skill-name">{t("common.name")}</Label>
             <Input
               id="skill-name"
               value={draft.name}
@@ -614,7 +615,7 @@ function StudioNewSkillPanel({
           </div>
         </div>
         <div className="space-y-2">
-          <Label>Color</Label>
+          <Label>{t("common.color")}</Label>
           <div className="flex flex-wrap items-center gap-2">
             {SKILL_CREATE_ACCENTS.map((color) => (
               <button
@@ -664,7 +665,7 @@ function StudioNewSkillPanel({
                 draft.sharingScope === scope ? "border-foreground bg-accent/50" : "border-border",
               )}
             >
-              <span className="block font-medium">{scope === "company" ? "Organization" : "Private"}</span>
+              <span className="block font-medium">{scope === "company" ? t("common.organization") : t("common.private")}</span>
               <span className="mt-1 block text-xs text-muted-foreground">
                 {scope === "company" ? "Visible inside this organization." : "Only visible in your library."}
               </span>
@@ -675,7 +676,7 @@ function StudioNewSkillPanel({
             disabled
             className="rounded-md border border-dashed border-border px-3 py-2 text-left text-sm text-muted-foreground"
           >
-            <span className="block font-medium">Public</span>
+            <span className="block font-medium">{t("common.public")}</span>
             <span className="mt-1 block text-xs">Coming later.</span>
           </button>
         </div>
@@ -692,11 +693,11 @@ function StudioNewSkillPanel({
 
       <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
         <Button variant="ghost" onClick={() => navigate("/skills/studio")} disabled={createSkill.isPending}>
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button onClick={() => createSkill.mutate()} disabled={createSkill.isPending || !nameValid}>
           <FilePlus className="h-4 w-4" />
-          {createSkill.isPending ? "Creating..." : draft.forkedFromSkillId ? "Create fork" : "Create skill"}
+          {createSkill.isPending ? t("common.creating2") : draft.forkedFromSkillId ? "Create fork" : "Create skill"}
         </Button>
       </div>
     </div>
@@ -1520,7 +1521,7 @@ function SkillPane({
                   disabled={!dirty || saveMutation.isPending}
                   onClick={() => saveMutation.mutate()}
                 >
-                  {saveMutation.isPending ? "Saving…" : "Save"}
+                  {saveMutation.isPending ? t("common.saving2") : t("common.save")}
                 </Button>
               </>
             )}
@@ -1625,7 +1626,7 @@ function folderSeedFile(folderPath: string) {
 }
 
 function folderSeedContent(folderPath: string) {
-  const label = folderPath.split("/").filter(Boolean).at(-1) ?? "Folder";
+  const label = folderPath.split("/").filter(Boolean).at(-1) ?? t("common.folder");
   return `# ${label}\n`;
 }
 
@@ -1799,10 +1800,10 @@ function SkillPathDialog({
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button disabled={pending} onClick={submit}>
-            Create
+            {t("common.create")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -1876,10 +1877,10 @@ function DeleteFolderDialog({
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button variant="destructive" disabled={pending} onClick={submit}>
-            Delete
+            {t("common.delete")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -2120,7 +2121,7 @@ function InputPane({
                               variant="destructive"
                               onClick={() => deleteMutation.mutate(id)}
                             >
-                              <Trash2 className="mr-2 h-4 w-4" /> Delete
+                              <Trash2 className="mr-2 h-4 w-4" /> {t("common.delete")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -2168,7 +2169,7 @@ function InputPane({
                   disabled={!canSaveSelectedInput || updateMutation.isPending}
                   onClick={() => updateMutation.mutate({ content: draft })}
                 >
-                  {updateMutation.isPending ? "Saving..." : "Save changes"}
+                  {updateMutation.isPending ? t("common.saving") : t("common.saveChanges")}
                 </Button>
               </>
             ) : null}
@@ -2253,7 +2254,7 @@ function SaveInputDialog({
         </DialogHeader>
         <div className="space-y-3">
           <div className="space-y-1">
-            <Label htmlFor="input-name">Name</Label>
+            <Label htmlFor="input-name">{t("common.name")}</Label>
             <Input
               id="input-name"
               value={name}
@@ -2274,13 +2275,13 @@ function SaveInputDialog({
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             disabled={!name.trim() || !content.trim() || createMutation.isPending}
             onClick={() => createMutation.mutate()}
           >
-            Save
+            {t("common.save")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -2529,7 +2530,7 @@ function RunsPane({
                   disabled={gate.disabled || Boolean(templateGateReason) || createRunMutation.isPending}
                   onClick={() => createRunMutation.mutate()}
                 >
-                  <Play className="mr-1.5 h-3.5 w-3.5" /> Run
+                  <Play className="mr-1.5 h-3.5 w-3.5" /> {t("common.run")}
                 </Button>
               </span>
             </TooltipTrigger>
@@ -2683,7 +2684,7 @@ function RunTemplateAdvancedPanel({
     const custom = templates.filter((template) => !template.builtIn).map(toOption);
     return [
       { id: "built-in", label: "Built in", options: [noTemplateOption, ...builtIn] },
-      ...(custom.length > 0 ? [{ id: "custom", label: "Custom", options: custom }] : []),
+      ...(custom.length > 0 ? [{ id: "custom", label: t("common.custom"), options: custom }] : []),
     ];
   }, [templates]);
 
@@ -2705,7 +2706,7 @@ function RunTemplateAdvancedPanel({
         ) : (
           <ChevronRight className="h-3.5 w-3.5" />
         )}
-        <span className="font-semibold uppercase tracking-wide">Advanced</span>
+        <span className="font-semibold uppercase tracking-wide">{t("common.advanced")}</span>
         <span className="ml-auto truncate">{selectedTemplateName}</span>
       </button>
       {open ? (
@@ -2729,7 +2730,7 @@ function RunTemplateAdvancedPanel({
                   <span className="flex min-w-0 flex-col">
                     <span className={cn("truncate", selected && "font-medium")}>{option.label}</span>
                     <span className="truncate text-(length:--text-micro) text-muted-foreground">
-                      {option.description ?? (option.builtIn ? "Built in" : "Custom")}
+                      {option.description ?? (option.builtIn ? "Built in" : t("common.custom"))}
                     </span>
                   </span>
                 )}
@@ -2871,7 +2872,7 @@ function RunTemplateDialog({
         </DialogHeader>
         <div className="space-y-3">
           <div className="space-y-1">
-            <Label htmlFor="run-template-name">Name</Label>
+            <Label htmlFor="run-template-name">{t("common.name")}</Label>
             <Input
               id="run-template-name"
               value={name}
@@ -2880,7 +2881,7 @@ function RunTemplateDialog({
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="run-template-description">Description</Label>
+            <Label htmlFor="run-template-description">{t("common.description")}</Label>
             <Input
               id="run-template-description"
               value={description}
@@ -2903,7 +2904,7 @@ function RunTemplateDialog({
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             disabled={!name.trim() || !body.trim() || pending}
@@ -2915,7 +2916,7 @@ function RunTemplateDialog({
               })
             }
           >
-            {pending ? "Saving..." : "Save template"}
+            {pending ? t("common.saving") : "Save template"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -2935,7 +2936,7 @@ function RunHistoryRow({
   const agent = agents.find((a) => a.id === run.agentId) ?? null;
   const removed = !agent;
   const snapshotName =
-    (run.agentConfigSnapshot?.name as string | undefined) ?? "Agent";
+    (run.agentConfigSnapshot?.name as string | undefined) ?? t("common.agent");
   const name = agent?.name ?? snapshotName;
   return (
     <EntityRow
@@ -3004,7 +3005,7 @@ function AgentPicker({
                     <AgentIdentity agent={agent} size="xs" />
                     {!selectable && (
                       <Badge variant="secondary" className="ml-auto">
-                        Paused
+                        {t("common.paused")}
                       </Badge>
                     )}
                   </CommandItem>
@@ -3102,14 +3103,14 @@ function RunDetailView({
 
   if (detailQuery.isLoading) {
     return (
-      <PaneScaffold title="Run" action={<BackButton onBack={onBack} />}>
+      <PaneScaffold title={t("common.run")} action={<BackButton onBack={onBack} />}>
         <div className="p-3 text-xs text-muted-foreground">Loading run…</div>
       </PaneScaffold>
     );
   }
   if (!detail) {
     return (
-      <PaneScaffold title="Run" action={<BackButton onBack={onBack} />}>
+      <PaneScaffold title={t("common.run")} action={<BackButton onBack={onBack} />}>
         <div className="p-3 text-xs text-muted-foreground">Run not found.</div>
       </PaneScaffold>
     );
@@ -3117,14 +3118,14 @@ function RunDetailView({
 
   const agent = agents.find((a) => a.id === detail.agentId) ?? null;
   const agentName =
-    agent?.name ?? (detail.agentConfigSnapshot?.name as string | undefined) ?? "Agent";
+    agent?.name ?? (detail.agentConfigSnapshot?.name as string | undefined) ?? t("common.agent");
   const removed = !agent;
   const outputMode = runOutputMode(detail);
   const nonTerminal = !isTerminalRunStatus(detail.status);
   const taskLink = testTaskLinkState(detail);
 
   return (
-    <PaneScaffold title="Run" action={<BackButton onBack={onBack} />}>
+    <PaneScaffold title={t("common.run")} action={<BackButton onBack={onBack} />}>
       <div className="min-h-0 flex-1 space-y-3 overflow-auto p-3">
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={runBadgeStatus(detail.status)} />
@@ -3143,7 +3144,7 @@ function RunDetailView({
           <PropRow label="Input" value={detail.inputId ? "saved input" : "ad-hoc paste"} />
           <PropRow label="Template" value={detail.templateName ?? "No template"} />
           <PropRow label="Skill version" value={`v${detail.skillVersion.revisionNumber}`} />
-          <PropRow label="Created" value={relativeTime(detail.createdAt)} />
+          <PropRow label={t("common.created")} value={relativeTime(detail.createdAt)} />
         </div>
 
         {showRunErrorCard(detail.status) && (
@@ -3239,7 +3240,7 @@ function RunDetailView({
               disabled={cancelMutation.isPending}
               onClick={() => cancelMutation.mutate()}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
           ) : (
             <Button
@@ -3249,7 +3250,7 @@ function RunDetailView({
               disabled={deleteMutation.isPending}
               onClick={() => deleteMutation.mutate()}
             >
-              <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Delete
+              <Trash2 className="mr-1.5 h-3.5 w-3.5" /> {t("common.delete")}
             </Button>
           )}
           {taskLink.enabled && detail.harnessIssue ? (
@@ -3300,7 +3301,7 @@ function RunDocumentsSection({ documents }: { documents: IssueDocument[] }) {
     <section className="space-y-2">
       <div className="flex items-center gap-2">
         <FileText className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
-        <h3 className="text-sm font-medium text-muted-foreground">Documents</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{t("common.documents")}</h3>
         <span className="text-xs text-muted-foreground">{documents.length}</span>
       </div>
       <div className="space-y-2">
@@ -3584,7 +3585,7 @@ function PropRow({ label, value }: { label: string; value: string }) {
 function BackButton({ onBack }: { onBack: () => void }) {
   return (
     <Button variant="ghost" size="sm" onClick={onBack}>
-      <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Back
+      <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> {t("common.back")}
     </Button>
   );
 }
@@ -3601,9 +3602,9 @@ function MobileTabs({
   return (
     <Tabs defaultValue="skill" className="flex flex-1 flex-col">
       <TabsList variant="line" className="px-3">
-        <TabsTrigger value="skill">Skill</TabsTrigger>
+        <TabsTrigger value="skill">{t("common.skill")}</TabsTrigger>
         <TabsTrigger value="input">Input</TabsTrigger>
-        <TabsTrigger value="runs">Runs</TabsTrigger>
+        <TabsTrigger value="runs">{t("common.runs")}</TabsTrigger>
       </TabsList>
       <TabsContent value="skill" className="min-h-0 flex-1">
         {skill}

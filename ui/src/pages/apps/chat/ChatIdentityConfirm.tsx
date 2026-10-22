@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CheckCircle2, Loader2 } from "lucide-react";
@@ -114,7 +115,7 @@ export function ChatIdentityConfirm() {
           <dd className="text-right text-sm font-medium">{paperclipAccount}</dd>
         </div>
         <div className="flex items-center justify-between gap-4 py-3">
-          <dt className="text-sm text-muted-foreground">Agent</dt>
+          <dt className="text-sm text-muted-foreground">{t("common.agent")}</dt>
           <dd className="text-sm font-medium">
             {identity.botLabel ?? "Paperclip agent"}
           </dd>

@@ -1,4 +1,4 @@
-import { dateLocale } from "@/i18n";
+import { dateLocale, t } from "@/i18n";
 import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -176,8 +176,8 @@ const checksLabel = {
   unknown: "Checks not available",
 };
 const stateLabel = {
-  open: "Open",
-  draft: "Draft",
+  open: t("common.open"),
+  draft: t("common.draft"),
   merged: "Merged",
   closed: "Closed",
   unknown: "State unknown",

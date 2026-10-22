@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Upload } from "lucide-react";
@@ -19,7 +20,7 @@ export function ArtifactDropzone({ children, onUpload, enabled = true, target }:
     setDragging(false);
     if (!enabled || !element) return;
     let depth = 0;
-    const hasFiles = (event: DragEvent) => Array.from(event.dataTransfer?.types ?? []).includes("Files");
+    const hasFiles = (event: DragEvent) => Array.from(event.dataTransfer?.types ?? []).includes(t("common.files"));
     const enter = (event: DragEvent) => {
       if (!hasFiles(event)) return;
       event.preventDefault();

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Copy } from "lucide-react";
 import type { ToolMcpGatewayWithTokens, ToolProfileWithDetails } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
@@ -54,7 +55,7 @@ export function OverviewPanel({
   async function copy(value: string, label: string) {
     try {
       await copyTextToClipboard(value);
-      pushToast({ title: "Copied", body: label, tone: "success" });
+      pushToast({ title: t("common.copied"), body: label, tone: "success" });
     } catch {
       pushToast({ title: "Copy failed", body: "Clipboard access is unavailable.", tone: "error" });
     }
@@ -74,7 +75,7 @@ export function OverviewPanel({
           {apps.length} {apps.length === 1 ? "app" : "apps"}
           {profile ? ` · ${allowedToolsLabel(profile)}` : ""}
         </StatCard>
-        <StatCard label="Tokens">
+        <StatCard label={t("common.tokens")}>
           {active} active{expiring > 0 ? ` · ${expiring} expiring` : ""}
         </StatCard>
         <StatCard label="Health">
@@ -118,7 +119,7 @@ export function OverviewPanel({
           <h3 className="text-sm font-semibold text-foreground">How clients connect</h3>
           <Button variant="outline" size="sm" onClick={() => void copy(snippet, "Client config")}>
             <Copy className="mr-1 h-3.5 w-3.5" />
-            Copy
+            {t("common.copy")}
           </Button>
         </div>
         <pre className="mt-3 overflow-auto whitespace-pre-wrap break-words rounded bg-background p-3 font-mono text-xs text-muted-foreground">
