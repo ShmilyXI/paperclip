@@ -81,14 +81,14 @@ export function ProfileSettings() {
       setImage(profile.image ?? "");
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to update profile.");
+      setActionError(error instanceof Error ? error.message : t("settings.failedToUpdateProfile"));
     },
   });
 
   const uploadAvatarMutation = useMutation({
     mutationFn: async (file: File) => {
       if (!selectedCompanyId) {
-        throw new Error("Select an organization before uploading a profile avatar.");
+        throw new Error(t("settings.selectAnOrganizationBeforeUploading"));
       }
 
       const asset = await assetsApi.uploadImage(
@@ -104,7 +104,7 @@ export function ProfileSettings() {
       setImage(profile.image ?? "");
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to upload avatar.");
+      setActionError(error instanceof Error ? error.message : t("settings.failedToUploadAvatar"));
     },
   });
 
@@ -116,18 +116,18 @@ export function ProfileSettings() {
       setImage(profile.image ?? "");
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to remove avatar.");
+      setActionError(error instanceof Error ? error.message : t("settings.failedToRemoveAvatar"));
     },
   });
 
   if (sessionQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading profile...</div>;
+    return <div className="text-sm text-muted-foreground">{t("settings.loadingProfile")}</div>;
   }
 
   if (sessionQuery.error || !sessionQuery.data) {
     return (
       <div className="text-sm text-destructive">
-        {sessionQuery.error instanceof Error ? sessionQuery.error.message : "Failed to load profile."}
+        {sessionQuery.error instanceof Error ? sessionQuery.error.message : t("settings.failedToLoadProfile")}
       </div>
     );
   }
@@ -148,7 +148,7 @@ export function ProfileSettings() {
           <h1 className="text-lg font-semibold">{t("common.profile")}</h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          Control how your account appears in the sidebar and other board surfaces.
+          {t("settings.controlHowYourAccountAppears")}
         </p>
       </div>
 
@@ -237,7 +237,7 @@ export function ProfileSettings() {
           }}
         >
           <div className="space-y-2">
-            <Label htmlFor="profile-name">Display name</Label>
+            <Label htmlFor="profile-name">{t("settings.displayName")}</Label>
             <Input
               id="profile-name"
               value={name}
@@ -246,7 +246,7 @@ export function ProfileSettings() {
               placeholder={t("common.board")}
             />
             <p className="text-xs text-muted-foreground">
-              Shown in the sidebar account footer and comment author surfaces.
+              {t("settings.shownInTheSidebarAccount")}
             </p>
           </div>
 
@@ -259,7 +259,7 @@ export function ProfileSettings() {
               disabled
             />
             <p className="text-xs text-muted-foreground">
-              Email is managed by your auth session and is read-only here.
+              {t("settings.emailIsManagedByYour")}
             </p>
           </div>
 

@@ -58,12 +58,12 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       await queryClient.invalidateQueries({ queryKey: queryKeys.instance.generalSettings });
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to update general settings.");
+      setActionError(error instanceof Error ? error.message : t("settings.failedToUpdateGeneralSettings"));
     },
   });
 
   if (generalQuery.isLoading || healthQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading general settings...</div>;
+    return <div className="text-sm text-muted-foreground">{t("settings.loadingGeneralSettings")}</div>;
   }
 
   if (generalQuery.error) {
@@ -71,7 +71,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       <div className="text-sm text-destructive">
         {generalQuery.error instanceof Error
           ? generalQuery.error.message
-          : "Failed to load general settings."}
+          : t("settings.failedToLoadGeneralSettings")}
       </div>
     );
   }
@@ -124,7 +124,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       <section>
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold">Deployment and auth</h2>
+            <h2 className="text-sm font-semibold">{t("settings.deploymentAndAuth")}</h2>
             <ModeBadge
               deploymentMode={healthQuery.data?.deploymentMode}
               deploymentExposure={healthQuery.data?.deploymentExposure}
@@ -139,15 +139,15 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
           </div>
           <div className="grid gap-3 md:grid-cols-3">
             <StatusBox
-              label="Auth readiness"
+              label={t("settings.authReadiness")}
               value={healthQuery.data?.authReady ? "Ready" : "Not ready"}
             />
             <StatusBox
-              label="Bootstrap status"
+              label={t("settings.bootstrapStatus")}
               value={healthQuery.data?.bootstrapStatus === "bootstrap_pending" ? "Setup required" : "Ready"}
             />
             <StatusBox
-              label="Bootstrap invite"
+              label={t("settings.bootstrapInvite")}
               value={healthQuery.data?.bootstrapInviteActive ? t("common.active") : t("common.none")}
             />
           </div>
@@ -159,7 +159,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       <section>
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">Censor username in logs</h2>
+            <h2 className="text-sm font-semibold">{t("settings.censorUsernameInLogs")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
               Hide the username segment in home-directory paths and similar operator-visible log output. Standalone
               username mentions outside of paths are not yet masked in the live transcript view. This is off by
@@ -170,7 +170,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             checked={censorUsernameInLogs}
             onCheckedChange={() => updateGeneralMutation.mutate({ censorUsernameInLogs: !censorUsernameInLogs })}
             disabled={updateGeneralMutation.isPending || signOutMutation.isPending}
-            aria-label="Toggle username log censoring"
+            aria-label={t("settings.toggleUsernameLogCensoring")}
           />
         </div>
       </section>
@@ -180,7 +180,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       <section>
         <div className="space-y-5">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">Backup retention</h2>
+            <h2 className="text-sm font-semibold">{t("settings.backupRetention")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
               Configure how long automatic database backups are retained. Backups run roughly
               every hour and are compressed with gzip. Within the daily window all backups are
@@ -284,7 +284,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       <section>
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">AI feedback sharing</h2>
+            <h2 className="text-sm font-semibold">{t("settings.aiFeedbackSharing")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
               Control whether thumbs up and thumbs down votes can send the voted AI output to
               Paperclip Labs. Votes are always saved locally.
@@ -296,7 +296,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
                 rel="noreferrer"
                 className="inline-flex text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
               >
-                Read our terms of service
+                {t("settings.readOurTermsOfService")}
               </a>
             ) : null}
           </div>
@@ -310,13 +310,13 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             {[
               {
                 value: "allowed",
-                label: "Always allow",
-                description: "Share voted AI outputs automatically.",
+                label: t("settings.alwaysAllow"),
+                description: t("settings.shareVotedAiOutputsAutomatically"),
               },
               {
                 value: "not_allowed",
-                label: "Don't allow",
-                description: "Keep voted AI outputs local only.",
+                label: t("settings.donTAllow"),
+                description: t("settings.keepVotedAiOutputsLocal"),
               },
             ].map((option) => {
               const active = feedbackDataSharingPreference === option.value;
@@ -365,7 +365,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
           <div className="space-y-1.5">
             <h2 className="text-sm font-semibold">{t("common.signOut")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
-              Sign out of this Paperclip instance. You will be redirected to the login page.
+              {t("settings.signOutOfThisPaperclip")}
             </p>
           </div>
           <Button
