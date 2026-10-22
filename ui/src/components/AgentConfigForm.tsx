@@ -280,18 +280,18 @@ function formatArgList(value: unknown): string {
 
 const openCodeThinkingEffortOptions = [
   { id: "", label: t("common.auto") },
-  { id: "minimal", label: "Minimal" },
+  { id: "minimal", label: t("agentConfig.minimal") },
   { id: "low", label: t("common.low") },
   { id: "medium", label: t("common.medium") },
   { id: "high", label: t("common.high") },
-  { id: "xhigh", label: "X-High" },
-  { id: "max", label: "Max" },
+  { id: "xhigh", label: t("agentConfig.xHigh") },
+  { id: "max", label: t("agentConfig.max") },
 ] as const;
 
 const cursorModeOptions = [
   { id: "", label: t("common.auto") },
-  { id: "plan", label: "Plan" },
-  { id: "ask", label: "Ask" },
+  { id: "plan", label: t("agentConfig.plan") },
+  { id: "ask", label: t("agentConfig.ask") },
 ] as const;
 
 const claudeThinkingEffortOptions = [
@@ -307,7 +307,7 @@ const kimiThinkingEffortOptions = [
   { id: "", label: t("common.auto") },
   { id: "low", label: t("common.low") },
   { id: "high", label: t("common.high") },
-  { id: "max", label: "Max" },
+  { id: "max", label: t("agentConfig.max") },
 ] as const;
 
 const MAX_TURN_CONTINUATION_DEFAULT_MAX_ATTEMPTS = 2;
@@ -456,7 +456,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   );
   const createSecret = useMutation({
     mutationFn: (input: { name: string; value: string }) => {
-      if (!selectedCompanyId) throw new Error("Select an organization to create secrets");
+      if (!selectedCompanyId) throw new Error(t("agentConfig.selectAnOrganizationToCreate"));
       return secretsApi.create(selectedCompanyId, input);
     },
     onSuccess: () => {
@@ -467,7 +467,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
   const uploadMarkdownImage = useMutation({
     mutationFn: async ({ file, namespace }: { file: File; namespace: string }) => {
-      if (!selectedCompanyId) throw new Error("Select an organization to upload images");
+      if (!selectedCompanyId) throw new Error(t("agentConfig.selectAnOrganizationToUpload"));
       return assetsApi.uploadImage(selectedCompanyId, file, namespace);
     },
   });
@@ -656,7 +656,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       setRunnerUpgrade(current => current?.agentId === agentId ? { agentId, status: "upgraded" } : current);
     } catch (error) {
       setRunnerUpgrade(current => current?.agentId === agentId ? {
-        agentId, status: "failed", error: error instanceof Error ? error.message : "Could not upgrade this agent. Try again.",
+        agentId, status: "failed", error: error instanceof Error ? error.message : t("agentConfig.couldNotUpgradeThisAgent"),
       } : current);
     }
   };
@@ -1010,7 +1010,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       : ["agents", "none", "detect-model", adapterType],
     queryFn: () => {
       if (!selectedCompanyId) {
-        throw new Error("Select an organization to detect the model");
+        throw new Error(t("agentConfig.selectAnOrganizationToDetect"));
       }
       return agentsApi.detectModel(selectedCompanyId, adapterType);
     },
@@ -1084,7 +1084,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const testEnvironment = useMutation({
     mutationFn: async () => {
       if (!selectedCompanyId) {
-        throw new Error("Select an organization to test adapter environment");
+        throw new Error(t("agentConfig.selectAnOrganizationToTest"));
       }
       const flushedEnv = flushEnvironmentDraft();
       const adapterConfigPatch = flushedEnv ? { env: flushedEnv } : undefined;
@@ -1134,7 +1134,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           managedSandboxOnly = resolvedExperimental?.enableManagedSandboxOnly === true;
         } catch {
           throw new Error(
-            "Could not load environment settings to determine which environment to test in. Retry the test.",
+            t("agentConfig.couldNotLoadEnvironmentSettings"),
           );
         }
       }
@@ -1254,7 +1254,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     (!loginNeedsPty || providerSupportsLoginPty);
   const runEnvironmentTest = useCallback(async () => {
     if (!selectedCompanyId) {
-      throw new Error("Select an organization to test adapter environment");
+      throw new Error(t("agentConfig.selectAnOrganizationToTest"));
     }
     setTestActionPending(true);
     setTestActionError(null);
@@ -1262,7 +1262,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     try {
       return await testEnvironment.mutateAsync();
     } catch (error) {
-      setTestActionError(error instanceof Error ? error.message : "Environment test failed");
+      setTestActionError(error instanceof Error ? error.message : t("agentConfig.environmentTestFailed"));
       throw error;
     } finally {
       setTestActionPending(false);
@@ -1315,7 +1315,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
         ?? (testEnvironment.error instanceof Error
           ? testEnvironment.error.message
           : testEnvironment.error
-            ? "Environment test failed"
+            ? t("agentConfig.environmentTestFailed")
             : null),
       result: testEnvironment.data ?? null,
       // `showAdapterLogin` already requires a selected company and a non-empty
@@ -1353,7 +1353,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       const refreshed = await agentsApi.adapterModels(selectedCompanyId, modelAdapterType, { refresh: true, environmentId: currentDefaultEnvironmentId || null, provider: modelProvider, ...(runnerAcpxAgent === "copilot" ? { acpxAgent: runnerAcpxAgent, aiConnection: modelAiBinding, agentId: !isCreate ? props.agent.id : undefined } : {}) });
       queryClient.setQueryData(modelQueryKey, refreshed);
     } catch (error) {
-      setRefreshModelsError(error instanceof Error ? error.message : "Failed to refresh adapter models.");
+      setRefreshModelsError(error instanceof Error ? error.message : t("agentConfig.failedToRefreshAdapterModels"));
     } finally {
       setRefreshingModels(false);
     }
@@ -1385,7 +1385,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               : harnessType === "claude_local" || adapterType === "grok_local"
                 ? [{ id: "", label: t("common.auto") }, ...setupEfforts(harnessType, currentModelId).map((id) => ({
                     id,
-                    label: id === "xhigh" ? "X-High" : id[0].toUpperCase() + id.slice(1),
+                    label: id === "xhigh" ? t("agentConfig.xHigh") : id[0].toUpperCase() + id.slice(1),
                   }))]
                 : claudeThinkingEffortOptions;
   const currentThinkingEffort = isCreate
@@ -1503,8 +1503,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
         <div data-config-section="secrets" className={cn(!cards && "border-b border-border")}>
           {cards
-            ? <h3 className="mb-3 text-sm font-medium">Secret access</h3>
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">Secret access</div>
+            ? <h3 className="mb-3 text-sm font-medium">{t("agentConfig.secretAccess")}</h3>
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("agentConfig.secretAccess")}</div>
           }
           <div className={cn(cards ? "space-y-3 rounded-lg border border-border p-4" : "space-y-3 px-4 pb-3")}>
             <p className="text-xs text-muted-foreground">{help.secretAccess}</p>
@@ -1530,12 +1530,12 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
         <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div className="min-w-0 flex-1 space-y-1">
-              <p className="text-sm font-medium">Upgrade to Paperclip Runner</p>
+              <p className="text-sm font-medium">{t("agentConfig.upgradeToPaperclipRunner")}</p>
               <p className="text-sm text-muted-foreground">
                 Keep {harnessType === "claude_local" ? "Claude" : "Codex"}, your model, account, and compatible settings.
                 New sessions start fresh; past runs stay available.
               </p>
-              {isDirty ? <p className="text-xs text-muted-foreground">Your unsaved changes will be included.</p> : null}
+              {isDirty ? <p className="text-xs text-muted-foreground">{t("agentConfig.yourUnsavedChangesWillBe")}</p> : null}
             </div>
             <Button size="sm" className="self-end sm:self-auto" onClick={upgradeRunner} disabled={runnerUpgradePending || (!isCreate && props.isSaving)}>
               {runnerUpgradePending ? <Loader2 className="size-4 animate-spin" /> : null}
@@ -1545,7 +1545,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           {runnerUpgradeError ? <p role="alert" className="text-sm text-destructive">{runnerUpgradeError}</p> : null}
         </div>
       ) : null}
-      {runnerUpgraded ? <p role="status" className="text-sm text-muted-foreground">Upgraded to Paperclip Runner.</p> : null}
+      {runnerUpgraded ? <p role="status" className="text-sm text-muted-foreground">{t("agentConfig.upgradedToPaperclipRunner")}</p> : null}
     <ConfigSections order={props.sectionOrder} className={cn("relative", cards && "space-y-6")}>
       {/* ---- Floating Save button (edit mode, when dirty) ---- */}
       {isDirty && !props.hideInlineSave && (
@@ -1567,8 +1567,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       {!isCreate && (
         <div data-config-section="identity" className={cn(!cards && "border-b border-border")}>
           {cards
-            ? <h3 className="text-sm font-medium mb-3">{props.sectionTitles?.["identity"] ?? "Identity"}</h3>
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">Identity</div>
+            ? <h3 className="text-sm font-medium mb-3">{props.sectionTitles?.["identity"] ?? t("agentConfig.identity")}</h3>
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("agentConfig.identity")}</div>
           }
           <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
             <Field label={t("common.name")} hint={help.name}>
@@ -1577,7 +1577,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 onCommit={(v) => mark("identity", "name", v)}
                 immediate
                 className={inputClass}
-                placeholder="Agent name"
+                placeholder={t("agentConfig.agentName")}
               />
             </Field>
             <Field label={t("common.title")} hint={help.title}>
@@ -1586,7 +1586,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 onCommit={(v) => mark("identity", "title", v || null)}
                 immediate
                 className={inputClass}
-                placeholder="e.g. VP of Engineering"
+                placeholder={t("agentConfig.eGVpOfEngineering")}
               />
             </Field>
             <Field label={t("common.reportsTo")} hint={help.reportsTo}>
@@ -1600,7 +1600,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             </Field>
             {isLocal && !props.hidePromptTemplate && (
               <>
-                <Field label="Prompt Template" hint={help.promptTemplate}>
+                <Field label={t("agentConfig.promptTemplate")} hint={help.promptTemplate}>
                   <MarkdownEditor
                     value={eff(
                       "adapterConfig",
@@ -1618,7 +1618,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                   />
                 </Field>
                 <div className="rounded-md border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-100">
-                  Prompt template is replayed on every heartbeat. Keep it compact and dynamic to avoid recurring token cost and cache churn.
+                  {t("agentConfig.promptTemplateIsReplayedOn")}
                 </div>
               </>
             )}
@@ -1638,7 +1638,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           }
           <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
             <Field
-              label="Default environment"
+              label={t("agentConfig.defaultEnvironment")}
               hint="This instance runs all agents in the Kubernetes sandbox. Local execution is disabled."
             >
               {kubernetesEnvironment ? (
@@ -1662,10 +1662,10 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("common.environment")}</div>
           }
           <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
-            <Field label="Environment override">
+            <Field label={t("agentConfig.environmentOverride")}>
               <div className="space-y-2">
                 <SelectPopover
-                  aria-label="Environment override"
+                  aria-label={t("agentConfig.environmentOverride")}
                   value={currentDefaultEnvironmentId}
                   onValueChange={(nextValue) => {
                     if (isCreate) {
@@ -1675,7 +1675,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                     mark("identity", "defaultEnvironmentId", nextValue || null);
                   }}
                   options={[
-                    { value: "", label: `Default: ${inheritedEnvironmentLabel}` },
+                    { value: "", label: t("agentConfig.defaultInheritedenvironmentlabel", { inheritedEnvironmentLabel }) },
                     ...environmentOptions.map((environment) => ({
                       value: environment.id,
                       label: environmentDisplayLabel(environment),
@@ -1710,7 +1710,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
         </div>
         <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
           {showAdapterTypeField && isGrokBotRunner && (
-            <Field label="Harness" hint={help.adapterType}>
+            <Field label={t("agentConfig.harness")} hint={help.adapterType}>
               <div className="inline-flex items-center gap-1.5">
                 <AdapterMark type="grok_bot" className="size-4" />
                 <span>Grok Bot</span>
@@ -1719,7 +1719,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             </Field>
           )}
           {showAdapterTypeField && !isGrokBotRunner && (
-            <Field label="Harness" hint={help.adapterType}>
+            <Field label={t("agentConfig.harness")} hint={help.adapterType}>
               <AdapterTypeDropdown
                 value={isDotRunner ? "openai_dot" : isMuseRunner ? "muse" : isRunnerHarness ? harnessType : adapterType}
                 disabledTypes={adapterPickerDisabledTypes}
@@ -1807,7 +1807,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               {testActionError
                 ?? (testEnvironment.error instanceof Error
                   ? testEnvironment.error.message
-                  : "Environment test failed")}
+                  : t("agentConfig.environmentTestFailed"))}
             </div>
           )}
 
@@ -1831,7 +1831,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
           {/* Working directory */}
           {showLegacyWorkingDirectoryField && (
-            <Field label="Working directory (deprecated)" hint={help.cwd}>
+            <Field label={t("agentConfig.workingDirectoryDeprecated")} hint={help.cwd}>
               <div className="flex items-center gap-2 rounded-md border border-border px-2.5 py-1.5">
                 <FolderOpen className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                 <DraftInput
@@ -1907,7 +1907,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                   {refreshModelsError
                     ?? (modelError instanceof Error
                       ? modelError.message
-                      : "Failed to load adapter models.")}
+                      : t("agentConfig.failedToLoadAdapterModels"))}
                 </p>
               )}
               {adapterType === "opencode_local"
@@ -1961,7 +1961,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
               {!isCreate && typeof config.bootstrapPromptTemplate === "string" && config.bootstrapPromptTemplate && (
                 <>
-                  <Field label="Bootstrap prompt (legacy)" hint={help.bootstrapPrompt}>
+                  <Field label={t("agentConfig.bootstrapPromptLegacy")} hint={help.bootstrapPrompt}>
                     <MarkdownEditor
                       value={eff(
                         "adapterConfig",
@@ -1971,7 +1971,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                       onChange={(v) =>
                         mark("adapterConfig", "bootstrapPromptTemplate", v || undefined)
                       }
-                      placeholder="Optional initial setup prompt for the first run"
+                      placeholder={t("agentConfig.optionalInitialSetupPromptFor")}
                       contentClassName="min-h-(--sz-44px) text-sm font-mono"
                       imageUploadHandler={async (file) => {
                         const namespace = `agents/${props.agent.id}/bootstrap-prompt`;
@@ -2045,7 +2045,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 </Field>
               )}
 
-              <Field label="Extra args (comma-separated)" hint={help.extraArgs}>
+              <Field label={t("agentConfig.extraArgsCommaSeparated")} hint={help.extraArgs}>
                 <DraftInput
                   value={
                     isCreate
@@ -2088,12 +2088,12 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       {isCreate && showCreateRunPolicySection ? (
         <div data-config-section="run-policy" className={cn(!cards && "border-b border-border")}>
           {cards
-            ? <h3 className="text-sm font-medium flex items-center gap-2 mb-3"><Heart className="h-3 w-3" /> Run Policy</h3>
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground flex items-center gap-2"><Heart className="h-3 w-3" /> Run Policy</div>
+            ? <h3 className="text-sm font-medium flex items-center gap-2 mb-3"><Heart className="h-3 w-3" /> {t("agentConfig.runPolicy")}</h3>
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground flex items-center gap-2"><Heart className="h-3 w-3" /> {t("agentConfig.runPolicy")}</div>
           }
           <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
             <ToggleWithNumber
-              label="Heartbeat on interval"
+              label={t("agentConfig.heartbeatOnInterval")}
               hint={help.heartbeatInterval}
               checked={val!.heartbeatEnabled}
               onCheckedChange={(v) => set!({ heartbeatEnabled: v })}
@@ -2104,7 +2104,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               numberHint={help.intervalSec}
               showNumber={val!.heartbeatEnabled}
             />
-            <CollapsibleSection title="Advanced Run Policy" open={runPolicyAdvancedOpen} onToggle={() => setRunPolicyAdvancedOpen(!runPolicyAdvancedOpen)}>
+            <CollapsibleSection title={t("agentConfig.advancedRunPolicy")} open={runPolicyAdvancedOpen} onToggle={() => setRunPolicyAdvancedOpen(!runPolicyAdvancedOpen)}>
               <div className="space-y-3">{renderAdapterFields("runPolicy")}</div>
             </CollapsibleSection>
           </div>
@@ -2112,13 +2112,13 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       ) : !isCreate ? (
         <div data-config-section="run-policy" className={cn(!cards && "border-b border-border")}>
           {cards
-            ? <h3 className="text-sm font-medium flex items-center gap-2 mb-3"><Heart className="h-3 w-3" /> Run Policy</h3>
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground flex items-center gap-2"><Heart className="h-3 w-3" /> Run Policy</div>
+            ? <h3 className="text-sm font-medium flex items-center gap-2 mb-3"><Heart className="h-3 w-3" /> {t("agentConfig.runPolicy")}</h3>
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground flex items-center gap-2"><Heart className="h-3 w-3" /> {t("agentConfig.runPolicy")}</div>
           }
           <div className={cn(cards ? "border border-border rounded-lg overflow-hidden" : "")}>
             <div className={cn(cards ? "p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
               <ToggleWithNumber
-                label="Heartbeat on interval"
+                label={t("agentConfig.heartbeatOnInterval")}
                 hint={help.heartbeatInterval}
                 checked={eff("heartbeat", "enabled", heartbeat.enabled === true)}
                 onCheckedChange={(v) => mark("heartbeat", "enabled", v)}
@@ -2131,7 +2131,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               />
             </div>
             <CollapsibleSection
-              title="Advanced Run Policy"
+              title={t("agentConfig.advancedRunPolicy")}
               bordered={cards}
               open={runPolicyAdvancedOpen}
               onToggle={() => setRunPolicyAdvancedOpen(!runPolicyAdvancedOpen)}
@@ -2143,7 +2143,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               {!isCreate && (
                 <>
                   {!configSchema?.fields.some((field) => field.key === "timeoutSec") && (
-                  <Field label="Timeout (sec)" hint={help.timeoutSec}>
+                  <Field label={t("agentConfig.timeoutSec")} hint={help.timeoutSec}>
                     <DraftNumberInput
                       value={eff(
                         "adapterConfig",
@@ -2157,7 +2157,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                   </Field>
                   )}
                   {!configSchema?.fields.some((field) => field.key === "graceSec") && (
-                  <Field label="Interrupt grace period (sec)" hint={help.graceSec}>
+                  <Field label={t("agentConfig.interruptGracePeriodSec")} hint={help.graceSec}>
                     <DraftNumberInput
                       value={eff(
                         "adapterConfig",
@@ -2174,7 +2174,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               )}
               </>)}
               <ToggleField
-                label="Wake on demand"
+                label={t("agentConfig.wakeOnDemand")}
                 hint={help.wakeOnDemand}
                 checked={eff(
                   "heartbeat",
@@ -2183,7 +2183,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 )}
                 onChange={(v) => mark("heartbeat", "wakeOnDemand", v)}
               />
-              <Field label="Cooldown (sec)" hint={help.cooldownSec}>
+              <Field label={t("agentConfig.cooldownSec")} hint={help.cooldownSec}>
                 <DraftNumberInput
                   value={eff(
                     "heartbeat",
@@ -2209,14 +2209,14 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               </Field>
               <div className="rounded-md border border-border/70 px-3 py-2">
                 <ToggleField
-                  label="Continue after max-turn stop"
+                  label={t("agentConfig.continueAfterMaxTurnStop")}
                   hint={help.maxTurnContinuationEnabled}
                   checked={maxTurnContinuationEnabled}
                   onChange={(v) => updateMaxTurnContinuation({ enabled: v })}
                 />
                 {maxTurnContinuationEnabled ? (
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    <Field label="Continuation attempts" hint={help.maxTurnContinuationMaxAttempts}>
+                    <Field label={t("agentConfig.continuationAttempts")} hint={help.maxTurnContinuationMaxAttempts}>
                       <DraftNumberInput
                         value={maxTurnContinuationMaxAttempts}
                         onCommit={(v) =>
@@ -2227,7 +2227,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                         className={inputClass}
                       />
                     </Field>
-                    <Field label="Continuation delay (sec)" hint={help.maxTurnContinuationDelaySec}>
+                    <Field label={t("agentConfig.continuationDelaySec")} hint={help.maxTurnContinuationDelaySec}>
                       <DraftNumberInput
                         value={maxTurnContinuationDelaySec}
                         onCommit={(v) =>
@@ -2252,11 +2252,11 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
         <div className={cn(!cards && "border-b border-border")}>
           {cards ? (
             <h3 className="mb-3 flex items-center gap-2 text-sm font-medium">
-              <Bug className="h-3 w-3" /> Debugging
+              <Bug className="h-3 w-3" /> {t("agentConfig.debugging")}
             </h3>
           ) : (
             <div className="flex items-center gap-2 px-4 py-2 text-xs font-medium text-muted-foreground">
-              <Bug className="h-3 w-3" /> Debugging
+              <Bug className="h-3 w-3" /> {t("agentConfig.debugging")}
             </div>
           )}
           <div
@@ -2268,7 +2268,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             )}
           >
             <ToggleField
-              label="Capture raw provider traces"
+              label={t("agentConfig.captureRawProviderTraces")}
               hint="Stores exact provider traffic for every future run until disabled. Traces may contain sensitive prompts and tool arguments, are administrator-only, and expire after 24 hours."
               checked={eff<unknown>("debug", "providerTrace", debug.providerTrace) === "raw"}
               onChange={(enabled) =>
@@ -2364,7 +2364,7 @@ function AdapterLoginTerminalState({
     return (
       <div className="flex items-center gap-2 text-(length:--text-micro) text-foreground">
         <Check className="size-3 shrink-0" />
-        <span>Authenticated. The environment has credentials now.</span>
+        <span>{t("agentConfig.authenticatedTheEnvironmentHasCredentials")}</span>
       </div>
     );
   }
@@ -2545,7 +2545,7 @@ function DisplayedCodeLoginPanel({
       setSessionId(session.sessionId);
     },
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : "Could not start the login.");
+      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotStartTheLogin"));
     },
   });
 
@@ -2562,7 +2562,7 @@ function DisplayedCodeLoginPanel({
     mutationFn: () => agentsApi.cancelAdapterAuthLogin(companyId, adapterType, sessionId!),
     onSuccess: clearActiveSession,
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : "Could not cancel the login.");
+      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotCancelTheLogin"));
     },
   });
 
@@ -2707,7 +2707,7 @@ function DisplayedCodeLoginPanel({
       setStartError(
         activeSessionQuery.error instanceof Error
           ? activeSessionQuery.error.message
-          : "Could not check for an active login.",
+          : t("agentConfig.couldNotCheckForAn"),
       );
       return;
     }
@@ -2796,7 +2796,7 @@ function DisplayedCodeLoginPanel({
             {activeSessionQuery.error instanceof AdapterLoginConflictError && (
               <Button type="button" variant="outline" disabled={cancelConflictingLogin.isPending}
                 onClick={() => cancelConflictingLogin.mutate()}>
-                Cancel previous sign-in and retry
+                {t("agentConfig.cancelPreviousSignInAnd")}
               </Button>
             )}
           </div>
@@ -2862,14 +2862,14 @@ function DisplayedCodeLoginPanel({
         {isActive && !prompt && (
           <div className="flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
             <Loader2 className="size-3 animate-spin shrink-0" />
-            <span>Preparing...</span>
+            <span>{t("agentConfig.preparing")}</span>
           </div>
         )}
 
         {isActive && prompt && (
           <div className="space-y-2">
             <div className="text-(length:--text-micro) text-muted-foreground">
-              Copy the code, then open the authentication page.
+              {t("agentConfig.copyTheCodeThenOpen")}
             </div>
           {/* Code first, then the URL, and the sentence and the numbering both
               say so.
@@ -2889,28 +2889,28 @@ function DisplayedCodeLoginPanel({
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
               <div className="text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
-                1. Code
+                {t("agentConfig.n1Code")}
               </div>
               <span className="font-mono text-xs text-foreground break-all">{prompt.code}</span>
             </div>
-            <AdapterLoginCopyButton value={prompt.code} label="Copy code" />
+            <AdapterLoginCopyButton value={prompt.code} label={t("agentConfig.copyCode")} />
           </div>
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
               <div className="text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
-                2. Authentication URL
+                {t("agentConfig.n2AuthenticationUrl")}
               </div>
               <span className="font-mono text-xs text-foreground break-all">{prompt.url}</span>
             </div>
             <div className="flex items-center">
-              <AdapterLoginCopyButton value={prompt.url} label="Copy URL" />
+              <AdapterLoginCopyButton value={prompt.url} label={t("agentConfig.copyUrl")} />
               <Button
                 asChild
                 type="button"
                 variant="ghost"
                 size="icon-xs"
-                aria-label="Open the authentication page"
-                title="Open the authentication page"
+                aria-label={t("agentConfig.openTheAuthenticationPage")}
+                title={t("agentConfig.openTheAuthenticationPage")}
                 className="text-muted-foreground hover:text-foreground"
               >
                 <a href={prompt.url} target="_blank" rel="noreferrer noopener">
@@ -2932,20 +2932,20 @@ function DisplayedCodeLoginPanel({
         {status === "authenticated" && accountBindState === "saving" && (
           <div className="flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
             <Loader2 className="size-3 animate-spin shrink-0" />
-            <span>Binding this agent to the signed-in account...</span>
+            <span>{t("agentConfig.bindingThisAgentToThe")}</span>
           </div>
         )}
         {status === "authenticated" && accountBindState === "bound" && (
           <div className="flex items-center gap-2 text-(length:--text-micro) text-foreground">
             <Check className="size-3 shrink-0" />
-            <span>Agent bound to the signed-in account.</span>
+            <span>{t("agentConfig.agentBoundToTheSigned")}</span>
           </div>
         )}
         {status === "authenticated" && accountBindState === "failed" && (
           <div className="flex items-center gap-2 text-(length:--text-micro)">
             <TriangleAlert className="size-3 shrink-0 text-destructive" />
             <span className="text-destructive">
-              Could not bind this agent to the signed-in account.
+              {t("agentConfig.couldNotBindThisAgent")}
             </span>
             <Button
               type="button"
@@ -3118,7 +3118,7 @@ function SubmittedBrowserCodeLoginPanel({
       setSessionId(session.sessionId);
     },
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : "Could not start the login.");
+      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotStartTheLogin"));
     },
   });
 
@@ -3145,7 +3145,7 @@ function SubmittedBrowserCodeLoginPanel({
         clearActiveSession();
         return;
       }
-      setStartError(error instanceof Error ? error.message : "Could not cancel the login.");
+      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotCancelTheLogin"));
     },
   });
 
@@ -3179,7 +3179,7 @@ function SubmittedBrowserCodeLoginPanel({
       try {
         const active = await agentsApi.getActiveClaudeSetupTokenLoginSession(companyId);
         if (!active) return null;
-        if ((aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new Error("Another sign-in attempt is active. Finish or cancel it in its original account setup before starting this one.");
+        if ((aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new Error(t("agentConfig.anotherSignInAttemptIs"));
         return active;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
@@ -3309,7 +3309,7 @@ function SubmittedBrowserCodeLoginPanel({
     mutationFn: (code: string) =>
       agentsApi.submitClaudeSetupTokenBrowserCode(companyId, sessionId!, code),
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : "Could not submit the browser code.");
+      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotSubmitTheBrowser"));
     },
   });
 
@@ -3442,7 +3442,7 @@ function SubmittedBrowserCodeLoginPanel({
       setStartError(
         activeSessionQuery.error instanceof Error
           ? activeSessionQuery.error.message
-          : "Could not check for an active login.",
+          : t("agentConfig.couldNotCheckForAn"),
       );
       return;
     }
@@ -3537,8 +3537,7 @@ function SubmittedBrowserCodeLoginPanel({
         {transportInsecure && (
           <p className="flex items-start gap-2 pl-2 text-xs text-amber-700 dark:text-amber-200">
             <TriangleAlert className="mt-0.5 size-3 shrink-0" />
-            This connection is not encrypted. The login code travels in clear text on this
-            network. Continue only on a network you trust.
+            {t("agentConfig.thisConnectionIsNotEncrypted")}
           </p>
         )}
         {startError ? (
@@ -3604,7 +3603,7 @@ function SubmittedBrowserCodeLoginPanel({
                 setAppliedStored(true);
               }}
             >
-              Use saved login
+              {t("agentConfig.useSavedLogin")}
             </Button>
           )}
           <Button
@@ -3625,15 +3624,14 @@ function SubmittedBrowserCodeLoginPanel({
           token; a replacement login rotates it under the captured version. */}
       {storedToken && !isActive && !isStored && !appliedStored && (
         <div className="text-(length:--text-micro) text-muted-foreground">
-          You have a saved Claude login. Use it to bind this agent, or log in again to replace the
-          stored token.
+          {t("agentConfig.youHaveASavedClaude")}
         </div>
       )}
 
       {appliedStored && (
         <div className="flex items-center gap-2 text-(length:--text-micro) text-foreground">
           <Check className="size-3 shrink-0" />
-          <span>The saved Claude login is bound to this agent now.</span>
+          <span>{t("agentConfig.theSavedClaudeLoginIs")}</span>
         </div>
       )}
 
@@ -3649,7 +3647,7 @@ function SubmittedBrowserCodeLoginPanel({
         {isActive && !authorizationUrl && !isCompleting && (
           <div className="flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
             <Loader2 className="size-3 animate-spin shrink-0" />
-            <span>Preparing...</span>
+            <span>{t("agentConfig.preparing")}</span>
           </div>
         )}
 
@@ -3661,30 +3659,29 @@ function SubmittedBrowserCodeLoginPanel({
               >
                 <TriangleAlert className="size-3 shrink-0 mt-0.5" />
                 <span>
-                  This connection is not encrypted. The login code travels in clear text on this
-                  network. Continue only on a network you trust.
+                  {t("agentConfig.thisConnectionIsNotEncrypted")}
                 </span>
               </div>
             )}
             <div className="text-(length:--text-micro) text-muted-foreground">
-              Open the authorization page, then enter the browser code it shows.
+              {t("agentConfig.openTheAuthorizationPageThen")}
             </div>
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <div className="text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
-                  1. Authorization URL
+                  {t("agentConfig.n1AuthorizationUrl")}
                 </div>
                 <span className="font-mono text-xs text-foreground break-all">{authorizationUrl}</span>
               </div>
               <div className="flex items-center">
-                <AdapterLoginCopyButton value={authorizationUrl} label="Copy URL" />
+                <AdapterLoginCopyButton value={authorizationUrl} label={t("agentConfig.copyUrl")} />
                 <Button
                   asChild
                   type="button"
                   variant="ghost"
                   size="icon-xs"
-                  aria-label="Open the authorization page"
-                  title="Open the authorization page"
+                  aria-label={t("agentConfig.openTheAuthorizationPage")}
+                  title={t("agentConfig.openTheAuthorizationPage")}
                   className="text-muted-foreground hover:text-foreground"
                 >
                   <a href={authorizationUrl} target="_blank" rel="noreferrer noopener">
@@ -3695,11 +3692,11 @@ function SubmittedBrowserCodeLoginPanel({
             </div>
             <div className="space-y-1">
               <div className="text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
-                2. Browser code
+                {t("agentConfig.n2BrowserCode")}
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  aria-label="Browser code"
+                  aria-label={t("agentConfig.browserCode")}
                   type="text"
                   autoComplete="off"
                   spellCheck={false}
@@ -3731,14 +3728,14 @@ function SubmittedBrowserCodeLoginPanel({
         {isCompleting && (
           <div className="flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
             <Loader2 className="size-3 animate-spin shrink-0" />
-            <span>Completing the login…</span>
+            <span>{t("agentConfig.completingTheLogin")}</span>
           </div>
         )}
 
         {isStored && (
           <div className="flex items-center gap-2 text-(length:--text-micro) text-foreground">
             <Check className="size-3 shrink-0" />
-            <span>Authenticated. The environment has credentials now.</span>
+            <span>{t("agentConfig.authenticatedTheEnvironmentHasCredentials")}</span>
           </div>
         )}
 
@@ -3820,7 +3817,7 @@ export function AdapterTypeDropdown({
     ].filter(item => (item.value !== "paperclip_runner" || nativeRunnerEnabled) && !disabledTypes.has(item.value))
       .sort((a, b) => Number(a.value === "paperclip_runner") - Number(b.value === "paperclip_runner")),
     [disabledTypes, openAiDotEnabled, nativeRunnerEnabled, museEnabled]);
-  return <SelectPopover aria-label="Harness" value={value} onValueChange={onChange}
+  return <SelectPopover aria-label={t("agentConfig.harness")} value={value} onValueChange={onChange}
     displayValue={<span className="inline-flex min-w-0 items-center gap-1.5">
       <span aria-hidden="true" className="inline-flex shrink-0"><AdapterMark type={value} className="size-4" /></span>
       <span className="truncate">{adapterLabels[value] ?? getAdapterLabel(value)}</span>
@@ -3829,7 +3826,7 @@ export function AdapterTypeDropdown({
     options={adapterList.map(item => ({ value: item.value, disabled: item.comingSoon,
       group: item.value === "paperclip_runner" ? t("common.advanced") : undefined,
       label: <span className="inline-flex items-center gap-1.5"><span aria-hidden="true" className="inline-flex shrink-0"><AdapterMark type={item.value} className="size-4" /></span><span>{item.label}</span>{item.experimental && <ExperimentalBadge />}</span>,
-      suffix: item.comingSoon ? <span className="text-(length:--text-nano) text-muted-foreground">Coming soon</span> : undefined,
+      suffix: item.comingSoon ? <span className="text-(length:--text-nano) text-muted-foreground">{t("agentConfig.comingSoon")}</span> : undefined,
     }))} />;
 }
 
@@ -3972,7 +3969,7 @@ export function ModelDropdown({
           }}
         >
           <option value="" disabled={!allowDefault}>
-            {allowDefault ? (defaultLabel ?? t("common.default")) : loadingModels ? "Loading models…" : required ? "Select model (required)" : "Select model"}
+            {allowDefault ? (defaultLabel ?? t("common.default")) : loadingModels ? t("agentConfig.loadingModels") : required ? "Select model (required)" : "Select model"}
           </option>
           {extraModels.map(id => <option key={id} value={id}>{models.find(model => model.id === id)?.label ?? id}</option>)}
           {groupedModels.map(({ provider, entries }) => groupByProvider ? (
@@ -3980,16 +3977,16 @@ export function ModelDropdown({
               {entries.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
             </optgroup>
           ) : entries.map(model => <option key={model.id} value={model.id}>{model.label}</option>))}
-          {creatable && <option value={customOption}>Enter custom model…</option>}
+          {creatable && <option value={customOption}>{t("agentConfig.enterCustomModel")}</option>}
         </NativeSelect>
         {enteringCustomModel && (
           <label className="mt-3 block space-y-1 text-xs text-muted-foreground">
-            Model ID
-            <Input aria-label="Model ID" value={value} onChange={event => onChange(event.target.value)}
-              placeholder="Enter model ID or alias" autoFocus required={required} />
+            {t("agentConfig.modelId")}
+            <Input aria-label={t("agentConfig.modelId")} value={value} onChange={event => onChange(event.target.value)}
+              placeholder={t("agentConfig.enterModelIdOrAlias")} autoFocus required={required} />
           </label>
         )}
-        {loadingModels && <p role="status" className="mt-2 text-xs text-muted-foreground">Loading models…</p>}
+        {loadingModels && <p role="status" className="mt-2 text-xs text-muted-foreground">{t("agentConfig.loadingModels")}</p>}
         {onRefreshModels && <Button type="button" variant="ghost" size="sm" disabled={refreshingModels}
           onClick={() => void onRefreshModels()}>{refreshingModels ? "Refreshing…" : "Refresh models"}</Button>}
       </Field>
@@ -4079,7 +4076,7 @@ export function ModelDropdown({
                 {models.find((m) => m.id === value)?.label ?? value}
               </span>
               <Badge variant="outline" className="ml-auto text-(length:--text-nano) px-1.5 bg-green-500/15 text-green-400 border-green-500/20">
-                current
+                {t("agentConfig.current")}
               </Badge>
             </button>
           )}
@@ -4099,7 +4096,7 @@ export function ModelDropdown({
                 {models.find((m) => m.id === detectedModel)?.label ?? detectedModel}
               </span>
               <Badge variant="outline" className="ml-auto text-(length:--text-nano) px-1.5 bg-blue-500/15 text-blue-400 border-blue-500/20">
-                detected
+                {t("agentConfig.detected")}
               </Badge>
             </button>
           )}
@@ -4124,7 +4121,7 @@ export function ModelDropdown({
                     {entry?.label ?? candidate}
                   </span>
                   <Badge variant="outline" className="ml-auto text-(length:--text-nano) px-1.5 bg-sky-500/15 text-sky-400 border-sky-500/20">
-                    config
+                    {t("agentConfig.config")}
                   </Badge>
                 </button>
               );
@@ -4157,7 +4154,7 @@ export function ModelDropdown({
                   setModelSearch("");
                 }}
               >
-                <span>Use manual model</span>
+                <span>{t("agentConfig.useManualModel")}</span>
                 <span className="text-xs font-mono text-muted-foreground">{manualModel}</span>
               </button>
             )}
@@ -4192,7 +4189,7 @@ export function ModelDropdown({
             {filteredModels.length === 0 && !canCreateManualModel && promotedModelIds.size === 0 && (
               <div className="px-2 py-2 space-y-2">
                 <p className="text-xs text-muted-foreground">
-                  {loadingModels ? "Loading models…" : onDetectModel
+                  {loadingModels ? t("agentConfig.loadingModels") : onDetectModel
                     ? (emptyDetectHint ?? "No model detected yet. Enter a provider/model manually.")
                     : "No models found."}
                 </p>
@@ -4218,8 +4215,8 @@ function ThinkingEffortDropdown({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  return <Field label="Thinking effort" hint={help.thinkingEffort}>
-    <SelectPopover aria-label="Thinking effort" value={value} onValueChange={onChange}
+  return <Field label={t("agentConfig.thinkingEffort")} hint={help.thinkingEffort}>
+    <SelectPopover aria-label={t("agentConfig.thinkingEffort")} value={value} onValueChange={onChange}
       open={open} onOpenChange={onOpenChange}
       options={options.map(option => ({ value: option.id, label: option.label,
         suffix: option.id ? <span className="text-xs text-muted-foreground font-mono">{option.id}</span> : undefined,
