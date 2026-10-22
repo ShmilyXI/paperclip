@@ -178,7 +178,7 @@ function DeliveryBadge({ mode }: { mode: "env" | "api" }) {
         variant="outline"
         className="h-5 gap-1 px-1.5 text-(length:--text-nano) font-normal border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300"
       >
-        <Variable className="size-3" /> Env var
+        <Variable className="size-3" /> {t("secretAccess.envVar")}
       </Badge>
     );
   }
@@ -187,7 +187,7 @@ function DeliveryBadge({ mode }: { mode: "env" | "api" }) {
       variant="outline"
       className="h-5 gap-1 px-1.5 text-(length:--text-nano) font-normal border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300"
     >
-      <ServerCog className="size-3" /> API access
+      <ServerCog className="size-3" /> {t("secretAccess.apiAccess")}
     </Badge>
   );
 }
@@ -286,7 +286,7 @@ export function AgentSecretAccessEditor({
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">No secrets are bound to this agent yet.</p>
+        <p className="text-sm text-muted-foreground">{t("secretAccess.noSecretsAreBoundTo")}</p>
       )}
 
       {/* Pending binding proposals targeting this agent (PAP-14731). */}
@@ -358,7 +358,7 @@ export function AgentSecretAccessEditor({
                           }
                         }}
                         placeholder="ALIAS"
-                        aria-label="Access alias"
+                        aria-label={t("secretAccess.accessAlias")}
                         disabled={disabled}
                         className={cn(
                           "h-9 font-mono text-sm",
@@ -471,7 +471,7 @@ export function AgentSecretAccessEditor({
                       type="button"
                       onClick={() => removeRow(row.id)}
                       disabled={disabled}
-                      aria-label="Remove API access"
+                      aria-label={t("secretAccess.removeApiAccess")}
                       className="mt-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
                     >
                       <Trash2 className="size-3.5" />
@@ -482,7 +482,7 @@ export function AgentSecretAccessEditor({
                       Invalid alias — use letters, digits and _
                     </p>
                   ) : aliasDuplicate ? (
-                    <p className="pl-0.5 text-(length:--text-micro) text-destructive">Duplicate alias</p>
+                    <p className="pl-0.5 text-(length:--text-micro) text-destructive">{t("secretAccess.duplicateAlias")}</p>
                   ) : null}
                 </div>
               );

@@ -159,7 +159,7 @@ export function ConfigureBuiltInAgentModal({
       onOpenChange(false);
     },
     onError: (err) => {
-      setError(err instanceof ApiError ? err.message : "Failed to configure the built-in agent.");
+      setError(err instanceof ApiError ? err.message : t("builtIn.failedToConfigureTheBuilt"));
     },
   });
 
@@ -173,12 +173,11 @@ export function ConfigureBuiltInAgentModal({
 
         <div className="space-y-4">
           <InlineBanner tone="info" compact>
-            Creates <strong>{definition.displayName}</strong> in your roster, badged{" "}
-            <strong>Built-in</strong>. Organizations that require hire approval will queue this for the
-            board.
+            {t("builtIn.creates")} <strong>{definition.displayName}</strong> {t("builtIn.inRosterBadged")}{" "}
+            <strong>{t("builtIn.builtIn")}</strong>{t("builtIn.hireApprovalNote")}
           </InlineBanner>
 
-          <Field label="Harness">
+          <Field label={t("builtIn.harness")}>
             <AdapterTypeDropdown
               value={adapterType}
               onChange={(next) => {
@@ -227,7 +226,7 @@ export function ConfigureBuiltInAgentModal({
             </InlineBanner>
           )}
 
-          <Field label="Monthly budget (optional)" hint="Leave blank for no cap.">
+          <Field label={t("builtIn.monthlyBudgetOptional")} hint={t("builtIn.leaveBlankForNoCap")}>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">$</span>
               <Input
@@ -240,7 +239,7 @@ export function ConfigureBuiltInAgentModal({
                 onChange={(event) => setBudgetDollars(event.target.value)}
                 className="w-32"
               />
-              <span className="text-sm text-muted-foreground">/ month</span>
+              <span className="text-sm text-muted-foreground">{t("builtIn.month")}</span>
             </div>
           </Field>
 

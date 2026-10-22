@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { auditSectionHref, type AuditSection } from "./audit/audit-navigation";
 
 export type AgentDetailView =
@@ -20,28 +21,28 @@ export const AGENT_DETAIL_NAVIGATION: ReadonlyArray<{
   items: ReadonlyArray<{ value: AgentLocalDetailView; label: string }>;
 }> = [
   {
-    label: "Agent",
+    label: t("agentNav.agent"),
     items: [
-      { value: "overview", label: "Overview" },
-      { value: "instructions", label: "Instructions" },
-      { value: "skills", label: "Skills" },
+      { value: "overview", label: t("agentNav.overview") },
+      { value: "instructions", label: t("agentNav.instructions") },
+      { value: "skills", label: t("agentNav.skills") },
     ],
   },
   {
-    label: "Runtime",
+    label: t("agentNav.runtime"),
     items: [
-      { value: "runtime", label: "Harness / Runtime" },
-      { value: "secrets", label: "Secrets" },
-      { value: "tools", label: "Tools" },
-      { value: "channels", label: "Channels" },
+      { value: "runtime", label: t("agentNav.harnessRuntime") },
+      { value: "secrets", label: t("agentNav.secrets") },
+      { value: "tools", label: t("agentNav.tools") },
+      { value: "channels", label: t("agentNav.channels") },
     ],
   },
   {
-    label: "Governance",
+    label: t("agentNav.governance"),
     items: [
-      { value: "permissions", label: "Permissions / Trust" },
-      { value: "api-keys", label: "API Keys" },
-      { value: "revisions", label: "Revisions" },
+      { value: "permissions", label: t("agentNav.permissionsTrust") },
+      { value: "api-keys", label: t("agentNav.apiKeys") },
+      { value: "revisions", label: t("agentNav.revisions") },
     ],
   },
 ] as const;

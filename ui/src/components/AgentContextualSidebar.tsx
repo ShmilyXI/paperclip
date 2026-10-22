@@ -53,7 +53,7 @@ export function AgentContextualSidebar({
   agentRef,
   agentId,
   agentName,
-  labels = { secrets: "Secrets & variables" },
+  labels = { secrets: t("agentSidebar.secretsVariables") },
 }: {
   agentRef: string;
   agentId?: string;
