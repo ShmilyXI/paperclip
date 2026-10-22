@@ -82,9 +82,9 @@ type AppRow = {
  * pill's `attention` tone and the row highlight are now the *same* predicate.
  */
 function statusFor(application: ToolApplication, connections: ToolConnection[]): AppStatus {
-  if (connections.some(isRetiredComposioConnection)) return { label: "Retired", tone: "attention" };
+  if (connections.some(isRetiredComposioConnection)) return { label: t("connectors.retired"), tone: "attention" };
   if (connections.length === 0) {
-    return { label: "Not connected", tone: "not_connected" };
+    return { label: t("connectors.notConnected"), tone: "not_connected" };
   }
   if (
     application.status === "disabled" ||
@@ -94,9 +94,9 @@ function statusFor(application: ToolApplication, connections: ToolConnection[]):
     return { label: t("common.paused"), tone: "paused" };
   }
   if (connections.some((connection) => isAttentionHealthStatus(connection.healthStatus))) {
-    return { label: "Needs attention", tone: "attention" };
+    return { label: t("connectors.needsAttention"), tone: "attention" };
   }
-  return { label: "Healthy", tone: "connected" };
+  return { label: t("connectors.healthy"), tone: "connected" };
 }
 
 /** The single health-derived predicate that drives highlight, pill, banner, filter (F6). */
@@ -169,8 +169,8 @@ export function Connections() {
       if (status.verificationUrl) window.location.assign(status.verificationUrl);
     },
     onError: (error) => pushToast({
-      title: "Couldn’t reach Paperclip Cloud",
-      body: error instanceof Error ? error.message : "Try again in a moment.",
+      title: t("connectors.couldnTReachPaperclipCloud"),
+      body: error instanceof Error ? error.message : t("connectors.tryAgainInAMoment"),
       tone: "error",
     }),
   });
@@ -188,7 +188,7 @@ export function Connections() {
       queryClient.invalidateQueries({ queryKey: queryKeys.tools.applications(selectedCompanyId!) });
       queryClient.invalidateQueries({ queryKey: queryKeys.apps.attention(selectedCompanyId!) });
       pushToast({
-        title: "Connection deleted",
+        title: t("connectors.connectionDeleted"),
         body: target.remainingConnectionCount > 0
           ? `${target.appName} still has ${target.remainingConnectionCount} active ${target.remainingConnectionCount === 1 ? "connection" : "connections"} available to agents.`
           : `${target.appName} is no longer available to agents and its credentials are deleted. Connecting it again needs a new sign-in or key.`,
@@ -198,7 +198,7 @@ export function Connections() {
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't delete the connection",
+        title: t("connectors.couldnTDeleteTheConnection"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -305,7 +305,7 @@ export function Connections() {
   const visibleRows = filter === "attention" ? rowsNeedingAttention : rows;
 
   if (!selectedCompanyId) {
-    return <div className="p-6 text-sm text-muted-foreground">Select an organization to manage apps.</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{t("connectors.selectAnOrganizationToManage2")}</div>;
   }
 
   const loading = applicationsQuery.isLoading || connectionsQuery.isLoading || galleryQuery.isLoading;
@@ -337,10 +337,10 @@ export function Connections() {
             <div>
               <h1 className="text-2xl font-bold tracking-tight">{t("common.connections")}</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                The tools you’ve connected, and whether they’re working.
+                {t("connectors.theToolsYouVeConnected")}
               </p>
             </div>
-            <Button onClick={() => navigate(BROWSE_HREF)}>Connect an app</Button>
+            <Button onClick={() => navigate(BROWSE_HREF)}>{t("connectors.connectAnApp")}</Button>
           </header>
 
           <div className="flex flex-wrap items-center gap-2">
@@ -369,10 +369,10 @@ export function Connections() {
                   {reviewCount} {reviewCount === 1 ? "action is" : "actions are"} waiting for your OK
                 </div>
                 <div className="truncate text-xs text-amber-700 dark:text-amber-300">
-                  Your agents paused to check with you before making a change.
+                  {t("connectors.yourAgentsPausedToCheck")}
                 </div>
               </div>
-              <span className="shrink-0 text-xs font-semibold text-amber-800 dark:text-amber-200">Review →</span>
+              <span className="shrink-0 text-xs font-semibold text-amber-800 dark:text-amber-200">{t("connectors.review")}</span>
             </button>
           )}
 
@@ -391,7 +391,7 @@ export function Connections() {
                   {floatSummary(rowsNeedingAttention)}
                 </div>
               </div>
-              <span className="shrink-0 text-xs font-semibold text-red-800 dark:text-red-200">Fix →</span>
+              <span className="shrink-0 text-xs font-semibold text-red-800 dark:text-red-200">{t("connectors.fix")}</span>
             </button>
           )}
 
@@ -401,10 +401,10 @@ export function Connections() {
                 <tr className="border-b border-border bg-muted/40 text-left text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
                   <th className="px-4 py-2.5">{t("common.connection")}</th>
                   <th className="px-4 py-2.5">{t("common.type")}</th>
-                  <th className="px-4 py-2.5">Connected by</th>
+                  <th className="px-4 py-2.5">{t("connectors.connectedBy")}</th>
                   <th className="px-4 py-2.5">{t("common.status")}</th>
                   <th className="px-4 py-2.5">{t("common.actions")}</th>
-                  <th className="px-4 py-2.5">Last used</th>
+                  <th className="px-4 py-2.5">{t("connectors.lastUsed")}</th>
                   <th className="px-4 py-2.5" />
                 </tr>
               </thead>
@@ -531,7 +531,7 @@ export function Connections() {
 
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-xs text-muted-foreground">
-              Apps you connect become available to every agent unless you change “Who can use it”.
+              {t("connectors.appsYouConnectBecomeAvailable")}
             </p>
           </div>
         </div>
@@ -590,7 +590,7 @@ function CloudConnectorEnrollmentBanner({
       <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
         <ShieldCheck className="h-5 w-5 text-primary" />
         <div className="min-w-0 flex-1">
-          <div className="text-sm font-semibold text-foreground">Paperclip-managed sign-in is ready</div>
+          <div className="text-sm font-semibold text-foreground">{t("connectors.paperclipManagedSignInIs")}</div>
           <div className="truncate text-xs text-muted-foreground">
             Provider authorization uses {status.brokerBaseUrl}; credentials stay in this instance.
           </div>
@@ -602,7 +602,7 @@ function CloudConnectorEnrollmentBanner({
     return (
       <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
         <Cloud className="h-5 w-5 text-muted-foreground" />
-        <div className="text-sm text-muted-foreground">Paperclip Cloud enrollment status is unavailable.</div>
+        <div className="text-sm text-muted-foreground">{t("connectors.paperclipCloudEnrollmentStatusIs")}</div>
       </div>
     );
   }
@@ -614,7 +614,7 @@ function CloudConnectorEnrollmentBanner({
           {status?.status === "pending" ? "Finish Paperclip Cloud enrollment" : "Enable Paperclip-managed sign-in"}
         </div>
         <div className="text-xs text-muted-foreground">
-          Confirm this server’s exact address before Cloud can return encrypted Google credentials to it.
+          {t("connectors.confirmThisServerSExact")}
         </div>
       </div>
       <Button variant="outline" size="sm" disabled={busy} onClick={onEnable}>
@@ -678,7 +678,7 @@ function EmptyConnections({ onBrowse }: { onBrowse: () => void }) {
       <header>
         <h1 className="text-2xl font-bold tracking-tight">{t("common.connections")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          The tools you’ve connected, and whether they’re working.
+          {t("connectors.theToolsYouVeConnected")}
         </p>
       </header>
 
@@ -686,13 +686,13 @@ function EmptyConnections({ onBrowse }: { onBrowse: () => void }) {
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
           <AppWindow className="h-6 w-6 text-muted-foreground" />
         </div>
-        <p className="mt-4 text-sm font-medium text-foreground">No connections yet.</p>
+        <p className="mt-4 text-sm font-medium text-foreground">{t("connectors.noConnectionsYet")}</p>
         <p className="mt-1 text-sm text-muted-foreground">
           Add one from <span className="font-medium text-foreground">Apps</span> to give your agents
           the tools they need.
         </p>
         <Button className="mt-6" onClick={onBrowse}>
-          Browse apps
+          {t("connectors.browseApps")}
         </Button>
       </div>
     </div>

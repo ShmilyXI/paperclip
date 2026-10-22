@@ -46,12 +46,12 @@ export function SkillsContextualSidebar() {
           />
           <SidebarNavItem
             to={SKILLS_NAVIGATION_HREFS.discover}
-            label="Discover"
+            label={t("skills.discover")}
             icon={Compass}
             active={activeView === "discover"}
             end
           />
-          <SidebarNavItem to={SKILLS_NAVIGATION_HREFS.sources} label="Sources" icon={GithubIcon} active={activeView === "sources"} />
+          <SidebarNavItem to={SKILLS_NAVIGATION_HREFS.sources} label={t("skills.sources")} icon={GithubIcon} active={activeView === "sources"} />
         </div>
 
         <div data-slot="contextual-sidebar-section" className={contextualSidebarStyles.section}>
@@ -59,18 +59,18 @@ export function SkillsContextualSidebar() {
             data-slot="contextual-sidebar-section-label"
             className={contextualSidebarStyles.sectionLabel}
           >
-            Author
+            {t("skills.author")}
           </div>
           <p
             data-slot="contextual-sidebar-section-description"
             className={contextualSidebarStyles.sectionDescription}
           >
-            Skills you create, edit, and test.
+            {t("skills.skillsYouCreateEditAnd")}
           </p>
           <div data-slot="contextual-sidebar-group" className={contextualSidebarStyles.group}>
             <SidebarNavItem
               to={SKILLS_NAVIGATION_HREFS.authored}
-              label="My Skills"
+              label={t("skills.mySkills")}
               icon={PencilRuler}
               active={activeView === "authored"}
             />

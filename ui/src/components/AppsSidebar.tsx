@@ -39,7 +39,7 @@ export function AppsSidebar() {
         className={contextualSidebarStyles.nav}
       >
         <div data-slot="contextual-sidebar-group" className={contextualSidebarStyles.group}>
-          <SidebarNavItem to="/apps" label="Browse" icon={Store} end />
+          <SidebarNavItem to="/apps" label={t("connectors.browse")} icon={Store} end />
           <SidebarNavItem
             to="/apps/review"
             label={t("common.review")}
@@ -55,13 +55,13 @@ export function AppsSidebar() {
               data-slot="contextual-sidebar-section-label"
               className={contextualSidebarStyles.sectionLabel}
             >
-              Developer
+              {t("connectors.developer")}
             </div>
             <p
               data-slot="contextual-sidebar-section-description"
               className={contextualSidebarStyles.sectionDescription}
             >
-              Advanced setup for developers.
+              {t("connectors.advancedSetupForDevelopers")}
             </p>
             <div data-slot="contextual-sidebar-group" className={contextualSidebarStyles.group}>
               {developerTabs.map((tab) => (

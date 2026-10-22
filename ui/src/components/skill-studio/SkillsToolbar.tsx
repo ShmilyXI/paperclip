@@ -47,7 +47,7 @@ export interface SkillsToolbarProps {
 /** Shared shipped Skills controls. Canonical proposal: Components / Toolbars / Skills. */
 export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search, onSearchChange, sort, onSortChange, availableSources, sourceBadgeFilter, setSourceBadgeFilter, onScan, scanPending, onCreate, onBrowseDiscover, onImport, onImportFromProject, folderControl, onCreateFolder, selectMode, onToggleSelectMode, navigation }: SkillsToolbarProps) {
   return (
-    <div data-canonical-toolbar="skills" role="toolbar" aria-label="Skills controls" className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
+    <div data-canonical-toolbar="skills" role="toolbar" aria-label={t("skills.skillsControls")} className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
       <div className="w-full">
         <h1 className="text-lg font-semibold text-foreground">{viewTitle}</h1>
         <p className="text-xs text-muted-foreground">{viewDescription}</p>
@@ -86,7 +86,7 @@ export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search,
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuRadioGroup value={sourceBadgeFilter} onValueChange={setSourceBadgeFilter}>
-              <DropdownMenuRadioItem value="all">All sources</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="all">{t("skills.allSources")}</DropdownMenuRadioItem>
               {availableSources.map((source) => (
                 <DropdownMenuRadioItem key={source.value} value={source.value}>
                   {source.label}
@@ -101,8 +101,8 @@ export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search,
         size="icon-sm"
         onClick={() => onScan()}
         disabled={scanPending}
-        aria-label="Scan project workspaces for skills"
-        title="Scan project workspaces for skills"
+        aria-label={t("skills.scanProjectWorkspacesForSkills")}
+        title={t("skills.scanProjectWorkspacesForSkills")}
       >
         <RefreshCw className={cn("h-4 w-4", scanPending && "animate-spin")} />
       </Button>
@@ -110,7 +110,7 @@ export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search,
       {onCreateFolder ? (
         <Button variant="outline" size="sm" onClick={onCreateFolder}>
           <Plus className="mr-1 h-3.5 w-3.5" />
-          New folder
+          {t("skills.newFolder")}
         </Button>
       ) : null}
       {onToggleSelectMode ? (
@@ -129,21 +129,21 @@ export function SkillsToolbar({ viewTitle, viewDescription, searchLabel, search,
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={onCreate}>
             <Pencil className="mr-2 h-4 w-4" />
-            Create new skill
+            {t("skills.createNewSkill")}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onBrowseDiscover}>
             <Compass className="mr-2 h-4 w-4" />
-            Discover skills
+            {t("skills.discoverSkills")}
           </DropdownMenuItem>
-          <DropdownMenuItem asChild><Link to="/skills/sources/new"><GithubIcon className="mr-2 h-4 w-4" />Import from GitHub</Link></DropdownMenuItem>
-          <DropdownMenuItem asChild><Link to="/skills/sources">Manage sources</Link></DropdownMenuItem>
+          <DropdownMenuItem asChild><Link to="/skills/sources/new"><GithubIcon className="mr-2 h-4 w-4" />{t("skills.importFromGithub")}</Link></DropdownMenuItem>
+          <DropdownMenuItem asChild><Link to="/skills/sources">{t("skills.manageSources")}</Link></DropdownMenuItem>
           <DropdownMenuItem onSelect={onImport}>
             <Globe className="mr-2 h-4 w-4" />
-            Import from path or URL
+            {t("skills.importFromPathOrUrl")}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onImportFromProject}>
             <FolderSearch className="mr-2 h-4 w-4" />
-            Import skills from project
+            {t("skills.importSkillsFromProject")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -80,7 +80,7 @@ export { connectionAddress, connectionTransportLabel };
 export function AppDetail(props: { renderActions?: (connection: ToolConnection) => ReactNode; renderAgentSettings?: (connection: ToolConnection) => ReactNode; renderConnectionSettings?: (connection: ToolConnection) => ReactNode; onReconnect?: (connection: ToolConnection) => void } = {}) {
   const { connectionId = "" } = useParams<{ connectionId: string }>();
   const connection = useQuery({ queryKey: queryKeys.tools.connection(connectionId), queryFn: () => toolsApi.getConnection(connectionId), enabled: !!connectionId });
-  if (connection.isPending) return <p role="status">Loading connection…</p>;
+  if (connection.isPending) return <p role="status">{t("connectors.loadingConnection")}</p>;
   if (connection.error) return <p role="alert">{connection.error.message}</p>;
   const pluginKey = connection.data && aiConnectionRouterPluginKey(connection.data);
   return pluginKey ? <AiConnectionPoolConnector pluginKey={pluginKey} connection={connection.data} /> : <StandardAppDetail {...props} />;
@@ -242,7 +242,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       ? consumeSkillSourceReturn(connection.companyId)
       : null;
     pushToast({
-      title: `${appName} connected`,
+      title: t("connectors.appnameConnected", { appName }),
       body: skillSourcePath ? "Choose a repository to import your skills." : "The connection is ready. Review permissions or test an action below.",
       tone: "success",
     });
@@ -285,7 +285,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       queryClient.invalidateQueries({ queryKey: queryKeys.apps.attention(selectedCompanyId!) });
       navigate("/apps");
     },
-    onError: (error) => pushToast({ title: "Couldn't disconnect", body: error instanceof Error ? error.message : t("common.pleaseTryAgain"), tone: "error" }),
+    onError: (error) => pushToast({ title: t("connectors.couldnTDisconnect"), body: error instanceof Error ? error.message : t("common.pleaseTryAgain"), tone: "error" }),
   });
   const [pending, setPending] = useState(false);
   const persist = useMutation({
@@ -317,7 +317,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't save that",
+        title: t("connectors.couldnTSaveThat"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -336,7 +336,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't rename the app",
+        title: t("connectors.couldnTRenameTheApp"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -353,7 +353,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
         navigateTopLevel(target.url);
       } catch (error) {
         pushToast({
-          title: "Couldn't start sign-in",
+          title: t("connectors.couldnTStartSignIn"),
           body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
           tone: "error",
         });
@@ -361,7 +361,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't start sign-in",
+        title: t("connectors.couldnTStartSignIn"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -380,7 +380,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
   const startPersonalAuth = useMutation({
     mutationFn: () => {
       const subjectUserId = grantsQuery.data?.currentUserId;
-      if (!subjectUserId) throw new Error("Sign in again to connect your own account.");
+      if (!subjectUserId) throw new Error(t("connectors.signInAgainToConnect"));
       return toolsApi.startPersonalAuthorization(selectedCompanyId!, connectionId, {
         subjectUserId,
         returnTo: appTabHref(connectionId, "permissions"),
@@ -395,7 +395,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
         navigateTopLevel(target.url);
       } catch (error) {
         pushToast({
-          title: "Couldn't start sign-in",
+          title: t("connectors.couldnTStartSignIn"),
           body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
           tone: "error",
         });
@@ -403,7 +403,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't start sign-in",
+        title: t("connectors.couldnTStartSignIn"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -421,7 +421,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       invalidateGrants();
       setAudienceOpenGrantId(null);
       pushToast({
-        title: "Audience saved",
+        title: t("connectors.audienceSaved"),
         body: (grant.members?.length ?? 0) === 0
           ? "Every organization member can use this identity."
           : `${grant.members?.length} ${grant.members?.length === 1 ? "member" : "members"} can use this identity.`,
@@ -429,7 +429,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       });
     },
     onError: (error) =>
-      setAudienceError(error instanceof Error ? error.message : "We couldn't save that audience."),
+      setAudienceError(error instanceof Error ? error.message : t("connectors.weCouldnTSaveThat")),
   });
 
   const refreshTools = useMutation({
@@ -453,7 +453,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't refresh actions",
+        title: t("connectors.couldnTRefreshActions"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -465,13 +465,13 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       queryClient.invalidateQueries({ queryKey: queryKeys.tools.connectionGrants(connectionId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.apps.attention(selectedCompanyId!) });
       pushToast({
-        title: "GitHub access refreshed",
-        body: "Account, installation, and repository access are current.",
+        title: t("connectors.githubAccessRefreshed"),
+        body: t("connectors.accountInstallationAndRepositoryAccess"),
         tone: "success",
       });
     },
     onError: (error) => pushToast({
-      title: "Couldn't refresh GitHub access",
+      title: t("connectors.couldnTRefreshGithubAccess"),
       body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
       tone: "error",
     }),
@@ -512,7 +512,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
   }
 
   if (!selectedCompanyId) {
-    return <div className="p-6 text-sm text-muted-foreground">Select an organization to manage apps.</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{t("connectors.selectAnOrganizationToManage2")}</div>;
   }
   if (connectionQuery.isLoading) {
     return (
@@ -526,9 +526,9 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
   if (!connection) {
     return (
       <div className="max-w-3xl p-6">
-        <p className="text-sm text-muted-foreground">We couldn't find that app.</p>
+        <p className="text-sm text-muted-foreground">{t("connectors.weCouldnTFindThat")}</p>
         <Button className="mt-4" variant="outline" onClick={() => navigate("/apps")}>
-          Back to connectors
+          {t("connectors.backToConnectors")}
         </Button>
       </div>
     );
@@ -538,10 +538,10 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     return <div className="max-w-4xl space-y-6 pb-12">
       <h1 className="text-xl font-semibold">{appName}</h1>
       <section role="status" className="space-y-3 rounded-lg border border-border bg-muted p-4">
-        <h2 className="text-sm font-semibold">Connection retired</h2>
+        <h2 className="text-sm font-semibold">{t("connectors.connectionRetired")}</h2>
         <p className="text-sm text-muted-foreground">{RETIRED_COMPOSIO_MESSAGE}</p>
-        <p className="text-sm text-muted-foreground">Remove each obsolete connection separately. Removing this one does not remove other connections.</p>
-        <Button variant="outline" onClick={() => navigate("/apps/connect?source=composio")}>Add Composio MCP connection</Button>
+        <p className="text-sm text-muted-foreground">{t("connectors.removeEachObsoleteConnectionSeparately")}</p>
+        <Button variant="outline" onClick={() => navigate("/apps/connect?source=composio")}>{t("connectors.addComposioMcpConnection")}</Button>
       </section>
       {grantsQuery.data?.capabilities.canConfigure === true && <DangerZone
         appName={appName}
@@ -553,7 +553,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
 
   const aiGrantRevoked = connection.connectionPurpose === "ai"
     && grantRows.length > 0 && grantRows.every((grant) => grant.status === "revoked");
-  const status: StatusInfo = aiGrantRevoked ? { label: "Revoked", tone: "attention" } : statusFor(connection);
+  const status: StatusInfo = aiGrantRevoked ? { label: t("connectors.revoked"), tone: "attention" } : statusFor(connection);
   const needsReconnect = connection.requiresReauthorization
     ?? (status.tone === "attention" && connection.healthStatus !== "unknown");
   const quarantined = catalog.filter((e) => e.status === "quarantined");
@@ -596,7 +596,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
         <div role="status">
           <p>{connection.healthMessage || "GitHub access could not be checked. Try again."}</p>
           <Button variant="outline" disabled={refreshGitHubAccess.isPending} onClick={() => refreshGitHubAccess.mutate()}>
-            Retry access
+            {t("connectors.retryAccess")}
           </Button>
         </div>
       )}
@@ -683,7 +683,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
                   replaceAudience.mutate({ grantId: grant.id, memberUserIds })}
               />
               {connection.config?.sourceTemplateKey === "composio" ? <p className="text-sm text-muted-foreground">
-                These permissions apply to all apps available through this Composio connection. Manage app accounts and sign-in in Composio.
+                {t("connectors.thesePermissionsApplyToAll")}
               </p> : null}
               {connection.config?.sourceTemplateKey !== "composio" && isRemoteMcpConnectorMethod(connection.config?.sourceTemplateKey, connection.config?.connectionMethodKey) && <p className="text-sm text-muted-foreground">Paperclip controls access to the tools listed here. App and action permissions inside these tools are managed in {baseAppName}.</p>}
               <PermissionsPanel
@@ -794,7 +794,7 @@ export function AppDetailHeader({
               }}
             >
               <Input
-                aria-label="App name"
+                aria-label={t("connectors.appName")}
                 value={nameDraft}
                 onChange={(event) => onNameDraftChange(event.target.value)}
                 className="h-9 w-64 text-lg font-bold"
@@ -814,7 +814,7 @@ export function AppDetailHeader({
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 text-muted-foreground"
-                aria-label="Rename app"
+                aria-label={t("connectors.renameApp")}
                 disabled={!canRename}
                 onClick={onRenameStart}
               >
@@ -855,7 +855,7 @@ function ToolsLoading({ mcpActions = false }: { mcpActions?: boolean }) {
 function ToolsLoadError({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="space-y-3 py-8">
-      <p className="text-sm text-destructive">Couldn’t load tools for this app.</p>
+      <p className="text-sm text-destructive">{t("connectors.couldnTLoadToolsFor")}</p>
       <Button size="sm" variant="outline" onClick={onRetry}>{t("common.tryAgain")}</Button>
     </div>
   );
@@ -890,7 +890,7 @@ function statusFor(connection: ToolConnection): StatusInfo {
     return { label: t("common.paused"), tone: "paused" };
   }
   if (isAttentionHealthStatus(connection.healthStatus) || (connection.connectionPurpose === "ai" && (connection.healthStatus !== "ok" || aiSubscriptionNeedsIsolatedLogin(connection.config)))) {
-    return { label: "Needs attention", tone: "attention" };
+    return { label: t("connectors.needsAttention"), tone: "attention" };
   }
   return { label: t("common.connected"), tone: "connected" };
 }
