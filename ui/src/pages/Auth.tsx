@@ -74,7 +74,7 @@ export function AuthPage() {
       navigate(nextPath, { replace: true });
     },
     onError: (err) => {
-      setError(err instanceof Error ? err.message : "Authentication failed");
+      setError(err instanceof Error ? err.message : t("auth.authenticationFailed"));
     },
   });
 
@@ -93,7 +93,7 @@ export function AuthPage() {
 
   // A health/session failure must not be mistaken for a self-hosted instance.
   if (healthQuery.error || sessionError) {
-    return <p role="alert" className="p-6 text-sm text-destructive">Unable to check sign-in. Refresh and try again.</p>;
+    return <p role="alert" className="p-6 text-sm text-destructive">{t("auth.unableToCheckSignIn")}</p>;
   }
 
   if (healthQuery.data?.cloud) {
@@ -129,7 +129,7 @@ export function AuthPage() {
               event.preventDefault();
               if (mutation.isPending) return;
               if (!canSubmit) {
-                setError("Please fill in all required fields.");
+                setError(t("auth.pleaseFillInAllRequired"));
                 return;
               }
               mutation.mutate();

@@ -1120,7 +1120,7 @@ export function DiscoveryGrid({
   onOpenMobileFolders?: () => void;
   /** Create a folder under `parentId` (null = top level), used by the tree rail. */
   onCreateFolderIn?: (parentId: string | null) => void;
-  /** Provision the caller's personal "My Skills" root on demand. */
+  /** Provision the caller's personal t("skillsUi.mySkills") root on demand. */
   onEnsureMyFolder?: () => void;
   /** Open the rich move-to-folder dialog for a single card. */
   onOpenMoveCard?: (card: DiscoveryCard) => void;
@@ -1131,13 +1131,13 @@ export function DiscoveryGrid({
 }) {
   const installedView = tab === "installed";
   const authoredView = collectionView === "authored";
-  const viewTitle = authoredView ? t("skills.mySkills") : installedView ? "Installed skills" : t("skills.discoverSkills");
+  const viewTitle = authoredView ? t("skills.mySkills") : installedView ? t("skillsUi.installedSkills") : t("skills.discoverSkills");
   const viewDescription = authoredView
-    ? "Skills you can open, edit and test in Studio."
+    ? t("skillsUi.skillsYouCanOpenEdit")
     : installedView
-    ? "Skills available to this organization."
-    : "Browse skills from every available source.";
-  const searchLabel = authoredView ? "Search my skills" : installedView ? "Search installed skills" : "Search discoverable skills";
+    ? t("skillsUi.skillsAvailableToThisOrganization")
+    : t("skillsUi.browseSkillsFromEveryAvailable");
+  const searchLabel = authoredView ? t("skillsUi.searchMySkills") : installedView ? t("skillsUi.searchInstalledSkills") : t("skillsUi.searchDiscoverableSkills");
   // Source filter (github / skills.sh / local / …) lives in the grid so it
   // narrows whatever the parent already filtered by tab/category/search (PAP-10907 E).
   const [sourceBadgeFilter, setSourceBadgeFilter] = useState<string>("all");
@@ -1243,7 +1243,7 @@ export function DiscoveryGrid({
           selectMode={selectMode} onToggleSelectMode={onToggleSelectMode}
           folderControl={showBrowseRails && folderResult && onFolderSelect ? (
             <div className="w-full md:hidden">
-              <FolderChip result={folderResult} selection={folderSelection} allLabel="All skills" onClick={onOpenMobileFolders ?? (() => undefined)} />
+              <FolderChip result={folderResult} selection={folderSelection} allLabel={t("skillsUi.allSkills")} onClick={onOpenMobileFolders ?? (() => undefined)} />
             </div>
           ) : undefined}
         />
@@ -4807,7 +4807,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     }
   }
 
-  // Provision the signed-in user's personal "My Skills" root, then select it.
+  // Provision the signed-in user's personal t("skillsUi.mySkills") root, then select it.
   const ensureMyFolder = useMutation({
     mutationFn: () => foldersApi.ensureMy(selectedCompanyId!),
     onSuccess: async (folder) => {
@@ -4867,7 +4867,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     }
   }
 
-  // Inline folder creation used by the move dialog's "New folder inside…" affordance.
+  // Inline folder creation used by the move dialog's t("skillsUi.newFolderInside") affordance.
   async function createFolderInline(parentId: string | null, name: string): Promise<string | null> {
     try {
       const folder = await foldersApi.create(selectedCompanyId!, { kind: "skill", parentId, name, color: null });
@@ -5328,7 +5328,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         onOpenChange={setMobileFoldersOpen}
         result={railSkillFolderResult}
         selection={folderSelection}
-        allLabel="All skills"
+        allLabel={t("skillsUi.allSkills")}
         itemLabelPlural={t("common.skills")}
         onSelect={setFolderSelection}
         onCreate={() => openCreateFolder()}

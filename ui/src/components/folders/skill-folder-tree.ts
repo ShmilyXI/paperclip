@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { FolderListItem, FolderListResult } from "@paperclipai/shared";
 
 /**
@@ -6,7 +7,7 @@ import type { FolderListItem, FolderListResult } from "@paperclipai/shared";
  * The server returns a *flat* {@link FolderListResult}; every folder carries a
  * `parentId`, a canonical slug `path` (root = slug, children = `parent/slug`),
  * a `depth`, and a `systemKey`. Reserved roots have a stable `systemKey`:
- *   - `my`       → "My Skills" (personal folders live beneath it as `my:<userId>`)
+ *   - `my`       → t("skillsUi.mySkills") (personal folders live beneath it as `my:<userId>`)
  *   - `projects` → "Projects"  (auto-created project folders `project:<id>`)
  *   - `bundled`  → "Bundled"   (read-only; categories `bundled:<slug>`)
  * Everything else at the top level is a plain company folder and is grouped
@@ -21,7 +22,7 @@ export interface FolderTreeNode {
 export type ReservedRootKey = "my" | "projects" | "bundled";
 
 export interface SkillFolderTreeModel {
-  /** "My Skills" reserved root, or null when it hasn't been provisioned yet. */
+  /** t("skillsUi.mySkills") reserved root, or null when it hasn't been provisioned yet. */
   my: FolderTreeNode | null;
   /** Non-reserved top-level folders, shown under the "Company" heading. */
   company: FolderTreeNode[];
@@ -148,7 +149,7 @@ export function folderBreadcrumbTrail(
 export function reservedRootLabel(folder: Pick<FolderListItem, "systemKey" | "name">): string {
   switch (folder.systemKey) {
     case "my":
-      return "My Skills";
+      return t("skillsUi.mySkills");
     case "projects":
       return "Projects";
     case "bundled":
@@ -186,7 +187,7 @@ export function skillFolderPathDisplayFallback(folderPath: string | null | undef
 
   const root = segments[0]?.toLowerCase();
   const labels = segments.map(humanizeFolderPathSegment);
-  if (root === "my") labels[0] = "My Skills";
+  if (root === "my") labels[0] = t("skillsUi.mySkills");
   else if (root === "projects") labels[0] = "Projects";
   else if (root === "bundled") labels[0] = "Bundled";
   else labels.unshift("Organization");

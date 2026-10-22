@@ -33,24 +33,24 @@ const ALL = "__all";
 
 /** Action-domain prefixes offered in the filter (server does a prefix match). */
 const ACTION_DOMAINS: { value: string; label: string }[] = [
-  { value: ALL, label: "All actions" },
+  { value: ALL, label: t("audit.allActions") },
   { value: "issue.", label: t("common.tasks") },
-  { value: "case.", label: "Cases" },
+  { value: "case.", label: t("audit.cases") },
   { value: "agent.", label: t("common.agents") },
   { value: "heartbeat.", label: t("common.runs") },
   { value: "approval.", label: t("common.approvals") },
   { value: "project.", label: t("common.projects") },
   { value: "goal.", label: t("common.goals") },
-  { value: "tool_", label: "Apps & tools" },
+  { value: "tool_", label: t("audit.appsTools") },
   { value: "cost.", label: t("common.costs") },
   { value: "company.", label: t("common.organization") },
 ];
 
 /** Entity types offered in the filter (server does an exact match). */
 const ENTITY_TYPES: { value: string; label: string }[] = [
-  { value: ALL, label: "All entities" },
+  { value: ALL, label: t("audit.allEntities") },
   { value: "issue", label: t("common.task") },
-  { value: "case", label: "Case" },
+  { value: "case", label: t("audit.case") },
   { value: "agent", label: t("common.agent") },
   { value: "heartbeat_run", label: t("common.run") },
   { value: "routine", label: t("common.routine") },
@@ -199,7 +199,7 @@ function AuditEntityNode({ record }: { record: AuditActionRecord }) {
   if (connectionId) {
     return (
       <Link to={`/apps/${connectionId}/permissions`} className="font-medium text-primary hover:underline">
-        the connection
+        {t("audit.theConnection")}
       </Link>
     );
   }
@@ -266,7 +266,7 @@ function AuditRow({
                 to={`/agents/${record.agentId}/runs/${record.runId}`}
                 className="text-primary hover:underline"
               >
-                View run
+                {t("audit.viewRun")}
               </Link>
             ) : null}
             <span className="font-mono text-(length:--text-micro) opacity-70">{record.action}</span>
@@ -291,7 +291,7 @@ function AuditUpsell() {
       <CardContent className="flex flex-col items-center gap-3 py-14 text-center">
         <ShieldAlert className="h-10 w-10 text-muted-foreground/50" />
         <div>
-          <p className="text-sm font-medium text-foreground">Agent audit is a Paperclip Enterprise view</p>
+          <p className="text-sm font-medium text-foreground">{t("audit.agentAuditIsAPaperclip")}</p>
           <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
             The agent audit log gives you a searchable, exportable record of everything your agents
             did — every comment, task change, approval, and run — with the responsible person for
@@ -540,11 +540,11 @@ export function AuditFeed({
       // Browsers may read blob URLs lazily after click(), so keep the URL alive
       // long enough for the download to start.
       window.setTimeout(() => URL.revokeObjectURL(url), 5_000);
-      pushToast({ title: "Audit exported", body: "Your CSV download has started.", tone: "success" });
+      pushToast({ title: t("audit.auditExported"), body: t("audit.yourCsvDownloadHasStarted"), tone: "success" });
     } catch (error) {
       pushToast({
-        title: "Export failed",
-        body: error instanceof Error ? error.message : "Could not export the audit log.",
+        title: t("audit.exportFailed"),
+        body: error instanceof Error ? error.message : t("audit.couldNotExportTheAudit"),
         tone: "error",
       });
     } finally {
@@ -573,14 +573,14 @@ export function AuditFeed({
 
       {showModeToggle ? (
         <Tabs value={resolvedMode} onValueChange={(value) => onModeChange?.(value as AuditFeedMode)}>
-          <TabsList aria-label="Activity scope">
+          <TabsList aria-label={t("audit.activityScope")}>
             <TabsTrigger value="all">{t("common.activity")}</TabsTrigger>
             <TabsTrigger
               value="agents"
               disabled={accessTier === "basic"}
               title={accessTier === "basic" ? "Agent Actions requires audit access" : undefined}
             >
-              Agent Actions
+              {t("audit.agentActions")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -593,7 +593,7 @@ export function AuditFeed({
             : lockedAgentId
               ? "Scoped to one agent"
               : scopedCase
-                ? <>Case <Link to={caseHref(scopedCase.identifier)} className="font-medium text-primary hover:underline">{scopedCase.identifier} · {scopedCase.title}</Link></>
+                ? <>{t("audit.case")} <Link to={caseHref(scopedCase.identifier)} className="font-medium text-primary hover:underline">{scopedCase.identifier} · {scopedCase.title}</Link></>
                 : `Scoped to ${lockedEntity?.label ?? lockedEntity?.type ?? "entity"}`}
         </div>
       ) : null}
@@ -607,7 +607,7 @@ export function AuditFeed({
                 <SelectValue placeholder={t("common.agent")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={ALL}>All agents</SelectItem>
+                <SelectItem value={ALL}>{t("audit.allAgents")}</SelectItem>
                 {(agents.data ?? []).map((a) => (
                   <SelectItem key={a.id} value={a.id}>
                     {a.name}
@@ -619,14 +619,14 @@ export function AuditFeed({
         ) : null}
         {canUseAdvancedControls ? (
           <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-            <span>Responsible user</span>
+            <span>{t("audit.responsibleUser")}</span>
             <Select value={responsibleUser} onValueChange={setResponsibleUser}>
-              {/* Wide enough for "All responsible users" — w-44 truncated it. */}
+              {/* Wide enough for t("audit.allResponsibleUsers") — w-44 truncated it. */}
               <SelectTrigger className="w-52">
-                <SelectValue placeholder="Responsible user" />
+                <SelectValue placeholder={t("audit.responsibleUser")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={ALL}>All responsible users</SelectItem>
+                <SelectItem value={ALL}>{t("audit.allResponsibleUsers")}</SelectItem>
                 {(userDirectory.data?.users ?? []).map((u) => (
                   <SelectItem key={u.principalId} value={u.principalId}>
                     {u.user?.name ?? u.user?.email ?? u.principalId.slice(0, 8)}
@@ -637,10 +637,10 @@ export function AuditFeed({
           </label>
         ) : null}
         <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-          <span>Action</span>
+          <span>{t("audit.action")}</span>
           <Select value={actionDomain} onValueChange={setActionDomain}>
             <SelectTrigger className="w-40">
-              <SelectValue placeholder="Action" />
+              <SelectValue placeholder={t("audit.action")} />
             </SelectTrigger>
             <SelectContent>
               {ACTION_DOMAINS.map((d) => (
@@ -653,10 +653,10 @@ export function AuditFeed({
         </label>
         {!lockedEntity ? (
           <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-            <span>Entity</span>
+            <span>{t("audit.entity")}</span>
             <Select value={entityType} onValueChange={setEntityType}>
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="Entity" />
+                <SelectValue placeholder={t("audit.entity")} />
               </SelectTrigger>
               <SelectContent>
                 {ENTITY_TYPES.map((e) => (
@@ -670,10 +670,10 @@ export function AuditFeed({
         ) : null}
         {!lockedEntity && entityType === "case" ? (
           <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-            <span>Case</span>
+            <span>{t("audit.case")}</span>
             <Input
               type="search"
-              aria-label="Case ID or identifier"
+              aria-label={t("audit.caseIdOrIdentifier")}
               placeholder="CAS-C1"
               value={entityIdDraft}
               onChange={event => {
@@ -692,10 +692,10 @@ export function AuditFeed({
           </label>
         ) : null}
         <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-          <span>From</span>
+          <span>{t("audit.from")}</span>
           <Input
             type="date"
-            aria-label="From date"
+            aria-label={t("audit.fromDate")}
             value={dateFrom}
             max={dateTo || undefined}
             onChange={(e) => setDateFrom(e.target.value)}
@@ -703,10 +703,10 @@ export function AuditFeed({
           />
         </label>
         <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-          <span>To</span>
+          <span>{t("audit.to")}</span>
           <Input
             type="date"
-            aria-label="To date"
+            aria-label={t("audit.toDate")}
             value={dateTo}
             min={dateFrom || undefined}
             onChange={(e) => setDateTo(e.target.value)}
@@ -735,7 +735,7 @@ export function AuditFeed({
       {recoveringFromAccessDowngrade || fallingBackToAllActivity ? (
         <Card>
           <CardContent className="py-14 text-center text-sm text-muted-foreground">
-            Refreshing audit access…
+            {t("audit.refreshingAuditAccess")}
           </CardContent>
         </Card>
       ) : feed.isLoading ? (
@@ -746,7 +746,7 @@ export function AuditFeed({
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-14 text-center">
             <p className="text-sm text-muted-foreground">
-              {feed.error instanceof Error ? feed.error.message : "Failed to load the audit log."}
+              {feed.error instanceof Error ? feed.error.message : t("audit.failedToLoadTheAudit")}
             </p>
             <Button variant="outline" size="sm" onClick={() => feed.refetch()}>
               {t("common.tryAgain")}
@@ -778,7 +778,7 @@ export function AuditFeed({
         </Card>
       ) : (
         <div className="border-y border-border">
-          <ul className={cn("divide-y divide-border")} aria-label="Audit activity">
+          <ul className={cn("divide-y divide-border")} aria-label={t("audit.auditActivity")}>
             {items.map((record) => (
               <AuditRow
                 key={record.id}
@@ -806,7 +806,7 @@ export function AuditFeed({
       ) : null}
 
       <p className="text-xs text-muted-foreground">
-        Recorded by Paperclip — entries can't be edited. Sensitive values are never stored.
+        {t("audit.recordedByPaperclipEntriesCan")}
       </p>
     </div>
   );

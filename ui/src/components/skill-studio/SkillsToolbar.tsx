@@ -11,10 +11,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuRadioG
 export type DiscoverySort = "agents" | "stars" | "forks" | "recent" | "alphabetical";
 
 const DISCOVERY_SORT_LABELS: Record<DiscoverySort, string> = {
-  agents: "Most agents",
-  stars: "Most stars",
-  forks: "Most forks",
-  recent: "Recently updated",
+  agents: t("skillsUi.mostAgents"),
+  stars: t("skillsUi.mostStars"),
+  forks: t("skillsUi.mostForks"),
+  recent: t("skillsUi.recentlyUpdated"),
   alphabetical: t("common.alphabetical"),
 };
 
