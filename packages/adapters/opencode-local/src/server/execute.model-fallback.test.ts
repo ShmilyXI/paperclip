@@ -158,6 +158,39 @@ describe("OpenCode model fallback", () => {
     expect(logs.join("\n")).toContain("adapterConfig.fallbackModel is not a usable fallback");
   });
 
+  it("still falls back after an unknown-session retry with a fresh session", async () => {
+    await fs.writeFile(path.join(configHome, "fake-opencode"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+    const logs: string[] = [];
+    runProcessMock
+      .mockReset()
+      .mockResolvedValueOnce(providerErrorResult("unknown session"))
+      .mockResolvedValueOnce(providerErrorResult("429 Too Many Requests"))
+      .mockResolvedValueOnce(successResult("recovered via backup", "session-combo"));
+    const result = await execute({
+      ...baseExecuteCall({ fallbackModel: "backupco/backup-1" }),
+      runtime: { sessionId: "previous", sessionParams: null, sessionDisplayId: null, taskKey: null },
+      onLog: async (stream, chunk) => {
+        logs.push(`${stream}:${chunk}`);
+      },
+    });
+    expect(runProcessMock).toHaveBeenCalledTimes(3);
+    const retryArgs = runProcessMock.mock.calls[1][3] as string[];
+    const fallbackArgs = runProcessMock.mock.calls[2][3] as string[];
+    expect(retryArgs[retryArgs.indexOf("--model") + 1]).toBe("primary/provider-1");
+    expect(fallbackArgs[fallbackArgs.indexOf("--model") + 1]).toBe("backupco/backup-1");
+    expect(result.exitCode).toBe(0);
+    expect(result.model).toBe("backupco/backup-1");
+    expect(result.sessionId).toBe("session-combo");
+    expect(parseModelFallback(result.resultJson)).toEqual({
+      from: "primary/provider-1",
+      to: "backupco/backup-1",
+      reason: "rate_limit",
+    });
+    const logText = logs.join("\n");
+    expect(logText).toContain(`OpenCode session "previous" is unavailable; retrying with a fresh session.`);
+    expect(logText).toContain(`retrying once with fallback model "backupco/backup-1"`);
+  });
+
   it("does not switch models on a timeout", async () => {
     await fs.writeFile(path.join(configHome, "fake-opencode"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
     runProcessMock
