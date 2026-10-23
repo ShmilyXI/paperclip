@@ -176,6 +176,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
               Cmd/Ctrl+K remains the keyboard path (command palette). */}
           <SidebarNavItem to="/search" label={t("nav.search")} icon={Search} />
           <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
+          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
           {!combinedInboxTasks ? (
             <SidebarNavItem
               to="/inbox"
@@ -233,7 +234,6 @@ export function Sidebar({ children }: { children?: ReactNode }) {
               <SidebarStarredProjects />
             </>
           ) : null}
-          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
           <SidebarNavItem to="/routines" label={t("nav.routines")} icon={Repeat} />
           <SidebarNavItem to="/artifacts" label={t("nav.artifacts")} icon={Package} />
           {showCases ? (

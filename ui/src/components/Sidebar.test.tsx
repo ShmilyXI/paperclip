@@ -517,8 +517,10 @@ describe("Sidebar", () => {
     const labels = (section: Element | undefined) => [...(section?.querySelectorAll("a") ?? [])]
       .map((anchor) => anchor.textContent?.trim());
 
-    expect(labels(workSection)).toEqual(["Tasks", "Projects", "Board", "Routines", "Artifacts"]);
+    expect(labels(workSection)).toEqual(["Tasks", "Projects", "Routines", "Artifacts"]);
     expect(labels(orgSection)).toEqual(["Agents", "Skills", "Connectors", "Audit"]);
+    const topLabels = [...container.querySelectorAll("nav a")].map((anchor) => anchor.textContent?.trim());
+    expect(topLabels.indexOf("Board")).toBe(topLabels.indexOf("Dashboard") + 1);
     expect(sections.indexOf(workSection!)).toBeLessThan(sections.indexOf(orgSection!));
     expect(
       workSection?.querySelector('a[href="/issues"] svg')?.classList.contains("lucide-circle-check"),

@@ -152,11 +152,12 @@ export function Sidebar() {
               width; a nav row also keeps search reachable from the
               collapsed rail, where the old header icon was dropped entirely.
               Cmd/Ctrl+K remains the keyboard path (command palette). */}
-          <SidebarNavItem to="/search" label="Search" icon={Search} />
-          <SidebarNavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} liveCount={liveRunCount} />
+          <SidebarNavItem to="/search" label={t("nav.search")} icon={Search} />
+          <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
+          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
           <SidebarNavItem
             to="/inbox"
-            label="Inbox"
+            label={t("nav.inbox")}
             icon={Inbox}
             badge={inboxBadge.inbox}
             badgeLabel="unread"
@@ -180,9 +181,8 @@ export function Sidebar() {
           ) : null}
         </div>
 
-        <SidebarSection label="Work" collapsible={{ open: workOpen, onOpenChange: setWorkOpen }}>
-          <SidebarNavItem to="/issues" label="Tasks" icon={CircleDot} />
-          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
+        <SidebarSection label={t("nav.work")} collapsible={{ open: workOpen, onOpenChange: setWorkOpen }}>
+          <SidebarNavItem to="/issues" label={t("nav.tasks")} icon={CircleDot} />
           {showCases ? (
             <SidebarNavItem to="/cases" label="Cases" icon={Layers} textBadge="beta" />
           ) : null}
