@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { usePrimaryAgentPresentation } from "@/components/primary-agent/PrimaryAgentPresentation";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -62,7 +63,7 @@ import type { Agent } from "@paperclipai/shared";
 
 /**
  * When no agent is running, the sidebar falls back to showing at most this many
- * recently-active agents plus a "See all agents" link (IA Phase 5).
+ * recently-active agents plus a t("sidebar.seeAllAgents") link (IA Phase 5).
  */
 const RECENT_AGENT_LIMIT = 3;
 const LIVE_AGENT_LINGER_MS = 120_000;
@@ -153,12 +154,12 @@ function SidebarAgentItem({
     : isBudgetPaused
       ? "Budget paused"
       : isPaused && hasInvalidOrgChain
-        ? "Invalid org chain"
+        ? t("sidebar.invalidOrgChain")
       : pauseResumeLabel;
   const showBuiltInLifecycle = builtInStatus === "needs_setup" || builtInStatus === "pending_approval";
   const trailingLabel = [
     showBuiltInLifecycle ? `Built-in agent ${builtInStatus.replace(/_/g, " ")}` : null,
-    hasInvalidOrgChain ? "Invalid reporting chain" : null,
+    hasInvalidOrgChain ? t("sidebar.invalidReportingChain") : null,
   ].filter(Boolean).join(", ") || undefined;
 
   // C11 (DECISION-SHEET.md): the row itself is a SidebarNavItem, so agent rows
@@ -182,7 +183,7 @@ function SidebarAgentItem({
           <span className="ml-1 flex shrink-0 items-center gap-1">
             {showBuiltInLifecycle ? <BuiltInLifecycleChip status={builtInStatus} compact /> : null}
             {hasInvalidOrgChain ? (
-              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-500" aria-label="Invalid reporting chain" />
+              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-500" aria-label={t("sidebar.invalidReportingChain")} />
             ) : null}
           </span>
         ) : undefined
@@ -249,7 +250,7 @@ function SidebarAgentItem({
                 ) : (
                   <Star className={cn("size-4", starred && "fill-amber-500 text-amber-500")} />
                 )}
-                <span>{starred ? "Remove from starred" : "Star agent"}</span>
+                <span>{starred ? t("sidebar.removeFromStarred") : "Star agent"}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
             </>
@@ -262,7 +263,7 @@ function SidebarAgentItem({
               }}
             >
               <Pencil className="size-4" />
-              <span>Edit agent</span>
+              <span>{t("sidebar.editAgent")}</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -272,7 +273,7 @@ function SidebarAgentItem({
               onPauseResume(agent, isPaused ? "resume" : "pause");
             }}
             disabled={pauseResumeDisabled}
-            title={isBudgetPaused ? "Agent was paused by budget limits" : undefined}
+            title={isBudgetPaused ? t("sidebar.agentWasPausedByBudget") : undefined}
           >
             {isPaused ? <PlayCircle className="size-4" /> : <PauseCircle className="size-4" />}
             <span>{pauseResumeDisabledLabel}</span>
@@ -422,7 +423,7 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
   // active agents. Agents that just stopped running linger briefly so clustered
   // run boundaries do not make rows pop out and the section does not immediately
   // swap to the recent fallback during short all-idle gaps. Otherwise fall back
-  // to up to RECENT_AGENT_LIMIT agents. Either way a "See all agents" link is
+  // to up to RECENT_AGENT_LIMIT agents. Either way a t("sidebar.seeAllAgents") link is
   // shown so the full list is always reachable.
   // Classic mode (PAP-89, flag OFF) restores the show-all behavior.
   const runningAgents = useMemo(() => {
@@ -440,7 +441,7 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
     : hasActiveAgents
       ? runningAgents
       : sortedAgents.slice(0, RECENT_AGENT_LIMIT);
-  // Always expose "See all agents" whenever the displayed list is a subset of all
+  // Always expose t("sidebar.seeAllAgents") whenever the displayed list is a subset of all
   // agents, so users never lose the entry point to the full list. In classic mode
   // every agent is already shown, so the link is unnecessary.
   const showSeeAllLink = streamlined && sortedAgents.length > 0;
@@ -645,9 +646,9 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
         onClick: openNewAgent,
       }}
       menu={{
-        ariaLabel: "Agents section actions",
+        ariaLabel: t("sidebar.agentsSectionActions"),
         actions: [
-          { type: "item", label: "Browse agents", icon: Users, href: "/agents/all" },
+          { type: "item", label: t("sidebar.browseAgents"), icon: Users, href: "/agents/all" },
           { type: "separator" },
         ],
         radioLabel: "Agent sort",
@@ -668,20 +669,20 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
           <Link
             to="/agents/all"
             state={SIDEBAR_SCROLL_RESET_STATE}
-            aria-label={rail ? "See all agents" : undefined}
+            aria-label={rail ? t("sidebar.seeAllAgents") : undefined}
             onClick={() => {
               if (isMobile) setSidebarOpen(false);
             }}
             className="flex items-center gap-2.5 mx-2 rounded-lg px-2 py-1.5 pointer-coarse:py-1 text-(length:--text-compact) font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
           >
             <Users className="shrink-0 h-4 w-4" />
-            <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : undefined}>See all agents</span>
+            <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : undefined}>{t("sidebar.seeAllAgents")}</span>
           </Link>
         );
         return rail ? (
           <Tooltip>
             <TooltipTrigger asChild>{seeAllLink}</TooltipTrigger>
-            <TooltipContent side="right">See all agents</TooltipContent>
+            <TooltipContent side="right">{t("sidebar.seeAllAgents")}</TooltipContent>
           </Tooltip>
         ) : (
           seeAllLink

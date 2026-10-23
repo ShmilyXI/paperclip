@@ -127,6 +127,7 @@ const AssistantConnection = lazy(() => import("./pages/apps/AssistantConnection"
 const JoinRequestQueue = lazy(() => import("./pages/JoinRequestQueue").then((module) => ({ default: module.JoinRequestQueue })));
 
 const CompanyExport = lazy(() => import("./pages/CompanyExport").then((module) => ({ default: module.CompanyExport })));
+const CoordinationBoard = lazy(() => import("./pages/Board").then((module) => ({ default: module.Board })));
 
 const ProductionAgents = lazy(() => import("./pages/Agents.production").then((module) => ({ default: module.Agents })));
 const ProductionRoutines = lazy(() => import("./pages/Routines.production").then((module) => ({ default: module.Routines })));
@@ -147,6 +148,8 @@ function boardRoutes(streamlinedUiEnabled: boolean, combinedInboxTasksEnabled: b
       <Route index element={<Navigate to="dashboard" replace />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="dashboard/live" element={<DashboardLive />} />
+      {/* Coordination board: a frame onto the separately-run board service (not part of this UI). */}
+      <Route path="board" element={<CoordinationBoard />} />
       <Route
         path="timeline"
         element={streamlinedUiEnabled ? <AuditCompatibilityRedirect to="/activity/timeline" /> : <Timeline />}

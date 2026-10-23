@@ -998,7 +998,7 @@ export function AgentDetail() {
   // AgentActionButtons component. Approval and lifecycle retry stay in the detail header.
   const agentAction = useMutation({
     mutationFn: async (action: "approve" | "retryLifecycle") => {
-      if (!agentLookupRef) return Promise.reject(new Error("No agent reference"));
+      if (!agentLookupRef) return Promise.reject(new Error(t("agentDetail.noAgentReference")));
       if (action === "approve") {
         return agentsApi.approve(agentLookupRef, resolvedCompanyId ?? undefined);
       }

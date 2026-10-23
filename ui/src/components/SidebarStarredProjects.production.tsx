@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useMemo } from "react";
 import { NavLink, useLocation } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -132,7 +133,7 @@ export function SidebarStarredProjects() {
             <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "flex-1 truncate"}>{project.name}</span>
             {!rail && project.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label="Private project" /> : null}
             {!rail && project.pauseReason === "budget" ? (
-              <BudgetSidebarMarker title="Project paused by budget" />
+              <BudgetSidebarMarker title={t("sidebar.projectPausedByBudget")} />
             ) : null}
           </NavLink>
         );
@@ -191,7 +192,7 @@ export function SidebarStarredProjects() {
                     ) : (
                       <Star className="size-4 fill-amber-500 text-amber-500" />
                     )}
-                    <span>Remove from starred</span>
+                    <span>{t("sidebar.removeFromStarred")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -206,7 +207,7 @@ export function SidebarStarredProjects() {
                     ) : (
                       <LogOut className="size-4" />
                     )}
-                    <span>Leave project</span>
+                    <span>{t("sidebar.leaveProject")}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

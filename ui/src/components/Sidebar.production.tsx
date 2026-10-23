@@ -1,5 +1,7 @@
+import { t } from "@/i18n";
 import {
   Inbox,
+  KanbanSquare,
   ListChecks,
   CircleDot,
   Target,
@@ -174,12 +176,13 @@ export function Sidebar() {
             <SidebarNavItem to="/status" label="Status" icon={LayoutGrid} textBadge="beta" />
           ) : null}
           {conferenceRoomChatEnabled ? (
-            <SidebarNavItem to="/board-chat" label="Conference Room" icon={MessagesSquare} />
+            <SidebarNavItem to="/board-chat" label={t("nav.conferenceRoom")} icon={MessagesSquare} />
           ) : null}
         </div>
 
         <SidebarSection label="Work" collapsible={{ open: workOpen, onOpenChange: setWorkOpen }}>
           <SidebarNavItem to="/issues" label="Tasks" icon={CircleDot} />
+          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
           {showCases ? (
             <SidebarNavItem to="/cases" label="Cases" icon={Layers} textBadge="beta" />
           ) : null}

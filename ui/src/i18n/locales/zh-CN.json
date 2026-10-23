@@ -63,7 +63,8 @@
     "decisions2": "待决策",
     "home": "首页",
     "mobileNavigation": "移动端导航",
-    "openSidebar": "打开侧边栏"
+    "openSidebar": "打开侧边栏",
+    "board": "统筹看板"
   },
   "sidebar": {
     "top": "默认排序",
@@ -197,7 +198,9 @@
     "import": "导入",
     "experimental": "实验功能",
     "plugins": "插件",
-    "adapters": "适配器"
+    "adapters": "适配器",
+    "invites": "邀请",
+    "heartbeats": "心跳"
   },
   "dashboard": {
     "dashboard": "仪表盘",
@@ -926,7 +929,8 @@
     "orgChartView": "组织架构视图",
     "unknownEnvironmentId": "未知运行环境 - {{environmentId}}",
     "chat": "聊天",
-    "sandboxProvider": "{{provider}} 沙箱服务商"
+    "sandboxProvider": "{{provider}} 沙箱服务商",
+    "selectCompanyToViewAgents": "请选择一家公司以查看员工。"
   },
   "orgChart": {
     "orgChart": "组织架构",
@@ -1235,7 +1239,8 @@
     "moreCount": "+{{count}} 项",
     "totalCount": "共 {{count}} 个",
     "tasksTouched": "涉及的任务（{{count}}）",
-    "events": "事件（{{count}}）"
+    "events": "事件（{{count}}）",
+    "noAgentReference": "没有员工引用"
   },
   "agentNav": {
     "agent": "员工",
@@ -1846,7 +1851,8 @@
     "on": "开",
     "off": "关",
     "moreActionsFor": "{{title}} 的更多操作",
-    "restore": "恢复"
+    "restore": "恢复",
+    "selectCompanyToViewRoutines": "请选择一家公司以查看例行任务。"
   },
   "routineDetail": {
     "selectAnOrganizationToCreate": "请选择组织以创建密钥",
@@ -2121,7 +2127,17 @@
     "searchProjects": "搜索项目...",
     "activeTriggers": "{{count}} 个活跃",
     "triggersSummaryAria": "{{count}} 个触发器。打开触发器。",
-    "previewAssumesPreviousRun": "预览假设下一次触发时上一次运行仍在进行中。时间按 {{timeZone}} 显示。"
+    "previewAssumesPreviousRun": "预览假设下一次触发时上一次运行仍在进行中。时间按 {{timeZone}} 显示。",
+    "noTriggersYet": "还没有触发器",
+    "noTriggersYetPeriod": "还没有触发器。",
+    "anyActivityCounts": "公司范围内的任何活动都算作运行理由。",
+    "manageBoundSecrets": "管理已绑定的密钥",
+    "webhookAuthBearer": "每次请求都发送 Authorization: Bearer <secret>。",
+    "webhookAuthHmac": "发送 X-Paperclip-Timestamp 与 X-Paperclip-Signature: sha256=<hex>，签名内容为「时间戳 + 一个点 + 完整的 JSON 请求体」。",
+    "webhookAuthGithubHmac": "接受 GitHub 风格的 X-Hub-Signature-256 请求头（对原始请求体做 HMAC，不含时间戳）。",
+    "webhookAuthAppWebhook": "接受 bearer token，或对完整请求体在 X-Hub-Signature / X-Hub-Signature-256 中携带的 HMAC-SHA256 签名。",
+    "webhookAuthFireflies": "签名 Webhook（旧版）。",
+    "webhookAuthNone": "不做认证 — Webhook 地址本身即作为共享密钥。"
   },
   "routineHistory": {
     "restoredRevisionRestoredfromnumberAsRevision": "已将修订 {{restoredFromNumber}} 恢复为修订 {{newNumber}}",
@@ -2454,7 +2470,19 @@
     "discover": "发现",
     "sources": "来源",
     "author": "创作",
-    "skillsYouCreateEditAnd": "您创建、编辑和测试的技能。"
+    "skillsYouCreateEditAnd": "您创建、编辑和测试的技能。",
+    "discoverInstallForkShare": "发现、安装、复刻、分享",
+    "searchSkillsAuthorsCategories": "搜索技能、作者、分类…",
+    "installing": "正在安装…",
+    "noAgentsSupportSkills": "此公司还没有支持技能的员工。",
+    "agentsWithSkillInstalled": "此公司中当前已安装该技能的员工。",
+    "sharingScopeCompany": "公司 — 仅在本公司内可见",
+    "removeFromCompanyLibrary": "将此技能从公司技能库中移除。",
+    "selectCompanyToManageSkills": "请选择要管理技能的公司。",
+    "noSkillsYet": "还没有技能。可以新建一个，或从目录中安装。",
+    "noSkillsInThisTab": "此标签页还没有技能。",
+    "reviewForkMetadata": "查看复刻的元数据，并创建一个可编辑的公司副本。",
+    "createEditableCompanySkill": "在 Paperclip 工作区中创建一个可编辑的公司技能。"
   },
   "connectors": {
     "retired": "已停用",
@@ -10045,7 +10073,13 @@
     "selectAnOrganizationToView": "选择组织以查看任务。",
     "couldNotLoadTasks": "无法加载任务",
     "loadingTasks": "正在加载任务…",
-    "loadMoreTasks": "加载更多任务"
+    "loadMoreTasks": "加载更多任务",
+    "resetReplay": "重置 / 重放",
+    "showSavedThread": "显示已保存的对话",
+    "userMethodPrompt": "告诉我你找出这一点的方法。",
+    "syntheticWorkspaceNotice": "合成工作区提示。展开此行以查看详情。",
+    "pendingInputCount": "1 条待处理输入",
+    "previewReplyReceived": "已收到预览回复。本次交流只存在于你的浏览器中，未启动任何员工。"
   },
   "financeBillerCard": {
     "net": "净额",
@@ -14986,7 +15020,9 @@
     "warnings": "警告",
     "webhookUrl": "Webhook 地址",
     "claudeFailedWhile": "Claude 失败，因为",
-    "isSetClearItAndRetry": "已设置。你可以在此适配器配置中清除它，然后重试探测。"
+    "isSetClearItAndRetry": "已设置。你可以在此适配器配置中清除它，然后重试探测。",
+    "approvedDuringSetup": "在入门引导的首次员工设置中已批准。",
+    "samplePromptHello": "回复「hello」。"
   },
   "announcementWell": {
     "dismissedForThisVisit": "本次访问内已忽略",
@@ -15612,5 +15648,206 @@
     "defaultPolicyRemediation": "组织管理员可以修改技能策略以允许此操作。",
     "defaultAdminRemediation": "此操作需要组织管理权限。请联系管理员进行此变更。",
     "fixFlaggedIssue": "修复被标记的问题后重试。"
+  },
+  "board": {
+    "settingsLabel": "看板显示设置",
+    "addressLabel": "看板地址",
+    "save": "保存",
+    "openInNewWindow": "在新窗口打开",
+    "currentAddress": "当前地址",
+    "frameTitle": "统筹看板",
+    "blockedTitle": "无法在本页嵌入看板",
+    "blockedDescription": "{{url}} 没能加载进本页：看板服务端拒绝被嵌入（X-Frame-Options 或 CSP frame-ancestors）。请在新窗口打开，或在下方更换地址。"
+  },
+  "adapterConfigFields": {
+    "executionEngine": "执行引擎",
+    "executionEngineHint": "默认使用 ACP。若 ACP 不可用，运行会以配置错误失败。要改用 CLI 请显式选择 CLI。",
+    "permissionMode": "权限模式",
+    "acpServerCommand": "ACP 服务器命令",
+    "acpSessionMode": "ACP 会话模式",
+    "acpSessionModeHint": "持久模式在多次运行之间保留 ACP 会话状态；一次性模式每次运行都重新开始。",
+    "acpNonInteractivePermissions": "ACP 非交互权限",
+    "acpNonInteractivePermissionsHint": "当 ACP 智能体在交互会话之外请求输入时的兜底处理。",
+    "acpStateDirectory": "ACP 状态目录",
+    "acpStateDirectoryHint": "可选的 ACP 会话状态目录。默认使用 Paperclip 管理的组织/员工范围存储。",
+    "acpWarmProcessIdleMs": "ACP 温进程空闲毫秒",
+    "acpWarmProcessIdleMsHint": "默认为 0，即每次运行后关闭 ACP 进程，同时保留持久会话状态。",
+    "agentInstructionsFile": "员工说明文件",
+    "instructionsFileHint": "指向一个 markdown 文件的绝对路径（例如 AGENTS.md），用于定义该员工的行为。运行时注入系统提示词。",
+    "skipPermissions": "跳过权限检查"
+  },
+  "codexLocal": {
+    "harness": "运行框架",
+    "harnessHint": "选择运行任务的员工运行框架。",
+    "dotConnection": "Dot 连接",
+    "dotConnectionHint": "派发工作前必须先完成一次经过验证的事件往返。",
+    "readTaskAttachments": "读取任务附件",
+    "readTaskAttachmentsHint": "允许 Dot 读取其当前所分配任务的附件文件。文件内容会发送至 OpenAI。此项不需要工作区命令权限；默认关闭。",
+    "workspaceFilesAndCommands": "工作区文件与命令",
+    "workspaceFilesAndCommandsHint": "允许 Dot 读写其被分配的工作区并发布文件。需要本地 Runner。命令仅在带 bubblewrap 的 Linux 上可用；这些命令无法读取你的主目录，也无法使用注入的凭证。",
+    "dotUnmeteredHint": "Dot 不上报 token 用量或费用。Paperclip 无法对供应商支出设置硬上限；已知的公司与员工预算限制仍然生效。",
+    "museConnection": "Muse 连接",
+    "museConnectionHint": "配对、接收方联系方式、后台回复和员工配置分别单独验证。",
+    "museUnmeteredHint": "Muse 不上报用量或费用。Paperclip 无法对 Muse 支出设置硬上限；已知的公司与员工预算限制仍然生效。",
+    "acpAgent": "ACP 智能体",
+    "acpAgentHint": "Cursor 使用 Paperclip 提问；无法提供单次运行费用。Pi 接受任意供应商/模型 ID。GitHub Copilot 尚待资格确认。",
+    "cursorMode": "Cursor 模式",
+    "cursorModeHint": "选择 Cursor 的会话模式。权限与公司审批规则依然生效。",
+    "unsupportedSavedCursorMode": "已保存的模式不受支持 — 请选择智能体、计划或提问",
+    "cursorModeAgent": "智能体",
+    "cursorModePlan": "计划",
+    "cursorModeAsk": "提问",
+    "piThinkingLevel": "Pi 思考级别",
+    "piThinkingLevelHint": "运行器会在每次会话可提交提示前核验这一确切级别。修改该级别会开启新会话。",
+    "unsupportedSavedThinkingLevel": "已保存的思考级别不受支持",
+    "thinkingOff": "关闭",
+    "thinkingLow": "低",
+    "thinkingHigh": "高",
+    "thinkingMax": "最高",
+    "managedAgentProfile": "托管员工配置档",
+    "managedAgentProfileHint": "公司范围内经过资格认证的配置档 ID 或键。远端资源身份从已保存的配置档读取，而不是来自此员工配置。",
+    "sessionSpendCeiling": "单次会话支出上限（USD）",
+    "sessionSpendCeilingHint": "可选的单员工硬性上限。保留 1.00 即使用保守的默认值。",
+    "acknowledgeManagedRetention": "确认托管留存策略",
+    "acknowledgeManagedRetentionHint": "Claude Managed 是有状态的测试版服务，不适用 ZDR 或 HIPAA 模式。",
+    "agentCoreProfile": "AgentCore 配置档",
+    "agentCoreProfileHint": "公司范围内经过资格认证的配置档 ID 或键。运行框架、Memory、IAM 与上下文存储身份都来自已保存的配置档。",
+    "estimatedSessionCeiling": "预计单次会话上限（USD）",
+    "estimatedSessionCeilingHint": "Paperclip 估算值；AWS 不提供按会话的货币硬性停止。",
+    "maximumIterations": "最大迭代次数",
+    "maximumIterationsHint": "合格范围是 1–8。无效值会保守回退为 8。",
+    "maximumOutputTokens": "最大输出 token 数",
+    "maximumOutputTokensHint": "合格范围是 1–4096。",
+    "invocationTimeout": "调用超时（秒）",
+    "invocationTimeoutHint": "合格范围是 1–300 秒。",
+    "acknowledgeMemoryRetention": "确认 90 天 Memory 留存",
+    "acknowledgeMemoryRetentionHint": "合格 AgentCore 配置档会将短期 Memory 事件精确保留 90 天。",
+    "unsupportedSavedQualifiedMode": "已保存的模式不受支持 — 请选择一个合格模式",
+    "runnerLifecycle": "运行器生命周期",
+    "runnerLifecycleHint": "逐轮模式在每次运行后挂起。温模式则在受治理的运行之间保持同一个供应商进程可用。",
+    "turnByTurn": "逐轮",
+    "warmSession": "温会话",
+    "warmIdleTimeout": "温会话空闲超时（毫秒）",
+    "warmIdleTimeoutHint": "空闲达到该时长后，runnerd 会对供应商会话做检查点并挂起。上限为 24 小时。",
+    "acpServerCommandHint": "可选的 Codex ACP 服务器命令覆盖值。默认使用包内的 codex-acp 可执行文件。",
+    "acpSessionPersistent": "持久",
+    "acpSessionOneShot": "一次性",
+    "permissionDeny": "拒绝",
+    "permissionFail": "失败",
+    "instructionsFileHint": "指向一个 markdown 文件的绝对路径（例如 AGENTS.md），用于定义该员工的行为。运行时注入系统提示词。注意：Codex 仍可能自动应用工作区中仓库范围的 AGENTS.md 文件。",
+    "bypassSandbox": "绕过沙箱",
+    "enableSearch": "启用搜索",
+    "fastMode": "快速模式",
+    "fastModeManualModelHint": "对手动指定的模型，快速模式会被直接透传。若 Codex 拒绝，请关闭该开关。",
+    "fastModeSupportedHint": "快速模式消耗额度/token 的速度远快于标准 Codex 运行。",
+    "unknownProviderConfiguration": "未知的供应商配置将被原样保留。",
+    "engineDefaultAcp": "默认（ACP）",
+    "fastModeUnsupportedHint": "快速模式目前仅支持 {{model}} 或手动指定的模型 ID。在切换模型之前，Paperclip 会忽略此开关。",
+    "qualificationPending": "— 待资格确认",
+    "permissionModeHint": "{{description}} 所选模式不会放宽 Paperclip 的工作区、网络、凭证或规划边界。"
+  },
+  "claudeLocal": {
+    "acpServerCommandHint": "可选的 Claude ACP 服务器命令覆盖值。默认使用包内的 claude-agent-acp 可执行文件。",
+    "enableChrome": "启用 Chrome",
+    "maxTurnsPerRun": "每次运行最大轮数"
+  },
+  "geminiLocal": {
+    "instructionsFileHint": "指向一个 markdown 文件的绝对路径（例如 AGENTS.md），用于定义该员工的行为。运行时前置拼接到 Gemini 提示词。",
+    "acpServerCommandHint": "可选的 Gemini ACP 服务器命令覆盖值。默认为 gemini --acp。"
+  },
+  "cursorAdapter": {
+    "instructionsFileHint": "指向一个 markdown 文件的绝对路径（例如 AGENTS.md），用于定义该员工的行为。运行时注入提示词。"
+  },
+  "kimiLocal": {
+    "instructionsFileHint": "指向一个 markdown 文件的绝对路径（例如 AGENTS.md），用于定义该员工的行为。运行时前置拼接到 Kimi 提示词。"
+  },
+  "grokLocal": {
+    "instructionsFileHint": "指向一个 markdown 文件的绝对路径（例如 AGENTS.md），用于定义该员工的行为。Paperclip 会在可能时将其以 Agents.md 的形式放入 Grok 工作区。"
+  },
+  "processAdapter": {
+    "command": "命令",
+    "args": "参数（逗号分隔）"
+  },
+  "httpAdapter": {
+    "webhookUrl": "Webhook 地址"
+  },
+  "runtimeJsonFields": {
+    "runtimeServicesJson": "运行时服务 JSON",
+    "payloadTemplateJson": "载荷模板 JSON"
+  },
+  "openclawGateway": {
+    "gatewayUrl": "网关地址",
+    "gatewayAuthToken": "网关认证 token",
+    "agentId": "员工 ID",
+    "sessionStrategy": "会话策略",
+    "sessionStrategyFixed": "固定",
+    "sessionStrategyPerIssue": "按任务",
+    "sessionStrategyPerRun": "按运行",
+    "sessionKey": "会话键",
+    "passwordAlternativeAuth": "密码（备用认证）",
+    "role": "角色",
+    "scopes": "权限范围（逗号分隔）",
+    "paperclipApiUrlOverride": "Paperclip API 地址覆盖",
+    "timeoutSeconds": "超时（秒）",
+    "headersJson": "请求头 JSON",
+    "claimedApiKeyPath": "已领取 API 密钥路径",
+    "waitTimeoutMs": "等待超时（毫秒）",
+    "disableDeviceAuth": "禁用设备认证",
+    "skipDeviceKeyAuthentication": "跳过设备密钥认证",
+    "autoPairOnFirstConnect": "首次连接自动配对",
+    "automaticallyApproveDevicePairing": "自动批准设备配对",
+    "deviceAuth": "设备认证",
+    "deviceAuthDescription": "启用后，Paperclip 会在入门引导过程中持久保存设备密钥，使配对审批在多次运行之间保持稳定。"
+  },
+  "hermesGateway": {
+    "apiBaseUrl": "API 基础地址",
+    "apiBaseUrlHint": "Paperclip 可访问的 Hermes API 服务器基础地址，例如 http://127.0.0.1:8642 或私有 HTTPS 地址。默认的 dashboard 根地址或聊天地址（例如 http://127.0.0.1:9119/chat ）也会被接受并映射到 /api。",
+    "apiKey": "API 密钥",
+    "apiKeyPlaceholder": "Hermes 的 API_SERVER_KEY，不是 PAPERCLIP_API_KEY",
+    "paperclipApiUrl": "Paperclip API 地址",
+    "paperclipApiUrlHint": "可选的 Paperclip API 地址，须能被 Hermes 主机访问。这不是凭证。",
+    "sessionKeyStrategy": "会话键策略",
+    "sessionKeyStrategyHint": "控制 X-Hermes-Session-Key 请求头。默认按任务隔离，可避免跨任务的记忆串味。",
+    "sessionStrategyIssueScoped": "按任务隔离",
+    "sessionStrategyAgentScoped": "按员工隔离",
+    "sessionStrategyRunScoped": "按运行隔离",
+    "sessionStrategyNone": "无",
+    "timeoutSeconds": "超时（秒）",
+    "eventReconnectMs": "事件重连（毫秒）",
+    "eventReconnectHint": "在非终止性断连后，重连 Hermes SSE 事件流之前的延迟。",
+    "dangerouslyAllowRemoteHttp": "危险：允许远程 HTTP",
+    "dangerouslyAllowRemoteHttpHint": "不安全的仅供开发使用的逃生口。远程 Hermes 网关应使用 HTTPS；回环 HTTP 仍然允许。",
+    "extraHeaders": "额外请求头",
+    "extraHeadersHint": "可选的 JSON 对象，用于附加非机密请求头。与安全相关的关键请求头由适配器生成。",
+    "instructions": "说明",
+    "instructionsHint": "可选的稳定 Hermes 说明，与唤醒输入分开发送。"
+  },
+  "appsSidebar": {
+    "waitingForYourOk": "等待你的确认"
+  },
+  "smokeLabTab": {
+    "servicesStarted": "冒烟服务已启动",
+    "couldNotStartServices": "无法启动服务",
+    "servicesStopped": "冒烟服务已停止",
+    "couldNotStopServices": "无法停止服务",
+    "fixturesInstalled": "已安装夹具应用",
+    "fixturesAlreadyPresent": "夹具应用已存在",
+    "couldNotInstallFixtures": "无法安装夹具应用",
+    "reset": "冒烟实验室已重置",
+    "couldNotReset": "无法重置",
+    "runStarted": "冒烟运行已开始",
+    "runStartedBody": "浏览器运行器会在每一步完成时记录下来。",
+    "couldNotStartRun": "无法开始运行",
+    "turnedOff": "冒烟实验室已关闭",
+    "loading": "正在加载冒烟实验室…",
+    "noServices": "没有服务上报。请先启动上方的夹具服务。",
+    "fakeOauthCredentials": "假 OAuth 演示凭证",
+    "noRuns": "还没有记录任何运行。",
+    "selectRun": "选择一次运行以查看其步骤。",
+    "noSteps": "此次运行没有记录任何步骤。"
+  },
+  "taskChatLab": {
+    "chosenSample": "已选 · C · 背景开启",
+    "streamingSpeed": "流式速度"
   }
 }

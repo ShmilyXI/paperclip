@@ -63,7 +63,8 @@
     "decisions2": "decisions",
     "home": "Home",
     "mobileNavigation": "Mobile navigation",
-    "openSidebar": "Open sidebar"
+    "openSidebar": "Open sidebar",
+    "board": "Board"
   },
   "sidebar": {
     "top": "Top",
@@ -197,7 +198,9 @@
     "import": "Import",
     "experimental": "Experimental",
     "plugins": "Plugins",
-    "adapters": "Adapters"
+    "adapters": "Adapters",
+    "invites": "Invites",
+    "heartbeats": "Heartbeats"
   },
   "dashboard": {
     "dashboard": "Dashboard",
@@ -926,7 +929,8 @@
     "orgChartView": "Org chart view",
     "unknownEnvironmentId": "Unknown environment - {{environmentId}}",
     "chat": "Chat",
-    "sandboxProvider": "{{provider}} sandbox provider"
+    "sandboxProvider": "{{provider}} sandbox provider",
+    "selectCompanyToViewAgents": "Select a company to view agents."
   },
   "orgChart": {
     "orgChart": "Org Chart",
@@ -1235,7 +1239,8 @@
     "moreCount": "+{{count}} more",
     "totalCount": "{{count}} total",
     "tasksTouched": "Tasks Touched ({{count}})",
-    "events": "Events ({{count}})"
+    "events": "Events ({{count}})",
+    "noAgentReference": "No agent reference"
   },
   "agentNav": {
     "agent": "Agent",
@@ -1846,7 +1851,8 @@
     "on": "On",
     "off": "Off",
     "moreActionsFor": "More actions for {{title}}",
-    "restore": "Restore"
+    "restore": "Restore",
+    "selectCompanyToViewRoutines": "Select a company to view routines."
   },
   "routineDetail": {
     "selectAnOrganizationToCreate": "Select an organization to create secrets",
@@ -2121,7 +2127,17 @@
     "searchProjects": "Search projects...",
     "activeTriggers": "{{count}} active",
     "triggersSummaryAria": "{{count}} triggers. Open triggers.",
-    "previewAssumesPreviousRun": "Preview assumes the previous run is still in flight when the next fires. Times shown in {{timeZone}}."
+    "previewAssumesPreviousRun": "Preview assumes the previous run is still in flight when the next fires. Times shown in {{timeZone}}.",
+    "noTriggersYet": "No triggers yet",
+    "noTriggersYetPeriod": "No triggers yet.",
+    "anyActivityCounts": "Any activity across the company counts as a reason to run.",
+    "manageBoundSecrets": "Manage bound secrets",
+    "webhookAuthBearer": "Send Authorization: Bearer <secret> with each request.",
+    "webhookAuthHmac": "Send X-Paperclip-Timestamp and X-Paperclip-Signature: sha256=<hex>, signing timestamp + a dot + the exact JSON body.",
+    "webhookAuthGithubHmac": "Accept GitHub-style X-Hub-Signature-256 header (HMAC over raw body, no timestamp).",
+    "webhookAuthAppWebhook": "Accept a bearer token or an HMAC-SHA256 signature over the exact request body in X-Hub-Signature or X-Hub-Signature-256.",
+    "webhookAuthFireflies": "Signed webhook (legacy).",
+    "webhookAuthNone": "No authentication — the webhook URL itself acts as a shared secret."
   },
   "routineHistory": {
     "restoredRevisionRestoredfromnumberAsRevision": "Restored revision {{restoredFromNumber}} as revision {{newNumber}}",
@@ -2454,7 +2470,19 @@
     "discover": "Discover",
     "sources": "Sources",
     "author": "Author",
-    "skillsYouCreateEditAnd": "Skills you create, edit, and test."
+    "skillsYouCreateEditAnd": "Skills you create, edit, and test.",
+    "discoverInstallForkShare": "Discover, install, fork, share",
+    "searchSkillsAuthorsCategories": "Search skills, authors, categories…",
+    "installing": "Installing…",
+    "noAgentsSupportSkills": "No agents in this company support skills yet.",
+    "agentsWithSkillInstalled": "Agents in this company that currently have this skill installed.",
+    "sharingScopeCompany": "Company — visible inside this company",
+    "removeFromCompanyLibrary": "Remove this skill from the company library.",
+    "selectCompanyToManageSkills": "Select a company to manage skills.",
+    "noSkillsYet": "No skills yet. Create one or install from the catalog.",
+    "noSkillsInThisTab": "No skills in this tab yet.",
+    "reviewForkMetadata": "Review the fork metadata and create an editable company copy.",
+    "createEditableCompanySkill": "Create an editable company skill in the Paperclip workspace."
   },
   "connectors": {
     "retired": "Retired",
@@ -10045,7 +10073,13 @@
     "selectAnOrganizationToView": "Select an organization to view tasks.",
     "couldNotLoadTasks": "Could not load tasks",
     "loadingTasks": "Loading tasks…",
-    "loadMoreTasks": "Load more tasks"
+    "loadMoreTasks": "Load more tasks",
+    "resetReplay": "Reset / replay",
+    "showSavedThread": "Show saved thread",
+    "userMethodPrompt": "Tell me your method for finding this out.",
+    "syntheticWorkspaceNotice": "Synthetic workspace notice. Expand this row to inspect the details.",
+    "pendingInputCount": "1 pending input",
+    "previewReplyReceived": "Preview reply received. This exchange exists only in your browser; no agent was started."
   },
   "financeBillerCard": {
     "net": "net",
@@ -14986,7 +15020,9 @@
     "warnings": "Warnings",
     "webhookUrl": "Webhook URL",
     "claudeFailedWhile": "Claude failed while",
-    "isSetClearItAndRetry": "is set. You can clear it in this adapter config and retry the probe."
+    "isSetClearItAndRetry": "is set. You can clear it in this adapter config and retry the probe.",
+    "approvedDuringSetup": "Approved during onboarding first-agent setup.",
+    "samplePromptHello": "Respond with hello."
   },
   "announcementWell": {
     "dismissedForThisVisit": "Dismissed for this visit",
@@ -15612,5 +15648,206 @@
     "defaultPolicyRemediation": "An organization administrator can change the skill policy to allow this.",
     "defaultAdminRemediation": "This requires organization administration access. Ask an administrator to make this change.",
     "fixFlaggedIssue": "Fix the flagged issue and try again."
+  },
+  "board": {
+    "settingsLabel": "Board display settings",
+    "addressLabel": "Board address",
+    "save": "Save",
+    "openInNewWindow": "Open in new window",
+    "currentAddress": "Current address",
+    "frameTitle": "Coordination board",
+    "blockedTitle": "Could not embed the board",
+    "blockedDescription": "{{url}} did not load inside this page: the board server refuses framing (X-Frame-Options or CSP frame-ancestors). Open it in a new window, or change the address below."
+  },
+  "adapterConfigFields": {
+    "executionEngine": "Execution engine",
+    "executionEngineHint": "Default uses ACP. If ACP is unavailable, the run fails with a setup error. Choose CLI explicitly to use it.",
+    "permissionMode": "Permission mode",
+    "acpServerCommand": "ACP server command",
+    "acpSessionMode": "ACP session mode",
+    "acpSessionModeHint": "Persistent keeps ACP session state between runs. One-shot starts fresh each run.",
+    "acpNonInteractivePermissions": "ACP non-interactive permissions",
+    "acpNonInteractivePermissionsHint": "Fallback if the ACP agent asks for input outside an interactive session.",
+    "acpStateDirectory": "ACP state directory",
+    "acpStateDirectoryHint": "Optional ACP session state directory. Defaults to Paperclip-managed organization/agent scoped storage.",
+    "acpWarmProcessIdleMs": "ACP warm process idle ms",
+    "acpWarmProcessIdleMsHint": "Defaults to 0, which closes the ACP process after each run while retaining persistent session state.",
+    "agentInstructionsFile": "Agent instructions file",
+    "instructionsFileHint": "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Injected into the system prompt at runtime.",
+    "skipPermissions": "Skip permissions"
+  },
+  "codexLocal": {
+    "harness": "Harness",
+    "harnessHint": "Choose the agent harness that runs your tasks.",
+    "dotConnection": "Dot connection",
+    "dotConnectionHint": "A verified event round trip is required before assigning work.",
+    "readTaskAttachments": "Read task attachments",
+    "readTaskAttachmentsHint": "Let Dot read files attached to its current assigned task. File contents are sent to OpenAI. Does not require workspace command access; off by default.",
+    "workspaceFilesAndCommands": "Workspace files and commands",
+    "workspaceFilesAndCommandsHint": "Let Dot read and write its assigned workspace and publish files. Requires a local Runner. Commands are available only on Linux with bubblewrap; they cannot read your home directory or use injected credentials.",
+    "dotUnmeteredHint": "Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply.",
+    "museConnection": "Muse connection",
+    "museConnectionHint": "Pairing, receiver contact, background reply, and agent setup are verified separately.",
+    "museUnmeteredHint": "Muse does not report usage or cost. Paperclip cannot enforce a Muse spend ceiling; known company and agent budget limits still apply.",
+    "acpAgent": "ACP agent",
+    "acpAgentHint": "Cursor uses Paperclip questions; per-run cost is unavailable. Pi accepts any provider/model ID. GitHub Copilot awaits qualification.",
+    "cursorMode": "Cursor mode",
+    "cursorModeHint": "Select Cursor's session mode. Permissions and company approval rules still apply.",
+    "unsupportedSavedCursorMode": "Unsupported saved mode — select Agent, Plan, or Ask",
+    "cursorModeAgent": "Agent",
+    "cursorModePlan": "Plan",
+    "cursorModeAsk": "Ask",
+    "piThinkingLevel": "Pi thinking level",
+    "piThinkingLevelHint": "The runner verifies this exact level before each session can prompt. Changing it starts a new session.",
+    "unsupportedSavedThinkingLevel": "Unsupported saved thinking level",
+    "thinkingOff": "Off",
+    "thinkingLow": "Low",
+    "thinkingHigh": "High",
+    "thinkingMax": "Max",
+    "managedAgentProfile": "Managed Agent profile",
+    "managedAgentProfileHint": "Company-scoped qualified profile ID or key. Remote resource identity is loaded from the stored profile, not this agent config.",
+    "sessionSpendCeiling": "Session spend ceiling (USD)",
+    "sessionSpendCeilingHint": "Optional per-agent hard ceiling. Leave 1.00 to use a conservative default.",
+    "acknowledgeManagedRetention": "Acknowledge managed retention",
+    "acknowledgeManagedRetentionHint": "Claude Managed is a stateful beta service and is not eligible for ZDR or HIPAA modes.",
+    "agentCoreProfile": "AgentCore profile",
+    "agentCoreProfileHint": "Company-scoped qualified profile ID or key. Harness, Memory, IAM, and context-store identity come from the stored profile.",
+    "estimatedSessionCeiling": "Estimated session ceiling (USD)",
+    "estimatedSessionCeilingHint": "Paperclip estimate; AWS does not provide a per-session currency hard stop.",
+    "maximumIterations": "Maximum iterations",
+    "maximumIterationsHint": "Qualified range is 1–8. Invalid values fail closed to 8.",
+    "maximumOutputTokens": "Maximum output tokens",
+    "maximumOutputTokensHint": "Qualified range is 1–4096.",
+    "invocationTimeout": "Invocation timeout (seconds)",
+    "invocationTimeoutHint": "Qualified range is 1–300 seconds.",
+    "acknowledgeMemoryRetention": "Acknowledge 90-day Memory retention",
+    "acknowledgeMemoryRetentionHint": "The qualified AgentCore profile retains short-term Memory events for exactly 90 days.",
+    "unsupportedSavedQualifiedMode": "Unsupported saved mode — select a qualified mode",
+    "runnerLifecycle": "Runner lifecycle",
+    "runnerLifecycleHint": "Turn by turn suspends after each run. Warm keeps the same provider process available between governed runs.",
+    "turnByTurn": "Turn by turn",
+    "warmSession": "Warm session",
+    "warmIdleTimeout": "Warm idle timeout (ms)",
+    "warmIdleTimeoutHint": "After this much inactivity, runnerd checkpoints and suspends the provider session. The maximum is 24 hours.",
+    "acpServerCommandHint": "Optional override for the Codex ACP server command. Defaults to the package-local codex-acp binary.",
+    "acpSessionPersistent": "Persistent",
+    "acpSessionOneShot": "One-shot",
+    "permissionDeny": "Deny",
+    "permissionFail": "Fail",
+    "instructionsFileHint": "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Injected into the system prompt at runtime. Note: Codex may still auto-apply repo-scoped AGENTS.md files from the workspace.",
+    "bypassSandbox": "Bypass sandbox",
+    "enableSearch": "Enable search",
+    "fastMode": "Fast mode",
+    "fastModeManualModelHint": "Fast mode will be passed through for this manual model. If Codex rejects it, turn the toggle off.",
+    "fastModeSupportedHint": "Fast mode consumes credits/tokens much faster than standard Codex runs.",
+    "unknownProviderConfiguration": "Unknown provider configuration is preserved.",
+    "engineDefaultAcp": "Default (ACP)",
+    "fastModeUnsupportedHint": "Fast mode currently only works on {{model}} or manual model IDs. Paperclip will ignore this toggle until the model is switched.",
+    "qualificationPending": "— qualification pending",
+    "permissionModeHint": "{{description}} The selected mode does not widen Paperclip's workspace, network, credential, or planning boundaries."
+  },
+  "claudeLocal": {
+    "acpServerCommandHint": "Optional override for the Claude ACP server command. Defaults to the package-local claude-agent-acp binary.",
+    "enableChrome": "Enable Chrome",
+    "maxTurnsPerRun": "Max turns per run"
+  },
+  "geminiLocal": {
+    "instructionsFileHint": "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Prepended to the Gemini prompt at runtime.",
+    "acpServerCommandHint": "Optional override for the Gemini ACP server command. Defaults to gemini --acp."
+  },
+  "cursorAdapter": {
+    "instructionsFileHint": "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Injected into the prompt at runtime."
+  },
+  "kimiLocal": {
+    "instructionsFileHint": "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Prepended to the Kimi prompt at runtime."
+  },
+  "grokLocal": {
+    "instructionsFileHint": "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Paperclip stages it into the Grok workspace as Agents.md when possible."
+  },
+  "processAdapter": {
+    "command": "Command",
+    "args": "Args (comma-separated)"
+  },
+  "httpAdapter": {
+    "webhookUrl": "Webhook URL"
+  },
+  "runtimeJsonFields": {
+    "runtimeServicesJson": "Runtime services JSON",
+    "payloadTemplateJson": "Payload template JSON"
+  },
+  "openclawGateway": {
+    "gatewayUrl": "Gateway URL",
+    "gatewayAuthToken": "Gateway auth token",
+    "agentId": "Agent ID",
+    "sessionStrategy": "Session strategy",
+    "sessionStrategyFixed": "Fixed",
+    "sessionStrategyPerIssue": "Per issue",
+    "sessionStrategyPerRun": "Per run",
+    "sessionKey": "Session key",
+    "passwordAlternativeAuth": "Password (alternative auth)",
+    "role": "Role",
+    "scopes": "Scopes (comma-separated)",
+    "paperclipApiUrlOverride": "Paperclip API URL override",
+    "timeoutSeconds": "Timeout (seconds)",
+    "headersJson": "Headers JSON",
+    "claimedApiKeyPath": "Claimed API key path",
+    "waitTimeoutMs": "Wait timeout (ms)",
+    "disableDeviceAuth": "Disable device auth",
+    "skipDeviceKeyAuthentication": "Skip device key authentication",
+    "autoPairOnFirstConnect": "Auto-pair on first connect",
+    "automaticallyApproveDevicePairing": "Automatically approve device pairing",
+    "deviceAuth": "Device auth",
+    "deviceAuthDescription": "When enabled, Paperclip persists a device key during onboarding so pairing approvals remain stable across runs."
+  },
+  "hermesGateway": {
+    "apiBaseUrl": "API base URL",
+    "apiBaseUrlHint": "Hermes API server base URL that Paperclip can reach, such as http://127.0.0.1:8642 or a private HTTPS URL. Default dashboard root/chat URLs such as http://127.0.0.1:9119/chat are accepted and map to /api.",
+    "apiKey": "API key",
+    "apiKeyPlaceholder": "Hermes API_SERVER_KEY, not PAPERCLIP_API_KEY",
+    "paperclipApiUrl": "Paperclip API URL",
+    "paperclipApiUrlHint": "Optional Paperclip API URL reachable by the Hermes host. This is not a credential.",
+    "sessionKeyStrategy": "Session key strategy",
+    "sessionKeyStrategyHint": "Controls X-Hermes-Session-Key. Issue scoped prevents cross-task memory bleed by default.",
+    "sessionStrategyIssueScoped": "Issue scoped",
+    "sessionStrategyAgentScoped": "Agent scoped",
+    "sessionStrategyRunScoped": "Run scoped",
+    "sessionStrategyNone": "None",
+    "timeoutSeconds": "Timeout seconds",
+    "eventReconnectMs": "Event reconnect ms",
+    "eventReconnectHint": "Delay before reconnecting the Hermes SSE events stream after a nonterminal disconnect.",
+    "dangerouslyAllowRemoteHttp": "Dangerously allow remote HTTP",
+    "dangerouslyAllowRemoteHttpHint": "Unsafe dev-only escape hatch. Remote Hermes gateways should use HTTPS; loopback HTTP remains allowed.",
+    "extraHeaders": "Extra headers",
+    "extraHeadersHint": "Optional JSON object of extra nonsecret headers. Security-critical headers are generated by the adapter.",
+    "instructions": "Instructions",
+    "instructionsHint": "Optional stable Hermes instructions sent separately from the wake input."
+  },
+  "appsSidebar": {
+    "waitingForYourOk": "waiting for your OK"
+  },
+  "smokeLabTab": {
+    "servicesStarted": "Smoke services started",
+    "couldNotStartServices": "Couldn't start services",
+    "servicesStopped": "Smoke services stopped",
+    "couldNotStopServices": "Couldn't stop services",
+    "fixturesInstalled": "Fixture apps installed",
+    "fixturesAlreadyPresent": "Fixture apps already present",
+    "couldNotInstallFixtures": "Couldn't install fixtures",
+    "reset": "Smoke Lab reset",
+    "couldNotReset": "Couldn't reset",
+    "runStarted": "Smoke run started",
+    "runStartedBody": "The browser runner records each step as it completes.",
+    "couldNotStartRun": "Couldn't start a run",
+    "turnedOff": "Smoke Lab is turned off",
+    "loading": "Loading Smoke Lab…",
+    "noServices": "No services reported. Start the fixture services above.",
+    "fakeOauthCredentials": "Fake OAuth demo credentials",
+    "noRuns": "No runs recorded yet.",
+    "selectRun": "Select a run to see its steps.",
+    "noSteps": "No steps recorded for this run."
+  },
+  "taskChatLab": {
+    "chosenSample": "Chosen · C · On bg",
+    "streamingSpeed": "Streaming speed"
   }
 }

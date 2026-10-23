@@ -22,6 +22,7 @@ import {
   MessageCircle,
   GanttChartSquare,
   LayoutGrid,
+  KanbanSquare,
   Users,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -232,6 +233,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
               <SidebarStarredProjects />
             </>
           ) : null}
+          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
           <SidebarNavItem to="/routines" label={t("nav.routines")} icon={Repeat} />
           <SidebarNavItem to="/artifacts" label={t("nav.artifacts")} icon={Package} />
           {showCases ? (

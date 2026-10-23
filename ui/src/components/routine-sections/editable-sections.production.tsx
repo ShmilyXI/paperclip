@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -40,45 +41,45 @@ import type { EnvBinding, RoutineDetail as RoutineDetailType } from "@paperclipa
 const concurrencyPolicyOptions = [
   {
     value: "coalesce_if_active",
-    title: "Coalesce if active",
-    description: "Keep one follow-up run queued while an active run is still working.",
+    title: t("routineSections.coalesceIfActive"),
+    description: t("routineSections.keepOneFollowUpRun"),
   },
   {
     value: "always_enqueue",
-    title: "Always enqueue",
-    description: "Queue every trigger occurrence, even if several runs stack up.",
+    title: t("routineSections.alwaysEnqueue"),
+    description: t("routineSections.queueEveryTriggerOccurrenceEven"),
   },
   {
     value: "skip_if_active",
-    title: "Skip if active",
-    description: "Drop overlapping trigger occurrences while the routine is already active.",
+    title: t("routineSections.skipIfActive"),
+    description: t("routineSections.dropOverlappingTriggerOccurrencesWhile"),
   },
 ];
 
 const catchUpPolicyOptions = [
   {
     value: "skip_missed",
-    title: "Skip missed",
-    description: "Ignore schedule windows that were missed while paused.",
+    title: t("routineSections.skipMissed"),
+    description: t("routineSections.ignoreScheduleWindowsThatWere"),
   },
   {
     value: "enqueue_missed_with_cap",
-    title: "Enqueue missed with cap",
-    description: "Catch up missed schedule windows after recovery; sub-hourly schedules are combined into one catch-up run, slower schedules replay each missed window up to a cap.",
+    title: t("routineSections.enqueueMissedWithCap"),
+    description: t("routines.catchUpMissedScheduleWindows"),
   },
 ];
 
 const activityGatePolicyOptions = [
   {
     value: "always",
-    title: "Run on every scheduled tick",
-    description: "Fire on the schedule no matter what — the default behavior.",
+    title: t("routineSections.runOnEveryScheduledTick"),
+    description: t("routineSections.fireOnTheScheduleNo"),
   },
   {
     value: "require_external_activity",
-    title: "Skip when there's been no activity since the last run",
+    title: t("routineSections.skipWhenThereSBeen"),
     description:
-      "On a scheduled tick, only run if something happened since the last run that finished. Lets a watcher-style routine stay asleep while the system is settled instead of burning tokens.",
+      t("routineSections.onAScheduledTickOnly"),
   },
 ];
 
@@ -86,24 +87,24 @@ const activityGateScopeOptions = [
   {
     value: "company",
     title: "Company-wide",
-    description: "Any activity across the company counts as a reason to run.",
+    description: t("routineSections.anyActivityCounts"),
   },
   {
     value: "project",
-    title: "This project",
-    description: "Only activity in the routine's project counts as a reason to run.",
+    title: t("routineSections.thisProject"),
+    description: t("routineSections.onlyActivityInTheRoutine"),
   },
 ];
 
 const triggerKinds = ["schedule", "webhook"];
 const signingModes = ["app_webhook", "bearer", "hmac_sha256", "github_hmac", "none"];
 const signingModeDescriptions: Record<string, string> = {
-  bearer: "Send Authorization: Bearer <secret> with each request.",
-  hmac_sha256: "Send X-Paperclip-Timestamp and X-Paperclip-Signature: sha256=<hex>, signing timestamp + a dot + the exact JSON body.",
-  github_hmac: "Accept GitHub-style X-Hub-Signature-256 header (HMAC over raw body, no timestamp).",
-  app_webhook: "Accept a bearer token or an HMAC-SHA256 signature over the exact request body in X-Hub-Signature or X-Hub-Signature-256.",
-  fireflies_hmac: "Signed webhook (legacy).",
-  none: "No authentication — the webhook URL itself acts as a shared secret.",
+  bearer: t("routineSections.webhookAuthBearer"),
+  hmac_sha256: t("routineSections.webhookAuthHmac"),
+  github_hmac: t("routineSections.webhookAuthGithubHmac"),
+  app_webhook: t("routineSections.webhookAuthAppWebhook"),
+  fireflies_hmac: t("routineSections.webhookAuthFireflies"),
+  none: t("routineSections.webhookAuthNone"),
 };
 const SIGNING_MODES_WITHOUT_REPLAY_WINDOW = new Set(["app_webhook", "bearer", "github_hmac", "fireflies_hmac", "none"]);
 
@@ -164,7 +165,7 @@ export function OverviewSection({
             placeholder="Responsible"
             noneLabel="No responsible"
             searchPlaceholder="Search responsible..."
-            emptyMessage="No responsible found."
+            emptyMessage={t("comments.noResponsibleFound")}
             onChange={(assigneeAgentId) =>
               setEditDraft((current) => ({ ...current, assigneeAgentId }))
             }
@@ -211,7 +212,7 @@ export function OverviewSection({
             placeholder="Project"
             noneLabel="No project"
             searchPlaceholder="Search projects..."
-            emptyMessage="No projects found."
+            emptyMessage={t("newIssue.noProjectsFound")}
             onChange={(projectId) => setEditDraft((current) => ({ ...current, projectId }))}
             onConfirm={() => descriptionEditorRef.current?.focus()}
             renderTriggerValue={(option) =>
@@ -281,7 +282,7 @@ export function OverviewSection({
               ref={descriptionEditorRef}
               value={editDraft.description}
               onChange={(description) => setEditDraft((current) => ({ ...current, description }))}
-              placeholder="Add instructions..."
+              placeholder={t("routines.addInstructions")}
               bordered={false}
               contentClassName="min-h-(--sz-120px) text-sm leading-7"
               mentions={mentionOptions}
@@ -297,7 +298,7 @@ export function OverviewSection({
             ref={descriptionEditorRef}
             value={editDraft.description}
             onChange={(description) => setEditDraft((current) => ({ ...current, description }))}
-            placeholder="Add instructions..."
+            placeholder={t("routines.addInstructions")}
             bordered={false}
             contentClassName="min-h-(--sz-120px) text-sm leading-7"
             mentions={mentionOptions}
@@ -335,17 +336,17 @@ export function OverviewSection({
           icon={KeyRound}
           label="Secrets"
           value={boundSecrets === 0 ? "None" : `${boundSecrets} bound`}
-          hint="Manage bound secrets"
+          hint={t("routineSections.manageBoundSecrets")}
           to={() => navigateToSection("secrets")}
           ariaLabel={`${boundSecrets} secrets bound. Open secrets.`}
         />
         <SummaryCard
           icon={Play}
-          label="Last run"
+          label={t("common.lastRun")}
           value={lastRun ? lastRun.status.replaceAll("_", " ") : "No runs"}
           hint={lastRun ? timeAgo(lastRun.triggeredAt) : "Trigger a run"}
           to={() => navigateToSection("runs")}
-          ariaLabel={lastRun ? `Last run ${lastRun.status}. Open runs.` : "No runs. Open runs."}
+          ariaLabel={lastRun ? `Last run ${lastRun.status}. Open runs.` : t("routineSections.noRunsOpenRuns")}
         />
       </div>
 
@@ -440,7 +441,7 @@ export function TriggersSection() {
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-muted-foreground">
           {routine.triggers.length === 0
-            ? "No triggers yet"
+            ? t("routineSections.noTriggersYet")
             : `${routine.triggers.length} trigger${routine.triggers.length === 1 ? "" : "s"}`}
         </p>
         <Button
@@ -593,7 +594,7 @@ export function TriggersSection() {
       {routine.triggers.length === 0 ? (
         <EmptyState
           icon={Clock3}
-          message="No triggers yet."
+          message={t("routineSections.noTriggersYetPeriod")}
           action="Add a trigger"
           onAction={() => setAddOpen(true)}
         />
@@ -643,7 +644,7 @@ export function VariablesSection() {
       ) : (
         <EmptyState
           icon={Braces}
-          message="No variables yet. Add a {{placeholder}} in the title or instructions to create one."
+          message={t("routineSections.noVariablesYetAddA")}
           action="Edit instructions"
           onAction={() => navigateToSection("overview")}
         />
@@ -734,7 +735,7 @@ export function DeliverySection() {
           Advanced run policy
         </p>
         <RadioCardGroup
-          ariaLabel="Advanced run policy"
+          ariaLabel={t("routineSections.advancedRunPolicy")}
           value={editDraft.activityGatePolicy}
           onValueChange={(activityGatePolicy) =>
             setEditDraft((current) => ({ ...current, activityGatePolicy }))
@@ -751,7 +752,7 @@ export function DeliverySection() {
           <div className="space-y-2 rounded-lg border border-border p-3">
             <Label className="text-xs font-medium">Activity scope</Label>
             <RadioCardGroup
-              ariaLabel="Activity gate scope"
+              ariaLabel={t("routineSections.activityGateScope")}
               value={editDraft.activityGateScope}
               onValueChange={(activityGateScope) =>
                 setEditDraft((current) => ({ ...current, activityGateScope }))

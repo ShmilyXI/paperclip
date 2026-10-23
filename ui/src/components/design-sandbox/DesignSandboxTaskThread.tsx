@@ -66,8 +66,8 @@ export default function DesignSandboxTaskThread({
         </optgroup>)}
       </NativeSelect>
       {selected !== "saved" ? <>
-        <Button size="sm" variant="outline" onClick={() => setGeneration(value => value + 1)}>Reset / replay</Button>
-        <Button size="sm" variant="ghost" onClick={() => choose("saved")}>Show saved thread</Button>
+        <Button size="sm" variant="outline" onClick={() => setGeneration(value => value + 1)}>{t("designSandboxTasks.resetReplay")}</Button>
+        <Button size="sm" variant="ghost" onClick={() => choose("saved")}>{t("designSandboxTasks.showSavedThread")}</Button>
         <span className="text-muted-foreground">Production renderers · synthetic data · preview actions stay local</span>
       </> : null}
     </div>
@@ -126,10 +126,10 @@ function PreviewCase({ example, header, agentName, agent, replay, streamlined }:
     activeVote: votes[item.id] ?? null, sharingPreference: "allowed", termsUrl: null,
     onVote: async vote => { setVotes(current => ({ ...current, [item.id]: vote })); },
   }} /> : null;
-  const followup: TaskChatMessageItem = { id: "synthetic-followup", kind: "message", author: "human", isCurrentUser: true, text: "Tell me your method for finding this out.", timestamp: "10:12 AM", optimistic: scenario.messageState };
+  const followup: TaskChatMessageItem = { id: "synthetic-followup", kind: "message", author: "human", isCurrentUser: true, text: t("designSandboxTasks.userMethodPrompt"), timestamp: "10:12 AM", optimistic: scenario.messageState };
   const final = terminal && !scenario.renderer ? paperclipRunnerFinalResponse(parsed, { allowFallback: true }) : undefined;
   const failed = ["failed", "timed_out", "cancelled"].includes(status);
-  const notice: TaskChatItem[] = scenario.notice ? [{ id: "synthetic-notice", kind: "message", author: "system", text: "Synthetic workspace notice. Expand this row to inspect the details.", timestamp: "10:13 AM", presentation: { kind: "system_notice", tone: scenario.notice, title: `Workspace preview · ${scenario.notice}`, detailsDefaultOpen: false, density: "compact" } }] : [];
+  const notice: TaskChatItem[] = scenario.notice ? [{ id: "synthetic-notice", kind: "message", author: "system", text: t("designSandboxTasks.syntheticWorkspaceNotice"), timestamp: "10:13 AM", presentation: { kind: "system_notice", tone: scenario.notice, title: `Workspace preview · ${scenario.notice}`, detailsDefaultOpen: false, density: "compact" } }] : [];
   const historyItems = [...history, followup, ...(final ? settledReply({ ...final, interstitial: false, streaming: false, authorName: agentName, agent, timestamp: "10:13 AM" }, scenario.entries, `synthetic-${example.id}`, failed) : []), ...notice, ...messages];
   const showTail = !final && !scenario.paused && !scenario.notice && !scenario.messageState;
   const showComposer = replay || Boolean(pending || scenario.paused || scenario.messageState);
@@ -162,10 +162,10 @@ function PreviewCase({ example, header, agentName, agent, replay, streamlined }:
           content: <TaskChatProtocolCard item={pending} presentation="takeover" onRuntimeRequestDecision={runtimeDecision} />,
           onDismiss: () => setTakeoverDismissed(true), onSkip: () => runtimeDecision(pending, { action: "cancel" }),
         } : null}
-        pendingTakeover={pending && takeoverDismissed ? { count: 1, label: "1 pending input", onOpen: () => setTakeoverDismissed(false) } : null}
+        pendingTakeover={pending && takeoverDismissed ? { count: 1, label: t("designSandboxTasks.pendingInputCount"), onOpen: () => setTakeoverDismissed(false) } : null}
         onAdd={async body => setMessages(current => [...current,
           { id: `local-human-${current.length}`, kind: "message", author: "human", text: body, timestamp: t("common.justNow"), isCurrentUser: true },
-          { id: `local-agent-${current.length}`, kind: "message", author: "agent", authorName: agentName, agent, text: "Preview reply received. This exchange exists only in your browser; no agent was started.", timestamp: t("common.justNow") },
+          { id: `local-agent-${current.length}`, kind: "message", author: "agent", authorName: agentName, agent, text: t("designSandboxTasks.previewReplyReceived"), timestamp: t("common.justNow") },
         ])}
       />
     </TaskChatComposerDock> : null}

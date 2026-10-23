@@ -1541,7 +1541,7 @@ function NewSkillWizard({
             <Input
               value={categoryDraft}
               onChange={(event) => patchDraft({ categories: splitCategoryDraft(event.target.value) })}
-              placeholder="engineering, review, memory"
+              placeholder={t("skillStudio.engineeringReviewMemory")}
               className="h-9"
             />
           </div>
@@ -3536,7 +3536,7 @@ export function SkillDetailPage({
               <Input
                 value={settingsCategoryDraft}
                 onChange={(event) => setSettingsCategoryDraft(event.target.value)}
-                placeholder="engineering, review, memory"
+                placeholder={t("skillStudio.engineeringReviewMemory")}
                 className="h-9"
                 disabled={updateSettingsPending}
               />

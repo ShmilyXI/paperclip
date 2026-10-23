@@ -517,7 +517,7 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
-          title="OpenAI Dot"
+          title={t("companyImport.openaiDot")}
           description={t("experimental.addOpenaiDotAsA")}
           footnote={t("experimental.requiresAssistantConnectionsMcpAnd")}
           checked={experimentalQuery.data?.enableOpenAiDot === true}
@@ -530,7 +530,7 @@ export function InstanceExperimentalSettings() {
 
 
         <ExperimentalToggleCard
-          title="Paperclip Runner"
+          title={t("agentRunnerSelect.paperclipRunner")}
           description={t("experimental.allowAgentsToSelectPaperclip")}
           checked={enableNativeRunner}
           onCheckedChange={(checked) =>

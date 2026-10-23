@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { configFieldsForSection } from "../config-sections";
 import type { AdapterConfigFieldsProps } from "../types";
 import {
@@ -11,7 +12,7 @@ import { ChoosePathButton } from "../../components/PathInstructionsModal";
 const inputClass =
   "w-full rounded-md border border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40";
 const instructionsFileHint =
-  "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Injected into the system prompt at runtime.";
+  t("adapterConfigFields.instructionsFileHint");
 
 export function OpenCodeLocalConfigFields({
   section,
@@ -26,7 +27,7 @@ export function OpenCodeLocalConfigFields({
   return configFieldsForSection(section, (
     <>
       {!hideInstructionsFile && (
-        <Field label="Agent instructions file" hint={instructionsFileHint}>
+        <Field label={t("adapterConfigFields.agentInstructionsFile")} hint={instructionsFileHint}>
           <div className="flex items-center gap-2">
             <DraftInput
               value={
@@ -52,7 +53,7 @@ export function OpenCodeLocalConfigFields({
         </Field>
       )}
       <ToggleField
-        label="Skip permissions"
+        label={t("adapterConfigFields.skipPermissions")}
         hint={help.dangerouslySkipPermissions}
         checked={
           isCreate

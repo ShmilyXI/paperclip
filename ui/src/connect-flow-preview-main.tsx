@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { StrictMode, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { MotionConfig, motion } from "motion/react";
@@ -139,8 +140,8 @@ function ConnectFlowPreview({
   const apiMode = mode === "api";
   const handsOverCode = !apiMode && selectedId === "codex_local";
   const instructionTail = handsOverCode
-    ? " by providing the authorization code below"
-    : " then come back and enter authorization code";
+    ? t("adapterLoginChrome.byProvidingTheAuthorization")
+    : t("adapterLoginChrome.thenComeBackAndEnter");
   const authUrl = OAUTH_URL[selectedId ?? "claude_local"]!;
 
   const after = (ms: number, fn: () => void) => {
@@ -212,7 +213,7 @@ function ConnectFlowPreview({
     timers.current = [];
     // What was typed stays until the card has gone. Clearing it here emptied
     // the field while it was still on screen, so the placeholder appeared under
-    // the fade — the card left saying "Enter API key here" over a field the
+    // the fade — the card left saying t("onboarding.enterApiKeyHere") over a field the
     // customer had just filled in.
     setPhase("unwindCard");
   };
@@ -285,7 +286,7 @@ function ConnectFlowPreview({
         : phase === "ready"
         ? { label: signInLabel, icon: "none" as const, disabled: false }
         : phase === "waiting"
-          ? { label: "Waiting for code", icon: "spinner" as const, disabled: true }
+          ? { label: t("onboarding.waitingForCode"), icon: "spinner" as const, disabled: true }
           : phase === "connecting"
             ? { label: "Connecting", icon: "spinner" as const, disabled: true }
             : { label: "Next", icon: "arrow" as const, disabled: true };
@@ -312,7 +313,7 @@ function ConnectFlowPreview({
             lede={
               done
                 ? "The step advances straight to Review — there is no success screen."
-                : "Paperclip works with your existing subscription or API keys."
+                : t("onboarding.worksWithYourExistingSubscriptionOrApiKeys")
             }
           />
         </div>
@@ -321,7 +322,7 @@ function ConnectFlowPreview({
           <>
             <div className="space-y-2 pt-12">
               <ModelSourceTiles
-                label="Model source"
+                label={t("onboarding.modelSource")}
                 sources={MODEL_SOURCES}
                 mode={mode}
                 selectedId={selectedId}
@@ -420,8 +421,8 @@ function ConnectFlowPreview({
                     {/* The one place the three paths differ. */}
                     {apiMode ? (
                       <OnboardingCardField
-                        label="API key"
-                        placeholder="Enter API key here"
+                        label={t("onboarding.apiKey")}
+                        placeholder={t("onboarding.enterApiKeyHere")}
                         masked
                         value={apiKey}
                         onChange={setApiKey}

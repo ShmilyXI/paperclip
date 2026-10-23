@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -109,55 +110,55 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
   const startMutation = useMutation({
     mutationFn: () => smokeLabApi.startServices(companyId),
     onSuccess: () => {
-      pushToast({ title: "Smoke services started", tone: "success" });
+      pushToast({ title: t("smokeLabTab.servicesStarted"), tone: "success" });
       refresh();
     },
-    onError: (e: Error) => pushToast({ title: "Couldn't start services", body: e.message, tone: "error" }),
+    onError: (e: Error) => pushToast({ title: t("smokeLabTab.couldNotStartServices"), body: e.message, tone: "error" }),
   });
 
   const stopMutation = useMutation({
     mutationFn: () => smokeLabApi.stopServices(companyId),
     onSuccess: () => {
-      pushToast({ title: "Smoke services stopped", tone: "info" });
+      pushToast({ title: t("smokeLabTab.servicesStopped"), tone: "info" });
       refresh();
     },
-    onError: (e: Error) => pushToast({ title: "Couldn't stop services", body: e.message, tone: "error" }),
+    onError: (e: Error) => pushToast({ title: t("smokeLabTab.couldNotStopServices"), body: e.message, tone: "error" }),
   });
 
   const installMutation = useMutation({
     mutationFn: () => smokeLabApi.installFixtures(companyId),
     onSuccess: (r) => {
       pushToast({
-        title: r.created ? "Fixture apps installed" : "Fixture apps already present",
+        title: r.created ? t("smokeLabTab.fixturesInstalled") : t("smokeLabTab.fixturesAlreadyPresent"),
         tone: "success",
       });
       refresh();
     },
-    onError: (e: Error) => pushToast({ title: "Couldn't install fixtures", body: e.message, tone: "error" }),
+    onError: (e: Error) => pushToast({ title: t("smokeLabTab.couldNotInstallFixtures"), body: e.message, tone: "error" }),
   });
 
   const resetMutation = useMutation({
     mutationFn: () => smokeLabApi.reset(companyId),
     onSuccess: () => {
-      pushToast({ title: "Smoke Lab reset", tone: "info" });
+      pushToast({ title: t("smokeLabTab.reset"), tone: "info" });
       setSelectedRunId(null);
       refresh();
     },
-    onError: (e: Error) => pushToast({ title: "Couldn't reset", body: e.message, tone: "error" }),
+    onError: (e: Error) => pushToast({ title: t("smokeLabTab.couldNotReset"), body: e.message, tone: "error" }),
   });
 
   const runSmokeMutation = useMutation({
     mutationFn: () => smokeLabApi.createRun(companyId, { trigger: "manual", summary: {} }),
     onSuccess: (r) => {
       pushToast({
-        title: "Smoke run started",
-        body: "The browser runner records each step as it completes.",
+        title: t("smokeLabTab.runStarted"),
+        body: t("smokeLabTab.runStartedBody"),
         tone: "success",
       });
       setSelectedRunId(r.run.id);
       refresh();
     },
-    onError: (e: Error) => pushToast({ title: "Couldn't start a run", body: e.message, tone: "error" }),
+    onError: (e: Error) => pushToast({ title: t("smokeLabTab.couldNotStartRun"), body: e.message, tone: "error" }),
   });
 
   const anyMutating =
@@ -173,7 +174,7 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
       <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 text-foreground">
           <FlaskConical className="h-5 w-5 text-muted-foreground" />
-          <h2 className="text-base font-semibold">Smoke Lab is turned off</h2>
+          <h2 className="text-base font-semibold">{t("smokeLabTab.turnedOff")}</h2>
         </div>
         <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">
           The Smoke Lab is an experimental developer surface for exercising the integration paths
@@ -185,7 +186,7 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
   }
 
   if (!loaded) {
-    return <div className="p-6 text-sm text-muted-foreground">Loading Smoke Lab…</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{t("smokeLabTab.loading")}</div>;
   }
 
   const services = servicesQuery.data?.services ?? [];
@@ -308,13 +309,13 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
             </div>
           ))}
           {services.length === 0 && (
-            <p className="text-sm text-muted-foreground">No services reported. Start the fixture services above.</p>
+            <p className="text-sm text-muted-foreground">{t("smokeLabTab.noServices")}</p>
           )}
         </div>
 
         {/* Demo credentials for the fake OAuth login */}
         <div className="rounded-lg border border-dashed border-border bg-muted/30 p-3">
-          <p className="text-xs font-semibold text-foreground">Fake OAuth demo credentials</p>
+          <p className="text-xs font-semibold text-foreground">{t("smokeLabTab.fakeOauthCredentials")}</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
             Type these into the fake provider's real consent page during a P1 (OAuth) smoke. Fixed
             fixture values — safe to show.
@@ -403,7 +404,7 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
         <div className="grid gap-4 lg:grid-cols-(--gtc-64)">
           <div className="rounded-lg border border-border">
             {runs.length === 0 && (
-              <p className="p-4 text-sm text-muted-foreground">No runs recorded yet.</p>
+              <p className="p-4 text-sm text-muted-foreground">{t("smokeLabTab.noRuns")}</p>
             )}
             <ul className="divide-y divide-border">
               {runs.map((run: SmokeRun) => {
@@ -432,7 +433,7 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
 
           <div className="min-w-0 rounded-lg border border-border">
             {!activeRun && (
-              <p className="p-4 text-sm text-muted-foreground">Select a run to see its steps.</p>
+              <p className="p-4 text-sm text-muted-foreground">{t("smokeLabTab.selectRun")}</p>
             )}
             {activeRun && (
               <div className="flex flex-col">
@@ -443,7 +444,7 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
                   <StatusBadge status={activeRun.status} />
                 </div>
                 {steps.length === 0 ? (
-                  <p className="p-4 text-sm text-muted-foreground">No steps recorded for this run.</p>
+                  <p className="p-4 text-sm text-muted-foreground">{t("smokeLabTab.noSteps")}</p>
                 ) : (
                   <ul className="divide-y divide-border">
                     {steps.map((step) => (

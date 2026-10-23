@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -68,13 +69,13 @@ import {
 const concurrencyPolicies = ["coalesce_if_active", "always_enqueue", "skip_if_active"];
 const catchUpPolicies = ["skip_missed", "enqueue_missed_with_cap"];
 const concurrencyPolicyDescriptions: Record<string, string> = {
-  coalesce_if_active: "If a run is already active, keep just one follow-up run queued.",
-  always_enqueue: "Queue every trigger occurrence, even if the routine is already running.",
-  skip_if_active: "Drop new trigger occurrences while a run is still active.",
+  coalesce_if_active: t("routines.ifARunIsAlready"),
+  always_enqueue: t("routines.queueEveryTriggerOccurrenceEven"),
+  skip_if_active: t("routines.dropNewTriggerOccurrencesWhile"),
 };
 const catchUpPolicyDescriptions: Record<string, string> = {
-  skip_missed: "Ignore windows that were missed while the scheduler or routine was paused.",
-  enqueue_missed_with_cap: "Catch up missed schedule windows after recovery; sub-hourly schedules are combined into one catch-up run, slower schedules replay each missed window up to a cap.",
+  skip_missed: t("routines.ignoreWindowsThatWereMissed"),
+  enqueue_missed_with_cap: t("routines.catchUpMissedScheduleWindows"),
 };
 
 function autoResizeTextarea(element: HTMLTextAreaElement | null) {
@@ -243,7 +244,7 @@ export function buildRoutineSections(
     .filter((group) => group.items.length > 0)
     .map((group) => (
       builtInRoutines.length > 0 && groupByValue === "none" && group.key === "__all"
-        ? { ...group, label: "Custom routines" }
+        ? { ...group, label: t("routines.customRoutines") }
         : group
     ));
 
@@ -253,7 +254,7 @@ export function buildRoutineSections(
     ...customGroups,
     {
       key: builtInRoutineGroupKey,
-      label: "Built-in routines",
+      label: t("routines.builtInRoutines"),
       items: builtInRoutines,
     },
   ];
@@ -454,10 +455,10 @@ export function Routines() {
       setAdvancedOpen(false);
       await queryClient.invalidateQueries({ queryKey: queryKeys.routines.list(selectedCompanyId!) });
       pushToast({
-        title: "Routine created",
+        title: t("routines.routineCreated"),
         body: routine.assigneeAgentId
-          ? "Add the first trigger to turn it into a live workflow."
-          : "Draft saved. Add a default agent before enabling automation.",
+          ? t("routines.addTheFirstTriggerTo")
+          : t("routines.draftSavedAddADefault"),
         tone: "success",
       });
       navigate(`/routines/${routine.id}?tab=triggers`);
@@ -483,8 +484,8 @@ export function Routines() {
           ]);
         } catch (moveError) {
           pushToast({
-            title: "Folder created, move failed",
-            body: moveError instanceof Error ? moveError.message : "Paperclip could not move the selected routines.",
+            title: t("routines.folderCreatedMoveFailed"),
+            body: moveError instanceof Error ? moveError.message : t("routines.paperclipCouldNotMoveThe"),
             tone: "error",
           });
           return;
@@ -492,12 +493,12 @@ export function Routines() {
       } else {
         setFolderSelection(folder.id);
       }
-      pushToast({ title: "Folder created", body: folder.name, tone: "success" });
+      pushToast({ title: t("routines.folderCreated"), body: folder.name, tone: "success" });
     },
     onError: (mutationError) => {
       pushToast({
-        title: "Failed to save folder",
-        body: mutationError instanceof Error ? mutationError.message : "Paperclip could not save the folder.",
+        title: t("routines.failedToSaveFolder"),
+        body: mutationError instanceof Error ? mutationError.message : t("routines.paperclipCouldNotSaveThe"),
         tone: "error",
       });
     },
@@ -512,8 +513,8 @@ export function Routines() {
     },
     onError: (mutationError) => {
       pushToast({
-        title: "Folder save failed",
-        body: mutationError instanceof Error ? mutationError.message : "Paperclip could not update the folder.",
+        title: t("routines.folderSaveFailed"),
+        body: mutationError instanceof Error ? mutationError.message : t("routines.paperclipCouldNotUpdateThe"),
         tone: "error",
       });
     },
@@ -527,12 +528,12 @@ export function Routines() {
         queryClient.invalidateQueries({ queryKey: queryKeys.routines.list(selectedCompanyId!) }),
         queryClient.invalidateQueries({ queryKey: queryKeys.folders.list(selectedCompanyId!, "routine") }),
       ]);
-      pushToast({ title: "Folder deleted", body: "Items moved to Unfiled.", tone: "success" });
+      pushToast({ title: t("routines.folderDeleted"), body: t("routines.itemsMovedToUnfiled"), tone: "success" });
     },
     onError: (mutationError) => {
       pushToast({
-        title: "Folder delete failed",
-        body: mutationError instanceof Error ? mutationError.message : "Paperclip could not delete the folder.",
+        title: t("routines.folderDeleteFailed"),
+        body: mutationError instanceof Error ? mutationError.message : t("routines.paperclipCouldNotDeleteThe"),
         tone: "error",
       });
     },
@@ -548,8 +549,8 @@ export function Routines() {
     },
     onError: (mutationError) => {
       pushToast({
-        title: "Move failed",
-        body: mutationError instanceof Error ? mutationError.message : "Paperclip could not move the routine.",
+        title: t("routines.moveFailed"),
+        body: mutationError instanceof Error ? mutationError.message : t("routines.paperclipCouldNotMoveThe2"),
         tone: "error",
       });
     },
@@ -578,8 +579,8 @@ export function Routines() {
     },
     onError: (mutationError) => {
       pushToast({
-        title: "Failed to update routine",
-        body: mutationError instanceof Error ? mutationError.message : "Paperclip could not update the routine.",
+        title: t("routines.failedToUpdateRoutine"),
+        body: mutationError instanceof Error ? mutationError.message : t("routines.paperclipCouldNotUpdateThe2"),
         tone: "error",
       });
     },
@@ -613,8 +614,8 @@ export function Routines() {
     },
     onError: (mutationError) => {
       pushToast({
-        title: "Routine run failed",
-        body: mutationError instanceof Error ? mutationError.message : "Paperclip could not start the routine run.",
+        title: t("routines.routineRunFailed"),
+        body: mutationError instanceof Error ? mutationError.message : t("routines.paperclipCouldNotStartThe"),
         tone: "error",
       });
     },
@@ -762,8 +763,8 @@ export function Routines() {
       pushToast({ title: "Routines moved", body: `${ids.length} routine${ids.length === 1 ? "" : "s"} filed.`, tone: "success" });
     } catch (moveError) {
       pushToast({
-        title: "Failed to move routines",
-        body: moveError instanceof Error ? moveError.message : "Paperclip could not move the selected routines.",
+        title: t("routines.failedToMoveRoutines"),
+        body: moveError instanceof Error ? moveError.message : t("routines.paperclipCouldNotMoveThe"),
         tone: "error",
       });
     }
@@ -776,8 +777,8 @@ export function Routines() {
   function handleToggleEnabled(routine: RoutineListItem, enabled: boolean) {
     if (!enabled && !routine.assigneeAgentId) {
       pushToast({
-        title: "Default agent required",
-        body: "Set a default agent before enabling routine automation.",
+        title: t("routines.defaultAgentRequired"),
+        body: t("routines.setADefaultAgentBefore"),
         tone: "warn",
       });
       return;
@@ -796,7 +797,7 @@ export function Routines() {
   }
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={Repeat} message="Select a company to view routines." />;
+    return <EmptyState icon={Repeat} message={t("routines.selectCompanyToViewRoutines")} />;
   }
 
   if (isLoading) {
@@ -827,7 +828,7 @@ export function Routines() {
           onValueChange={handleTabChange}
           items={[
             { value: "routines", label: "Routines" },
-            { value: "runs", label: "Recent Runs" },
+            { value: "runs", label: t("routines.recentRuns") },
           ]}
         />
         <TabsContent value="routines" className="space-y-4">
@@ -984,7 +985,7 @@ export function Routines() {
               <textarea
                 ref={titleInputRef}
                 className="w-full resize-none overflow-hidden bg-transparent text-xl font-semibold outline-none placeholder:text-muted-foreground/50"
-                placeholder="Routine title"
+                placeholder={t("routines.routineTitle")}
                 rows={1}
                 value={draft.title}
                 onChange={(event) => {
@@ -1026,7 +1027,7 @@ export function Routines() {
                     placeholder="Responsible"
                     noneLabel="No responsible"
                     searchPlaceholder="Search responsible..."
-                    emptyMessage="No responsible found."
+                    emptyMessage={t("comments.noResponsibleFound")}
                     onChange={(assigneeAgentId) => {
                       if (assigneeAgentId) trackRecentAssignee(assigneeAgentId);
                       setDraft((current) => ({ ...current, assigneeAgentId }));
@@ -1072,7 +1073,7 @@ export function Routines() {
                     placeholder="Project"
                     noneLabel="No project"
                     searchPlaceholder="Search projects..."
-                    emptyMessage="No projects found."
+                    emptyMessage={t("newIssue.noProjectsFound")}
                     onChange={(projectId) => {
                       if (projectId) trackRecentProject(projectId);
                       setDraft((current) => ({ ...current, projectId }));
@@ -1134,7 +1135,7 @@ export function Routines() {
                 ref={descriptionEditorRef}
                 value={draft.description}
                 onChange={(description) => setDraft((current) => ({ ...current, description }))}
-                placeholder="Add instructions..."
+                placeholder={t("routines.addInstructions")}
                 bordered={false}
                 contentClassName="min-h-(--sz-160px) text-sm text-muted-foreground"
                 mentions={mentionOptions}
@@ -1214,7 +1215,7 @@ export function Routines() {
               </Button>
               {createRoutine.isError ? (
                 <p className="text-sm text-destructive">
-                  {createRoutine.error instanceof Error ? createRoutine.error.message : "Failed to create routine"}
+                  {createRoutine.error instanceof Error ? createRoutine.error.message : t("routines.failedToCreateRoutine")}
                 </p>
               ) : null}
             </div>
@@ -1225,7 +1226,7 @@ export function Routines() {
       {error ? (
         <Card>
           <CardContent className="pt-6 text-sm text-destructive">
-            {error instanceof Error ? error.message : "Failed to load routines"}
+            {error instanceof Error ? error.message : t("routines.failedToLoadRoutines")}
           </CardContent>
         </Card>
       ) : null}
@@ -1285,7 +1286,7 @@ export function Routines() {
             <div className="py-12">
               <EmptyState
                 icon={Repeat}
-                message="No active routines. Use Create routine to define the first recurring workflow."
+                message={t("routines.noActiveRoutinesUseCreate")}
               />
             </div>
           ) : sortedRoutines.length === 0 ? (
@@ -1358,7 +1359,7 @@ export function Routines() {
                                 const previousFolderId = routine.folderId ?? null;
                                 moveRoutineToFolder.mutate({ itemId: routine.id, folderId });
                                 pushToast({
-                                  title: "Routine moved",
+                                  title: t("routines.routineMoved"),
                                   body: folderId
                                     ? `Moved "${routine.title}" to ${routineFolders?.folders.find((folder) => folder.id === folderId)?.name ?? "folder"}.`
                                     : `Moved "${routine.title}" to Unfiled.`,

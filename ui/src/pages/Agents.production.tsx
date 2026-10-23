@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { PrimaryAgentIndicator } from "@/components/primary-agent/PrimaryAgentPresentation";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useState, useEffect, useMemo, lazy, Suspense } from "react";
@@ -68,13 +69,13 @@ interface EnvironmentDescriptor {
 const localEnvironmentDescriptor: EnvironmentDescriptor = {
   label: "Local",
   detail: "Paperclip host",
-  title: "Local - Paperclip host",
+  title: t("agents.localPaperclipHost"),
 };
 
 const loadingEnvironmentDescriptor: EnvironmentDescriptor = {
   label: "—",
   detail: "Loading environment",
-  title: "Loading environment",
+  title: t("agents.loadingEnvironment"),
 };
 
 // Agents in these states never appear in the agents list — `terminated` is
@@ -129,7 +130,7 @@ function describeEnvironment(
   capabilities?: EnvironmentCapabilities | null,
 ): EnvironmentDescriptor {
   const detail = isPlatformManagedEnvironment(environment)
-    ? "Managed by Paperclip"
+    ? t("agents.managedByPaperclip")
     : environment.driver === "sandbox"
       ? `${getSandboxProviderLabel(environment, capabilities)} sandbox provider`
       : environment.driver === "local"
@@ -145,7 +146,7 @@ function describeEnvironment(
 
 function describeMissingEnvironment(environmentId: string): EnvironmentDescriptor {
   return {
-    label: "Unknown environment",
+    label: t("agents.unknownEnvironment"),
     detail: environmentId.slice(0, 8),
     title: `Unknown environment - ${environmentId}`,
   };
@@ -325,7 +326,7 @@ export function Agents() {
   }, [builtInAgentsEnabled, instanceSettings, navigate, requestedTab, selectedCompanyId]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={Bot} message="Select a company to view agents." />;
+    return <EmptyState icon={Bot} message={t("agents.selectCompanyToViewAgents")} />;
   }
 
   if (isLoading) {
@@ -460,8 +461,8 @@ export function Agents() {
                   effectiveView === "list" ? "bg-accent text-foreground" : "text-muted-foreground hover:bg-accent/50"
                 )}
                 onClick={() => setView("list")}
-                title="List view"
-                aria-label="List view"
+                title={t("common.listView")}
+                aria-label={t("common.listView")}
                 aria-pressed={effectiveView === "list"}
               >
                 <List className="h-3.5 w-3.5" />
@@ -472,8 +473,8 @@ export function Agents() {
                   effectiveView === "org" ? "bg-accent text-foreground" : "text-muted-foreground hover:bg-accent/50"
                 )}
                 onClick={() => setView("org")}
-                title="Org chart view"
-                aria-label="Org chart view"
+                title={t("agents.orgChartView")}
+                aria-label={t("agents.orgChartView")}
                 aria-pressed={effectiveView === "org"}
               >
                 <GitBranch className="h-3.5 w-3.5" />
@@ -496,7 +497,7 @@ export function Agents() {
       {agents && agents.length === 0 && (
         <EmptyState
           icon={Bot}
-          message="Create your first agent to get started."
+          message={t("agents.createYourFirstAgentTo")}
           action="New Agent"
           onAction={openNewAgent}
         />

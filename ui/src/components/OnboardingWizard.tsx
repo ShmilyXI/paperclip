@@ -2539,7 +2539,7 @@ function OnboardingWizardInner({
       if (hire.approval) {
         await approvalsApi.approve(
           hire.approval.id,
-          "Approved during onboarding first-agent setup."
+          t("onboardingWizard.approvedDuringSetup")
         );
         queryClient.invalidateQueries({
           queryKey: queryKeys.approvals.list(createdCompanyId)
@@ -3171,7 +3171,7 @@ function OnboardingWizardInner({
                          switch only hide the card, and nothing here releases
                          the session early — see `unwindConnectStep`.
 
-                         No "Use saved login" control: the hire step already
+                         No t("agentConfig.useSavedLogin") control: the hire step already
                          applies a stored login on its own. */
                       <AdapterLoginPanel
                         key={`${adapterType}:${resolvedLoginEnvironmentId}`}
@@ -3354,11 +3354,11 @@ function OnboardingWizardInner({
                               : adapterType === "codex_local"
                               ? `${effectiveAdapterCommand} exec --json -`
                               : adapterType === "gemini_local"
-                                ? `${effectiveAdapterCommand} --output-format json "Respond with hello."`
+                                ? `${effectiveAdapterCommand} --output-format json t("onboardingWizard.samplePromptHello")`
                               : adapterType === "kimi_local"
-                                ? `${effectiveAdapterCommand} -p "Respond with hello." --output-format stream-json`
+                                ? `${effectiveAdapterCommand} -p t("onboardingWizard.samplePromptHello") --output-format stream-json`
                               : adapterType === "opencode_local"
-                                ? `${effectiveAdapterCommand} run --format json "Respond with hello."`
+                                ? `${effectiveAdapterCommand} run --format json t("onboardingWizard.samplePromptHello")`
                               : `${effectiveAdapterCommand} --print - --output-format stream-json --verbose`}
                           </p>
                           <p className="text-muted-foreground">

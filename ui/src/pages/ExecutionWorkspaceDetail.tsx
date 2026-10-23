@@ -1200,7 +1200,7 @@ export function ExecutionWorkspaceDetail() {
                           className="font-mono"
                           value={form.cwd}
                           onChange={(event) => setForm((current) => current ? { ...current, cwd: event.target.value } : current)}
-                          placeholder="/absolute/path/to/workspace"
+                          placeholder={t("projectProperties.absolutePathToWorkspace")}
                         />
                       </Field>
 

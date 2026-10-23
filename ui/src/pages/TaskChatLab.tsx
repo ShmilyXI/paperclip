@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Pause, Play, RotateCcw } from "lucide-react";
@@ -145,7 +146,7 @@ function useStreamingReplay(
  * page-surface treatment.
  */
 const BUBBLE_VARIANTS = [
-  { id: "", label: "Chosen · C · On bg" },
+  { id: "", label: t("taskChatLab.chosenSample") },
   { id: "former", label: "Former" },
   { id: "darker", label: "A · Darker" },
   { id: "hairline", label: "B · Hairline" },
@@ -234,7 +235,7 @@ export function TaskChatLab() {
                 step={0.1}
                 value={speed}
                 onChange={(e) => setSpeed(parseFloat(e.target.value))}
-                aria-label="Streaming speed"
+                aria-label={t("taskChatLab.streamingSpeed")}
                 className="w-32"
               />
               <span className="w-10 tabular-nums">{speed.toFixed(1)}×</span>

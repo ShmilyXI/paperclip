@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useSelectedHeartbeatRun } from "../hooks/useSelectedHeartbeatRun";
 import { AgentCharacter } from "../components/AgentCharacter";
 import { characterStateForAgent } from "@paperclipai/shared";
@@ -297,7 +298,7 @@ export const AGENT_DETAIL_TABS: ReadonlyArray<{ value: AgentDetailView; label: s
   { value: "budget", label: "Budget" },
 ];
 
-export const DISCARD_AGENT_CONFIG_CHANGES_MESSAGE = "Discard unsaved agent configuration changes?";
+export const DISCARD_AGENT_CONFIG_CHANGES_MESSAGE = t("agentDetail.discardUnsavedAgentConfigurationChanges");
 
 export function confirmAgentConfigNavigation(
   dirty: boolean,
@@ -616,14 +617,14 @@ function WorkspaceOperationLogViewer({
         className="text-(length:--text-micro) text-muted-foreground underline underline-offset-2 hover:text-foreground"
         onClick={() => setOpen((value) => !value)}
       >
-        {open ? "Hide full log" : "Show full log"}
+        {open ? t("agentDetail.hideFullLog") : t("agentDetail.showFullLog")}
       </button>
       {open && (
         <div className="rounded-md border border-border bg-background/70 p-2">
           {isLoading && <div className="text-xs text-muted-foreground">Loading log...</div>}
           {error && (
             <div className="text-xs text-destructive">
-              {error instanceof Error ? error.message : "Failed to load workspace operation log"}
+              {error instanceof Error ? error.message : t("agentDetail.failedToLoadWorkspaceOperation")}
             </div>
           )}
           {!isLoading && !error && chunks.length === 0 && (
@@ -723,7 +724,7 @@ function WorkspaceOperationsSection({
               )}
               {typeof metadata?.created === "boolean" && (
                 <div className="text-xs text-muted-foreground">
-                  {metadata.created ? "Created by this run" : "Reused existing workspace"}
+                  {metadata.created ? t("agentDetail.createdByThisRun") : t("agentDetail.reusedExistingWorkspace")}
                 </div>
               )}
               {operation.stderrExcerpt && operation.stderrExcerpt.trim() && (
@@ -849,7 +850,7 @@ export function AgentDetail() {
       builtInAgentsApi.reset(resolvedCompanyId!, builtInState!.definition.key, [kind]),
     onSuccess: invalidateBuiltIn,
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to update bundle resource");
+      setActionError(error instanceof Error ? error.message : t("agentDetail.failedToUpdateBundleResource"));
     },
   });
   const runBuiltInRoutine = useMutation({
@@ -857,7 +858,7 @@ export function AgentDetail() {
       builtInAgentsApi.runRoutine(resolvedCompanyId!, builtInState!.definition.key, routineKey),
     onSuccess: invalidateBuiltIn,
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to run built-in routine");
+      setActionError(error instanceof Error ? error.message : t("agentDetail.failedToRunBuiltIn"));
     },
   });
   const enableBuiltInSchedule = useMutation({
@@ -865,7 +866,7 @@ export function AgentDetail() {
       builtInAgentsApi.enableRoutineSchedule(resolvedCompanyId!, builtInState!.definition.key, routineKey),
     onSuccess: invalidateBuiltIn,
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to enable routine schedule");
+      setActionError(error instanceof Error ? error.message : t("agentDetail.failedToEnableRoutineSchedule"));
     },
   });
   const disableBuiltInSchedule = useMutation({
@@ -873,7 +874,7 @@ export function AgentDetail() {
       builtInAgentsApi.disableRoutineSchedule(resolvedCompanyId!, builtInState!.definition.key, routineKey),
     onSuccess: invalidateBuiltIn,
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to disable routine schedule");
+      setActionError(error instanceof Error ? error.message : t("agentDetail.failedToDisableRoutineSchedule"));
     },
   });
   const builtInRoutineActionPending =
@@ -1002,7 +1003,7 @@ export function AgentDetail() {
   // which is surfaced via the pending-approval banner below.
   const agentAction = useMutation({
     mutationFn: async (action: "approve") => {
-      if (!agentLookupRef) return Promise.reject(new Error("No agent reference"));
+      if (!agentLookupRef) return Promise.reject(new Error(t("agentDetail.noAgentReference")));
       if (action === "approve") {
         return agentsApi.approve(agentLookupRef, resolvedCompanyId ?? undefined);
       }
@@ -1066,7 +1067,7 @@ export function AgentDetail() {
       }
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to update permissions");
+      setActionError(err instanceof Error ? err.message : t("agentDetail.failedToUpdatePermissions"));
     },
   });
 
@@ -1249,7 +1250,7 @@ export function AgentDetail() {
           <button
             type="button"
             className="h-6 w-6 shrink-0 text-yellow-900/70 hover:text-yellow-900 dark:text-yellow-100/70 dark:hover:text-yellow-100"
-            aria-label="Dismiss agent membership notice"
+            aria-label={t("agentDetail.dismissAgentMembershipNotice")}
             onClick={() => setDismissedLeftAgentIds((current) => new Set(current).add(agent.id))}
           >
             ×
@@ -1320,7 +1321,7 @@ export function AgentDetail() {
             runLabel="Run Heartbeat"
             actionsDisabled={agentAction.isPending}
             workActionsDisabled={hasInvalidOrgChain}
-            workActionsDisabledReason="Repair this agent's reporting chain before assigning tasks or starting runs"
+            workActionsDisabledReason={t("agentDetail.repairReportingChainBeforeAssigning")}
             hasPendingNavigationChanges={configDirty}
             onBeforeNavigate={prepareAgentNavigation}
             onActionError={setActionError}
@@ -1360,7 +1361,7 @@ export function AgentDetail() {
       {builtInState && (
         <InlineBanner
           tone="info"
-          title="Built-in agent"
+          title={t("agentDetail.builtInAgent")}
           actions={
             <Button
               variant="outline"
@@ -1368,7 +1369,7 @@ export function AgentDetail() {
               onClick={() => resetBuiltIn.mutate()}
               disabled={resetBuiltIn.isPending}
             >
-              {resetBuiltIn.isPending ? "Resetting…" : "Reset to defaults"}
+              {resetBuiltIn.isPending ? "Resetting…" : t("agentDetail.resetToDefaults")}
             </Button>
           }
         >
@@ -1421,7 +1422,7 @@ export function AgentDetail() {
       {actionError && <p className="text-sm text-destructive">{actionError}</p>}
       {isPendingApproval && (
         <div className="flex flex-wrap items-center gap-3 rounded-md border border-amber-300/60 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-400/40 dark:bg-amber-950/30 dark:text-amber-200">
-          <span>This agent is pending board approval and cannot be invoked yet.</span>
+          <span>{t("agentDetail.thisAgentIsPendingBoard")}</span>
           <Button
             variant="outline"
             size="sm"
@@ -1429,7 +1430,7 @@ export function AgentDetail() {
             disabled={agentAction.isPending}
           >
             <CheckCircle2 className="h-3.5 w-3.5 sm:mr-1" />
-            <span>Approve agent</span>
+            <span>{t("agentDetail.approveAgent")}</span>
           </Button>
         </div>
       )}
@@ -1799,19 +1800,19 @@ function AgentOverview({
 
       {/* Charts */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <ChartCard title="Run Activity" subtitle="Last 14 days">
+        <ChartCard title={t("dashboard.runActivity")} subtitle={t("dashboard.last14Days")}>
           <RunActivityChart runs={runs} />
         </ChartCard>
-        {/* PAP-411: "Tasks by Priority" chart hidden behind SHOW_TASK_PRIORITY_UI. */}
+        {/* PAP-411: t("dashboard.tasksByPriority") chart hidden behind SHOW_TASK_PRIORITY_UI. */}
         {SHOW_TASK_PRIORITY_UI && (
-          <ChartCard title="Tasks by Priority" subtitle="Last 14 days">
+          <ChartCard title={t("dashboard.tasksByPriority")} subtitle={t("dashboard.last14Days")}>
             <PriorityChart issues={assignedIssues} />
           </ChartCard>
         )}
-        <ChartCard title="Tasks by Status" subtitle="Last 14 days">
+        <ChartCard title={t("dashboard.tasksByStatus")} subtitle={t("dashboard.last14Days")}>
           <IssueStatusChart issues={assignedIssues} />
         </ChartCard>
-        <ChartCard title="Success Rate" subtitle="Last 14 days">
+        <ChartCard title={t("dashboard.successRate")} subtitle={t("dashboard.last14Days")}>
           <SuccessRateChart runs={runs} />
         </ChartCard>
       </div>
@@ -2060,7 +2061,7 @@ function AgentConfigurePage({
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Changed:{" "}
-                      {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : "no tracked changes"}
+                      {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : t("agentDetail.noTrackedChanges")}
                     </p>
                   </div>
                 ))}
@@ -2143,7 +2144,7 @@ function ConfigurationTab({
       if (!syncAgentRouteAfterRename(queryClient, navigate, agent, updated, urlTab ?? content)) {
         queryClient.invalidateQueries({ queryKey: queryKeys.agents.detail(agent.urlKey) });
       }
-      pushToast({ title: "Agent saved", tone: "success" });
+      pushToast({ title: t("agentDetail.agentSaved"), tone: "success" });
     },
     onError: (err) => {
       setAwaitingRefreshAfterSave(false);
@@ -2152,8 +2153,8 @@ function ConfigurationTab({
           ? err.message
           : err instanceof Error
             ? err.message
-            : "Could not save agent";
-      pushToast({ title: "Save failed", body: message, tone: "error" });
+            : t("agentDetail.couldNotSaveAgent");
+      pushToast({ title: t("agentDetail.saveFailed"), body: message, tone: "error" });
     },
   });
 
@@ -2176,14 +2177,14 @@ function ConfigurationTab({
   const taskAssignLocked = agent.role === "ceo" || canCreateAgents;
   const taskAssignHint =
     taskAssignSource === "ceo_role"
-      ? "Enabled automatically for CEO agents."
+      ? t("agentDetail.enabledAutomaticallyForCeoAgents")
       : taskAssignSource === "agent_creator"
-        ? "Enabled automatically while this agent can create new agents."
+        ? t("agentDetail.enabledAutomaticallyWhileThisAgent")
         : taskAssignSource === "explicit_grant"
           ? "Enabled via explicit company permission grant."
           : taskAssignSource === "simple_default"
             ? "Enabled by simple company-wide task assignment defaults."
-            : "Disabled unless explicitly granted.";
+            : t("agentDetail.disabledUnlessExplicitlyGranted");
 
   return (
     <div className="space-y-6">
@@ -2236,7 +2237,7 @@ function ConfigurationTab({
         <div className="border border-border rounded-lg p-4 space-y-4">
           <div className="flex items-center justify-between gap-4 text-sm">
             <div className="space-y-1">
-              <div>Can create new agents</div>
+              <div>{t("agentDetail.canCreateNewAgents")}</div>
               <p className="text-xs text-muted-foreground">
                 Lets this agent create or hire agents. This also grants task assignment authority.
               </p>
@@ -2274,7 +2275,7 @@ function ConfigurationTab({
           </div>
           <div className="flex items-center justify-between gap-4 text-sm">
             <div className="space-y-1">
-              <div>Can assign tasks</div>
+              <div>{t("agentDetail.canAssignTasks")}</div>
               <p className="text-xs text-muted-foreground">
                 {taskAssignHint}
               </p>
@@ -2975,9 +2976,9 @@ export function PromptsTab({
                 <p className="text-xs text-muted-foreground">
                   {selectedFileExists
                     ? selectedFileSummary?.deprecated
-                      ? "Deprecated virtual file"
+                      ? t("agentDetail.deprecatedVirtualFile")
                       : `${selectedFileDetail?.language ?? "text"} file`
-                    : "New file in this bundle"}
+                    : t("agentDetail.newFileInThisBundle")}
                 </p>
               </div>
             </div>
@@ -2985,8 +2986,8 @@ export function PromptsTab({
               {!fileLoading && (
                 <CopyText
                   text={displayValue}
-                  ariaLabel="Copy instructions file as markdown"
-                  title="Copy as markdown"
+                  ariaLabel={t("agentDetail.copyInstructionsFileAsMarkdown")}
+                  title={t("agentDetail.copyAsMarkdown")}
                   copiedLabel="Copied"
                   className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted-foreground hover:bg-accent hover:text-foreground"
                 >
@@ -3023,7 +3024,7 @@ export function PromptsTab({
               key={selectedOrEntryFile}
               value={displayValue}
               onChange={(value) => setDraft(value ?? "")}
-              placeholder="# Agent instructions"
+              placeholder={t("agentDetail.agentInstructions")}
               className="min-w-0 overflow-hidden"
               contentClassName="min-h-(--sz-420px) max-w-full break-words text-sm leading-7"
               imageUploadHandler={async (file) => {
@@ -3037,7 +3038,7 @@ export function PromptsTab({
               value={displayValue}
               onChange={(event) => setDraft(event.target.value)}
               className="min-h-(--sz-420px) w-full min-w-0 rounded-md border border-border bg-transparent px-3 py-2 font-mono text-sm outline-none"
-              placeholder="File contents"
+              placeholder={t("agentDetail.fileContents")}
             />
           )}
         </div>
@@ -3309,7 +3310,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
         payload: resumePayload,
       }, run.companyId);
       if (!("id" in result)) {
-        throw new Error(result.message ?? "Resume request was skipped.");
+        throw new Error(result.message ?? t("agentDetail.resumeRequestWasSkipped"));
       }
       return result;
     },
@@ -3474,12 +3475,12 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
             )}
             {resumeRun.isError && (
               <div className="text-xs text-destructive">
-                {resumeRun.error instanceof Error ? resumeRun.error.message : "Failed to resume run"}
+                {resumeRun.error instanceof Error ? resumeRun.error.message : t("agentDetail.failedToResumeRun")}
               </div>
             )}
             {retryRun.isError && (
               <div className="text-xs text-destructive">
-                {retryRun.error instanceof Error ? retryRun.error.message : "Failed to retry run"}
+                {retryRun.error instanceof Error ? retryRun.error.message : t("agentDetail.failedToRetryRun")}
               </div>
             )}
             {startTime && (
@@ -3515,13 +3516,13 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   onClick={() => runClaudeLogin.mutate()}
                   disabled={runClaudeLogin.isPending}
                 >
-                  {runClaudeLogin.isPending ? "Running claude login..." : "Login to Claude Code"}
+                  {runClaudeLogin.isPending ? t("agentDetail.runningClaudeLogin") : t("agentDetail.loginToClaudeCode")}
                 </Button>
                 {runClaudeLogin.isError && (
                   <p className="text-xs text-destructive">
                     {runClaudeLogin.error instanceof Error
                       ? runClaudeLogin.error.message
-                      : "Failed to run Claude login"}
+                      : t("agentDetail.failedToRunClaudeLogin")}
                   </p>
                 )}
                 {claudeLoginResult?.loginUrl && (
@@ -3656,13 +3657,13 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                     >
                       {clearSessionsForTouchedIssues.isPending
                         ? "clearing session..."
-                        : "clear session for these tasks"}
+                        : t("agentDetail.clearSessionForTheseTasks")}
                     </button>
                     {clearSessionsForTouchedIssues.isError && (
                       <p className="text-(length:--text-micro) text-destructive mt-1">
                         {clearSessionsForTouchedIssues.error instanceof Error
                           ? clearSessionsForTouchedIssues.error.message
-                          : "Failed to clear sessions"}
+                          : t("agentDetail.failedToClearSessions")}
                       </p>
                     )}
                   </div>
@@ -3802,7 +3803,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
     if (parsed.length > 0) {
       // Live runs stream forever, so cap the retained tail. Terminated runs are
-      // paginated by the user via "Load more log" and keep their full history.
+      // paginated by the user via t("agentDetail.loadMoreLog") and keep their full history.
       appendLogLines(parsed);
     }
   }
@@ -3940,7 +3941,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
             setLogLoading(false);
             return;
           }
-          setLogError(err instanceof Error ? err.message : "Failed to load run log");
+          setLogError(err instanceof Error ? err.message : t("agentDetail.failedToLoadRunLog"));
         }
       } finally {
         if (!cancelled) setLogLoading(false);
@@ -3964,7 +3965,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
       setLogOffset(next);
       setHasMoreLog(result.nextOffset !== undefined);
     } catch (err) {
-      setLogError(err instanceof Error ? err.message : "Failed to load more run log");
+      setLogError(err instanceof Error ? err.message : t("agentDetail.failedToLoadMoreRun"));
     } finally {
       setLoadingMoreLog(false);
     }
@@ -4278,7 +4279,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
           mode={transcriptMode}
           streaming={isLive}
           limit={isLive ? LIVE_TRANSCRIPT_RENDER_LIMIT : undefined}
-          emptyMessage={run.logRef ? "Waiting for transcript..." : "No persisted transcript for this run."}
+          emptyMessage={run.logRef ? t("agentDetail.waitingForTranscript") : t("agentDetail.noPersistedTranscriptForThis")}
         />
         {hasMoreLog && (
           <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
@@ -4289,7 +4290,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
               onClick={loadMorePersistedLog}
               disabled={loadingMoreLog}
             >
-              {loadingMoreLog ? "Loading..." : "Load more log"}
+              {loadingMoreLog ? "Loading..." : t("agentDetail.loadMoreLog")}
             </Button>
             <span className="text-xs text-muted-foreground">
               Showing the first {Math.round(logOffset / 1024).toLocaleString("en-US")} KB
@@ -4418,7 +4419,7 @@ function KeysTab({ agentId, companyId }: { agentId: string; companyId?: string }
         setTimeout(() => setCopied(false), 2000);
       })
       .catch(() => {
-        pushToast({ title: "Copy failed", body: "Clipboard access is unavailable.", tone: "error" });
+        pushToast({ title: t("agentActions.copyFailed"), body: t("agentActions.clipboardAccessIsUnavailable"), tone: "error" });
       });
   }
 
@@ -4477,7 +4478,7 @@ function KeysTab({ agentId, companyId }: { agentId: string; companyId?: string }
         </p>
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Key name (e.g. production)"
+            placeholder={t("agentDetail.keyNameEGProduction")}
             value={newKeyName}
             onChange={(e) => setNewKeyName(e.target.value)}
             className="h-8 text-sm"

@@ -3809,7 +3809,7 @@ export function AdapterTypeDropdown({
   const selectedDisplay = getAdapterDisplay(value);
   const adapterList = useMemo(() =>
     [...listAdapterOptions(type => adapterLabels[type] ?? getAdapterLabel(type)),
-      ...(openAiDotEnabled ? [{ value: "openai_dot", label: "OpenAI Dot", experimental: true, comingSoon: false }] : []),
+      ...(openAiDotEnabled ? [{ value: "openai_dot", label: t("companyImport.openaiDot"), experimental: true, comingSoon: false }] : []),
       ...(museEnabled ? [{ value: "muse", label: t("agentConfig.musePersonalAgent"), experimental: true, comingSoon: false }] : []),
     ].filter(item => (item.value !== "paperclip_runner" || nativeRunnerEnabled) && !disabledTypes.has(item.value))
       .sort((a, b) => Number(a.value === "paperclip_runner") - Number(b.value === "paperclip_runner")),

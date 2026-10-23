@@ -603,7 +603,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
       },
       {
         slug: "github-code-review-bot",
-        name: "GitHub Code Review Bot",
+        name: t("githubChatSetup.githubCodeReviewBot"),
         description:
           t("connectors.haveAnAgentReviewPull"),
       },

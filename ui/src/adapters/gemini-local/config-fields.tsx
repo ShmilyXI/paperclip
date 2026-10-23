@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { configFieldsForSection } from "../config-sections";
 import type { AdapterConfigFieldsProps } from "../types";
 import {
@@ -10,7 +11,7 @@ import { ChoosePathButton } from "../../components/PathInstructionsModal";
 const inputClass =
   "w-full rounded-md border border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40";
 const instructionsFileHint =
-  "Absolute path to a markdown file (e.g. AGENTS.md) that defines this agent's behavior. Prepended to the Gemini prompt at runtime.";
+  t("geminiLocal.instructionsFileHint");
 
 export function GeminiLocalConfigFields({
   section,
@@ -36,7 +37,7 @@ export function GeminiLocalConfigFields({
         the ACP sub-fields below name host paths. The platform-managed
         environment owns both, so the managed-sandbox-only policy hides them.
       */}
-      {!managedSandboxOnly && <Field label="Execution engine" hint="Default uses ACP. If ACP is unavailable, the run fails with a setup error. Choose CLI explicitly to use it.">
+      {!managedSandboxOnly && <Field label={t("adapterConfigFields.executionEngine")} hint={t("adapterConfigFields.executionEngineHint")}>
         <select
           className={inputClass}
           value={engine}
@@ -56,8 +57,8 @@ export function GeminiLocalConfigFields({
         <>
           {!managedSandboxOnly && (
             <Field configSection="advanced"
-              label="ACP server command"
-              hint="Optional override for the Gemini ACP server command. Defaults to gemini --acp."
+              label={t("adapterConfigFields.acpServerCommand")}
+              hint={t("geminiLocal.acpServerCommandHint")}
             >
               <DraftInput
                 value={
@@ -76,7 +77,7 @@ export function GeminiLocalConfigFields({
               />
             </Field>
           )}
-          <Field configSection="runPolicy" label="ACP session mode" hint="Persistent keeps ACP session state between runs. One-shot starts fresh each run.">
+          <Field configSection="runPolicy" label={t("adapterConfigFields.acpSessionMode")} hint={t("adapterConfigFields.acpSessionModeHint")}>
             <select
               className={inputClass}
               value={
@@ -96,8 +97,8 @@ export function GeminiLocalConfigFields({
             </select>
           </Field>
           <Field
-            label="ACP non-interactive permissions"
-            hint="Fallback if the ACP agent asks for input outside an interactive session."
+            label={t("adapterConfigFields.acpNonInteractivePermissions")}
+            hint={t("adapterConfigFields.acpNonInteractivePermissionsHint")}
           >
             <select
               className={inputClass}
@@ -119,8 +120,8 @@ export function GeminiLocalConfigFields({
           </Field>
           {!managedSandboxOnly && (
             <Field
-              label="ACP state directory"
-              hint="Optional ACP session state directory. Defaults to Paperclip-managed organization/agent scoped storage."
+              label={t("adapterConfigFields.acpStateDirectory")}
+              hint={t("adapterConfigFields.acpStateDirectoryHint")}
             >
               <div className="flex items-center gap-2">
                 <DraftInput
@@ -143,8 +144,8 @@ export function GeminiLocalConfigFields({
             </Field>
           )}
           <Field configSection="runPolicy"
-            label="ACP warm process idle ms"
-            hint="Defaults to 0, which closes the ACP process after each run while retaining persistent session state."
+            label={t("adapterConfigFields.acpWarmProcessIdleMs")}
+            hint={t("adapterConfigFields.acpWarmProcessIdleMsHint")}
           >
             {isCreate ? (
               <input
@@ -169,7 +170,7 @@ export function GeminiLocalConfigFields({
         </>
       )}
       {!hideInstructionsFile && (
-        <Field label="Agent instructions file" hint={instructionsFileHint}>
+        <Field label={t("adapterConfigFields.agentInstructionsFile")} hint={instructionsFileHint}>
           <div className="flex items-center gap-2">
             <DraftInput
               value={

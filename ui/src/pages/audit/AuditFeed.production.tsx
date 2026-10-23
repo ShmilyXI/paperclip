@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
@@ -31,7 +32,7 @@ const ALL = "__all";
 
 /** Action-domain prefixes offered in the filter (server does a prefix match). */
 const ACTION_DOMAINS: { value: string; label: string }[] = [
-  { value: ALL, label: "All actions" },
+  { value: ALL, label: t("audit.allActions") },
   { value: "issue.", label: "Tasks" },
   { value: "agent.", label: "Agents" },
   { value: "heartbeat.", label: "Runs" },
@@ -45,7 +46,7 @@ const ACTION_DOMAINS: { value: string; label: string }[] = [
 
 /** Entity types offered in the filter (server does an exact match). */
 const ENTITY_TYPES: { value: string; label: string }[] = [
-  { value: ALL, label: "All entities" },
+  { value: ALL, label: t("audit.allEntities") },
   { value: "issue", label: "Task" },
   { value: "agent", label: "Agent" },
   { value: "project", label: "Project" },
@@ -444,11 +445,11 @@ export function AuditFeed({
       // Browsers may read blob URLs lazily after click(), so keep the URL alive
       // long enough for the download to start.
       window.setTimeout(() => URL.revokeObjectURL(url), 5_000);
-      pushToast({ title: "Audit exported", body: "Your CSV download has started.", tone: "success" });
+      pushToast({ title: t("audit.auditExported"), body: t("audit.yourCsvDownloadHasStarted"), tone: "success" });
     } catch (error) {
       pushToast({
-        title: "Export failed",
-        body: error instanceof Error ? error.message : "Could not export the audit log.",
+        title: t("audit.exportFailed"),
+        body: error instanceof Error ? error.message : t("audit.couldNotExportTheAudit"),
         tone: "error",
       });
     } finally {
@@ -468,7 +469,7 @@ export function AuditFeed({
             <h1 className="text-lg font-semibold text-foreground">Activity</h1>
             <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
               {resolvedMode === "agents"
-                ? "Every recorded agent action, newest first — with the responsible person and run behind each one."
+                ? t("auditFeed.everyRecordedAgentActionNewest")
                 : "Everything happening in your company, newest first — people, agents, and the system. Each line is one recorded action."}
             </p>
           </div>
@@ -477,7 +478,7 @@ export function AuditFeed({
 
       {showModeToggle ? (
         <Tabs value={resolvedMode} onValueChange={(value) => onModeChange?.(value as AuditFeedMode)}>
-          <TabsList aria-label="Activity scope">
+          <TabsList aria-label={t("routineSections.activityScope")}>
             <TabsTrigger value="all">All activity</TabsTrigger>
             <TabsTrigger value="agents">Agent actions</TabsTrigger>
           </TabsList>
@@ -504,7 +505,7 @@ export function AuditFeed({
           <Select value={responsibleUser} onValueChange={setResponsibleUser}>
             {/* Wide enough for "All responsible users" — w-44 truncated it. */}
             <SelectTrigger className="w-52">
-              <SelectValue placeholder="Responsible user" />
+              <SelectValue placeholder={t("audit.responsibleUser")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL}>All responsible users</SelectItem>
@@ -541,7 +542,7 @@ export function AuditFeed({
           </Select>
           <Input
             type="date"
-            aria-label="From date"
+            aria-label={t("audit.fromDate")}
             value={dateFrom}
             max={dateTo || undefined}
             onChange={(e) => setDateFrom(e.target.value)}
@@ -549,7 +550,7 @@ export function AuditFeed({
           />
           <Input
             type="date"
-            aria-label="To date"
+            aria-label={t("audit.toDate")}
             value={dateTo}
             min={dateFrom || undefined}
             onChange={(e) => setDateTo(e.target.value)}
@@ -587,7 +588,7 @@ export function AuditFeed({
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-14 text-center">
             <p className="text-sm text-muted-foreground">
-              {feed.error instanceof Error ? feed.error.message : "Failed to load the audit log."}
+              {feed.error instanceof Error ? feed.error.message : t("audit.failedToLoadTheAudit")}
             </p>
             <Button variant="outline" size="sm" onClick={() => feed.refetch()}>
               Try again
@@ -600,13 +601,13 @@ export function AuditFeed({
             <ScrollText className="h-10 w-10 text-muted-foreground/40" />
             <div>
               <p className="text-sm font-medium text-foreground">
-                {hasActiveFilters ? "No actions match these filters" : "Nothing here yet"}
+                {hasActiveFilters ? t("auditFeed.noActionsMatchTheseFilters") : t("auditFeed.nothingHereYet")}
               </p>
               <p className="mt-1 max-w-md text-sm text-muted-foreground">
                 {hasActiveFilters
-                  ? "Try a wider date range or different filters."
+                  ? t("auditFeed.tryAWiderDateRange")
                   : resolvedMode === "agents"
-                    ? "As soon as your agents start doing things, their actions show up here."
+                    ? t("auditFeed.asSoonAsYourAgents")
                     : "As soon as anyone in your company does something, it shows up here."}
               </p>
             </div>

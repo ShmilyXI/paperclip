@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { SkillBinaryFile } from "../components/SkillBinaryFile";
 import { SkillSourceProvenance } from "../components/SkillSourceProvenance";
 import { AgentIdentity } from "@/components/AgentIdentity";
@@ -468,20 +469,20 @@ function TrustChip({ level }: { level: CompanySkillTrustLevel }) {
   const map = {
     markdown_only: {
       icon: ShieldCheck,
-      label: "Markdown only",
-      tooltip: "Text only — no scripts, no binaries, no assets.",
+      label: t("skills.markdownOnly"),
+      tooltip: t("skills.textOnlyNoScriptsNo"),
       className: "border-border bg-muted/40 text-muted-foreground",
     },
     assets: {
       icon: Folder,
-      label: "Includes assets",
-      tooltip: "Ships images, fonts, or other non-script files.",
+      label: t("skills.includesAssets"),
+      tooltip: t("skills.shipsImagesFontsOrOther"),
       className: "border-cyan-500/30 bg-cyan-500/10 text-cyan-800 dark:text-cyan-200",
     },
     scripts_executables: {
       icon: AlertTriangle,
-      label: "Includes scripts",
-      tooltip: "Ships executable scripts. Review before installing.",
+      label: t("skills.includesScripts"),
+      tooltip: t("skills.shipsExecutableScriptsReviewBefore"),
       className: "border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-200",
     },
   } as const;
@@ -505,14 +506,14 @@ function CompatChip({ compatibility }: { compatibility: CompanySkillCompatibilit
   const map = {
     unknown: {
       icon: HelpCircle,
-      label: "Unknown format",
-      tooltip: "Paperclip could not validate this skill as Agent Skills markdown. Install at your own risk.",
+      label: t("skills.unknownFormat"),
+      tooltip: t("skills.paperclipCouldNotValidateThis"),
       className: "border-yellow-500/40 bg-yellow-500/10 text-yellow-800 dark:text-yellow-200",
     },
     invalid: {
       icon: XOctagon,
       label: "Invalid",
-      tooltip: "This skill cannot be installed — content is not valid Agent Skills markdown.",
+      tooltip: t("skills.thisSkillCannotBeInstalled"),
       className: "border-destructive/40 bg-destructive/10 text-destructive",
     },
   } as const;
@@ -541,7 +542,7 @@ function ProvenanceBadge({ packageName, packageVersion }: { packageName: string 
           <span>{packageName}{packageVersion ? ` v${packageVersion}` : ""}</span>
         </span>
       </TooltipTrigger>
-      <TooltipContent>Installed from the app-shipped skills catalog. Provenance is signed by package version and content hash.</TooltipContent>
+      <TooltipContent>{t("skills.installedFromTheAppShipped")}</TooltipContent>
     </Tooltip>
   );
 }
@@ -1180,7 +1181,7 @@ export function DiscoveryGrid({
       <aside className={cn("hidden w-60 shrink-0 flex-col overflow-hidden border-r border-border md:flex", showFolderRail && "md:hidden")}>
         <div className="border-b border-border px-4 py-4">
           <h2 className="text-sm font-semibold text-foreground">Skills Store</h2>
-          <p className="text-xs text-muted-foreground">Discover, install, fork, share</p>
+          <p className="text-xs text-muted-foreground">{t("skills.discoverInstallForkShare")}</p>
         </div>
         <div className="px-4 pb-1 pt-3 text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
           Categories
@@ -1203,7 +1204,7 @@ export function DiscoveryGrid({
             <input
               value={search}
               onChange={(event) => onSearchChange(event.target.value)}
-              placeholder="Search skills, authors, categories…"
+              placeholder={t("skills.searchSkillsAuthorsCategories")}
               className="h-full w-full bg-transparent text-base outline-none placeholder:text-muted-foreground sm:text-sm"
             />
           </div>
@@ -1253,8 +1254,8 @@ export function DiscoveryGrid({
             size="icon-sm"
             onClick={() => onScan()}
             disabled={scanPending}
-            aria-label="Scan project workspaces for skills"
-            title="Scan project workspaces for skills"
+            aria-label={t("skills.scanProjectWorkspacesForSkills")}
+            title={t("skills.scanProjectWorkspacesForSkills")}
           >
             <RefreshCw className={cn("h-4 w-4", scanPending && "animate-spin")} />
           </Button>
@@ -1281,8 +1282,8 @@ export function DiscoveryGrid({
                 <Boxes className="mr-2 h-4 w-4" />
                 Browse catalog
               </DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/skills/sources/new"><GithubIcon className="mr-2 h-4 w-4" />Import from GitHub</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/skills/sources">Manage sources</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/skills/sources/new"><GithubIcon className="mr-2 h-4 w-4" />{t("skills.importFromGithub")}</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/skills/sources">{t("skills.manageSources")}</Link></DropdownMenuItem>
               <DropdownMenuItem onSelect={onImport}>
                 <Globe className="mr-2 h-4 w-4" />
                 Import from path or URL
@@ -1418,10 +1419,10 @@ export function DiscoveryGrid({
                 icon={LayoutGrid}
                 message={
                   totalCount === 0
-                    ? "No skills yet. Create one or install from the catalog."
+                    ? t("skills.noSkillsYet")
                     : search || activeCategory || sourceFilterActive
-                      ? "No skills match your filters."
-                      : "No skills in this tab yet."
+                      ? t("companySkills.noSkillsMatchYourFilters")
+                      : t("skills.noSkillsInThisTab")
                 }
               />
               {totalCount === 0 ? (
@@ -1429,7 +1430,7 @@ export function DiscoveryGrid({
                   <Button size="sm" onClick={onBrowseCatalog}>
                     <Boxes className="mr-1.5 h-3.5 w-3.5" /> Browse catalog
                   </Button>
-                  <Button size="sm" variant="outline" asChild><Link to="/skills/sources/new">Import from GitHub</Link></Button>
+                  <Button size="sm" variant="outline" asChild><Link to="/skills/sources/new">{t("skills.importFromGithub")}</Link></Button>
                   <Button size="sm" variant="ghost" onClick={onCreate}>
                     Create a skill
                   </Button>
@@ -1555,7 +1556,7 @@ function NewSkillWizard({
                   : draft.markdown,
               });
             }}
-            placeholder="Skill name"
+            placeholder={t("skills.skillName")}
             className="h-9"
           />
           <Input
@@ -1580,7 +1581,7 @@ function NewSkillWizard({
                   : draft.markdown,
               });
             }}
-            placeholder="One-line promise for the skill"
+            placeholder={t("skills.oneLinePromiseForThe")}
             className="min-h-20"
           />
         </div>
@@ -1630,7 +1631,7 @@ function NewSkillWizard({
             <Input
               value={categoryDraft}
               onChange={(event) => patchDraft({ categories: splitCategoryDraft(event.target.value) })}
-              placeholder="engineering, review, memory"
+              placeholder={t("skillStudio.engineeringReviewMemory")}
               className="h-9"
             />
           </div>
@@ -1885,7 +1886,7 @@ function CatalogDetailPane({
   loadingPrimaryAction: boolean;
 }) {
   if (!skill) {
-    return <EmptyState icon={Boxes} message="Select a catalog skill to inspect." />;
+    return <EmptyState icon={Boxes} message={t("skills.selectACatalogSkillTo")} />;
   }
 
   const installedHash = installedSkill?.originHash ?? null;
@@ -1904,14 +1905,14 @@ function CatalogDetailPane({
             </Button>
           </span>
         </TooltipTrigger>
-        <TooltipContent>This skill cannot be installed — its content is not valid Agent Skills markdown.</TooltipContent>
+        <TooltipContent>{t("skills.thisSkillCannotBeInstalled2")}</TooltipContent>
       </Tooltip>
     );
   } else if (!isInstalled) {
     cta = (
       <Button onClick={onInstall} disabled={loadingPrimaryAction}>
         {skill.trustLevel === "scripts_executables" ? <AlertTriangle className="mr-1.5 h-3.5 w-3.5" /> : <Download className="mr-1.5 h-3.5 w-3.5" />}
-        {loadingPrimaryAction ? "Preparing..." : "Install skill in this organization"}
+        {loadingPrimaryAction ? "Preparing..." : t("companySkills.installSkillInThisOrganization")}
       </Button>
     );
   } else if (hashOutOfSync) {
@@ -1964,7 +1965,7 @@ function CatalogDetailPane({
                   Update available
                 </Badge>
               </TooltipTrigger>
-              <TooltipContent>Catalog content hash has changed since this skill was installed.</TooltipContent>
+              <TooltipContent>{t("skills.catalogContentHashHasChanged")}</TooltipContent>
             </Tooltip>
           ) : null}
           {skill.requires.length > 0 ? (
@@ -1993,8 +1994,8 @@ function CatalogDetailPane({
           <CopyText
             text={skill.contentHash}
             copiedLabel="Copied hash"
-            ariaLabel="Copy content hash"
-            title="Copy content hash"
+            ariaLabel={t("skills.copyContentHash")}
+            title={t("skills.copyContentHash")}
             className="inline-flex h-6 w-6 items-center justify-center rounded-sm border border-border text-muted-foreground hover:bg-accent hover:text-foreground"
           >
             <Copy className="h-3 w-3" />
@@ -2012,7 +2013,7 @@ function CatalogDetailPane({
         ) : fileQuery.error ? (
           <div className="text-sm text-destructive">{fileQuery.error instanceof Error ? fileQuery.error.message : "Failed to load file"}</div>
         ) : !fileQuery.data ? (
-          <div className="text-sm text-muted-foreground">Select a file to inspect.</div>
+          <div className="text-sm text-muted-foreground">{t("skills.selectAFileToInspect")}</div>
         ) : fileQuery.data.markdown ? (
           <MarkdownBody softBreaks={false} linkIssueReferences={false}>{body}</MarkdownBody>
         ) : (
@@ -2101,10 +2102,10 @@ export function InstallPreviewDialog({
   if (defaultAction === "update") {
     confirmLabel = "Install update";
   } else if (defaultAction === "replace") {
-    confirmLabel = "Replace existing skill";
+    confirmLabel = t("companySkills.replaceExistingSkillConfirm");
     confirmVariant = "destructive";
   }
-  if (isPending) confirmLabel = "Installing…";
+  if (isPending) confirmLabel = t("skills.installing");
 
   return (
     <Dialog open={open} onOpenChange={(value) => (!isPending ? onOpenChange(value) : null)}>
@@ -2180,7 +2181,7 @@ export function InstallPreviewDialog({
 
           {defaultAction === "install" ? (
             <div className="rounded-md border border-border p-3">
-              <div className="mb-1 text-xs uppercase tracking-wide text-muted-foreground">Enable for agents</div>
+              <div className="mb-1 text-xs uppercase tracking-wide text-muted-foreground">{t("skills.enableForAgents")}</div>
               <p className="mb-2 text-xs text-muted-foreground">
                 Installing adds the skill to the company library. Agents can only use it once it is enabled for them.
               </p>
@@ -2192,7 +2193,7 @@ export function InstallPreviewDialog({
                   setSelectedAgentIds(next);
                 }}
                 showSelectionPreview={false}
-                emptyMessage="No agents in this company support skills yet."
+                emptyMessage={t("skills.noAgentsSupportSkills")}
                 isAgentDisabled={(agent) => {
                   const option = agent as AttachAgentOption;
                   return option.required || !option.supportsSkills;
@@ -2221,7 +2222,7 @@ export function InstallPreviewDialog({
               </div>
               <label className="flex items-center gap-2">
                 <Checkbox checked={force} onCheckedChange={(value) => setForce(Boolean(value))} />
-                <span>Force replace existing same-key skill</span>
+                <span>{t("skills.forceReplaceExistingSameKey")}</span>
               </label>
             </div>
           ) : null}
@@ -2294,7 +2295,7 @@ function AttachAgentsPopover({
       selectedAgentIds={attachedIds}
       onSave={(nextIds) => onSubmit(Array.from(nextIds), draftVersionId)}
       pending={pending}
-      triggerLabel="Add to agent"
+      triggerLabel={t("companySkills.addToAgent")}
       triggerIcon={<Plus className="mr-1.5 h-3.5 w-3.5" />}
       triggerVariant="default"
       triggerSize="sm"
@@ -2650,7 +2651,7 @@ function SkillVersionDiffDialog({
       <DialogContent className="flex max-h-(--sz-85vh) w-full !max-w-(--pct-90) flex-col overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <DialogHeader className="shrink-0">
-            <DialogTitle>Diff · skill files</DialogTitle>
+            <DialogTitle>{t("skills.diffSkillFiles")}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-wrap items-center gap-3 text-xs">
             <label className="flex items-center gap-2">
@@ -2699,9 +2700,9 @@ function SkillVersionDiffDialog({
           </aside>
           <div className="min-w-0 flex-1 overflow-auto rounded-md border border-border text-xs">
             {!right ? (
-              <div className="p-6 text-center text-sm text-muted-foreground">Select a version to compare.</div>
+              <div className="p-6 text-center text-sm text-muted-foreground">{t("skills.selectAVersionToCompare")}</div>
             ) : left?.id === right.id ? (
-              <div className="p-6 text-center text-sm text-muted-foreground">Both sides are the same version.</div>
+              <div className="p-6 text-center text-sm text-muted-foreground">{t("skills.bothSidesAreTheSame")}</div>
             ) : (
               <div className="font-mono text-xs leading-6">
                 <div className="grid grid-cols-(--gtc-1) border-b border-border/60 bg-muted/30 px-3 py-2 text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
@@ -2821,7 +2822,7 @@ function SkillTagsEditor({
           </span>
         ))}
         {categories.length === 0 ? (
-          <span className="text-xs text-muted-foreground">No tags yet.</span>
+          <span className="text-xs text-muted-foreground">{t("skills.noTagsYet")}</span>
         ) : null}
       </div>
       <Input
@@ -2834,7 +2835,7 @@ function SkillTagsEditor({
           }
         }}
         onBlur={() => draft.trim() && addTag(draft)}
-        placeholder="Add a tag…"
+        placeholder={t("skills.addATag")}
         disabled={pending}
         className="mt-2 h-8 text-sm"
       />
@@ -2976,7 +2977,7 @@ export function SkillDetailPage({
   }, [isDirty]);
 
   if (!detail) {
-    return loading ? <PageSkeleton variant="detail" /> : <EmptyState icon={Boxes} message="Skill not found." />;
+    return loading ? <PageSkeleton variant="detail" /> : <EmptyState icon={Boxes} message={t("skills.skillNotFound")} />;
   }
 
   const skill = detail;
@@ -3078,7 +3079,7 @@ export function SkillDetailPage({
                   variant="outline"
                   size="sm"
                   onClick={onFork}
-                  title={skill.editableReason ?? "Fork this skill to edit it."}
+                  title={skill.editableReason ?? t("companySkills.forkThisSkillToEdit")}
                 >
                   <GitFork className="mr-1.5 h-3.5 w-3.5" />
                   {skill.sourceType === "github" ? "Make a copy" : "Fork"}
@@ -3089,7 +3090,7 @@ export function SkillDetailPage({
           {fileLoading ? (
             <PageSkeleton variant="detail" />
           ) : !file ? (
-            <div className="text-sm text-muted-foreground">Select a file to inspect.</div>
+            <div className="text-sm text-muted-foreground">{t("skills.selectAFileToInspect")}</div>
           ) : file.encoding === "base64" ? <SkillBinaryFile file={file} /> : editMode && file.editable ? (
             file.markdown ? (
               <MarkdownEditor value={draft} onChange={setDraft} bordered={false} className="min-h-(--sz-520px)" />
@@ -3120,9 +3121,9 @@ export function SkillDetailPage({
           {fileLoading ? (
             <PageSkeleton variant="detail" />
           ) : file?.markdown ? (
-            <MarkdownBody softBreaks={false} linkIssueReferences={false}>{body || skill.description || "No overview yet."}</MarkdownBody>
+            <MarkdownBody softBreaks={false} linkIssueReferences={false}>{body || skill.description || t("companySkills.noOverviewYet")}</MarkdownBody>
           ) : (
-            <p className="text-sm text-muted-foreground">{skill.description ?? "No overview yet."}</p>
+            <p className="text-sm text-muted-foreground">{skill.description ?? t("companySkills.noOverviewYet")}</p>
           )}
         </section>
         <section className="grid min-w-0 gap-3 text-sm sm:grid-cols-2">
@@ -3180,7 +3181,7 @@ export function SkillDetailPage({
           {versionsLoading ? (
             <PageSkeleton variant="list" />
           ) : sortedVersions.length === 0 ? (
-            <div className="py-6 text-sm text-muted-foreground">No saved versions yet.</div>
+            <div className="py-6 text-sm text-muted-foreground">{t("skills.noSavedVersionsYet")}</div>
           ) : (
             sortedVersions.map((version) => (
               <div key={version.id} className="grid gap-2 border-b border-border px-0 py-3 text-sm last:border-b-0 sm:grid-cols-(--gtc-13)">
@@ -3217,7 +3218,7 @@ export function SkillDetailPage({
 
   function renderAgentsBody() {
     // Only the agents actually using this skill are listed (PAP-10907); the
-    // multi-selector behind "Add to agent" is where you attach more.
+    // multi-selector behind t("companySkills.addToAgent") is where you attach more.
     const attached = skill.usedByAgents;
     return (
       <div className="space-y-3">
@@ -3369,14 +3370,14 @@ export function SkillDetailPage({
                     <span className="hidden sm:inline">{detail.attachedAgentCount === 1 ? "install" : "installs"}</span>
                   </span>
                 </TooltipTrigger>
-                <TooltipContent>Agents in this company that currently have this skill installed.</TooltipContent>
+                <TooltipContent>{t("skills.agentsWithSkillInstalled")}</TooltipContent>
               </Tooltip>
               <button
                 type="button"
                 onClick={onToggleStar}
                 disabled={starPending}
                 className="inline-flex items-center gap-1.5 border-l border-border px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground disabled:opacity-50"
-                title={detail.starredByCurrentActor ? "Unstar this skill" : "Star this skill"}
+                title={detail.starredByCurrentActor ? t("companySkills.unstarThisSkill") : t("companySkills.starThisSkill")}
               >
                 <Star className={cn("h-3.5 w-3.5", detail.starredByCurrentActor && "fill-current text-yellow-400")} />
                 <span className="hidden sm:inline">{detail.starredByCurrentActor ? "Starred" : "Star"}</span>
@@ -3386,7 +3387,7 @@ export function SkillDetailPage({
                 type="button"
                 onClick={onFork}
                 className="inline-flex items-center gap-1.5 border-l border-border px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground"
-                title="Fork this skill"
+                title={t("skills.forkThisSkill")}
               >
                 <GitFork className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">{skill.sourceType === "github" ? "Make a copy" : "Fork"}</span>
@@ -3442,7 +3443,7 @@ export function SkillDetailPage({
                 fullWidth
               />
               {detail.usedByAgents.length === 0 ? (
-                <p className="text-xs text-muted-foreground">No agents attached yet.</p>
+                <p className="text-xs text-muted-foreground">{t("skills.noAgentsAttachedYet")}</p>
               ) : (
                 <div className="space-y-0.5">
                   {/* Preview up to three attached agents, then summarise the rest. */}
@@ -3457,7 +3458,7 @@ export function SkillDetailPage({
                         <AgentAvatar agent={meta} size={16} className="h-4 w-4 shrink-0 text-muted-foreground"/>
                         <span className="min-w-0 flex-1 truncate text-foreground">{agent.name}</span>
                         {meta?.paused ? (
-                          <Pause className="h-3 w-3 shrink-0 text-amber-500" aria-label="Paused" />
+                          <Pause className="h-3 w-3 shrink-0 text-amber-500" aria-label={t("labels.status.paused")} />
                         ) : null}
                       </Link>
                     );
@@ -3537,9 +3538,9 @@ export function SkillDetailPage({
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Pin className="h-3.5 w-3.5 shrink-0" aria-label="Pinned source revision" />
+                      <Pin className="h-3.5 w-3.5 shrink-0" aria-label={t("skills.pinnedSourceRevision")} />
                     </TooltipTrigger>
-                    <TooltipContent>Pinned source revision</TooltipContent>
+                    <TooltipContent>{t("skills.pinnedSourceRevision")}</TooltipContent>
                   </Tooltip>
                   <span className="truncate font-mono text-foreground">{currentPin ?? "untracked"}</span>
                 </div>
@@ -3603,7 +3604,7 @@ export function SkillDetailPage({
       <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Skill settings</DialogTitle>
+            <DialogTitle>{t("skills.skillSettings")}</DialogTitle>
             <DialogDescription>Manage how {detail.name} is grouped and shared.</DialogDescription>
           </DialogHeader>
           <div className="space-y-5">
@@ -3612,11 +3613,11 @@ export function SkillDetailPage({
               <Input
                 value={settingsCategoryDraft}
                 onChange={(event) => setSettingsCategoryDraft(event.target.value)}
-                placeholder="engineering, review, memory"
+                placeholder={t("skillStudio.engineeringReviewMemory")}
                 className="h-9"
                 disabled={updateSettingsPending}
               />
-              <p className="text-xs text-muted-foreground">Separate categories with commas. Leave empty to clear categories.</p>
+              <p className="text-xs text-muted-foreground">{t("skills.separateCategoriesWithCommasLeave")}</p>
             </div>
             <div className="space-y-1.5">
               <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Sharing</label>
@@ -3626,10 +3627,10 @@ export function SkillDetailPage({
                 disabled={updateSettingsPending}
                 className="h-9 w-full rounded-md border border-border bg-background px-2 text-sm text-foreground"
               >
-                <option value="company">Company — visible inside this company</option>
-                <option value="private">Private — only visible in your library</option>
+                <option value="company">{t("skills.sharingScopeCompany")}</option>
+                <option value="private">{t("skills.privateOnlyVisibleInYour")}</option>
               </select>
-              <p className="text-xs text-muted-foreground">Public link sharing is coming later.</p>
+              <p className="text-xs text-muted-foreground">{t("skills.publicLinkSharingIsComing")}</p>
             </div>
             <div className="flex justify-end gap-2 border-t border-border pt-4">
               <Button
@@ -3658,14 +3659,14 @@ export function SkillDetailPage({
               <div className="rounded-md border border-destructive/40 p-3">
                 <div className="text-xs font-semibold uppercase tracking-wide text-destructive">Danger zone</div>
                 <div className="mt-2 flex items-center justify-between gap-3">
-                  <p className="min-w-0 text-xs text-muted-foreground">Remove this skill from the company library.</p>
+                  <p className="min-w-0 text-xs text-muted-foreground">{t("skills.removeFromCompanyLibrary")}</p>
                   <Button
                     variant="destructive"
                     size="sm"
                     className="shrink-0"
                     onClick={onDelete}
                     disabled={deletePending}
-                    title={detail.usedByAgents.length > 0 ? "Detach this skill from all agents before removing it." : undefined}
+                    title={detail.usedByAgents.length > 0 ? t("companySkills.detachThisSkillFromAll") : undefined}
                   >
                     <Trash2 className="mr-1.5 h-3.5 w-3.5" />
                     {deletePending ? "Removing…" : "Remove"}
@@ -3738,7 +3739,7 @@ function SkillPane({
     return (
       <EmptyState
         icon={Boxes}
-        message="Select a skill to inspect its files."
+        message={t("skills.selectASkillToInspect")}
       />
     );
   }
@@ -3752,7 +3753,7 @@ function SkillPane({
   const displaySourcePath = detail.sourcePath ? middleTruncate(detail.sourcePath) : null;
   const removeBlocked = usedBy.length > 0;
   const removeDisabledReason = removeBlocked
-    ? "Detach this skill from all agents before removing it."
+    ? t("companySkills.detachThisSkillFromAll")
     : null;
 
   return (
@@ -3816,8 +3817,8 @@ function SkillPane({
                     <CopyText
                       text={detail.sourcePath}
                       copiedLabel="Copied path"
-                      ariaLabel="Copy source path"
-                      title="Copy source path"
+                      ariaLabel={t("skills.copySourcePath")}
+                      title={t("skills.copySourcePath")}
                       className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                     >
                       <Copy className="h-3.5 w-3.5" />
@@ -3883,7 +3884,7 @@ function SkillPane({
                     Locally modified
                   </Badge>
                 </TooltipTrigger>
-                <TooltipContent>You have edited this skill after installing. Updates from the catalog will overwrite your changes.</TooltipContent>
+                <TooltipContent>{t("skills.youHaveEditedThisSkill")}</TooltipContent>
               </Tooltip>
             ) : null}
             {(() => {
@@ -3905,7 +3906,7 @@ function SkillPane({
               />
             </div>
             {usedBy.length === 0 ? (
-              <span className="text-muted-foreground">No agents attached</span>
+              <span className="text-muted-foreground">{t("skills.noAgentsAttached")}</span>
             ) : (
               <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {usedBy.map((agent) => (
@@ -3970,7 +3971,7 @@ function SkillPane({
         {fileLoading ? (
           <PageSkeleton variant="detail" />
         ) : !file ? (
-          <div className="text-sm text-muted-foreground">Select a file to inspect.</div>
+          <div className="text-sm text-muted-foreground">{t("skills.selectAFileToInspect")}</div>
         ) : editMode && file.editable ? (
           file.markdown ? (
             <MarkdownEditor
@@ -4352,11 +4353,11 @@ export function CompanySkills() {
       if (result.imported[0]) navigate(routeForSkill(result.imported[0]));
       pushToast({
         tone: "success",
-        title: "Skills imported",
+        title: t("skills.skillsImported"),
         body: `${result.imported.length} skill${result.imported.length === 1 ? "" : "s"} added.`,
       });
       if (result.warnings[0]) {
-        pushToast({ tone: "warn", title: "Import warnings", body: result.warnings[0] });
+        pushToast({ tone: "warn", title: t("skills.importWarnings"), body: result.warnings[0] });
       }
       setSource("");
     },
@@ -4372,11 +4373,11 @@ export function CompanySkills() {
     ),
     onMutate: (projectId) => {
       setScanStatusMessage(
-        projectId ? "Refreshing project skills..." : "Scanning project workspaces for skills...",
+        projectId ? t("companySkills.refreshingProjectSkills") : t("companySkills.scanningProjectWorkspacesForSkills"),
       );
     },
     onSuccess: async (result) => {
-      setScanStatusMessage("Refreshing skills list...");
+      setScanStatusMessage(t("companySkills.refreshingSkillsList"));
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: queryKeys.companySkills.list(selectedCompanyId!) }),
         queryClient.invalidateQueries({ queryKey: queryKeys.folders.list(selectedCompanyId!, "skill") }),
@@ -4385,26 +4386,26 @@ export function CompanySkills() {
       setScanStatusMessage(summary);
       pushToast({
         tone: "success",
-        title: "Project skill scan complete",
+        title: t("skills.projectSkillScanComplete"),
         body: summary,
       });
       if (result.conflicts[0]) {
         pushToast({
           tone: "warn",
-          title: "Skill conflicts found",
+          title: t("skills.skillConflictsFound"),
           body: result.conflicts[0].reason,
         });
       } else if (result.warnings[0]) {
         pushToast({
           tone: "warn",
-          title: "Scan warnings",
+          title: t("skills.scanWarnings"),
           body: result.warnings[0],
         });
       }
     },
     onError: (error) => {
       setScanStatusMessage(null);
-      reportSkillError(error, "Project skill scan failed", "Failed to scan project workspaces.", "Scanning projects for skills");
+      reportSkillError(error, t("companySkills.projectSkillScanFailed"), t("companySkills.failedToScanProjectWorkspaces"), t("companySkills.actionScanningProjectsForSkills"));
     },
   });
 
@@ -4417,14 +4418,14 @@ export function CompanySkills() {
       setCreateError(null);
       pushToast({
         tone: "success",
-        title: skill.forkedFromSkillId ? "Skill fork created" : "Skill created",
+        title: skill.forkedFromSkillId ? t("skillStudio.skillForkCreated") : "Skill created",
         body: `${skill.name} is now editable in the Paperclip workspace.`,
       });
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : "Failed to create skill.";
+      const message = error instanceof Error ? error.message : t("skills.failedToCreateSkill");
       setCreateError(message);
-      reportSkillError(error, "Skill creation failed", "Failed to create skill.", "Creating a skill");
+      reportSkillError(error, t("skillStudio.skillCreationFailed"), t("skills.failedToCreateSkill"), "Creating a skill");
     },
   });
 
@@ -4445,22 +4446,22 @@ export function CompanySkills() {
       setEditMode(false);
       pushToast({
         tone: "success",
-        title: "Skill saved",
+        title: t("skills.skillSaved"),
         body: result.path,
       });
     },
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Save failed",
-        body: error instanceof Error ? error.message : "Failed to save skill file.",
+        title: t("agentDetail.saveFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToSaveSkillFile"),
       });
     },
   });
 
   const toggleStar = useMutation({
     mutationFn: () => {
-      if (!activeDetail) throw new Error("Select a skill first.");
+      if (!activeDetail) throw new Error(t("skills.selectASkillFirst"));
       return activeDetail.starredByCurrentActor
         ? companySkillsApi.unstar(selectedCompanyId!, activeDetail.id)
         : companySkillsApi.star(selectedCompanyId!, activeDetail.id);
@@ -4475,8 +4476,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Star failed",
-        body: error instanceof Error ? error.message : "Failed to update star.",
+        title: t("skills.starFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToUpdateStar"),
       });
     },
   });
@@ -4497,13 +4498,13 @@ export function CompanySkills() {
         queryClient.invalidateQueries({ queryKey: queryKeys.companySkills.list(selectedCompanyId!) }),
         queryClient.invalidateQueries({ queryKey: queryKeys.companySkills.detail(selectedCompanyId!, skill.id) }),
       ]);
-      pushToast({ tone: "success", title: "Skill settings updated", body: skillSettingsToastBody(skill) });
+      pushToast({ tone: "success", title: t("skills.skillSettingsUpdated"), body: skillSettingsToastBody(skill) });
     },
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Skill settings update failed",
-        body: error instanceof Error ? error.message : "Failed to update skill settings.",
+        title: t("skills.skillSettingsUpdateFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToUpdateSkillSettings"),
       });
     },
   });
@@ -4520,12 +4521,12 @@ export function CompanySkills() {
       navigate(routeForSkill(skill, selectedPath));
       pushToast({
         tone: "success",
-        title: "Skill updated",
+        title: t("skills.skillUpdated"),
         body: skill.sourceRef ? `Pinned to ${shortRef(skill.sourceRef)}` : skill.name,
       });
     },
     onError: (error) => {
-      reportSkillError(error, "Update failed", "Failed to install skill update.", "Updating this skill");
+      reportSkillError(error, "Update failed", t("companySkills.failedToInstallSkillUpdate"), t("companySkills.actionUpdatingSkill"));
     },
   });
 
@@ -4683,29 +4684,29 @@ export function CompanySkills() {
         body: result.action === "created"
           ? enabledCount > 0
             ? `${result.skill.name} — enabled for ${enabledCount} agent${enabledCount === 1 ? "" : "s"}.`
-            : `${result.skill.name} is in the library but not enabled for any agent yet. Use "Add to agent" to enable it.`
+            : `${result.skill.name} is in the library but not enabled for any agent yet. Use t("companySkills.addToAgent") to enable it.`
           : result.skill.name,
       });
       if (enableFailures > 0) {
         pushToast({
           tone: "warn",
-          title: "Skill installed, but enabling failed",
-          body: `Could not enable ${result.skill.name} for ${enableFailures} agent${enableFailures === 1 ? "" : "s"}. Use "Add to agent" on the skill page.`,
+          title: t("skills.skillInstalledButEnablingFailed"),
+          body: `Could not enable ${result.skill.name} for ${enableFailures} agent${enableFailures === 1 ? "" : "s"}. Use t("companySkills.addToAgent") on the skill page.`,
         });
       }
       if (result.warnings[0]) {
-        pushToast({ tone: "warn", title: "Install warnings", body: result.warnings[0] });
+        pushToast({ tone: "warn", title: t("skills.installWarnings"), body: result.warnings[0] });
       }
       if (result.action === "created") {
         navigate(routeForSkill(result.skill));
       }
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : "Failed to install catalog skill.";
+      const message = error instanceof Error ? error.message : t("skills.failedToInstallCatalogSkill");
       setInstallDialogState((current) => ({ ...current, error: message }));
       // Also surface explicit-policy / platform denials in the persistent banner
       // so the reason stays visible after the dialog closes.
-      policyDenial.capture(error, "Installing this skill");
+      policyDenial.capture(error, t("companySkills.actionInstallingSkill"));
     },
   });
   const createFolder = useMutation({
@@ -4730,21 +4731,21 @@ export function CompanySkills() {
         } catch (moveError) {
           pushToast({
             tone: "error",
-            title: "Folder created, move failed",
-            body: moveError instanceof Error ? moveError.message : "Failed to move the selected skills.",
+            title: t("routines.folderCreatedMoveFailed"),
+            body: moveError instanceof Error ? moveError.message : t("skills.failedToMoveTheSelected"),
           });
           return;
         }
       } else {
         setFolderSelection(folder.id);
       }
-      pushToast({ tone: "success", title: "Folder created", body: folder.name });
+      pushToast({ tone: "success", title: t("routines.folderCreated"), body: folder.name });
     },
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder save failed",
-        body: error instanceof Error ? error.message : "Failed to save folder.",
+        title: t("routines.folderSaveFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToSaveFolder"),
       });
     },
   });
@@ -4759,8 +4760,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder save failed",
-        body: error instanceof Error ? error.message : "Failed to update folder.",
+        title: t("routines.folderSaveFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToUpdateFolder"),
       });
     },
   });
@@ -4772,15 +4773,15 @@ export function CompanySkills() {
       setFolderSelection(folder.id);
       pushToast({
         tone: "success",
-        title: "Folder moved",
+        title: t("skills.folderMoved"),
         body: skillFolderPathDisplayFallback(folder.path) ?? folder.name,
       });
     },
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder move failed",
-        body: error instanceof Error ? error.message : "Failed to move folder.",
+        title: t("skills.folderMoveFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToMoveFolder"),
       });
     },
   });
@@ -4793,13 +4794,13 @@ export function CompanySkills() {
         queryClient.invalidateQueries({ queryKey: queryKeys.companySkills.list(selectedCompanyId!) }),
         queryClient.invalidateQueries({ queryKey: queryKeys.folders.list(selectedCompanyId!, "skill") }),
       ]);
-      pushToast({ tone: "success", title: "Folder deleted", body: "Skills moved to Unfiled." });
+      pushToast({ tone: "success", title: t("routines.folderDeleted"), body: t("skills.skillsMovedToUnfiled") });
     },
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder delete failed",
-        body: error instanceof Error ? error.message : "Failed to delete folder.",
+        title: t("routines.folderDeleteFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToDeleteFolder"),
       });
     },
   });
@@ -4815,8 +4816,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Move failed",
-        body: error instanceof Error ? error.message : "Failed to move skill.",
+        title: t("routines.moveFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToMoveSkill"),
       });
     },
   });
@@ -4836,8 +4837,8 @@ export function CompanySkills() {
     } catch (moveError) {
       pushToast({
         tone: "error",
-        title: "Failed to move skills",
-        body: moveError instanceof Error ? moveError.message : "Failed to move the selected skills.",
+        title: t("skills.failedToMoveSkills"),
+        body: moveError instanceof Error ? moveError.message : t("skills.failedToMoveTheSelected"),
       });
     }
   }
@@ -4852,8 +4853,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Couldn't open My Skills",
-        body: error instanceof Error ? error.message : "Failed to create your personal folder.",
+        title: t("skills.couldnTOpenMySkills"),
+        body: error instanceof Error ? error.message : t("skills.failedToCreateYourPersonal"),
       });
     },
   });
@@ -4911,8 +4912,8 @@ export function CompanySkills() {
     } catch (error) {
       pushToast({
         tone: "error",
-        title: "Folder create failed",
-        body: error instanceof Error ? error.message : "Failed to create folder.",
+        title: t("skills.folderCreateFailed"),
+        body: error instanceof Error ? error.message : t("skills.failedToCreateFolder"),
       });
       return null;
     }
@@ -4939,13 +4940,13 @@ export function CompanySkills() {
         title: ids.length === 1 ? "Skill moved" : "Skills moved",
         body: folderId
           ? `Filed under ${skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder"}.`
-          : "Moved to Unfiled.",
+          : t("companySkills.movedToUnfiled"),
       });
     } catch (moveError) {
       pushToast({
         tone: "error",
-        title: "Move failed",
-        body: moveError instanceof Error ? moveError.message : "Failed to move.",
+        title: t("routines.moveFailed"),
+        body: moveError instanceof Error ? moveError.message : t("skills.failedToMove"),
       });
     }
   }
@@ -5012,9 +5013,9 @@ export function CompanySkills() {
         }
         await attachAgentsMutation.mutateAsync({ agentId, desiredSkills: currentEntries });
       }
-      pushToast({ tone: "success", title: "Agents updated", body: `${nextAgentIds.length} agent(s) attached.` });
+      pushToast({ tone: "success", title: t("skills.agentsUpdated"), body: `${nextAgentIds.length} agent(s) attached.` });
     } catch (error) {
-      pushToast({ tone: "error", title: "Update failed", body: error instanceof Error ? error.message : "Failed to update agent skills." });
+      pushToast({ tone: "error", title: t("skills.updateFailed"), body: error instanceof Error ? error.message : t("skills.failedToUpdateAgentSkills") });
     }
   }
 
@@ -5064,12 +5065,12 @@ export function CompanySkills() {
       navigate("/skills", { replace: true });
       pushToast({
         tone: "success",
-        title: "Skill removed",
+        title: t("skills.skillRemoved"),
         body: `${skill.name} was removed from the company skill library.`,
       });
     },
     onError: (error) => {
-      reportSkillError(error, "Remove failed", "Failed to remove skill.", "Removing this skill");
+      reportSkillError(error, "Remove failed", t("companySkills.failedToRemoveSkill"), t("companySkills.actionRemovingSkill"));
     },
   });
 
@@ -5109,7 +5110,7 @@ export function CompanySkills() {
   );
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={Boxes} message="Select a company to manage skills." />;
+    return <EmptyState icon={Boxes} message={t("skills.selectCompanyToManageSkills")} />;
   }
 
   function handleAddSkillSource() {
@@ -5147,10 +5148,10 @@ export function CompanySkills() {
     ? (catalogListQuery.data ?? []).find((entry) => entry.key === activeDetail.key)?.source ?? null
     : null;
   const studioBackHref = studioForkDetailQuery.data ? routeForSkill(studioForkDetailQuery.data) : "/skills";
-  const studioTitle = studioForkFromId ? "Fork skill" : "Create a new skill";
+  const studioTitle = studioForkFromId ? "Fork skill" : t("skillStudio.createANewSkill");
   const studioDescription = studioForkFromId
-    ? "Review the fork metadata and create an editable company copy."
-    : "Create an editable company skill in the Paperclip workspace.";
+    ? t("skills.reviewForkMetadata")
+    : t("skills.createEditableCompanySkill");
   return (
     <>
       {policyDenial.denial ? (
@@ -5161,7 +5162,7 @@ export function CompanySkills() {
       <Dialog open={deleteOpen} onOpenChange={closeDeleteDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Remove skill</DialogTitle>
+            <DialogTitle>{t("skills.removeSkill")}</DialogTitle>
             <DialogDescription>
               Remove this skill from the company library. If any agents still use it, removal will be blocked until it is detached.
             </DialogDescription>
@@ -5170,7 +5171,7 @@ export function CompanySkills() {
             <p>
               {deleteTargetDetail
                 ? `You are about to remove ${deleteTargetDetail.name}.`
-                : "You are about to remove this skill."}
+                : t("companySkills.youAreAboutToRemove2")}
             </p>
             {deleteTargetDetail?.usedByAgents?.length ? (
               <div className="rounded-md border border-border px-3 py-3 text-muted-foreground">
@@ -5209,7 +5210,7 @@ export function CompanySkills() {
       <Dialog open={emptySourceHelpOpen} onOpenChange={setEmptySourceHelpOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add a skill source</DialogTitle>
+            <DialogTitle>{t("skills.addASkillSource")}</DialogTitle>
             <DialogDescription>
               Paste a local path, GitHub URL, or `skills.sh` command into the field first.
             </DialogDescription>
@@ -5222,7 +5223,7 @@ export function CompanySkills() {
               className="flex items-start justify-between rounded-md border border-border px-3 py-3 text-foreground no-underline transition-colors hover:bg-accent/40"
             >
               <span>
-                <span className="block font-medium">Browse skills.sh</span>
+                <span className="block font-medium">{t("skills.browseSkillsSh")}</span>
                 <span className="mt-1 block text-muted-foreground">
                   Find install commands and paste one here.
                 </span>
@@ -5275,7 +5276,7 @@ export function CompanySkills() {
       <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Import a skill</DialogTitle>
+            <DialogTitle>{t("skills.importASkill")}</DialogTitle>
             <DialogDescription>
               Paste a local path, GitHub URL, or `skills.sh` command to import a skill into this company.
             </DialogDescription>
@@ -5285,7 +5286,7 @@ export function CompanySkills() {
               <Input
                 value={source}
                 onChange={(event) => setSource(event.target.value)}
-                placeholder="Paste path, GitHub URL, or skills.sh command"
+                placeholder={t("skills.pastePathGithubUrlOr")}
                 className="h-9 rounded-none border-0 px-0 shadow-none focus-visible:ring-0"
               />
               <Button size="sm" onClick={handleAddSkillSource} disabled={importSkill.isPending}>
@@ -5299,8 +5300,8 @@ export function CompanySkills() {
               className="flex items-start justify-between rounded-md border border-border px-3 py-3 text-sm text-foreground no-underline transition-colors hover:bg-accent/40"
             >
               <span>
-                <span className="block font-medium">Browse skills.sh</span>
-                <span className="mt-1 block text-muted-foreground">Find install commands and paste one here.</span>
+                <span className="block font-medium">{t("skills.browseSkillsSh")}</span>
+                <span className="mt-1 block text-muted-foreground">{t("skills.findInstallCommandsAndPaste")}</span>
               </span>
               <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
             </a>
@@ -5312,7 +5313,7 @@ export function CompanySkills() {
             >
               <span>
                 <span className="block font-medium">Search GitHub</span>
-                <span className="mt-1 block text-muted-foreground">Look for repositories with `SKILL.md`, then paste the repo URL.</span>
+                <span className="mt-1 block text-muted-foreground">{t("companySkills.lookForRepositoriesWithSkill2")}</span>
               </span>
               <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
             </a>
@@ -5373,7 +5374,7 @@ export function CompanySkills() {
           if (!open) setMoveDialog(null);
         }}
         result={railSkillFolderResult}
-        title={moveDialog?.title ?? "Move to folder"}
+        title={moveDialog?.title ?? t("companySkills.moveToFolder")}
         subtitle={moveDialog?.subtitle ?? null}
         currentFolderId={moveDialog?.currentFolderId ?? null}
         onMove={(folderId) => void performDialogMove(folderId)}
@@ -5398,7 +5399,7 @@ export function CompanySkills() {
               {studioForkFromId && studioForkDetailQuery.isLoading ? (
                 <PageSkeleton variant="detail" />
               ) : studioForkFromId && !studioForkDetailQuery.data ? (
-                <EmptyState icon={Boxes} message="Fork source skill not found." />
+                <EmptyState icon={Boxes} message={t("skills.forkSourceSkillNotFound")} />
               ) : (
                 <NewSkillWizard
                   initialDraft={studioDraft}
@@ -5451,7 +5452,7 @@ export function CompanySkills() {
             setMoveDialog({
               skillIds: [card.skillId],
               title: `Move "${card.name}"`,
-              subtitle: "Choose a destination folder.",
+              subtitle: t("skills.chooseADestinationFolder"),
               currentFolderId: card.folderId ?? null,
             });
           } : undefined}
@@ -5481,7 +5482,7 @@ export function CompanySkills() {
             moveSkillToFolder.mutate({ itemId: skillId, folderId });
             pushToast({
               tone: "success",
-              title: "Skill moved",
+              title: t("skills.skillMoved"),
               body: folderId
                 ? `Moved "${card.name}" to ${skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder"}.`
                 : `Moved "${card.name}" to Unfiled.`,
@@ -5552,7 +5553,7 @@ export function CompanySkills() {
           onMoveToFolder={activeDetail ? () => setMoveDialog({
             skillIds: [activeDetail.id],
             title: `Move "${activeDetail.name}"`,
-            subtitle: "Choose a destination folder.",
+            subtitle: t("skills.chooseADestinationFolder"),
             currentFolderId: activeDetail.folderId ?? null,
           }) : undefined}
           updateSettingsPending={updateSkillSettings.isPending}
@@ -5576,7 +5577,7 @@ export function CompanySkills() {
           {catalogListQuery.isLoading || catalogDetailQuery.isLoading ? (
             <PageSkeleton variant="detail" />
           ) : !selectedCatalogSkill ? (
-            <EmptyState icon={Boxes} message="Catalog skill not found." />
+            <EmptyState icon={Boxes} message={t("skills.catalogSkillNotFound")} />
           ) : (
             <div className="grid gap-0 xl:grid-cols-(--gtc-30)">
               <aside className="border-b border-border px-3 py-4 xl:border-b-0 xl:border-r">
@@ -5621,7 +5622,7 @@ export function CompanySkills() {
           {skillsQuery.isLoading ? (
             <PageSkeleton variant="detail" />
           ) : (
-            <EmptyState icon={Boxes} message="Skill not found." />
+            <EmptyState icon={Boxes} message={t("skills.skillNotFound")} />
           )}
         </div>
       )}
