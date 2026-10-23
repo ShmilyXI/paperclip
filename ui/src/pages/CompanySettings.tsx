@@ -289,7 +289,7 @@ export function CompanySettings() {
                         onClick={handleClearLogo}
                         disabled={clearLogoMutation.isPending}
                       >
-                        {clearLogoMutation.isPending ? "Removing..." : "Remove logo"}
+                        {clearLogoMutation.isPending ? "Removing..." : t("settings.removeLogo")}
                       </Button>
                     </div>
                   )}
@@ -402,8 +402,8 @@ export function CompanySettings() {
               {archiveMutation.isPending
                 ? "Archiving..."
                 : selectedCompany.status === "archived"
-                ? "Already archived"
-                : "Archive organization"}
+                ? t("settings.alreadyArchived")
+                : t("settings.archiveOrganization")}
             </Button>
             {archiveMutation.isError && (
               <span className="text-xs text-destructive">

@@ -169,7 +169,7 @@ export function describeDenial(code: string, fallback: string): { title: string;
   return {
     icon: <Ban aria-hidden="true" className="h-6 w-6 text-red-500" />,
     title: t("fileViewerSheet.canTPreviewThisFile"),
-    body: fallback || "The viewer was unable to load this file.",
+    body: fallback || t("fileViewerSheet.theViewerWasUnableToLoad"),
   };
 }
 
@@ -223,8 +223,8 @@ export function FileViewerMetadataRow({
             <>
               <span aria-hidden="true" className="opacity-50">·</span>
               <span>
-                Line {state.line}
-                {state.column ? `, Col ${state.column}` : ""}
+                {t("fileViewerSheet.line", { line: state.line })}
+                {state.column ? ", " + t("fileViewerSheet.col", { column: state.column }) : ""}
               </span>
             </>
           ) : null}
@@ -573,14 +573,14 @@ export function FileViewerSheet({
   useEffect(() => {
     if (resolveQuery.isError) {
       const normalized = normalizeError(resolveQuery.error);
-      setAnnouncement(normalized.message || "Unable to load file.");
+      setAnnouncement(normalized.message || t("fileViewerSheet.unableToLoadFile"));
     }
   }, [resolveQuery.isError, resolveQuery.error]);
 
   useEffect(() => {
     if (contentQuery.isError) {
       const normalized = normalizeError(contentQuery.error);
-      setAnnouncement(normalized.message || "Unable to load file content.");
+      setAnnouncement(normalized.message || t("fileViewerSheet.unableToLoadFileContent"));
     }
   }, [contentQuery.isError, contentQuery.error]);
 
@@ -662,7 +662,7 @@ export function FileViewerSheet({
       await copyTextToClipboard(value);
       showCopyFeedback(field, message);
     } catch {
-      showCopyFeedback(null, "Copy failed");
+      showCopyFeedback(null, t("fileViewerSheet.copyFailed"));
     } finally {
       setCopyingField((current) => (current === field ? null : current));
     }
@@ -677,7 +677,7 @@ export function FileViewerSheet({
         content = result.data;
       }
       if (!content) {
-        showCopyFeedback(null, "File contents unavailable");
+        showCopyFeedback(null, t("fileViewerSheet.fileContentsUnavailable"));
         return;
       }
       const message = content.content.encoding === "base64" ? t("fileViewerSheet.copiedFileData") : t("fileViewerSheet.copiedContents");

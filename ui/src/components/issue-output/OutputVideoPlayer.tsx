@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { cn } from "@/lib/utils";
 
 interface OutputVideoPlayerProps {
@@ -25,7 +26,7 @@ export function OutputVideoPlayer({ src, poster, className, title }: OutputVideo
         controls
         preload="metadata"
         playsInline
-        aria-label={title ? `Video output: ${title}` : "Video output"}
+        aria-label={title ? t("outputVideoPlayer.videoOutputWithTitle", { title }) : t("outputVideoPlayer.videoOutput")}
         className="absolute inset-0 h-full w-full"
       />
     </div>

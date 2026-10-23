@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { IssueDocument } from "@paperclipai/shared";
 import { Lightbulb, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,7 +15,7 @@ export function planPreviewContent(markdown: string) {
   const headingIndex = lines.findIndex((line) => /^#\s+/.test(line));
   const title = headingIndex >= 0
     ? lines[headingIndex]!.replace(/^#\s+/, "").trim()
-    : "Plan";
+    : t("taskChatPlanPreviewCard.plan");
   const preview = lines
     .filter((line, index) => index !== headingIndex && !/^(```|~~~|---+$|\*\*\*+$|___+$)/.test(line))
     .map((line) => line
@@ -55,7 +56,7 @@ export interface TaskChatPlanPreviewCardProps {
 function livePlanContent(activity: TaskChatProviderActivityItem) {
   const title = activity.title.trim() && activity.title.trim().toLowerCase() !== "plan"
     ? activity.title.trim()
-    : "Plan";
+    : t("taskChatPlanPreviewCard.plan");
   const preview = activity.steps
     .map((step) => step.label.trim())
     .filter(Boolean)
@@ -88,7 +89,7 @@ export function TaskChatPlanPreviewCard({
   const content = source.kind === "saved" && source.document
     ? planPreviewContent(source.document.body)
     : source.kind === "saved"
-      ? { title: source.fallbackTitle?.trim() || "Plan", preview: [] as string[] }
+      ? { title: source.fallbackTitle?.trim() || t("taskChatPlanPreviewCard.plan"), preview: [] as string[] }
       : livePlanContent(source.activity);
   const live = source.kind === "live";
   const headerDetail = revision == null
@@ -102,7 +103,7 @@ export function TaskChatPlanPreviewCard({
           className={cn("h-4 w-4 shrink-0", live && "text-(--status-agent-running)")}
         />
         <span className={cn("font-medium", live && shimmer && "shimmer-text shimmer-text-muted")} data-testid={live ? "task-chat-plan-streaming-status" : undefined}>
-          {live ? "Writing plan" : "Plan"}
+          {live ? t("taskChatPlanPreviewCard.writingPlan") : t("taskChatPlanPreviewCard.plan")}
         </span>
         {headerDetail ? (
           <span
@@ -131,7 +132,7 @@ export function TaskChatPlanPreviewCard({
           </ul>
         ) : (
           <p className="mt-1 text-sm text-muted-foreground">
-            {live ? "Waiting for the first plan step…" : "Open the synchronized plan to review it."}
+            {live ? t("taskChatPlanPreviewCard.waitingForTheFirstPlan") : t("taskChatPlanPreviewCard.openTheSynchronizedPlanTo")}
           </p>
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-b from-transparent to-card/95" />
@@ -159,7 +160,7 @@ export function TaskChatPlanPreviewCard({
 
   return (
     <section
-      aria-label={ariaLabel ?? "Streaming Plan preview"}
+      aria-label={ariaLabel ?? t("taskChatPlanPreviewCard.streamingPlanPreview")}
       data-testid={testId}
       className={sharedClassName}
     >

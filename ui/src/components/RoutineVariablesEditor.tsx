@@ -86,7 +86,8 @@ export function RoutineVariablesEditor({
         <div>
           <p className="text-sm font-medium">{t("routineVariablesEditor.variables")}</p>
           <p className="text-xs text-muted-foreground">
-            Detected from `{"{{name}}"}` placeholders in the title and instructions.
+            {t("routineVariablesEditor.detectedFrom")} <code>{"{{name}}"}</code>{" "}
+            {t("routineVariablesEditor.placeholdersSuffix")}
           </p>
         </div>
         {open ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}

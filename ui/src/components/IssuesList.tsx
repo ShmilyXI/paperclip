@@ -503,6 +503,7 @@ interface IssuesListProps {
   hasMoreIssues?: boolean;
   isLoadingMoreIssues?: boolean;
   mutedIssueIds?: Set<string>;
+  /** Stable badge codes ("paused"); the row renders the display text via t(). */
   issueBadgeById?: Map<string, string>;
   onLoadMoreIssues?: () => void;
   onSearchChange?: (search: string) => void;
@@ -1967,7 +1968,7 @@ function StreamlinedIssuesList({
                 <div className="p-2 space-y-0.5">
                   {/* PAP-411: "priority" sort option hidden behind SHOW_TASK_PRIORITY_UI (comparator stays dormant). */}
                   {([
-                    ["workflow", "Workflow"],
+                    ["workflow", t("issuesList.workflow")],
                     ["status", t("common.status")],
                     ["priority", t("common.priority")],
                     ["title", t("common.title")],
@@ -2016,10 +2017,10 @@ function StreamlinedIssuesList({
                   {([
                     ["status", t("common.status")],
                     ["priority", t("common.priority")],
-                    ["assignee", "Responsible"],
+                    ["assignee", t("issuesList.responsible")],
                     ["project", t("common.project")],
                     ["workspace", t("common.workspace")],
-                    ["parent", "Parent Task"],
+                    ["parent", t("issuesList.parentTask")],
                     ["none", t("common.none")],
                   ] as const)
                     .filter(([value]) => SHOW_TASK_PRIORITY_UI || value !== "priority")
@@ -2047,12 +2048,12 @@ function StreamlinedIssuesList({
       {error && <p className="text-sm text-destructive">{error.message}</p>}
       {!searchWithinLoadedIssues && normalizedIssueSearch.length > 0 && searchedIssues.length === ISSUE_SEARCH_RESULT_LIMIT && (
         <p className="text-xs text-muted-foreground">
-          Showing up to {ISSUE_SEARCH_RESULT_LIMIT} matches. Refine the search to narrow further.
+          {t("issuesList.showingUpToMatches", { limit: ISSUE_SEARCH_RESULT_LIMIT })}
         </p>
       )}
       {boardColumnLimitReached && (
         <p className="text-xs text-muted-foreground">
-          Some board columns are showing up to {ISSUE_BOARD_COLUMN_RESULT_LIMIT} tasks. Refine filters or search to reveal the rest.
+          {t("issuesList.someBoardColumnsShowingUpTo", { limit: ISSUE_BOARD_COLUMN_RESULT_LIMIT })}
         </p>
       )}
       {hierarchy.error ? <p className="text-sm text-destructive">{t("issuesList.failedToLoadTaskHierarchy")} {hierarchy.error.message}</p> : null}
@@ -2252,11 +2253,11 @@ function StreamlinedIssuesList({
                           <>
                             {hasChildren && !isExpanded ? (
                               <span className="ml-1.5 text-xs text-muted-foreground">
-                                ({totalDescendants} sub-task{totalDescendants !== 1 ? "s" : ""})
+                                ({t("issuesList.subTaskCount", { count: totalDescendants })})
                               </span>
                             ) : null}
                             {issueBadge ? (
-                              issueBadge === "Paused" ? (
+                              issueBadge === "paused" ? (
                                 <Badge variant="ghost"
                                   className={cn("ml-1.5 px-1.5 text-(length:--text-nano)", statusBadge.paused)}
                                   aria-label={t("common.paused")}

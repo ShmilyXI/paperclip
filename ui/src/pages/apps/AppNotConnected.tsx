@@ -149,13 +149,13 @@ export function AppNotConnected() {
       )
       : grantsQuery.data?.capabilities.canConfigure === true);
   const reconnectUnavailableMessage = grantsQuery.isLoading
-    ? "Checking who can reconnect this identity…"
+    ? t("appNotConnected.checkingWhoCanReconnectThis")
     : grantsQuery.isError
-      ? "We couldn't verify who can reconnect this identity. Reload the page to try again."
+      ? t("appNotConnected.weCouldnTVerifyWho")
       : previousConnection?.credentialPolicy === "per_user"
         && retainedPersonalUserId !== grantsQuery.data?.currentUserId
-        ? "The person this connection belongs to must reconnect it."
-        : "You don't have permission to reconnect this identity.";
+        ? t("appNotConnected.thePersonThisConnectionBelongs")
+        : t("appNotConnected.youDonTHavePermission");
   const connectHref = newConnectionHref({
     applicationId,
     appName: application.name,
@@ -218,7 +218,7 @@ function ApplicationHeader({
         <div className="flex items-center gap-2">
           <h1 className="truncate text-2xl font-bold tracking-tight">{applicationName}</h1>
           <span className="inline-flex items-center rounded-full border border-border bg-background px-2 py-0.5 text-xs font-medium text-muted-foreground">
-            {connectedCount > 0 ? `${connectedCount} connected` : "Not connected"}
+            {connectedCount > 0 ? t("appNotConnected.connectedcountConnected", { connectedCount }) : t("appNotConnected.notConnected")}
           </span>
         </div>
         {description && (
@@ -246,14 +246,14 @@ function ConnectionCallout({
     <section className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border px-4 py-3">
       <div>
         <h2 className="text-sm font-semibold text-foreground">
-          {previousConnection ? "Needs attention" : "Not connected"}
+          {previousConnection ? t("appNotConnected.needsAttention") : t("appNotConnected.notConnected")}
         </h2>
         <p className="mt-0.5 text-sm text-muted-foreground">
           {previousConnection
             ? previousConnection.authKind === "oauth"
-              ? `Sign in to ${applicationName} again to restore access.`
-              : `Add a working ${applicationName} key to restore access.`
-            : `Connect ${applicationName} so agents can use it.`}
+              ? t("appNotConnected.signInToApplicationnameAgain", { applicationName })
+              : t("appNotConnected.addAWorkingApplicationnameKey", { applicationName })
+            : t("appNotConnected.connectApplicationnameSoAgentsCan", { applicationName })}
         </p>
         {previousConnection && !canReconnect ? (
           <p className="mt-1 text-sm text-muted-foreground">{reconnectUnavailableMessage}</p>

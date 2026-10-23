@@ -262,7 +262,7 @@ export function getConfiguredRuntimeServicePortWarnings(services: ConfiguredRunt
   return Array.from(servicesByPort.entries())
     .filter(([, servicesForPort]) => servicesForPort.length > 1)
     .map(([port, servicesForPort]) =>
-      `Port ${port} is assigned to multiple services: ${servicesForPort.map((service) => service.name).join(", ")}.`,
+      t("execWorkspace.portIsAssignedToMultipleServices", { port, services: servicesForPort.map((service) => service.name).join(", ") }),
     );
 }
 
@@ -330,7 +330,7 @@ function validateForm(form: WorkspaceFormState) {
     try {
       new URL(repoUrl);
     } catch {
-      return "Repo URL must be a valid URL.";
+      return t("execWorkspace.repoUrlMustBeValidUrl");
     }
   }
 
@@ -340,7 +340,7 @@ function validateForm(form: WorkspaceFormState) {
       return runtimeJson.error;
     }
     const invalidPort = readConfiguredRuntimeServicePorts(runtimeJson.value).find((service) => service.invalidPort);
-    if (invalidPort) return `${invalidPort.name} has an invalid fixed port.`;
+    if (invalidPort) return t("execWorkspace.hasInvalidFixedPort", { name: invalidPort.name });
   }
 
   return null;
@@ -369,21 +369,21 @@ function Field({
 function workspaceOperationPhaseLabel(phase: string) {
   switch (phase) {
     case "worktree_prepare":
-      return "Worktree setup";
+      return t("workspaceOperations.worktreeSetup");
     case "workspace_config_freshness":
-      return "Config freshness";
+      return t("workspaceOperations.configFreshness");
     case "workspace_provision":
-      return "Provision";
+      return t("workspaceOperations.provision");
     case "workspace_seed":
-      return "Database seed";
+      return t("workspaceOperations.databaseSeed");
     case "workspace_runtime_provision":
-      return "Runtime provision";
+      return t("workspaceOperations.runtimeProvision");
     case "workspace_teardown":
-      return "Teardown";
+      return t("workspaceOperations.teardown");
     case "worktree_cleanup":
-      return "Worktree cleanup";
+      return t("workspaceOperations.worktreeCleanup");
     case "workspace_finalize":
-      return "Finalize";
+      return t("workspaceOperations.finalize");
     default:
       return phase;
   }
@@ -469,14 +469,14 @@ export function RuntimeProvisionStatusValue({
   if (status.kind === "provisioned") {
     return (
       <StatusPill className="border-emerald-500/40 text-emerald-600 dark:text-emerald-400">
-        Provisioned{status.at ? ` · ${formatDateTime(status.at)}` : ""}
+        {t("execWorkspace.provisioned")}{status.at ? ` · ${formatDateTime(status.at)}` : ""}
       </StatusPill>
     );
   }
   return (
     <div className="flex flex-col gap-1">
       <StatusPill className="border-destructive/50 text-destructive">
-        Provisioning failed{status.at ? ` · ${formatDateTime(status.at)}` : ""}
+        {t("execWorkspace.provisioningFailed")}{status.at ? ` · ${formatDateTime(status.at)}` : ""}
       </StatusPill>
       <button type="button" onClick={onViewLogs} className="self-start text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground">
         {t("execWorkspace.viewRuntimeLogs")}
@@ -619,7 +619,7 @@ function WorkspaceRoutineRow({
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span>{routine.assigneeAgentId ? t("execWorkspace.defaultAgentSet") : t("execWorkspace.chooseAgentWhenRunning")}</span>
-          <span>Last run {formatOptionalDateTime(routine.lastRun?.triggeredAt ?? routine.lastTriggeredAt)}</span>
+          <span>{t("common.lastRun")} {formatOptionalDateTime(routine.lastRun?.triggeredAt ?? routine.lastTriggeredAt)}</span>
           <span className="flex flex-wrap gap-1">
             {variableNames.map((name) => (
               <span key={name} className="rounded-sm bg-muted px-1.5 py-0.5 font-mono text-(length:--text-micro) text-muted-foreground">
@@ -1106,7 +1106,7 @@ export function ExecutionWorkspaceDetail() {
                 ? t("execWorkspace.noServicesHaveBeenStarted")
                 : t("execWorkspace.noWorkspaceCommandConfigIs")
             }
-            jobEmptyMessage="No one-shot jobs are configured for this execution workspace yet."
+            jobEmptyMessage={t("execWorkspace.noOneShotJobsConfigured")}
             disabledHint={
               canStartRuntimeServices
                 ? null
@@ -1399,7 +1399,7 @@ export function ExecutionWorkspaceDetail() {
               <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Button className="w-full sm:w-auto" disabled={!isDirty || updateWorkspace.isPending} onClick={saveChanges}>
                   {updateWorkspace.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Save changes
+                  {t("common.saveChanges")}
                 </Button>
                 <Button
                   variant="outline"
@@ -1594,7 +1594,7 @@ export function ExecutionWorkspaceDetail() {
         ) : isExecutionWorkspacePluginTab(activeTab) ? (
           <MissingPluginTabPlaceholder
             defaultTabHref={executionWorkspaceTabPath(workspace.id, "issues")}
-            defaultTabLabel="Back to tasks"
+            defaultTabLabel={t("execWorkspace.backToTasks")}
           />
         ) : activeTab === "routines" ? (
           <ExecutionWorkspaceRoutinesList

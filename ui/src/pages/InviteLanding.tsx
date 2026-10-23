@@ -295,7 +295,7 @@ export function InviteLandingPage() {
     Boolean(invite?.companyId) &&
     companyList.some((company) => company.id === invite?.companyId);
   const companyName = invite?.companyName?.trim() || null;
-  const companyDisplayName = companyName || "this Paperclip company";
+  const companyDisplayName = companyName || t("inviteLanding.thisPaperclipCompany");
   const companyLogoUrl = invite?.companyLogoUrl?.trim() || null;
   const invitedByUserName = invite?.invitedByUserName?.trim() || null;
   const inviteMessage = invite?.inviteMessage?.trim() || null;
@@ -430,9 +430,9 @@ export function InviteLandingPage() {
 
   const joinButtonLabel = useMemo(() => {
     if (!invite) return t("common.continue");
-    if (isCurrentMember) return "Open organization";
+    if (isCurrentMember) return t("inviteLanding.openOrganization");
     if (invite.inviteType === "bootstrap_ceo") return t("inviteLanding.acceptInvite");
-    if (showsAgentForm) return "Submit request";
+    if (showsAgentForm) return t("inviteLanding.submitRequest");
     return sessionQuery.data ? t("inviteLanding.acceptInvite") : t("common.continue");
   }, [invite, isCurrentMember, sessionQuery.data, showsAgentForm]);
 
@@ -621,7 +621,7 @@ export function InviteLandingPage() {
                 <div>
                   <h2 className="text-lg font-semibold">{t("inviteLanding.submitAgentDetails")}</h2>
                   <p className="mt-1 text-sm text-zinc-400">
-                    This invite will create an approval request for a new agent in {companyDisplayName}.
+                    {t("inviteLanding.thisInviteWillCreate", { company: companyDisplayName })}
                   </p>
                 </div>
                 <label className="block text-sm">

@@ -691,7 +691,7 @@ export function WhatNeedsMe() {
               onToggle={() => setAgingOpen((prev) => !prev)}
             >
               <p className="text-xs text-muted-foreground">
-                Idle past {ATTENTION_AGING_DAYS} days — kept off the desk. Keep any you still want surfaced.
+                {t("whatNeedsMe.idlePastDays", { days: ATTENTION_AGING_DAYS })}
               </p>
               {agingItems.map((item) => (
                 <AgingItemRow
@@ -800,7 +800,7 @@ export function DecisionBundleHeader({
         </span>
       )}
       {title && <span className="text-muted-foreground">· {title}</span>}
-      <span className="text-muted-foreground">· {count} pending</span>
+      <span className="text-muted-foreground">{t("whatNeedsMe.pendingCount", { count })}</span>
     </div>
   );
 }

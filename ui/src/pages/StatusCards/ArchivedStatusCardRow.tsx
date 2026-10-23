@@ -35,9 +35,12 @@ export function ArchivedStatusCardRow({
   return (
     <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-muted/30 px-4 py-3">
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold">{card.title ?? "Untitled card"}</p>
+        <p className="truncate text-sm font-semibold">{card.title ?? t("statusCardsIndex.untitledCard")}</p>
         <p className="mt-0.5 text-xs text-muted-foreground" title={card.archivedAt ? formatDateTime(card.archivedAt) : undefined}>
-          archived {shortDate(card.archivedAt)} · last summary {shortDate(card.lastGeneratedAt)}
+          {t("statusCardsIndex.archivedSummary", {
+            archived: shortDate(card.archivedAt),
+            lastSummary: shortDate(card.lastGeneratedAt),
+          })}
           {rollup ? ` · lifetime ${formatTokens(rollup.totalTokens)} / ${formatCents(rollup.totalCostCents)}` : ""}
         </p>
       </div>
@@ -50,7 +53,7 @@ export function ArchivedStatusCardRow({
         </Button>
         <Button variant="outline" size="sm" onClick={onRestore} disabled={restorePending}>
           {restorePending ? <Loader2 className="animate-spin" /> : null}
-          Restore
+          {t("statusCardsIndex.restore")}
         </Button>
       </div>
     </div>

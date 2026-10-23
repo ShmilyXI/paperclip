@@ -618,12 +618,12 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
     }
 
     if (entry.kind === "runtime_request") {
-      blocks.push({ type: "event", ts: entry.ts, label: `runtime ${entry.requestType}`, tone: entry.status === "pending" ? "warn" : "info", text: entry.prompt, detail: entry.status });
+      blocks.push({ type: "event", ts: entry.ts, label: t("runTranscriptView.runtimeRequesttype", { requestType: entry.requestType }), tone: entry.status === "pending" ? "warn" : "info", text: entry.prompt, detail: entry.status });
       continue;
     }
 
     if (entry.kind === "run_result") {
-      blocks.push({ type: "event", ts: entry.ts, label: `result · ${entry.disposition}`, tone: entry.disposition === "blocked" ? "warn" : "info", text: entry.summary });
+      blocks.push({ type: "event", ts: entry.ts, label: t("runTranscriptView.resultDisposition", { disposition: entry.disposition }), tone: entry.disposition === "blocked" ? "warn" : "info", text: entry.summary });
       continue;
     }
 
@@ -692,7 +692,9 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
         ts: entry.ts,
         label: "init",
         tone: "info",
-        text: `model ${entry.model}${entry.sessionId ? ` • session ${entry.sessionId}` : ""}`,
+        text:
+          t("runTranscriptView.modelLine", { model: entry.model }) +
+          (entry.sessionId ? t("runTranscriptView.sessionSuffix", { session: entry.sessionId }) : ""),
       });
       continue;
     }
@@ -1403,7 +1405,7 @@ function TranscriptToolGroup({
               </div>
               <div className={cn("grid gap-2 pl-7", compact ? "grid-cols-1" : "lg:grid-cols-2")}>
                 <div>
-                  <div className="mb-0.5 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">Input</div>
+                  <div className="mb-0.5 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">{t("runTranscriptView.input")}</div>
                   <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-(length:--text-micro) text-foreground/80">
                     {formatToolPayload(item.input) || "<empty>"}
                   </pre>
@@ -1633,7 +1635,9 @@ function TranscriptStderrGroup({
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((v) => !v); } }}
       >
         <span className={cn("text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow)")}>
-          {block.lines.length} log {block.lines.length === 1 ? "line" : "lines"}
+          {block.lines.length === 1
+            ? t("runTranscriptView.logLine", { count: block.lines.length })
+            : t("runTranscriptView.logLines", { count: block.lines.length })}
         </span>
         {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
       </div>
@@ -1670,7 +1674,9 @@ function TranscriptSystemGroup({
       >
         <TerminalSquare className="h-3.5 w-3.5 shrink-0" />
         <span className="text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow)">
-          {block.lines.length} system {block.lines.length === 1 ? "message" : "messages"}
+          {block.lines.length === 1
+            ? t("runTranscriptView.systemMessage", { count: block.lines.length })
+            : t("runTranscriptView.systemMessages", { count: block.lines.length })}
         </span>
         {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
       </div>
@@ -1853,7 +1859,7 @@ export function RunTranscriptView({
   limit,
   streaming = false,
   collapseStdout = false,
-  emptyMessage = "No transcript yet.",
+  emptyMessage = t("runTranscriptView.noTranscriptYet"),
   className,
   thinkingClassName,
   externalReferences,

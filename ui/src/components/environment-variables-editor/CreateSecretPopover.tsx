@@ -46,9 +46,9 @@ export function SecretPopoverForm({
   const trimmedName = name.trim();
   const nameError = (() => {
     if (!trimmedName) return touched ? t("common.nameIsRequired") : null;
-    if (!SECRET_NAME_RE.test(trimmedName)) return "Use lowercase letters, digits and _";
+    if (!SECRET_NAME_RE.test(trimmedName)) return t("createSecretPopover.useLowercaseLettersDigitsAnd");
     if (existingSecretNames?.some((existing) => existing.toLowerCase() === trimmedName)) {
-      return "A secret with this name already exists";
+      return t("createSecretPopover.aSecretWithThisName");
     }
     return null;
   })();

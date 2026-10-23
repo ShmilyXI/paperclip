@@ -419,7 +419,7 @@ export function ChoosePathButton() {
               <p className="font-medium">{t("agentConfigPrimitives.windowsFileExplorer")}</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
                 <li>{t("agentConfigPrimitives.findTheFolderInFile")}</li>
-                <li>Hold <kbd>Shift</kbd> and right-click the folder.</li>
+                <li>{t("agentConfigPrimitives.hold")} <kbd>Shift</kbd> {t("agentConfigPrimitives.andRightClickTheFolder")}</li>
                 <li>{t("agentConfigPrimitives.clickCopyAsPath")}</li>
                 <li>{t("agentConfigPrimitives.pasteTheResultIntoThe")}</li>
               </ol>

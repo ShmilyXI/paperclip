@@ -81,17 +81,17 @@ export function EmailMessageCard({
           )}
         </p>
         <p className="break-words text-xs text-muted-foreground">
-          To: {message.to.join(", ")}
+          {t("emailMessageCard.toRecipients", { recipients: message.to.join(", ") })}
         </p>
         {!!message.cc?.length && (
           <p className="break-words text-xs text-muted-foreground">
-            Cc: {message.cc.join(", ")}
+            {t("emailMessageCard.ccRecipients", { recipients: message.cc.join(", ") })}
           </p>
         )}
         <p className="text-sm font-semibold">{message.subject}</p>
       </div>
       <div className="whitespace-pre-wrap break-words text-sm">
-        {message.text || "(No text body)"}
+        {message.text || t("emailMessageCard.noTextBody")}
       </div>
       {!!message.attachmentIds.length && (
         <div className="flex flex-wrap gap-2">

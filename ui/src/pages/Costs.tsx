@@ -145,7 +145,7 @@ function FinanceSummaryCard({
         <MetricTile
           label={t("costs.debits")}
           value={formatCents(debitCents)}
-          subtitle={`${eventCount} total event${eventCount === 1 ? "" : "s"} in range`}
+          subtitle={t("costs.totalEventsInRange", { count: eventCount })}
           icon={ArrowUpRight}
         />
         <MetricTile
@@ -612,7 +612,7 @@ export function Costs({
       )}
       {museUsageUnavailable && (
         <p role="status" className="text-sm text-muted-foreground">
-          {scopedAgent.name}'s Muse activity has no reported usage or cost. Totals below show recorded organization charges only. Paperclip cannot enforce a Muse spend ceiling.
+          {t("costs.museActivityHasNoReportedUsage", { name: scopedAgent.name })}
         </p>
       )}
       {showSummaryChrome ? (
@@ -671,7 +671,7 @@ export function Costs({
               subtitle={subscriptions ? <div className="space-y-1">
                 <CostEstimateLabel eventCount={subscriptions.api.eventCount} estimatedEventCount={subscriptions.api.estimatedEventCount} />
                 <div><SubscriptionTokenUsage usage={subscriptions.api} /></div>
-              </div> : subscriptionError ? "API usage is unavailable" : "API usage is loading"}
+              </div> : subscriptionError ? t("costs.apiUsageIsUnavailable") : t("costs.apiUsageIsLoading")}
               icon={DollarSign}
             />
             <SubscriptionCostCard key={companyId} companyId={companyId} report={subscriptions} error={subscriptionError} onChanged={invalidateSubscriptions} />
@@ -684,10 +684,10 @@ export function Costs({
               )}
               subtitle={
                 activeBudgetIncidents.length > 0
-                  ? `${budgetData?.pausedAgentCount ?? 0} agents paused · ${budgetData?.pausedProjectCount ?? 0} projects paused`
+                  ? `${t("costs.agentsPaused", { count: budgetData?.pausedAgentCount ?? 0 })} · ${t("costs.projectsPaused", { count: budgetData?.pausedProjectCount ?? 0 })}`
                   : spendData?.summary.budgetCents && spendData.summary.budgetCents > 0
-                    ? preset === "mtd" ? `${formatCents(spendData.summary.spendCents)} of ${formatCents(spendData.summary.budgetCents)} this month` : "Monthly limit"
-                    : "No monthly cap configured"
+                    ? preset === "mtd" ? t("costs.ofThisMonth", { spend: formatCents(spendData.summary.spendCents), budget: formatCents(spendData.summary.budgetCents) }) : t("costs.monthlyLimit")
+                    : t("costs.noMonthlyCapConfigured")
               }
               icon={Coins}
             />
@@ -699,18 +699,18 @@ export function Costs({
                   <span className="block whitespace-nowrap">{formatCents(financeData.summary.debitCents)} debits</span>
                   <span className="block whitespace-nowrap">{formatCents(financeData.summary.creditCents)} credits</span>
                 </>
-              ) : "Financial data unavailable"}
+              ) : t("costs.financialDataUnavailable")}
               icon={ReceiptText}
             />
             <MetricTile
               label={t("costs.financeEvents")}
               value={financeData ? String(financeData.summary.eventCount) : "—"}
-              subtitle={financeData ? `${formatCents(financeData.summary.estimatedDebitCents)} estimated in range` : "Financial data unavailable"}
+              subtitle={financeData ? t("costs.estimatedInRange", { amount: formatCents(financeData.summary.estimatedDebitCents) }) : t("costs.financialDataUnavailable")}
               icon={ArrowUpRight}
             />
           </div>
-          {subscriptions && Number(subscriptions.subscription.costCents) > 0 && <p className="text-sm text-muted-foreground">Subscription accounts also have {formatCents(Number(subscriptions.subscription.costCents))} in recorded usage charges for this period, separate from monthly fees.</p>}
-          {subscriptions && subscriptions.unknown.eventCount > 0 && <p className="text-sm text-muted-foreground">Other billing usage: {formatTokens(subscriptions.unknown.inputTokens + subscriptions.unknown.cachedInputTokens + subscriptions.unknown.outputTokens)} tokens{Number(subscriptions.unknown.costCents) > 0 ? ` · ${formatCents(Number(subscriptions.unknown.costCents))} in recorded charges` : ""}, included in the inference ledger.</p>}
+          {subscriptions && Number(subscriptions.subscription.costCents) > 0 && <p className="text-sm text-muted-foreground">{t("costs.subscriptionAccountsAlsoHave")} {formatCents(Number(subscriptions.subscription.costCents))} {t("costs.inRecordedUsageChargesFor")}</p>}
+          {subscriptions && subscriptions.unknown.eventCount > 0 && <p className="text-sm text-muted-foreground">{t("costs.otherBillingUsage")} {formatTokens(subscriptions.unknown.inputTokens + subscriptions.unknown.cachedInputTokens + subscriptions.unknown.outputTokens)}{t("costs.tokensSuffix")}{Number(subscriptions.unknown.costCents) > 0 ? t("costs.inRecordedCharges", { amount: formatCents(Number(subscriptions.unknown.costCents)) }) : ""}{t("costs.includedInTheInferenceLedger")}</p>}
           {subscriptionError && subscriptions && <p role="status" className="text-sm text-muted-foreground">{t("costs.showingTheLastLoadedApi")}</p>}
           {discoverSubscriptions.error && <div role="status" className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <p>{t("costs.connectedAccountsCouldNotBe")}</p>
@@ -856,7 +856,7 @@ export function Costs({
                   </Card>
                   {userSpendError && (
                     <p role="status" className="text-sm text-muted-foreground">
-                      {userSpendData ? "User costs could not be refreshed. Showing the last loaded data." : "User costs could not be loaded. Please try again shortly."}
+                      {userSpendData ? t("costs.userCostsCouldNotBeRefreshed") : t("costs.userCostsCouldNotBeLoaded")}
                     </p>
                   )}
                   {userSpendData && <CostByUserTable report={userSpendData} />}
@@ -876,7 +876,7 @@ export function Costs({
                             key={row.projectId ?? `unattributed-${index}`}
                             className="flex items-center justify-between gap-3 border border-border px-3 py-2 text-sm"
                           >
-                            <span className="truncate">{row.projectName ?? row.projectId ?? "Unattributed"}</span>
+                            <span className="truncate">{row.projectName ?? row.projectId ?? t("costByUserTable.unattributed")}</span>
                             <CostAmount costCents={row.costCents} eventCount={row.eventCount} estimatedEventCount={row.estimatedEventCount} />
                           </div>
                         ))
@@ -916,7 +916,7 @@ export function Costs({
                 />
               ) : (
                 <p role="status" className="text-sm text-muted-foreground">
-                  {financeLoading ? "Loading financial events…" : t("costs.financialEventsCouldNotBe")}
+                  {financeLoading ? t("costs.loadingFinancialEvents") : t("costs.financialEventsCouldNotBe")}
                 </p>
               )}
             </>
@@ -1001,10 +1001,10 @@ export function Costs({
                         <h2 className="text-lg font-semibold capitalize">{scopeType === "company" ? "organization" : scopeType} budgets</h2>
                         <p className="text-sm text-muted-foreground">
                           {scopeType === "company"
-                            ? "Organization-wide monthly policy."
+                            ? t("costs.organizationWideMonthlyPolicy")
                             : scopeType === "agent"
-                              ? "Recurring monthly spend policies for individual agents."
-                              : "Lifetime spend policies for execution-bound projects."}
+                              ? t("costs.recurringMonthlySpendPoliciesForIndividualAgents")
+                              : t("costs.lifetimeSpendPoliciesForExecutionBoundProjects")}
                         </p>
                       </div>
                       <div className="grid gap-4 xl:grid-cols-2">
@@ -1153,7 +1153,7 @@ export function Costs({
         </TabsContent>
 
         <TabsContent value="finance" className="mt-4 space-y-4">
-          {financeData?.summary.providerReportedCentsExact !== undefined && <p className="text-sm text-muted-foreground">Provider API cost reports: {formatCents(financeData.summary.providerReportedCents ?? 0)}. Report totals overlap invoices and run estimates and are shown separately from recorded charges.</p>}
+          {financeData?.summary.providerReportedCentsExact !== undefined && <p className="text-sm text-muted-foreground">{t("costs.providerApiCostReports")} {formatCents(financeData.summary.providerReportedCents ?? 0)}{t("costs.reportTotalsOverlapInvoices")}</p>}
 
           {showCustomPrompt ? (
             <p className="text-sm text-muted-foreground">{t("costs.selectAStartAndEnd")}</p>

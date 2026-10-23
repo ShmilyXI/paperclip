@@ -179,7 +179,7 @@ export function SearchFilterBar({
         selected={selectedAssignee ? [selectedAssignee] : []}
         onSelect={(value) => onChange(applyAssigneeToken(filters, value, data.currentUserId))}
         searchable
-        searchPlaceholder="Search assignees…"
+        searchPlaceholder={t("searchFilterBar.searchAssignees")}
         emptyMessage={t("searchFilterBar.noAssignees")}
       />
       <SearchFilterMenu
@@ -188,7 +188,7 @@ export function SearchFilterBar({
         selected={filters.projectId ? [filters.projectId] : []}
         onSelect={(value) => onChange({ ...filters, projectId: value })}
         searchable
-        searchPlaceholder="Search projects…"
+        searchPlaceholder={t("searchFilterBar.searchProjects")}
         emptyMessage={t("searchFilterBar.noProjects")}
       />
       <SearchFilterMenu
@@ -197,7 +197,7 @@ export function SearchFilterBar({
         selected={filters.labelId ? [filters.labelId] : []}
         onSelect={(value) => onChange({ ...filters, labelId: value })}
         searchable
-        searchPlaceholder="Search labels…"
+        searchPlaceholder={t("searchFilterBar.searchLabels")}
         emptyMessage={t("searchFilterBar.noLabels")}
       />
       {/* PAP-411: Priority filter menu hidden behind SHOW_TASK_PRIORITY_UI (search DSL stays intact). */}

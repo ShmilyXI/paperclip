@@ -28,7 +28,7 @@ import { MarkdownBody } from "@/components/MarkdownBody";
 export function ReviewQueueCard({
   connectionId,
   emptyState = "hidden",
-  heading = "Waiting for your OK",
+  heading = t("reviewQueueCard.waitingForYourOk"),
   plain = false,
 }: {
   connectionId?: string;
@@ -214,7 +214,7 @@ function ReviewRow({
 }
 
 function actionLabel(item: ToolActionRequestListItem): string {
-  if (!item.toolTitle && !item.toolName) return "This action";
+  if (!item.toolTitle && !item.toolName) return t("reviewQueueCard.thisAction");
   return humanizeConnectionDisplayName(item.toolName ?? "", { title: item.toolTitle });
 }
 

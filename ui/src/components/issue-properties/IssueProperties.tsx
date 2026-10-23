@@ -168,7 +168,7 @@ function TruncatedCopyable({ value, icon: Icon }: { value: string; icon: Compone
         )}
         onClick={handleCopy}
         title={value}
-        aria-label={`Copy ${value} to clipboard`}
+        aria-label={t("issueProps.copyValueToClipboard", { value })}
       >
         {!streamlinedUiEnabled ? value : middle ? (
           <span className="flex min-w-0" data-middle-truncate="true">
@@ -855,7 +855,7 @@ export function IssueProperties({
       return (
         <span
           className="min-w-0 truncate text-sm"
-          title={`Task-level model override — replaces the agent's primary model for this issue.${details.length > 0 ? ` (${details.join(" · ")})` : ""}`}
+          title={`${t("issueProps.taskLevelModelOverride")}${details.length > 0 ? ` (${details.join(" · ")})` : ""}`}
         >
           {summary}
         </span>
@@ -900,7 +900,7 @@ export function IssueProperties({
               placeholder={t("issueProps.defaultModel")}
               disablePortal
               noneLabel={t("issueProps.defaultModel")}
-              searchPlaceholder="Search models..."
+              searchPlaceholder={t("issueProps.searchModels")}
               emptyMessage={t("issueProps.noModelsFound")}
               onChange={updateAssigneeOverrideModel}
             />
@@ -1084,9 +1084,9 @@ export function IssueProperties({
         : userLabel(participant.userId ?? null))
       : null;
     if (issue.executionState.status === "changes_requested") {
-      return `${stageLabel} requested changes${participantLabel ? ` by ${participantLabel}` : ""}`;
+      return participantLabel ? t("issueProps.stageRequestedChangesBy", { stage: stageLabel, participant: participantLabel }) : t("issueProps.stageRequestedChanges", { stage: stageLabel });
     }
-    return `${stageLabel} pending${participantLabel ? ` with ${participantLabel}` : ""}`;
+    return participantLabel ? t("issueProps.stagePendingWith", { stage: stageLabel, participant: participantLabel }) : t("issueProps.stagePending", { stage: stageLabel });
   })();
   useEffect(() => {
     setMonitorAtInput(toDateTimeLocalValue(executionPolicy?.monitor?.nextCheckAt));
@@ -1200,8 +1200,8 @@ export function IssueProperties({
           value={watchdogAgentInput}
           options={watchdogAgentOptions}
           placeholder={t("issueProps.selectAgent")}
-          noneLabel="No watchdog agent"
-          searchPlaceholder="Search agents..."
+          noneLabel={t("issueProps.noWatchdogAgent")}
+          searchPlaceholder={t("issueProps.searchAgents")}
           emptyMessage={t("issueProps.noAgentsFound")}
           onChange={setWatchdogAgentInput}
           renderTriggerValue={(option) => {
@@ -1334,12 +1334,12 @@ export function IssueProperties({
       : t("common.none");
   const monitorSecondary = monitorNextCheckAt
     ? monitorIsDueNow
-      ? "checking momentarily…"
-      : `${formatMonitorAbsolute(monitorNextCheckAt, {}, monitorNow)}${monitorIsOverdue ? " · fires on next tick" : monitorAttemptCount > 0 ? ` · Attempt ${monitorAttemptCount}` : ""}`
+      ? t("issueProps.checkingMomentarily")
+      : `${formatMonitorAbsolute(monitorNextCheckAt, {}, monitorNow)}${monitorIsOverdue ? t("issueProps.firesOnNextTick") : monitorAttemptCount > 0 ? t("issueProps.attemptSuffix", { attempt: monitorAttemptCount }) : ""}`
     : monitorState?.status === "cleared"
       ? [
-          monitorLastTriggeredAt ? `last checked ${timeAgo(monitorLastTriggeredAt)}` : null,
-          monitorAttemptCount > 0 ? `after attempt ${monitorAttemptCount}` : null,
+          monitorLastTriggeredAt ? t("issueProps.lastChecked", { time: timeAgo(monitorLastTriggeredAt) }) : null,
+          monitorAttemptCount > 0 ? t("issueProps.afterAttempt", { attempt: monitorAttemptCount }) : null,
         ].filter(Boolean).join(" · ")
       : null;
   const monitorTrigger = (
@@ -1370,7 +1370,7 @@ export function IssueProperties({
         >
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <span className="text-sm font-semibold">{t("issueProps.monitor")}</span>
-            {monitorAttemptCount > 0 ? <span className="text-xs text-muted-foreground">Attempt {monitorAttemptCount}</span> : null}
+            {monitorAttemptCount > 0 ? <span className="text-xs text-muted-foreground">{t("issueProps.attempt", { attempt: monitorAttemptCount })}</span> : null}
           </div>
           <div className="space-y-3 px-4 py-3 text-left">
             <div>
@@ -1388,7 +1388,7 @@ export function IssueProperties({
             </div>
             <div>
               <div className="text-xs text-muted-foreground">{t("issueProps.lastTriggered")}</div>
-              <div className="text-sm">{monitorLastTriggeredAt ? formatMonitorAbsoluteFull(monitorLastTriggeredAt) : "— not yet triggered"}</div>
+              <div className="text-sm">{monitorLastTriggeredAt ? formatMonitorAbsoluteFull(monitorLastTriggeredAt) : t("issueProps.notYetTriggered")}</div>
             </div>
           </div>
           <div className="flex gap-2 border-t border-border px-4 py-3">
@@ -1431,15 +1431,15 @@ export function IssueProperties({
   const scheduledRetryIsContinuation =
     scheduledRetry?.scheduledRetryReason === "max_turns_continuation";
   const scheduledRetryRelativeLabel = (() => {
-    if (!scheduledRetryRelative) return "Pending schedule";
+    if (!scheduledRetryRelative) return t("issueProps.pendingSchedule");
     const action = scheduledRetryIsContinuation ? t("issueProperties.continuation") : t("common.retry");
-    if (scheduledRetryRelative === "now") return `${action} due now`;
+    if (scheduledRetryRelative === "now") return t("issueProps.actionDueNow", { action });
     return `${action} ${scheduledRetryRelative}`;
   })();
   const scheduledRetryRetryNowSuccess = retryNow.isSuccess
     && (retryNow.data?.outcome === "promoted" || retryNow.data?.outcome === "already_promoted");
   const scheduledRetryAttemptBadge = scheduledRetryAttempt !== null ? (
-    <span className="whitespace-nowrap shrink-0 text-xs text-muted-foreground">Attempt {scheduledRetryAttempt}</span>
+    <span className="whitespace-nowrap shrink-0 text-xs text-muted-foreground">{t("issueProps.attempt", { attempt: scheduledRetryAttempt })}</span>
   ) : null;
   const scheduledRetryTrigger = (
     <span className="inline-flex min-w-0 items-center gap-1.5">
@@ -1465,7 +1465,7 @@ export function IssueProperties({
         </span>
         {scheduledRetryAttempt !== null ? (
           <span className="text-xs text-muted-foreground">
-            Attempt {scheduledRetryAttempt}
+            {t("issueProps.attempt", { attempt: scheduledRetryAttempt })}
           </span>
         ) : null}
       </div>
@@ -1865,7 +1865,7 @@ export function IssueProperties({
         ) : null}
         {visibleUserOptions.length > 0 ? (
           <>
-            {sectionHeader("Board users")}
+            {sectionHeader(t("issueProps.boardUsers"))}
             {visibleUserOptions.map((option) => renderAssigneeOption(option))}
           </>
         ) : null}
@@ -2969,7 +2969,7 @@ export function IssueProperties({
                       truncation on genuinely long names is recoverable. */}
                   <span
                     className="flex min-w-0 max-w-full items-center gap-1.5 text-sm"
-                    title={`Archived by ${archivedByName} · ${formatDateTime(issue.archivedAt)}`}
+                    title={t("issueProps.archivedBy", { name: archivedByName, time: formatDateTime(issue.archivedAt) })}
                   >
                     {archivedByAgent
                       ? <AgentAvatar agent={archivedByAgent} size={16} className="h-3.5 w-3.5 shrink-0 text-muted-foreground"/>

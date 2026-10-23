@@ -30,11 +30,11 @@ export function BuiltInLifecycleChip({
       )}
       title={
         isPendingApproval
-          ? "Waiting on board hire approval before the feature can run"
-          : "Needs adapter/model setup before the feature can run"
+          ? t("builtInAgentBadges.waitingOnBoardHireApproval")
+          : t("builtInAgentBadges.needsAdapterModelSetupBefore")
       }
     >
-      {isPendingApproval ? (compact ? t("common.approval") : t("common.pendingApproval")) : compact ? "Setup" : "Needs setup"}
+      {isPendingApproval ? (compact ? t("common.approval") : t("common.pendingApproval")) : compact ? t("builtInAgentBadges.setup") : t("builtInAgentBadges.needsSetup")}
     </Badge>
   );
 }

@@ -16,7 +16,7 @@ export function ExecutionBlockerNotice({ presentation, canRetry, onRetry, optimi
 }) {
   useSecondTick(presentation?.state === "retry_scheduled");
   if (error && !optimistic && !takingLonger) return <div role="alert" className={cn("flex items-center justify-between gap-2 text-sm text-destructive", className)}><span>{error.message}</span>{canRetry && <Button variant="outline" size="sm" onClick={onRetry}>{t("common.retry")}</Button>}</div>;
-  if (takingLonger) return <div role="status" className={cn("flex items-center justify-between gap-2 text-sm text-muted-foreground", className)}><span>Taking longer than usual…</span>{canRetry && <Button variant="outline" size="sm" onClick={onRetry}>{t("common.retry")}</Button>}</div>;
+  if (takingLonger) return <div role="status" className={cn("flex items-center justify-between gap-2 text-sm text-muted-foreground", className)}><span>{t("executionBlockerNotice.takingLongerThanUsual")}</span>{canRetry && <Button variant="outline" size="sm" onClick={onRetry}>{t("common.retry")}</Button>}</div>;
   if (optimistic || !presentation || presentation.responsibility !== "system" ||
       !["failed", "retry_scheduled"].includes(presentation.state)) return null;
   const seconds = Math.max(0, Math.ceil((Date.parse(presentation.nextRetryAt ?? "") - Date.now()) / 1000));

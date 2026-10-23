@@ -35,7 +35,7 @@ export function AdvancedPanel({
   onRemove,
   onReplaced,
   canReplaceCredential = true,
-  credentialUnavailableMessage = "You don't have permission to replace this identity's credential.",
+  credentialUnavailableMessage = t("appDetailAdvancedPanel.youDonTHavePermission2"),
   appToggleDisabled,
   onToggleApp,
   identityGrant = null,
@@ -251,7 +251,7 @@ export function ReconnectCard({
               onClick={() => verifyVercel.mutate()}
             >
               {verifyVercel.isPending && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
-              Check again
+              {t("appDetailAdvancedPanel.checkAgain")}
             </Button>
           </div>
         ) : oauth ? (
@@ -299,7 +299,7 @@ function ReconnectForm({
     .filter((ref) => ref.placement === "header" || ref.placement === "url")
     .map((ref) => ({
       configPath: connectionCredentialConfigPath(ref),
-      label: ref.placement === "url" ? "MCP server URL" : ref.prefix === "Bearer " ? t("appDetailAdvancedPanel.appKey") : ref.key ?? ref.name,
+      label: ref.placement === "url" ? t("appDetailAdvancedPanel.mcpServerUrl") : ref.prefix === "Bearer " ? t("appDetailAdvancedPanel.appKey") : ref.key ?? ref.name,
       helpUrl: "",
       required: true,
     }));
@@ -327,7 +327,7 @@ function ReconnectForm({
       } else {
         pushToast({
           title: t("appDetailAdvancedPanel.stillNotWorking"),
-          body: result.connection.healthMessage?.trim() || "That key didn't check out. Try another.",
+          body: result.connection.healthMessage?.trim() || t("appDetailAdvancedPanel.thatKeyDidnTCheck"),
           tone: "error",
         });
       }
@@ -439,7 +439,7 @@ export function DangerZone({
   onRemove,
   onReplaced,
   canReplaceCredential = true,
-  credentialUnavailableMessage = "You don't have permission to replace this identity's credential.",
+  credentialUnavailableMessage = t("appDetailAdvancedPanel.youDonTHavePermission2"),
   toggleDisabled = false,
   onToggleConnection,
   identityGrant = null,
@@ -573,7 +573,7 @@ export function DangerZone({
               <div>
                 <p className="text-sm font-medium text-foreground">{t("appDetailAdvancedPanel.removeThisApp")}</p>
                 <p className="text-xs text-muted-foreground">
-                  {`Deletes credentials for ${appName} and removes agent access. Reconnecting requires a new sign-in or key.`}
+                  {t("appDetailAdvancedPanel.deletesCredentialsForAppnameAnd", { appName })}
                 </p>
               </div>
               {confirming ? (
@@ -583,7 +583,7 @@ export function DangerZone({
                   </Button>
                   <Button variant="destructive" size="sm" onClick={onRemove} disabled={removing}>
                     {removing && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
-                    Yes, remove it
+                    {t("appDetailAdvancedPanel.yesRemoveIt")}
                   </Button>
                 </div>
               ) : (
@@ -618,12 +618,12 @@ export function connectionAddress(connection: ToolConnection): string {
   const config = connection.config ?? connection.transportConfig ?? {};
   const value = config.url ?? config.endpoint ?? config.remoteUrl;
   if (typeof value === "string" && value.trim().length > 0) return redactUrlSecrets(value);
-  if (connection.transport === "local_stdio") return "Local command";
-  return "Not set";
+  if (connection.transport === "local_stdio") return t("appDetailAdvancedPanel.localCommand");
+  return t("appDetailAdvancedPanel.notSet");
 }
 
 export function connectionTransportLabel(transport: ToolConnection["transport"]): string {
-  if (transport === "mcp_remote") return "Remote HTTP";
-  if (transport === "local_stdio") return "Local command";
+  if (transport === "mcp_remote") return t("appDetailAdvancedPanel.remoteHttp");
+  if (transport === "local_stdio") return t("appDetailAdvancedPanel.localCommand");
   return t("common.unknown");
 }

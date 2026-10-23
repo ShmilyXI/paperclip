@@ -129,7 +129,7 @@ export function WizardToolsStep(props: WizardToolsStepProps) {
       {filteredGroups.length === 0 ? (
         // Cold state B (AP17): a search/filter that matches nothing.
         <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-border py-10 text-center">
-          <p className="text-sm font-medium text-foreground">No tools match “{search}”.</p>
+          <p className="text-sm font-medium text-foreground">{t("wizardToolsStep.noToolsMatch", { search })}</p>
           <button
             type="button"
             onClick={() => {
@@ -208,7 +208,7 @@ function AppRow({
             <span className="text-xs text-muted-foreground">
               {state === "indeterminate"
                 ? appSelectionLabel(group, selection)
-                : "includes tools " + group.name + " adds later"}
+                : t("wizardToolsStep.includesToolsAddsLater", { group: group.name })}
             </span>
           </span>
         </button>
@@ -315,7 +315,7 @@ function createAdvancedRuleId() {
 
 function ruleSummary(rule: AdvancedRule): string {
   const verb = rule.effect === "include" ? t("profileWizard.allow") : t("profileWizard.block");
-  if (rule.kind === "tool_name") return `${verb} tools matching ${rule.value}`;
+  if (rule.kind === "tool_name") return t("wizardToolsStep.verbToolsMatching", { verb, value: rule.value });
   if (rule.kind === "risk_level") return `${verb} ${rule.riskLevel ?? rule.value} tools`;
   return `${verb} tool ${rule.value}`;
 }
@@ -415,7 +415,7 @@ function AdvancedRules({
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder={kind === "tool_name" ? "e.g. gmail.send*" : "tool ID"}
+              placeholder={kind === "tool_name" ? t("wizardToolsStep.egGmailSend") : t("wizardToolsStep.toolId")}
               className="w-44"
             />
           )}

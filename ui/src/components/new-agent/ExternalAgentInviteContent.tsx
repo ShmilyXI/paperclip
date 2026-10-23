@@ -74,7 +74,7 @@ export function DotConnectionChecks({ state }: { state: DotConnectionState }) {
           </span>
           <div className="min-w-0 pt-0.5">
             <p className={cn("text-sm", done || active || failed ? "font-medium" : "text-muted-foreground")}>
-              {check.title}<span className="sr-only">{done ? ": complete" : failed ? ": needs attention" : active ? ": in progress" : ": waiting"}</span>
+              {check.title}<span className="sr-only">{done ? t("externalAgentInviteContent.stepComplete") : failed ? t("externalAgentInviteContent.stepNeedsAttention") : active ? t("externalAgentInviteContent.stepInProgress") : t("externalAgentInviteContent.stepWaiting")}</span>
             </p>
             {done && <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{check.description}</p>}
           </div>
@@ -202,7 +202,7 @@ export function ExternalAgentInviteContent({
       {error && <div role="alert" className="space-y-3 text-sm text-destructive"><p>{error}</p>{!museAwaitingInvitation && <Button variant="outline" disabled={busy} onClick={onRetry}>{t("common.tryAgain")}</Button>}</div>}
       {!provider ? <><ExternalAgentPresetPicker onSelect={onSelect} dotDisabledReason={dotDisabledReason} grokDisabledReason={grokDisabledReason} museEnabled={museEnabled} />
         {dotDisabledReason && <p className="text-sm text-muted-foreground">{dotDisabledReason}</p>}{grokDisabledReason && grokDisabledReason !== dotDisabledReason && <p className="text-sm text-muted-foreground">{grokDisabledReason}</p>}</>
-        : approvalHref ? <p className="text-sm text-muted-foreground">An organization admin needs to approve this agent before {muse ? "Muse" : "Dot"} can connect. This page will update after approval.</p>
+        : approvalHref ? <p className="text-sm text-muted-foreground">{t("externalAgentInviteContent.anOrgAdminNeedsToApprove", { product: muse ? "Muse" : "Dot" })}</p>
         : museAwaitingInvitation ? busy ? <p role="status" className="text-sm text-muted-foreground">{t("externalAgentInviteContent.loadingMuseInvitation")}</p> : null
         : muse && busy && !museDetails && !prompt && !museConnection?.paired ? <p role="status" className="text-sm text-muted-foreground">{t("externalAgentInviteContent.loadingMuseSetup")}</p>
         : museDetails ? <form id={detailsId} className="space-y-4" onSubmit={event => { event.preventDefault(); if (museDraft.name.trim() && !busy) onMuseContinue?.(); }}>
@@ -231,7 +231,7 @@ export function ExternalAgentInviteContent({
           {connection.phase === "waiting" && <p className="mt-4 text-xs text-muted-foreground">{t("externalAgentInviteContent.dotUsesYourOpenaiAccount")}</p>}</div>
         {connection.problem === "event_timeout" && <Button variant="outline" disabled={busy} onClick={onRetry}>{t("externalAgentInviteContent.retryTestEvent")}</Button>}
         {connection.problem === "offline" && <Button variant="outline" disabled={busy} onClick={onRetry}>{t("externalAgentInviteContent.reconnectUpdates")}</Button>}
-      </> : <p className="text-sm leading-relaxed text-muted-foreground">The invitation includes everything your agent needs to join {companyName}. You can review its request before granting access.</p>}
+      </> : <p className="text-sm leading-relaxed text-muted-foreground">{t("externalAgentInviteContent.theInvitationIncludesEverything", { company: companyName })}</p>}
     </div>
     <div className="flex items-center justify-between gap-3 border-t px-6 py-4 sm:px-8">
       <div className="flex items-center gap-2">

@@ -49,8 +49,10 @@ function shortId(value: string | null | undefined) {
   return value.length > 12 ? `${value.slice(0, 8)}...` : value;
 }
 
-function pluralize(count: number, singular: string, plural = `${singular}s`) {
-  return `${count} ${count === 1 ? singular : plural}`;
+function toolsAllowed(count: number) {
+  return count === 1
+    ? t("gatewaysTab.toolAllowed", { count })
+    : t("gatewaysTab.toolsAllowed", { count });
 }
 
 function dateValue(value: Date | string | null | undefined) {
@@ -83,26 +85,28 @@ function formatScope(
 ) {
   if (gateway.contextScopeType !== "none" && gateway.contextScopeId) {
     if (gateway.contextScopeType === "project") {
-      return `Project ${projectNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId)}`;
+      return t("gatewaysTab.projectScope", { project: projectNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId) });
     }
     if (gateway.contextScopeType === "agent") {
-      return `Agent ${agentNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId)}`;
+      return t("gatewaysTab.agentScope", { agent: agentNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId) });
     }
     return `${gateway.contextScopeType} ${shortId(gateway.contextScopeId)}`;
   }
-  if (gateway.projectId) return `Project ${projectNames.get(gateway.projectId) ?? shortId(gateway.projectId)}`;
-  if (gateway.issueId) return `Issue ${shortId(gateway.issueId)}`;
-  if (gateway.agentId) return `Agent ${agentNames.get(gateway.agentId) ?? shortId(gateway.agentId)}`;
+  if (gateway.projectId)
+    return t("gatewaysTab.projectScope2", { project: projectNames.get(gateway.projectId) ?? shortId(gateway.projectId) });
+  if (gateway.issueId) return t("gatewaysTab.issueScope", { issue: shortId(gateway.issueId) });
+  if (gateway.agentId)
+    return t("gatewaysTab.agentScope2", { agent: agentNames.get(gateway.agentId) ?? shortId(gateway.agentId) });
   return t("common.company");
 }
 
 function formatAllowedTools(profile: ToolProfileWithDetails | undefined) {
-  if (!profile) return "Profile unavailable";
+  if (!profile) return t("gatewaysTab.profileUnavailable");
   const allowed = profile.summary.allowedToolCount;
   if (profile.summary.accessMode === "all_except") {
-    return `${pluralize(Math.max(profile.summary.totalToolCount - profile.summary.excludedToolCount, 0), "tool")} allowed`;
+    return toolsAllowed(Math.max(profile.summary.totalToolCount - profile.summary.excludedToolCount, 0));
   }
-  return allowed === 0 ? t("gatewaysTab.noToolsAllowed") : `${pluralize(allowed, "tool")} allowed`;
+  return allowed === 0 ? t("gatewaysTab.noToolsAllowed") : toolsAllowed(allowed);
 }
 
 function formatSnippetConfig(config: Record<string, unknown>) {
@@ -364,7 +368,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                     ) : null}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Button type="button" variant="outline" size="sm" onClick={() => void copyText(endpoint, "Gateway endpoint")}>
+                    <Button type="button" variant="outline" size="sm" onClick={() => void copyText(endpoint, t("gatewaysTab.gatewayEndpoint"))}>
                       <Copy className="mr-1.5 h-3.5 w-3.5" />
                       {t("gatewaysTab.copyEndpoint")}
                     </Button>
@@ -391,7 +395,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                   <div>
                     <dt className="text-xs font-medium text-muted-foreground">{t("gatewaysTab.allowedTools")}</dt>
                     <dd className="mt-0.5 text-foreground">
-                      {profile ? `${formatAllowedTools(profile)} via ${profile.name}` : t("gatewaysTab.profileProfileid", { profileId: shortId(gateway.profileId) })}
+                      {profile ? t("gatewaysTab.toolsViaProfile", { tools: formatAllowedTools(profile), profile: profile.name }) : t("gatewaysTab.profileProfileid", { profileId: shortId(gateway.profileId) })}
                     </dd>
                   </div>
                   <div>
@@ -509,8 +513,8 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                 {createdToken ? (
                   <div className="space-y-2 rounded-md border border-border bg-muted/40 p-3 text-sm">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="font-medium text-foreground">New token for {createdToken.name}</div>
-                      <Button type="button" variant="outline" size="sm" onClick={() => void copyText(createdToken.token, "Gateway bearer token")}>
+                      <div className="font-medium text-foreground">{t("gatewaysTab.newTokenFor", { name: createdToken.name })}</div>
+                      <Button type="button" variant="outline" size="sm" onClick={() => void copyText(createdToken.token, t("gatewaysTab.gatewayBearerToken"))}>
                         <Copy className="mr-1.5 h-3.5 w-3.5" />
                         {t("gatewaysTab.copyToken")}
                       </Button>
@@ -564,7 +568,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                                       size="sm"
                                       className="h-7 px-2 text-xs text-destructive hover:text-destructive"
                                       onClick={() => setConfirmingRevokeTokenId(token.id)}
-                                      aria-label={`Revoke ${token.name}`}
+                                      aria-label={t("gatewaysTab.revokeToken", { name: token.name })}
                                     >
                                       <RotateCcw className="mr-1 h-3.5 w-3.5" />
                                       {t("gatewaysTab.revoke")}
@@ -625,7 +629,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                                 className="h-7 px-2"
                                 onClick={(event) => {
                                   event.preventDefault();
-                                  void copyText(formatSnippetConfig(snippet.config), `${snippet.label} snippet`);
+                                  void copyText(formatSnippetConfig(snippet.config), t("gatewaysTab.snippetLabel", { label: snippet.label }));
                                 }}
                               >
                                 <Copy className="mr-1 h-3.5 w-3.5" />

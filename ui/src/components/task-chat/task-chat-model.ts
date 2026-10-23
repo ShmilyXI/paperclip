@@ -251,6 +251,11 @@ export interface TaskChatMarkerItem {
   kind: "marker";
   variant: "session_start" | "interrupted" | "turn_boundary";
   label: string;
+  /**
+   * Stable identity of `label` (its i18n key), set when code compares a marker
+   * label. Compare this, never the rendered text.
+   */
+  labelKey?: string;
   detail?: string;
   /** False when the recorded run cannot be retried, even after the chat continues. */
   retryable?: boolean;

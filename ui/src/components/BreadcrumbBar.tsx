@@ -53,6 +53,12 @@ function GlobalToolbar({
   );
 }
 
+/** The tasks list route, with or without a company prefix or view query. */
+function isTasksListHref(href: string | undefined): boolean {
+  if (!href) return false;
+  return (href.split("?")[0] ?? "").endsWith("/issues");
+}
+
 export function BreadcrumbBar({ taskDetailLayout = false }: { taskDetailLayout?: boolean }) {
   const {
     breadcrumbs,
@@ -110,7 +116,8 @@ export function BreadcrumbBar({ taskDetailLayout = false }: { taskDetailLayout?:
   );
 
   const currentCrumb = breadcrumbs[breadcrumbs.length - 1];
-  if (isMobile && breadcrumbs[0]?.label === "Tasks" && currentCrumb.identifier) {
+  // Compare the route, not the label: owners set the first crumb label with t().
+  if (isMobile && isTasksListHref(breadcrumbs[0]?.href) && currentCrumb.identifier) {
     return (
       <div className="h-(--sz-60px) shrink-0 flex items-center border-b border-border px-4">
         {menuButton}
@@ -232,8 +239,8 @@ export function BreadcrumbBar({ taskDetailLayout = false }: { taskDetailLayout?:
           size="icon-sm"
           className="ml-5 size-9 shrink-0 text-muted-foreground"
           onClick={toggleTaskPanel}
-          aria-label={taskPanelOpen ? "Hide properties" : "Show properties"}
-          title={taskPanelOpen ? "Hide properties" : "Show properties"}
+          aria-label={taskPanelOpen ? t("breadcrumbBar.hideProperties") : t("breadcrumbBar.showProperties")}
+          title={taskPanelOpen ? t("breadcrumbBar.hideProperties") : t("breadcrumbBar.showProperties")}
         >
           {taskPanelOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
         </Button>

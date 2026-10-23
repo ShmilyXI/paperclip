@@ -119,7 +119,7 @@ export function CliAuthPage() {
       <div className="mx-auto max-w-xl py-10">
         <Card className="block p-6">
           <h1 className="text-xl font-semibold">
-            {challenge.status === "expired" ? "CLI auth challenge expired" : "CLI auth challenge cancelled"}
+            {challenge.status === "expired" ? t("cliAuth.cliAuthChallengeExpired") : t("cliAuth.cliAuthChallengeCancelled")}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {t("cliAuth.startTheCliAuthFlow")}

@@ -281,7 +281,7 @@ export function ActionCard({
             {policyNumber != null ? (
               <>
                 {" "}
-                <span className="font-medium text-foreground">Policy #{policyNumber}</span> {t("actionCard.requiresApprovalHere")}
+                <span className="font-medium text-foreground">{t("actionCard.policyNumber", { number: policyNumber })}</span> {t("actionCard.requiresApprovalHere")}
               </>
             ) : null}
           </p>

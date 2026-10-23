@@ -55,10 +55,10 @@ export function issueColumnDescription(
   presentation: "legacy" | "task" = "legacy",
 ): string {
   if (column === "id" && presentation === "task") {
-    return "Task identifier like PAP-1009 on the trailing edge.";
+    return t("issueColumns.taskIdentifierDescription");
   }
   if (column === "status" && presentation === "task") {
-    return "Task state icon on the leading edge.";
+    return t("issueColumns.taskStateIconDescription");
   }
   return issueColumnDescriptions[column];
 }
@@ -173,7 +173,7 @@ export function IssueColumnPicker({
           className="rounded-lg px-3 py-2 text-sm"
         >
           {t("issueColumns.resetDefaults")}
-          <span className="ml-auto text-xs text-muted-foreground">status, id, updated</span>
+          <span className="ml-auto text-xs text-muted-foreground">{t("issueColumns.statusIdUpdated")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -248,7 +248,7 @@ export function InboxIssueMetaLeading({
             "px-1.5 sm:gap-1.5 sm:px-2",
             "border-border bg-transparent",
           )}
-          title={`${subtreeLiveCount} sub-task${subtreeLiveCount === 1 ? "" : "s"} running below`}
+          title={t("issueColumns.subTasksRunningBelow", { count: subtreeLiveCount })}
         >
           <span
             className={cn(
@@ -258,7 +258,7 @@ export function InboxIssueMetaLeading({
             aria-hidden="true"
           />
           <span className="hidden text-(length:--text-micro) font-medium text-muted-foreground sm:inline">
-            {subtreeLiveCount} live below
+            {t("issueColumns.liveBelow", { count: subtreeLiveCount })}
           </span>
         </Badge>
       )}

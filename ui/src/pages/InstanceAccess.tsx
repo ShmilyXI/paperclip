@@ -161,7 +161,9 @@ export function InstanceAccess() {
                   ) : null}
                 </div>
                 <div className="mt-2 text-xs text-muted-foreground">
-                  {user.activeCompanyMembershipCount} active organization memberships
+                  {t("instanceAccess.activeOrganizationMemberships", {
+                    count: user.activeCompanyMembershipCount,
+                  })}
                 </div>
               </button>
             ))}

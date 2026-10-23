@@ -64,10 +64,10 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
       </Button>
     </div>
     {loadFailed || syncFailed ? <p role="alert" className="text-sm text-destructive">
-      Couldn’t refresh {providerName} apps.{apps.length ? " Last known apps are shown." : " Try refreshing again."}
+      {t("connectedAggregatorApps.couldNotRefreshApps", { provider: providerName })}{apps.length ? t("connectedAggregatorApps.lastKnownAppsShown") : t("connectedAggregatorApps.tryRefreshingAgain")}
     </p> : null}
     {syncing ? <p role="status" className="text-sm text-muted-foreground">
-      Refreshing apps…{data?.sync.total ? ` ${data.sync.checked} of ${data.sync.total}` : ""}
+      {t("connectedAggregatorApps.refreshingApps")}{data?.sync.total ? t("connectedAggregatorApps.checkedOfTotal", { checked: data.sync.checked, total: data.sync.total }) : ""}
     </p> : refresh.isSuccess && !syncFailed && !unavailable ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.appsRefreshed")}</p> : null}
     {(!settled && !failed) || query.isLoading ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.loadingApps")}</p>
       : apps.length ? <ul aria-label={`Connected ${providerName} apps`} tabIndex={0}

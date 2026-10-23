@@ -34,7 +34,7 @@ export function IssueContinuationHandoff({
 
   if (!document) return null;
 
-  const title = document.title?.trim() || "Continuation handoff";
+  const title = document.title?.trim() || t("issueContinuationHandoff.continuationHandoff");
 
   return (
     <div
@@ -60,12 +60,12 @@ export function IssueContinuationHandoff({
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-medium text-foreground">{title}</span>
             <Badge variant="outline" className="border-border font-mono text-(length:--text-nano) uppercase text-muted-foreground">
-              handoff
+              {t("issueContinuationHandoff.handoff")}
             </Badge>
           </div>
           <div className="text-(length:--text-micro) text-muted-foreground">
-            Updated {relativeTime(document.updatedAt)}
-            {document.latestRevisionNumber > 0 ? ` - revision ${document.latestRevisionNumber}` : ""}
+            {t("common.updated")} {relativeTime(document.updatedAt)}
+            {document.latestRevisionNumber > 0 ? t("issueContinuationHandoff.revisionSuffix", { number: document.latestRevisionNumber }) : ""}
           </div>
         </div>
         <AgentSetupPrompt

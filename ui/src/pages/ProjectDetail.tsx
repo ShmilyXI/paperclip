@@ -785,7 +785,7 @@ export function ProjectDetail() {
           {project.managedByPlugin ? (
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-(length:--text-micro) font-medium text-muted-foreground">
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: project.color ?? "var(--project-seed)" }} />
-              Managed by {project.managedByPlugin.pluginDisplayName}
+              {t("projectDetail.managedByPlugin", { name: project.managedByPlugin.pluginDisplayName })}
             </div>
           ) : null}
         </div>

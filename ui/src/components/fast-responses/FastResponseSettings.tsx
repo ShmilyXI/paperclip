@@ -215,10 +215,11 @@ export function FastResponseSettingsView({
           <div role="status" className="space-y-2 text-sm">
             <p>{result.text}</p>
             <p className="text-xs text-muted-foreground">
-              {(result.durationMs / 1000).toFixed(2)} seconds ·{" "}
-              {result.usage.inputTokens ?? "—"} input /{" "}
-              {result.usage.outputTokens ?? "—"} output tokens · Usage recorded
-              in Costs.
+              {t("fastResponseSettings.testResultUsage", {
+                seconds: (result.durationMs / 1000).toFixed(2),
+                input: result.usage.inputTokens ?? "—",
+                output: result.usage.outputTokens ?? "—",
+              })}
             </p>
           </div>
         ) : (

@@ -154,7 +154,7 @@ export function ProfileWizard({
       if (!draftId) {
         const created = await toolsApi.createProfile(companyId, {
           profileKey: profileKey || slugifyProfileKey(name) || "profile",
-          name: name.trim() || "Untitled profile",
+          name: name.trim() || t("profileWizard.untitledProfile"),
           description: description.trim() || null,
           status: "draft",
           defaultAction: newToolsAction,
@@ -165,7 +165,7 @@ export function ProfileWizard({
       }
       const updated = await toolsApi.updateProfile(draftId, {
         profileKey: profileKey || undefined,
-        name: name.trim() || "Untitled profile",
+        name: name.trim() || t("profileWizard.untitledProfile"),
         description: description.trim() || null,
         defaultAction: newToolsAction,
         entries,
@@ -340,7 +340,7 @@ export function ProfileWizard({
             {step === 3 ? (
               <Button disabled={busy} onClick={() => finish.mutate()}>
                 {busy ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : null}
-                Save profile
+                {t("profileWizard.saveProfile")}
               </Button>
             ) : null}
           </div>
@@ -394,7 +394,7 @@ async function reconcileBindings(
     } catch (error) {
       const rollbacks = await Promise.allSettled(completed.reverse().map((done) => done.rollback()));
       const rollbackFailures = rollbacks.filter((result) => result.status === "rejected").length;
-      const suffix = rollbackFailures > 0 ? `; ${rollbackFailures} rollback operation(s) also failed` : "";
+      const suffix = rollbackFailures > 0 ? t("profileWizard.rollbackOperationsAlsoFailed", { operations: rollbackFailures }) : "";
       throw new Error(t("profileWizard.couldNotUpdateAssignmentKey", { key: operation.key, suffix }), { cause: error });
     }
   }
@@ -632,8 +632,8 @@ export function StepAssign({
           getDescription={(agent) => {
             const context = contextByAgent.get(agent.id) ?? [];
             const bits = [...context];
-            if (defaultProfileName) bits.push("organization default");
-            return bits.length > 0 ? `already has: ${bits.join(" · ")}` : "no profiles yet";
+            if (defaultProfileName) bits.push(t("profileWizard.organizationDefault"));
+            return bits.length > 0 ? t("profileWizard.alreadyHas", { profiles: bits.join(" · ") }) : t("profileWizard.noProfilesYet");
           }}
         />
         <p className="text-xs text-muted-foreground">

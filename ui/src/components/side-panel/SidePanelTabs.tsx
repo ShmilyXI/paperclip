@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   useEffect,
   useLayoutEffect,
@@ -260,7 +261,7 @@ export function SidePanelTabs({
     const index = tabIds.indexOf(tabId);
     const nextFocus = tabIds[index + 1] ?? tabIds[index - 1] ?? null;
     onCloseTab(tabId);
-    setAnnouncement(nextFocus ? "Tab closed." : "Last tab closed. Choose something to open.");
+    setAnnouncement(nextFocus ? t("sidePanelTabs.tabClosed") : t("sidePanelTabs.lastTabClosedChooseSomething"));
     focusTab(nextFocus);
   }
 
@@ -276,7 +277,7 @@ export function SidePanelTabs({
       const [moved] = ordered.splice(index, 1);
       ordered.splice(target, 0, moved!);
       onReorderTabs(ordered);
-      setAnnouncement(`Moved ${tabs[index]?.label ?? "tab"} to position ${target + 1} of ${tabs.length}.`);
+      setAnnouncement(t("sidePanelTabs.movedTabToPositionTarget", { tab: tabs[index]?.label ?? t("sidePanelTabs.tab"), target: target + 1, length: tabs.length }));
       focusTab(tabId);
       return;
     }
@@ -305,7 +306,7 @@ export function SidePanelTabs({
     const [moved] = ordered.splice(from, 1);
     ordered.splice(to, 0, moved!);
     onReorderTabs(ordered);
-    setAnnouncement(`Moved ${tabs[from]?.label ?? "tab"} to position ${to + 1} of ${tabs.length}.`);
+    setAnnouncement(t("sidePanelTabs.movedTabToPositionTo", { tab: tabs[from]?.label ?? t("sidePanelTabs.tab"), to: to + 1, length: tabs.length }));
   }
 
   function handleDragStart(event: DragStartEvent) {

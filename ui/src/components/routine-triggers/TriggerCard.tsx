@@ -27,7 +27,7 @@ export function RoutineTriggerCard({
   const editorId = useId();
   return (
     <section
-      aria-label={`${kind === "schedule" ? "Schedule" : kind === "api" ? "API" : "Webhook"} trigger`}
+      aria-label={t("triggerCard.kindTrigger", { kind: kind === "schedule" ? t("routineTriggers.schedule") : kind === "api" ? t("triggerCard.api") : t("routineTriggers.webhook") })}
       className="rounded-md border border-border"
     >
       <div className="flex flex-wrap items-center gap-3 p-4">
@@ -44,13 +44,13 @@ export function RoutineTriggerCard({
             aria-controls={editorId}
             onClick={onEdit}
           >
-            {editLabel ?? (expanded ? t("common.close") : `Edit ${kind}`)}
+            {editLabel ?? (expanded ? t("common.close") : t("triggerCard.editKind", { kind }))}
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            aria-label={`Remove ${kind}`}
-            title={`Remove ${kind}`}
+            aria-label={t("triggerCard.removeKind", { kind })}
+            title={t("triggerCard.removeKind", { kind })}
             onClick={onRemove}
           >
             <Trash2 className="h-3.5 w-3.5" />

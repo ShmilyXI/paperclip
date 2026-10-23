@@ -586,7 +586,7 @@ export function DecisionCard({
                   : expiredReason === "target_completed"
                     ? t("decisionCard.allTargetIssuesWereCompleted")
                     : t("decisionCard.noResponseBeforeTheExpiry")}
-                {decision.continuationPolicy === "wake_origin_agent" && " The proposer was re-woken."}
+                {decision.continuationPolicy === "wake_origin_agent" && " " + t("decisionCard.theProposerWasReWoken")}
               </p>
             </div>
           )}

@@ -244,8 +244,8 @@ export function ConnectionIntentInteractionBody({
     interaction.status === "accepted"
       ? {
           icon: CheckCircle2,
-          title: accessRequest ? `${serviceName} access granted` : interaction.payload.upstreamService ? t("connectionIntentInteractionBody.externalProviderConnected") : `${serviceName} connected`,
-          body: accessRequest ? null : interaction.payload.upstreamService ? `${interaction.payload.requestingAgentName} can now verify and authorize ${interaction.payload.upstreamService.name} through this provider. The app is not yet verified.` : isAi ? t("connectionIntentInteractionBody.thisAgentCanNowUse") : `${interaction.payload.requestingAgentName} can use this connection on the continuation run.`,
+          title: accessRequest ? t("connectionIntentInteractionBody.servicenameAccessGranted", { serviceName }) : interaction.payload.upstreamService ? t("connectionIntentInteractionBody.externalProviderConnected") : t("connectionIntentInteractionBody.servicenameConnected", { serviceName }),
+          body: accessRequest ? null : interaction.payload.upstreamService ? t("connectionIntentInteractionBody.requestingagentnameCanNowVerifyAnd", { requestingAgentName: interaction.payload.requestingAgentName, name: interaction.payload.upstreamService.name }) : isAi ? t("connectionIntentInteractionBody.thisAgentCanNowUse") : t("connectionIntentInteractionBody.requestingagentnameCanUseThisConnection", { requestingAgentName: interaction.payload.requestingAgentName }),
         }
       : interaction.status === "cancelled"
         ? {
@@ -257,7 +257,7 @@ export function ConnectionIntentInteractionBody({
         ? {
             icon: XCircle,
             title: accessRequest ? t("connectionIntentInteractionBody.accessDeclined") : t("connectionIntentInteractionBody.connectionDeclined"),
-            body: accessRequest ? null : isAi ? t("connectionIntentInteractionBody.theTaskStillNeedsA") : `${interaction.payload.requestingAgentName} was notified and can continue without it.`,
+            body: accessRequest ? null : isAi ? t("connectionIntentInteractionBody.theTaskStillNeedsA") : t("connectionIntentInteractionBody.requestingagentnameWasNotifiedAndCan", { requestingAgentName: interaction.payload.requestingAgentName }),
           }
         : interaction.status === "expired"
           ? {
@@ -335,7 +335,7 @@ export function ConnectionIntentInteractionBody({
         <div className="flex items-center gap-3">
           <AgentAvatar agent={agentQuery.data ?? { id: interaction.payload.requestingAgentId, name: interaction.payload.requestingAgentName }} size={32} label={interaction.payload.requestingAgentName} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-foreground">Grant {interaction.payload.requestingAgentName} access to “{accessRequest.connectionName}”?</p>
+            <p className="text-sm font-medium text-foreground">{t("connectionIntentInteractionBody.grantNameAccessToService", { agent: interaction.payload.requestingAgentName, service: accessRequest.connectionName })}</p>
           </div>
           <AppLogo name={interaction.payload.serviceName} logoUrl={interaction.payload.serviceLogoUrl} darkLogoUrl={interaction.payload.serviceDarkLogoUrl} size={32} />
         </div>
@@ -401,7 +401,7 @@ export function ConnectionIntentInteractionBody({
         </Button>
       </div>
     : selectedReady ? <div className="space-y-3">
-        <p className="text-sm">{repair.connection.name} is ready.</p>
+        <p className="text-sm">{t("connectionIntentInteractionBody.nameIsReady", { name: repair.connection.name })}</p>
         <Button disabled={completeMutation.isPending} onClick={() => completeMutation.mutate(repair.connection.id)}>
           {completeMutation.isPending ? t("connectionIntentInteractionBody.continuing") : t("connectionIntentInteractionBody.continueTask")}
         </Button>
@@ -427,7 +427,7 @@ export function ConnectionIntentInteractionBody({
         onComplete={(result) => selectAiAccountMutation.mutate({ ...result, generation })}
         onCancel={() => { closeSetup(); returnFocusToCard(); }}
       /> : <p role="status" className="text-sm text-muted-foreground">
-        {repair.connection.ownership === "personal" ? `${repair.connection.ownerName ?? t("connectionIntentInteractionBody.theAccountOwner")} must reconnect ${repair.connection.name}.` : t("connectionIntentInteractionBody.theAccountOwnerMustReconnect", { name: repair.connection.name })}
+        {repair.connection.ownership === "personal" ? t("connectionIntentInteractionBody.theaccountownerMustReconnectName", { theAccountOwner: repair.connection.ownerName ?? t("connectionIntentInteractionBody.theAccountOwner"), name: repair.connection.name }) : t("connectionIntentInteractionBody.theAccountOwnerMustReconnect", { name: repair.connection.name })}
         {" "}You can continue here once it is restored.
       </p>
     : aiConnection && aiConnection.mode !== "responsible_user"
@@ -462,13 +462,13 @@ export function ConnectionIntentInteractionBody({
           />
           <div>
             <p className="font-medium text-foreground">
-              {readyForAdoption ? t("connectionIntentInteractionBody.useYourAiprovidernameAccount", { aiProviderName }) : needsOwnAiConnection ? t("connectionIntentInteractionBody.connectYourAiprovidernameAccount", { aiProviderName }) : isAi ? `${aiProviderName} authentication required` : `${interaction.payload.requestingAgentName} needs ${interaction.payload.serviceName}`}
+              {readyForAdoption ? t("connectionIntentInteractionBody.useYourAiprovidernameAccount", { aiProviderName }) : needsOwnAiConnection ? t("connectionIntentInteractionBody.connectYourAiprovidernameAccount", { aiProviderName }) : isAi ? t("connectionIntentInteractionBody.aiprovidernameAuthenticationRequired", { aiProviderName }) : t("connectionIntentInteractionBody.requestingagentnameNeedsServicename", { requestingAgentName: interaction.payload.requestingAgentName, serviceName: interaction.payload.serviceName })}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
               {readyForAdoption
                 ? t("connectionIntentInteractionBody.yourAccountIsConnectedUse", { requestingAgentName: interaction.payload.requestingAgentName })
                 : needsOwnAiConnection
-                ? `${interaction.payload.requestingAgentName} needs your own AI connection. Connect here and the task will resume automatically.`
+                ? t("connectionIntentInteractionBody.requestingagentnameNeedsYourOwnAi", { requestingAgentName: interaction.payload.requestingAgentName })
                 : interaction.payload.purpose === "ai"
                 ? t("connectionIntentInteractionBody.thisTaskCanTRun")
                 : isEmail ? t("connectionIntentInteractionBody.connectAgentmailToCreateAn")

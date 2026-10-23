@@ -57,7 +57,7 @@ export function ComposioAppSetup({ name, toolkit, connections, onClose, onBack, 
     {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     {result ? <p role="status" className="text-sm text-muted-foreground">{t("composioAppSetup.finishConnecting")} {name} in Composio, then return here.</p> : null}
     {result?.authorizationUrl ? <Button asChild variant="outline" className="w-full">
-      <a href={result.authorizationUrl} target="_blank" rel="noopener noreferrer">Connect {name} in Composio<ExternalLink className="size-4" /></a>
+      <a href={result.authorizationUrl} target="_blank" rel="noopener noreferrer">{t("composioAppSetup.connectNameInComposio", { name })}<ExternalLink className="size-4" /></a>
     </Button> : null}
     <div className="flex items-center justify-between gap-2">
       <Button variant="ghost" disabled={busy} onClick={onBack ?? onClose}>{onBack ? t("common.back") : t("common.cancel")}</Button>
@@ -67,7 +67,7 @@ export function ComposioAppSetup({ name, toolkit, connections, onClose, onBack, 
         if (connectionId === "__new__") onConnectNew();
         else void submit(result ? { action: "complete" } : { action: "start" });
       }}>
-        {busy ? t("composioAppSetup.checking") : connectionId === "__new__" ? t("composioAppSetup.connectNewAccount") : result ? "I’ve connected it" : t("common.continue")}
+        {busy ? t("composioAppSetup.checking") : connectionId === "__new__" ? t("composioAppSetup.connectNewAccount") : result ? t("composioAppSetup.iVeConnectedIt") : t("common.continue")}
       </Button>
       </div>
     </div>

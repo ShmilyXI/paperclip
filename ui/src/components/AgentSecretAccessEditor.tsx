@@ -313,7 +313,7 @@ export function AgentSecretAccessEditor({
                     {secret.pending ? <ProposedBadge /> : null}
                   </div>
                   <p className="flex flex-wrap items-center gap-1 text-muted-foreground">
-                    <span>proposed by {proposal.proposedBy.name}</span>
+                    <span>{t("agentSecretAccessEditor.proposedBy")} {proposal.proposedBy.name}</span>
                     <span aria-hidden="true">·</span>
                     <span className="truncate italic">“{proposal.justification}”</span>
                   </p>
@@ -502,7 +502,7 @@ export function AgentSecretAccessEditor({
       </div>
 
       <p className="text-(length:--text-micro) text-muted-foreground/70">
-        {deliveryModeDescription("api")} The agent reads them by alias through <code>GET /agents/me/secrets</code>.
+        {deliveryModeDescription("api")} {t("agentSecretAccessEditor.theAgentReadsThemByAliasThrough")} <code>GET /agents/me/secrets</code>.
       </p>
     </div>
   );

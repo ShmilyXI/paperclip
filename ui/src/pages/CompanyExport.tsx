@@ -1065,7 +1065,7 @@ export function CompanyExport() {
         icon={Package}
         title={t("companyExport.exportPreviewUnavailable")}
         message={t("companyExport.noExportPreviewIsLoaded")}
-        action="Load preview"
+        action={t("companyExport.loadPreview")}
         onAction={startPreviewRequest}
         hideActionIcon
       />
@@ -1085,15 +1085,15 @@ export function CompanyExport() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <span className="font-medium">
-              {selectedCompany?.name ?? t("common.organization")} export
+              {selectedCompany?.name ?? t("common.organization")} {t("companyExport.export")}
             </span>
             <span className="text-muted-foreground">
-              Exporting {selectedCount.toLocaleString()} of {totalFiles.toLocaleString()} file{totalFiles === 1 ? "" : "s"}
+              {t("companyExport.exportingFiles", { count: totalFiles, selected: selectedCount.toLocaleString(), total: totalFiles.toLocaleString() })}
               {selectedCount > 0 && ` (~${formatBytes(estimatedZipBytes)})`}
             </span>
             {warnings.length > 0 && (
               <span className="text-amber-500">
-                {warnings.length} warning{warnings.length === 1 ? "" : "s"}
+                {t("companyExport.warningCount", { count: warnings.length })}
               </span>
             )}
           </div>

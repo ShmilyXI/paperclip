@@ -217,10 +217,10 @@ export function validateField(
   if (type === "string" || type === "secret-ref") {
     const str = String(value);
     if (schema.minLength != null && str.length < schema.minLength) {
-      return `Must be at least ${schema.minLength} characters`;
+      return t("jsonSchemaForm.mustBeAtLeastMinlength", { minLength: schema.minLength });
     }
     if (schema.maxLength != null && str.length > schema.maxLength) {
-      return `Must be at most ${schema.maxLength} characters`;
+      return t("jsonSchemaForm.mustBeAtMostMaxlength", { maxLength: schema.maxLength });
     }
     if (schema.pattern) {
       // Guard against ReDoS: reject overly complex patterns from plugin JSON Schemas.
@@ -230,7 +230,7 @@ export function validateField(
         try {
           const re = new RegExp(schema.pattern);
           if (!re.test(str)) {
-            return `Must match pattern: ${schema.pattern}`;
+            return t("jsonSchemaForm.mustMatchPatternPattern", { pattern: schema.pattern });
           }
         } catch {
           // Invalid regex in schema — skip
@@ -241,34 +241,34 @@ export function validateField(
 
   if (type === "number" || type === "integer") {
     const num = Number(value);
-    if (isNaN(num)) return "Must be a valid number";
+    if (isNaN(num)) return t("jsonSchemaForm.mustBeAValidNumber");
     if (schema.minimum != null && num < schema.minimum) {
-      return `Must be at least ${schema.minimum}`;
+      return t("jsonSchemaForm.mustBeAtLeastMinimum", { minimum: schema.minimum });
     }
     if (schema.maximum != null && num > schema.maximum) {
-      return `Must be at most ${schema.maximum}`;
+      return t("jsonSchemaForm.mustBeAtMostMaximum", { maximum: schema.maximum });
     }
     if (schema.exclusiveMinimum != null && num <= schema.exclusiveMinimum) {
-      return `Must be greater than ${schema.exclusiveMinimum}`;
+      return t("jsonSchemaForm.mustBeGreaterThanExclusiveminimum", { exclusiveMinimum: schema.exclusiveMinimum });
     }
     if (schema.exclusiveMaximum != null && num >= schema.exclusiveMaximum) {
-      return `Must be less than ${schema.exclusiveMaximum}`;
+      return t("jsonSchemaForm.mustBeLessThanExclusivemaximum", { exclusiveMaximum: schema.exclusiveMaximum });
     }
     if (type === "integer" && !Number.isInteger(num)) {
-      return "Must be a whole number";
+      return t("jsonSchemaForm.mustBeAWholeNumber");
     }
     if (schema.multipleOf != null && num % schema.multipleOf !== 0) {
-      return `Must be a multiple of ${schema.multipleOf}`;
+      return t("jsonSchemaForm.mustBeAMultipleOf", { multipleOf: schema.multipleOf });
     }
   }
 
   if (type === "array") {
     const arr = value as unknown[];
     if (schema.minItems != null && arr.length < schema.minItems) {
-      return `Must have at least ${schema.minItems} items`;
+      return t("jsonSchemaForm.mustHaveAtLeastMinitems", { minItems: schema.minItems });
     }
     if (schema.maxItems != null && arr.length > schema.maxItems) {
-      return `Must have at most ${schema.maxItems} items`;
+      return t("jsonSchemaForm.mustHaveAtMostMaxitems", { maxItems: schema.maxItems });
     }
   }
 
@@ -1062,7 +1062,7 @@ function JsonObjectField({ value, onChange, disabled, label, error }: {
     onChange(next);
   };
   return <div className="space-y-2">
-    <Textarea aria-label={`${label} JSON`} aria-invalid={!!error} value={text} onChange={(event) => change(event.target.value)} disabled={disabled} rows={5} className="font-mono text-sm" />
+    <Textarea aria-label={t("jsonSchemaForm.labelJson", { label })} aria-invalid={!!error} value={text} onChange={(event) => change(event.target.value)} disabled={disabled} rows={5} className="font-mono text-sm" />
     <p className="text-xs text-muted-foreground">{t("jsonSchemaForm.enterAJsonObjectUsing")}</p>
     {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
   </div>;

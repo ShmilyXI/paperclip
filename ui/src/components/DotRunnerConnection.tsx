@@ -56,8 +56,8 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
     <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.dotManagesItsModelAnd")}</p>
     {state.data && !state.data.enabled && <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.enableOpenaiDotAndAssistant")}</p>}
     {state.data?.resourceUrl && <p className="text-sm break-all">{t("dotRunnerConnection.privatePluginMcpUrl")} <code>{state.data.resourceUrl}</code></p>}
-    {b && <p className="text-sm">Connection: {b.status}. Event subscription: {b.subscriptionVerified ? "verified" : "required"}.</p>}
-    {b?.assignment && <p className="text-sm">Assignment: {b.assignment.status === "offered" ? "waiting for Dot to accept" : "accepted by Dot"}.</p>}
+    {b && <p className="text-sm">{t("common.connection")}: {b.status}. {t("dotRunnerConnection.eventSubscription")} {b.subscriptionVerified ? t("dotRunnerConnection.verified") : t("dotRunnerConnection.required")}.</p>}
+    {b?.assignment && <p className="text-sm">{t("dotRunnerConnection.assignment")} {b.assignment.status === "offered" ? t("dotRunnerConnection.waitingForDotToAccept") : t("dotRunnerConnection.acceptedByDot")}.</p>}
     {b?.assignment?.attentionRequired && <p className="text-sm text-destructive" role="alert">{t("dotRunnerConnection.dotHasNotReportedUseful")}</p>}
     {pairing && setupPrompt && b?.status === "pairing" && <div className="space-y-2">
       <AgentSetupPrompt
@@ -68,7 +68,7 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
         description={t("dotRunnerConnection.pasteIntoYourDotTo")}
         side="bottom"
       />
-      <p className="text-xs text-muted-foreground">Setup prompt expires {new Date(pairing.expiresAt).toLocaleTimeString()}.</p>
+      <p className="text-xs text-muted-foreground">{t("dotRunnerConnection.setupPromptExpires", { time: new Date(pairing.expiresAt).toLocaleTimeString() })}</p>
     </div>}
     {!pairing && b?.status === "pairing" && <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.revokeThePendingConnectionAnd")}</p>}
     <div className="flex flex-wrap items-center gap-2">

@@ -108,7 +108,7 @@ export function ConnectModelPreview({
           <OnboardingHeading
             center
             title={t("onboarding.connectAModel")}
-            lede="Paperclip works with your existing subscription or API keys."
+            lede={t("onboarding.worksWithYourExistingSubscriptionOrApiKeys")}
           />
         </div>
 

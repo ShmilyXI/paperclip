@@ -17,8 +17,8 @@ export function ReportsToPicker({
   onChange,
   disabled = false,
   excludeAgentIds = [],
-  disabledEmptyLabel = "Reports to: N/A (CEO)",
-  chooseLabel = "Reports to...",
+  disabledEmptyLabel = t("reportsToPicker.reportsToNotApplicableCeo"),
+  chooseLabel = t("reportsToPicker.reportsTo"),
 }: {
   agents: Agent[];
   value: string | null;
@@ -94,7 +94,7 @@ export function ReportsToPicker({
           <div className="flex min-w-0 items-center gap-2 overflow-hidden px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-0.5">
             <AgentAvatar agent={current} size={16} className="shrink-0 h-3 w-3"/>
             <span className="min-w-0 truncate">
-              Current: {current.name} (terminated)
+              {t("reportsToPicker.currentTerminated", { name: current.name })}
             </span>
           </div>
         )}

@@ -9,6 +9,7 @@ import {
   writeFolderViewerStateToSearch,
   writeFileViewerStateToSearch,
 } from "@/context/FileViewerContext";
+import { t } from "@/i18n";
 
 export interface WorkspaceFileLinkProps {
   workspaceFileRef: ParsedWorkspaceFileRef;
@@ -35,14 +36,22 @@ export function WorkspaceFileLink({
   const canOpen = !!(onOpen || viewer);
   const isDirectory = workspaceFileRef.resourceKind === "directory" || workspaceFileRef.path.endsWith("/");
   const lineSuffix = workspaceFileRef.line
-    ? ` line ${workspaceFileRef.line}${workspaceFileRef.column ? ` column ${workspaceFileRef.column}` : ""}`
+    ? ` ${workspaceFileRef.column
+      ? t("workspaceFileLink.lineAndColumn", { line: workspaceFileRef.line, column: workspaceFileRef.column })
+      : t("workspaceFileLink.line", { line: workspaceFileRef.line })}`
     : "";
+  const openLabel = (target: string) => isDirectory
+    ? t("workspaceFileLink.openInWorkspaceBrowser", { target })
+    : t("workspaceFileLink.openInFileViewer", { target });
+  const plainLabel = (target: string) => isDirectory
+    ? t("workspaceFileLink.workspaceFolder", { target })
+    : t("workspaceFileLink.workspaceFile", { target });
   const ariaLabel = canOpen
-    ? `Open ${workspaceFileRef.path}${lineSuffix} in the ${isDirectory ? "workspace browser" : "file viewer"}`
-    : `Workspace ${isDirectory ? "folder" : "file"} ${workspaceFileRef.path}${lineSuffix}`;
+    ? openLabel(`${workspaceFileRef.path}${lineSuffix}`)
+    : plainLabel(`${workspaceFileRef.path}${lineSuffix}`);
   const tooltip = title ?? (canOpen
-    ? `Open ${workspaceFileRef.path}${lineSuffix} in the ${isDirectory ? "workspace browser" : "file viewer"}`
-    : `Workspace ${isDirectory ? "folder" : "file"} ${workspaceFileRef.path}${lineSuffix}`);
+    ? openLabel(`${workspaceFileRef.path}${lineSuffix}`)
+    : plainLabel(`${workspaceFileRef.path}${lineSuffix}`));
 
   const deepLinkSearch = isDirectory
     ? writeFolderViewerStateToSearch(location.search, {

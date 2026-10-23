@@ -132,7 +132,7 @@ export function AiProviderSetup({
     queryKey: ["agents", companyId, "provider-access"],
     queryFn: () => agentsApi.list(companyId),
   });
-  const label = providerLabel ?? providers.find((p) => p.id === provider)?.name ?? (provider === "github" ? "GitHub Copilot" : "provider");
+  const label = providerLabel ?? providers.find((p) => p.id === provider)?.name ?? (provider === "github" ? "GitHub Copilot" : t("aiProviderSetup.providerFallback"));
   const advanced = reconnect ? Boolean(reconnect.routing) : ["openrouter", "bedrock", "gateway", "local"].includes(provider ?? "");
   const nativeProvider: AiProvider =
     provider === "bedrock"
@@ -266,7 +266,7 @@ export function AiProviderSetup({
       installAgentIds={agentIds}
       setInstallAgentIds={setAgentIds}
       disabled={save.isPending}
-      notice={!canManageConnections ? ["Only a connection manager can share this credential with everyone or give every agent access."] : undefined}
+      notice={!canManageConnections ? [t("aiProviderSetup.onlyConnectionManagerCanShare")] : undefined}
     />
   ) : undefined;
   const cancel = () => reconnect || initialProvider ? onCancel() : setStep("provider");

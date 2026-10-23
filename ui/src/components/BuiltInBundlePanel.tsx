@@ -263,10 +263,10 @@ export function BuiltInBundlePanel({
   let adapterDetail: string | undefined;
   if (status === "pending_approval") {
     adapterChip = "pending_approval";
-    adapterDetail = "Waiting on board hire approval before this coach can run.";
+    adapterDetail = t("builtInBundlePanel.waitingOnBoardHireApproval");
   } else if (!adapterReady) {
     adapterChip = "needs_setup";
-    adapterDetail = "Pick an adapter this coach can run on.";
+    adapterDetail = t("builtInBundlePanel.pickAnAdapterThisCoach");
   }
 
   const skill = findResource(resources, "skill");

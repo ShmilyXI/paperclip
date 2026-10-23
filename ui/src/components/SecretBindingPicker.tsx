@@ -87,10 +87,10 @@ function statusTone(status: CompanySecret["status"]): string {
 export function SecretBindingPicker({
   value,
   onChange,
-  label = "Secret",
-  placeholder = "Select secret",
+  label = t("secretBindingPicker.secret"),
+  placeholder = t("secretBindingPicker.selectSecret"),
   allowVersionSelector = true,
-  emptyHint = "No matching secrets. Create one to bind it here.",
+  emptyHint = t("secretBindingPicker.noMatchingSecretsCreateOne"),
   className,
   disabled,
   statusFilter = ["active"],
@@ -258,7 +258,7 @@ export function SecretBindingPicker({
       ) : crossCompanyHint ? (
         <p className="text-(length:--text-micro) text-muted-foreground flex items-center gap-1">
           <AlertCircle className="h-3 w-3" />
-          Owned by {crossCompanyHint.companyName ? `the ${crossCompanyHint.companyName} organization` : "another organization"}. The binding keeps working; selecting a secret from this list re-points it here.
+          {t("secretBindingPicker.ownedBy")} {crossCompanyHint.companyName ? t("secretBindingPicker.theNamedOrganization", { companyName: crossCompanyHint.companyName }) : t("secretBindingPicker.anotherOrganization")}{t("secretBindingPicker.theBindingKeepsWorking")}
         </p>
       ) : missingHint ? (
         <p className="text-(length:--text-micro) text-destructive flex items-center gap-1">

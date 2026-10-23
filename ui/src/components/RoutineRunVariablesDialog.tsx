@@ -367,7 +367,7 @@ export function RoutineRunVariablesDialog({
                 recentOptionIds={recentAssigneeIds}
                 placeholder={t("common.agent")}
                 noneLabel={t("routineRunVariablesDialog.selectAnAgent")}
-                searchPlaceholder="Search agents..."
+                searchPlaceholder={t("routineRunVariablesDialog.searchAgents")}
                 emptyMessage={t("routineRunVariablesDialog.noAgentsFound")}
                 disablePortal
                 openOnFocus={false}
@@ -409,7 +409,7 @@ export function RoutineRunVariablesDialog({
                 recentOptionIds={recentProjectIds}
                 placeholder={t("common.project")}
                 noneLabel={t("routineRunVariablesDialog.noProject")}
-                searchPlaceholder="Search projects..."
+                searchPlaceholder={t("routineRunVariablesDialog.searchProjects")}
                 emptyMessage={t("routineRunVariablesDialog.noProjectsFound")}
                 disablePortal
                 openOnFocus={false}

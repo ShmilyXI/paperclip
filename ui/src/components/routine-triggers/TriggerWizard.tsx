@@ -42,10 +42,23 @@ export const defaultTriggerDraft: TriggerDraft = {
   sender: "custom",
   frequency: "weekdays",
   time: "09:00",
-  weekday: t("triggerWizard.monday"),
+  weekday: "Monday",
   timezone: "America/Chicago",
   created: false,
 };
+const WEEKDAY_KEYS: Array<[string, string]> = [
+  ["Monday", "triggerWizard.monday"],
+  ["Tuesday", "triggerWizard.tuesday"],
+  ["Wednesday", "triggerWizard.wednesday"],
+  ["Thursday", "triggerWizard.thursday"],
+  ["Friday", "triggerWizard.friday"],
+  ["Saturday", "triggerWizard.saturday"],
+  ["Sunday", "triggerWizard.sunday"],
+];
+function weekdayLabel(value: string) {
+  const found = WEEKDAY_KEYS.find(([day]) => day === value);
+  return found ? t(found[1]) : value;
+}
 export function webhookAgentInstructions(
   sender: TriggerDraft["sender"],
   routineTitle: string,
@@ -55,52 +68,52 @@ export function webhookAgentInstructions(
   signingMode: TriggerDraft["signingMode"] = "app_webhook",
 ) {
   const common = [
-    `Connect the sending app to the Paperclip routine ${JSON.stringify(routineTitle)}.`,
-    `Webhook URL: ${webhookUrl}`,
-    "Send an HTTP POST request with a JSON object as the body (not an array or string).",
+    t("triggerWizard.connectTheSendingAppToRoutine", { routineTitle: JSON.stringify(routineTitle) }),
+    t("triggerWizard.webhookUrlLine", { url: webhookUrl }),
+    t("triggerWizard.sendAnHttpPostRequest"),
     "Content-Type: application/json",
   ];
   const auth =
     sender === "github"
       ? [
-          "In GitHub, open your repository → Settings → Webhooks → Add webhook.",
-          "Use the webhook URL above as Payload URL and select application/json as Content type.",
+          t("triggerWizard.inGitHubOpenYourRepository"),
+          t("triggerWizard.useTheWebhookUrlAboveAsPayloadUrl"),
           `Secret: ${webhookSecret}`,
-          "Paste this value into GitHub’s Secret field. GitHub signs requests with X-Hub-Signature-256; do not use Bearer authentication.",
-          "Select the events that should start this routine, enable the webhook, and save.",
-          "To check the connection, open Recent Deliveries and redeliver an event.",
+          t("triggerWizard.pasteThisValueIntoGitHubSecretField"),
+          t("triggerWizard.selectTheEventsThatShouldStartThisRoutine"),
+          t("triggerWizard.toCheckTheConnectionOpenRecentDeliveries"),
         ]
       : [
-          `Secret key: ${webhookSecret}`,
+          t("triggerWizard.secretKeyLine", { secret: webhookSecret }),
           ...(signingMode === "bearer" ? [] : [
-            `If the app asks for a signing secret, paste the secret key above. Paperclip accepts HMAC-SHA256 over the exact request body in ${signingMode === "fireflies_hmac" ? "X-Hub-Signature" : "X-Hub-Signature or X-Hub-Signature-256"}, formatted sha256=<hex digest>.`,
+            t("triggerWizard.ifTheAppAsksForASigningSecret", { header: signingMode === "fireflies_hmac" ? "X-Hub-Signature" : "X-Hub-Signature or X-Hub-Signature-256" }),
           ]),
           ...(signingMode === "fireflies_hmac" ? [] : [
-            `For apps with custom headers, use Authorization: Bearer ${webhookSecret}`,
+            t("triggerWizard.forAppsWithCustomHeaders", { secret: webhookSecret }),
           ]),
-          "Subscribe only to the events that should start this routine. Public services need a publicly reachable HTTPS URL.",
-          "In the sending app, add a webhook using this URL, POST method, JSON body, and headers, then save it.",
-          "Send a unique Idempotency-Key header for each event and reuse it on retries, so retrying a setup test after activation cannot start the routine.",
-          'Example JSON body: {"event":"deployment.completed","environment":"production"}',
-          "To check the connection, send a test event from the app or perform the action that triggers a delivery.",
+          t("triggerWizard.subscribeOnlyToTheEvents"),
+          t("triggerWizard.inTheSendingAppAddAWebhook"),
+          t("triggerWizard.sendAUniqueIdempotencyKey"),
+          t("triggerWizard.exampleJsonBody"),
+          t("triggerWizard.toCheckTheConnectionSendATestEvent"),
         ];
   return [
     ...common,
     ...auth,
-    "Open Check connection in Paperclip to see whether the event arrived and authentication passed.",
+    t("triggerWizard.openCheckConnectionInPaperclip"),
     ...(setupPending
       ? [
-          "During setup, deliveries only test the connection. They do not start the routine or create a task.",
-          "Finish setup in Paperclip to enable this webhook for future events. Test events are not replayed.",
+          t("triggerWizard.duringSetupDeliveriesOnlyTest"),
+          t("triggerWizard.finishSetupInPaperclip"),
         ]
       : [
-          "This webhook is enabled. Deliveries can start the routine and create tasks.",
+          t("triggerWizard.thisWebhookIsEnabled"),
         ]),
-    "Store the key securely; do not put it in source control or logs.",
+    t("triggerWizard.storeTheKeySecurely"),
   ].join("\n");
 }
 export function describeSchedule(draft: TriggerDraft) {
-  return `${draft.frequency === "daily" ? t("triggers.everyDay") : draft.frequency === "weekly" ? t("triggerWizard.everyWeekday2", { weekday: draft.weekday }) : t("triggerWizard.everyWeekday")} at ${draft.time}`;
+  return `${draft.frequency === "daily" ? t("triggers.everyDay") : draft.frequency === "weekly" ? t("triggerWizard.everyWeekday2", { weekday: weekdayLabel(draft.weekday) }) : t("triggerWizard.everyWeekday")} at ${draft.time}`;
 }
 export function RoutineTriggerWizard({
   initialDraft,
@@ -177,8 +190,8 @@ export function RoutineTriggerWizard({
   const schedule = draft.kind === "schedule";
   const github = draft.sender === "github";
   const labels = schedule
-    ? ["Choose trigger", "Set schedule", t("triggers.reviewSchedule")]
-    : ["Choose trigger", "Connect your app", t("triggers.checkConnection")];
+    ? [t("triggerWizard.chooseTrigger"), t("triggerWizard.setSchedule"), t("triggers.reviewSchedule")]
+    : [t("triggerWizard.chooseTrigger"), t("triggerWizard.connectYourApp"), t("triggers.checkConnection")];
   function patch(values: Partial<TriggerDraft>) {
     setDraft((current) => ({ ...current, ...values }));
   }
@@ -203,7 +216,7 @@ export function RoutineTriggerWizard({
           ? t("triggerWizard.setASchedule")
           : t("triggerWizard.reviewYourSchedule")
         : draft.step === 1
-          ? t("triggerWizard.connectApp", { app: github ? t("triggers.github") : "your app" })
+          ? t("triggerWizard.connectApp", { app: github ? t("triggers.github") : t("triggerWizard.yourApp") })
           : t("triggerWizard.checkYourConnection");
   const subtitle =
     draft.step === 0
@@ -329,16 +342,8 @@ export function RoutineTriggerWizard({
                   value={draft.weekday}
                   onChange={(event) => patch({ weekday: event.target.value })}
                 >
-                  {[
-                    t("triggerWizard.monday"),
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                  ].map((day) => (
-                    <option key={day}>{day}</option>
+                  {WEEKDAY_KEYS.map(([value, key]) => (
+                    <option key={value} value={value}>{t(key)}</option>
                   ))}
                 </select>
               </div>
@@ -453,10 +458,9 @@ export function RoutineTriggerWizard({
             />
             {!github && draft.signingMode !== "bearer" && (
               <p className="text-sm text-muted-foreground">
-                Paste this key into your app’s signing secret field.
+                {t("triggerWizard.pasteThisKeyIntoYourAppSigningSecretField")}
                 {draft.signingMode !== "fireflies_hmac" && <>
-                  {" "}If your app uses custom headers instead, set Authorization to Bearer followed
-                  by a space and this key.
+                  {" "}{t("triggerWizard.ifYourAppUsesCustomHeaders")}
                 </>}
               </p>
             )}
@@ -490,7 +494,7 @@ export function RoutineTriggerWizard({
             </div>
             <div className="space-y-2">
               <p className="text-sm font-medium">
-                Send an event from {github ? t("triggers.github") : "your app"}
+                {t("triggerWizard.sendAnEventFrom", { app: github ? t("triggers.github") : t("triggerWizard.yourApp") })}
               </p>
               <p className="text-sm text-muted-foreground">
                 {github

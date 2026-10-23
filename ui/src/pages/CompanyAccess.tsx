@@ -333,22 +333,22 @@ export function CompanyAccess() {
                     request.requesterUser?.name ||
                     request.requestEmailSnapshot ||
                     request.requestingUserId ||
-                    "Unknown human requester"
+                    t("companyAccess.unknownHumanRequester")
                   }
                   subtitle={
                     request.requesterUser?.email ||
                     request.requestEmailSnapshot ||
                     request.requestingUserId ||
-                    "No email available"
+                    t("companyAccess.noEmailAvailable")
                   }
                   context={
                     request.invite
                       ? `${request.invite.allowedJoinTypes} join invite${request.invite.humanRole ? ` • default role ${request.invite.humanRole}` : ""}`
                       : t("companyAccess.inviteMetadataUnavailable")
                   }
-                  detail={`Submitted ${new Date(request.createdAt).toLocaleString()}`}
-                  approveLabel="Approve human"
-                  rejectLabel="Reject human"
+                  detail={t("companyAccess.submittedAt", { date: new Date(request.createdAt).toLocaleString() })}
+                  approveLabel={t("companyAccess.approveHuman")}
+                  rejectLabel={t("companyAccess.rejectHuman")}
                   disabled={joinRequestActionPending}
                   onApprove={() => approveJoinRequestMutation.mutate(request.id)}
                   onReject={() => rejectJoinRequestMutation.mutate(request.id)}
@@ -657,7 +657,7 @@ export function CompanyAccessLegacyRoute() {
 }
 
 function memberDisplayName(member: CompanyMember | null) {
-  if (!member) return "this member";
+  if (!member) return t("companyAccess.thisMember");
   return member.user?.name?.trim() || member.user?.email || member.principalId;
 }
 

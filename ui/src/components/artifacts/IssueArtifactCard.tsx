@@ -62,7 +62,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
     <Button
       variant="outline"
       size="sm"
-      aria-label={`Open in tab: ${props.title}`}
+      aria-label={t("issueArtifactCard.openInTabTitle", { title: props.title })}
       onClick={() => openTextAttachment(attachmentId, props.filename)}
     >
       {t("issueArtifactCard.openInTab")}
@@ -180,7 +180,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
       {csv && (tooLarge || data.isError || !localCsv) && (
         <div className="px-2 text-xs text-muted-foreground" role="status">
           {tooLarge
-            ? "CSV is too large to preview. Download the file to view it."
+            ? t("issueArtifactCard.csvTooLargeToPreview")
             : data.isError
               ? data.error.message
               : t("issueArtifactCard.csvPreviewIsUnavailableDownload")}

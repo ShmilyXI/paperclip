@@ -1722,7 +1722,9 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
             !bordered && "inset-0 rounded-sm",
           )}
         >
-          Drop {onDropFile ? "file" : "image"} to upload
+          {t("markdownEditor.dropToUpload", {
+            kind: onDropFile ? t("markdownEditor.dropKindFile") : t("markdownEditor.dropKindImage"),
+          })}
         </div>
       )}
       {uploadError && (

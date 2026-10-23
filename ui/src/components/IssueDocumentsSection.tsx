@@ -1248,9 +1248,9 @@ export function IssueDocumentsSection({
                       {activeConflict.showRemote && (
                         <div className="mt-3 rounded-md border border-border/70 bg-background/60 p-3">
                           <div className="mb-2 flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
-                            <span>Remote revision {activeConflict.serverDocument.latestRevisionNumber}</span>
+                            <span>{t("issueDocs.remoteRevisionN", { n: activeConflict.serverDocument.latestRevisionNumber })}</span>
                             <span>•</span>
-                            <span>updated {relativeTime(activeConflict.serverDocument.updatedAt)}</span>
+                            <span>{t("issueDocs.updatedAtTime", { time: relativeTime(activeConflict.serverDocument.updatedAt) })}</span>
                           </div>
                           {!isPlanKey(doc.key) && activeConflict.serverDocument.title ? (
                             <p className="mb-2 text-sm font-medium">{activeConflict.serverDocument.title}</p>

@@ -85,10 +85,10 @@ function CopyableInline({ value, label, mono }: { value: string; label?: string;
 
 function workspaceModeLabel(mode: string | null | undefined) {
   switch (mode) {
-    case "isolated_workspace": return "Isolated workspace";
-    case "operator_branch": return "Operator branch";
-    case "cloud_sandbox": return "Cloud environment";
-    case "adapter_managed": return "Adapter managed";
+    case "isolated_workspace": return t("issueWorkspaceCard.isolatedWorkspace");
+    case "operator_branch": return t("issueWorkspaceCard.operatorBranch");
+    case "cloud_sandbox": return t("issueWorkspaceCard.cloudEnvironment");
+    case "adapter_managed": return t("issueWorkspaceCard.adapterManaged");
     default: return t("common.workspace");
   }
 }
@@ -420,7 +420,7 @@ export function IssueWorkspaceCard({
           {!workspace && (
             <div className="text-muted-foreground">
               {currentSelection === "isolated_workspace"
-                ? "A fresh isolated workspace will be created when this task runs."
+                ? t("issueWorkspaceCard.aFreshIsolatedWorkspaceWillBeCreated")
                 : currentSelection === "reuse_existing"
                   ? t("issueWorkspaceCard.thisTaskWillReuseAn")
                   : t("issueWorkspaceCard.thisTaskWillUseThe")}

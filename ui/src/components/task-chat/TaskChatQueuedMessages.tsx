@@ -133,7 +133,7 @@ function SortableQueuedMessage({
         {...sortable.attributes}
         {...sortable.listeners}
         disabled={queueMutationDisabled || immutableResponse}
-        aria-label={`Reorder queued message: ${entry.comment.body}`}
+        aria-label={t("taskChatQueuedMessages.reorderQueuedMessageBody", { body: entry.comment.body })}
         className="flex h-7 w-7 shrink-0 cursor-grab items-center justify-center rounded-md text-muted-foreground/70 transition-colors hover:bg-accent hover:text-foreground active:cursor-grabbing disabled:cursor-default disabled:opacity-40"
       >
         <GripVertical className="h-3.5 w-3.5" aria-hidden />
@@ -190,7 +190,7 @@ function SortableQueuedMessage({
           !entry.canDiscard
         }
         title={t("taskChatQueuedMessages.discardQueuedMessage")}
-        aria-label={`Discard queued message: ${entry.comment.body}`}
+        aria-label={t("taskChatQueuedMessages.discardQueuedMessageBody", { body: entry.comment.body })}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-40"
         data-testid={`task-chat-queued-discard-${entry.comment.id}`}
       >
@@ -207,7 +207,7 @@ function SortableQueuedMessage({
             type="button"
             disabled={queueMutationDisabled || immutableResponse}
             title={t("taskChatQueuedMessages.queuedMessageActions")}
-            aria-label={`Queued message actions: ${entry.comment.body}`}
+            aria-label={t("taskChatQueuedMessages.queuedMessageActionsBody", { body: entry.comment.body })}
             className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           >
             <MoreHorizontal className="h-4 w-4" aria-hidden />
@@ -287,7 +287,7 @@ export function TaskChatQueuedMessages({
     setReordering(true);
     setVisibleError(null);
     setAnnouncement(
-      `Moved queued message to position ${to + 1} of ${next.length}.`,
+      t("taskChatQueuedMessages.movedQueuedMessageToPosition", { to: to + 1, length: next.length }),
     );
     try {
       await onReorder(orderedIds, queue.revision);

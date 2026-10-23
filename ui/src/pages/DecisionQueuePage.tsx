@@ -331,7 +331,7 @@ export function DecisionQueuePage() {
               onToggle={() => setAgingOpen((prev) => !prev)}
             >
               <p className="text-xs text-muted-foreground">
-                Idle past {ATTENTION_AGING_DAYS} days — kept off the queue. Keep any you still want surfaced.
+                {t("decisionQueuePage.idlePastDays", { days: ATTENTION_AGING_DAYS })}
               </p>
               {agingItems.map((item) => (
                 <AgingItemRow
@@ -379,7 +379,7 @@ function SeedRulesCard({
         <div className="flex min-w-0 items-start gap-2">
           <Settings2 className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
           <div className="min-w-0 space-y-1">
-            <p className="text-sm font-medium text-foreground">Auto-seeding is {enabled ? "on" : "off"}</p>
+            <p className="text-sm font-medium text-foreground">{enabled ? t("decisionQueuePage.autoSeedingIsOn") : t("decisionQueuePage.autoSeedingIsOff")}</p>
             <p className="text-xs text-muted-foreground">
               {enabled
                 ? t("decisionQueuePage.thisQueueFillsItselfAutomatically")
@@ -491,7 +491,7 @@ function QueueItemRow({
                 onClick={() => exclude.mutate()}
               >
                 {exclude.isPending && <Loader2 className="h-3 w-3 animate-spin" />}
-                Exclude
+                {t("decisionQueuePage.exclude")}
               </Button>
             </div>
           </PopoverContent>

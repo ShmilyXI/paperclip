@@ -60,14 +60,14 @@ export function GrokBotConnection({ companyId, agentId }: { companyId?: string; 
     {error && <p role="alert" className="text-destructive">{error.message}</p>}
     {state.data && !state.data.enabled && <p className="text-muted-foreground">{t("grokBotConnection.enableGrokBotAssistantConnections")}</p>}
     {binding?.connected ? <>
-      <p>Agent access connected. {routine?.verified && !recovering ? t("grokBotConnection.routineRoundTripVerified") : t("grokBotConnection.assignmentsRequireAVerifiedRoutine")}</p>
+      <p>{t("grokBotConnection.agentAccessConnected")} {routine?.verified && !recovering ? t("grokBotConnection.routineRoundTripVerified") : t("grokBotConnection.assignmentsRequireAVerifiedRoutine")}</p>
       <dl className="space-y-2 text-muted-foreground"><div><dt>{t("grokBotConnection.bot")}</dt><dd>{routine?.botName ?? t("grokBotConnection.notConfigured")}</dd></div><div><dt>{t("grokBotConnection.lastVerifiedExchange")}</dt><dd>{routine?.verifiedAt ? new Date(routine.verifiedAt).toLocaleString() : t("grokBotConnection.notYetVerified")}</dd></div><div><dt>{t("grokBotConnection.lastAuthenticatedContact")}</dt><dd>{routine?.lastContactAt ? new Date(routine.lastContactAt).toLocaleString() : t("grokBotConnection.notYetObserved")}</dd></div></dl>
-      {exchange && <p>Assignment delivered: {["accepted", "acknowledged"].includes(exchange.status) ? t("common.yes") : t("grokBotConnection.unconfirmed")}. Reply received: {exchange.acknowledgedAt ? t("common.yes") : t("common.no")}.</p>}
+      {exchange && <p>{t("grokBotConnection.assignmentDeliveredAndReplyReceived", { delivered: ["accepted", "acknowledged"].includes(exchange.status) ? t("common.yes") : t("grokBotConnection.unconfirmed"), reply: exchange.acknowledgedAt ? t("common.yes") : t("common.no") })}</p>}
       {exchange?.status === "rejected" && <div className="space-y-2"><p>{t("grokBotConnection.theRoutineRejectedThisDelivery")}</p><Button variant="outline" disabled={busy || recovering} onClick={() => retryDelivery.mutate(exchange.id)}>{t("grokBotConnection.retryRejectedDelivery")}</Button></div>}
       {!routine?.configured || replace ? <div className="space-y-3">
         <label className="block space-y-2"><span>{t("grokBotConnection.botNameInGrok")}</span><Input value={botName} onChange={e => setBotName(e.target.value)} maxLength={100} /></label>
         <AgentSetupPrompt prompt={buildGrokRoutinePrompt(binding.id, botName || "your Bot")} label={t("grokBotConnection.copyRoutineInstructions")} title={t("grokBotConnection.enableAssignments")} description={t("grokBotConnection.askTheBotForA")} />
-        <label className="block space-y-2"><span>Webhook URL</span><Input type="password" autoComplete="off" value={webhookUrl} onChange={e => setWebhookUrl(e.target.value)} /></label>
+        <label className="block space-y-2"><span>{t("grokBotConnection.webhookUrl")}</span><Input type="password" autoComplete="off" value={webhookUrl} onChange={e => setWebhookUrl(e.target.value)} /></label>
         <label className="block space-y-2"><span>{t("grokBotConnection.webhookKey")}</span><Input type="password" autoComplete="off" value={webhookKey} onChange={e => setWebhookKey(e.target.value)} /></label>
         <Button disabled={busy || recovering || !botName.trim() || !webhookUrl || !webhookKey} onClick={() => configure.mutate()}>{t("grokBotConnection.saveRoutine")}</Button>
       </div> : <div className="flex flex-wrap gap-2">

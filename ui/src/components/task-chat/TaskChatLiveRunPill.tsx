@@ -1,5 +1,6 @@
 import type { ExecutionProjection } from "@paperclipai/shared";
 import { Loader2 } from "lucide-react";
+import { t } from "@/i18n";
 import type { TranscriptEntry } from "../../adapters";
 import { cn } from "@/lib/utils";
 import { useSecondTick } from "@/hooks/useSecondTick";
@@ -70,7 +71,7 @@ export function TaskChatLiveRunPill({
     ? formatDurationWords(elapsedMs)
     : null;
   const failed = ["failed", "timed_out", "cancelled", "interrupted"].includes(status);
-  const verb = active ? "Working" : failed ? "Stopped" : "Worked";
+  const verb = active ? t("taskChatLiveRunPill.working") : failed ? t("taskChatLiveRunPill.stopped") : t("taskChatLiveRunPill.worked");
   const suffix = elapsed ? `for ${elapsed}` : null;
 
   return (

@@ -58,13 +58,13 @@ export function MyUserSecretsTab({ companyId }: { companyId: string }) {
       <div className="flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/5 px-4 py-3 text-xs text-violet-800 dark:text-violet-200">
         <UserRound className="h-4 w-4 mt-0.5 shrink-0" />
         <p>
-          These are credentials only you provide. Each value is yours alone — used when you are the
-          user responsible for a run — and is never shown back to anyone, including admins.
+          {t("userSecretsTab.credentialsOnlyYouProvide")}
           {missingCount > 0 ? (
             <span className="font-medium">
               {" "}
-              {missingCount} required secret{missingCount === 1 ? " still needs" : "s still need"} your
-              value.
+              {missingCount === 1
+                ? t("userSecretsTab.requiredSecretOne", { count: missingCount })
+                : t("userSecretsTab.requiredSecretsMany", { count: missingCount })}
             </span>
           ) : null}
         </p>
@@ -73,7 +73,7 @@ export function MyUserSecretsTab({ companyId }: { companyId: string }) {
       <div>
         {mySecretsQuery.isError ? (
           <div className="flex items-center gap-2 py-4 text-sm text-destructive">
-            <AlertCircle className="h-4 w-4" /> Failed to load your secrets:{" "}
+            <AlertCircle className="h-4 w-4" /> {t("userSecretsTab.failedToLoadYourSecrets")}{" "}
             {(mySecretsQuery.error as Error).message}
             <Button variant="ghost" size="sm" onClick={() => mySecretsQuery.refetch()}>
               {t("common.retry")}

@@ -37,7 +37,7 @@ export function SkillPackagePreview({ companyId, repository, commitSha, skill, i
         <DialogDescription className="break-all font-mono text-xs">{repositoryPackage ? 'Repository root' : root || 'Repository root'}/ · {inspection?.files.length ?? skill.fileCount ?? '?'} files{commitSha ? ` · ${commitSha.slice(0, 8)}` : ''}</DialogDescription>
       </DialogHeader>
       {!inspection && <p role="status" className="text-sm text-muted-foreground">{t("skillPackagePreview.refreshThisSourceToInspect")}</p>}
-      {skill.error && <p className="text-sm text-muted-foreground">Needs setup: {skill.error}</p>}
+      {skill.error && <p className="text-sm text-muted-foreground">{t("skillPackagePreview.needsSetup", { error: skill.error })}</p>}
       {inspection?.requirements && <section className="rounded-md border border-border bg-muted/30 p-3 text-sm">
         <h3 className="font-medium">{t("skillPackagePreview.runtimeRequirements")}</h3>
         <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{inspection.requirements}</p>
@@ -46,13 +46,13 @@ export function SkillPackagePreview({ companyId, repository, commitSha, skill, i
         <h3 className="flex items-center gap-2 font-medium"><AlertTriangle className="size-4" />{t("skillPackagePreview.filesNotIncluded")}</h3>
         <ul className="mt-2 space-y-2">
           {inspection!.references.map(reference => <li key={`${reference.fromPath}:${reference.resolvedPath}`} className="break-all text-xs">
-            <span className="font-mono">{reference.target}</span> · {reference.kind === 'outside_package' ? 'Outside this package' : t("common.notFound")}
-            <span className="text-muted-foreground"> · referenced in {reference.fromPath}</span>
+            <span className="font-mono">{reference.target}</span> · {reference.kind === 'outside_package' ? t("skillPackagePreview.outsideThisPackage") : t("common.notFound")}
+            <span className="text-muted-foreground"> · {t("skillPackagePreview.referencedIn", { path: reference.fromPath })}</span>
           </li>)}
         </ul>
       </section>}
       {Boolean(inspection?.warnings.length) && <details className="text-xs text-muted-foreground">
-        <summary className="cursor-pointer">Content audit · {inspection!.warnings.length} {inspection!.warnings.length === 1 ? 'notice' : 'notices'}</summary>
+        <summary className="cursor-pointer">{t("skillPackagePreview.contentAudit", { count: inspection!.warnings.length })}</summary>
         <ul className="mt-2 space-y-1">{inspection!.warnings.map(warning => <li key={warning}>{warning}</li>)}</ul>
       </details>}
       {inspection && <div className="flex min-h-0 flex-col overflow-hidden rounded-md border border-border md:flex-row">

@@ -206,7 +206,7 @@ export function ConnectClientDialog({
               groups={tokenGroups}
               onValueChange={setSelectedTokenId}
               placeholder={t("connectClientDialog.issueAToken")}
-              searchPlaceholder="Search tokens…"
+              searchPlaceholder={t("connectClientDialog.searchTokens")}
               emptyMessage={t("connectClientDialog.noCopyableTokens")}
               contentWidth="auto"
               triggerClassName="h-8 w-auto max-w-xs rounded-full px-3"

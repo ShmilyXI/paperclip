@@ -319,7 +319,7 @@ const LEGACY_AGENT_DETAIL_TABS = [
   { value: "budget", label: t("common.budget") },
 ] as const;
 
-export const DISCARD_AGENT_CONFIG_CHANGES_MESSAGE = "Discard unsaved agent configuration changes?";
+export const DISCARD_AGENT_CONFIG_CHANGES_MESSAGE = t("agentDetail.discardUnsavedAgentConfigurationChanges");
 
 export function confirmAgentConfigNavigation(
   dirty: boolean,
@@ -560,15 +560,15 @@ function parseStoredLogContent(content: string): RunLogChunk[] {
 function workspaceOperationPhaseLabel(phase: WorkspaceOperation["phase"]) {
   switch (phase) {
     case "worktree_prepare":
-      return "Worktree setup";
+      return t("workspaceOperations.worktreeSetup");
     case "workspace_config_freshness":
-      return "Config freshness";
+      return t("workspaceOperations.configFreshness");
     case "workspace_provision":
-      return "Provision";
+      return t("workspaceOperations.provision");
     case "workspace_teardown":
-      return "Teardown";
+      return t("workspaceOperations.teardown");
     case "worktree_cleanup":
-      return "Worktree cleanup";
+      return t("workspaceOperations.worktreeCleanup");
     default:
       return phase;
   }
@@ -684,7 +684,7 @@ function WorkspaceOperationsSection({
   return (
     <div className="rounded-lg border border-border bg-background/60 p-3 space-y-3">
       <div className="text-xs font-medium text-muted-foreground">
-        Workspace ({operations.length})
+        {t("agentDetail.workspaceCount", { count: operations.length })}
       </div>
       <div className="space-y-3">
         {operations.map((operation) => {
@@ -1243,7 +1243,7 @@ export function AgentDetail() {
           <div className="min-w-0 space-y-1">
             <p className="font-medium">{t("agentDetail.invalidReportingChain")}</p>
             <p className="text-amber-900/90 dark:text-amber-100/90">
-              {agent.name} cannot accept tasks or start runs until its reporting chain is repaired.
+              {agent.name} {t("agentDetail.cannotAcceptTasksOrStartRuns")}
             </p>
             <p className="break-words font-mono text-xs text-amber-900/80 dark:text-amber-100/80">
               {formatOrgChainHealthPath(agent)}
@@ -1298,7 +1298,7 @@ export function AgentDetail() {
             canRunWithProviderTrace={canUseProviderTrace && supportsRawProviderTrace(currentAgent.adapterType, currentAgent.adapterConfig)}
             actionsDisabled={agentAction.isPending}
             workActionsDisabled={hasInvalidOrgChain}
-            workActionsDisabledReason="Repair this agent's reporting chain before assigning tasks or starting runs"
+            workActionsDisabledReason={t("agentDetail.repairReportingChainBeforeAssigning")}
             hasPendingNavigationChanges={configDirty}
             onBeforeNavigate={prepareAgentNavigation}
             onActionError={setActionError}
@@ -1310,9 +1310,7 @@ export function AgentDetail() {
                     title: t("agentDetail.pauseTheDisplayname", { displayName: builtInState.definition.displayName }),
                     description: (
                       <>
-                        {builtInFeatureLabel} depends on this agent. While paused,{" "}
-                        {builtInFeatureLabel.toLowerCase()} generation is skipped and the{" "}
-                        {builtInFeatureLabel} page shows a warning.
+                        {builtInFeatureLabel} {t("agentDetail.dependsOnThisAgentWhilePaused", { feature: builtInFeatureLabel.toLowerCase(), label: builtInFeatureLabel })}
                       </>
                     ),
                   }
@@ -1871,7 +1869,7 @@ export function AgentOverview({
             ))}
             {assignedIssues.length > 6 && (
               <div className="border-t border-border px-3 py-2 text-center text-xs text-muted-foreground">
-                +{assignedIssues.length - 6} more tasks
+                +{assignedIssues.length - 6} {t("agentDetail.moreTasks")}
               </div>
             )}
           </div>
@@ -1977,7 +1975,7 @@ export function AgentRevisionsTab({
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Changed: {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : "no tracked changes"}
+                {t("agentDetail.changed")} {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : t("agentDetail.noTrackedChanges")}
               </p>
             </div>
           ))}
@@ -3107,9 +3105,9 @@ export function PromptsTab({
                   {candidate.errorMessage && <p className="text-sm text-muted-foreground">{candidate.errorMessage}</p>}
                   {candidate.entryFile !== currentEntryFile && <p className="text-sm text-muted-foreground">{t("agentDetail.theInstructionEntryChangedThese")}</p>}
                   {candidate.entryFile !== currentEntryFile && candidate.content !== null && readOnlyCandidateRunId === candidate.runId && (
-                    <div role="region" aria-label={`Preserved edits for ${candidate.entryFile}`} className="w-full space-y-3">
+                    <div role="region" aria-label={t("agentDetail.preservedEditsFor", { file: candidate.entryFile })} className="w-full space-y-3">
                       <p className="text-sm text-muted-foreground">{t("agentDetail.readOnlyNote", { entryFile: candidate.entryFile, currentEntryFile })}</p>
-                      <CopyText text={candidate.content} ariaLabel={`Copy preserved edits for ${candidate.entryFile}`}
+                      <CopyText text={candidate.content} ariaLabel={t("agentDetail.copyPreservedEditsFor", { file: candidate.entryFile })}
                         className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground">
                         <Copy className="h-3.5 w-3.5" />{t("agentDetail.copyPreservedEdits")}
                       </CopyText>
@@ -3128,8 +3126,8 @@ export function PromptsTab({
             {draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null) && <p className="text-sm text-destructive">{t("agentDetail.theCurrentInstructionsChangedAfter")}</p>}
             {(resolveCandidate.error || draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null)) && <Button type="button" variant="outline" size="sm" disabled={isSaving} onClick={() => refreshCandidateBase.mutate()}>{t("agentDetail.refreshCurrentRevision")}</Button>}
           </div>}
-          {(candidates.error || loadCandidate.error || resolveCandidate.error || refreshCandidateBase.error) && <p role="alert" className="text-sm text-destructive">{(candidates.error ?? loadCandidate.error ?? resolveCandidate.error ?? refreshCandidateBase.error)?.message} Your preserved edits remain available.</p>}
-          {(saveFile.error || fileError || updateBundle.error) && <p role="alert" className="text-sm text-destructive">{(saveFile.error ?? fileError ?? updateBundle.error)?.message} Your unsaved edits are retained.</p>}
+          {(candidates.error || loadCandidate.error || resolveCandidate.error || refreshCandidateBase.error) && <p role="alert" className="text-sm text-destructive">{(candidates.error ?? loadCandidate.error ?? resolveCandidate.error ?? refreshCandidateBase.error)?.message} {t("agentDetail.yourPreservedEditsRemainAvailable")}</p>}
+          {(saveFile.error || fileError || updateBundle.error) && <p role="alert" className="text-sm text-destructive">{(saveFile.error ?? fileError ?? updateBundle.error)?.message} {t("agentDetail.yourUnsavedEditsAreRetained")}</p>}
           {selectedFileDetail?.receipt?.materialization === "pending" && <p role="status" className="text-sm text-muted-foreground">{t("agentDetail.revisionSavedTheInstructionFile")}</p>}
           {selectedFileDetail?.revision && currentMode === "managed" && bundle?.persistence !== "agent_files" && <InstructionHistory
             key={selectedOrEntryFile} agentId={agent.id} companyId={companyId} path={selectedOrEntryFile}
@@ -3763,7 +3761,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                 data-testid="run-detail-on-behalf-of"
                 className="text-xs text-muted-foreground"
               >
-                On behalf of{" "}
+                {t("agentDetail.onBehalfOf")}{" "}
                 <span className="text-foreground">
                   {responsibleUserName ?? responsibleUserLabel(null)}
                 </span>
@@ -3882,7 +3880,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
             )}
             {hasNonZeroExit && (
               <div className="text-xs text-red-600 dark:text-red-400">
-                Exit code {run.exitCode}
+                {t("agentDetail.exitCode")} {run.exitCode}
                 {run.signal && <span className="text-muted-foreground ml-1">(signal: {run.signal})</span>}
               </div>
             )}
@@ -3900,7 +3898,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
               onClick={() => setSessionOpen((v) => !v)}
             >
               <ChevronRight className={cn("h-3 w-3 transition-transform", sessionOpen && "rotate-90")} />
-              Session
+              {t("agentDetail.session")}
               {sessionChanged && <span className="text-yellow-400 ml-1">{t("agentDetail.changed")}</span>}
             </button>
             {sessionOpen && (
@@ -3933,8 +3931,8 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                       }}
                     >
                       {clearSessionsForTouchedIssues.isPending
-                        ? "clearing session..."
-                        : "clear session for these tasks"}
+                        ? t("agentDetail.clearingSession")
+                        : t("agentDetail.clearSessionForTheseTasks")}
                     </button>
                     {clearSessionsForTouchedIssues.isError && (
                       <p className="text-(length:--text-micro) text-destructive mt-1">
@@ -4581,9 +4579,9 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
               {loadingMoreLog ? t("common.loading") : t("agentDetail.loadMoreLog")}
             </Button>
             <span className="text-xs text-muted-foreground">
-              Showing the first {Math.round(logOffset / 1024).toLocaleString(dateLocale())} KB
+              {t("agentDetail.showingTheFirst")} {Math.round(logOffset / 1024).toLocaleString(dateLocale())} KB
               {typeof run.logBytes === "number" && run.logBytes > 0
-                ? ` of ${Math.round(run.logBytes / 1024).toLocaleString(dateLocale())} KB`
+                ? ` ${t("agentDetail.ofKb", { kb: Math.round(run.logBytes / 1024).toLocaleString(dateLocale()) })}`
                 : ""}
             </span>
           </div>
@@ -4803,7 +4801,7 @@ export function KeysTab({ agentId, companyId }: { agentId: string; companyId?: s
                 <div>
                   <span className="text-sm font-medium">{key.name}</span>
                   <span className="text-xs text-muted-foreground ml-3">
-                    Created {formatDate(key.createdAt)}
+                    {t("common.created")} {formatDate(key.createdAt)}
                   </span>
                 </div>
                 <Button
@@ -4833,7 +4831,7 @@ export function KeysTab({ agentId, companyId }: { agentId: string; companyId?: s
                 <div>
                   <span className="text-sm line-through">{key.name}</span>
                   <span className="text-xs text-muted-foreground ml-3">
-                    Revoked {key.revokedAt ? formatDate(key.revokedAt) : ""}
+                    {t("agentDetail.revoked")} {key.revokedAt ? formatDate(key.revokedAt) : ""}
                   </span>
                 </div>
               </div>

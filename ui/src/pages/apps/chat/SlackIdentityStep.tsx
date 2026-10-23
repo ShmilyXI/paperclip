@@ -79,7 +79,7 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
                   <p className="text-xs text-muted-foreground">{identity.externalDetail}</p>
                 </div>
                 {mine ? <p role="status" className="flex items-center gap-2 text-sm"><CheckCircle2 className="size-4 text-(--status-task-done)" />{t("slackIdentityStep.linkedToYou")}</p>
-                  : identity.status === "linked" ? <p className="text-sm text-muted-foreground">Linked to {identity.paperclipUserLabel ?? "another Paperclip account"}</p>
+                  : identity.status === "linked" ? <p className="text-sm text-muted-foreground">{t("slackIdentityStep.linkedTo")} {identity.paperclipUserLabel ?? t("slackIdentityStep.anotherPaperclipAccount")}</p>
                   : <Button variant="outline" disabled={!userId || link.isPending} onClick={() => link.mutate(identity.principalId)} aria-label={`Link ${identity.externalLabel} to my Paperclip account`}>
                     {link.isPending && link.variables === identity.principalId && <Loader2 className="size-4 animate-spin" />}This is my Slack account
                   </Button>}

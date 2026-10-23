@@ -86,18 +86,18 @@ export function BillerSpendCard({
             label={t("billerSpendCard.periodSpend")}
             percentUsed={budgetPct}
             leftLabel={formatCents(row.costCents)}
-            rightLabel={`${Math.round(budgetPct)}% of company budget`}
+            rightLabel={t("billerSpendCard.budgetPctOfCompanyBudget", { pct: Math.round(budgetPct) })}
           />
         )}
 
         <div className="text-xs text-muted-foreground">
-          {row.apiRunCount > 0 ? `${row.apiRunCount} metered run${row.apiRunCount === 1 ? "" : "s"}` : "0 metered runs"}
+          {row.apiRunCount > 0 ? t("billerSpendCard.meteredRuns", { count: row.apiRunCount }) : t("billerSpendCard.zeroMeteredRuns")}
           {" · "}
           {row.subscriptionRunCount > 0
-            ? `${row.subscriptionRunCount} subscription run${row.subscriptionRunCount === 1 ? "" : "s"}`
-            : "0 subscription runs"}
+            ? t("billerSpendCard.subscriptionRuns", { count: row.subscriptionRunCount })
+            : t("billerSpendCard.zeroSubscriptionRuns")}
           {" · "}
-          {formatCents(weekSpendCents)} this week
+          {t("billerSpendCard.amountThisWeek", { amount: formatCents(weekSpendCents) })}
         </div>
 
         {billingTypeBreakdown.length > 0 && (

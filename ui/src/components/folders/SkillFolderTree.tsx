@@ -382,7 +382,7 @@ export function SkillFolderRail({
               expanded={expanded}
               renamingId={renamingId}
               renameDraft={renameDraft}
-              rootLabel="Bundled"
+              rootLabel={t("skillsUi.bundled")}
               rootIcon={<Boxes className="h-3.5 w-3.5" />}
               onToggle={toggle}
               onSelect={onSelect}
@@ -650,7 +650,7 @@ function TreeBranch({
                   <DropdownMenuItem onSelect={() => onEditFolder(folder)}>{t("skillsUi.editColor")}</DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => onMoveFolder(folder, isInMySkills ? "company" : "my")}>
                     <MoveRight className="h-3.5 w-3.5" />
-                    Move to {isInMySkills ? t("common.organization") : t("skillsUi.mySkills")}
+                    {t("skillsUi.moveTo", { target: isInMySkills ? t("common.organization") : t("skillsUi.mySkills") })}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem variant="destructive" onSelect={() => onDeleteFolder(folder)}>

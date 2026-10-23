@@ -45,9 +45,9 @@ export function MemberMultiSelect({
   triggerFullWidth = true,
   triggerClassName,
   contentAlign = "start",
-  emptyMessage = "No members yet.",
+  emptyMessage = t("memberMultiSelect.noMembersYet"),
   showSelectionPreview = true,
-  filterPlaceholder = "Filter people",
+  filterPlaceholder = t("memberMultiSelect.filterPeople"),
   onOpenChange,
 }: {
   members: MemberMultiSelectOption[];
@@ -125,7 +125,9 @@ export function MemberMultiSelect({
               <span className="truncate">
                 {triggerLabel ?? (selectedCount === 0
                   ? t("memberMultiSelect.selectPeople")
-                  : `${selectedCount} ${selectedCount === 1 ? "person" : "people"} selected`)}
+                  : selectedCount === 1
+                    ? t("memberMultiSelect.personSelected", { count: selectedCount })
+                    : t("memberMultiSelect.peopleSelected", { count: selectedCount }))}
               </span>
             </span>
             <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -161,7 +163,7 @@ export function MemberMultiSelect({
                   >
                     <Checkbox
                       checked={workingUserIds.has(member.userId)}
-                      aria-label={`Allow ${label}`}
+                      aria-label={t("memberMultiSelect.allowLabel", { label })}
                       onCheckedChange={(checked) => {
                         const next = new Set(workingUserIds);
                         if (checked) next.add(member.userId);
@@ -185,7 +187,7 @@ export function MemberMultiSelect({
           )}
           <div className="flex items-center justify-between border-t border-border px-3 py-2">
             <span className="text-xs text-muted-foreground" aria-live="polite">
-              {workingUserIds.size === 0 ? t("memberMultiSelect.noPeopleSelected") : `${workingUserIds.size} selected`}
+              {workingUserIds.size === 0 ? t("memberMultiSelect.noPeopleSelected") : t("memberMultiSelect.sizeSelected", { size: workingUserIds.size })}
             </span>
             <div className="flex items-center gap-2">
               {staged ? (

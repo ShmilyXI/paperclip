@@ -215,7 +215,7 @@ export function EnvironmentVariableRow({
             showNameIssue && nameIssue?.level === "error" && "border-destructive focus-visible:ring-destructive/40",
             showNameIssue && nameIssue?.level === "warn" && "border-amber-500 focus-visible:ring-amber-500/40",
           )}
-          placeholder="KEY"
+          placeholder={t("environmentVariablesEditorRow.keyPlaceholder")}
           value={row.name}
           spellCheck={false}
           disabled={disabled}
@@ -302,7 +302,7 @@ export function EnvironmentVariableRow({
                   <input
                     ref={valueInputRef}
                     className={valueTextInputClass}
-                    placeholder="value"
+                    placeholder={t("environmentVariablesEditorRow.valuePlaceholder")}
                     value={row.textValue}
                     type={sensitive ? "password" : "text"}
                     spellCheck={false}

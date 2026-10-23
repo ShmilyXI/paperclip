@@ -357,7 +357,10 @@ export function TaskChatStatusPill({
           ) : null}
           {item.tokens ? (
             <span className="ml-auto shrink-0 font-mono text-(length:--text-micro)">
-              {item.tokens.used.toLocaleString()}/{item.tokens.size.toLocaleString()} ctx
+              {t("taskChatStatusPill.contextTokens", {
+                used: item.tokens.used.toLocaleString(),
+                size: item.tokens.size.toLocaleString(),
+              })}
             </span>
           ) : null}
         </span>
@@ -423,7 +426,10 @@ export function TaskChatStatusPill({
           {elapsed ? <span>{elapsed}</span> : null}
           {item.tokens ? (
             <span>
-              {item.tokens.used.toLocaleString()}/{item.tokens.size.toLocaleString()} ctx
+              {t("taskChatStatusPill.contextTokens", {
+                used: item.tokens.used.toLocaleString(),
+                size: item.tokens.size.toLocaleString(),
+              })}
             </span>
           ) : null}
         </span>

@@ -150,7 +150,7 @@ export function ActionTestDialog({
           <p className="py-6 text-sm text-muted-foreground">{t("appActionTestDialog.noAgentsAreAvailableTo")}</p>
         ) : accessQuery.isError && !accessQuery.data ? (
           <TestLoadError
-            message={`We couldn't load ${selectedAgentBase?.name ?? "this agent"}'s permissions.`}
+            message={t("appActionTestDialog.couldNotLoadPermissions", { name: selectedAgentBase?.name ?? t("appActionTestDialog.thisAgent") })}
             onRetry={() => { void accessQuery.refetch(); }}
           />
         ) : !selectedAgent ? (
@@ -408,9 +408,9 @@ function splitRequiredOptional(schema: JsonSchemaNode): JsonSchemaNode {
 }
 
 const GUT_CHECK: Record<ToolConnectionTestDecision, (app: string, agent: string) => string> = {
-  allowed: (app, agent) => `This runs a real call against ${app} as ${agent}.`,
-  ask_first: () => `Waiting for your OK before this call leaves Paperclip.`,
-  off: (_app, agent) => `No call will be made — this action is off for ${agent}.`,
+  allowed: (app, agent) => t("appActionTestDialog.gutCheckAllowed", { app, agent }),
+  ask_first: () => t("appActionTestDialog.gutCheckAskFirst"),
+  off: (_app, agent) => t("appActionTestDialog.gutCheckOff", { agent }),
 };
 
 function ActionTester({
@@ -610,7 +610,7 @@ function RunningCard({
         {verb} {appName} as {agentName}.
       </p>
       <div className="mt-3 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">Started {seconds(elapsedMs)} ago · Press cancel to stop</span>
+        <span className="text-xs text-muted-foreground">{t("appActionTestDialog.startedAgoPressCancel", { seconds: seconds(elapsedMs) })}</span>
         <Button onClick={onCancel} size="sm" variant="outline">
           {t("common.cancel")}
         </Button>
@@ -677,7 +677,7 @@ function ProviderPendingResult({ pending, appName, connectionId, agent }: { pend
       <p className="text-muted-foreground">{t("appActionTestDialog.paperclipAllowedThisCallThe")}</p>
       {pending.links.map((link) => {
         const checked = checkOAuthEndpointUrl(link.url);
-        return checked.ok ? <Button key={checked.url} variant="outline" asChild><a href={checked.url} target="_blank" rel="noopener noreferrer">Continue at {checked.host}</a></Button> : null;
+        return checked.ok ? <Button key={checked.url} variant="outline" asChild><a href={checked.url} target="_blank" rel="noopener noreferrer">{t("appActionTestDialog.continueAt", { host: checked.host })}</a></Button> : null;
       })}
       {pending.message && <p className="whitespace-pre-wrap break-words">{pending.message}</p>}
       {pending.links.length === 0 && !pending.resumeTool && <p>{t("appActionTestDialog.openTheProviderDashboardTo")}</p>}
@@ -717,7 +717,7 @@ function ProviderResumeControls({ pending, connectionId, agent, onResult }: {
     if (!Object.keys(validation).length) resume.mutate(action);
   };
   return <div className="space-y-3">
-    <p className="text-muted-foreground">{t("appActionTestDialog.reviewTheProviderSRequest")} {agent.name}. The original action will not be started again.</p>
+    <p className="text-muted-foreground">{t("appActionTestDialog.reviewTheProviderSRequest")} {agent.name}{t("appActionTestDialog.originalActionWillNotBeStartedAgain")}</p>
     <div className="flex items-center gap-2"><span>{t("appActionTestDialog.resumePermission")}</span><DecisionBadge decision={permission} /></div>
     {Object.keys(schema.properties ?? {}).length > 0 && <JsonSchemaForm schema={schema} values={content} onChange={setContent} errors={errors} disabled={resume.isPending} />}
     <div className="flex flex-wrap gap-2">
@@ -749,7 +749,7 @@ function mcpToolError(value: unknown): { message: string; reasonCode: string | n
   const message =
     (typeof envelope.content === "string" && envelope.content.trim() !== "" && envelope.content)
     || (typeof envelope.error === "string" && envelope.error.trim() !== "" && envelope.error)
-    || "The app returned an error result.";
+    || t("appActionTestDialog.theAppReturnedAnErrorResult");
   return { message, reasonCode: "tool_error" };
 }
 
@@ -842,9 +842,9 @@ function successHeadline(value: unknown, entry: ToolCatalogEntry, appName: strin
   const verb = writeVerb(entry);
   if (!entry.isReadOnly && verb) return `Worked. Row ${verb}.`;
   const rows = asRows(value);
-  if (rows) return `Worked. ${rows.length} ${rows.length === 1 ? "row" : "rows"} came back.`;
-  if (isEmptyResult(value)) return "Worked. No data to show.";
-  return `Worked. ${appName} sent back the result.`;
+  if (rows) return t("appActionTestDialog.workedRowsCameBack", { count: rows.length });
+  if (isEmptyResult(value)) return t("appActionTestDialog.workedNoDataToShow");
+  return t("appActionTestDialog.workedAppSentBackResult", { app: appName });
 }
 
 function AllowedResult({
@@ -915,7 +915,7 @@ function PrettyPreview({ value }: { value: unknown }) {
         <div className="space-y-2">
           {shown.map((row, index) => <PreviewRowCard key={index} row={row} index={index} />)}
           {rows.length > shown.length && (
-            <p className="text-(length:--text-micro) text-muted-foreground">… {rows.length - shown.length} more rows in the raw response</p>
+            <p className="text-(length:--text-micro) text-muted-foreground">{t("appActionTestDialog.moreRowsInRawResponse", { count: rows.length - shown.length })}</p>
           )}
         </div>
       );
@@ -941,7 +941,7 @@ function PrettyPreview({ value }: { value: unknown }) {
           </tbody>
         </table>
         {rows.length > shown.length && (
-          <p className="px-2.5 py-1.5 text-(length:--text-micro) text-muted-foreground">… {rows.length - shown.length} more rows</p>
+          <p className="px-2.5 py-1.5 text-(length:--text-micro) text-muted-foreground">{t("appActionTestDialog.moreRows", { count: rows.length - shown.length })}</p>
         )}
       </div>
     );
@@ -999,7 +999,7 @@ function PreviewRowCard({ row, index }: { row: Record<string, unknown>; index: n
           ))}
         </dl>
       )}
-      {details.length > 3 && <p className="mt-2 text-muted-foreground">{details.length - 3} more {details.length === 4 ? "field" : "fields"} in the raw response</p>}
+      {details.length > 3 && <p className="mt-2 text-muted-foreground">{t("appActionTestDialog.moreFieldsInRawResponse", { count: details.length - 3 })}</p>}
     </div>
   );
 }
@@ -1277,7 +1277,7 @@ function OffExplanation({
 
   const whyBody = entry.status === "quarantined"
     ? t("appActionTestDialog.thisActionIsNewAnd")
-    : `${agent.name}'s access profile sets this action to Off.`;
+    : t("appActionTestDialog.accessProfileSetsActionToOff", { name: agent.name });
 
   // "Last changed by {Actor} · {relativeTime}" — only the access config carries
   // this; a quarantined action has never been configured, so there's nothing to
@@ -1294,21 +1294,21 @@ function OffExplanation({
         <div className="flex items-start gap-2">
           <Ban className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
           <div className="text-sm text-muted-foreground">
-            <p className="font-medium text-foreground">{title} is off for {agent.name}.</p>
+            <p className="font-medium text-foreground">{t("appActionTestDialog.titleIsOffFor", { title, agent: agent.name })}</p>
             <p className="mt-0.5">{t("appActionTestDialog.itWonTRunHere")}</p>
             <p className="mt-2">
-              Want to test it? Turn it on for {agent.name} in{" "}
+              {t("appActionTestDialog.wantToTestItTurnItOnFor", { name: agent.name })}{" "}
               <Link className="font-medium text-primary hover:underline" to={appTabHref(connectionId, "permissions")}>
                 {t("common.permissions")}
               </Link>{" "}
-              — set it to Allowed or Ask first.
+              {t("appActionTestDialog.setItToAllowedOrAskFirst")}
             </p>
           </div>
         </div>
         <Button asChild size="sm">
           <Link to={permHref}>{t("appActionTestDialog.openPermissions")}</Link>
         </Button>
-        <p className="text-xs text-muted-foreground">No call will be made — this action is off for {agent.name}.</p>
+        <p className="text-xs text-muted-foreground">{t("appActionTestDialog.gutCheckOff", { agent: agent.name })}</p>
       </div>
 
       <aside>
@@ -1360,33 +1360,33 @@ function isReconnectError(reasonCode: string | null | undefined): boolean {
 
 export function errorHints(message: string, reasonCode: string | null | undefined): string[] {
   if (reasonCode === "grant_credential_invalid") {
-    return ["Ask the connection owner to reconnect it from Connectors with a fresh key or server URL."];
+    return [t("appActionTestDialog.askTheConnectionOwnerToReconnect")];
   }
   if (reasonCode === "oauth_insufficient_scope") {
-    return ["Reconnect the app and allow the permissions required for this action."];
+    return [t("appActionTestDialog.reconnectTheAppAndAllowPermissions")];
   }
   const haystack = `${reasonCode ?? ""} ${message}`.toUpperCase();
   if (haystack.includes("NOT_FOUND")) {
     return [
-      "Double-check the ID or name you entered — pick it from a dropdown if one is offered.",
-      "Make sure this agent has access to that resource in the connected account.",
+      t("appActionTestDialog.doubleCheckTheIdOrName"),
+      t("appActionTestDialog.makeSureThisAgentHasAccess"),
     ];
   }
   if (haystack.includes("PERMISSION") || haystack.includes("FORBIDDEN") || haystack.includes("UNAUTHORIZED")) {
     return [
-      "The connected account may not have permission for this action.",
-      "Reconnect the app from Setup if its access was recently changed.",
+      t("appActionTestDialog.connectedAccountMayNotHavePermission"),
+      t("appActionTestDialog.reconnectTheAppFromSetup"),
     ];
   }
   if (haystack.includes("INVALID_ARGUMENT") || haystack.includes("INVALID") || haystack.includes("BAD_REQUEST")) {
     return [
-      "Check the field formats above — a value may be the wrong type or shape.",
-      "Open “More options” to confirm any advanced fields are filled in correctly.",
+      t("appActionTestDialog.checkTheFieldFormatsAbove"),
+      t("appActionTestDialog.openMoreOptionsToConfirm"),
     ];
   }
   if (haystack.includes("RATE_LIMIT") || haystack.includes("RESOURCE_EXHAUSTED") || haystack.includes("429")) {
-    return ["The app is rate-limiting calls right now — wait a moment and run it again."];
+    return [t("appActionTestDialog.theAppIsRateLimitingCalls")];
   }
   // Locked generic fallback (copy-spec decision #2).
-  return ["Check the inputs above and try again."];
+  return [t("appActionTestDialog.checkTheInputsAboveAndTryAgain")];
 }

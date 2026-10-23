@@ -75,7 +75,10 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
           className="paperclip-doc-annotation-sheet z-(--z-60) flex max-h-(--sz-88vh) flex-col rounded-none border-t border-border bg-popover p-0 text-popover-foreground shadow-2xl"
         >
           <SheetTitle className="sr-only">
-            Comments on {props.documentKey} revision {props.documentRevisionNumber}
+            {t("documentAnnotationPanel.commentsOnRevision", {
+              documentKey: props.documentKey,
+              revision: props.documentRevisionNumber,
+            })}
           </SheetTitle>
           <div className="mx-auto mt-2 h-1.5 w-12 shrink-0 rounded-full bg-muted-foreground/30" aria-hidden="true" />
           <AnnotationPanelBody {...props} />
@@ -89,7 +92,10 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
   return (
     <aside
       role="complementary"
-      aria-label={`Annotations for ${props.documentKey.toUpperCase()}, revision ${props.documentRevisionNumber}`}
+      aria-label={t("documentAnnotationPanel.annotationsFor", {
+        documentKey: props.documentKey.toUpperCase(),
+        revision: props.documentRevisionNumber,
+      })}
       data-testid="document-annotation-panel"
       className={cn(
         "isolate flex h-full max-h-(--sz-80vh) shrink-0 flex-col overflow-hidden rounded-none border border-border bg-popover text-popover-foreground shadow-xl",
@@ -111,7 +117,7 @@ export function AnnotationPanelBody(props: AnnotationPanelProps) {
   const bodyTestId = props.isMobile ? "document-annotation-panel" : undefined;
   const annotationTarget = useMemo<DocumentAnnotationTarget>(() => {
     if (props.target) return props.target;
-    if (!props.issueId) throw new Error("Document annotation panel requires an annotation target.");
+    if (!props.issueId) throw new Error(t("documentAnnotationPanel.documentAnnotationPanelRequiresAn"));
     return { kind: "issue", issueId: props.issueId, documentKey: props.documentKey };
   }, [props.documentKey, props.issueId, props.target]);
 
@@ -545,7 +551,7 @@ export function useCopyAnnotationLink() {
       if (typeof window === "undefined") return;
       const { pathname } = window.location;
       const hash = `#document-${encodeURIComponent(documentKey)}&thread=${encodeURIComponent(threadId)}`;
-      void copyWithToast(`${window.location.origin}${pathname}${hash}`, "Link copied");
+      void copyWithToast(`${window.location.origin}${pathname}${hash}`, t("documentAnnotationPanel.linkCopied"));
     },
     [copyWithToast],
   );

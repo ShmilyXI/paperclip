@@ -131,8 +131,8 @@ function rangeWindow(range: DateRangeState): Pick<WorkTimelineParams, "from" | "
 }
 
 function rangeError(range: DateRangeState): string | null {
-  if (!range.fromDate || !range.toDate) return "Choose a start and end date.";
-  if (!rangeWindow(range)) return "Start date must be before end date.";
+  if (!range.fromDate || !range.toDate) return t("timeline.chooseAStartAndEndDate");
+  if (!rangeWindow(range)) return t("timeline.startDateMustBeBeforeEndDate");
   return null;
 }
 

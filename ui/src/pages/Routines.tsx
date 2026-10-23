@@ -964,8 +964,8 @@ export function Routines() {
                     options={assigneeOptions}
                     recentOptionIds={recentAssigneeIds}
                     placeholder={t("routines.responsible")}
-                    noneLabel="No responsible"
-                    searchPlaceholder="Search responsible..."
+                    noneLabel={t("routines.noResponsible")}
+                    searchPlaceholder={t("routines.searchResponsible")}
                     emptyMessage={t("routines.noResponsibleFound")}
                     onChange={(assigneeAgentId) => {
                       if (assigneeAgentId) trackRecentAssignee(assigneeAgentId);
@@ -1011,7 +1011,7 @@ export function Routines() {
                     recentOptionIds={recentProjectIds}
                     placeholder={t("common.project")}
                     noneLabel={t("routines.noProject")}
-                    searchPlaceholder="Search projects..."
+                    searchPlaceholder={t("routines.searchProjects")}
                     emptyMessage={t("routines.noProjectsFound")}
                     onChange={(projectId) => {
                       if (projectId) trackRecentProject(projectId);

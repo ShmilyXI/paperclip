@@ -63,18 +63,18 @@ type InboxScopeFilters = {
 };
 
 const INBOX_CATEGORY_OPTIONS: ReadonlyArray<[InboxCategoryFilter, string]> = [
-  ["everything", "All categories"],
-  ["issues_i_touched", "My recent tasks"],
-  ["join_requests", "Join requests"],
+  ["everything", t("issueFiltersPopover.allCategories")],
+  ["issues_i_touched", t("issueFiltersPopover.myRecentTasks")],
+  ["join_requests", t("issueFiltersPopover.joinRequests")],
   ["approvals", t("common.approvals")],
-  ["failed_runs", "Failed runs"],
-  ["alerts", "Alerts"],
+  ["failed_runs", t("issueFiltersPopover.failedRuns")],
+  ["alerts", t("issueFiltersPopover.alerts")],
 ];
 
 const INBOX_APPROVAL_STATUS_OPTIONS: ReadonlyArray<[InboxApprovalFilter, string]> = [
-  ["all", "All approval statuses"],
-  ["actionable", "Needs action"],
-  ["resolved", "Resolved"],
+  ["all", t("issueFiltersPopover.allApprovalStatuses")],
+  ["actionable", t("issueFiltersPopover.needsAction")],
+  ["resolved", t("issueFiltersPopover.resolved")],
 ];
 
 const SEARCHABLE_FILTER_THRESHOLD = 6;
@@ -94,8 +94,8 @@ function FilterOptionSearch({
       <Input
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder={`Search ${label.toLowerCase()}...`}
-        aria-label={`Search ${label.toLowerCase()}`}
+        placeholder={t("issueFiltersPopover.searchPlaceholder", { label: label.toLowerCase() })}
+        aria-label={t("issueFiltersPopover.searchAriaLabel", { label: label.toLowerCase() })}
         className="h-8 pl-7 text-xs"
       />
     </div>
@@ -399,7 +399,7 @@ export function IssueFiltersPopover({
                             type="button"
                             className="rounded-full p-0.5 hover:bg-accent"
                             onClick={() => onChange({ creators: state.creators.filter((value) => value !== creator.id) })}
-                            aria-label={`Remove creator ${creator.label}`}
+                            aria-label={t("issueFiltersPopover.removeCreator", { label: creator.label })}
                           >
                             <X className="h-3 w-3" />
                           </button>

@@ -73,7 +73,7 @@ function isCompanySearchScope(value: string | null): value is CompanySearchScope
 }
 
 function describeScope(scope: CompanySearchScope) {
-  if (scope === "all") return "All scopes";
+  if (scope === "all") return t("search.allScopes");
   return SCOPE_LABELS[scope];
 }
 

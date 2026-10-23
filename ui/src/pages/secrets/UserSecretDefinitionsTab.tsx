@@ -170,8 +170,8 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
       <div className="min-h-0 flex-1 overflow-y-auto">
         {definitionsQuery.isError ? (
           <div className="flex items-center gap-2 py-4 text-sm text-destructive">
-            <AlertCircle className="h-4 w-4" /> Failed to load definitions:{" "}
-            {(definitionsQuery.error as Error).message}
+            <AlertCircle className="h-4 w-4" />{" "}
+            {t("userSecretDefinitionsTab.failedToLoadDefinitions", { message: (definitionsQuery.error as Error).message })}
             <Button variant="ghost" size="sm" onClick={() => definitionsQuery.refetch()}>
               {t("common.retry")}
             </Button>
@@ -271,7 +271,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
                 disabled={Boolean(editing)}
               />
               <p className="text-(length:--text-micro) text-muted-foreground">
-                Stable identifier referenced by env bindings. {editing ? t("userSecretDefinitionsTab.cannotBeChanged") : ""}
+                {t("userSecretDefinitionsTab.stableIdentifier")} {editing ? t("userSecretDefinitionsTab.cannotBeChanged") : ""}
               </p>
             </div>
             <div className="space-y-1">

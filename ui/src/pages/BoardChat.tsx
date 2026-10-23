@@ -594,7 +594,7 @@ export function BoardChat() {
               } else if (event.type === "error") {
                 setErrorText(
                   event.message ||
-                    "The board assistant couldn't respond. Please try again.",
+                    t("boardChat.theBoardAssistantCouldnTRespond"),
                 );
                 setStatusText("");
               } else if (event.type === "done") {
@@ -732,11 +732,11 @@ export function BoardChat() {
                 const ceoName = ceoAgent.name;
                 const companyName = selectedCompany.name;
                 const missionLine = missionText
-                  ? ` — your mission is "${missionText}".`
+                  ? t("boardChat.yourMissionIs", { mission: missionText })
                   : ".";
                 const welcomeBody =
-                  `Welcome to **${companyName}**! I'm ${ceoName}, your team lead. I've read through what you shared in the wizard${missionLine}\n\n` +
-                  `Here are a few things I can help you put on paper right now. Pick one below and I'll draft it for you using everything you told us.`;
+                  t("boardChat.welcomeBody", { company: companyName, ceo: ceoName, missionLine }) + "\n\n" +
+                  t("boardChat.welcomeIntro");
 
                 const userHasReplied = sortedComments.some(
                   (c) => !c.authorAgentId && c.authorUserId !== "board-concierge",
@@ -960,7 +960,7 @@ export function BoardChat() {
               surface="translucent"
               submitting={sending}
               disabled={sending}
-              sendLabel="Send message"
+              sendLabel={t("boardChat.sendMessage")}
               className="pointer-events-auto"
             />
           </div>

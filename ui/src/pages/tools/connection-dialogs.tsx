@@ -78,7 +78,7 @@ export function CatalogDialog({ connection, onClose }: { connection: ToolConnect
     <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Tool catalog — {connection.name}</DialogTitle>
+          <DialogTitle>{t("connectionDialogs.toolCatalog", { name: connection.name })}</DialogTitle>
         </DialogHeader>
         {catalog.isLoading ? (
           <LoadingState />

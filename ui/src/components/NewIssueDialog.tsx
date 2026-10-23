@@ -1139,7 +1139,7 @@ export function NewIssueDialog() {
           }
         }}
       >
-        <DialogTitle className="sr-only">{isSubIssueMode ? "New sub-task" : t("common.newTask2")}</DialogTitle>
+        <DialogTitle className="sr-only">{isSubIssueMode ? t("newIssue.newSubTask") : t("common.newTask2")}</DialogTitle>
         <div
           ref={dialogBodyRef}
           className={cn("min-h-0 overflow-y-auto overscroll-contain", isFileDragOver && "bg-accent/20")}
@@ -1198,7 +1198,7 @@ export function NewIssueDialog() {
                     }
                   },
                 },
-                submitLabel: isSubIssueMode ? "Create sub-task" : "Create task",
+                submitLabel: isSubIssueMode ? t("newIssue.createSubTask") : t("newIssue.createTask"),
                 canSubmitWithoutBody: Boolean(title.trim()),
                 onSelectFiles: stageFiles,
                 runSettings: composerSettings,
@@ -1239,14 +1239,14 @@ export function NewIssueDialog() {
                   <>
                     {parentPrivacyUnresolved ? (
                       <div role={parentPrivacyError ? "alert" : "status"} className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{parentPrivacyError ? "Couldn't check parent access." : "Checking parent access…"}</span>
+                        <span>{parentPrivacyError ? t("newIssue.couldnTCheckParentAccess") : t("newIssue.checkingParentAccess")}</span>
                         {parentPrivacyError ? <Button variant="ghost" size="sm" onClick={() => void refetchParentPrivacy()}>{t("common.retry")}</Button> : null}
                       </div>
                     ) : null}
                     {worktreeSelectionIncomplete && !worktreesLoading ? (
                       <p role="alert" className="mb-2 text-xs text-destructive">
-                        {worktreesError ? "Couldn't check the selected worktree. Retry in Worktrees or choose New worktree."
-                          : "The selected worktree is no longer available. Choose another worktree or start a new one."}
+                        {worktreesError ? t("newIssue.couldnTCheckTheSelectedWorktree")
+                          : t("newIssue.theSelectedWorktreeIsNoLonger")}
                       </p>
                     ) : null}
                     {stagedFiles.length > 0 ? (
@@ -1346,12 +1346,12 @@ export function NewIssueDialog() {
                     {selectedAssigneeAgent?.status === "paused" ? (
                       <div data-testid="new-issue-paused-assignee-note" className="mx-4 mb-2">
                         <InlineBanner tone="warning" icon={PauseCircle} compact>
-                          <span className="font-medium">{selectedAssigneeAgent.name}</span> is paused and will not start
-                          work on this task until it is resumed
+                          <span className="font-medium">{selectedAssigneeAgent.name}</span>
+                          {t("newIssue.isPausedAndWillNotStart")}
                           {selectedAssigneeAgent.pauseReason === "import"
-                            ? " — it arrived paused from an organization import"
+                            ? t("newIssue.itArrivedPausedFromImport")
                             : ""}
-                          . You can resume it from the task page after creating the task.
+                          {t("newIssue.youCanResumeItFromTheTaskPage")}
                         </InlineBanner>
                       </div>
                     ) : null}
@@ -1372,8 +1372,7 @@ export function NewIssueDialog() {
                     {showParentWorkspaceWarning ? (
                       <div className="mb-2">
                         <InlineBanner tone="warning" compact>
-                          This sub-task will no longer use the parent task workspace
-                          {parentExecutionWorkspaceLabel ? ` (${parentExecutionWorkspaceLabel})` : ""}.
+                          {t("newIssue.thisSubTaskWillNoLongerUseParentWorkspace", { workspace: parentExecutionWorkspaceLabel ? ` (${parentExecutionWorkspaceLabel})` : "" })}
                         </InlineBanner>
                       </div>
                     ) : null}
@@ -1390,15 +1389,15 @@ export function NewIssueDialog() {
                       options={projectOptions}
                       recentOptionIds={recentProjectIds}
                       placeholder={t("common.project")}
-                      mobileTitle="Select project"
+                      mobileTitle={t("newIssue.selectProject")}
                       modal
                       className="h-8 min-w-0 flex-1 gap-1.5 border-0 bg-transparent px-2 text-xs shadow-none hover:bg-accent focus-visible:bg-accent focus-visible:ring-0 sm:max-w-64 sm:flex-none"
                       disabled={createIssue.isPending}
                       triggerDataSlot="new-issue-compact-control"
                       contentStyle={entityPickerViewportStyle}
-                      noneLabel="No project"
+                      noneLabel={t("newIssue.noProject")}
                       noneAtTop
-                      searchPlaceholder="Search projects..."
+                      searchPlaceholder={t("newIssue.searchProjects")}
                       emptyMessage={t("newIssue.noProjectsFound")}
                       onChange={handleProjectChange}
                       renderTriggerValue={(option) =>

@@ -36,7 +36,7 @@ export function CopyText({
       await copyTextToClipboard(text);
       setLabel(copiedLabel);
     } catch {
-      setLabel("Copy failed");
+      setLabel(t("copyText.copyFailed"));
     }
     clearTimeout(timerRef.current);
     setVisible(true);

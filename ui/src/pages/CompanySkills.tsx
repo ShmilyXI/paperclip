@@ -304,13 +304,13 @@ function middleTruncate(value: string, maxLength = 72) {
 
 function formatProjectScanSummary(result: CompanySkillProjectScanResult) {
   const parts = [
-    `${result.discovered} found`,
-    `${result.imported.length} imported`,
-    `${result.updated.length} updated`,
+    t("companySkills.discoveredFound", { discovered: result.discovered }),
+    t("companySkills.lengthImported", { length: result.imported.length }),
+    t("companySkills.lengthUpdated", { length: result.updated.length }),
   ];
-  if (result.conflicts.length > 0) parts.push(`${result.conflicts.length} conflicts`);
-  if (result.skipped.length > 0) parts.push(`${result.skipped.length} skipped`);
-  return `${parts.join(", ")} across ${result.scannedWorkspaces} workspace${result.scannedWorkspaces === 1 ? "" : "s"}.`;
+  if (result.conflicts.length > 0) parts.push(t("companySkills.lengthConflicts", { length: result.conflicts.length }));
+  if (result.skipped.length > 0) parts.push(t("companySkills.lengthSkipped", { length: result.skipped.length }));
+  return t("companySkills.scanSummary", { parts: parts.join(", "), count: result.scannedWorkspaces });
 }
 
 function fileIcon(kind: CompanySkillFileInventoryEntry["kind"]) {
@@ -862,7 +862,7 @@ function SkillCard({
             type="checkbox"
             className="mt-1 h-4 w-4 rounded border-border"
             checked={selected}
-            aria-label={`Select ${card.name}`}
+            aria-label={t("importSkills.selectName", { name: card.name })}
             onClick={(event) => event.stopPropagation()}
             onChange={(event) => onSelectChange?.(card, event.target.checked)}
           />
@@ -871,7 +871,7 @@ function SkillCard({
         <div className="min-w-0 flex-1">
           <div className="truncate font-mono text-sm font-medium text-foreground">{card.name}</div>
           <div className="truncate text-xs text-muted-foreground">
-            by {card.author}{card.version ? ` · ${card.version}` : ""}
+            {t("skills.by")} {card.author}{card.version ? ` · ${card.version}` : ""}
           </div>
           {badgeFolder !== undefined ? (
             <div className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
@@ -887,7 +887,7 @@ function SkillCard({
                 variant="ghost"
                 size="icon-sm"
                 className="-mr-1 -mt-1 opacity-70 group-hover:opacity-100"
-                aria-label={`More actions for ${card.name}`}
+                aria-label={t("secrets.moreActionsFor", { name: card.name })}
                 onClick={(event) => event.stopPropagation()}
               >
                 <MoreHorizontal className="h-4 w-4" />
@@ -1263,7 +1263,7 @@ export function DiscoveryGrid({
                   value={activeCategory ?? "__all__"}
                   onValueChange={(value) => onCategoryChange(value === "__all__" ? null : value)}
                 >
-                  <DropdownMenuRadioItem value="__all__">All ({categoryTotal})</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="__all__">{t("companySkills.allCount", { count: categoryTotal })}</DropdownMenuRadioItem>
                   {categories.map((category) => (
                     <DropdownMenuRadioItem key={category.slug} value={category.slug} className="capitalize">
                       {category.slug} ({category.count})
@@ -1287,8 +1287,8 @@ export function DiscoveryGrid({
                   size="sm"
                   onClick={() => onScan(activeProjectId)}
                   disabled={scanPending}
-                  aria-label={`Refresh ${activeProjectFolder.name} project skills`}
-                  title={`Refresh skills from ${activeProjectFolder.name}`}
+                  aria-label={t("companySkills.refreshNameProjectSkills", { name: activeProjectFolder.name })}
+                  title={t("companySkills.refreshSkillsFromName", { name: activeProjectFolder.name })}
                 >
                   <RefreshCw className={cn("h-3.5 w-3.5", scanPending && "animate-spin")} />
                   {t("common.refresh")}
@@ -1526,7 +1526,7 @@ function NewSkillWizard({
                     draft.color === color ? "border-foreground" : "border-border",
                   )}
                   style={{ backgroundColor: color }}
-                  aria-label={`Use ${color}`}
+                  aria-label={t("skillStudio.useColor", { color })}
                 />
               ))}
               <Input
@@ -2084,8 +2084,9 @@ export function InstallPreviewDialog({
 
           {conflict ? (
             <div className="rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-200">
-              An existing skill with key <span className="font-mono">{conflict.key}</span> is installed (
-              {conflict.sourceLabel ?? conflict.sourceType}). Installing will {defaultAction === "update" ? "overwrite the catalog content" : "replace the existing skill"}.
+              {t("companySkills.existingSkillWithKey")} <span className="font-mono">{conflict.key}</span>{" "}
+              {t("companySkills.installedSourceNote", { source: conflict.sourceLabel ?? conflict.sourceType })}{" "}
+              {defaultAction === "update" ? t("companySkills.overwriteCatalogContent") : t("companySkills.replaceExistingSkill")}.
             </div>
           ) : null}
 
@@ -2110,7 +2111,7 @@ export function InstallPreviewDialog({
                 }}
                 getDescription={(agent) => {
                   const option = agent as AttachAgentOption;
-                  return `${option.adapterType}${option.required ? " · required" : ""}${!option.supportsSkills ? " · skills not supported" : ""}`;
+                  return `${option.adapterType}${option.required ? ` · ${t("common.required")}` : ""}${!option.supportsSkills ? ` · ${t("companySkills.skillsNotSupported")}` : ""}`;
                 }}
               />
             </div>
@@ -2233,14 +2234,14 @@ function AttachAgentsPopover({
           </select>
         </div>
       ) : null}
-      emptyMessage={eligible.length === 0 ? t("skills.noAgentsInThisOrganization") : "No agents yet."}
+      emptyMessage={eligible.length === 0 ? t("skills.noAgentsInThisOrganization") : t("agentChatPicker.noAgentsYet")}
       isAgentDisabled={(agent) => {
         const option = agent as AttachAgentOption;
         return option.required || !option.supportsSkills;
       }}
       getDescription={(agent) => {
         const option = agent as AttachAgentOption;
-        return `${option.adapterType}${option.required ? " · required" : ""}${!option.supportsSkills ? " · skills not supported" : ""}`;
+        return `${option.adapterType}${option.required ? ` · ${t("common.required")}` : ""}${!option.supportsSkills ? ` · ${t("companySkills.skillsNotSupported")}` : ""}`;
       }}
       renderNameSuffix={(agent) => (agent as AttachAgentOption).paused ? (
         <Badge variant="outline" className="[&>svg]:size-2.5 border-amber-500/30 bg-amber-500/10 px-1.5 text-(length:--text-nano) uppercase tracking-wide text-amber-500">
@@ -2722,7 +2723,7 @@ function SkillTagsEditor({
             {tag}
             <button
               type="button"
-              aria-label={`Remove tag ${tag}`}
+              aria-label={t("companySkills.removeTagTag", { tag })}
               disabled={pending}
               onClick={() => onSave(categories.filter((entry) => entry !== tag))}
               className="text-muted-foreground hover:text-foreground disabled:opacity-50"
@@ -3070,7 +3071,7 @@ export function SkillDetailPage({
                   <span>{t("skills.readOnly")}</span>
                   <Button type="button" variant="outline" size="xs" onClick={onFork}>
                     <GitFork className="mr-1 h-3 w-3" />
-                    {skill.sourceType === "github" ? t("companySkills.makeACopy") : "Fork"}
+                    {skill.sourceType === "github" ? t("companySkills.makeACopy") : t("companySkills.fork")}
                   </Button>
                 </>
               )}
@@ -3145,8 +3146,8 @@ export function SkillDetailPage({
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
-            {attached.length} {attached.length === 1 ? "agent" : "agents"} attached
-            {selectedVersion ? ` · ${versionLabel(selectedVersion)}` : " · Latest"}
+            {t("companySkills.agentsAttached", { count: attached.length })}
+            {selectedVersion ? ` · ${versionLabel(selectedVersion)}` : ` · ${t("skills.latest")}`}
           </p>
           <AttachAgentsPopover
             agents={attachAgents}
@@ -3228,12 +3229,12 @@ export function SkillDetailPage({
                     <TooltipTrigger asChild>
                       <span
                         className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
-                        aria-label={`Installed from ${source.label}`}
+                        aria-label={t("companySkills.installedFromLabel", { label: source.label })}
                       >
                         <SourceIcon className="h-4 w-4" />
                       </span>
                     </TooltipTrigger>
-                    <TooltipContent>Installed from {source.label}</TooltipContent>
+                    <TooltipContent>{t("companySkills.installedFromLabel", { label: source.label })}</TooltipContent>
                   </Tooltip>
                 </div>
                 {/* GitHub-style t("skills.by") attribution sits directly under the title. */}
@@ -3311,7 +3312,7 @@ export function SkillDetailPage({
                 title={t("skills.forkThisSkill")}
               >
                 <GitFork className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{skill.sourceType === "github" ? t("companySkills.makeACopy") : "Fork"}</span>
+                <span className="hidden sm:inline">{skill.sourceType === "github" ? t("companySkills.makeACopy") : t("companySkills.fork")}</span>
                 <span className="font-medium text-foreground">{detail.forkCount}</span>
               </button>
             </div>
@@ -3527,7 +3528,7 @@ export function SkillDetailPage({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{t("skills.skillSettings")}</DialogTitle>
-            <DialogDescription>Manage how {detail.name} is grouped and shared.</DialogDescription>
+            <DialogDescription>{t("companySkills.manageHowNameIsGrouped", { name: detail.name })}</DialogDescription>
           </DialogHeader>
           <div className="space-y-5">
             <div className="space-y-1.5">
@@ -4648,7 +4649,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         body: result.action === "created"
           ? enabledCount > 0
             ? t("companySkills.enabledForAgentsToast", { count: enabledCount, name: result.skill.name })
-            : `${result.skill.name} is in the library but not enabled for any agent yet. Use "Add to agent" to enable it.`
+            : t("companySkills.nameIsInTheLibrary", { name: result.skill.name })
           : result.skill.name,
       });
       if (enableFailures > 0) {
@@ -4903,7 +4904,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         tone: "success",
         title: ids.length === 1 ? t("skills.skillMoved") : t("skills.skillsMoved"),
         body: folderId
-          ? `Filed under ${skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder"}.`
+          ? t("companySkills.filedUnder", { name: skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder" })
           : t("companySkills.movedToUnfiled"),
       });
     } catch (moveError) {
@@ -5462,7 +5463,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
               tone: "success",
               title: t("skills.skillMoved"),
               body: folderId
-                ? `Moved "${card.name}" to ${skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder"}.`
+                ? t("companySkills.movedNameTo", { name: card.name, folder: skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder" })
                 : t("companySkills.movedNameToUnfiled", { name: card.name }),
               action: {
                 label: t("common.undo"),

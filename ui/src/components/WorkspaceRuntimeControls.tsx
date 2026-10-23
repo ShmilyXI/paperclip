@@ -104,7 +104,7 @@ function buildJobItem(
     key: `command:${command.id}`,
     title: command.name,
     kind: "job",
-    statusLabel: "run once",
+    statusLabel: t("workspaceRuntimeControls.runOnce"),
     lifecycle: null,
     healthStatus: null,
     exposure: null,
@@ -268,14 +268,14 @@ export function buildWorkspaceServiceControlEntries(input: {
 
     const runtimeService = item.runtimeServiceId ? runtimeServicesById.get(item.runtimeServiceId) ?? null : null;
     const failureDetail = state === "failed"
-      ? `Service failed${runtimeService?.stoppedAt ? ` · ${timeAgo(runtimeService.stoppedAt)}` : ""}`
+      ? `${t("workspaceRuntimeControls.serviceFailed")}${runtimeService?.stoppedAt ? ` · ${timeAgo(runtimeService.stoppedAt)}` : ""}`
       : null;
     const exposure = runtimeService?.exposure ?? item.exposure;
     const exposureFailure = exposureFailureCopy(exposure);
     const exposureDetail = exposure?.state === "pending"
       ? t("workspaceRuntimeControls.provisioningHttps")
       : exposure?.state === "ready"
-        ? "HTTPS ready"
+        ? t("workspaceRuntimeControls.httpsReady")
         : exposureFailure
           ? `${exposureFailure.label} · ${exposureFailure.remediation}`
           : null;
@@ -477,7 +477,7 @@ function CommandSection({
                       <ExternalLink className="h-3.5 w-3.5" />
                     </a>
                   ) : null}
-                  {item.port ? <div>Port {item.port}</div> : null}
+                  {item.port ? <div>{t("workspaceRuntimeControls.port")} {item.port}</div> : null}
                   {item.command ? <div className="break-all font-mono">{item.command}</div> : null}
                   {item.cwd && !hideHostPaths ? <div className="break-all font-mono">{item.cwd}</div> : null}
                   {item.disabledReason ? <div>{item.disabledReason}</div> : null}
@@ -510,8 +510,8 @@ export function WorkspaceRuntimeControls({
   sections,
   isPending = false,
   pendingRequest = null,
-  serviceEmptyMessage = "No services are configured for this workspace.",
-  jobEmptyMessage = "No one-shot jobs are configured for this workspace.",
+  serviceEmptyMessage = t("workspaceRuntimeControls.noServicesConfigured"),
+  jobEmptyMessage = t("workspaceRuntimeControls.noOneShotJobsConfigured"),
   disabledHint = null,
   onAction,
   className,

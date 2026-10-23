@@ -65,7 +65,7 @@ function WindowColumn({ stats }: { stats: UserProfileWindowStats }) {
     <div className="flex min-w-0 flex-col gap-4 border-l border-border pl-5 first:border-l-0 first:pl-0">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">{stats.label}</h2>
-        <span className="text-(length:--text-micro) text-muted-foreground tabular-nums">{completionRate(stats)} done</span>
+        <span className="text-(length:--text-micro) text-muted-foreground tabular-nums">{t("userProfile.percentDone", { rate: completionRate(stats) })}</span>
       </div>
 
       <div className="grid grid-cols-2 gap-x-5 gap-y-3">
@@ -125,7 +125,11 @@ function UsageChart({ points }: { points: UserProfileDailyPoint[] }) {
               <div
                 className="w-full bg-foreground/80 transition-opacity group-hover:bg-foreground"
                 style={{ height: `${heightPct}%`, minHeight: tokens === 0 ? 1 : undefined }}
-                title={`${formatShortDate(point.date)}: ${formatTokens(tokens)} tokens, ${point.completedIssues} completed`}
+                title={t("userProfile.pointTooltip", {
+                    date: formatShortDate(point.date),
+                    tokens: formatTokens(tokens),
+                    completed: point.completedIssues,
+                  })}
               />
               {completedPct > 0 ? (
                 <div
@@ -312,7 +316,7 @@ export function UserProfile() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <HeroStat label={t("userProfile.allTimeTokens")} value={formatTokens(allTimeTokens)} hint={formatCents(allTime?.costCents ?? 0) + " spent"} />
+          <HeroStat label={t("userProfile.allTimeTokens")} value={formatTokens(allTimeTokens)} hint={t("userProfile.amountSpent", { amount: formatCents(allTime?.costCents ?? 0) })} />
           <HeroStat label={t("userProfile.completed")} value={formatNumber(allTime?.completedIssues ?? 0)} hint={allTime ? `${completionRate(allTime)} rate` : undefined} />
           <HeroStat label={t("userProfile.openAssigned")} value={formatNumber(allTime?.assignedOpenIssues ?? 0)} hint={`${formatNumber(allTime?.createdIssues ?? 0)} created`} />
           <HeroStat label={t("userProfile.n7DayActions")} value={formatNumber(last7?.activityCount ?? 0)} hint={`${formatNumber(last7?.commentCount ?? 0)} comments`} />
@@ -380,8 +384,8 @@ export function UserProfile() {
       </div>
 
       <div className="grid gap-10 xl:grid-cols-2">
-        <UsageList title={t("userProfile.agentAttribution")} empty="No issue-linked token usage yet." rows={agentUsageRows} />
-        <UsageList title={t("userProfile.providerMix")} empty="No provider usage attributed yet." rows={providerUsageRows} />
+        <UsageList title={t("userProfile.agentAttribution")} empty={t("userProfile.noIssueLinkedTokenUsage")} rows={agentUsageRows} />
+        <UsageList title={t("userProfile.providerMix")} empty={t("userProfile.noProviderUsageAttributed")} rows={providerUsageRows} />
       </div>
     </div>
   );

@@ -62,9 +62,9 @@ export function RailwayAccessPanel({ connection, grants }: { connection: ToolCon
           <Button disabled={!canConfigure || mutation.isPending || !knownHosts.trim()} onClick={() => mutation.mutate({ action: "enable", grantId, knownHosts })}>{setup.enabled ? t("railwayAccessPanel.updateTrustedHostKey") : t("railwayAccessPanel.enableContainerAccess")}</Button>
           <Button variant="outline" disabled={mutation.isPending} onClick={() => mutation.mutate({ action: "remove", grantId })}>{t("railwayAccessPanel.removeContainerKey")}</Button>
         </div>
-        <p className="text-sm text-muted-foreground">{setup.enabled ? t("railwayAccessPanel.containerAccessIsEnabledFor") : "Register the public key and verify the host key before enabling access."} Removing the key stops new Paperclip connections. Also remove its public key from Railway.</p>
+        <p className="text-sm text-muted-foreground">{setup.enabled ? t("railwayAccessPanel.containerAccessIsEnabledFor") : t("railwayAccessPanel.registerThePublicKey")}{t("railwayAccessPanel.removingTheKeyStopsNewConnections")}</p>
       </>}
     </>}
-    {mutation.isError && <p role="alert" className="text-sm text-destructive">{mutation.error instanceof Error ? mutation.error.message : "Container access could not be updated."}</p>}
+    {mutation.isError && <p role="alert" className="text-sm text-destructive">{mutation.error instanceof Error ? mutation.error.message : t("railwayAccessPanel.containerAccessCouldNotBeUpdated")}</p>}
   </section>;
 }

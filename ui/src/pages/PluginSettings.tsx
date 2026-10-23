@@ -149,7 +149,7 @@ export function PluginSettings() {
       : plugin.status === "error"
         ? "destructive"
         : "secondary";
-  const pluginDescription = plugin.manifestJson.description || "No description provided.";
+  const pluginDescription = plugin.manifestJson.description || t("pluginSettings.noDescriptionProvided");
   const pluginCapabilities = plugin.manifestJson.capabilities ?? [];
   const environmentDrivers = plugin.manifestJson.environmentDrivers ?? [];
   const localFolderDeclarations = plugin.manifestJson.localFolders ?? [];
@@ -268,8 +268,7 @@ export function PluginSettings() {
                 <div className="rounded-md border border-border/60 bg-muted/20 px-4 py-3 text-sm">
                   <p className="font-medium text-foreground">{t("pluginSettings.configureThisPluginFromSettings")}</p>
                   <p className="mt-1 text-muted-foreground">
-                    {driverLabel || "This plugin"} registers environment runtime settings there so the execution target
-                    stays instance-scoped while secret bindings still resolve through the selected organization context.
+                    {t("pluginSettings.thisPluginRegistersEnvironmentSettings", { driver: driverLabel || t("pluginSettings.thisPlugin") })}
                   </p>
                   <div className="mt-3">
                     <Link to="/company/settings/instance/environments">
@@ -421,7 +420,7 @@ export function PluginSettings() {
 
                       <div className="flex items-center gap-1.5 border-t border-border/50 pt-2 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        Last checked: {new Date(dashboardData.checkedAt).toLocaleTimeString()}
+                        {t("pluginSettings.lastChecked", { time: new Date(dashboardData.checkedAt).toLocaleTimeString() })}
                       </div>
                     </>
                   ) : (
@@ -439,7 +438,7 @@ export function PluginSettings() {
                       <ActivitySquare className="h-4 w-4" />
                       {t("pluginSettings.recentLogs")}
                     </CardTitle>
-                    <CardDescription>Last {recentLogs.length} log entries</CardDescription>
+                    <CardDescription>{t("pluginSettings.lastLogEntries", { count: recentLogs.length })}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="max-h-64 space-y-1 overflow-y-auto font-mono text-xs">
@@ -619,7 +618,7 @@ function PluginLocalFoldersSettings({ pluginId, companyId, declarations }: Plugi
       </div>
       {error ? (
         <div className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {(error as Error).message || "Failed to load local folder settings."}
+          {(error as Error).message || t("pluginSettings.failedToLoadLocalFolderSettings")}
         </div>
       ) : null}
       {isLoading ? (
@@ -836,14 +835,14 @@ function FolderRequirements({
         title={t("pluginSettings.requiredDirectories")}
         items={requiredDirectories}
         missingItems={missingDirectories}
-        missingLabel="Missing directories"
+        missingLabel={t("pluginSettings.missingDirectories")}
         inspectionUnavailable={rootNotInspected}
       />
       <RequirementList
         title={t("pluginSettings.requiredFiles")}
         items={requiredFiles}
         missingItems={missingFiles}
-        missingLabel="Missing files"
+        missingLabel={t("pluginSettings.missingFiles")}
         inspectionUnavailable={rootNotInspected}
       />
     </div>
@@ -1003,7 +1002,7 @@ function PluginConfigForm({ pluginId, companyId, schema, initialValues, isLoadin
       setTimeout(() => setSaveMessage(null), 3000);
     },
     onError: (err: Error) => {
-      setSaveMessage({ type: "error", text: err.message || "Failed to save configuration." });
+      setSaveMessage({ type: "error", text: err.message || t("pluginSettings.failedToSaveConfiguration") });
     },
   });
 
@@ -1017,11 +1016,11 @@ function PluginConfigForm({ pluginId, companyId, schema, initialValues, isLoadin
       if (result.valid) {
         setTestResult({ type: "success", text: t("pluginSettings.configurationTestPassed") });
       } else {
-        setTestResult({ type: "error", text: result.message || "Configuration test failed." });
+        setTestResult({ type: "error", text: result.message || t("pluginSettings.configurationTestFailed") });
       }
     },
     onError: (err: Error) => {
-      setTestResult({ type: "error", text: err.message || "Configuration test failed." });
+      setTestResult({ type: "error", text: err.message || t("pluginSettings.configurationTestFailed") });
     },
   });
 
@@ -1112,7 +1111,7 @@ function PluginConfigForm({ pluginId, companyId, schema, initialValues, isLoadin
               {t("common.saving")}
             </>
           ) : (
-            "Save Configuration"
+            t("pluginSettings.saveConfiguration")
           )}
         </Button>
         {pluginStatus === "ready" && supportsConfigTest && (

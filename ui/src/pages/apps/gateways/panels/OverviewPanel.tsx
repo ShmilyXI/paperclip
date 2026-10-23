@@ -72,14 +72,17 @@ export function OverviewPanel({
           <p className="mt-2 text-xs text-muted-foreground">{t("gatewayOverviewPanel.toggleTheWholeGatewayOff")}</p>
         </div>
         <StatCard label={t("gatewayOverviewPanel.apps")}>
-          {apps.length} {apps.length === 1 ? "app" : "apps"}
+          {apps.length === 1
+            ? t("gatewayOverviewPanel.appCount", { count: apps.length })
+            : t("gatewayOverviewPanel.appsCount", { count: apps.length })}
           {profile ? ` · ${allowedToolsLabel(profile)}` : ""}
         </StatCard>
         <StatCard label={t("common.tokens")}>
-          {active} active{expiring > 0 ? ` · ${expiring} expiring` : ""}
+          {t("gatewayOverviewPanel.activeTokens", { count: active })}
+          {expiring > 0 ? ` · ${t("gatewayOverviewPanel.expiringTokens", { count: expiring })}` : ""}
         </StatCard>
         <StatCard label={t("gatewayOverviewPanel.health")}>
-          {needsAttention.length === 0 ? t("gatewayOverviewPanel.allGreen") : `${needsAttention.length} needs attention`}
+          {needsAttention.length === 0 ? t("gatewayOverviewPanel.allGreen") : t("gatewayOverviewPanel.needsAttentionCount", { count: needsAttention.length })}
         </StatCard>
       </div>
 
@@ -117,7 +120,7 @@ export function OverviewPanel({
       <section className="rounded-lg border border-border bg-muted/30 p-4">
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-foreground">{t("gatewayOverviewPanel.howClientsConnect")}</h3>
-          <Button variant="outline" size="sm" onClick={() => void copy(snippet, "Client config")}>
+          <Button variant="outline" size="sm" onClick={() => void copy(snippet, t("gatewayOverviewPanel.clientConfig"))}>
             <Copy className="mr-1 h-3.5 w-3.5" />
             {t("common.copy")}
           </Button>
@@ -158,7 +161,9 @@ function AppRow({ app }: { app: GatewayAppRow }) {
           {gatewayAppDisplayName(app)}
         </Link>
         <div className="text-xs text-muted-foreground">
-          {app.toolCount} {app.toolCount === 1 ? "tool" : "tools"}
+          {app.toolCount === 1
+            ? t("gatewayOverviewPanel.toolCount", { count: app.toolCount })
+            : t("gatewayOverviewPanel.toolsCount", { count: app.toolCount })}
           {app.needsAttention && app.attentionReason ? ` · ${app.attentionReason}` : ""}
         </div>
       </div>

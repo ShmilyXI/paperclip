@@ -483,6 +483,7 @@ interface IssuesListProps {
   hasMoreIssues?: boolean;
   isLoadingMoreIssues?: boolean;
   mutedIssueIds?: Set<string>;
+  /** Stable badge codes ("paused"); the row renders the display text via t(). */
   issueBadgeById?: Map<string, string>;
   onLoadMoreIssues?: () => void;
   onSearchChange?: (search: string) => void;
@@ -590,28 +591,33 @@ function SubIssueProgressSummaryStrip({
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
             <span className="font-medium text-foreground">
-              {summary.doneCount}/{summary.totalCount} done
+              {t("legacyIssuesList.doneOfTotal", { done: summary.doneCount, total: summary.totalCount })}
             </span>
             <span className="text-muted-foreground">
-              {summary.inProgressCount} in progress
+              {t("legacyIssuesList.inProgressCount", { count: summary.inProgressCount })}
             </span>
             <span className="text-muted-foreground">
-              {summary.blockedCount} blocked
+              {t("legacyIssuesList.blockedCount", { count: summary.blockedCount })}
             </span>
             {showCostSummary && (
               <>
                 <span
                   className="text-muted-foreground tabular-nums"
-                  title={`${costSummary.runCount.toLocaleString()} run${
-                    costSummary.runCount === 1 ? "" : "s"
-                  } across ${costSummary.issueCount} sub-task${
-                    costSummary.issueCount === 1 ? "" : "s"
-                  }`}
+                  title={
+                    t("legacyIssuesList.runCostRuns", {
+                      count: costSummary.runCount,
+                      runs: costSummary.runCount.toLocaleString(),
+                    }) +
+                    t("legacyIssuesList.runCostSubTasks", {
+                      count: costSummary.issueCount,
+                      issueCount: costSummary.issueCount,
+                    })
+                  }
                 >
-                  {formatTokens(totalTokens)} tokens
+                  {t("legacyIssuesList.tokensCount", { tokens: formatTokens(totalTokens) })}
                 </span>
                 <span className="text-muted-foreground tabular-nums">
-                  {formatDurationMs(costSummary.runtimeMs)} runtime
+                  {t("legacyIssuesList.runtime", { duration: formatDurationMs(costSummary.runtimeMs) })}
                 </span>
               </>
             )}
@@ -1788,7 +1794,7 @@ export function IssuesList({
                         )}
                         onClick={() => updateView({ boardColumnPageSize: pageSize })}
                       >
-                        <span>{pageSize} per column</span>
+                        <span>{t("legacyIssuesList.perColumn", { count: pageSize })}</span>
                         {viewState.boardColumnPageSize === pageSize && <Check className="h-3.5 w-3.5" />}
                       </button>
                     ))}
@@ -1899,10 +1905,10 @@ export function IssuesList({
                   {([
                     ["status", t("common.status")],
                     ["priority", t("common.priority")],
-                    ["assignee", "Responsible"],
+                    ["assignee", t("legacyIssuesList.responsible")],
                     ["project", t("common.project")],
                     ["workspace", t("common.workspace")],
-                    ["parent", "Parent Task"],
+                    ["parent", t("legacyIssuesList.parentTask")],
                     ["none", t("common.none")],
                   ] as const)
                     .filter(([value]) => SHOW_TASK_PRIORITY_UI || value !== "priority")
@@ -1929,15 +1935,15 @@ export function IssuesList({
       {error && <p className="text-sm text-destructive">{error.message}</p>}
       {!searchWithinLoadedIssues && normalizedIssueSearch.length > 0 && searchedIssues.length === ISSUE_SEARCH_RESULT_LIMIT && (
         <p className="text-xs text-muted-foreground">
-          Showing up to {ISSUE_SEARCH_RESULT_LIMIT} matches. Refine the search to narrow further.
+          {t("legacyIssuesList.showingUpToMatches", { limit: ISSUE_SEARCH_RESULT_LIMIT })}
         </p>
       )}
       {boardColumnLimitReached && (
         <p className="text-xs text-muted-foreground">
-          Some board columns are showing up to {ISSUE_BOARD_COLUMN_RESULT_LIMIT} tasks. Refine filters or search to reveal the rest.
+          {t("legacyIssuesList.boardColumnsLimit", { limit: ISSUE_BOARD_COLUMN_RESULT_LIMIT })}
         </p>
       )}
-      {hierarchy.error ? <p className="text-sm text-destructive">Failed to load task hierarchy: {hierarchy.error.message}</p> : null}
+      {hierarchy.error ? <p className="text-sm text-destructive">{t("legacyIssuesList.failedToLoadTaskHierarchy", { error: hierarchy.error.message })}</p> : null}
       {!isLoading && !externalObjectFilterLoading && visibleListRowCount === 0 && viewState.viewMode === "list" && (
         <EmptyState
           icon={CircleDot}
@@ -2000,8 +2006,8 @@ export function IssuesList({
                     variant="ghost"
                     size="icon-xs"
                     className="-mr-2 text-muted-foreground"
-                    title={`New task in ${group.label}`}
-                    aria-label={`New task in ${group.label}`}
+                    title={t("legacyIssuesList.newTaskInGroup", { group: group.label })}
+                    aria-label={t("legacyIssuesList.newTaskInGroup", { group: group.label })}
                     onClick={() => openCreateIssueDialog(group)}
                   >
                     <Plus className="h-3 w-3" />
@@ -2063,14 +2069,14 @@ export function IssuesList({
                       if (!blockerIssue) return null;
                       const label = blockerIssue.identifier ?? blockerIssue.id.slice(0, 8);
                       const blockerStep = checklistMeta?.stepNumberByIssueId.get(blockerId);
-                      const blockerStepSuffix = blockerStep ? ` \u00b7 step ${blockerStep}` : "";
-                      return { blockerId, chipLabel: `blocked by ${label}${blockerStepSuffix}` };
+                      const blockerStepSuffix = blockerStep ? ` ${t("legacyIssuesList.stepSuffix", { step: blockerStep })}` : "";
+                      return { blockerId, chipLabel: `${t("legacyIssuesList.blockedBy", { label })}${blockerStepSuffix}` };
                     })
                     .filter((chip): chip is { blockerId: string; chipLabel: string } => chip !== null);
                   const firstVisibleBlockerChip = visibleBlockerChips[0] ?? null;
                   const additionalVisibleBlockerCount = Math.max(visibleBlockerChips.length - 1, 0);
                   const additionalVisibleBlockerLabel = additionalVisibleBlockerCount > 0
-                    ? ` ... and ${additionalVisibleBlockerCount} more`
+                    ? ` ${t("legacyIssuesList.andMore", { count: additionalVisibleBlockerCount })}`
                     : "";
                   const firstVisibleBlockerDisplayLabel = firstVisibleBlockerChip
                     ? `${firstVisibleBlockerChip.chipLabel}${additionalVisibleBlockerLabel}`
@@ -2135,11 +2141,11 @@ export function IssuesList({
                           <>
                             {hasChildren && !isExpanded ? (
                               <span className="ml-1.5 text-xs text-muted-foreground">
-                                ({totalDescendants} sub-task{totalDescendants !== 1 ? "s" : ""})
+                                ({t("legacyIssuesList.subTasksCount", { count: totalDescendants })})
                               </span>
                             ) : null}
                             {issueBadge ? (
-                              issueBadge === "Paused" ? (
+                              issueBadge === "paused" ? (
                                 <Badge variant="ghost"
                                   className={cn("ml-1.5 px-1.5 text-(length:--text-nano)", statusBadge.paused)}
                                   aria-label={t("common.paused")}

@@ -217,7 +217,7 @@ function initialsForName(name: string) {
 function formatRunStatusLabel(status: string) {
   switch (status) {
     case "timed_out":
-      return "timed out";
+      return t("commentThread.timedOut");
     default:
       return statusLabel(status);
   }
@@ -477,7 +477,7 @@ function TimelineEventCard({
   currentUserId?: string | null;
 }) {
   const actorName = formatTimelineActorName(event.actorType, event.actorId, agentMap, currentUserId);
-  const actionLabel = event.followUpRequested ? "requested follow-up" : "updated this task";
+  const actionLabel = event.followUpRequested ? t("commentThread.requestedFollowUp") : t("chatThread.updatedThisTask");
 
   return (
     <div id={`activity-${event.id}`} className="flex items-start gap-2.5 py-1.5">
@@ -672,7 +672,7 @@ const TimelineList = memo(function TimelineList({
                   ) : null}
                   {run.environmentLease ? (
                     <span>
-                      Lease{" "}
+                      {t("commentThread.lease")}{" "}
                       <span className="font-mono text-foreground">
                         {run.environmentLease.id.slice(0, 8)}
                       </span>
@@ -686,7 +686,7 @@ const TimelineList = memo(function TimelineList({
                   ) : null}
                   {run.environmentLease?.failureReason ? (
                     <span className="text-destructive">
-                      Failure: {run.environmentLease.failureReason}
+                      {t("commentThread.failure")} {run.environmentLease.failureReason}
                     </span>
                   ) : null}
                 </div>
@@ -962,7 +962,7 @@ export function CommentThread({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-semibold">Timeline ({timeline.length + queuedComments.length})</h3>
+      <h3 className="text-sm font-semibold">{t("commentThread.timelineCount", { count: timeline.length + queuedComments.length })}</h3>
 
       <TimelineList
         timeline={timeline}
@@ -988,7 +988,7 @@ export function CommentThread({
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-2">
             <h4 className="text-xs font-semibold uppercase tracking-(--tracking-eyebrow) text-amber-700 dark:text-amber-300">
-              Queued Comments ({queuedComments.length})
+              {t("commentThread.queuedCommentsCount", { count: queuedComments.length })}
             </h4>
             {onInterruptQueued && queuedComments[0]?.queueTargetRunId ? (
               <Button
@@ -1061,8 +1061,8 @@ export function CommentThread({
                 value={reassignTarget}
                 options={reassignOptions}
                 placeholder={t("comments.responsible")}
-                noneLabel="No responsible"
-                searchPlaceholder="Search responsible..."
+                noneLabel={t("commentThread.noResponsible")}
+                searchPlaceholder={t("commentThread.searchResponsible")}
                 emptyMessage={t("comments.noResponsibleFound")}
                 onChange={selectAssignee}
                 className="text-xs h-8"

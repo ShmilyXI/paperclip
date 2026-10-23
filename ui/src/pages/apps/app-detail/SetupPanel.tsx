@@ -113,12 +113,12 @@ function PostHogConfigurationSection({ connection }: { connection: ToolConnectio
   const features = typeof config.features === "string" ? config.features : t("common.none");
   const tools = typeof config.tools === "string" && config.tools ? config.tools : t("common.none");
   const rows = [
-    ["Connection method", method],
-    ["Project pin", typeof config.projectId === "string" ? config.projectId : t("appDetailSetupPanel.useActiveProject")],
-    ["Read-only mode", config.readOnly === true ? t("appDetailSetupPanel.on") : t("appDetailSetupPanel.off")],
-    ["Feature groups", features],
-    ["Individual tools", tools],
-    ["Response mode", typeof config.mode === "string" ? config.mode : "tools"],
+    [t("appDetailSetupPanel.connectionMethod"), method],
+    [t("appDetailSetupPanel.projectPin"), typeof config.projectId === "string" ? config.projectId : t("appDetailSetupPanel.useActiveProject")],
+    [t("appDetailSetupPanel.readOnlyMode"), config.readOnly === true ? t("appDetailSetupPanel.on") : t("appDetailSetupPanel.off")],
+    [t("appDetailSetupPanel.featureGroups"), features],
+    [t("appDetailSetupPanel.individualTools"), tools],
+    [t("appDetailSetupPanel.responseMode"), typeof config.mode === "string" ? config.mode : "tools"],
   ];
   return (
     <section>
@@ -190,7 +190,7 @@ function GoogleSheetsAllowlistSection({
                     {sheetUrl}
                   </span>
                   <span className="block truncate font-mono text-(length:--text-micro) font-normal text-muted-foreground/80">
-                    ID: {id}
+                    {t("appDetailSetupPanel.idLabel", { id })}
                   </span>
                 </a>
                 <Button
@@ -262,7 +262,7 @@ export function QuarantinedActionsReview({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="text-sm font-semibold text-amber-800 dark:text-amber-200">
-            Review {count} new {count === 1 ? "action" : "actions"}
+            {t("appDetailSetupPanel.reviewNewActions", { count })}
           </div>
           <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">
             {t("appDetailSetupPanel.turnOnTheActionsAgents")}

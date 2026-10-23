@@ -273,7 +273,7 @@ export function GitHubBotManagement({
                   await client.invalidateQueries({ queryKey: ["github-bot-repositories", endpoint.id] });
                   await client.invalidateQueries({ queryKey: ["github-bot-repository-pages", endpoint.id] });
                   setNotice(
-                    "Repository access refreshed. New repositories stay disabled.",
+                    t("gitHubBotManagement.repositoryAccessRefreshedNewRepositories"),
                   );
                 })
               }
@@ -375,7 +375,7 @@ export function GitHubBotManagement({
                 setDraft(null);
                 setScoreText(null);
                 setAutomaticMode(null);
-                setNotice("Changes saved.");
+                setNotice(t("gitHubBotManagement.changesSaved"));
               })
             }
           >

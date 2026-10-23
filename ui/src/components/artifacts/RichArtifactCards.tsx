@@ -212,7 +212,7 @@ export function PullRequestCard(props: PullRequestCardProps) {
       <div className="flex flex-col gap-4 p-5">
         <div className="flex items-center justify-between gap-2">
           <span className="flex items-center gap-2 text-xs text-muted-foreground">
-            <GitPullRequest className="size-4" /> Pull request{" "}
+            <GitPullRequest className="size-4" /> {t("richArtifactCards.pullRequest")}{" "}
             {number != null && <span className="font-mono">#{number}</span>}
           </span>
           <Badge
@@ -280,7 +280,7 @@ export function CommitCard(props: CommitCardProps) {
     <Card>
       <div className="flex flex-col gap-4 p-5">
         <span className="flex items-center gap-2 text-xs text-muted-foreground">
-          <GitCommitHorizontal className="size-4" /> Commit{" "}
+          <GitCommitHorizontal className="size-4" /> {t("richArtifactCards.commitLabel")}{" "}
           <code title={props.sha}>{props.sha.slice(0, 8)}</code>
         </span>
         <Identity {...props} />
@@ -390,7 +390,7 @@ export function DocumentCard(props: DocumentCardProps) {
       <div className="flex flex-col gap-3 p-5">
         <span className="flex items-center gap-2 text-xs text-muted-foreground">
           <FileText className="size-4" /> Markdown
-          {props.revision != null && ` · revision ${props.revision}`}
+          {props.revision != null && ` · ${t("richArtifactCards.revisionN", { n: props.revision })}`}
         </span>
         <Identity {...props} />
         <span className="break-all font-mono text-xs text-muted-foreground">
@@ -483,9 +483,8 @@ export function DataCard(props: DataCardProps) {
       <div className="flex flex-col gap-3 p-5">
         <span className="flex items-center gap-2 text-xs text-muted-foreground">
           <Table2 className="size-4" /> CSV · {props.truncated ? `${t("richArtifactCards.first")} ` : ""}
-          {props.rows.length} {props.rows.length === 1 ? "row" : "rows"} ·{" "}
-          {props.columns.length}{" "}
-          {props.columns.length === 1 ? "column" : "columns"}
+          {t("richArtifactCards.countRows", { count: props.rows.length })} ·{" "}
+          {t("richArtifactCards.countColumns", { count: props.columns.length })}
         </span>
         <Identity {...props} />
         <span className="break-all font-mono text-xs text-muted-foreground">
@@ -573,7 +572,7 @@ export function ImageCard(props: ImageCardProps) {
             <Button
               size="sm"
               variant="outline"
-              aria-label={`View image: ${props.title}`}
+              aria-label={t("richArtifactCards.viewImageTitle", { title: props.title })}
               onClick={props.onOpen}
             >
               {t("richArtifactCards.viewImage")}
@@ -629,7 +628,7 @@ export function VideoCard(props: VideoCardProps) {
             <Button
               size="sm"
               variant="outline"
-              aria-label={`Open video: ${props.title}`}
+              aria-label={t("richArtifactCards.openVideoTitle", { title: props.title })}
               onClick={props.onOpen}
             >
               {t("richArtifactCards.openVideo")}

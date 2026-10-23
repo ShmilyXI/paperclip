@@ -21,7 +21,7 @@ import { SetMyUserSecretDialog } from "./SetMyUserSecretDialog";
 export function MissingUserSecretsBanner({
   companyId,
   definitionKeys,
-  title = "Set your user secrets",
+  title = t("missingUserSecretsBanner.setYourUserSecrets"),
   secretsPath,
   className,
 }: {
@@ -62,9 +62,7 @@ export function MissingUserSecretsBanner({
         <div className="min-w-0 flex-1">
           <p className="font-medium">{title}</p>
           <p className="mt-0.5 text-amber-700/90 dark:text-amber-300/90">
-            {missing.length} user secret{missing.length === 1 ? "" : "s"} you are responsible for
-            {missing.length === 1 ? " has" : " have"} no value yet. Runs that require
-            {missing.length === 1 ? " it" : " them"} will fail until you set your value.
+            {t("missingUserSecretsBanner.secretsWithoutValues", { count: missing.length })}
           </p>
           <ul className="mt-2 space-y-1.5">
             {missing.map((entry) => (

@@ -56,13 +56,13 @@ export function StageSecretsPanel({
       <EmptyState
         icon={KeyRound}
         message={t("stageSecretsPanel.secretsAreAvailableOnlyTo")}
-        action="Set up automation"
+        action={t("stageSecretsPanel.setUpAutomation")}
         onAction={onSetupAutomation}
       />
     );
   }
 
-  const displayName = agentName?.trim() || "the responsible agent";
+  const displayName = agentName?.trim() || t("stageSecretsPanel.theResponsibleAgent");
 
   return (
     <div className="space-y-5">

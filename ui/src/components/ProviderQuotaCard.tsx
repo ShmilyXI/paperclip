@@ -149,16 +149,16 @@ export function ProviderQuotaCard({
               {providerDisplayName(provider)}
             </CardTitle>
             <CardDescription className="text-xs mt-0.5">
-              <span className="font-mono">{formatTokens(totalInputTokens)}</span> in
+              <span className="font-mono">{formatTokens(totalInputTokens)}</span>{t("providerQuotaCard.inSuffix")}
               {" · "}
-              <span className="font-mono">{formatTokens(totalOutputTokens)}</span> out
+              <span className="font-mono">{formatTokens(totalOutputTokens)}</span>{t("providerQuotaCard.outSuffix")}
               {(totalApiRuns > 0 || totalSubRuns > 0) && (
                 <span className="ml-1.5">
                   ·{" "}
                   {totalApiRuns > 0 && `~${totalApiRuns} api`}
                   {totalApiRuns > 0 && totalSubRuns > 0 && " / "}
                   {totalSubRuns > 0 && `~${totalSubRuns} sub`}
-                  {" runs"}
+                  {t("providerQuotaCard.runsSuffix")}
                 </span>
               )}
             </CardDescription>
@@ -177,14 +177,14 @@ export function ProviderQuotaCard({
               label={t("providerQuotaCard.periodSpend")}
               percentUsed={budgetPct}
               leftLabel={formatCents(totalCostCents)}
-              rightLabel={`${Math.round(budgetPct)}% of company budget`}
+              rightLabel={t("providerQuotaCard.budgetpctOfCompanyBudget", { budgetPct })}
               showDeficitNotch={showDeficitNotch}
             />
             <QuotaBar
               label={t("providerQuotaCard.thisWeek")}
               percentUsed={weekPct}
               leftLabel={formatCents(weekSpendCents)}
-              rightLabel={`~${formatCents(Math.round(weeklyBudgetShare))} / wk`}
+              rightLabel={t("providerQuotaCard.weeklybudgetshareWk", { weeklyBudgetShare })}
               showDeficitNotch={weekPct >= 100}
             />
           </div>
@@ -300,13 +300,13 @@ export function ProviderQuotaCard({
                       <div
                         className="absolute inset-y-0 left-0 bg-primary/60 transition-(--tp-width) duration-150"
                         style={{ width: `${tokenPct}%` }}
-                        title={`${Math.round(tokenPct)}% of provider tokens`}
+                        title={t("providerQuotaCard.tokenpctOfProviderTokens", { tokenPct })}
                       />
                       {/* cost share overlay — narrower, opaque, shows relative cost weight */}
                       <div
                         className="absolute inset-y-0 left-0 bg-primary/85 transition-(--tp-width) duration-150"
                         style={{ width: `${costPct}%` }}
-                        title={`${Math.round(costPct)}% of provider cost`}
+                        title={t("providerQuotaCard.costpctOfProviderCost", { costPct })}
                       />
                     </div>
                   </div>
@@ -364,7 +364,7 @@ export function ProviderQuotaCard({
                             {qw.valueLabel != null ? (
                               <span className="font-medium tabular-nums">{qw.valueLabel}</span>
                             ) : qw.usedPercent != null ? (
-                              <span className="font-medium tabular-nums">{qw.usedPercent}% used</span>
+                              <span className="font-medium tabular-nums">{t("providerQuotaCard.usedPercent", { percent: qw.usedPercent })}</span>
                             ) : null}
                           </div>
                           {qw.usedPercent != null && fillColor != null && (

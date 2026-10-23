@@ -18,7 +18,7 @@ function RepoRow({ repo, onRemove }: { repo: ProjectRepository; onRemove: () => 
         </span>}
       </div>
       {repo.private && <LockKeyhole className="size-3 shrink-0 text-muted-foreground" aria-label={t("repositoryEditor.privateRepository")} />}
-      <Button type="button" variant="ghost" size="icon-sm" aria-label={`Remove ${repo.fullName}`} onClick={onRemove}><X className="size-4" /></Button>
+      <Button type="button" variant="ghost" size="icon-sm" aria-label={t("repositoryEditor.removeFullname", { fullName: repo.fullName })} onClick={onRemove}><X className="size-4" /></Button>
     </div>
   );
 }
@@ -63,9 +63,9 @@ export function RepositoryEditor({ selected, onChange, state = "ready", availabl
         <div ref={picker} className="flex flex-col gap-2">
           <SearchableSelect<string, (typeof options)[number]>
             value="" groups={[{ id: "available", label: t("repositoryEditor.availableGithubRepos"), options }]}
-            placeholder={addLabel} searchPlaceholder="Search GitHub repos…"
+            placeholder={addLabel} searchPlaceholder={t("repositoryEditor.searchGithubRepos")}
             contentClassName="max-h-(--radix-popover-content-available-height) overflow-hidden [&_[data-slot=command]]:max-h-(--radix-popover-content-available-height) [&_[data-slot=command-list]]:min-h-0 [&_[data-slot=command-list]]:flex-1 [&_[data-slot=command-input-wrapper]]:shrink-0"
-            loading={state === "loading"} loadingMessage="Loading GitHub repos…"
+            loading={state === "loading"} loadingMessage={t("repositoryEditor.loadingGithubRepos")}
             emptyMessage={state === "error" ? t("repositoryEditor.couldnTLoadGithubRepos") : state === "empty" ? t("repositoryEditor.noReposAvailableConnectAn") : t("repositoryEditor.noMatchingReposTryAnother")}
             renderValue={() => <span className="flex items-center gap-2 text-foreground"><GithubIcon className="size-4" />{addLabel}</span>}
             renderOption={({ repo }) => <><GitBranch className="size-4 shrink-0 text-muted-foreground" /><span className="flex min-w-0 flex-1 flex-col gap-1"><span className="truncate">{repo.fullName}</span><span className="truncate text-xs text-muted-foreground">{repo.connections.join(" · ")}</span></span>{repo.private && <LockKeyhole className="size-3 shrink-0 text-muted-foreground" />}</>}
@@ -75,7 +75,7 @@ export function RepositoryEditor({ selected, onChange, state = "ready", availabl
               : { render: () => <><Plus className="size-4" />{t("repositoryEditor.connectAnotherGithubAccount")}</>, onSelect: onConnect }}
           />
           <div className="flex items-center justify-between gap-2">
-            <p className="text-xs text-muted-foreground">{"All GitHub connections you can use."}</p>
+            <p className="text-xs text-muted-foreground">{t("repositoryEditor.allGithubConnectionsYouCanUse")}</p>
             <Button type="button" variant="ghost" size="sm" onClick={() => setShowPicker(false)}>{t("common.cancel")}</Button>
           </div>
         </div>

@@ -53,7 +53,7 @@ export function AgentChat() {
       recordAgentChatVisit(agent.companyId, userId, agent.id, chat.data?.id ?? null);
   }, [enabled, agent?.id, agent?.companyId, userId, session.isSuccess, chat.isSuccess, chat.data?.id]);
   const ensureIssue = useCallback(async () => {
-    if (!agent || !selectedCompanyId) throw new Error("Agent not found");
+    if (!agent || !selectedCompanyId) throw new Error(t("agentChat.agentNotFound"));
     if (chat.data) return chat.data;
     const promise = (creating.current ??= agentChatsApi.ensure(
       selectedCompanyId,

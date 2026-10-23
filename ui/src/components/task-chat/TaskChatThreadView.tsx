@@ -25,7 +25,7 @@ import { TaskMessageScroller } from "./TaskMessageScroller";
 import { TaskChatProtocolCard } from "./TaskChatProtocolCard";
 import { TaskChatProtocolActivityRow } from "./TaskChatProtocolActivityRow";
 import { TaskChatPlanPreviewCard } from "./TaskChatPlanPreviewCard";
-import { compactAdjacentErrors } from "./adjacent-errors";
+import { compactAdjacentErrors, isRunFailureMarker } from "./adjacent-errors";
 
 const EMPTY_ATTACHMENTS: IssueAttachment[] = [];
 
@@ -326,8 +326,7 @@ export function TaskChatThreadView({
           .find(
             (item) => {
               const marker = item.kind === "marker" ? item : retryMarkers.get(item.id);
-              return marker?.variant === "interrupted" &&
-                (marker.label === "Run failed" || marker.label === "Usage limit reached");
+              return marker?.variant === "interrupted" && isRunFailureMarker(marker);
             },
           )?.id
       : undefined;

@@ -135,7 +135,7 @@ export function Projects() {
         <EmptyState
           icon={Hexagon}
           message={t("projects.noProjectsYet")}
-          action="Add Project"
+          action={t("projects.addProject")}
           onAction={openNewProject}
         />
       )}
@@ -145,8 +145,8 @@ export function Projects() {
       {sortedProjects.length > 0 && (
         <div className="space-y-6">
           {([
-            ["My Projects", groupedProjects.mine],
-            ["Other Projects", groupedProjects.other],
+            [t("projects.myProjects"), groupedProjects.mine],
+            [t("projects.otherProjects"), groupedProjects.other],
           ] as const).map(([label, sectionProjects]) => {
             if (sectionProjects.length === 0) return null;
 

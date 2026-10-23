@@ -202,8 +202,7 @@ export function OutputFeedbackButtons({
               {t("outputFeedbackButtons.thisVoteIsAlwaysSaved")}
             </p>
             <p>
-              {t("common.choose")} <span className="font-medium text-foreground">{t("outputFeedbackButtons.alwaysAllow")}</span> to share
-              this vote and future voted AI outputs. Choose{" "}
+              {t("common.choose")} <span className="font-medium text-foreground">{t("outputFeedbackButtons.alwaysAllow")}</span> {t("outputFeedbackButtons.toShareThisVoteAndFuture")}{" "}
               <span className="font-medium text-foreground">{t("outputFeedbackButtons.donTAllow")}</span> {t("outputFeedbackButtons.toKeepThisVoteAnd")}
             </p>
             <p>

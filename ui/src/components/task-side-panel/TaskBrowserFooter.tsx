@@ -91,11 +91,11 @@ export function TaskBrowserFooter({
           <Clock3 className="size-3" aria-hidden="true" />
           {seconds > 0 ? (
             <>
-              Closes in{" "}
+              {t("taskBrowserFooter.closesIn")}{" "}
               <span className="font-mono tabular-nums">{countdown}</span>
             </>
           ) : (
-            "Closing…"
+            t("taskBrowserFooter.closing")
           )}
         </span>
       )}
@@ -127,8 +127,7 @@ export function TaskBrowserFooter({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              Keep this browser open for up to {BROWSER_USE_IDLE_MS / 60000}{" "}
-              more minutes.
+              {t("taskBrowserFooter.keepOpenForUpTo", { minutes: BROWSER_USE_IDLE_MS / 60000 })}
             </TooltipContent>
           </Tooltip>
         )}

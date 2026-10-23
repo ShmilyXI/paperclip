@@ -195,12 +195,12 @@ export function GatewaysList() {
                 disabled={toggleMutation.isPending}
                 onClick={(event) => event.stopPropagation()}
                 onCheckedChange={() => toggleMutation.mutate({ gateway })}
-                aria-label={`Turn ${gateway.name} ${isGatewayOn(gateway) ? "off" : "on"}`}
+                aria-label={isGatewayOn(gateway) ? t("gatewaysList.turnGatewayOff", { name: gateway.name }) : t("gatewaysList.turnGatewayOn", { name: gateway.name })}
               />
             );
             const empty = (
               <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                No gateways match “{search.trim()}”.
+                {t("gatewaysList.noGatewaysMatch", { query: search.trim() })}
               </div>
             );
             return (

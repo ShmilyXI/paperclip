@@ -28,7 +28,7 @@ function MessageKind({ kind }: { kind: AgentCommentaryKind }) {
 function CommentaryRow({ entry, onOpen }: { entry: AgentCommentaryEntry; onOpen: (trigger: HTMLButtonElement) => void }) {
   return (
     <li>
-      <button type="button" onClick={(event) => onOpen(event.currentTarget)} aria-label={`Read ${entry.kind} from ${entry.agent.name}`}
+      <button type="button" onClick={(event) => onOpen(event.currentTarget)} aria-label={t("agentCommentary.readKindFromName", { kind: entry.kind, name: entry.agent.name })}
         className="group flex w-full flex-col gap-2 rounded-md px-3 py-4 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:grid md:grid-cols-12 md:items-start md:gap-4">
         <div className="flex items-center justify-between gap-3 md:col-span-2"><AgentIdentity agent={entry.agent} size="sm" /><span className="md:hidden"><MessageKind kind={entry.kind} /></span></div>
         <div className="hidden md:col-span-2 md:block"><MessageKind kind={entry.kind} /></div>

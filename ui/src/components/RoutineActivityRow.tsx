@@ -16,13 +16,25 @@ function formatTime(value: string | Date): string {
 
 function summarizeEvent(event: RoutineActivityEvent): string {
   const details = event.details;
-  if (event.action === "routine.webhook_test_received") return "Connection working · No run or task created";
-  if (event.action === "routine.webhook_test_rejected") return "Update the key in your app and resend";
-  if (event.action === "routine.webhook_received") return "Authentication passed";
-  if (event.action === "routine.webhook_rejected") return "Check the key in your sending app";
+  if (event.action === "routine.webhook_test_received") return t("routineActivityRow.connectionWorkingNoRunOr");
+  if (event.action === "routine.webhook_test_rejected") return t("routineActivityRow.updateTheKeyInYour");
+  if (event.action === "routine.webhook_received") return t("routineActivityRow.authenticationPassed");
+  if (event.action === "routine.webhook_rejected") return t("routineActivityRow.checkTheKeyInYour");
   if (!details) return "";
   if (typeof details.changeSummary === "string") return details.changeSummary;
-  if (event.action === "routine.run_triggered") return `${details.source === "webhook" ? "Webhook" : details.source === "schedule" ? "Schedule" : t("common.manual")} · ${details.status === "issue_created" ? "Task created" : String(details.status ?? "").replaceAll("_", " ")}`;
+  if (event.action === "routine.run_triggered") {
+    const sourceLabel =
+      details.source === "webhook"
+        ? t("routineActivityRow.webhook")
+        : details.source === "schedule"
+          ? t("routineActivityRow.schedule")
+          : t("common.manual");
+    const statusLabel =
+      details.status === "issue_created"
+        ? t("routineActivityRow.taskCreated")
+        : String(details.status ?? "").replaceAll("_", " ");
+    return `${sourceLabel} · ${statusLabel}`;
+  }
   return Object.entries(details).filter(([key]) => !/id$/i.test(key)).slice(0, 3)
     .map(([key, value]) => `${key.replace(/([a-z])([A-Z])/g, "$1 $2").replaceAll("_", " ").toLowerCase()}: ${formatDetailValue(value)}`)
     .join(" · ");
@@ -41,14 +53,14 @@ function formatDetailValue(value: unknown): string {
 }
 
 const actionLabels: Record<string, string> = {
-  "routine.webhook_test_received": "Connection test passed",
-  "routine.webhook_test_rejected": "Connection test rejected",
-  "routine.webhook_received": "Webhook event received",
-  "routine.webhook_rejected": "Webhook authentication failed",
-  "routine.created": "Routine created", "routine.updated": "Routine updated",
-  "routine.trigger_created": "Trigger added", "routine.trigger_updated": "Trigger updated",
-  "routine.trigger_deleted": "Trigger removed", "routine.trigger_removed": "Trigger removed", "routine.trigger_restored": "Trigger restored", "routine.trigger_setup_finished": "Webhook setup finished", "routine.trigger_secret_rotated": "Webhook key replaced",
-  "routine.run_triggered": "Routine started", "routine.run_created": "Run created",
+  "routine.webhook_test_received": t("routineActivityRow.connectionTestPassed"),
+  "routine.webhook_test_rejected": t("routineActivityRow.connectionTestRejected"),
+  "routine.webhook_received": t("routineActivityRow.webhookEventReceived"),
+  "routine.webhook_rejected": t("routineActivityRow.webhookAuthenticationFailed"),
+  "routine.created": t("routineActivityRow.routineCreated"), "routine.updated": t("routineActivityRow.routineUpdated"),
+  "routine.trigger_created": t("routineActivityRow.triggerAdded"), "routine.trigger_updated": t("routineActivityRow.triggerUpdated"),
+  "routine.trigger_deleted": t("routineActivityRow.triggerRemoved"), "routine.trigger_removed": t("routineActivityRow.triggerRemoved"), "routine.trigger_restored": t("routineActivityRow.triggerRestored"), "routine.trigger_setup_finished": t("routineActivityRow.webhookSetupFinished"), "routine.trigger_secret_rotated": t("routineActivityRow.webhookKeyReplaced"),
+  "routine.run_triggered": t("routineActivityRow.routineStarted"), "routine.run_created": t("routineActivityRow.runCreated"),
 };
 function actionLabel(action: string) {
   return actionLabels[action] ?? action.replace(/^routine[._]/, "").replaceAll("_", " ").replaceAll(".", " ").replace(/^./, (char) => char.toUpperCase());

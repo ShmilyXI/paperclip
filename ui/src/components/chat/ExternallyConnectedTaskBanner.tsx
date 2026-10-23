@@ -217,7 +217,7 @@ function ConnectedTaskComposer({
       setStorageError(null);
     } catch {
       setStorageError(
-        "Saved delivery identity could not be read. Check Activity and restore browser storage before starting another send.",
+        t("externallyConnectedTaskBanner.savedDeliveryIdentityCouldNotBeRead"),
       );
       setComposing(true);
     }
@@ -352,7 +352,7 @@ function ConnectedTaskComposer({
           writeBoardSendDraft(storageKey, saved);
         } catch {
           setStorageError(
-            "The rejected send could not be saved. Restore browser storage, then retry this same request to recover its receipt.",
+            t("externallyConnectedTaskBanner.rejectedSendCouldNotBeSaved"),
           );
           return;
         }
@@ -371,7 +371,7 @@ function ConnectedTaskComposer({
         title: t("externallyConnectedTaskBanner.couldnTConfirmChannelDelivery"),
         body:
           error instanceof Error
-            ? `${error.message} Your draft is kept; retrying here reuses the same request identity.`
+            ? `${error.message} ${t("externallyConnectedTaskBanner.yourDraftIsKept")}`
             : t("externallyConnectedTaskBanner.yourDraftIsKeptRetrying"),
         tone: "error",
       });
@@ -507,7 +507,7 @@ function ConnectedTaskComposer({
           {binding.externalUrl && (
             <Button asChild size="sm" variant="outline">
               <a href={binding.externalUrl} target="_blank" rel="noreferrer">
-                Open {providerNames[binding.provider]} <ExternalLink />
+                {t("common.open")} {providerNames[binding.provider]} <ExternalLink />
               </a>
             </Button>
           )}

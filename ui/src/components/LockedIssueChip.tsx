@@ -33,12 +33,12 @@ export function LockedIssueChip({
   // Identifier is the only viewer-safe field on the stub. When the server
   // withheld even that, fall back to a neutral "Private" label so the chip
   // still reads as a locked reference rather than an empty box.
-  const label = identifier ?? (unavailable ? "Unavailable" : t("common.private"));
+  const label = identifier ?? (unavailable ? t("lockedIssueChip.unavailable") : t("common.private"));
   const Icon = unavailable ? CircleHelp : Lock;
   return (
     <span
       data-testid="locked-issue-chip"
-      aria-label={`${label} — ${unavailable ? "unavailable or you don't have access" : "private, you don't have access"}`}
+      aria-label={t("lockedIssueChip.lockedReason", { label, reason: unavailable ? t("lockedIssueChip.unavailableOrNoAccess") : t("lockedIssueChip.privateNoAccess") })}
       className={cn(
         "inline-flex shrink-0 select-none items-center gap-1 rounded-md border border-dashed border-border px-1.5 py-0.5",
         "font-mono text-(length:--text-nano) leading-tight text-muted-foreground sm:text-(length:--text-micro)",

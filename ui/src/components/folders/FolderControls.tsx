@@ -390,7 +390,7 @@ export function AllUnfiledBanner({
     <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2 text-sm">
       <FolderIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
       <span className="min-w-0 flex-1 text-muted-foreground">
-        Group these {itemLabelPlural} into folders to keep things tidy.
+        {t("folders.groupTheseIntoFolders", { items: itemLabelPlural })}
       </span>
       <Button size="sm" variant="outline" onClick={onCreateFolder}>
         {t("folders.createYourFirstFolder")}
@@ -465,13 +465,13 @@ export function MobileFolderSheet({
           />
           {result?.kind === "skill" ? (
             <>
-              {model.my ? renderBranch(model.my, "My Skills") : null}
+              {model.my ? renderBranch(model.my, t("folders.mySkills")) : null}
               <div className="px-2 pb-0.5 pt-2 text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
                 {t("common.organization")}
               </div>
               {model.company.map((node) => renderBranch(node))}
               {model.projects ? renderBranch(model.projects, t("common.projects")) : null}
-              {model.bundled ? renderBranch(model.bundled, "Bundled") : null}
+              {model.bundled ? renderBranch(model.bundled, t("folders.bundled")) : null}
             </>
           ) : (
             model.roots.map((node) => renderBranch(node, reservedRootLabel(node.folder)))
@@ -636,9 +636,9 @@ export function FolderFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit folder" : "Create folder"}</DialogTitle>
+          <DialogTitle>{isEdit ? t("folders.editFolder") : t("folders.createFolder")}</DialogTitle>
           <DialogDescription>
-            {kind === "routine" ? "Organize routines in this organization." : "Organize installed organization skills."}
+            {kind === "routine" ? t("folders.organizeRoutinesInThisOrganization") : t("folders.organizeInstalledOrganizationSkills")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -688,7 +688,7 @@ export function FolderFormDialog({
             {t("common.cancel")}
           </Button>
           <Button onClick={() => onSubmit({ name: name.trim(), color })} disabled={pending || !name.trim()}>
-            {pending ? t("common.saving") : isEdit ? t("common.save") : "Create folder"}
+            {pending ? t("common.saving") : isEdit ? t("common.save") : t("folders.createFolder")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -717,7 +717,7 @@ export function DeleteFolderDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>{t("folders.deleteFolder")}</AlertDialogTitle>
           <AlertDialogDescription>
-            The {folder?.itemCount ?? 0} {itemLabelPlural} in this folder won't be deleted. They'll move to Unfiled.
+            {t("folders.itemsInThisFolderWontBeDeleted", { count: folder?.itemCount ?? 0, items: itemLabelPlural })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { IssueRecoveryAction } from "@paperclipai/shared";
 import { isNativeWorkspaceExportRepairCause } from "@paperclipai/shared";
 import { asObject, cn } from "../lib/utils";
@@ -12,6 +13,6 @@ export function WorkspaceExportRecovery({ action, className }: {
   const queued = !!action.evidence.workspaceOwnerStop || action.wakePolicy?.kind === "resume_native_run";
   const automatic = queued || (ownerRecovery && asObject(action.evidence.workspaceOwnerRecovery).state === "resuming");
   return <p role="status" className={cn("text-sm text-muted-foreground", className)}>
-    {automatic ? "Restoring saved work…" : "Workspace recovery needs operator assistance. The agent’s result is saved."}
+    {automatic ? t("workspaceExportRecovery.restoringSavedWork") : t("workspaceExportRecovery.workspaceRecoveryNeedsOperatorAssistance")}
   </p>;
 }

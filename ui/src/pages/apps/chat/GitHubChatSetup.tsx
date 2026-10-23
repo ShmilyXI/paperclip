@@ -402,7 +402,7 @@ export function GitHubChatSetup() {
             <>
               <p role="status" className="text-sm">
                 {t("githubChatSetup.githubAccount")} <strong>{legacyIdentity?.login}</strong>{" "}
-                connected. You can now mention this bot on GitHub.
+                {t("githubChatSetup.connectedYouCanNowMentionThisBotOnGithub")}
               </p>
               {footer()}
             </>
@@ -410,7 +410,7 @@ export function GitHubChatSetup() {
             <>
               <p className="text-sm">
                 {t("githubChatSetup.connectGithubAccount")} <strong>{state.identity.login}</strong>{" "}
-                to your Paperclip account.
+                {t("githubChatSetup.toYourPaperclipAccount")}
               </p>
               {footer(t("githubChatSetup.confirmMyAccount"), async () => {
                 await githubChatApi.confirmIdentity(
@@ -519,7 +519,7 @@ export function GitHubChatSetup() {
           <p className="text-sm">
             {t("githubChatSetup.paperclipCloudReceivesGithubEvents")}
           </p>
-          {footer("Connect Paperclip Cloud", async () => {
+          {footer(t("githubChatSetup.connectPaperclipCloud"), async () => {
             const result = await toolsApi.startCloudConnectorEnrollment(
               selectedCompanyId!,
               undefined,

@@ -35,24 +35,24 @@ function detectHiringPlan(body: string): boolean {
 }
 
 const QUEUED_MESSAGES = [
-  "Heartbeat triggered, waking up...",
+  t("onboarding.heartbeatTriggeredWakingUp"),
   "Initializing...",
-  "Getting ready...",
+  t("onboarding.gettingReady"),
 ];
 
 const RUNNING_MESSAGES = [
-  "Working on a response...",
-  "Reading the conversation...",
-  "Thinking through the plan...",
-  "Drafting a response...",
-  "Still working...",
-  "Almost there...",
+  t("onboarding.workingOnAResponse"),
+  t("onboarding.readingTheConversation"),
+  t("onboarding.thinkingThroughThePlan"),
+  t("onboarding.draftingAResponse"),
+  t("onboarding.stillWorking"),
+  t("onboarding.almostThere"),
 ];
 
 const WAITING_MESSAGES = [
-  "Waiting to wake up...",
-  "Heartbeat pending...",
-  "Should wake up soon...",
+  t("onboarding.waitingToWakeUp"),
+  t("onboarding.heartbeatPending"),
+  t("onboarding.shouldWakeUpSoon"),
 ];
 
 function getCyclingMessage(messages: string[], elapsed: number, agentName: string): string {
@@ -70,13 +70,13 @@ function getRunStatusMessage(status: string, agentName: string, elapsed: number)
     case "succeeded":
       return `${agentName} finished`;
     case "failed":
-      return `${agentName} encountered an error`;
+      return t("onboarding.encounteredAnError", { name: agentName });
     case "cancelled":
-      return `${agentName}'s run was cancelled`;
+      return t("onboarding.runWasCancelled", { name: agentName });
     case "timed_out":
-      return `${agentName}'s run timed out`;
+      return t("onboarding.runTimedOut", { name: agentName });
     default:
-      return `${agentName} is thinking...`;
+      return t("onboarding.isThinking", { name: agentName });
   }
 }
 
@@ -269,10 +269,10 @@ export function OnboardingChat({
           companyGoal={companyGoal}
           hasComments={Boolean(comments?.length)}
           onDiscuss={() => {
-            setInput("I want to discuss the plan before you get started.");
+            setInput(t("onboarding.iWantToDiscussThePlan"));
             inputRef.current?.focus();
           }}
-          onStart={() => sendMessage("Yes, get started on the hiring plan!")}
+          onStart={() => sendMessage(t("onboarding.yesGetStartedOnTheHiringPlan"))}
         />
         {comments?.map((comment) => {
           const isAgent = Boolean(comment.authorAgentId);
@@ -351,7 +351,7 @@ export function OnboardingChat({
               <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
               <div>
                 <p className="text-sm font-medium">
-                  {agentName} has prepared a hiring plan
+                  {t("onboarding.hasPreparedAHiringPlan", { name: agentName })}
                 </p>
                 <p className="text-(length:--text-micro) text-muted-foreground">
                   {t("onboarding.reviewItMakeEditsThen")}
@@ -372,7 +372,7 @@ export function OnboardingChat({
           ref={inputRef}
           type="text"
           className="flex-1 rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
-          placeholder={detectedPlanCommentId ? `Ask ${agentName} to revise the plan...` : `Message ${agentName}...`}
+          placeholder={detectedPlanCommentId ? t("onboarding.askToReviseThePlan", { name: agentName }) : t("onboarding.messageName", { name: agentName })}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -473,8 +473,8 @@ function WelcomeMessage({
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500" />
           </span>
           {phase === "waking"
-            ? `${agentName} is waking up...`
-            : `${agentName} is composing a message...`}
+            ? t("onboarding.isWakingUp", { name: agentName })
+            : t("onboarding.isComposingAMessage", { name: agentName })}
         </div>
       )}
     </>

@@ -53,10 +53,10 @@ export function summarizeRoutineSchedule(triggers: RoutineTrigger[]): RoutineSch
 
   const first = schedules[0]!;
   return {
-    label: schedules.length === 1 ? "1 active schedule" : `${schedules.length} active schedules`,
+    label: schedules.length === 1 ? t("routineOverview.oneActiveSchedule") : t("routineOverview.activeSchedules", { count: schedules.length }),
     detail: first.cronExpression
       ? `${first.cronExpression}${first.timezone ? ` · ${first.timezone}` : ""}`
-      : first.label ?? "Scheduled trigger",
+      : first.label ?? t("routineOverview.scheduledTrigger"),
     nextRunAt,
   };
 }
@@ -165,7 +165,7 @@ export function RoutineOverview() {
           icon={Repeat}
           label={t("routineOverview.state")}
           value={<StatusBadge status={automationState} />}
-          detail={hasLiveRun ? "A run is active now" : "No active run"}
+          detail={hasLiveRun ? t("routineOverview.aRunIsActiveNow") : t("routineOverview.noActiveRun")}
         />
         <OverviewFact
           icon={CalendarClock}
@@ -176,14 +176,14 @@ export function RoutineOverview() {
         <OverviewFact
           icon={Clock3}
           label={t("common.nextRun")}
-          value={schedule.nextRunAt ? formatRoutineTimestamp(schedule.nextRunAt) : hasWebhook ? "On webhook delivery" : "Not scheduled"}
-          detail={schedule.nextRunAt ? "Scheduled" : hasWebhook ? "Waiting for an incoming request" : "Add or enable a schedule"}
+          value={schedule.nextRunAt ? formatRoutineTimestamp(schedule.nextRunAt) : hasWebhook ? t("routineOverview.onWebhookDelivery") : t("routineOverview.notScheduled")}
+          detail={schedule.nextRunAt ? t("routineOverview.scheduled") : hasWebhook ? t("routineOverview.waitingForAnIncomingRequest") : t("routineOverview.addOrEnableASchedule")}
         />
         <OverviewFact
           icon={Play}
           label={t("common.lastRun")}
-          value={lastRun ? <StatusBadge status={lastRun.status} /> : "No runs yet"}
-          detail={lastRun ? formatRoutineTimestamp(lastRun.triggeredAt) : "Run manually or wait for a trigger"}
+          value={lastRun ? <StatusBadge status={lastRun.status} /> : t("routineOverview.noRunsYet")}
+          detail={lastRun ? formatRoutineTimestamp(lastRun.triggeredAt) : t("routineOverview.runManuallyOrWaitFor")}
         />
       </div>
 
@@ -242,7 +242,7 @@ export function RoutineOverview() {
             ) : (
               <div key={run.id} className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-2 text-sm">
                 <StatusBadge status={run.status} />
-                <span className="min-w-0 flex-1 truncate">{run.trigger?.label ?? "Routine run"}</span>
+                <span className="min-w-0 flex-1 truncate">{run.trigger?.label ?? t("routineOverview.routineRun")}</span>
                 <span className="shrink-0 font-mono text-xs text-muted-foreground">{formatRoutineTimestamp(run.triggeredAt)}</span>
               </div>
             ))}

@@ -179,11 +179,11 @@ function statusLabel(status: IssueThreadInteraction["status"]) {
     case "pending":
       return t("common.pending");
     case "accepted":
-      return "Accepted";
+      return t("issueThreadInteractionCard.accepted");
     case "rejected":
       return t("common.rejected");
     case "answered":
-      return "Answered";
+      return t("issueThreadInteractionCard.answered");
     case "cancelled":
       return t("common.cancelled");
     case "expired":
@@ -198,17 +198,17 @@ function statusLabel(status: IssueThreadInteraction["status"]) {
 function interactionKindLabel(kind: IssueThreadInteraction["kind"]) {
   switch (kind) {
     case "suggest_tasks":
-      return "Suggested tasks";
+      return t("issueThreadInteractionCard.suggestedTasks");
     case "ask_user_questions":
       return t("interaction.askUserQuestions");
     case "request_confirmation":
-      return "Confirmation";
+      return t("issueThreadInteractionCard.confirmation");
     case "request_checkbox_confirmation":
-      return "Checkbox confirmation";
+      return t("issueThreadInteractionCard.checkboxConfirmation");
     case "request_item_verdicts":
-      return "Item verdicts";
+      return t("issueThreadInteractionCard.itemVerdicts");
     case "connection_intent":
-      return "Connection request";
+      return t("issueThreadInteractionCard.connectionRequest");
     default:
       return kind;
   }
@@ -887,7 +887,7 @@ function SuggestTasksCard({
             "mt-1 leading-6",
             !interaction.result?.rejectionReason && "text-rose-900/75",
           )}>
-            {interaction.result?.rejectionReason || "No reason provided."}
+            {interaction.result?.rejectionReason || t("issueThreadInteractionCard.noReasonProvided")}
           </p>
         </div>
       ) : null}
@@ -965,7 +965,7 @@ function SuggestTasksCard({
                       {t("common.saving")}
                     </>
                   ) : (
-                    "Save rejection"
+                    t("issueThreadInteractionCard.saveRejection")
                   )}
                 </Button>
               </div>
@@ -1251,7 +1251,7 @@ function AskUserQuestionsCard({
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-                    Question {index + 1}
+                    {t("issueThreadInteractionCard.question", { number: index + 1 })}
                   </div>
                   <div
                     id={`${interaction.id}-${question.id}-prompt`}
@@ -1373,7 +1373,7 @@ function AskUserQuestionsCard({
                       {t("interaction.cancelling")}
                     </>
                   ) : (
-                    "Cancel question"
+                    t("issueThreadInteractionCard.cancelQuestion")
                   )}
                   </Button>
                 ) : null}
@@ -1426,7 +1426,7 @@ function AskUserQuestionsCard({
           <p className="mt-1">
             {interaction.result?.outcome === "issue_closed"
               ? t("issueThreadInteractionCard.thisQuestionRequestExpiredAutomatically")
-              : "A later board/user comment superseded this question request. Create a fresh request if answers are still needed."}
+              : t("issueThreadInteractionCard.aLaterCommentSuperseded")}
           </p>
           {interaction.result?.commentId ? (
             <a
@@ -1645,7 +1645,7 @@ function RequestConfirmationResolution({
         )}
         <p className="leading-6">
           {expiredByComment
-            ? "A board comment superseded this confirmation before it was resolved."
+            ? t("issueThreadInteractionCard.aBoardCommentSuperseded")
             : expiredByIssueClosed
               ? t("issueThreadInteractionCard.thisConfirmationExpiredAutomaticallyWhen")
               : t("issueThreadInteractionCard.theRequestedTargetChangedBefore")}
@@ -1708,13 +1708,13 @@ function ToolActionResolution({
     cancelled: t("common.cancelled"),
   };
   const Icon = state === "running" ? Loader2 : state === "executed" ? CheckCircle2 : state === "failed" ? AlertTriangle : state === "expired" ? Clock : MinusCircle;
-  const detail = state === "failed" ? result?.errorMessage?.trim() || "The action could not complete."
+  const detail = state === "failed" ? result?.errorMessage?.trim() || t("issueThreadInteractionCard.theActionCouldNotComplete")
     : state === "declined" ? interaction.result?.reason?.trim()
     : null;
   const status = <>
     <Icon className={cn("h-3.5 w-3.5 shrink-0", state === "running" && "animate-spin", state === "failed" && "text-destructive")} />
     {labels[state]}
-    {result?.rememberedAction ? " · Always allowed" : ""}
+    {result?.rememberedAction ? ` ${t("issueThreadInteractionCard.alwaysAllowed")}` : ""}
   </>;
   return (
     <div className="space-y-1 text-sm text-muted-foreground" aria-live="polite">
@@ -1912,7 +1912,7 @@ function SecretProposalResolution({
   resolvedByLabel: string | null;
 }) {
   const result = interaction.result?.secretProposal ?? null;
-  const who = resolvedByLabel ?? "the board";
+  const who = resolvedByLabel ?? t("issueThreadInteractionCard.theBoard");
   const when = interaction.resolvedAt
     ? formatDateTime(interaction.resolvedAt)
     : result?.updatedAt
@@ -1924,7 +1924,7 @@ function SecretProposalResolution({
       <div aria-live="polite" className="flex items-start gap-2 rounded-sm border border-amber-500/50 bg-amber-500/10 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
         <Loader2 className="mt-0.5 h-4 w-4 shrink-0 animate-spin" />
         <div>
-          <div className="font-medium">Approved by {who} — creating the binding</div>
+          <div className="font-medium">{t("issueThreadInteractionCard.approvedByCreating", { who })}</div>
           <p className="mt-1 text-amber-900/80 dark:text-amber-100/80">
             {t("interaction.paperclipIsReCheckingAuthority")}
           </p>
@@ -1938,9 +1938,9 @@ function SecretProposalResolution({
       <div aria-live="polite" className="flex items-start gap-2 rounded-sm border border-green-500/50 bg-green-500/10 px-4 py-3 text-sm text-green-900 dark:text-green-100">
         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
         <div>
-          <div className="font-medium">Binding created · approved by {who}</div>
+          <div className="font-medium">{t("issueThreadInteractionCard.bindingCreatedApprovedBy", { who })}</div>
           <p className="mt-1 text-green-900/80 dark:text-green-100/80">
-            The target agent can now use the proposed config path{when ? ` · ${when}` : ""}.
+            {t("issueThreadInteractionCard.theTargetAgentCanNowUse")}{when ? ` · ${when}` : ""}.
           </p>
         </div>
       </div>
@@ -1981,7 +1981,7 @@ function SecretProposalResolution({
         <div className="flex items-start gap-2">
           <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
-            <div className="font-medium">Rejected by {who}</div>
+            <div className="font-medium">{t("issueThreadInteractionCard.rejectedBy", { who })}</div>
             <p className="mt-1 text-red-900/80 dark:text-red-100/80">{t("interaction.theBindingWasNotCreated")}</p>
           </div>
         </div>
@@ -1998,7 +1998,7 @@ function SecretProposalResolution({
     <div className="flex items-start gap-2 rounded-sm border border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
       <Clock className="mt-0.5 h-4 w-4 shrink-0" />
       <div>
-        <div className="font-medium text-foreground">Proposal expired{when ? ` · ${when}` : ""}</div>
+        <div className="font-medium text-foreground">{t("issueThreadInteractionCard.proposalExpired")}{when ? ` · ${when}` : ""}</div>
         <p className="mt-1">{t("interaction.theBindingWasNotCreated2")}</p>
       </div>
     </div>
@@ -2065,14 +2065,14 @@ function RequestSecretProposalCard({
       <ProposalJustification justification={payload.justification} />
       <div className="flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
         <Clock className="h-3.5 w-3.5" />
-        Expires {formatDateTime(payload.expiresAt)}
+        {t("issueThreadInteractionCard.expires", { date: formatDateTime(payload.expiresAt) })}
       </div>
 
       {isPending ? (
         <ConfirmationActionRow
           resetKey={`${interaction.id}:${interaction.status}`}
           approveLabel={interaction.payload.acceptLabel ?? t("issueThreadInteractionCard.approveBind")}
-          reviseLabel="Add reason…"
+          reviseLabel={t("issueThreadInteractionCard.addReason")}
           rejectLabel={interaction.payload.rejectLabel ?? t("common.reject")}
           approveVariant="cta"
           allowRevise={interaction.payload.allowDeclineReason !== false}
@@ -2107,7 +2107,7 @@ function RequestSecretProposalCard({
  * confirmations (e.g. "Delete selected"), but the shape stays consistent.
  */
 const CONFIRMATION_APPROVE_LABEL = t("common.approve");
-const CONFIRMATION_REVISE_LABEL = "Revise…";
+const CONFIRMATION_REVISE_LABEL = t("issueThreadInteractionCard.revise");
 const CONFIRMATION_REJECT_LABEL = t("common.reject");
 
 /**
@@ -2294,7 +2294,7 @@ function ConfirmationActionRow({
                   {t("interaction.sending")}
                 </>
               ) : (
-                "Send revision"
+                t("issueThreadInteractionCard.sendRevision")
               )}
             </Button>
           </div>
@@ -2462,7 +2462,7 @@ function RequestConnectionAuthorizationCard({
             >
               <Button asChild size="sm" variant="cta" className="w-full sm:w-auto">
                 <a href={href} target="_blank" rel="noreferrer">
-                  Connect {providerName}
+                  {t("issueThreadInteractionCard.connect", { provider: providerName })}
                   <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
                 </a>
               </Button>
@@ -2479,7 +2479,7 @@ function RequestConnectionAuthorizationCard({
                     {t("common.saving2")}
                   </>
                 ) : (
-                  "Not now"
+                  t("issueThreadInteractionCard.notNow")
                 )}
               </Button>
             </div>
@@ -2489,8 +2489,8 @@ function RequestConnectionAuthorizationCard({
             <ConnectionAuthorizationStatusLine
               Icon={TriangleAlert}
               testId="connection-authorization-no-target"
-              headline="This authorization link is unavailable"
-              detail={`Ask ${requestingAgentLabel ?? "the agent"} to send a fresh ${providerName} authorization link.`}
+              headline={t("issueThreadInteractionCard.thisAuthorizationLinkIsUnavailable")}
+              detail={t("issueThreadInteractionCard.askToSendAFreshLink", { agent: requestingAgentLabel ?? t("issueThreadInteractionCard.theAgent"), provider: providerName })}
             />
           )}
           <InteractionActionError message={actionError} />
@@ -2506,16 +2506,16 @@ function RequestConnectionAuthorizationCard({
         <ConnectionAuthorizationStatusLine
           Icon={CheckCircle2}
           testId="connection-authorization-connected"
-          headline={`${providerName} connected`}
+          headline={t("issueThreadInteractionCard.providerConnected", { provider: providerName })}
           detail={
             <>
-              Connected by{" "}
+              {t("issueThreadInteractionCard.connectedBy")}{" "}
               <span className="font-medium text-foreground">
                 {/* "You" is display-cased for a badge; this is mid-sentence. */}
-                {(resolvedByLabel ?? addresseeLabel) === "You" ? "you" : resolvedByLabel ?? addresseeLabel}
+                {(resolvedByLabel ?? addresseeLabel) === "You" ? t("issueThreadInteractionCard.youMidSentence") : resolvedByLabel ?? addresseeLabel}
               </span>
               {resolvedByAgent ? <ResolvedByAgentChip /> : null}
-              {interaction.resolvedAt ? ` on ${formatDateTime(interaction.resolvedAt)}` : ""}
+              {interaction.resolvedAt ? " " + t("issueThreadInteractionCard.onDate", { date: formatDateTime(interaction.resolvedAt) }) : ""}
             </>
           }
         />
@@ -2624,7 +2624,7 @@ function RequestConfirmationCard({
       }
       if (uploaded.length > 0) setShots((current) => [...current, ...uploaded]);
     } catch {
-      setUploadError("Couldn't upload that image. Try again.");
+      setUploadError(t("issueThreadInteractionCard.couldNotUploadImage"));
     } finally {
       setUploading(false);
     }
@@ -3412,8 +3412,7 @@ function RequestItemVerdictsCard({
           </div>
           {progress.decided > 0 ? (
             <p className="mt-1 text-xs leading-5">
-              {progress.decided === 1 ? "1 item was" : `${progress.decided} items were`} already applied and cannot be
-              reverted. Remaining items were cancelled.
+              {t("issueThreadInteractionCard.itemsAlreadyApplied", { count: progress.decided })}
             </p>
           ) : null}
         </div>
@@ -3503,7 +3502,7 @@ function RequestItemVerdictsCard({
                     )}
                   />
                   {attempted && invalidDraftIds.has(item.id) ? (
-                    <p className="text-xs text-destructive">A reason is required to {VERDICT_LABEL[draft.verdict].toLowerCase()} this item.</p>
+                    <p className="text-xs text-destructive">{t("issueThreadInteractionCard.aReasonIsRequiredTo", { verdict: VERDICT_LABEL[draft.verdict].toLowerCase() })}</p>
                   ) : null}
                 </div>
               ) : null}
@@ -3812,11 +3811,11 @@ export function IssueThreadInteractionCard({
                       data-testid="interaction-addressee-badge"
                     >
                       <Bot className="h-3 w-3" />
-                      For {addresseeLabel}
+                      {t("issueThreadInteractionCard.forWho", { who: addresseeLabel })}
                     </Badge>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-xs text-xs">
-                    Directed to {addresseeLabel}. Agent-addressed interactions are owned by that agent and are kept out of the open organization attention feed.
+                    {t("issueThreadInteractionCard.directedTo", { who: addresseeLabel })}
                   </TooltipContent>
                 </Tooltip>
               ) : null}
@@ -3865,11 +3864,11 @@ export function IssueThreadInteractionCard({
             <TooltipTrigger asChild>
               <div className="rounded-sm border border-border/70 bg-transparent px-3 py-2 text-right text-xs text-muted-foreground">
                 <div className="font-medium text-foreground">{formatShortDate(interaction.createdAt)}</div>
-                <div>proposed by {createdByLabel}</div>
+                <div>{t("issueThreadInteractionCard.proposedBy", { who: createdByLabel })}</div>
               </div>
             </TooltipTrigger>
             <TooltipContent side="bottom" className="text-xs">
-              Created {formatDateTime(interaction.createdAt)}
+              {t("issueThreadInteractionCard.createdOn", { date: formatDateTime(interaction.createdAt) })}
             </TooltipContent>
           </Tooltip>
         </div>
@@ -3953,10 +3952,10 @@ export function IssueThreadInteractionCard({
             data-testid="interaction-withdrawn-footer"
           >
             <div>
-              Withdrawn by{" "}
-              <span className="font-medium text-foreground">{resolvedByLabel ?? "an agent"}</span>
+              {t("issueThreadInteractionCard.withdrawnBy")}{" "}
+              <span className="font-medium text-foreground">{resolvedByLabel ?? t("issueThreadInteractionCard.anAgent")}</span>
               {resolvedByAgent ? <ResolvedByAgentChip /> : null}
-              {interaction.resolvedAt ? ` on ${formatShortDate(interaction.resolvedAt)}` : ""}
+              {interaction.resolvedAt ? " " + t("issueThreadInteractionCard.onDate", { date: formatShortDate(interaction.resolvedAt) }) : ""}
             </div>
             {adminReason ? (
               <div className="mt-1 italic text-muted-foreground/90">"{adminReason}"</div>

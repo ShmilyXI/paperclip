@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { Agent, DocumentAnnotationThreadWithComments, IssueDocument } from "@paperclipai/shared";
 import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { t } from "@/i18n";
 import { cn } from "@/lib/utils";
 import { documentAnnotationsApi, type DocumentAnnotationTarget } from "@/api/document-annotations";
 import { queryKeys } from "@/lib/queryKeys";
@@ -130,13 +131,13 @@ export function IssueDocumentAnnotations({
 
   const newCommentDisabled = draftDirty || draftConflicted || historicalPreview || !doc.latestRevisionId;
   const newCommentDisabledReason = historicalPreview
-    ? "New comments are disabled while previewing a historical revision."
+    ? t("issueDocumentAnnotations.newCommentsDisabledHistoricalPreview")
     : draftConflicted
-      ? "Resolve the document conflict before adding new comments."
+      ? t("issueDocumentAnnotations.resolveDocumentConflictBeforeComments")
       : draftDirty
-        ? "Save the draft to anchor new comments."
+        ? t("issueDocumentAnnotations.saveDraftToAnchorComments")
         : !doc.latestRevisionId
-          ? "Document has no saved revision yet."
+          ? t("issueDocumentAnnotations.documentHasNoSavedRevision")
           : null;
 
   const handleSelectionAnchorChange = useCallback((anchor: PendingAnchor | null) => {
@@ -427,8 +428,8 @@ export function DocumentAnnotationsCountChip({
       onClick={onToggle}
       data-testid={`document-annotation-count-${docKey}`}
       aria-label={openCount === 0
-        ? `Open comments on ${docKey}`
-        : `Open ${openCount} unresolved comments on ${docKey}`}
+        ? t("issueDocumentAnnotations.openCommentsOnDoc", { docKey })
+        : t("issueDocumentAnnotations.openUnresolvedCommentsOnDoc", { count: openCount, docKey })}
       aria-expanded={panelOpen}
     >
       <MessageSquare className="h-3 w-3" aria-hidden="true" />

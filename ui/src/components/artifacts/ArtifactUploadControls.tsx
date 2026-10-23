@@ -52,7 +52,7 @@ export function ArtifactUploadContent({ children, empty = false, entries = [], o
         </div>
         {entry.status === "error" ? <div className="flex shrink-0 items-center gap-1">
           {onRetry ? <Button variant="ghost" size="sm" onClick={() => onRetry(entry.id)}>{t("common.retry")}</Button> : null}
-          {onDismiss ? <Button variant="ghost" size="icon-sm" aria-label={`Dismiss upload: ${entry.filename}`} onClick={() => onDismiss(entry.id)}><X aria-hidden="true" /></Button> : null}
+          {onDismiss ? <Button variant="ghost" size="icon-sm" aria-label={t("artifactUploadControls.dismissUploadFilename", { filename: entry.filename })} onClick={() => onDismiss(entry.id)}><X aria-hidden="true" /></Button> : null}
         </div> : null}
       </li>)}
     </ul> : null}

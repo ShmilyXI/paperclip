@@ -68,8 +68,7 @@ function CredentialSettings({
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium">{t("browserUseSettingsPanel.allowedSavedProfiles")}</legend>
         <p className="text-sm text-muted-foreground">
-          Fresh browsers are the default. Selected profiles let agents use their
-          saved website logins. Manage profiles in{" "}
+          {t("browserUseSettingsPanel.freshBrowsersAreTheDefault")}{" "}
           <a
             href="https://cloud.browser-use.com"
             target="_blank"
@@ -103,7 +102,7 @@ function CredentialSettings({
         )}
         {profiles.isError && (
           <p role="alert" className="text-sm text-destructive">
-            Could not load profiles.{" "}
+            {t("browserUseSettingsPanel.couldNotLoadProfiles")}{" "}
             <Button
               size="sm"
               variant="ghost"

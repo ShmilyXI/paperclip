@@ -29,15 +29,15 @@ const runSegmentColors = {
 
 // Compact per-day tooltip that also attributes failures to their error class.
 function runDayTooltip(entry: DashboardRunActivityDay): string {
-  const lines = [`${entry.date}: ${entry.total} run${entry.total === 1 ? "" : "s"}`];
-  if (entry.succeeded > 0) lines.push(`  succeeded: ${entry.succeeded}`);
-  if (entry.recovered > 0) lines.push(`  recovered: ${entry.recovered} (retry succeeded)`);
+  const lines = [t("activityCharts.runDayHeader", { count: entry.total, date: entry.date })];
+  if (entry.succeeded > 0) lines.push(`  ${t("activityCharts.succeeded", { count: entry.succeeded })}`);
+  if (entry.recovered > 0) lines.push(`  ${t("activityCharts.recovered", { count: entry.recovered })}`);
   if (entry.failed > 0) {
-    lines.push(`  failed: ${entry.failed}`);
+    lines.push(`  ${t("activityCharts.failed", { count: entry.failed })}`);
     const codes = Object.entries(entry.failedByErrorCode ?? {}).sort((a, b) => b[1] - a[1]);
     for (const [code, count] of codes) lines.push(`    ${code}: ${count}`);
   }
-  if (entry.other > 0) lines.push(`  other: ${entry.other}`);
+  if (entry.other > 0) lines.push(`  ${t("activityCharts.other", { count: entry.other })}`);
   return lines.join("\n");
 }
 

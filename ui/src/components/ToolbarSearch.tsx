@@ -1,10 +1,11 @@
+import { t } from "@/i18n";
 import type { Ref } from "react";
 import { Search, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 /** Shared collection search field: one surface, focus ring and clear affordance. */
-export function ToolbarSearch({ query, onQueryChange, label, placeholder, clearLabel = "Clear search", inputRef, inputType = "text" }: {
+export function ToolbarSearch({ query, onQueryChange, label, placeholder, clearLabel = t("toolbarSearch.clearSearch"), inputRef, inputType = "text" }: {
   query: string;
   onQueryChange: (value: string) => void;
   label: string;

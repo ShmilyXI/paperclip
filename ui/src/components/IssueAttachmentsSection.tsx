@@ -105,7 +105,7 @@ function AttachmentActions({
 function AttachmentMeta({ attachment }: { attachment: IssueAttachment }) {
   return (
     <p className="mt-0.5 text-(length:--text-micro) text-muted-foreground">
-      Attachment · {attachment.contentType} · {formatBytes(attachment.byteSize)}
+      {t("common.attachment")} · {attachment.contentType} · {formatBytes(attachment.byteSize)}
     </p>
   );
 }
@@ -217,7 +217,7 @@ function GenericAttachmentRow({
           {filename}
         </a>
         <p className="truncate text-(length:--text-micro) text-muted-foreground">
-          Attachment · {attachment.contentType} · {formatBytes(attachment.byteSize)}
+          {t("common.attachment")} · {attachment.contentType} · {formatBytes(attachment.byteSize)}
         </p>
       </div>
       <AttachmentActions attachment={attachment} onDelete={onDelete} deletePending={deletePending} />

@@ -739,7 +739,7 @@ export function InstanceExperimentalSettings() {
 
           <ExperimentalToggleCard
             title={t("experimental.smokeLab")}
-            description='Add a t("experimental.smokeLab") tab under Apps → Developer and an "Integration smoke" card on the dashboard for exercising every integration path against deterministic local fixtures (fake OAuth provider + loopback MCP servers). Private (non-public) deployments only.'
+            description={t("experimental.smokeLabDescription")}
             checked={enableSmokeLab}
             onCheckedChange={(checked) => toggleMutation.mutate({ enableSmokeLab: checked })}
             disabled={toggleMutation.isPending}

@@ -5,7 +5,7 @@ import { formatCents } from "../lib/utils";
 
 export const typeLabel: Record<string, string> = {
   hire_agent: t("approvals.hireAgent"),
-  approve_ceo_strategy: "CEO Strategy",
+  approve_ceo_strategy: t("approvals.ceoStrategy"),
   budget_override_required: t("approvals.budgetOverride"),
   request_board_approval: t("approvals.boardApproval"),
 };
@@ -140,7 +140,7 @@ export function BudgetOverridePayload({ payload }: { payload: Record<string, unk
       <PayloadField label={t("approvals.metric")} value={payload.metric} />
       {(budgetAmount !== null || observedAmount !== null) ? (
         <div className="rounded-md bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
-          Limit {budgetAmount !== null ? formatCents(budgetAmount) : "—"} · Observed {observedAmount !== null ? formatCents(observedAmount) : "—"}
+          {t("approvals.limitObserved", { limit: budgetAmount !== null ? formatCents(budgetAmount) : "—", observed: observedAmount !== null ? formatCents(observedAmount) : "—" })}
         </div>
       ) : null}
       {!!payload.guidance && (

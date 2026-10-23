@@ -80,7 +80,7 @@ function PoolConnector({ companyId, pluginKey, connection }: { companyId: string
   useEffect(() => {
     if (!editing || !canManage) return;
     let alive = true;
-    void aiConnectionPoolsApi.inspect(companyId, editing.id).then(value => { if (alive) setInspection(value); }).catch(() => { if (alive) setInspectionError("Usage unavailable."); });
+    void aiConnectionPoolsApi.inspect(companyId, editing.id).then(value => { if (alive) setInspection(value); }).catch(() => { if (alive) setInspectionError(t("aiConnectionPoolConnector.usageUnavailable")); });
     return () => { alive = false; };
   }, [companyId, editing, canManage]);
   async function invalidate() {

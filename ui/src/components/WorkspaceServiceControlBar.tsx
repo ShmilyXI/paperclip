@@ -47,7 +47,7 @@ export type WorkspaceServiceControlBarProps = {
   /** serviceKey is null when the action targets all services (aggregate bar / popover footer). */
   onAction: (action: WorkspaceServiceControlAction, serviceKey: string | null) => void;
   onViewLogs?: () => void;
-  /** Optional link target for "Manage in Services tab" in the multi-service popover. */
+  /** Optional link target for t("workspaceServiceControlBar.manageInServicesTab2") in the multi-service popover. */
   onManageServices?: () => void;
   /** Initial open state for the multi-service popover (used by Storybook/static captures). */
   defaultServicesOpen?: boolean;
@@ -115,7 +115,7 @@ function CopyUrlButton({ url, disabled }: { url: string; disabled?: boolean }) {
   useEffect(() => () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
-  const copyLabel = copyState === "copied" ? "URL copied" : copyState === "failed" ? t("workspaceServiceControlBar.copyFailed") : t("workspaceServiceControlBar.copyUrl");
+  const copyLabel = copyState === "copied" ? t("workspaceServiceControlBar.urlCopied") : copyState === "failed" ? t("workspaceServiceControlBar.copyFailed") : t("workspaceServiceControlBar.copyUrl");
   return (
     <Button
       variant="ghost"
@@ -366,7 +366,7 @@ function ServicePopoverRow({
     : live
       ? displayUrl
     : entry.state === "starting" && entry.port
-      ? `starting on :${entry.port}…`
+      ? t("workspaceServiceControlBar.startingOnPort", { port: entry.port })
       : entry.state === "failed" && entry.failureDetail
         ? entry.failureDetail
         : `${meta.label.toLowerCase().replace(/…$/, "")}${entry.port ? ` · :${entry.port}` : ""}`;
@@ -455,10 +455,10 @@ function MultiServiceBar({
               <button
                 type="button"
                 className="flex h-full items-center gap-2 rounded-l-lg pr-1 text-xs font-medium text-foreground hover:bg-accent"
-                aria-label={`${runningCount} of ${services.length} services running — show services`}
+                aria-label={t("workspaceServiceControlBar.servicesRunningAriaLabel", { running: runningCount, total: services.length })}
               >
                 <StatusIndicator entry={aggregateEntry} />
-                <span className="whitespace-nowrap">{runningCount}/{services.length} running</span>
+                <span className="whitespace-nowrap">{t("workspaceServiceControlBar.runningCount", { running: runningCount, total: services.length })}</span>
                 <ChevronDown className="size-3 text-muted-foreground" />
               </button>
             </PopoverTrigger>

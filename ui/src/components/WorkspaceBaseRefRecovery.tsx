@@ -82,7 +82,7 @@ export function WorkspaceBaseRefRecoveryProvider({ issue, agentMap, unavailableR
     const requestedRef = failure.requestedRef;
     const workspace = issue.project?.workspaces?.find(w => w.id === issue.projectWorkspaceId)
       ?? issue.project?.primaryWorkspace;
-    let repository = "The task’s repository";
+    let repository = t("workspaceBaseRefRecovery.theTaskSRepository");
     if (workspace?.repoUrl) {
       try { const url = new URL(workspace.repoUrl); if (url.protocol === "https:" || url.protocol === "http:") repository = `${url.hostname}${url.pathname.replace(/\.git$/, "")}`; } catch { /* Keep local paths and credentials out of the card. */ }
     }

@@ -174,7 +174,7 @@ export function CompanyPatternIcon({
       {logo ? (
         <img
           src={logo}
-          alt={`${companyName} logo`}
+          alt={t("companyPatternIcon.companynameLogo", { companyName })}
           onError={() => setImageError(true)}
           className={cn(
             "absolute inset-0 h-full w-full",

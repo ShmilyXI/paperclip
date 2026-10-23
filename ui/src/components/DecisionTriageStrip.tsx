@@ -124,12 +124,12 @@ export function DecisionTriageStrip({ item, companyId, agents }: DecisionTriageS
   });
   const routeToAgent = useMutation({
     mutationFn: (agent: Agent) => {
-      if (!relatedIssueId) throw new Error("This decision has no linked task to route from.");
+      if (!relatedIssueId) throw new Error(t("decisionTriageStrip.thisDecisionHasNoLinkedTask"));
       const mention = `[@${agent.name}](${buildAgentMentionHref(agent.id)})`;
       const body =
         t("decisionTriageStrip.recommendationComment", {
           mention,
-          taskRef: taskRef ? ` on ${taskRef.identifier}` : "",
+          taskRef: taskRef ? t("decisionTriageStrip.onTaskRef", { taskRef: taskRef.identifier }) : "",
         });
       return issuesApi.addComment(relatedIssueId, body);
     },
@@ -214,7 +214,7 @@ export function DecisionTriageStrip({ item, companyId, agents }: DecisionTriageS
             <button
               type="button"
               className="text-muted-foreground hover:text-destructive disabled:opacity-50"
-              aria-label={`Remove from ${queue.title}`}
+              aria-label={t("decisionTriageStrip.removeFromQueueTitle", { queue: queue.title })}
               disabled={pending}
               onClick={() => removeFromQueue.mutate(queue.key)}
             >
@@ -235,7 +235,7 @@ export function DecisionTriageStrip({ item, companyId, agents }: DecisionTriageS
         {item.snoozedUntil ? (
           <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <AlarmClock className="h-3.5 w-3.5" />
-            Snoozed until {new Date(item.snoozedUntil).toLocaleString()}
+            {t("decisionTriageStrip.snoozedUntil", { time: new Date(item.snoozedUntil).toLocaleString() })}
             <button
               type="button"
               className="text-muted-foreground hover:text-foreground"

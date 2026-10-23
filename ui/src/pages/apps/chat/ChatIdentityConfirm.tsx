@@ -73,7 +73,7 @@ export function ChatIdentityConfirm() {
     session.data?.user.name?.trim() ||
     session.data?.user.email?.trim() ||
     session.data?.user.id ||
-    "the signed-in account";
+    t("chatIdentityConfirm.theSignedInAccount");
   if (confirmed) {
     return (
       <main className="mx-auto max-w-lg space-y-5 px-6 py-12">
@@ -81,8 +81,10 @@ export function ChatIdentityConfirm() {
         <div>
           <h1 className="text-xl font-bold">{t("chatIdentityConfirm.identityLinked")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Future messages from {identity.externalLabel} use your current
-            Paperclip permissions in {identity.companyName}.
+            {t("chatIdentityConfirm.futureMessagesUseYourPermissions", {
+              label: identity.externalLabel,
+              company: identity.companyName,
+            })}
           </p>
         </div>
         {identity.provider === "slack" && <Button asChild><a href="https://app.slack.com/" target="_blank" rel="noopener noreferrer">{t("chatIdentityConfirm.returnToSlack")}</a></Button>}
@@ -121,9 +123,9 @@ export function ChatIdentityConfirm() {
         </div>
       </dl>
       <p className="text-sm text-muted-foreground">
-        Confirm only if this is your {providerNames[identity.provider]}{" "}
-        identity. Paperclip will check your current organization membership on
-        every action.
+        {t("chatIdentityConfirm.confirmOnlyIfThisIsYours", {
+          provider: providerNames[identity.provider],
+        })}
       </p>
       {confirm.isError && (
         <p className="text-sm text-destructive">
@@ -133,8 +135,8 @@ export function ChatIdentityConfirm() {
       {identity.canConfirm === false ? (
         <div className="space-y-3">
           <p className="text-sm">{t("chatIdentityConfirm.needMembership", { company: identity.companyName })}</p>
-          {requestAccess.isSuccess ? <p role="status" className="text-sm">Access requested. An admin can approve it in Paperclip. After approval, return here to confirm; if this link expires, send the connect command in Slack again.</p>
-            : <Button disabled={requestAccess.isPending || !identity.selfService} onClick={() => requestAccess.mutate()}>Request access</Button>}
+          {requestAccess.isSuccess ? <p role="status" className="text-sm">{t("chatIdentityConfirm.accessRequestedAnAdminCan")}</p>
+            : <Button disabled={requestAccess.isPending || !identity.selfService} onClick={() => requestAccess.mutate()}>{t("chatIdentityConfirm.requestAccess")}</Button>}
           {requestAccess.isError && <p role="alert" className="text-sm text-destructive">{t("chatIdentityConfirm.couldNotRequestAccess")}</p>}
         </div>
       ) : <Button disabled={confirm.isPending} onClick={() => confirm.mutate()}>

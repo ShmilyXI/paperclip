@@ -210,8 +210,8 @@ function WorkspaceFileRow({ item, treeItemId, selected, highlighted, depth, onOp
         <a
           href={downloadUrl}
           download={name}
-          aria-label={`Download ${name}`}
-          title={`Download ${name}`}
+          aria-label={t("workspaceFileBrowser.downloadName", { name })}
+          title={t("workspaceFileBrowser.downloadName", { name })}
           onClick={(event) => event.stopPropagation()}
           className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-70 hover:bg-background/70 hover:text-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
@@ -836,11 +836,13 @@ export function WorkspaceFileBrowser({
   ]);
 
   const announcement = useMemo(() => {
-    if (listQuery.isFetching) return "Loading workspace files…";
-    if (listQuery.isError) return "Unable to load workspace files.";
+    if (listQuery.isFetching) return t("workspaceFileBrowser.loadingWorkspaceFiles");
+    if (listQuery.isError) return t("workspaceFileBrowser.unableToLoadWorkspaceFiles");
     if (data?.state === "unavailable") return describeUnavailable(data.unavailableReason ?? "").title;
-    if (items.length === 0) return "No matching files.";
-    return `${items.length} item${items.length === 1 ? "" : "s"} found.`;
+    if (items.length === 0) return t("workspaceFileBrowser.noMatchingFiles");
+    return items.length === 1
+      ? t("workspaceFileBrowser.itemFound", { count: items.length })
+      : t("workspaceFileBrowser.itemsFound", { count: items.length });
   }, [data, items.length, listQuery.isError, listQuery.isFetching]);
 
   function openTypedPath() {
@@ -1150,7 +1152,7 @@ export function WorkspaceFileBrowser({
               {t("workspaceFileBrowser.loadMoreFromThisFolder")}
             </button>
           ) : (
-            <>Showing first {items.length} — refine the search to narrow.</>
+            <>{t("workspaceFileBrowser.showingFirstNarrow", { count: items.length })}</>
           )}
         </div>
       ) : null}

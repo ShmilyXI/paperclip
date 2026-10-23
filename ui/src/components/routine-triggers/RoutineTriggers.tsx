@@ -166,9 +166,9 @@ export function RoutineTriggers() {
             {trigger.kind === "schedule"
               ? t("routineTriggers.schedule")
               : trigger.kind === "api"
-                ? "API trigger"
-                : "Webhook"}{" "}
-            removed.
+                ? t("routineTriggers.apiTrigger")
+                : t("routineTriggers.webhook")}{" "}
+            {t("routineTriggers.removed")}
           </span>
           <Button
             variant="ghost"
@@ -230,10 +230,10 @@ export function RoutineTriggers() {
               trigger.kind === "schedule"
                 ? (describeCron(trigger.cronExpression) ?? t("routineTriggers.schedule"))
                 : trigger.kind === "api"
-                  ? "API trigger"
+                  ? t("routineTriggers.apiTrigger")
                   : trigger.signingMode === "github_hmac"
-                    ? "GitHub webhook"
-                    : "Webhook"
+                    ? t("routineTriggers.gitHubWebhook")
+                    : t("routineTriggers.webhook")
             }
             summary={
               trigger.setupPending

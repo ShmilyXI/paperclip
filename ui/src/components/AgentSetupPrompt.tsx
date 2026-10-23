@@ -67,9 +67,9 @@ function readLogoPositions(group: HTMLSpanElement | null) {
 /** A small handoff to the user's agent, with an inspectable prompt and local copy feedback. */
 export function AgentSetupPrompt({
   prompt,
-  title = "Agent setup",
-  description = "Paste this into your agent to take care of setup.",
-  label = "Set up with an agent",
+  title = t("agentSetup.agentSetup"),
+  description = t("agentSetup.pasteThisIntoYourAgent"),
+  label = t("agentSetup.setUpWithAnAgent"),
   variant = "outline",
   side = "top",
   align = "start",
@@ -79,7 +79,7 @@ export function AgentSetupPrompt({
   agent,
 }: AgentSetupPromptProps) {
   const agents = agent ? [agent] : defaultAgents;
-  const recipient = agent ? `your ${agent.name}` : "your agent";
+  const recipient = agent ? t("agentSetup.yourName", { name: agent.name }) : t("agentSetup.yourAgent");
   const id = useId();
   const reducedMotion = usePrefersReducedMotion();
   const [open, setOpen] = useState(false);
@@ -263,15 +263,15 @@ export function AgentSetupPrompt({
               onClick={() => { if (prompt.trim()) void copyPrompt(); }}
             >
               {status === "copied" ? <Check className="agent-setup-check size-4" /> : <Copy className="size-4" />}
-              {status === "copied" ? "Copied to clipboard" : status === "copying" ? "Copying…" : status === "failed" ? "Try copying again" : "Copy prompt"}
+              {status === "copied" ? t("agentSetup.copiedToClipboard") : status === "copying" ? t("agentSetup.copying") : status === "failed" ? t("agentSetup.tryCopyingAgain") : t("agentSetup.copyPrompt")}
             </Button>
             <p className="text-center text-xs text-muted-foreground">
-              {status === "copied" ? `Ready to paste into ${recipient}.` : agent ? `Give this prompt to ${recipient}.` : "Works with Codex, ChatGPT, Claude, and more."}
+              {status === "copied" ? t("agentSetup.readyToPasteIntoRecipient", { recipient }) : agent ? t("agentSetup.giveThisPromptToRecipient", { recipient }) : t("agentSetup.worksWithCodexChatgptClaude")}
             </p>
           </div>
         </PopoverContent>
       </Popover>
-      <span role="status" className="sr-only">{status === "copied" ? `Setup prompt copied. Ready to paste into ${recipient}.` : ""}</span>
+      <span role="status" className="sr-only">{status === "copied" ? t("agentSetup.setupPromptCopiedReadyTo", { recipient }) : ""}</span>
       {flight && createPortal(
         <span ref={flyingLogos} className="agent-setup-flight-layer" aria-hidden="true">
           {agents.map((agent, index) => (

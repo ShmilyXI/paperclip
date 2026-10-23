@@ -57,7 +57,7 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
               <span>{label}</span>
               {sortField === field ? (
                 <span className="text-xs text-muted-foreground">
-                  {sortDir === "asc" ? "Asc" : "Desc"}
+                  {sortDir === "asc" ? t("routinesToolbar.asc") : t("routinesToolbar.desc")}
                 </span>
               ) : null}
             </button>

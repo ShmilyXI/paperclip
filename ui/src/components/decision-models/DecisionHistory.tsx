@@ -11,7 +11,7 @@ export function DecisionHistoryTable({ entries, fastResponse = false, fastRespon
   return <div className="space-y-3">
     <p className="text-xs text-muted-foreground">{t("decisionHistory.recentRequestsInputsAreNot")}</p>
     <div className="overflow-x-auto"><table className="w-full text-sm" aria-label={fastResponse ? t("decisionHistory.fastResponses") : t("decisionHistory.decisionRequests")}>
-      <thead><tr className="border-b border-border text-muted-foreground">{["When / feature", "Responsible", t("common.task"), ...(fastResponse ? [t("common.connection")] : []), t("common.model"), t("common.status"), t("common.duration"), "Tokens in / out", t("common.cost")].map(label => <th key={label} className="px-3 py-2 text-left font-medium">{label}</th>)}</tr></thead>
+      <thead><tr className="border-b border-border text-muted-foreground">{[t("decisionHistory.whenFeature"), t("decisionHistory.responsible"), t("common.task"), ...(fastResponse ? [t("common.connection")] : []), t("common.model"), t("common.status"), t("common.duration"), t("decisionHistory.tokensInOut"), t("common.cost")].map(label => <th key={label} className="px-3 py-2 text-left font-medium">{label}</th>)}</tr></thead>
       <tbody>{entries.map(row => <tr key={row.id} className="border-b border-border last:border-0">
         <td className="px-3 py-3"><div className="whitespace-nowrap">{formatDateTime(row.startedAt)}</div><div className="text-xs text-muted-foreground">{row.feature === "settings.test" ? t("decisionHistory.setupTest") : row.feature}</div></td>
         <td className="px-3 py-3">{row.actorType === "system" ? t("decisionHistory.paperclipServices") : row.userName ?? (row.responsibleUserId === "local-board" ? t("common.board") : t("decisionHistory.formerUser"))}</td>

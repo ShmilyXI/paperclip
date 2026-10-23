@@ -314,56 +314,56 @@ function stopReasonLabel(run: RunForIssue) {
   const effectiveTimeoutSec = readNumber(result?.effectiveTimeoutSec);
   const timeoutText =
     effectiveTimeoutSec && effectiveTimeoutSec > 0
-      ? `${effectiveTimeoutSec}s timeout`
+      ? t("issueRunLedger.timeoutWithSeconds", { seconds: effectiveTimeoutSec })
       : null;
 
   if (timeoutFired || stopReason === "timeout") {
-    return timeoutText ? `timeout (${timeoutText})` : "timeout";
+    return timeoutText ? t("issueRunLedger.timeoutWithDetail", { detail: timeoutText }) : t("issueRunLedger.stopTimeout");
   }
   if (
     stopReason === "max_turns_exhausted" ||
     stopReason === "turn_limit_exhausted"
   )
-    return "max turns exhausted";
-  if (stopReason === "budget_paused") return "budget paused";
-  if (stopReason === "cancelled") return "cancelled";
-  if (stopReason === "paused") return "paused by board";
-  if (stopReason === "process_lost") return "process lost";
+    return t("issueRunLedger.stopMaxTurnsExhausted");
+  if (stopReason === "budget_paused") return t("issueRunLedger.stopBudgetPaused");
+  if (stopReason === "cancelled") return t("issueRunLedger.stopCancelled");
+  if (stopReason === "paused") return t("issueRunLedger.stopPausedByBoard");
+  if (stopReason === "process_lost") return t("issueRunLedger.stopProcessLost");
   if (stopReason === "unmanaged_background_task_stopped")
-    return "unmanaged background task stopped";
-  if (stopReason === "adapter_failed") return "adapter failed";
+    return t("issueRunLedger.stopUnmanagedBackgroundTaskStopped");
+  if (stopReason === "adapter_failed") return t("issueRunLedger.stopAdapterFailed");
   if (stopReason === "completed")
-    return timeoutText ? `completed (${timeoutText})` : "completed";
+    return timeoutText ? t("issueRunLedger.completedWithDetail", { detail: timeoutText }) : t("issueRunLedger.stopCompleted");
   return timeoutText;
 }
 
 function stopStatusLabel(run: LedgerRun, stopReason: string | null) {
   if (stopReason) return stopReason;
-  if (run.status === "scheduled_retry") return "Retry pending";
-  if (run.status === "queued") return "Waiting to start";
-  if (run.status === "running") return "Still running";
-  if (!run.livenessState) return "Unavailable";
-  return "No stop reason";
+  if (run.status === "scheduled_retry") return t("issueRunLedger.retryPending");
+  if (run.status === "queued") return t("issueRunLedger.statusWaitingToStart");
+  if (run.status === "running") return t("issueRunLedger.statusStillRunning");
+  if (!run.livenessState) return t("issueRunLedger.statusUnavailable");
+  return t("issueRunLedger.statusNoStopReason");
 }
 
 function lastUsefulActionLabel(run: LedgerRun) {
-  if (run.status === "scheduled_retry") return "Waiting for next attempt";
+  if (run.status === "scheduled_retry") return t("issueRunLedger.statusWaitingForNextAttempt");
   if (run.lastUsefulActionAt) return relativeTime(run.lastUsefulActionAt);
-  if (isActiveRun(run)) return "No action recorded yet";
+  if (isActiveRun(run)) return t("issueRunLedger.statusNoActionRecordedYet");
   if (
     run.livenessState === "plan_only" ||
     run.livenessState === "needs_followup"
   ) {
-    return "No concrete action";
+    return t("issueRunLedger.statusNoConcreteAction");
   }
-  if (run.livenessState === "empty_response") return "No useful output";
-  if (!run.livenessState) return "Unavailable";
-  return "None recorded";
+  if (run.livenessState === "empty_response") return t("issueRunLedger.statusNoUsefulOutput");
+  if (!run.livenessState) return t("issueRunLedger.statusUnavailable");
+  return t("issueRunLedger.statusNoneRecorded");
 }
 
 function continuationLabel(run: LedgerRun) {
   if (!run.continuationAttempt || run.continuationAttempt <= 0) return null;
-  return `Continuation attempt ${run.continuationAttempt}`;
+  return t("issueRunLedger.continuationAttempt", { attempt: run.continuationAttempt });
 }
 
 function hasExhaustedContinuation(run: RunForIssue) {

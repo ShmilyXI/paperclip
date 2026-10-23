@@ -424,7 +424,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
         title: t("connectors.audienceSaved"),
         body: (grant.members?.length ?? 0) === 0
           ? t("appDetail.everyOrganizationMemberCanUse")
-          : `${grant.members?.length} ${grant.members?.length === 1 ? "member" : "members"} can use this identity.`,
+          : t("appDetail.countMembersCanUse", { count: grant.members?.length }),
         tone: "success",
       });
     },
@@ -444,9 +444,9 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       queryClient.invalidateQueries({ queryKey: queryKeys.tools.connections(selectedCompanyId!) });
       queryClient.invalidateQueries({ queryKey: queryKeys.apps.attention(selectedCompanyId!) });
       pushToast({
-        title: `t("appDetail.foundActions", { count: result.discoveredCount })`,
+        title: t("appDetail.foundActions", { count: result.discoveredCount }),
         body: result.quarantinedCount > 0
-          ? `${result.quarantinedCount} new ${result.quarantinedCount === 1 ? "action needs" : "actions need"} your OK.`
+          ? t("appDetail.countNewActionsNeedYourOk", { count: result.quarantinedCount })
           : undefined,
         tone: "success",
       });

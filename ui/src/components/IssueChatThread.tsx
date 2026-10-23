@@ -459,8 +459,8 @@ function IssueChatLiveRunStatusLine({
       : currentStatusMessage;
   const activityText = lastActivityElapsed
     ? lastActivityAgeMs !== null && lastActivityAgeMs >= 15_000
-      ? `no output for ${lastActivityElapsed} - still running`
-      : `${lastActivityElapsed} ago`
+      ? t("chatThread.noOutputForLastactivityelapsedStill", { lastActivityElapsed })
+      : t("chatThread.lastactivityelapsedAgo", { lastActivityElapsed })
     : "";
   const text = [primary, activityText].filter(Boolean).join(" · ");
   if (!text) return null;
@@ -849,7 +849,7 @@ export function IssueAssigneePausedNotice({
           ) : undefined
         }
       >
-        New runs will not start until the agent is resumed. {pauseDetail}
+        {t("chatThread.newRunsWillNotStartUntilResumed")} {pauseDetail}
       </InlineBanner>
     </div>
   );
@@ -1184,8 +1184,17 @@ function toolCountSummary(toolParts: ToolCallMessagePart[]): string | null {
   }
   const parts: string[] = [];
   if (commands > 0)
-    parts.push(`ran ${commands} command${commands === 1 ? "" : "s"}`);
-  if (other > 0) parts.push(`called ${other} tool${other === 1 ? "" : "s"}`);
+    parts.push(
+      commands === 1
+        ? t("chatThread.ranCommand", { count: commands })
+        : t("chatThread.ranCommands", { count: commands }),
+    );
+  if (other > 0)
+    parts.push(
+      other === 1
+        ? t("chatThread.calledTool", { count: other })
+        : t("chatThread.calledTools", { count: other }),
+    );
   return parts.join(", ");
 }
 
@@ -2026,7 +2035,7 @@ function IssueChatUserMessage({
   const queueReason =
     typeof custom.queueReason === "string" ? custom.queueReason : null;
   const queueBadgeLabel =
-    queueReason === "hold" ? "\u23f8 Deferred wake" : t("common.queued");
+    queueReason === "hold" ? t("chatThread.deferredWake") : t("common.queued");
   const pending = custom.clientStatus === "pending";
   const deleted = Boolean(custom.deletedAt);
   const queueTargetRunId =
@@ -2307,8 +2316,8 @@ function IssueChatAssistantMessage({
     onVote,
     agentMap,
     onStopRun,
-    stopRunLabel = "Stop run",
-    stoppingRunLabel = "Stopping...",
+    stopRunLabel = t("chatThread.stopRun"),
+    stoppingRunLabel = t("chatThread.stopping"),
     stopRunVariant = "stop",
     runFinalizationActions = [],
     userLabelMap,
@@ -2921,7 +2930,7 @@ function IssueChatFeedbackButtons({
               <span className="font-medium text-foreground">{t("chatThread.alwaysAllow")}</span>{" "}
               to share this vote and future voted AI outputs. Choose{" "}
               <span className="font-medium text-foreground">{t("chatThread.donTAllow")}</span>{" "}
-              to keep this vote and future votes local.
+              {t("chatThread.toKeepThisVoteLocal")}
             </p>
             <p>{t("issueChatThread.youCanChangeThisLater")}</p>
             {termsUrl ? (
@@ -5413,8 +5422,10 @@ const IssueChatComposer = forwardRef<
 
       {draftRecovery && draftRecovery.sourceKey === sharedDraftKey ? (
         <p role="status" className="mb-3 text-sm text-muted-foreground">
-          Another tab changed the saved draft. This draft is kept separately in this tab.
-          {!draftRecovery.persisted ? " Browser storage is unavailable; copy your text before leaving." : " It will be restored if you reload this tab."}
+          {t("chatThread.anotherTabChangedTheSavedDraft")}
+          {!draftRecovery.persisted
+            ? " " + t("chatThread.storageUnavailable")
+            : " " + t("chatThread.draftRestoredOnReload")}
         </p>
       ) : null}
       {uncertainSubmission ? (
@@ -5567,7 +5578,7 @@ const IssueChatComposer = forwardRef<
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={`Remove ${attachment.name}`}
+                    aria-label={t("chatThread.removeName", { name: attachment.name })}
                     disabled={!!uncertainSubmission}
                     onClick={() =>
                       setComposerAttachments((current) =>
@@ -5633,8 +5644,8 @@ const IssueChatComposer = forwardRef<
             value={reassignTarget}
             options={reassignOptions}
             placeholder={t("chatThread.responsible")}
-            noneLabel="No responsible"
-            searchPlaceholder="Search responsible..."
+            noneLabel={t("chatThread.noResponsible")}
+            searchPlaceholder={t("chatThread.searchResponsible")}
             emptyMessage={t("chatThread.noResponsibleFound")}
             onChange={selectAssignee}
             className="h-8 text-xs"
@@ -6704,8 +6715,7 @@ export function IssueChatThread({
                         label={t("chatThread.legacyRecoveryTask")}
                         body={
                           <span>
-                            Legacy recovery task. Newer recovery actions live on
-                            the source task
+                            {t("chatThread.legacyRecoveryTaskBody")}
                             {legacyRecoverySourceIssue.identifier ? (
                               <>
                                 {" — "}

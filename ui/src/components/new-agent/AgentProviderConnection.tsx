@@ -282,7 +282,7 @@ export function AgentProviderConnection({
         <div className="pt-5">{advancedConnection.content}</div>
         <FooterNav
           onBack={onBack}
-          primaryLabel="Use connection"
+          primaryLabel={t("agentProviderConnection.useConnection")}
           primaryDisabled={!advancedConnection.value}
           onPrimary={() => {
             if (advancedConnection.value) onConnected({ env: {}, aiConnection: advancedConnection.value });
@@ -291,8 +291,9 @@ export function AgentProviderConnection({
       </> : <>
       {!opened && savedKeys.options.length > 0 && (
         <p className="mt-2 text-sm text-muted-foreground">
-          {savedKeys.options.length} saved API{" "}
-          {savedKeys.options.length === 1 ? "key available" : "keys available"}.
+          {savedKeys.options.length === 1
+            ? t("agentProviderConnection.savedApiKeyAvailable", { count: savedKeys.options.length })
+            : t("agentProviderConnection.savedApiKeysAvailable", { count: savedKeys.options.length })}
         </p>
       )}
       {method === "subscription" &&

@@ -106,7 +106,7 @@ export function ComposerModeChip({ mode, onRemove, disabled, testId, mobile = fa
   const meta = workModeMetaFor(mode);
   const Icon = meta.icon;
   return <button type="button" onClick={onRemove} disabled={disabled || !onRemove}
-    aria-label={`Remove ${meta.label}`} data-pending-work-mode={mode} data-testid={testId}
+    aria-label={t("composerAddMenu.removeLabel", { label: meta.label })} data-pending-work-mode={mode} data-testid={testId}
     className={cn("inline-flex h-8 shrink-0 items-center rounded-full border text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50", mobile ? "gap-1 px-2" : "gap-1 px-2 sm:gap-1.5 sm:px-2.5", meta.classes.chip)}>
     <Icon className="size-3.5" aria-hidden />
     <span className={mobile ? "sr-only" : "max-sm:sr-only"}>{meta.label}</span>

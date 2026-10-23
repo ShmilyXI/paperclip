@@ -191,22 +191,22 @@ function formatRelativeShort(value: string | null | undefined): string {
   const diff = Date.now() - date.getTime();
   if (diff < 0) return date.toLocaleDateString();
   const seconds = Math.floor(diff / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
+  if (seconds < 60) return t("time.secondsAgo", { count: seconds });
   const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 60) return t("time.minutesAgo", { count: minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 48) return `${hours}h ago`;
+  if (hours < 48) return t("time.hoursAgo", { count: hours });
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d ago`;
+  if (days < 30) return t("time.daysAgo", { count: days });
   return date.toLocaleDateString();
 }
 
 function readableErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
-    return error.message || `Request failed: ${error.status}`;
+    return error.message || t("importFromVaultDialog.requestFailedStatus", { status: error.status });
   }
   if (error instanceof Error) return error.message;
-  return "Unexpected error";
+  return t("importFromVaultDialog.unexpectedError");
 }
 
 function apiErrorCode(error: ApiError): string | null {
@@ -271,34 +271,34 @@ function validateDraftRow(
   existing: CompanySecret[],
   otherDrafts: DraftSelection[],
 ): string | null {
-  if (!draft.name.trim()) return "Name is required.";
-  if (draft.name.length > 160) return "Name must be 160 characters or fewer.";
-  if (!draft.key.trim()) return "Key is required.";
+  if (!draft.name.trim()) return t("importFromVaultDialog.nameIsRequired");
+  if (draft.name.length > 160) return t("importFromVaultDialog.nameMustBe160Characters");
+  if (!draft.key.trim()) return t("importFromVaultDialog.keyIsRequired");
   if (!KEY_PATTERN.test(draft.key)) {
-    return "Key may only contain lowercase letters, numbers, dot, underscore, or hyphen.";
+    return t("importFromVaultDialog.keyMayOnlyContainLowercase");
   }
-  if (draft.key.length > 120) return "Key must be 120 characters or fewer.";
-  if (draft.description.length > 500) return "Description must be 500 characters or fewer.";
+  if (draft.key.length > 120) return t("importFromVaultDialog.keyMustBe120Characters");
+  if (draft.description.length > 500) return t("importFromVaultDialog.descriptionMustBe500Characters");
 
   const lowerName = draft.name.trim().toLowerCase();
   const lowerKey = draft.key.trim().toLowerCase();
 
   for (const existingSecret of existing) {
     if (existingSecret.name.trim().toLowerCase() === lowerName) {
-      return "A Paperclip secret already uses this name.";
+      return t("importFromVaultDialog.aPaperclipSecretAlreadyUses");
     }
     if (existingSecret.key.trim().toLowerCase() === lowerKey) {
-      return "A Paperclip secret already uses this key.";
+      return t("importFromVaultDialog.aPaperclipSecretAlreadyUses2");
     }
   }
 
   for (const other of otherDrafts) {
     if (other === draft) continue;
     if (other.name.trim().toLowerCase() === lowerName) {
-      return "Another row in this batch already uses this name.";
+      return t("importFromVaultDialog.anotherRowInThisBatch");
     }
     if (other.key.trim().toLowerCase() === lowerKey) {
-      return "Another row in this batch already uses this key.";
+      return t("importFromVaultDialog.anotherRowInThisBatch2");
     }
   }
 
@@ -768,7 +768,7 @@ export function ImportFromVaultDialog({
                     <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> {t("importFromVaultDialog.importing")}
                   </>
                 ) : (
-                  `Import ${draftList.length}`
+                  t("importFromVaultDialog.importCount", { count: draftList.length })
                 )}
               </Button>
             )}
@@ -924,14 +924,14 @@ function SelectStep(props: SelectStepProps) {
                     <span className="flex items-center gap-2">
                       <span>{vault.displayName}</span>
                       {vault.isDefault && (
-                        <Badge variant="outline" className="px-1 py-0 text-(length:--text-nano)">default</Badge>
+                        <Badge variant="outline" className="px-1 py-0 text-(length:--text-nano)">{t("importFromVaultDialog.defaultBadge")}</Badge>
                       )}
                       {vault.status === "warning" && (
-                        <Badge variant="outline" className="px-1 py-0 text-(length:--text-nano) text-amber-500 border-amber-500/40">warning</Badge>
+                        <Badge variant="outline" className="px-1 py-0 text-(length:--text-nano) text-amber-500 border-amber-500/40">{t("importFromVaultDialog.warningBadge")}</Badge>
                       )}
                       {blocked && (
                         <Badge variant="outline" className="px-1 py-0 text-(length:--text-nano) text-muted-foreground">
-                          {vault.status === "coming_soon" ? "coming soon" : vault.status}
+                          {vault.status === "coming_soon" ? t("importFromVaultDialog.comingSoonBadge") : vault.status}
                         </Badge>
                       )}
                     </span>
@@ -971,7 +971,10 @@ function SelectStep(props: SelectStepProps) {
       {selectedNotVisible > 0 && (
         <div className="flex items-center justify-between border-b border-border/60 bg-muted/20 px-5 py-1.5 text-xs text-muted-foreground">
           <span>
-            {selection.size} selected · {selectedNotVisible} not visible with current search
+            {t("importFromVaultDialog.selectedNotVisible", {
+              selected: selection.size,
+              notVisible: selectedNotVisible,
+            })}
           </span>
           <Button
             variant="ghost"
@@ -999,7 +1002,7 @@ function SelectStep(props: SelectStepProps) {
                   <Checkbox
                     checked={headerCheckboxState}
                     onCheckedChange={() => toggleAllLoaded()}
-                    aria-label={`Select all loaded (${selectableInLoaded.length})`}
+                    aria-label={t("importFromVaultDialog.selectAllLoaded", { count: selectableInLoaded.length })}
                     disabled={selectableInLoaded.length === 0}
                   />
                 </th>
@@ -1039,7 +1042,7 @@ function SelectStep(props: SelectStepProps) {
                         checked={isSelected}
                         onCheckedChange={() => toggleRow(candidate)}
                         disabled={!candidate.importable}
-                        aria-label={`Select ${candidate.remoteName}`}
+                        aria-label={t("importFromVaultDialog.selectRemoteName", { name: candidate.remoteName })}
                       />
                     </td>
                     <td className="px-2 py-2.5">
@@ -1090,9 +1093,9 @@ function SelectStep(props: SelectStepProps) {
         {hasNextPage && !previewError && (
           <div className="flex items-center justify-between border-t border-border/60 px-5 py-2 text-xs text-muted-foreground">
             <span>
-              {candidates.length} loaded
+              {t("importFromVaultDialog.loadedCount", { count: candidates.length })}
               {selectableInLoaded.length > 0 && (
-                <span> · {selectableInLoaded.length} selectable</span>
+                <span>{t("importFromVaultDialog.selectableCount", { count: selectableInLoaded.length })}</span>
               )}
             </span>
             <Button
@@ -1107,7 +1110,7 @@ function SelectStep(props: SelectStepProps) {
                   <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> {t("common.loading2")}
                 </>
               ) : (
-                `Load ${PAGE_SIZE} more`
+                t("importFromVaultDialog.loadMoreCount", { count: PAGE_SIZE })
               )}
             </Button>
           </div>
@@ -1131,9 +1134,9 @@ function PreviewErrorBanner({ error, onRetry }: { error: unknown; onRetry: () =>
       <div className="flex-1">
         <div className="font-medium">
           {isPermission
-            ? "AWS denied list access"
+            ? t("importFromVaultDialog.awsDeniedListAccess")
             : isThrottling
-              ? "AWS throttled the listing request"
+              ? t("importFromVaultDialog.awsThrottledTheListingRequest")
               : t("importFromVaultDialog.couldNotLoadRemoteSecrets")}
         </div>
         <div className="mt-1 text-xs leading-relaxed text-destructive/80">
@@ -1176,7 +1179,7 @@ function EmptyCandidates({ query }: { query: string }) {
     return (
       <EmptyState
         icon={Search}
-        message={`No remote secrets match "${query}".`}
+        message={t("importFromVaultDialog.noRemoteSecretsMatchQuery", { query })}
       />
     );
   }
@@ -1214,10 +1217,10 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-center gap-3 border-b border-border/60 bg-muted/20 px-5 py-3 text-xs">
-        <span className="font-medium">{ready} secrets ready to import</span>
+        <span className="font-medium">{t("importFromVaultDialog.secretsReadyToImport", { count: ready })}</span>
         {blocked > 0 && (
           <span className="text-amber-600 dark:text-amber-400">
-            {blocked} need attention before import
+            {t("importFromVaultDialog.needAttentionBeforeImport", { count: blocked })}
           </span>
         )}
       </div>
@@ -1306,7 +1309,7 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
                   variant="ghost"
                   size="icon"
                   onClick={() => removeDraft(draft.candidate.externalRef)}
-                  aria-label={`Remove ${draft.candidate.remoteName}`}
+                  aria-label={t("importFromVaultDialog.removeRemoteName", { name: draft.candidate.remoteName })}
                   className="h-7 w-7"
                   disabled={importing}
                 >
@@ -1357,9 +1360,9 @@ function ResultStep({ result, draftList }: ResultStepProps) {
       <div className="border-b border-border/60 px-5 py-3" data-testid="result-summary">
         <h3 className="text-sm font-semibold">{heading}</h3>
         <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-          <span className="text-emerald-600 dark:text-emerald-400">✓ {result.importedCount} created</span>
-          <span>⊘ {result.skippedCount} skipped</span>
-          <span className="text-destructive">⨯ {result.errorCount} failed</span>
+          <span className="text-emerald-600 dark:text-emerald-400">{t("importFromVaultDialog.createdCount", { count: result.importedCount })}</span>
+          <span>{t("importFromVaultDialog.skippedCount", { count: result.skippedCount })}</span>
+          <span className="text-destructive">{t("importFromVaultDialog.failedCount", { count: result.errorCount })}</span>
         </div>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -1457,17 +1460,17 @@ function FooterStatus({
       <div className="text-xs text-muted-foreground">
         {totalSelected === 0
           ? t("importFromVaultDialog.selectRemoteSecretsToImport")
-          : `${totalSelected} selected`}
+          : t("importFromVaultDialog.selectedCount", { count: totalSelected }) }
       </div>
     );
   }
   if (step === "review") {
     return (
       <div className="text-xs text-muted-foreground">
-        {readyReviewCount} ready
+        {t("importFromVaultDialog.reviewReadyCount", { count: readyReviewCount })}
         {blockedReviewCount > 0 && (
           <span className="ml-2 text-amber-600 dark:text-amber-400">
-            · {blockedReviewCount} blocked
+            {t("importFromVaultDialog.reviewBlockedCount", { count: blockedReviewCount })}
           </span>
         )}
       </div>
@@ -1476,9 +1479,9 @@ function FooterStatus({
   if (result) {
     return (
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span>{result.importedCount} created</span>
-        <span>{result.skippedCount} skipped</span>
-        <span>{result.errorCount} failed</span>
+        <span>{t("importFromVaultDialog.resultCreatedCount", { count: result.importedCount })}</span>
+        <span>{t("importFromVaultDialog.resultSkippedCount", { count: result.skippedCount })}</span>
+        <span>{t("importFromVaultDialog.resultFailedCount", { count: result.errorCount })}</span>
       </div>
     );
   }

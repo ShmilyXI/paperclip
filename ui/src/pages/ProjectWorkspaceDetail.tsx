@@ -191,21 +191,21 @@ function validateWorkspaceForm(form: WorkspaceFormState) {
 
   if (form.sourceType === "remote_managed") {
     if (!remoteWorkspaceRef && !repoUrl) {
-      return "Remote-managed workspaces require a remote workspace ref or repo URL.";
+      return t("projectWorkspace.remoteManagedWorkspacesRequireRemote");
     }
   } else if (!cwd && !repoUrl) {
-    return "Workspace requires at least one local path or repo URL.";
+    return t("projectWorkspace.workspaceRequiresAtLeastOne");
   }
 
   if (cwd && (form.sourceType === "local_path" || form.sourceType === "non_git_path") && !isAbsolutePath(cwd)) {
-    return "Local workspace path must be absolute.";
+    return t("projectWorkspace.localWorkspacePathMustBeAbsolute");
   }
 
   if (repoUrl) {
     try {
       new URL(repoUrl);
     } catch {
-      return "Repo URL must be a valid URL.";
+      return t("projectWorkspace.repoUrlMustBeAValidUrl");
     }
   }
 
@@ -488,9 +488,7 @@ export function ProjectWorkspaceDetail() {
         <div className="space-y-6">
           <Card className="block p-5">
             <p className="max-w-2xl text-sm text-muted-foreground">
-              Configure the concrete workspace Paperclip attaches to this project. These values drive per-workspace
-              checkout behavior, default runtime services for child execution workspaces, and let you override setup
-              or cleanup commands when one workspace needs special handling.
+              {t("projectWorkspace.configureTheConcreteWorkspace")}
             </p>
 
             <Separator className="my-5" />
@@ -712,7 +710,7 @@ export function ProjectWorkspaceDetail() {
                 <div className="text-xs font-medium uppercase tracking-(--tracking-eyebrow) text-muted-foreground">{t("projectWorkspace.workspaceCommands")}</div>
                 <h2 className="text-lg font-semibold">{t("projectWorkspace.servicesAndJobs")}</h2>
                 <p className="text-sm text-muted-foreground">
-                  Long-running services stay supervised here, while one-shot jobs run on demand against this workspace. Execution workspaces inherit this config unless they override it.
+                  {t("projectWorkspace.longRunningServicesStaySupervised")}
                 </p>
               </div>
             </div>
@@ -726,8 +724,8 @@ export function ProjectWorkspaceDetail() {
                   ? t("projectWorkspaceDetail.noServicesHaveBeenStarted")
                   : t("projectWorkspaceDetail.noWorkspaceCommandConfigIs")
               }
-              jobEmptyMessage="No one-shot jobs are configured for this workspace yet."
-              disabledHint="Project workspaces need a working directory before local commands can run, and services also need runtime config."
+              jobEmptyMessage={t("projectWorkspace.noOneShotJobsConfigured")}
+              disabledHint={t("projectWorkspace.projectWorkspacesNeedAWorkingDirectory")}
               onAction={(request) => controlRuntimeServices.mutate(request)}
             />
           </Card>
@@ -755,7 +753,7 @@ export function ProjectWorkspaceDetail() {
         ) : (
           <MissingPluginTabPlaceholder
             defaultTabHref={`${projectWorkspaceUrl(project, routeWorkspaceId)}?tab=configuration`}
-            defaultTabLabel="Back to configuration"
+            defaultTabLabel={t("projectWorkspace.backToConfiguration")}
           />
         )
       ) : null}

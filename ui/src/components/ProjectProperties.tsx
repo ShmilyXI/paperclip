@@ -412,7 +412,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
       return;
     }
     if (!isAbsolutePath(cwd)) {
-      setWorkspaceError("Local folder must be a full absolute path.");
+      setWorkspaceError(t("projectProps.localFolderMustBeAFullAbsolutePath"));
       return;
     }
     setWorkspaceError(null);
@@ -478,7 +478,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
             />
           ) : (
             <p className="text-sm text-muted-foreground">
-              {project.description?.trim() || "No description"}
+              {project.description?.trim() || t("projectProps.noDescription")}
             </p>
           )}
         </PropertyRow>

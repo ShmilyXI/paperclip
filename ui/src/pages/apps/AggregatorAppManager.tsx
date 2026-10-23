@@ -20,8 +20,8 @@ export function AggregatorAppManager({ app, connections, initialConnectionId, on
   const connection = connections.find(candidate => candidate.id === connectionId);
   const provider = connection?.config?.sourceTemplateKey;
   return <Dialog open onOpenChange={open => { if (!open) onClose(); }}><DialogContent>
-    <DialogHeader><DialogTitle>Manage {app.name}</DialogTitle>
-      <DialogDescription>Accounts and sign-in are managed in {isAppAggregator(provider) ? AGGREGATOR_NAMES[provider] : "the provider"}.</DialogDescription>
+    <DialogHeader><DialogTitle>{t("aggregatorAppManager.manageName", { name: app.name })}</DialogTitle>
+      <DialogDescription>{t("aggregatorAppManager.accountsManagedIn", { provider: isAppAggregator(provider) ? AGGREGATOR_NAMES[provider] : t("aggregatorAppManager.theProvider") })}</DialogDescription>
     </DialogHeader>
     {connections.length > 1 ? <div className="space-y-2"><Label htmlFor="manage-aggregator-gateway">{t("common.connection")}</Label>
       <select id="manage-aggregator-gateway" className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm" value={connectionId} onChange={event => setConnectionId(event.target.value)}>
@@ -40,20 +40,20 @@ function AccountObservations({ app, connection, onClose }: { app: AggregatorAppC
   const accounts = snapshots.flatMap(snapshot => snapshot.accounts.map(account => ({ account, snapshot })));
   const refresh = useMutation({ mutationFn: async () => { const result = await toolsApi.refreshAggregatorApps(connection.id, snapshots.map(snapshot => snapshot.toolkit)); queries.setQueryData(key, result); } });
   const provider = query.data?.provider;
-  const name = provider ? AGGREGATOR_NAMES[provider] : "provider";
+  const name = provider ? AGGREGATOR_NAMES[provider] : t("aggregatorAppManager.provider");
   const managementUrl = provider ? aggregatorManagementUrl(provider, accounts[0]?.account.managementUrl ?? (typeof connection.config?.managementUrl === "string" ? connection.config?.managementUrl : null)) : null;
   return <>
-    {query.isError || refresh.isError || query.data?.sync.status === "error" ? <p role="alert" className="text-sm text-destructive">Couldn’t check {name}. Last known accounts are shown.</p> : null}
+    {query.isError || refresh.isError || query.data?.sync.status === "error" ? <p role="alert" className="text-sm text-destructive">{t("aggregatorAppManager.couldnTCheckName", { name })}</p> : null}
     {query.isLoading ? <p role="status" className="text-sm text-muted-foreground">{t("aggregatorAppManager.loadingAccounts")}</p> : accounts.length ? <div className="divide-y divide-border">
       {accounts.map(({ account, snapshot }) => <div key={`${snapshot.toolkit}:${account.id}`} className="py-3">
-        <p className="text-sm font-medium">{account.alias || `${app.name} account`}</p>
+        <p className="text-sm font-medium">{account.alias || t("aggregatorAppManager.nameAccount", { name: app.name })}</p>
         <p className="text-xs text-muted-foreground">{snapshot.freshness === "stale" || snapshot.errorAt || Date.now() - new Date(snapshot.checkedAt).getTime() > 5 * 60_000 || account.status === "UNVERIFIED" ? t("aggregatorAppManager.notVerified") : account.status === "ACTIVE" ? t("common.connected") : account.status === "INITIATED" ? t("aggregatorAppManager.waitingForSignIn") : t("aggregatorAppManager.needsSignIn")}</p>
       </div>)}
     </div> : <p className="text-sm text-muted-foreground">{query.data?.discovery.message ?? t("aggregatorAppManager.noConnectedNameAccounts", { name: app.name })}</p>}
     <p className="text-xs text-muted-foreground">{t("aggregatorAppManager.via")} <Link to={`/apps/${connection.id}/permissions`} onClick={onClose} className="underline underline-offset-2">“{connection.name}”</Link></p>
     <DialogFooter className="sm:justify-between"><Button variant="ghost" onClick={onClose}>{t("common.close")}</Button><div className="flex flex-wrap items-center gap-2">
       <Button variant="ghost" disabled={!settled || refresh.isPending || query.data?.discovery.availability !== "available"} onClick={() => refresh.mutate()}>{t("common.refresh")}</Button>
-      {managementUrl ? <Button asChild><a href={managementUrl} target="_blank" rel="noopener noreferrer">Open in {name}<ExternalLink className="size-4" /></a></Button> : null}
+      {managementUrl ? <Button asChild><a href={managementUrl} target="_blank" rel="noopener noreferrer">{t("aggregatorAppManager.openIn", { name })}<ExternalLink className="size-4" /></a></Button> : null}
     </div></DialogFooter>
   </>;
 }

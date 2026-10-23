@@ -393,13 +393,14 @@ function WorkspaceChangeCard({ item }: { item: TaskChatWorkspaceChangeItem }) {
     item.files.find((file) => file.path === selectedPath) ?? null;
   const visibleFiles = expanded ? item.files : item.files.slice(0, 3);
   const fileCount = item.totals.files || item.files.length;
-  const fileLabel = `${fileCount} ${fileCount === 1 ? "file" : "files"}`;
   const stats = [
     item.totals.additions == null ? null : `+${item.totals.additions}`,
     item.totals.deletions == null ? null : `−${item.totals.deletions}`,
   ].filter(Boolean).join(" ");
   const summary = item.complete
-    ? `${fileLabel} changed${stats ? ` · ${stats}` : ""}`
+    ? stats
+      ? t("taskChatProtocolCard.filesChangedWithStats", { count: fileCount, stats })
+      : t("taskChatProtocolCard.filesChanged", { count: fileCount })
     : t("taskChatProtocolCard.workspaceChangesInProgress");
   return (
     <>
@@ -425,7 +426,7 @@ function WorkspaceChangeCard({ item }: { item: TaskChatWorkspaceChangeItem }) {
                     : file.path}
                 </span>
                 <span className="text-xs capitalize text-muted-foreground">
-                  {file.binary ? "binary · " : ""}
+                  {file.binary ? `${t("taskChatProtocolCard.binaryLabel")} · ` : ""}
                   {file.operation.replaceAll("_", " ")}
                 </span>
               </span>
@@ -532,7 +533,7 @@ function WorkspaceFileCard({ item }: { item: TaskChatWorkspaceFileItem }) {
         status={
           item.source === "runner_verified" ? "completed" : "informational"
         }
-        summary={`${label} · ${extension}${item.line ? ` · line ${item.line}` : ""}`}
+        summary={`${label} · ${extension}${item.line ? ` ${t("taskChatProtocolCard.lineNumber", { count: item.line })}` : ""}`}
         testId="task-chat-workspace-file"
       >
         <div className="flex flex-wrap items-center gap-2">
@@ -933,7 +934,7 @@ function ResultCard({
         <div className="flex flex-col gap-3 text-sm">
           {item.blocker ? (
             <div className="rounded-sm bg-muted/50 p-2">
-              <strong>Blocked: {item.blocker.reasonCode}</strong>
+              <strong>{t("taskChatProtocolCard.blockedReasonCode", { reason: item.blocker.reasonCode })}</strong>
               <p className="mt-1 text-muted-foreground">
                 {item.blocker.unblockAction}
               </p>
@@ -972,7 +973,7 @@ function ResultCard({
               {item.remainingWork.map((work, index) => (
                 <li key={`${work.description}:${index}`}>
                   {work.description}
-                  {work.blocksCompletion ? " · blocks completion" : ""}
+                  {work.blocksCompletion ? ` · ${t("taskChatProtocolCard.blocksCompletion")}` : ""}
                 </li>
               ))}
             </ul>

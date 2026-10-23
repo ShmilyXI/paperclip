@@ -195,7 +195,7 @@ export function IssueRelatedWorkPanel({
         title={t("issueRelatedWorkPanel.references")}
         description={t("issueRelatedWorkPanel.otherTasksThisTaskCurrently")}
         items={outbound}
-        emptyLabel="This task does not reference any other tasks yet."
+        emptyLabel={t("issueRelatedWorkPanel.thisTaskDoesNotReference")}
       />
       {externalObjectsEnabled ? (
         <ExternalObjectsSection
@@ -209,7 +209,7 @@ export function IssueRelatedWorkPanel({
         title={t("issueRelatedWorkPanel.referencedBy")}
         description={t("issueRelatedWorkPanel.otherTasksThatCurrentlyPoint")}
         items={inbound}
-        emptyLabel="No other tasks reference this task yet."
+        emptyLabel={t("issueRelatedWorkPanel.noOtherTasksReferenceThis")}
       />
     </div>
   );

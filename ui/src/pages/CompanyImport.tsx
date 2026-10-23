@@ -728,8 +728,8 @@ function AdapterPickerList({
                 {agent.fallbackAdapterType && (
                   <div className="mx-4 mb-2.5 rounded-md border border-amber-500/30 bg-amber-500/5 px-3 py-2">
                     <p className="text-xs text-amber-500">
-                      source adapter {agent.adapterChoice === "openai_dot" ? "OpenAI Dot" : agent.adapterChoice === "muse" ? "Muse — Personal agent" : agent.adapterType} is not installed here — this agent
-                      will use {adapterLabels[selectedType] ?? getAdapterLabel(selectedType)}
+                      {t("companyImport.sourceAdapter")} {agent.adapterChoice === "openai_dot" ? "OpenAI Dot" : agent.adapterChoice === "muse" ? "Muse — Personal agent" : agent.adapterType} {t("companyImport.isNotInstalledHereThisAgentWillUse")}{" "}
+                      {adapterLabels[selectedType] ?? getAdapterLabel(selectedType)}
                     </p>
                   </div>
                 )}
@@ -814,7 +814,7 @@ interface ImportTransferProgress {
 
 function formatTransferProgress(progress: ImportTransferProgress): string {
   const currentPart = Math.min(progress.uploadedParts + 1, progress.totalParts);
-  return `Uploading part ${currentPart} of ${progress.totalParts} — ${formatMegabytes(progress.uploadedBytes)} of ${formatMegabytes(progress.totalBytes)} uploaded.`;
+  return t("companyImport.uploadProgress", { current: currentPart, total: progress.totalParts, uploaded: formatMegabytes(progress.uploadedBytes), totalBytes: formatMegabytes(progress.totalBytes) });
 }
 
 // ── Async import job flow ─────────────────────────────────────────────
@@ -1118,7 +1118,7 @@ export function CompanyImport() {
   );
 
   const localZipHelpText =
-    "Upload a .zip exported directly from Paperclip. Re-zipped archives created by Finder, Explorer, or other zip tools may not import correctly.";
+    t("companyImport.localZipHelpText");
 
   useEffect(() => {
     setBreadcrumbs([
@@ -1932,7 +1932,7 @@ export function CompanyImport() {
                     {isActivated ? (
                       <span className="shrink-0 text-xs text-emerald-500">{t("companyImport.activated")}</span>
                     ) : failure ? (
-                      <span className="shrink-0 text-xs text-destructive">failed: {failure}</span>
+                      <span className="shrink-0 text-xs text-destructive">{t("companyImport.failedPrefix")} {failure}</span>
                     ) : (
                       <span className="shrink-0 text-xs text-muted-foreground">{t("companyImport.paused")}</span>
                     )}
@@ -2104,7 +2104,7 @@ export function CompanyImport() {
           >
             <option value="new">{t("companyImport.createNewOrganization")}</option>
             <option value="existing">
-              Existing company: {selectedCompany?.name}
+              {t("companyImport.existingCompany")} {selectedCompany?.name}
             </option>
           </select>
         </Field>
@@ -2173,10 +2173,10 @@ export function CompanyImport() {
             <Loader2 className="mt-0.5 h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground" />
             <p className="text-xs text-muted-foreground">
               {transferProgress
-                ? `${formatTransferProgress(transferProgress)} An interrupted upload resumes from the finished parts.`
-                : `Uploading and analyzing your package${
+                ? `${formatTransferProgress(transferProgress)} ${t("companyImport.anInterruptedUploadResumes")}`
+                : `${t("companyImport.uploadingAndAnalyzingYourPackage")}${
                     localCompressedBytes !== null ? ` (${formatMegabytes(localCompressedBytes)} zip)` : ""
-                  } — large packages can take a few minutes. Keep this page open.`}
+                  }${t("companyImport.largePackagesCanTakeAFewMinutes")}`}
             </p>
           </div>
         )}
@@ -2273,7 +2273,7 @@ export function CompanyImport() {
               <Loader2 className="mt-0.5 h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground" />
               <p className="text-xs text-muted-foreground">
                 {transferProgress
-                  ? `${formatTransferProgress(transferProgress)} An interrupted upload resumes from the finished parts.`
+                  ? `${formatTransferProgress(transferProgress)} ${t("companyImport.anInterruptedUploadResumes")}`
                   : t("companyImport.importRunningOnTheServer2")}
               </p>
             </div>
@@ -2281,12 +2281,11 @@ export function CompanyImport() {
           {importMutation.isError && !importMutation.isPending && (
             <div className="mx-5 mt-3 rounded-md border border-destructive/40 bg-destructive/5 px-3 py-2.5">
               <p className="text-xs text-destructive">
-                Import failed:{" "}
+                {t("companyImport.importFailed")}:{" "}
                 {importMutation.error instanceof Error
                   ? importMutation.error.message
                   : t("companyImport.theRequestDidNotComplete")}{" "}
-                Nothing may have been created, or the import stopped partway — check the target company
-                before retrying.
+                {t("companyImport.nothingMayHaveBeenCreatedOrThe")}
               </p>
             </div>
           )}

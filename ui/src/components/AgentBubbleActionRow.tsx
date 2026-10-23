@@ -155,7 +155,7 @@ export function AgentBubbleActionRow({
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             onClick={() => {
-              void copyWithToast(copyText, "Message copied");
+              void copyWithToast(copyText, t("agentBubbleActionRow.messageCopied"));
             }}
           >
             <Copy className="mr-2 h-3.5 w-3.5" />
@@ -340,8 +340,7 @@ export function IssueChatFeedbackButtons({
           <div className="space-y-3 text-sm text-muted-foreground">
             <p>{t("agentBubbleActionRow.thisVoteIsAlwaysSaved")}</p>
             <p>
-              {t("common.choose")} <span className="font-medium text-foreground">{t("agentBubbleActionRow.alwaysAllow")}</span> to share
-              this vote and future voted AI outputs. Choose{" "}
+              {t("common.choose")} <span className="font-medium text-foreground">{t("agentBubbleActionRow.alwaysAllow")}</span> {t("agentBubbleActionRow.toShareThisVoteAndFuture")}{" "}
               <span className="font-medium text-foreground">{t("agentBubbleActionRow.donTAllow")}</span> {t("agentBubbleActionRow.toKeepThisVoteAnd")}
             </p>
             <p>{t("agentBubbleActionRow.youCanChangeThisLater")}</p>

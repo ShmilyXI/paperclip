@@ -1006,7 +1006,7 @@ function MarkdownBodyImpl({
     if (mediaMode === "reference") {
       map.img = ({ src, alt, title }) => (
         <span data-markdown-image-reference title={title}>
-          Image: {alt || "Untitled image"}{src ? ` (${src})` : ""}
+          {t("markdownBody.imageLabel")}{" "}{alt || t("markdownBody.untitledImage")}{src ? ` (${src})` : ""}
         </span>
       );
     } else if (resolveImageSrc || onImageClick) {

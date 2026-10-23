@@ -76,7 +76,7 @@ export function GitHubConnectionComplete({
                   </>}
                 </p>
                 <Link to={`/apps/chat/${endpoint.id}/access`} className="inline-block text-xs text-muted-foreground underline underline-offset-4">
-                  {repositories.isError ? t("gitHubConnectionComplete.repositoryAccessUnavailable") : count === undefined ? t("gitHubConnectionComplete.repositoryAccess") : count === 0 ? t("gitHubConnectionComplete.noRepositoriesEnabled") : `${count} ${count === 1 ? "repository" : "repositories"} enabled`}
+                  {repositories.isError ? t("gitHubConnectionComplete.repositoryAccessUnavailable") : count === undefined ? t("gitHubConnectionComplete.repositoryAccess") : count === 0 ? t("gitHubConnectionComplete.noRepositoriesEnabled") : t("gitHubConnectionComplete.repositoriesEnabled", { count })}
                 </Link>
               </div>
             </div>

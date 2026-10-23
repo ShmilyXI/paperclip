@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -33,9 +34,9 @@ export type ModelSource = {
 };
 
 const CREDENTIAL_TAG_LABEL: Record<ModelConnectionMode, string> = {
-  subscription: "Subscription",
-  api: "API key",
-  advanced: "Custom Gateway",
+  subscription: t("modelSourceTiles.subscription"),
+  api: t("modelSourceTiles.apiKey"),
+  advanced: t("modelSourceTiles.customGateway"),
 };
 
 /**

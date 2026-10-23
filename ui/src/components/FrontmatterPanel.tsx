@@ -433,10 +433,10 @@ function buildSummary(parsed: Record<string, unknown>): string {
   const parts: string[] = [];
   if (typeof parsed.name === "string" && parsed.name.trim()) parts.push(parsed.name.trim());
   const tools = asStringArray(parsed["allowed-tools"]);
-  if (tools && tools.length > 0) parts.push(`${tools.length} ${tools.length === 1 ? "tool" : "tools"}`);
+  if (tools && tools.length > 0) parts.push(t("frontmatterPanel.toolsCount", { count: tools.length }));
   if (isFrontmatterPlainRecord(parsed.metadata)) {
     const count = Object.keys(parsed.metadata).length;
-    if (count > 0) parts.push(`${count} metadata`);
+    if (count > 0) parts.push(t("frontmatterPanel.metadataCount", { count }));
   }
   return parts.join(" · ");
 }
@@ -596,7 +596,7 @@ function MetadataRows({
       {rows.map((row, index) => (
         <div key={row.id} className="flex items-center gap-1.5">
           <Input
-            aria-label={`Metadata key ${index + 1}`}
+            aria-label={t("frontmatterPanel.metadataKeyNumber", { count: index + 1 })}
             value={row.key}
             readOnly={readOnly}
             placeholder={t("frontmatterPanel.key")}
@@ -604,7 +604,7 @@ function MetadataRows({
             className="h-8 flex-1 font-mono text-xs"
           />
           <Input
-            aria-label={`Value for ${row.key || `field ${index + 1}`}`}
+            aria-label={t("frontmatterPanel.valueForKey", { key: row.key || t("frontmatterPanel.fieldNumber", { count: index + 1 }) })}
             value={row.text}
             readOnly={readOnly}
             placeholder={t("frontmatterPanel.value")}
@@ -616,7 +616,7 @@ function MetadataRows({
               variant="ghost"
               size="icon"
               className="h-8 w-8 shrink-0"
-              aria-label={`Remove ${row.key || `field ${index + 1}`}`}
+              aria-label={t("frontmatterPanel.removeForKey", { key: row.key || t("frontmatterPanel.fieldNumber", { count: index + 1 }) })}
               onClick={() => remove(index)}
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -662,7 +662,7 @@ function ChipInput({
           {!readOnly ? (
             <button
               type="button"
-              aria-label={`Remove ${value}`}
+              aria-label={t("frontmatterPanel.removeValue", { value })}
               onClick={() => onChange(values.filter((_, i) => i !== index))}
               className="hover:text-foreground"
             >

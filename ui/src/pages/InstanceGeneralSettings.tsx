@@ -86,13 +86,13 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
   const showFeedbackDataSharing = !hiddenSettings.has("instance.general.feedbackDataSharingPreference");
   const showSignOut = !hiddenSettings.has("instance.general.signOut");
   const visibleTopics = [
-    ...(showCensorUsernameInLogs ? ["log display"] : []),
-    ...(showBackupRetention ? ["backup retention"] : []),
-    ...(showFeedbackDataSharing ? ["data sharing"] : []),
+    ...(showCensorUsernameInLogs ? [t("instanceGeneralSettings.logDisplay")] : []),
+    ...(showBackupRetention ? [t("instanceGeneralSettings.backupRetention")] : []),
+    ...(showFeedbackDataSharing ? [t("instanceGeneralSettings.dataSharing")] : []),
   ];
   const topicSummary = visibleTopics.length > 2
-    ? `${visibleTopics.slice(0, -1).join(", ")}, and ${visibleTopics[visibleTopics.length - 1]}`
-    : visibleTopics.join(" and ");
+    ? t("instanceGeneralSettings.topicListAnd", { list: visibleTopics.slice(0, -1).join(", "), last: visibleTopics[visibleTopics.length - 1] })
+    : visibleTopics.join(t("instanceGeneralSettings.andConjunction"));
   const visibleActionError = signOutMutation.error instanceof Error
     ? signOutMutation.error.message
     : signOutMutation.error
@@ -108,7 +108,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             <h1 className="text-lg font-semibold">{t("common.general")}</h1>
           </div>
           <p className="text-sm text-muted-foreground">
-            Configure instance-wide preferences
+            {t("instanceGeneralSettings.configureInstanceWidePreferences")}
             {visibleTopics.length > 0 ? <> including {topicSummary}</> : null}.
           </p>
         </div>

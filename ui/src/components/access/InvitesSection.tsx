@@ -85,7 +85,7 @@ export function InvitesSection() {
   }
 
   async function copyInviteUrl(url: string) {
-    return copyText(url, "The invite URL is selected. Copy it manually from the field.", selectLatestInviteUrl);
+    return copyText(url, t("invitesSection.inviteUrlSelectedCopyManually"), selectLatestInviteUrl);
   }
 
   const inviteHistoryQueryKey = queryKeys.access.invites(selectedCompanyId ?? "", "all", INVITE_HISTORY_PAGE_SIZE);
@@ -118,7 +118,7 @@ export function InvitesSection() {
     onSuccess: async (invite) => {
       setLatestInviteUrl(invite.inviteUrl);
       setLatestInviteCopied(false);
-      const copied = await copyText(invite.inviteUrl, "Copy the invite URL manually from the field below.");
+      const copied = await copyText(invite.inviteUrl, t("invitesSection.copyTheInviteUrlManually"));
 
       await queryClient.invalidateQueries({ queryKey: inviteHistoryQueryKey });
       pushToast({
@@ -172,8 +172,7 @@ export function InvitesSection() {
   return (
     <div className="max-w-6xl space-y-8">
       <p className="max-w-3xl text-sm text-muted-foreground">
-        Invite people to request access to this organization. New invite links are copied to your clipboard when they are
-        generated.
+        {t("invitesSection.invitePeopleToRequestAccess")}
       </p>
 
       <section className="space-y-4 rounded-xl border border-border p-5">

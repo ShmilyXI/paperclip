@@ -190,8 +190,16 @@ export function Connections() {
       pushToast({
         title: t("connectors.connectionDeleted"),
         body: target.remainingConnectionCount > 0
-          ? `${target.appName} still has ${target.remainingConnectionCount} active ${target.remainingConnectionCount === 1 ? "connection" : "connections"} available to agents.`
-          : `${target.appName} is no longer available to agents and its credentials are deleted. Connecting it again needs a new sign-in or key.`,
+          ? target.remainingConnectionCount === 1
+        ? t("connectors.stillHasOneConnection", {
+            app: target.appName,
+            count: target.remainingConnectionCount,
+          })
+        : t("connectors.stillHasConnections", {
+            app: target.appName,
+            count: target.remainingConnectionCount,
+          })
+          : t("connectors.noLongerAvailable", { app: target.appName }),
         tone: "success",
       });
       setConnectionToDelete(null);
@@ -366,7 +374,9 @@ export function Connections() {
               <ShieldQuestion className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-semibold text-amber-900 dark:text-amber-100">
-                  {reviewCount} {reviewCount === 1 ? "action is" : "actions are"} waiting for your OK
+                  {reviewCount === 1
+                    ? t("connectors.actionWaitingForOk", { count: reviewCount })
+                    : t("connectors.actionsWaitingForOk", { count: reviewCount })}
                 </div>
                 <div className="truncate text-xs text-amber-700 dark:text-amber-300">
                   {t("connectors.yourAgentsPausedToCheck")}
@@ -385,7 +395,9 @@ export function Connections() {
               <ShieldAlert className="h-5 w-5 shrink-0 text-red-600 dark:text-red-400" />
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-semibold text-red-900 dark:text-red-100">
-                  {rowsNeedingAttention.length} {rowsNeedingAttention.length === 1 ? "connection needs" : "connections need"} attention
+                  {rowsNeedingAttention.length === 1
+                    ? t("connectors.connectionNeedsAttention", { count: rowsNeedingAttention.length })
+                    : t("connectors.connectionsNeedAttention", { count: rowsNeedingAttention.length })}
                 </div>
                 <div className="truncate text-xs text-red-700 dark:text-red-300">
                   {floatSummary(rowsNeedingAttention)}
@@ -506,7 +518,7 @@ export function Connections() {
                               variant="ghost"
                               size="icon-sm"
                               className="text-muted-foreground hover:text-destructive"
-                              aria-label={`Delete ${row.displayName} connection`}
+                              aria-label={t("connectors.deleteNamedConnection", { name: row.displayName })}
                               onClick={(event) => {
                                 event.stopPropagation();
                                 setConnectionToDelete({
@@ -595,7 +607,7 @@ function CloudConnectorEnrollmentBanner({
         <div className="min-w-0 flex-1">
           <div className="text-sm font-semibold text-foreground">{t("connectors.paperclipManagedSignInIs")}</div>
           <div className="truncate text-xs text-muted-foreground">
-            Provider authorization uses {status.brokerBaseUrl}; credentials stay in this instance.
+            {t("connectors.providerAuthorizationUses", { broker: status.brokerBaseUrl })}
           </div>
         </div>
       </div>
@@ -672,7 +684,7 @@ function enabledActionCount(profile: ToolProfileWithDetails): number {
 function floatSummary(rows: AppRow[]): string {
   const names = rows.map((row) => humanizeConnectionDisplayName(row.application.name));
   if (names.length <= 2) return names.join(" and ");
-  return `${names.slice(0, 2).join(", ")} and ${names.length - 2} more`;
+  return t("connectors.namesAndMore", { names: names.slice(0, 2).join(", "), count: names.length - 2 });
 }
 
 function EmptyConnections({ onBrowse }: { onBrowse: () => void }) {

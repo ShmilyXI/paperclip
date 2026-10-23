@@ -52,7 +52,7 @@ const HARNESS_LABELS: Record<string, string> = {
 };
 
 function harnessLabel(agent: Agent | undefined): string {
-  if (!agent) return "Choose an agent";
+  if (!agent) return t("composerRunSettingsPicker.chooseAnAgent");
   const harness = HARNESS_LABELS[agentHarnessType(agent.adapterType, agent.adapterConfig)] ?? agent.adapterType;
   const provider = composerCatalogProvider(agent);
   const binding = aiRuntimeConnectionBindingSchema.safeParse(agent?.runtimeConfig?.aiConnection).data;
@@ -61,11 +61,11 @@ function harnessLabel(agent: Agent | undefined): string {
 }
 
 function unavailableModelReason(agent: Agent | undefined): string {
-  if (!agent) return "Choose an agent to select its model and effort.";
-  if (agent.adapterType === "paperclip_runner" && agent.adapterConfig.provider === "muse") return "Muse chooses its model and effort. Paperclip has no per-task override.";
-  if (agent?.adapterType === "process") return "This agent runs a command. Its harness does not expose a model or effort setting.";
-  if (agent?.adapterType === "http") return "This agent calls an HTTP endpoint. The destination service chooses its model.";
-  return "This gateway chooses its model remotely; Paperclip has no per-task model setting for it.";
+  if (!agent) return t("composerRunSettingsPicker.chooseAnAgentToSelectItsModelAndEffort");
+  if (agent.adapterType === "paperclip_runner" && agent.adapterConfig.provider === "muse") return t("composerRunSettingsPicker.museChoosesItsModelAndEffort");
+  if (agent?.adapterType === "process") return t("composerRunSettingsPicker.thisAgentRunsACommand");
+  if (agent?.adapterType === "http") return t("composerRunSettingsPicker.thisAgentCallsAnHttpEndpoint");
+  return t("composerRunSettingsPicker.thisGatewayChoosesItsModelRemotely");
 }
 
 function AnimatedBody({ children }: { children: ReactNode }) {
@@ -266,12 +266,12 @@ export function ComposerRunSettingsPicker({
     <div className="flex items-center gap-2 px-1 py-1.5"><button type="button" aria-label={t("composerRunSettingsPicker.backToSelection")} onClick={() => setView("settings")} className="grid size-7 place-items-center rounded-md hover:bg-accent"><ArrowLeft className="size-4" /></button><span className="min-w-0 flex-1"><span className="block text-xs font-semibold">{t("composerRunSettingsPicker.chooseModel")}</span><span className="block truncate text-xs text-muted-foreground">{harnessLabel(agent)}</span></span>{closeButton}</div>
     <div className="relative mt-2"><Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted-foreground" aria-hidden /><input autoFocus type="search" aria-label={t("composerRunSettingsPicker.searchOrPasteAModel")} placeholder={t("composerRunSettingsPicker.searchOrPasteAModel")} value={modelSearch} onChange={(event) => setModelSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && manualValid && !exactMatch) chooseModel(query); }} className="h-9 w-full rounded-md border border-border bg-background pl-8 pr-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring" /></div>
     <div className="mt-2 min-h-0 max-h-60 overflow-y-auto overscroll-contain touch-pan-y" role="listbox" aria-label={t("composerRunSettingsPicker.models")}>
-      {!query ? <button type="button" role="option" aria-selected={selected.model === null} onClick={() => chooseModel(null)} className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left hover:bg-accent"><span className="min-w-0 flex-1"><span className="block text-sm font-medium">{t("composerRunSettingsPicker.useAgentDefault")}</span><span className="block truncate text-xs text-muted-foreground">{models.find((item) => item.id === configuredModel)?.label || configuredModel || "Default"}</span></span>{selected.model === null ? <Check className="composer-run-settings-accent size-4" /> : null}</button> : null}
+      {!query ? <button type="button" role="option" aria-selected={selected.model === null} onClick={() => chooseModel(null)} className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left hover:bg-accent"><span className="min-w-0 flex-1"><span className="block text-sm font-medium">{t("composerRunSettingsPicker.useAgentDefault")}</span><span className="block truncate text-xs text-muted-foreground">{models.find((item) => item.id === configuredModel)?.label || configuredModel || t("common.default")}</span></span>{selected.model === null ? <Check className="composer-run-settings-accent size-4" /> : null}</button> : null}
       {filteredModels.map((item) => <button type="button" role="option" aria-selected={selected.model === item.id} key={item.id} onClick={() => chooseModel(item.id)} className="flex w-full items-center gap-3 rounded-md px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"><span className="min-w-0 flex-1"><span className="block truncate font-medium">{item.label}</span><span className="block truncate font-mono text-xs text-muted-foreground">{item.id}</span></span>{item.detail || item.id === configuredModel ? <span className="shrink-0 text-xs text-muted-foreground">{item.detail ?? t("composerRunSettingsPicker.agentDefault")}</span> : null}{selected.model === item.id ? <Check className="composer-run-settings-accent size-4 shrink-0" /> : null}</button>)}
       {catalogPending ? <p className="px-2.5 py-2 text-xs text-muted-foreground">{t("composerRunSettingsPicker.loadingModels")}</p> : null}
       {!catalogPending && !filteredModels.length && query ? <p className="px-2.5 py-2 text-xs text-muted-foreground">{t("composerRunSettingsPicker.noCatalogMatch")}</p> : null}
     </div>
-    {query && !exactMatch ? <div className="mt-2 border-t border-border pt-2"><button type="button" disabled={!manualValid} onClick={() => chooseModel(query)} className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm hover:bg-accent disabled:opacity-40"><Plus className="size-4 shrink-0" aria-hidden /><span className="min-w-0 flex-1 truncate">Use exact ID <span className="font-mono font-semibold">{query}</span></span></button>{!manualValid ? <p className="px-2.5 text-xs text-destructive">{provider === "openrouter" ? t("composerRunSettingsPicker.useOpenrouterProviderModelWith") : t("composerRunSettingsPicker.modelIdsCannotContainSpaces")}</p> : null}</div> : null}
+    {query && !exactMatch ? <div className="mt-2 border-t border-border pt-2"><button type="button" disabled={!manualValid} onClick={() => chooseModel(query)} className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm hover:bg-accent disabled:opacity-40"><Plus className="size-4 shrink-0" aria-hidden /><span className="min-w-0 flex-1 truncate">{t("composerRunSettingsPicker.useExactId")} <span className="font-mono font-semibold">{query}</span></span></button>{!manualValid ? <p className="px-2.5 text-xs text-destructive">{provider === "openrouter" ? t("composerRunSettingsPicker.useOpenrouterProviderModelWith") : t("composerRunSettingsPicker.modelIdsCannotContainSpaces")}</p> : null}</div> : null}
     <p className="px-2.5 pb-1 pt-2 text-xs text-muted-foreground">{provider === "openrouter" ? t("composerRunSettingsPicker.customIdsOpenrouterProviderModel") : t("composerRunSettingsPicker.customModelIdsCanBe")}</p>
   </div>;
 

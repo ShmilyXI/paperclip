@@ -164,7 +164,7 @@ export function IssueShareSheet({
   canManage,
   open,
   onOpenChange,
-  aclDescription = "Sharing grants access to this task and its descendants, including comments, documents, and run history. Parents and siblings need separate access.",
+  aclDescription = t("issueShareSheet.sharingGrantsAccessToThisTaskAndItsDescendantsIncludingCommentsDocumentsAndRunHistoryParentsAndSiblingsNeedSeparateAccess"),
   implicitPrincipals = [],
   initialView = "list",
   initialAddSelection = "",
@@ -427,9 +427,9 @@ export function IssueShareSheet({
               renderOption={renderAccessIdentity}
               onValueChange={(value) => setAddSelection(value)}
               placeholder={t("issueShareSheet.chooseAPersonOrAgent")}
-              searchPlaceholder="Search people and agents…"
+              searchPlaceholder={t("issueShareSheet.searchPeopleAndAgents")}
               loading={directoryQuery.isLoading || agentsQuery.isLoading}
-              loadingMessage="Loading directory…"
+              loadingMessage={t("issueShareSheet.loadingDirectory")}
               emptyMessage={t("issueShareSheet.noOneLeftToAdd")}
               triggerClassName="w-full"
             />
@@ -478,7 +478,7 @@ export function IssueShareSheet({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Remove {revokeTarget?.subjectDisplayName ?? "this subject"}'s saved grant?
+              {t("issueShareSheet.removeSavedGrantTitle", { subject: revokeTarget?.subjectDisplayName ?? t("issueShareSheet.thisSubject") })}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {t("issueShareSheet.thisRemovesThisGrantAnd")} <span className="font-semibold">{t("issueShareSheet.not")}</span> {t("issueShareSheet.eraseContentAlreadySeenOr")}

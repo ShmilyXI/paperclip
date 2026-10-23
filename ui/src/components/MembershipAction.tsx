@@ -26,9 +26,12 @@ export function MembershipAction({
 }: MembershipActionProps) {
   const isLeft = state === "left";
   const label = pending
-    ? pendingState === "left" ? "Leaving..." : "Joining..."
+    ? pendingState === "left" ? t("membershipAction.leaving") : t("membershipAction.joining")
     : isLeft ? t("common.join") : t("common.leave");
-  const ariaLabel = `${isLeft ? t("common.join") : t("common.leave")} ${resourceName}`;
+  const ariaLabel = t("membershipAction.actionForResource", {
+    action: isLeft ? t("common.join") : t("common.leave"),
+    resource: resourceName,
+  });
   const Icon = pending ? Loader2 : isLeft ? LogIn : LogOut;
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {

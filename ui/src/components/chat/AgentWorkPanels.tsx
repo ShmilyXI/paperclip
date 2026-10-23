@@ -225,7 +225,7 @@ export function AgentTasksPanel({
           {visible.map((task) => <AgentTaskCard key={task.id} task={task} />)}
           {capped ? (
             <p className="px-1 text-xs text-muted-foreground">
-              Showing the {AGENT_TASK_LIMIT} most recently updated tasks.
+              {t("agentWorkPanels.showingMostRecentlyUpdated", { limit: AGENT_TASK_LIMIT })}
             </p>
           ) : null}
         </div>
@@ -263,7 +263,7 @@ export function AgentArtifactCard({ artifact }: { artifact: CompanyArtifact }) {
         </span>
       </div>
       <div className="flex items-center gap-1.5 pl-6 text-xs text-muted-foreground">
-        <span>Updated {formatDate(artifact.updatedAt)}</span>
+        <span>{t("agentWorkPanels.updatedAt", { time: formatDate(artifact.updatedAt) })}</span>
         <span aria-hidden>·</span>
         <span className="font-mono">{artifact.issue.identifier}</span>
       </div>

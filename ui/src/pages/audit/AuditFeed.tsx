@@ -174,7 +174,7 @@ function AuditEntityNode({ record }: { record: AuditActionRecord }) {
     const caseRef = record.entity.case;
     return (
       <Link to={caseHref(caseRef?.identifier ?? record.entityId)} className="font-medium text-primary hover:underline">
-        {caseRef ? `${caseRef.identifier} · ${caseRef.title}` : "the case"}
+        {caseRef ? `${caseRef.identifier} · ${caseRef.title}` : t("auditFeed.theCase")}
       </Link>
     );
   }
@@ -184,7 +184,7 @@ function AuditEntityNode({ record }: { record: AuditActionRecord }) {
   if (issueRef) {
     return (
       <Link to={`/issues/${issueRef}`} className="font-medium text-primary hover:underline">
-        {issue?.identifier ? `${issue.identifier}${issue.title ? ` · ${issue.title}` : ""}` : "the task"}
+        {issue?.identifier ? `${issue.identifier}${issue.title ? ` · ${issue.title}` : ""}` : t("auditFeed.theTask")}
       </Link>
     );
   }

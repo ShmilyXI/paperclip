@@ -137,8 +137,8 @@ export function ProfileSettings() {
   const initials = deriveInitials(currentName);
   const isSavingProfile = updateMutation.isPending || uploadAvatarMutation.isPending || removeAvatarMutation.isPending;
   const uploadHint = selectedCompany
-    ? `Stored in Paperclip file storage for ${selectedCompany.name}.`
-    : "Select an organization to upload an avatar into Paperclip storage.";
+    ? t("settings.storedInPaperclipFileStorage", { name: selectedCompany.name })
+    : t("settings.selectAnOrganizationToUpload");
 
   return (
     <div className="max-w-6xl space-y-6">
@@ -200,7 +200,7 @@ export function ProfileSettings() {
                     disabled={!selectedCompanyId || isSavingProfile}
                   >
                     {uploadAvatarMutation.isPending ? <LoaderCircle className="size-4 animate-spin" /> : <Camera className="size-4" />}
-                    {currentImage ? "Change photo" : "Upload photo"}
+                    {currentImage ? t("settings.changePhoto") : t("settings.uploadPhoto")}
                   </Button>
                   {currentImage ? (
                     <Button
@@ -219,10 +219,10 @@ export function ProfileSettings() {
               <div className="min-w-0 flex-1 space-y-2 pb-1">
                 <div>
                   <h2 className="truncate text-2xl font-semibold text-foreground">{currentName}</h2>
-                  <p className="truncate text-sm text-muted-foreground">{sessionQuery.data.user.email ?? "No email"}</p>
+                  <p className="truncate text-sm text-muted-foreground">{sessionQuery.data.user.email ?? t("settings.noEmail")}</p>
                 </div>
                 <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
-                  Click the avatar to upload a new image. {uploadHint}
+                  {t("settings.clickTheAvatarToUpload")} {uploadHint}
                 </p>
               </div>
             </div>
@@ -266,7 +266,7 @@ export function ProfileSettings() {
           <div className="md:col-span-2 flex justify-end">
             <Button type="submit" disabled={isSavingProfile || !name.trim()}>
               {updateMutation.isPending ? <LoaderCircle className="size-4 animate-spin" /> : <Save className="size-4" />}
-              {updateMutation.isPending ? t("common.saving") : "Save profile"}
+              {updateMutation.isPending ? t("common.saving") : t("settings.saveProfile")}
             </Button>
           </div>
         </form>

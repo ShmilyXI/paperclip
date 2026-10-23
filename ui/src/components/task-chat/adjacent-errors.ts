@@ -20,6 +20,18 @@ export function isNoLiveExecutionPathNotice(item: TaskChatMessageItem): boolean 
   return recoveryStatement;
 }
 
+/**
+ * Labels of a hard run failure — the markers that carry a retry target.
+ * The rendered label is translated, so identity comes from the key; markers
+ * built before `labelKey` existed (and static fixtures) keep the English label.
+ */
+const RUN_FAILURE_LABEL_KEYS = ["taskChatThread.runFailed", "taskChatThread.usageLimitReached"];
+
+export function isRunFailureMarker(marker: TaskChatMarkerItem): boolean {
+  if (marker.labelKey) return RUN_FAILURE_LABEL_KEYS.includes(marker.labelKey);
+  return marker.label === "Run failed" || marker.label === "Usage limit reached";
+}
+
 function errorKind(item: TaskChatItem): "run" | "recovery" | null {
   if (item.kind === "marker" && item.variant === "interrupted"
     && item.tone !== "neutral" && !item.credentialAccess) return "run";
@@ -55,7 +67,7 @@ export function compactAdjacentErrors(items: readonly TaskChatItem[]): {
     if (mixed && errorKind(latest) === "recovery") {
       const marker = items.slice(start, end).reverse().find(
         (item): item is TaskChatMarkerItem => item.kind === "marker"
-          && (item.label === "Run failed" || item.label === "Usage limit reached"),
+          && isRunFailureMarker(item),
       );
       // Preserve the retry target separately from the surviving error's text.
       // The renderer still applies the parent's permission and pending state.

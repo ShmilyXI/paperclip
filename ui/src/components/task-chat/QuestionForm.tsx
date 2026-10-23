@@ -72,27 +72,27 @@ function answerError(
   answer: Answer | undefined,
 ): string | null {
   if (question.required && !answerHasValue(answer))
-    return "This question is required.";
+    return t("questionForm.thisQuestionIsRequired");
   if (
     question.answerMode !== "text" &&
     answer?.customText !== undefined &&
     !answer.customText.trim()
   ) {
-    return "Enter a custom answer.";
+    return t("questionForm.enterACustomAnswer");
   }
   const value =
     question.answerMode === "text" ? answer?.text : answer?.customText;
   if (value == null || value.length === 0) return null;
   const validation = question.textValidation;
   if (validation?.minLength != null && value.length < validation.minLength)
-    return `Enter at least ${validation.minLength} characters.`;
+    return t("questionForm.enterAtLeastCharacters", { count: validation.minLength });
   if (validation?.maxLength != null && value.length > validation.maxLength)
-    return `Enter no more than ${validation.maxLength} characters.`;
+    return t("questionForm.enterNoMoreThanCharacters", { count: validation.maxLength });
   if (validation?.pattern) {
     const result = matchSafeQuestionValidationPattern(validation.pattern, value);
     if (result === "unsupported")
-      return "This question has an unsupported validation pattern.";
-    if (result === "no_match") return "Use the requested format.";
+      return t("questionForm.unsupportedValidationPattern");
+    if (result === "no_match") return t("questionForm.useTheRequestedFormat");
   }
   if (
     validation?.inputType === "number" ||
@@ -103,12 +103,12 @@ function answerError(
       !Number.isFinite(numeric) ||
       (validation.inputType === "integer" && !Number.isInteger(numeric))
     ) {
-      return `Enter a valid ${validation.inputType}.`;
+      return t("questionForm.enterAValidType", { type: validation.inputType });
     }
     if (validation.minimum != null && numeric < validation.minimum)
-      return `Enter a value of at least ${validation.minimum}.`;
+      return t("questionForm.enterValueOfAtLeast", { min: validation.minimum });
     if (validation.maximum != null && numeric > validation.maximum)
-      return `Enter a value no greater than ${validation.maximum}.`;
+      return t("questionForm.enterValueNoGreaterThan", { max: validation.maximum });
   }
   return null;
 }
@@ -592,7 +592,7 @@ function QuestionFormForRequest({
             onSubmit={() => {
               if (!inputUploading && currentError == null) progressOrSubmit();
             }}
-            attachAriaLabel={`Attach image to answer for ${question.prompt}`}
+            attachAriaLabel={t("questionForm.attachImageToAnswerFor", { prompt: question.prompt })}
           />
         </div>
       ) : (
@@ -664,7 +664,7 @@ function QuestionFormForRequest({
                     if (!inputUploading && currentError == null)
                       progressOrSubmit();
                   }}
-                  attachAriaLabel={`Attach image to other answer for ${question.prompt}`}
+                  attachAriaLabel={t("questionForm.attachImageToOtherAnswerFor", { prompt: question.prompt })}
                 />
               ) : null}
             </div>
@@ -693,7 +693,7 @@ function QuestionFormForRequest({
             {working === "cancel" ? (
               <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
             ) : null}{" "}
-            Cancel
+            {t("common.cancel")}
           </Button>
         ) : null}
         {!question.required ? (

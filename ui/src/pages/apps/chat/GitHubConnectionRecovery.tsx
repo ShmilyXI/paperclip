@@ -35,7 +35,7 @@ export type GitHubAppCredentials = { appId: string; privateKey: string; webhookS
 function CredentialLabel({ id, label, help }: { id: string; label: string; help: string }) {
   return <div className="flex items-center gap-1.5">
     <Label htmlFor={id}>{label}</Label>
-    <Tooltip><TooltipTrigger asChild><button type="button" aria-label={`Help with ${label}`} className="rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
+    <Tooltip><TooltipTrigger asChild><button type="button" aria-label={t("gitHubConnectionRecovery.helpWith", { label })} className="rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
       <CircleHelp className="size-3.5" aria-hidden="true" />
     </button></TooltipTrigger><TooltipContent className="max-w-xs">{help}</TooltipContent></Tooltip>
   </div>;
@@ -54,7 +54,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, onConnect, onExit }: {
   const [error, setError] = useState("");
   const [fileError, setFileError] = useState("");
   const needsWebhookSecret = !reconnect && !["active", "paused", "revoked"].includes(endpoint.status);
-  const appName = endpoint.botLabel ?? endpoint.setup?.github?.appName ?? "your existing App";
+  const appName = endpoint.botLabel ?? endpoint.setup?.github?.appName ?? t("gitHubConnectionRecovery.yourExistingApp");
   const appIdInvalid = !!credentials.appId.trim() && !/^\d+$/.test(credentials.appId.trim());
   const keyInvalid = !!credentials.privateKey.trim() && !/-----BEGIN (?:RSA )?PRIVATE KEY-----/.test(credentials.privateKey);
   const keyLoaded = !!credentials.privateKey.trim() && !keyInvalid && !privateKeyDraft;
@@ -87,13 +87,13 @@ export function GitHubAppRecovery({ endpoint, reconnect, onConnect, onExit }: {
         <p className="text-muted-foreground">{t("gitHubConnectionRecovery.ifItSOwnedBy")}</p>
       </div>
       <div className="space-y-2">
-        <CredentialLabel id="github-app-id" label="App ID" help="The numeric App ID on the GitHub App’s settings page. This is different from its Client ID or installation ID." />
-        <p id="github-app-id-help" className="text-sm text-muted-foreground">{t("common.copy")} <strong>App ID</strong> from the App’s settings page. {reconnect && "The saved ID is filled in when available."}</p>
+        <CredentialLabel id="github-app-id" label="App ID" help={t("gitHubConnectionRecovery.theNumericAppIdOnTheGithubAppSSettingsPageThisIsDifferentFromItsClientIdOrInstallationId")} />
+        <p id="github-app-id-help" className="text-sm text-muted-foreground">{t("common.copy")} <strong>App ID</strong> from the App’s settings page. {reconnect && t("gitHubConnectionRecovery.theSavedIdIsFilledInWhenAvailable")}</p>
         <Input id="github-app-id" aria-describedby="github-app-id-help" inputMode="numeric" value={credentials.appId} disabled={pending} aria-invalid={appIdInvalid} onChange={event => setCredentials({ ...credentials, appId: event.target.value })} />
         {appIdInvalid && <p role="alert" className="text-sm text-destructive">{t("gitHubConnectionRecovery.useTheNumericAppId")}</p>}
       </div>
       <div className="space-y-2">
-        <CredentialLabel id="github-private-key" label={t("gitHubConnectionRecovery.privateKey")} help="Upload the .pem file downloaded from this GitHub App, or paste its entire contents, including the BEGIN and END lines." />
+        <CredentialLabel id="github-private-key" label={t("gitHubConnectionRecovery.privateKey")} help={t("gitHubConnectionRecovery.uploadThePemFileDownloadedFromThisGithubApp")} />
         <ol id="github-private-key-help" className="list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
           <li>{t("gitHubConnectionRecovery.inTheSameAppS")} <strong>{t("gitHubConnectionRecovery.credentialsKeyPairsNewKey")}</strong>{t("gitHubConnectionRecovery.onTheOlderSettingsPage")} <strong>{t("gitHubConnectionRecovery.privateKeysGenerateAPrivate")}</strong>.</li>
           <li>{t("gitHubConnectionRecovery.uploadTheDownloaded")} <strong>.pem</strong> {t("gitHubConnectionRecovery.fileBelowOrPasteIts")}</li>
@@ -107,7 +107,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, onConnect, onExit }: {
             const privateKey = await file.text();
             setCredentials(current => ({ ...current, privateKey }));
             setPrivateKeyDraft("");
-          } catch { setFileError("Could not read this file. Try again or paste the key below."); }
+          } catch { setFileError(t("gitHubConnectionRecovery.couldNotReadThisFileTryAgainOrPasteTheKeyBelow")); }
         }} />
         <Input id="github-private-key" type="password" autoComplete="off" placeholder={keyLoaded ? t("gitHubConnectionRecovery.pasteAReplacementPemKey") : t("gitHubConnectionRecovery.orPasteTheCompletePem")} aria-describedby="github-private-key-help" disabled={pending} value={privateKeyDraft} aria-invalid={keyInvalid}
           onPaste={event => { event.preventDefault(); setCredentials({ ...credentials, privateKey: event.clipboardData.getData("text") }); setPrivateKeyDraft(""); setFileError(""); }}
@@ -118,7 +118,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, onConnect, onExit }: {
         <a className="inline-flex items-center gap-1 text-sm underline" href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/managing-private-keys-for-github-apps" target="_blank" rel="noreferrer">{t("gitHubConnectionRecovery.githubSPrivateKeyInstructions")}<ExternalLink className="size-3.5" /></a>
       </div>
       {needsWebhookSecret && <div className="space-y-2">
-        <CredentialLabel id="github-webhook-secret" label={t("gitHubConnectionRecovery.webhookSecret")} help="The secret configured for this App’s webhook. It must match GitHub exactly." />
+        <CredentialLabel id="github-webhook-secret" label={t("gitHubConnectionRecovery.webhookSecret")} help={t("gitHubConnectionRecovery.theSecretConfiguredForThisAppSWebhookItMustMatchGithubExactly")} />
         <p className="text-sm text-muted-foreground">{t("gitHubConnectionRecovery.useTheSecretSavedWhen")}</p>
         <Input id="github-webhook-secret" type="password" autoComplete="off" disabled={pending} value={credentials.webhookSecret} onChange={event => setCredentials({ ...credentials, webhookSecret: event.target.value })} />
       </div>}

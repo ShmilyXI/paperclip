@@ -138,7 +138,7 @@ export function AiConnectionField({
           else changeBinding({ mode: "responsible_user", provider, method });
         }}>
           <option value="">{t("aiConnectionField.individualAccount")}</option>
-          {compatiblePools.map(pool => <option key={pool.id} value={pool.id}>{pool.name} · Experimental pool</option>)}
+          {compatiblePools.map(pool => <option key={pool.id} value={pool.id}>{pool.name}{t("aiConnectionField.experimentalPool")}</option>)}
           {value?.mode === "router" && !compatiblePools.some(pool => pool.id === value.connectionId) && <option value={value.connectionId}>{t("aiConnectionField.poolUnavailableEnableRoutingAnd")}</option>}
         </select>
         {value?.mode === "router" && <span className="text-muted-foreground">{t("aiConnectionField.newTasksRotateExistingTasks")}</span>}
@@ -177,7 +177,7 @@ export function AiConnectionField({
           </DialogHeader>
           {pendingAdoption?.mode !== "router" && <p className="text-sm">
             {pendingAdoption?.mode === "responsible_user"
-              ? t("aiConnectionField.responsibleUserDefault", { accountName: accounts.data?.connections.find((account) => account.isDefault && account.provider === provider)?.name ?? "Not connected" })
+              ? t("aiConnectionField.responsibleUserDefault", { accountName: accounts.data?.connections.find((account) => account.isDefault && account.provider === provider)?.name ?? t("aiConnectionField.notConnected") })
               : accounts.data?.connections.find(
                   (account) => account.id === pendingAdoption?.connectionId,
                 )?.name}
@@ -238,7 +238,7 @@ export function AiConnectionField({
             initialMethod={reconnecting?.method ?? method}
             fixedMethod={Boolean(reconnecting)}
             connectionId={reconnecting?.id}
-            name={reconnecting?.name ?? `My ${provider === "anthropic" ? "Claude" : provider === "openai" ? "OpenAI" : provider === "xai" ? "Grok" : provider === "google" ? "Gemini" : provider === "github" ? "GitHub Copilot" : "OpenRouter"} ${method === "subscription" ? "subscription" : "API"}`}
+            name={reconnecting?.name ?? t("aiConnectionField.myConnectionName", { provider: provider === "anthropic" ? "Claude" : provider === "openai" ? "OpenAI" : provider === "xai" ? "Grok" : provider === "google" ? "Gemini" : provider === "github" ? "GitHub Copilot" : "OpenRouter", method: method === "subscription" ? t("aiConnectionField.subscription") : "API" })}
             ownership="personal"
             agentIds={agentId ? [agentId] : []}
             allAgents={allAgents}

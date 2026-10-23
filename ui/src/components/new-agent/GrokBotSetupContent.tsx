@@ -24,7 +24,7 @@ export interface GrokBotSetupContentProps {
   onCredentials: (url: string, key: string) => void;
   onBack: () => void; onExit: () => void; onNext: () => void; onRetry: () => void;
 }
-const steps = ["Identify Bot", "Connect access", t("grokBotSetupContent.enableAssignments"), "Verify"];
+const steps = [t("grokBotSetupContent.identifyBot"), t("grokBotSetupContent.connectAccess"), t("grokBotSetupContent.enableAssignments"), t("grokBotSetupContent.verify")];
 export function GrokBotSetupContent(p: GrokBotSetupContentProps) {
   const pairingCodeId = useId();
   const binding = p.connection?.binding;
@@ -44,7 +44,7 @@ export function GrokBotSetupContent(p: GrokBotSetupContentProps) {
       <div className="space-y-3 pr-5">
         <AdapterMark type="grok_bot" className="size-10" />
         <DialogTitle className="text-xl font-semibold tracking-tight">{ready ? t("grokBotSetupContent.yourGrokBotIsConnected") : t("grokBotSetupContent.connectYourGrokBot")}</DialogTitle>
-        <DialogDescription className="text-sm leading-relaxed">{ready ? `${p.details.botName} can receive assignments and work with ${p.companyName}.` : t("grokBotSetupContent.bringAnExistingBotInto", { companyName: p.companyName })}</DialogDescription>
+        <DialogDescription className="text-sm leading-relaxed">{ready ? t("grokBotSetupContent.canReceiveAssignments", { bot: p.details.botName, company: p.companyName }) : t("grokBotSetupContent.bringAnExistingBotInto", { companyName: p.companyName })}</DialogDescription>
       </div>
       <ol aria-label={t("grokBotSetupContent.grokBotSetup")} className="grid grid-cols-4 gap-2 text-xs text-muted-foreground">
         {steps.map((label, index) => <li key={label} aria-current={p.step === index ? "step" : undefined} className={p.step === index ? "font-medium text-foreground" : ""}>{index + 1}. {label}</li>)}

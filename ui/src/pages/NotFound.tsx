@@ -28,11 +28,11 @@ export function NotFoundPage({ scope = "global", requestedPrefix }: NotFoundPage
   const currentPath = `${location.pathname}${location.search}${location.hash}`;
   const normalizedPrefix = requestedPrefix?.toUpperCase();
 
-  const title = scope === "invalid_company_prefix" ? "Organization not found" : t("common.pageNotFound");
+  const title = scope === "invalid_company_prefix" ? t("notFound.organizationNotFound") : t("common.pageNotFound");
   const description =
     scope === "invalid_company_prefix"
-      ? `No organization matches prefix "${normalizedPrefix ?? "unknown"}".`
-      : "This route does not exist.";
+      ? t("notFound.noOrganizationMatchesPrefix", { prefix: normalizedPrefix ?? t("notFound.unknown") })
+      : t("notFound.thisRouteDoesNotExist");
 
   return (
     <div className="mx-auto max-w-2xl py-10">

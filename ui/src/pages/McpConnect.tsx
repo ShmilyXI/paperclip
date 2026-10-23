@@ -71,7 +71,7 @@ function McpConnectRequest({ id, device = false, agentPairingOnly = false, onEdi
     if (!companyId && !data?.requestedCompanyId && data?.companies[0]) setCompanyId(data.companies[0].id);
   }, [companyId, data]);
   const clientName = data?.clientName.trim();
-  const assistantName = clientName && !/^(assistant|mcp client)$/i.test(clientName) ? clientName : "your assistant";
+  const assistantName = clientName && !/^(assistant|mcp client)$/i.test(clientName) ? clientName : t("mcpConnect.yourAssistant");
   const clientOrigin = data?.clientOrigin || data?.redirectOrigin;
   const company = data?.companies.find((item) => item.id === selectedCompanyId);
   const canApproveWrites = Boolean(!data?.agentConnection && company?.canWrite && writeEnabled);

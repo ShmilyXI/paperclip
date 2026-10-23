@@ -5,6 +5,7 @@ import {
   aiMethodLabel,
   type AiConnectionSummary,
 } from "./model";
+import { t } from "@/i18n";
 
 export function AiConnectionIdentity({
   connection,
@@ -28,8 +29,8 @@ export function AiConnectionIdentity({
         <span className="flex items-center gap-1 text-xs text-muted-foreground">
           <Icon aria-hidden className="size-3" />
           {connection.ownership === "shared"
-            ? "Company shared"
-            : `Personal · ${connection.ownerName ?? "Account owner"}`}
+            ? t("aiConnectionIdentity.companyShared")
+            : t("aiConnectionIdentity.personalOwner", { owner: connection.ownerName ?? t("aiConnectionIdentity.accountOwner") })}
         </span>
       </div>
     </div>

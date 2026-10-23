@@ -45,10 +45,9 @@ export function AdvancedToolsRoute() {
             <h1 className="text-lg font-semibold">{t("advancedToolsRoute.advancedSetupRequiresEditingAccess")}</h1>
           </div>
           <p className="text-sm text-muted-foreground">
-            This area lets company editors wire up tools that aren't in the gallery. Ask a company editor if you
-            need a new app connected, or head back to{" "}
+            {t("advancedToolsRoute.thisAreaLetsCompanyEditors")}{" "}
             <Link to="/apps" className="font-medium text-primary hover:underline">
-              your apps
+              {t("advancedToolsRoute.yourApps")}
             </Link>
             .
           </p>

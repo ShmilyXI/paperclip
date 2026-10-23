@@ -12,23 +12,23 @@ function formatRelativeTimestamp(value: string | null): string | null {
   if (Number.isNaN(timestamp)) return null;
 
   const deltaMs = Date.now() - timestamp;
-  if (deltaMs < 60_000) return "just now";
+  if (deltaMs < 60_000) return t("devRestartBanner.justNow");
   const deltaMinutes = Math.round(deltaMs / 60_000);
-  if (deltaMinutes < 60) return `${deltaMinutes}m ago`;
+  if (deltaMinutes < 60) return t("devRestartBanner.minutesAgo", { minutes: deltaMinutes });
   const deltaHours = Math.round(deltaMinutes / 60);
-  if (deltaHours < 24) return `${deltaHours}h ago`;
+  if (deltaHours < 24) return t("devRestartBanner.hoursAgo", { hours: deltaHours });
   const deltaDays = Math.round(deltaHours / 24);
-  return `${deltaDays}d ago`;
+  return t("devRestartBanner.daysAgo", { days: deltaDays });
 }
 
 function describeReason(devServer: DevServerHealthStatus): string {
   if (devServer.reason === "backend_changes_and_pending_migrations") {
-    return "backend files changed and migrations are pending";
+    return t("devRestartBanner.backendFilesChangedAndMigrationsPending");
   }
   if (devServer.reason === "pending_migrations") {
-    return "pending migrations need a fresh boot";
+    return t("devRestartBanner.pendingMigrationsNeedAFreshBoot");
   }
-  return "backend files changed since this server booted";
+  return t("devRestartBanner.backendFilesChangedSinceServerBooted");
 }
 
 export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthStatus }) {
@@ -92,7 +92,7 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
             ) : null}
             {devServer.pendingMigrations.length > 0 ? (
               <span>
-                Pending migrations: {devServer.pendingMigrations.slice(0, 2).join(", ")}
+                {t("devRestartBanner.pendingMigrations", { list: devServer.pendingMigrations.slice(0, 2).join(", ") })}
                 {devServer.pendingMigrations.length > 2 ? ` +${devServer.pendingMigrations.length - 2} more` : ""}
               </span>
             ) : null}

@@ -34,7 +34,7 @@ function CaseFilter({ label, value, options, onChange, disabled }: {
 }) {
   return <div className="space-y-1">
     <span className="text-xs text-muted-foreground">{label}</span>
-    <SelectPopover aria-label={`Filter by ${label.toLowerCase()}`} value={value}
+    <SelectPopover aria-label={t("cases.filterByLabel", { label: label.toLowerCase() })} value={value}
       options={options} onValueChange={onChange} disabled={disabled} className="text-sm data-[size=default]:h-9" />
   </div>;
 }
@@ -146,8 +146,8 @@ export function Cases() {
         <p role="status" className="whitespace-nowrap text-xs text-muted-foreground">
           {casesQuery.isFetching ? (casesQuery.isPending ? t("cases.loadingCases") : t("cases.updatingCases"))
             : casesQuery.isError ? ""
-              : page > 1 && records.length > 0 ? `${offset + 1}–${offset + records.length} cases`
-                : `${records.length}${hasNext ? "+" : ""} ${records.length === 1 && !hasNext ? "case" : "cases"}`}
+              : page > 1 && records.length > 0 ? t("cases.rangeCases", { start: offset + 1, end: offset + records.length })
+                : t(hasNext ? "cases.countCasesPlus" : "cases.countCases", { count: records.length })}
         </p>
       </div>} controls={<CaseListControls activeFilterCount={activeFilterCount} columns={view.columns}
         onColumnsChange={columns => setView({ columns: columns.join(",") === DEFAULT_CASE_COLUMNS.join(",") ? "" : columns.join(",") || "none" }, false)}

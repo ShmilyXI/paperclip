@@ -640,7 +640,7 @@ function Setup({
         rememberCredentials();
       } else {
         try { await Promise.all(staged.map(secret => secret.remove())); }
-        catch { throw new Error(`${cause instanceof Error ? cause.message : t("newAgent.couldNotSaveAgentSetup")} Could not remove an unused setup credential. Remove it from Secrets before retrying.`); }
+        catch { throw new Error(`${cause instanceof Error ? cause.message : t("newAgent.couldNotSaveAgentSetup")}${t("newAgentSetup.couldNotRemoveUnusedSetupCredential")}`); }
       }
       throw cause;
     }
@@ -837,7 +837,7 @@ function Setup({
       ? createdKimiModel
       : (createdKimiModel as { value?: string } | undefined)?.value) ||
     model ||
-    "Default";
+    t("common.default");
   const environmentLabel =
     adapterType === "cursor_cloud"
       ? "Cursor Cloud"
@@ -1265,7 +1265,7 @@ function Setup({
                             <p className="text-xs text-muted-foreground sm:col-span-2">
                               New keys are saved as organization secrets when
                               you finish setup.
-                              {multiProvider && ` Use a ${provider}/model ID.`}
+                              {multiProvider && t("newAgentSetup.useAProviderModelId", { provider })}
                             </p>
                           </div>
                         )}

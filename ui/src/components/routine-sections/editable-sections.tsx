@@ -146,8 +146,8 @@ export function OverviewSection({
             options={assigneeOptions}
             recentOptionIds={recentAssigneeIds}
             placeholder={t("routineSections.responsible")}
-            noneLabel="No responsible"
-            searchPlaceholder="Search responsible..."
+            noneLabel={t("routineSections.noResponsible")}
+            searchPlaceholder={t("routineSections.searchResponsible")}
             emptyMessage={t("routineSections.noResponsibleFound")}
             onChange={(assigneeAgentId) =>
               setEditDraft((current) => ({ ...current, assigneeAgentId }))
@@ -193,8 +193,8 @@ export function OverviewSection({
             options={projectOptions}
             recentOptionIds={recentProjectIds}
             placeholder={t("common.project")}
-            noneLabel="No project"
-            searchPlaceholder="Search projects..."
+            noneLabel={t("routineSections.noProject")}
+            searchPlaceholder={t("routineSections.searchProjects")}
             emptyMessage={t("routineSections.noProjectsFound")}
             onChange={(projectId) => setEditDraft((current) => ({ ...current, projectId }))}
             onConfirm={() => descriptionEditorRef.current?.focus()}
@@ -309,10 +309,10 @@ export function OverviewSection({
         <SummaryCard
           icon={Clock3}
           label={t("routineSections.triggers")}
-          value={activeTriggers === 0 ? t("common.none") : `${activeTriggers} active`}
+          value={activeTriggers === 0 ? t("common.none") : t("routineSections.activeTriggers", { count: activeTriggers })}
           hint={nextFire ? t("routineSections.nextFireNextfire", { nextFire }) : t("routineSections.noSchedule")}
           to={() => navigateToSection("triggers")}
-          ariaLabel={`${activeTriggers} triggers. Open triggers.`}
+          ariaLabel={t("routineSections.triggersSummaryAria", { count: activeTriggers })}
         />
         <SummaryCard
           icon={Play}
@@ -605,8 +605,7 @@ function NextFiresPreview({
             ))}
           </div>
           <p className="text-(length:--text-micro) text-muted-foreground/60">
-            Preview assumes the previous run is still in flight when the next fires. Times shown in{" "}
-            {preview.timeZone}.
+            {t("routineSections.previewAssumesPreviousRun", { timeZone: preview.timeZone })}
           </p>
         </>
       ) : (

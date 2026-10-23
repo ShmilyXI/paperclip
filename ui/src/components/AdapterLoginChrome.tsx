@@ -442,8 +442,8 @@ export function ProviderSubscriptionCard({
             Sign in to {providerName}
           </a>
           {mode === "submitted_code"
-            ? " then come back and enter authorization code"
-            : " by providing the authorization code below"}
+            ? t("adapterLoginChrome.thenComeBackAndEnter")
+            : t("adapterLoginChrome.byProvidingTheAuthorization")}
         </>
       }
     >
@@ -460,7 +460,7 @@ export function ProviderApiKeyCard({
 }) {
   return (
     <OnboardingLoginCard
-      instruction={`Provide your ${providerName} API key to connect`}
+      instruction={t("adapterLoginChrome.provideYourProvidernameApiKey", { providerName })}
     >
       <OnboardingCardField {...field} label={t("adapterLoginChrome.apiKey")} masked />
     </OnboardingLoginCard>
@@ -495,7 +495,7 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
   const ready = login?.status === "ready";
   return <div className="min-w-0 max-w-full space-y-3 text-sm text-muted-foreground">
     {ready ? <>
-      <p role="status" className="flex items-center gap-2 text-foreground"><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{provider} is signed in. Click Connect to use this account.</p>
+      <p role="status" className="flex items-center gap-2 text-foreground"><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{t("adapterLoginChrome.signedInClickConnect", { provider })}</p>
       {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => browserLogin ? login?.retry() : setShowCommand(true)}>{t("adapterLoginChrome.useADifferentAccount")}</button>}
     </> : !browserLogin && <p>{isolated ? t("adapterLoginChrome.signInToProviderFor", { provider }) : t("adapterLoginChrome.connectUsesYourLocalProvider", { provider })}</p>}
     {browserLogin && !ready && !login?.authorizationUrl && !login?.error && <p role="status">{t("adapterLoginChrome.preparingBrowserSignIn")}</p>}
@@ -522,6 +522,6 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
       </div>}
     </>}
     {login?.error && <p role="alert">{login.error}</p>}
-    {login && !login.preparing && !ready && (isolated || login.error) && <button type="button" className="underline underline-offset-4" onClick={login.retry}>{isolated ? "Start sign-in again" : "Check again"}</button>}
+    {login && !login.preparing && !ready && (isolated || login.error) && <button type="button" className="underline underline-offset-4" onClick={login.retry}>{isolated ? t("adapterLoginChrome.startSignInAgain") : t("adapterLoginChrome.checkAgain")}</button>}
   </div>;
 }

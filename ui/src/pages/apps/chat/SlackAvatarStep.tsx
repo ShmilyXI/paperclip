@@ -89,7 +89,7 @@ export function SlackAvatarContent({
               ) : (
                 <Download className="size-4" />
               )}
-              Download avatar
+              {t("slackAvatarStep.downloadAvatar")}
             </a>
           </Button>
           {downloadError && (
@@ -133,15 +133,15 @@ export function SlackAvatarContent({
               {t("slackAvatarStep.andChoose")} <strong>{appName}</strong>.
             </li>
             <li>
-              {t("common.choose")} <strong>Basic Information</strong>, then scroll to{" "}
-              <strong>Display Information</strong>.
+              {t("common.choose")} <strong>{t("slackAvatarStep.basicInformation")}</strong>{t("slackAvatarStep.thenScrollTo")}{" "}
+              <strong>{t("slackAvatarStep.displayInformation")}</strong>.
             </li>
             <li>
-              {t("slackAvatarStep.underAppIconPreview")} <strong>App icon &amp; Preview</strong>{t("slackAvatarStep.clickAppIconAndUpload")}
+              {t("slackAvatarStep.underAppIconPreview")} <strong>{t("slackAvatarStep.appIconAndPreview")}</strong>{t("slackAvatarStep.clickAppIconAndUpload")}
               <span className="break-all font-mono text-xs">{filename}</span>.
             </li>
             <li>
-              {t("slackAvatarStep.confirmTheCropThenClick")} <strong>Save Changes</strong>{t("slackAvatarStep.inSlack")}
+              {t("slackAvatarStep.confirmTheCropThenClick")} <strong>{t("slackAvatarStep.saveChanges")}</strong>{t("slackAvatarStep.inSlack")}
             </li>
           </ol>
         </section>

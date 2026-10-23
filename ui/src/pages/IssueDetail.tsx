@@ -446,9 +446,9 @@ function isPlanConfirmationInteraction(
 function buildPlanDecisionResponseText(
   interaction: RequestConfirmationInteraction,
 ) {
-  if (interaction.status === "accepted") return "Approved plan";
+  if (interaction.status === "accepted") return t("issueDetail.approvedPlan");
   const reason = interaction.result?.reason?.trim();
-  return reason ? `Requested changes\n\n${reason}` : "Requested changes";
+  return reason ? t("issueDetail.requestedChangesWithReason", { reason }) : t("issueDetail.requestedChanges");
 }
 
 const FEEDBACK_TERMS_URL =
@@ -459,11 +459,11 @@ const JUMP_TO_LATEST_MAX_COMMENT_PAGES = 10;
 function treeControlPreviewErrorCopy(error: unknown): string {
   if (error instanceof ApiError) {
     if (error.status === 403)
-      return "Only board users can preview subtree controls.";
+      return t("issueDetail.onlyBoardUsersCanPreview");
     if (error.status === 409)
-      return "Preview is stale because subtree hold state changed. Retry to refresh.";
+      return t("issueDetail.previewIsStaleBecauseSubtree");
     if (error.status === 422)
-      return "This subtree action is currently invalid for the selected tasks.";
+      return t("issueDetail.thisSubtreeActionIsCurrently");
   }
   return error instanceof Error ? error.message : t("issueDetail.unableToLoadPreview");
 }
@@ -2376,7 +2376,7 @@ const IssueDetailChatTab = memo(function IssueDetailChatTab({
           return next;
         });
         if (classicTaskInterfaceEnabled) {
-          setClassicQueuedDeliveryError("Couldn’t interrupt. Message is still queued.");
+          setClassicQueuedDeliveryError(t("issueDetail.couldnTInterruptMessageIs"));
           return;
         }
         await refreshQueueAfterConflict(error);
@@ -6802,9 +6802,9 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       request: import("../components/IssueRecoveryActionCard").RecoveryReissueRequest,
     ) => {
       if (!issue) throw new Error(t("issueDetail.taskIsNotLoadedYet"));
-      const sourceLabel = issue.identifier ?? "the stalled task";
+      const sourceLabel = issue.identifier ?? t("issueDetail.theStalledTask");
       const descriptionLines = [
-        `Re-issued from ${sourceLabel} on an isolated git worktree after a workspace branch divergence.`,
+        t("issueDetail.reIssuedFromSourcelabelOn", { sourceLabel }),
         "",
         `- Base ref (live branch): \`${request.baseRef}\``,
         ...(request.expectedBranch
@@ -6838,8 +6838,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title: t("issueDetail.isolatedReIssueCreated"),
         body: created.identifier
-          ? `${created.identifier} will run on a fresh isolated workspace.`
-          : "A fresh isolated re-issue was created.",
+          ? t("issueDetail.identifierWillRunOnA", { identifier: created.identifier })
+          : t("issueDetail.aFreshIsolatedReIssue"),
         tone: "success",
       });
       if (created.identifier) {
@@ -7018,7 +7018,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     const badges = new Map<string, string>();
     for (const child of childIssues) {
       if (!heldIssueIds.has(child.id)) continue;
-      badges.set(child.id, t("common.paused"));
+      // Stable badge code; the list renders it with t("common.paused").
+      badges.set(child.id, "paused");
     }
     return badges;
   }, [childIssues, heldIssueIds]);
@@ -7125,7 +7126,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
   const previewAffectedAgentCount =
     treeControlPreview?.totals.affectedAgents ?? 0;
   const reopenComposerHint = closedIsolatedWorkspaceReopenPending
-    ? "This issue's isolated workspace was archived. Your next comment or resume reopens it and rebuilds the worktree."
+    ? t("issueDetail.thisIssueSIsolatedWorkspace")
     : null;
   const composerHint = activePauseHold ? null : reopenComposerHint;
   const queuedCommentReason: "hold" | "active_run" | "other" = activePauseHold
@@ -7312,7 +7313,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
               <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
             </span>
-            Live
+            {t("issueDetail.live")}
           </Badge>
         )}
 
@@ -7334,7 +7335,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
             title={t("issueDetail.thisTaskIsAGenerated")}
           >
             <ScanEye className="h-3 w-3" />
-            Watchdog
+            {t("issueDetail.watchdog")}
           </Badge>
         ) : null}
 
@@ -7371,7 +7372,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
             title={t("issueDetail.blockedByParkedWorkAt")}
           >
             <Flag className="h-3 w-3" />
-            Blocked by parked work
+            {t("issueDetail.blockedByParkedWork")}
           </Badge>
         ) : null}
 
@@ -7557,7 +7558,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                       }}
                     >
                       <Plus className="h-3 w-3" />
-                      Add subtask
+                      {t("issueDetail.addSubtask")}
                     </button>
                     <button
                       className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-xs hover:bg-accent/50"
@@ -7819,7 +7820,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
               )}
             >
               <EyeOff className="h-4 w-4 shrink-0" />
-              This task is hidden
+              {t("issueDetail.thisTaskIsHidden")}
             </div>
           )}
           {treeControlWakeWarning ? (
@@ -7888,7 +7889,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                 className="shrink-0 shadow-none"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
-                New Sub-task
+                {t("issueDetail.newSubTask")}
               </Button>
             </div>
           )}
@@ -8034,7 +8035,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="text-sm font-medium text-muted-foreground">
-                      Artifacts
+                      {t("issueDetail.artifacts")}
                     </h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -8074,7 +8075,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
               >
                 <TabsTrigger value="chat" className="gap-1.5">
                   <MessageSquare className="h-3.5 w-3.5" />
-                  Chat
+                  {t("issueDetail.chat")}
                 </TabsTrigger>
                 <TabsTrigger value="activity" className="gap-1.5">
                   <ActivityIcon className="h-3.5 w-3.5" />
@@ -8082,7 +8083,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                 </TabsTrigger>
                 <TabsTrigger value="related-work" className="gap-1.5">
                   <ListTree className="h-3.5 w-3.5" />
-                  Related work
+                  {t("issueDetail.relatedWork")}
                 </TabsTrigger>
                 {issuePluginTabItems.map((item) => (
                   <TabsTrigger key={item.value} value={item.value}>
@@ -8111,24 +8112,24 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
             >
               {resolvedDetailTab === "chat" ? (
                 <WorkspaceBaseRefRecoveryProvider issue={issue} agentMap={agentMap} onRepaired={() => { invalidateIssueDetail(); invalidateIssueCollections(); }}
-                  baseRefUnavailableReason={!canManageBoardRuntime ? "You don’t have permission to repair this task’s workspace." : null}
-                  unavailableReason={!canResolveBoardRecoveryAction ? "You don’t have permission to retry this task."
-                    : treeControlStateError ? "Couldn’t check whether this task is paused. Refresh to try again."
-                    : activePauseHold ? "Resume the task before retrying."
-                    : issue.project?.pausedAt ? "Resume the project before retrying."
-                    : interactions.some(i => i.status === "pending") ? "Respond to the pending question or confirmation before retrying." : null}>
+                  baseRefUnavailableReason={!canManageBoardRuntime ? t("issueDetail.youDonTHavePermission") : null}
+                  unavailableReason={!canResolveBoardRecoveryAction ? t("issueDetail.youDonTHavePermission2")
+                    : treeControlStateError ? t("issueDetail.couldnTCheckWhetherThis")
+                    : activePauseHold ? t("issueDetail.resumeTheTaskBeforeRetrying")
+                    : issue.project?.pausedAt ? t("issueDetail.resumeTheProjectBeforeRetrying")
+                    : interactions.some(i => i.status === "pending") ? t("issueDetail.respondToThePendingQuestion") : null}>
                 <DispositionRecoveryProvider value={{
                   issue,
                   agentMap,
                   hasPendingInteraction: interactions.some((interaction) => interaction.status === "pending"),
                   unavailableReason: boardAccess && !canResolveBoardRecoveryAction
-                    ? "You don’t have permission to retry this recovery action."
+                    ? t("issueDetail.youDonTHavePermission3")
                     : treeControlStateError
-                    ? "Couldn’t check whether this task is paused. Refresh to try again."
+                    ? t("issueDetail.couldnTCheckWhetherThis")
                     : activePauseHold
-                      ? "The task is paused. Resume it before retrying."
+                      ? t("issueDetail.theTaskIsPausedResume")
                       : issue.project?.pausedAt
-                        ? "The project is paused. Resume it before retrying."
+                        ? t("issueDetail.theProjectIsPausedResume")
                         : null,
                   onRetry: (actionId) => retryDispositionRecovery.mutateAsync(actionId).then(() => undefined),
                 }}>
@@ -8288,7 +8289,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                     } : undefined,
                     resumeHref: !activePauseHold.isRoot ? createIssueDetailPath(activePauseHoldRoot?.identifier ?? activePauseHold.rootIssueId) : undefined,
                   } : null}
-                  composerDisabledReason={issue.conversationAgentId && !instanceExperimentalSettings?.enableAgentChat ? "Agent Chat is disabled in Experimental settings." : treeControlStateError ? "Couldn’t check whether this task is paused. Refresh to try again." : null}
+                  composerDisabledReason={issue.conversationAgentId && !instanceExperimentalSettings?.enableAgentChat ? t("issueDetail.agentChatIsDisabledIn") : treeControlStateError ? t("issueDetail.couldnTCheckWhetherThis") : null}
                   composerHint={composerHint}
                   queuedCommentReason={queuedCommentReason}
                   onVote={handleCommentVote}
@@ -8598,7 +8599,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                   <SheetHeader>
                     <SheetTitle className="text-sm">
                       {documentDeepLink?.documentKey === "plan"
-                        ? "Plan"
+                        ? t("issueDetail.plan")
                         : t("common.properties")}
                     </SheetTitle>
                   </SheetHeader>

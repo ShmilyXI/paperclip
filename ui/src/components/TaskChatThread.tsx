@@ -519,7 +519,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
     showComposer = true,
     composerPause,
     composerDisabledReason,
-    emptyMessage = "No messages yet.",
+    emptyMessage = t("taskChatThread.noMessagesYet"),
     companyId,
     linkedRuns,
     liveRuns,
@@ -1659,24 +1659,25 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           (source.status === "timed_out"
             ? "native_runner_timed_out"
             : "native_runner_process_exited");
-        const label =
+        const labelKey =
           code === "native_provider_runtime_missing" && source.status === "failed"
-            ? t("taskChatThread.runtimeMissing")
+            ? "taskChatThread.runtimeMissing"
             : code === "native_provider_model_rejected" && source.status === "failed"
-            ? t("taskChatThread.modelUnavailable")
+            ? "taskChatThread.modelUnavailable"
             : code === "native_provider_approval_required" && source.status === "failed"
-            ? t("taskChatThread.approvalRequired")
+            ? "taskChatThread.approvalRequired"
             : code === "native_provider_usage_limit" && source.status === "failed"
-            ? t("taskChatThread.usageLimitReached")
+            ? "taskChatThread.usageLimitReached"
             : source.status === "cancelled"
-              ? t("taskChatThread.runCancelled")
+              ? "taskChatThread.runCancelled"
               : source.status === "interrupted"
-                ? t("taskChatThread.runInterrupted")
+                ? "taskChatThread.runInterrupted"
                 : source.status === "timed_out"
-                  ? t("taskChatThread.runTimedOut")
-                  : t("taskChatThread.runFailed");
+                  ? "taskChatThread.runTimedOut"
+                  : "taskChatThread.runFailed";
+        const label = t(labelKey);
         const responseBoundary = sourceHasNativeResponse
-          ? " after returning a final response"
+          ? t("taskChatThread.responseBoundaryAfterFinalResponse")
           : "";
         const detail =
           source.status === "cancelled"
@@ -1715,6 +1716,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             variant: "interrupted",
             tone: source.status === "cancelled" ? "neutral" : "error",
             label,
+            labelKey,
             detail,
             retryable: code !== "native_session_cleanup_quarantined",
             ...(credentialAccess ? { credentialAccess, retryable: false } : {}),
@@ -1768,6 +1770,15 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             : code.startsWith("workspace_git_scan_")
             ? t("taskChatThread.workspaceSetupFailedBeforeThe", { retryDetail })
             : t("taskChatThread.theRunFailedCodeRetrydetail", { code, retryDetail });
+        const labelKey = branchUnavailable
+          ? "taskChatThread.startingBranchUnavailable"
+          : restoreFailed
+            ? "taskChatThread.workspaceRestoreFailed"
+            : aiRequest?.status === "pending"
+              ? "taskChatThread.aiConnectionNeeded"
+              : source.status === "cancelled"
+                ? (meta?.startedAt ? "taskChatThread.stopped" : "taskChatThread.couldnTStart")
+                : "taskChatThread.runFailed";
         const id = `${source.id}:failure`;
         if (!historical && (!props.interruption || credentialAccess)) entriesWithFailures.push({
           ms: toMs(meta?.finishedAt ?? meta?.startedAt ?? meta?.createdAt),
@@ -1777,7 +1788,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "interrupted",
-            label: branchUnavailable ? t("taskChatThread.startingBranchUnavailable") : restoreFailed ? t("taskChatThread.workspaceRestoreFailed") : aiRequest?.status === "pending" ? "AI connection needed" : source.status === "cancelled" ? (meta?.startedAt ? t("taskChatThread.stopped") : t("taskChatThread.couldnTStart")) : t("taskChatThread.runFailed"),
+            label: t(labelKey),
+            labelKey,
             runId: source.status === "cancelled" ? undefined : source.id,
             ...(branchUnavailable || aiRequest?.status === "pending" ? { retryable: false } : {}),
             ...(restoreFailed ? {
@@ -3235,7 +3247,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                           onEdit={beginQueuedEdit}
                           onReorder={async (orderedCommentIds, revision) => {
                             if (!onReorderQueuedComments)
-                              throw new Error("Queue reordering is unavailable.");
+                              throw new Error(t("taskChatThread.queueReorderingIsUnavailable"));
                             await onReorderQueuedComments(
                               orderedCommentIds,
                               revision,
@@ -3243,7 +3255,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                           }}
                           onSteer={async (commentId, revision) => {
                             if (!onSteerQueuedComment)
-                              throw new Error("Steering is unavailable.");
+                              throw new Error(t("taskChatThread.steeringIsUnavailable"));
                             await onSteerQueuedComment(commentId, revision);
                           }}
                           onInterrupt={
@@ -3258,12 +3270,12 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                           onDiscard={async (commentId, revision) => {
                             if (commentId.startsWith("optimistic-")) {
                               if (!onCancelQueued)
-                                throw new Error("Discard is unavailable.");
+                                throw new Error(t("taskChatThread.discardIsUnavailable"));
                               onCancelQueued(commentId);
                               return;
                             }
                             if (!onDiscardQueuedComment)
-                              throw new Error("Discard is unavailable.");
+                              throw new Error(t("taskChatThread.discardIsUnavailable"));
                             await onDiscardQueuedComment(commentId, revision);
                             if (queuedEdit?.commentId === commentId)
                               setQueuedEdit(null);

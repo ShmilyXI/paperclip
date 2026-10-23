@@ -45,7 +45,7 @@ function humanizeKey(raw: string): string {
 function draftSummary(draft: McpJsonImportDraft): string {
   const keyCount = draft.credentialFields.length || draft.credentialRefs.length;
   const where = draft.transport === "local_stdio" ? t("pasteConfigTab.runsInYourWorkspace") : t("pasteConfigTab.connectsOverTheWeb");
-  if (keyCount === 0) return `${where}  ·  no keys needed`;
+  if (keyCount === 0) return t("pasteConfigTab.whereNoKeysNeeded", { where });
   return `${where}  ·  needs ${keyCount} ${keyCount === 1 ? "key" : "keys"}`;
 }
 
@@ -174,7 +174,7 @@ export function PasteConfigTab({ companyId }: { companyId: string }) {
         if (result.auth.manualClientRequired) {
           setOAuthPhase("error");
           setOAuthError(
-            "This server requires OAuth client details from its provider settings. Continue in setup to add them.",
+            t("pasteConfigTab.thisServerRequiresOauthClientDetails"),
           );
           return;
         }
@@ -221,7 +221,7 @@ export function PasteConfigTab({ companyId }: { companyId: string }) {
       JSON.parse(trimmed);
       return null;
     } catch {
-      return "That doesn't look like valid JSON yet — paste the whole snippet, including the outer braces.";
+      return t("pasteConfigTab.thatDoesNotLookLikeValidJson");
     }
   }, [draftText]);
 
@@ -261,7 +261,7 @@ export function PasteConfigTab({ companyId }: { companyId: string }) {
         <McpConfigHelpDialog />
       </div>
       <p className="text-xs text-muted-foreground">
-        Just a URL?{" "}
+        {t("pasteConfigTab.justAUrl")}{" "}
         <Link to="/apps" className="text-primary hover:underline">
           {t("pasteConfigTab.browsePlannedAppConnections")}
         </Link>{" "}
@@ -314,7 +314,7 @@ export function PasteConfigTab({ companyId }: { companyId: string }) {
           <div className="space-y-3">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-              We found {drafts.length} {drafts.length === 1 ? "app" : "apps"} in that config
+              {t("pasteConfigTab.weFoundAppsInThatConfig", { count: drafts.length })}
             </h3>
             {drafts.map((draft, index) => {
               const url = draftConnectUrl(draft);
@@ -402,7 +402,7 @@ function DraftCard({
         {onCheck ? (
           <Button size="sm" className="shrink-0" onClick={onCheck} disabled={checking || !canCheck}>
             {checking ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : null}
-            Check actions
+            {t("pasteConfigTab.checkActions")}
           </Button>
         ) : null}
       </div>
@@ -489,7 +489,7 @@ function CatalogReview({
         <div>
           <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
             <ShieldCheck className="h-4 w-4 text-emerald-600" />
-            Review actions for {result.application.name}
+            {t("pasteConfigTab.reviewActionsFor", { name: result.application.name })}
           </h3>
           <p className="mt-1 text-xs text-muted-foreground">
             {t("pasteConfigTab.healthAndCatalogChecksPassed")}
@@ -517,7 +517,7 @@ function CatalogReview({
         askFirstLevels={askFirstLevels}
       />
       {activatedName ? (
-        <p className="text-xs font-medium text-emerald-700">{activatedName} is active for all agents.</p>
+        <p className="text-xs font-medium text-emerald-700">{t("pasteConfigTab.isActiveForAllAgents", { name: activatedName })}</p>
       ) : null}
     </div>
   );

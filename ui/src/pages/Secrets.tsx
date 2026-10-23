@@ -263,9 +263,9 @@ function isAwsDiscoveryAccessDenied(error: unknown): boolean {
 }
 
 function readableErrorMessage(error: unknown): string {
-  if (error instanceof ApiError) return error.message || `Request failed: ${error.status}`;
+  if (error instanceof ApiError) return error.message || t("secrets.requestFailed", { status: error.status });
   if (error instanceof Error) return error.message;
-  return "Unexpected error";
+  return t("common.unexpectedError");
 }
 
 function providerVaultFormFromConfig(config: CompanySecretProviderConfig): ProviderVaultForm {
@@ -351,7 +351,7 @@ function modeLabel(managedMode: SecretManagedMode) {
 
 function modeDescription(managedMode: SecretManagedMode, canWriteExternalValue = false) {
   if (managedMode === "paperclip_managed") {
-    return "Paperclip owns create and rotation writes for this provider secret.";
+    return t("secrets.paperclipOwnsCreateAndRotationWrites");
   }
   return canWriteExternalValue
     ? t("secrets.paperclipResolvesThisProviderReference")
@@ -472,12 +472,12 @@ export function getCreateProviderBlockReason(
   health: SecretProviderHealthResponse | null,
   providerConfig?: CompanySecretProviderConfig | null,
 ) {
-  if (!provider) return "Select a provider.";
+  if (!provider) return t("secrets.selectAProvider");
   if (mode === "managed" && provider.supportsManagedValues === false) {
-    return `${provider.label} does not support Paperclip-managed secret values.`;
+    return t("secrets.doesNotSupportPaperclipManagedSecretValues", { provider: provider.label });
   }
   if (mode === "external" && provider.supportsExternalReferences === false) {
-    return `${provider.label} does not support linked external references.`;
+    return t("secrets.doesNotSupportLinkedExternalReferences", { provider: provider.label });
   }
   const selectedProviderConfigBlockReason = providerConfig?.provider === provider.id
     ? getProviderConfigBlockReason(providerConfig)
@@ -488,15 +488,15 @@ export function getCreateProviderBlockReason(
     if (selectedProviderConfigReady) return null;
     if (selectedProviderConfigBlockReason) return selectedProviderConfigBlockReason;
     const healthEntry = healthEntryForProvider(health, provider.id);
-    const deploymentMessage = `Deployment default ${provider.label} is not configured.`;
-    const nextStep = " Select a ready provider vault or configure the deployment default.";
+    const deploymentMessage = t("secrets.deploymentDefaultProviderIsNotConfigured", { provider: provider.label });
+    const nextStep = t("secrets.selectAReadyProviderVaultOrConfigure");
     return healthEntry?.message
       ? `${deploymentMessage}${nextStep} ${healthEntry.message}`
       : `${deploymentMessage}${nextStep}`;
   }
   const healthEntry = healthEntryForProvider(health, provider.id);
   if (healthEntry?.status === "error") {
-    return `${provider.label} health check failed: ${healthEntry.message}`;
+    return t("secrets.healthCheckFailed", { provider: provider.label, message: healthEntry.message });
   }
   return null;
 }
@@ -512,7 +512,7 @@ function providerHealthText(
     providerConfig?.provider === provider.id &&
     !getProviderConfigBlockReason(providerConfig)
   ) {
-    return `Using selected provider vault. Deployment default ${provider.label} is not configured.`;
+    return t("secrets.usingSelectedProviderVaultDeploymentDefaultNotConfigured", { provider: provider.label });
   }
   const entry = healthEntryForProvider(health, provider.id);
   if (!entry) return null;
@@ -529,8 +529,8 @@ export function getProviderConfigBlockReason(
   config: CompanySecretProviderConfig | null | undefined,
 ) {
   if (!config) return null;
-  if (config.status === "disabled") return "This provider vault is disabled.";
-  if (config.status === "coming_soon") return "This provider vault is saved as draft metadata only.";
+  if (config.status === "disabled") return t("secrets.thisProviderVaultIsDisabled");
+  if (config.status === "coming_soon") return t("secrets.thisProviderVaultIsSavedAsDraftMetadataOnly");
   if (config.healthStatus === "error") {
     return config.healthMessage ?? t("secrets.thisProviderVaultHealthCheck");
   }
@@ -1523,7 +1523,7 @@ export function Secrets() {
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label={`Actions for ${name}`}
+            aria-label={t("secrets.actionsFor", { name })}
             onClick={(event) => event.stopPropagation()}
           >
             <MoreHorizontal className="h-4 w-4" />
@@ -1992,8 +1992,8 @@ export function Secrets() {
                   <div className="mb-3">
                     <div className="text-sm font-medium text-foreground">{t("secrets.searchResults")}</div>
                     <div className="text-xs text-muted-foreground">
-                      {filteredRows.length} {filteredRows.length === 1 ? "match" : "matches"} across all
-                      folders{folderPath ? ` · searching everywhere, not just ${folderPath}` : ""}
+                      {t("secrets.matchCountAcrossAllFolders", { count: filteredRows.length })}
+                      {folderPath ? t("secrets.searchingEverywhereNotJust", { folderPath }) : ""}
                     </div>
                   </div>
                 ) : null}
@@ -2009,7 +2009,7 @@ export function Secrets() {
                     <EmptyState
                       icon={FolderOpen}
                       message={t("secrets.noSecretsInThisFolder")}
-                      action="New secret here"
+                      action={t("secrets.newSecretHere")}
                       onAction={openCreateSecret}
                     />
                   ) : (
@@ -2107,7 +2107,7 @@ export function Secrets() {
                             {row.kind === "company" ? (
                               <span className="truncate text-muted-foreground">
                                 <span className="font-mono text-foreground">v{row.secret.latestVersion}</span>
-                                <span> · {row.secret.managedMode === "external_reference" ? "linked" : "managed"}</span>
+                                <span> · {row.secret.managedMode === "external_reference" ? t("secrets.linked") : t("secrets.managed")}</span>
                               </span>
                             ) : (
                               <CoverageInline companyId={selectedCompanyId} definitionId={row.definition.id} compact />
@@ -2180,13 +2180,13 @@ export function Secrets() {
                             {row.kind === "company" ? (
                               <>
                                 v{row.secret.latestVersion} ·{" "}
-                                {row.secret.managedMode === "external_reference" ? "linked" : "managed"}
+                                {row.secret.managedMode === "external_reference" ? t("secrets.linked") : t("secrets.managed")}
                               </>
                             ) : (
-                              "Member-owned values"
+                              t("secrets.memberOwnedValues")
                             )}
                           </span>
-                          <span>Updated {formatRelative(row.kind === "company" ? row.secret.updatedAt : row.definition.updatedAt)}</span>
+                          <span>{t("common.updated")} {formatRelative(row.kind === "company" ? row.secret.updatedAt : row.definition.updatedAt)}</span>
                         </div>
                       </div>
                     );
@@ -2294,7 +2294,7 @@ export function Secrets() {
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" aria-label={`More actions for ${selectedSecret.name}`}>
+                    <Button variant="outline" size="sm" aria-label={t("secrets.moreActionsFor", { name: selectedSecret.name })}>
                       <MoreHorizontal className="mr-1 h-3.5 w-3.5" /> {t("common.more")}
                     </Button>
                   </DropdownMenuTrigger>
@@ -2428,7 +2428,7 @@ export function Secrets() {
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" aria-label={`More actions for ${selectedDefinition.name}`}>
+                    <Button variant="outline" size="sm" aria-label={t("secrets.moreActionsFor", { name: selectedDefinition.name })}>
                       <MoreHorizontal className="mr-1 h-3.5 w-3.5" /> {t("common.more")}
                     </Button>
                   </DropdownMenuTrigger>
@@ -2769,7 +2769,7 @@ export function Secrets() {
                   setCreateKeyDirty(true);
                   setCreateForm((current) => ({ ...current, key: event.target.value }));
                 }}
-                placeholder={secretValueProvider === "user" ? "PERSONAL_GH_TOKEN" : "auto from name"}
+                placeholder={secretValueProvider === "user" ? "PERSONAL_GH_TOKEN" : t("secrets.autoFromName")}
                 disabled={Boolean(editingDefinition)}
                 className={cn(
                   "font-mono text-sm",
@@ -2837,9 +2837,9 @@ export function Secrets() {
                         {provider.label}
                         {provider.configured === false &&
                         !getSelectableProviderConfig(providerConfigs, provider.id)
-                          ? " (deployment default missing)"
+                          ? t("secrets.deploymentDefaultMissing")
                           : provider.requiresExternalRef
-                            ? " (external only)"
+                            ? t("secrets.externalOnly")
                             : ""}
                       </option>
                     ))}
@@ -2974,7 +2974,7 @@ export function Secrets() {
                   onChange={(event) =>
                     setVaultForm((current) => ({ ...current, displayName: event.target.value }))
                   }
-                  placeholder="Production local vault"
+                  placeholder={t("secrets.productionLocalVault")}
                 />
               </div>
               <div>
@@ -3961,7 +3961,7 @@ function AwsProviderVaultDiscoveryError({
         <div className="min-w-0 flex-1 space-y-2">
           <div>
             <p className="font-medium">
-              {isAccessDenied ? "AWS discovery needs ListSecrets permission" : "AWS discovery failed"}
+              {isAccessDenied ? t("secrets.awsDiscoveryNeedsListsecretsPermission") : t("secrets.awsDiscoveryFailed")}
             </p>
             <p className="mt-1 leading-relaxed text-destructive/85">
               {isAccessDenied
@@ -4056,7 +4056,7 @@ function SecretCreateError({
         <div className="min-w-0 flex-1 space-y-2">
           <div>
             <p className="font-medium">
-              {isAccessDenied ? "AWS secret creation needs CreateSecret permission" : "AWS secret creation failed"}
+              {isAccessDenied ? t("secrets.awsSecretCreationNeedsCreatesecretPermission") : t("secrets.awsSecretCreationFailed")}
             </p>
             <p className="mt-1 leading-relaxed text-destructive/85">
               {details?.actionableMessage ?? message}
@@ -4444,7 +4444,7 @@ function AgentAccessSection({
       const adapterConfig = { ...((detail.adapterConfig ?? {}) as Record<string, unknown>) };
       const env = { ...((adapterConfig.env ?? {}) as Record<string, unknown>) };
       if (env[key] !== undefined) {
-        throw new Error(`${detail.name} already has an env var named ${key}.`);
+        throw new Error(t("secrets.alreadyHasAnEnvVarNamed", { name: detail.name, key }));
       }
       env[key] =
         reference.kind === "company"
@@ -4544,7 +4544,7 @@ function AgentAccessSection({
                     variant="ghost"
                     size="sm"
                     className="h-6 w-6 shrink-0 p-0 text-muted-foreground"
-                    aria-label={`Remove access for ${agent.name}`}
+                    aria-label={t("secrets.removeAccessFor", { name: agent.name })}
                     disabled={revokeMutation.isPending}
                     onClick={() => revokeMutation.mutate({ agentId: agent.id })}
                   >

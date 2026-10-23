@@ -37,7 +37,7 @@ export function OutputRow({ item, creatorName }: OutputRowProps) {
             item.degraded ? "text-destructive" : "text-muted-foreground",
           )}
         >
-          {item.degraded ? "File details unavailable" : metaBits.join(" · ")}
+          {item.degraded ? t("outputRow.fileDetailsUnavailable") : metaBits.join(" · ")}
         </p>
       </div>
       {meta ? (

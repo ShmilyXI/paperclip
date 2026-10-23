@@ -613,7 +613,7 @@ export function RoutineDetail() {
         title:
           response.secretMaterials.length === 1
             ? t("routineDetail.webhookTriggerRestored")
-            : `${response.secretMaterials.length} webhook triggers restored`,
+            : t("routineDetail.webhookTriggersRestored", { count: response.secretMaterials.length }),
         entries: response.secretMaterials.map((recreated) => ({
           webhookUrl: recreated.webhookUrl,
           webhookSecret: recreated.webhookSecret,

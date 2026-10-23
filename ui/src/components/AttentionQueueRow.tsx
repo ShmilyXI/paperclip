@@ -283,7 +283,7 @@ export const AttentionQueueRow = memo(function AttentionQueueRow({
                 <CalendarClock className="h-3 w-3" />
                 {decideByLabel(item.decideBy)}
                 {decideByProvenance(item) && (
-                  <span className="text-muted-foreground/80">· set by {decideByProvenance(item)}</span>
+                  <span className="text-muted-foreground/80">{t("attentionQueueRow.setByName", { name: decideByProvenance(item) })}</span>
                 )}
               </span>
             </>
@@ -294,9 +294,9 @@ export const AttentionQueueRow = memo(function AttentionQueueRow({
           {isHidden && snoozedUntil ? (
             <span
               className="text-(length:--text-nano) text-muted-foreground"
-              title={`Reappears ${new Date(snoozedUntil).toLocaleString()}`}
+              title={t("attentionQueueRow.reappearsAt", { time: new Date(snoozedUntil).toLocaleString() })}
             >
-              Reappears {reappearLabel(snoozedUntil)}
+              {t("attentionQueueRow.reappearsIn", { when: reappearLabel(snoozedUntil) })}
             </span>
           ) : (
             <span className="text-(length:--text-nano) text-muted-foreground">{relativeTime(item.activityAt)}</span>
@@ -562,14 +562,14 @@ function CompactDecisionActions({
 }
 
 function decisionLabel(action: CompactDecisionAction): string {
-  if (action === "request_revision") return "sent for revision";
-  if (action === "accept" || action === "approve") return "approved";
-  return "rejected";
+  if (action === "request_revision") return t("attentionQueueRow.sentForRevision");
+  if (action === "accept" || action === "approve") return t("attentionQueueRow.approvedLabel");
+  return t("attentionQueueRow.rejectedLabel");
 }
 
 function compactDecisionSuccessLabel(sourceKind: AttentionItem["sourceKind"], action: CompactDecisionAction): string {
-  if (sourceKind === "approval") return `Approval ${decisionLabel(action)}`;
-  if (sourceKind === "join_request") return `Join request ${decisionLabel(action)}`;
+  if (sourceKind === "approval") return t("attentionQueueRow.approvalDecision", { decision: decisionLabel(action) });
+  if (sourceKind === "join_request") return t("attentionQueueRow.joinRequestDecision", { decision: decisionLabel(action) });
   return action === "accept" ? t("attentionQueueRow.confirmationAccepted") : t("attentionQueueRow.confirmationDeclined");
 }
 
@@ -727,20 +727,20 @@ function SnoozeSubmenu({ onSnooze }: { onSnooze: (snoozedUntil: string) => void 
 function decideByProvenance(item: AttentionItem): string | null {
   const attribution = item.decideByAttribution;
   if (!attribution) return null;
-  if (attribution.type === "agent") return attribution.agentName ?? "an agent";
-  return "you";
+  if (attribution.type === "agent") return attribution.agentName ?? t("decisionCard.anAgent");
+  return t("issueThreadInteractionCard.youMidSentence");
 }
 
 /** Compact "when does this snooze end" label, e.g. `in 2h`, `in 3d`. */
 function reappearLabel(snoozedUntil: string): string {
   const diffMs = new Date(snoozedUntil).getTime() - Date.now();
-  if (!Number.isFinite(diffMs) || diffMs <= 0) return "soon";
+  if (!Number.isFinite(diffMs) || diffMs <= 0) return t("issueRecoveryActionCard.soon");
   const diffMin = Math.round(diffMs / 60000);
-  if (diffMin < 60) return `in ${diffMin}m`;
+  if (diffMin < 60) return t("attentionQueueRow.inMinutes", { n: diffMin });
   const diffHr = Math.round(diffMin / 60);
-  if (diffHr < 24) return `in ${diffHr}h`;
+  if (diffHr < 24) return t("attentionQueueRow.inHours", { n: diffHr });
   const diffDay = Math.round(diffHr / 24);
-  return `in ${diffDay}d`;
+  return t("attentionQueueRow.inDays", { n: diffDay });
 }
 
 /**

@@ -133,7 +133,7 @@ export function TaskChatRichInput({
             ) : (
               <ImagePlus aria-hidden className="h-3.5 w-3.5" />
             )}
-            Attach image
+            {t("taskChatRichInput.attachImage")}
           </Button>
           <span>{t("taskChatRichInput.orDropPasteAnImage")}</span>
         </div>

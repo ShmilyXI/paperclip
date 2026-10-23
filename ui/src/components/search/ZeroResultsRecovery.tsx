@@ -41,9 +41,10 @@ export function ZeroResultsRecovery({
       <div className="space-y-1">
         <div className="text-base font-semibold">{t("zeroResultsRecovery.noResultsWithTheseFilters")}</div>
         <p className="text-sm text-muted-foreground">
-          {unfilteredTotal === 1 ? "1 result matches" : `${unfilteredTotal} results match`}
+          {t("zeroResultsRecovery.resultsMatch", { count: unfilteredTotal })}
           {query ? <> &ldquo;{query}&rdquo;</> : null}, but your{" "}
-          {activeCount === 1 ? "active filter hides" : `${activeCount} active filters hide`} all of them.
+          {t("zeroResultsRecovery.activeFiltersHide", { count: activeCount })}{" "}
+          {t("zeroResultsRecovery.allOfThem")}
         </p>
       </div>
 
@@ -60,13 +61,13 @@ export function ZeroResultsRecovery({
               onClick={() => onChange(clearFilterDimension(filters, suggestion.filter))}
             >
               <span className="min-w-0 truncate">
-                Remove{" "}
+                {t("zeroResultsRecovery.remove")}{" "}
                 <span className="font-medium">
                   {describeLoosenSuggestion(suggestion.filter, suggestion.values, lookups)}
                 </span>
               </span>
               <span className="shrink-0 tabular-nums text-emerald-600 dark:text-emerald-400">
-                +{suggestion.additionalCount} {suggestion.additionalCount === 1 ? "result" : "results"}
+                +{t("zeroResultsRecovery.additionalResults", { count: suggestion.additionalCount })}
               </span>
             </button>
           ))}

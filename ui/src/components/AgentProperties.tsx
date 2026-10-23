@@ -78,7 +78,7 @@ export function AgentProperties({ agent, runtimeState }: AgentPropertiesProps) {
           </PropertyRow>
         )}
         {runtimeState?.lastError && (
-          <PropertyRow label={lastErrorIsActive ? "Last error" : "Last run error"}>
+          <PropertyRow label={lastErrorIsActive ? t("agentProps.lastError") : t("agentProps.lastRunError")}>
             <span
               className={
                 lastErrorIsActive

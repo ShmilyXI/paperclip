@@ -39,21 +39,21 @@ export function useDispositionRecoverySnapshot(metadata: IssueCommentMetadata | 
 
 /** UI affordance only; the server rechecks the current action and all execution gates. */
 export function dispositionRetryUnavailableReason(snapshot: DispositionRecoverySnapshot, context: DispositionRecoveryContextValue | null): string | null {
-  if (!context) return "Open the task to review its current state.";
+  if (!context) return t("dispositionRecoveryNotice.openTheTaskToReview");
   const { issue } = context;
   const action = issue.activeRecoveryAction;
-  if (!action || action.id !== snapshot.actionId || action.status !== "active") return "This recovery notice is no longer active.";
-  if (issue.status !== "blocked") return "The task’s state has changed. Review its current state before retrying.";
-  if (action.kind !== "deliberate_wait_without_target" || action.ownerType !== "board" || action.wakePolicy?.type !== "board_escalation") return "The task’s recovery state has changed. Refresh to see the current action.";
-  if (!snapshot.assigneeAgentId || issue.assigneeAgentId !== snapshot.assigneeAgentId || action.returnOwnerAgentId !== snapshot.assigneeAgentId) return "The assigned agent has changed. Review the task before retrying.";
+  if (!action || action.id !== snapshot.actionId || action.status !== "active") return t("dispositionRecoveryNotice.noticeNoLongerActive");
+  if (issue.status !== "blocked") return t("dispositionRecoveryNotice.taskStateChanged");
+  if (action.kind !== "deliberate_wait_without_target" || action.ownerType !== "board" || action.wakePolicy?.type !== "board_escalation") return t("dispositionRecoveryNotice.recoveryStateChanged");
+  if (!snapshot.assigneeAgentId || issue.assigneeAgentId !== snapshot.assigneeAgentId || action.returnOwnerAgentId !== snapshot.assigneeAgentId) return t("dispositionRecoveryNotice.assignedAgentChanged");
   if (context.unavailableReason) return context.unavailableReason;
-  if (context.hasPendingInteraction) return "Respond to the pending question or confirmation before retrying.";
-  if (issue.executionRunId || issue.checkoutRunId) return "The task already has an active run. Wait for it to finish.";
-  if (issue.executionState?.status === "pending") return "The task is waiting for a review or approval.";
-  if (issue.blockedBy?.some(blocker => blocker.status !== "done" && blocker.status !== "cancelled")) return "Resolve the task’s blockers before retrying.";
+  if (context.hasPendingInteraction) return t("dispositionRecoveryNotice.respondToPending");
+  if (issue.executionRunId || issue.checkoutRunId) return t("dispositionRecoveryNotice.taskHasActiveRun");
+  if (issue.executionState?.status === "pending") return t("dispositionRecoveryNotice.taskWaitingForReview");
+  if (issue.blockedBy?.some(blocker => blocker.status !== "done" && blocker.status !== "cancelled")) return t("dispositionRecoveryNotice.resolveBlockers");
   const agent = context.agentMap?.get(snapshot.assigneeAgentId);
-  if (agent?.status === "paused") return "The assigned agent is paused. Resume the agent before retrying.";
-  if (agent?.status === "terminated") return "The assigned agent is no longer available.";
+  if (agent?.status === "paused") return t("dispositionRecoveryNotice.assignedAgentPaused");
+  if (agent?.status === "terminated") return t("dispositionRecoveryNotice.assignedAgentUnavailable");
   return null;
 }
 
@@ -85,7 +85,7 @@ export function DispositionRecoveryNotice({ snapshot, createdAt, defaultExpanded
   const unavailableId = useId();
   const unavailableReason = dispositionRetryUnavailableReason(snapshot, context);
   const historical = Boolean(context && context.issue.activeRecoveryAction?.id !== snapshot.actionId);
-  const agentName = (snapshot.assigneeAgentId && context?.agentMap?.get(snapshot.assigneeAgentId)?.name) || "the assigned agent";
+  const agentName = (snapshot.assigneeAgentId && context?.agentMap?.get(snapshot.assigneeAgentId)?.name) || t("dispositionRecoveryNotice.theAssignedAgent");
   const HeadingIcon = requested || historical ? Check : TriangleAlert;
 
   async function retry() {
@@ -121,7 +121,7 @@ export function DispositionRecoveryNotice({ snapshot, createdAt, defaultExpanded
             {!historical && <span className="font-medium text-foreground">{t("dispositionRecoveryNotice.retryUnavailable")} </span>}{unavailableReason}
           </p>
         ) : null}
-        {error ? <p role="alert" className="text-sm text-destructive">Couldn’t confirm the retry. {error}</p> : null}
+        {error ? <p role="alert" className="text-sm text-destructive">{t("dispositionRecoveryNotice.couldNotConfirmTheRetry")} {error}</p> : null}
         <div className="flex flex-wrap items-center gap-2">
           {!requested && !historical ? (
             <Button size="xs" variant="outline" disabled={pending || Boolean(unavailableReason)} aria-describedby={unavailableReason ? unavailableId : undefined} onClick={() => void retry()}>
@@ -139,7 +139,7 @@ export function DispositionRecoveryNotice({ snapshot, createdAt, defaultExpanded
           <div id={detailsId} className="flex flex-col gap-3 rounded-lg border border-border bg-muted/20 p-3">
             <dl className="flex flex-col gap-2 text-xs">
               <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">{t("dispositionRecoveryNotice.assignedWhenRecoveryStopped")}</dt><dd>{agentName}</dd></div>
-              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">{t("dispositionRecoveryNotice.automaticAttempts")}</dt><dd className="font-mono">{snapshot.attemptCount} of {snapshot.maxAttempts}</dd></div>
+              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">{t("dispositionRecoveryNotice.automaticAttempts")}</dt><dd className="font-mono">{t("dispositionRecoveryNotice.attemptsOfMax", { used: snapshot.attemptCount, max: snapshot.maxAttempts })}</dd></div>
               <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">{t("dispositionRecoveryNotice.automaticRetriesForThisRecovery")}</dt><dd>{t("dispositionRecoveryNotice.stopped")}</dd></div>
             </dl>
             <p className="text-xs leading-relaxed text-muted-foreground">{t("dispositionRecoveryNotice.recoveryAskedTheAssignedAgent")}</p>

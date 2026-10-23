@@ -92,9 +92,9 @@ export function SavedProviderKeySelect({
     <div className="space-y-2">
       {options.length > 0 && (
         <label className="block space-y-2 text-sm">
-          <span>{kind === "api" ? "API key" : "Subscription"}</span>
+          <span>{kind === "api" ? t("savedProviderKeySelect.apiKey") : t("savedProviderKeySelect.subscription")}</span>
           <select
-            aria-label={kind === "api" ? "Saved API key" : "Saved subscription"}
+            aria-label={kind === "api" ? t("savedProviderKeySelect.savedApiKey") : t("savedProviderKeySelect.savedSubscription")}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             value={value}
             onChange={(event) => onChange(event.target.value)}
@@ -107,8 +107,8 @@ export function SavedProviderKeySelect({
             ))}
             <option value="">
               {kind === "api"
-                ? "Enter a new API key"
-                : "Sign in to another account"}
+                ? t("savedProviderKeySelect.enterANewApiKey")
+                : t("savedProviderKeySelect.signInToAnotherAccount")}
             </option>
           </select>
         </label>
@@ -125,8 +125,7 @@ export function SavedProviderKeySelect({
       )}
       {value && (
         <p className="text-sm text-muted-foreground">
-          Reuse this saved {kind === "api" ? "key" : "subscription"} for this
-          agent.
+          {t("savedProviderKeySelect.reuseThisSavedForAgent", { kind: kind === "api" ? t("savedProviderKeySelect.key") : t("savedProviderKeySelect.subscription") })}
         </p>
       )}
     </div>

@@ -122,7 +122,7 @@ export const ChatComposer = forwardRef<ChatComposerHandle, ChatComposerProps>(fu
     tone = "standard",
     surface = "card",
     autoFocus = false,
-    sendLabel = "Send message",
+    sendLabel = t("chatComposer.sendMessage"),
     onAttachFiles,
     attachments = [],
     attaching = false,

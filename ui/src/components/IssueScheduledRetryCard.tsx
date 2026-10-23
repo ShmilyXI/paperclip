@@ -62,11 +62,11 @@ export function IssueScheduledRetryCard({
   const titleAction = continuation ? t("issueScheduledRetryCard.automaticContinuation") : t("issueScheduledRetryCard.automaticRetry");
   let titleSuffix: string;
   if (relative === "now") {
-    titleSuffix = "due now";
+    titleSuffix = t("issueScheduledRetryCard.dueNow");
   } else if (relative) {
     titleSuffix = relative;
   } else {
-    titleSuffix = "pending schedule";
+    titleSuffix = t("issueScheduledRetryCard.pendingSchedule");
   }
   const title = `${titleAction} ${titleSuffix}`;
 

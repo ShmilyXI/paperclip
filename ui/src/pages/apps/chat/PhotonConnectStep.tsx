@@ -74,9 +74,7 @@ export function PhotonConnectStep({
       </div>
       {repairing && (
         <p className="text-sm text-muted-foreground">
-          Reconnect keeps this project and{" "}
-          {endpoint.photonAllocation === "shared" ? "shared DM allocation" : endpoint.botExternalId ?? "dedicated number"}. Leave the secret blank
-          to reuse the saved connection.
+          {t("photonConnectStep.reconnectKeepsProject", { allocation: endpoint.photonAllocation === "shared" ? t("photonConnectStep.sharedDmAllocation") : endpoint.botExternalId ?? t("photonConnectStep.dedicatedNumber") })}
         </p>
       )}
       <label className="grid gap-2 text-sm font-medium">

@@ -67,8 +67,8 @@ export function OwnSlackAppSetup({ endpoint, stage, disabled, saveDetails, onSav
     const installWindow = window.open("about:blank", "_blank");
     if (installWindow) {
       installWindow.opener = null;
-      installWindow.document.title = "Preparing Slack installation";
-      installWindow.document.body.textContent = "Preparing your Slack installation…";
+      installWindow.document.title = t("ownSlackAppSetup.preparingSlackInstallation");
+      installWindow.document.body.textContent = t("ownSlackAppSetup.preparingYourSlackInstallation");
       pendingWindow.current = installWindow;
     }
     let token = configurationToken.trim();
@@ -146,7 +146,7 @@ export function OwnSlackAppSetup({ endpoint, stage, disabled, saveDetails, onSav
           <ol className="list-decimal space-y-2 pl-5">
             <li>{t("ownSlackAppSetup.inSlackAppSettingsFind")} <strong>{t("ownSlackAppSetup.yourAppConfigurationTokens")}</strong> {t("ownSlackAppSetup.andChoose")} <strong>{t("ownSlackAppSetup.generateToken")}</strong>.</li>
             <li>{t("ownSlackAppSetup.selectTheWorkspaceWhereYou")}</li>
-            <li>{t("ownSlackAppSetup.copyThe")} <strong>Access Token</strong> {t("ownSlackAppSetup.andPasteItBelow")}</li>
+            <li>{t("ownSlackAppSetup.copyThe")} <strong>{t("ownSlackAppSetup.accessToken")}</strong> {t("ownSlackAppSetup.andPasteItBelow")}</li>
           </ol>
           <p className="text-muted-foreground">{t("ownSlackAppSetup.paperclipUsesThisTokenTo")}</p>
         </div>

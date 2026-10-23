@@ -63,7 +63,7 @@ export function SidePanelMobileTabs({ tabs, activeTabId, onActiveTabChange, onCl
           }}
           onCloseAutoFocus={(event) => {
             if (tabs.length !== 0) return;
-            const addButton = headerRef.current?.querySelector<HTMLButtonElement>('[aria-label={t("sidePanelMobileTabs.openANewTab")}]');
+            const addButton = headerRef.current?.querySelector<HTMLButtonElement>('[aria-label="Open a new tab"]');
             if (addButton) { event.preventDefault(); addButton.focus(); }
           }}
         >

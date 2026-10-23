@@ -42,8 +42,8 @@ import { SecretPathName } from "./SecretPathName";
 
 /** Short, non-reversible fingerprint label. Never renders the value. */
 export function fingerprintLabel(fingerprint: string | null, length: number | null): string {
-  const digest = fingerprint ? `sha256:${fingerprint.slice(0, 10)}…` : "no fingerprint";
-  const size = typeof length === "number" ? `${length} ${length === 1 ? "byte" : "bytes"}` : null;
+  const digest = fingerprint ? `sha256:${fingerprint.slice(0, 10)}…` : t("proposalReview.noFingerprint");
+  const size = typeof length === "number" ? t("proposalReview.byteCount", { count: length }) : null;
   return size ? `${digest} · ${size}` : digest;
 }
 
@@ -181,7 +181,7 @@ export function bindingSecretLabel(proposal: SecretProposalView): {
   pending: boolean;
 } {
   if (proposal.secretProposalId) {
-    return { name: proposal.secretProposalName ?? "proposed secret", pending: true };
+    return { name: proposal.secretProposalName ?? t("proposalReview.proposedSecret"), pending: true };
   }
   return { name: proposal.secretName ?? "secret", pending: false };
 }
@@ -189,7 +189,7 @@ export function bindingSecretLabel(proposal: SecretProposalView): {
 function readableError(error: unknown): string {
   if (error instanceof ApiError) return error.message || `Request failed: ${error.status}`;
   if (error instanceof Error) return error.message;
-  return "Something went wrong. Try again.";
+  return t("proposalReview.somethingWentWrongTryAgain");
 }
 
 /* -------------------------------------------------------------------------- */

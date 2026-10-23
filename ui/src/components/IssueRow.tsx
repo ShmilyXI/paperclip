@@ -284,7 +284,7 @@ export function IssueRow({
           refreshed && "task-row-link",
         )}
       >
-        <span className="sr-only">Open {identifier}: {issue.title}</span>
+        <span className="sr-only">{t("issueRow.openIdentifierTitle", { identifier, title: issue.title })}</span>
       </Link>
     );
     return (
@@ -465,7 +465,7 @@ export function IssueRow({
           "absolute inset-0 rounded-lg no-underline text-inherit focus-visible:z-10 focus-visible:outline-none focus-visible:ring-(length:--rad-3) focus-visible:ring-ring",
         )}
       >
-        <span className="sr-only">Open {identifier}: {issue.title}</span>
+        <span className="sr-only">{t("issueRow.openIdentifierTitle", { identifier, title: issue.title })}</span>
       </Link>
       <span className="flex shrink-0 items-center gap-1 pt-px sm:hidden">
         {mobileLeading ?? <StatusIcon status={issue.status} externalConversationState={issue.externalConversationState} blockerAttention={issue.blockerAttention} size="md" className={selectedStatusClass} />}
@@ -612,8 +612,8 @@ function renderRecoveryChip(
         selected ? "!border-muted-foreground !text-muted-foreground" : null,
       )}
       title={detail
-        ? `${label} — ${detail}. Open the source task to act.`
-        : `${label} — open the source task to act.`}
+        ? t("issueRow.labelWithDetailAction", { label, detail })
+        : t("issueRow.labelAction", { label })}
     >
       <Icon className="h-2.5 w-2.5" aria-hidden />
       {label}

@@ -294,7 +294,7 @@ function ActivityRow({
                 {request ? <DetailFact label={t("auditTab.dispatched")} value={request.dispatched === true ? t("common.yes") : t("common.no")} /> : null}
                 {httpStatus !== undefined ? <DetailFact label={t("auditTab.httpStatus")} value={String(httpStatus)} mono /> : null}
                 {contentType ? <DetailFact label={t("auditTab.contentType")} value={contentType} mono /> : null}
-                {responseBytes !== undefined ? <DetailFact label={t("auditTab.responseSize")} value={`${responseBytes} bytes`} /> : null}
+                {responseBytes !== undefined ? <DetailFact label={t("auditTab.responseSize")} value={t("auditTab.bytes", { count: responseBytes })} /> : null}
                 {upstreamRequestId ? <DetailFact label={t("auditTab.upstreamId")} value={upstreamRequestId} mono /> : null}
                 {isRuntimeMcpDeliveryDiagnostic ? (
                   <>

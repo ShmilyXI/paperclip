@@ -35,12 +35,12 @@ export function CostByUserTable({ report }: { report: CostByUserReport }) {
                   <td className="px-4 py-3 text-right tabular-nums">{row.runCount.toLocaleString()}</td>
                   <td className="px-4 py-3 text-right tabular-nums">
                     {formatTokens(row.inputTokens + row.cachedInputTokens)}
-                    {row.cachedInputTokens > 0 && <div className="whitespace-nowrap text-xs text-muted-foreground">{formatTokens(row.cachedInputTokens)} cached</div>}
+                    {row.cachedInputTokens > 0 && <div className="whitespace-nowrap text-xs text-muted-foreground">{t("costByUserTable.cachedTokens", { tokens: formatTokens(row.cachedInputTokens) })}</div>}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">{formatTokens(row.outputTokens)}</td>
                   <td className="py-3 pl-4 text-right tabular-nums">
                     <CostAmount costCents={row.costCents} eventCount={row.eventCount} estimatedEventCount={row.estimatedEventCount} unpricedEventCount={row.unpricedEventCount} />
-                    {row.unpricedEventCount > 0 && <div className="whitespace-nowrap text-xs text-muted-foreground">{row.unpricedEventCount} unpriced {row.unpricedEventCount === 1 ? "charge" : "charges"}</div>}
+                    {row.unpricedEventCount > 0 && <div className="whitespace-nowrap text-xs text-muted-foreground">{t("costByUserTable.unpricedCharges", { count: row.unpricedEventCount })}</div>}
                   </td>
                 </tr>
               ))}

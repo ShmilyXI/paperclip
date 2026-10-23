@@ -116,7 +116,7 @@ function checklistIcon(step: TaskChatProtocolStep) {
 }
 
 function fileCountLabel(files: number): string {
-  return `${files} ${files === 1 ? "file" : "files"} changed`;
+  return t("taskChatTurnStatusIsland.filesChanged", { count: files });
 }
 
 function IslandBody({ model }: { model: TaskChatTurnStatusModel }) {
@@ -132,7 +132,10 @@ function IslandBody({ model }: { model: TaskChatTurnStatusModel }) {
         <span className="flex shrink-0 items-center gap-2">
           {planIcon(plan)}
           <span className="font-mono text-sm tabular-nums" aria-live="polite" aria-atomic="true">
-            Step {plan.currentStepIndex + 1} / {plan.steps.length}
+            {t("taskChatTurnStatusIsland.stepProgress", {
+              current: plan.currentStepIndex + 1,
+              total: plan.steps.length,
+            })}
             <span className="sr-only">: {plan.steps[plan.currentStepIndex]?.label}</span>
           </span>
         </span>
@@ -164,11 +167,14 @@ function islandLabel(model: TaskChatTurnStatusModel): string {
   for (const segment of model.segments) {
     if (segment.kind === "plan") {
       const step = segment.steps[segment.currentStepIndex];
-      parts.push(`Step ${segment.currentStepIndex + 1} of ${segment.steps.length}${step ? `: ${step.label}` : ""}`);
+      parts.push(`${t("taskChatTurnStatusIsland.stepOf", {
+        current: segment.currentStepIndex + 1,
+        total: segment.steps.length,
+      })}${step ? `: ${step.label}` : ""}`);
     } else {
       parts.push(fileCountLabel(segment.files));
-      if (segment.additions != null) parts.push(`${segment.additions} additions`);
-      if (segment.deletions != null) parts.push(`${segment.deletions} deletions`);
+      if (segment.additions != null) parts.push(t("taskChatTurnStatusIsland.additions", { count: segment.additions }));
+      if (segment.deletions != null) parts.push(t("taskChatTurnStatusIsland.deletions", { count: segment.deletions }));
     }
   }
   return parts.join(", ");

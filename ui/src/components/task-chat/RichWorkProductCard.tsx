@@ -144,7 +144,7 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
   const isVideo = isVideoLikeOutput(contentType, stringMeta(metadata, "originalFilename") ?? workProduct.title);
   let Icon: LucideIcon = File;
   let meta: Array<string | null> = [];
-  let action = "Open preview";
+  let action = t("richWorkProductCard.openPreview");
 
   switch (workProduct.type) {
     case "pull_request": {
@@ -154,18 +154,18 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
       const base = stringMeta(metadata, "baseRef", "base", "baseBranch");
       const head = stringMeta(metadata, "headRef", "head", "headBranch", "branch");
       meta = [repository, number ? `#${number.replace(/^#/, "")}` : null, base && head ? `${base} ← ${head}` : null, urlLabel(workProduct.url)];
-      action = "Open on GitHub";
+      action = t("richWorkProductCard.openOnGithub");
       break;
     }
     case "commit":
       Icon = GitCommit;
       meta = [stringMeta(metadata, "shortSha", "sha")?.slice(0, 8) ?? workProduct.externalId?.slice(0, 8) ?? null, stringMeta(metadata, "branch", "branchName"), urlLabel(workProduct.url)];
-      action = "Open on GitHub";
+      action = t("richWorkProductCard.openOnGithub");
       break;
     case "branch":
       Icon = GitBranch;
       meta = [href ? t("richWorkProductCard.branch") : t("richWorkProductCard.branchNoRemoteLink"), stringMeta(metadata, "repository", "repo", "repositoryName"), stringMeta(metadata, "branch", "branchName") ?? workProduct.externalId, urlLabel(workProduct.url)];
-      action = "Open on GitHub";
+      action = t("richWorkProductCard.openOnGithub");
       break;
     case "artifact": {
       Icon = isImage ? Image : isVideo ? Film : File;
@@ -177,17 +177,17 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
     case "document":
       Icon = FileText;
       meta = [t("common.document"), stringMeta(metadata, "revision", "revisionNumber") ? `rev ${stringMeta(metadata, "revision", "revisionNumber")}` : null];
-      action = "Open document";
+      action = t("richWorkProductCard.openDocument");
       break;
     case "preview_url":
       Icon = Globe;
       meta = [urlLabel(workProduct.url)];
-      action = "Open preview";
+      action = t("richWorkProductCard.openPreview");
       break;
     case "runtime_service":
       Icon = Server;
       meta = [stringMeta(metadata, "service", "serviceName") ?? workProduct.provider, stringMeta(metadata, "port") ? `port ${stringMeta(metadata, "port")}` : null];
-      action = "Open service";
+      action = t("richWorkProductCard.openService");
       break;
   }
 
@@ -301,7 +301,7 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
           <button
             type="button"
             onClick={() => openText!(textMetadata!.attachmentId, textMetadata!.originalFilename ?? workProduct.title)}
-            aria-label={`Open in tab: ${workProduct.title}`}
+            aria-label={t("richWorkProductCard.openInTab", { title: workProduct.title })}
             className="inline-flex items-center gap-1 text-xs font-medium text-foreground after:absolute after:inset-0 after:rounded-md focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
           >
             {compact ? null : <span className="hidden @sm:inline">{t("richWorkProductCard.openInTab")}</span>}<FileText aria-hidden className="h-3 w-3" />

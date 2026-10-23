@@ -57,7 +57,7 @@ export function AgentsUsingSkillBadge({
 }) {
   const [open, setOpen] = useState(false);
   const count = skill.usedByAgents.length;
-  const label = `${count} ${count === 1 ? "agent uses" : "agents use"} this skill`;
+  const label = t("agentsUsingSkillDialog.agentsUseThisSkill", { count });
 
   return (
     <>
@@ -233,11 +233,11 @@ export function AgentsUsingSkillDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Agents using {skill.name}</DialogTitle>
+          <DialogTitle>{t("agentsUsingSkillDialog.agentsUsingSkillName", { name: skill.name })}</DialogTitle>
           <DialogDescription>
             {count === 0
               ? t("agentsUsingSkillDialog.noAgentsHaveThisSkill")
-              : `${count} ${count === 1 ? "agent has" : "agents have"} this skill in their desired set.`}
+              : t("agentsUsingSkillDialog.agentsHaveThisSkillInTheirDesiredSet", { count })}
           </DialogDescription>
         </DialogHeader>
 
@@ -440,9 +440,9 @@ function AddAgentPicker({
       value=""
       groups={groups}
       loading={loading}
-      loadingMessage="Loading agents..."
+      loadingMessage={t("agentsUsingSkillDialog.loadingAgents")}
       placeholder={t("agentsUsingSkillDialog.addAgent")}
-      searchPlaceholder="Search agents..."
+      searchPlaceholder={t("agentsUsingSkillDialog.searchAgents")}
       emptyMessage={t("agentsUsingSkillDialog.allEligibleAgentsAlreadyHave")}
       disabled={disabled}
       onValueChange={(_value, option) => {

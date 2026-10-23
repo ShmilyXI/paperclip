@@ -266,7 +266,7 @@ export function ActionsSection({
               ) : (
                 <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
               )}
-              Refresh actions
+              {t("permissionsPanel.refreshActions")}
             </Button>
           </div>
         ) : null}
@@ -298,21 +298,21 @@ export function ActionsSection({
               onChange={(event) => setQuery(event.target.value)}
             />
           </div>
-          <FilterChip label={`All ${readOnly.length + canChange.length}`} active={kindFilter === "all"} onClick={() => setKindFilter("all")} />
-          <FilterChip label={`Read ${readOnly.length}`} active={kindFilter === "read"} onClick={() => setKindFilter("read")} />
-          <FilterChip label={`Write ${canChange.length}`} active={kindFilter === "write"} onClick={() => setKindFilter("write")} />
+          <FilterChip label={t("permissionsPanel.filterAll", { count: readOnly.length + canChange.length })} active={kindFilter === "all"} onClick={() => setKindFilter("all")} />
+          <FilterChip label={t("permissionsPanel.filterRead", { count: readOnly.length })} active={kindFilter === "read"} onClick={() => setKindFilter("read")} />
+          <FilterChip label={t("permissionsPanel.filterWrite", { count: canChange.length })} active={kindFilter === "write"} onClick={() => setKindFilter("write")} />
         </div>
-        <p className="text-xs text-muted-foreground">{visibleCount} matches · sorted A–Z</p>
+        <p className="text-xs text-muted-foreground">{t("permissionsPanel.matchesSortedAz", { count: visibleCount })}</p>
       </div>
 
       {visibleCount === 0 ? (
         <div className="py-6 text-center text-sm text-muted-foreground">
-          No actions match “{query}”. Clear the search to see them all.
+          {t("permissionsPanel.noActionsMatch", { query })}
         </div>
       ) : (
         <div className="space-y-6">
           <ActionGroup
-            title={`Read (${visibleRead.length})`}
+            title={t("permissionsPanel.readGroupTitle", { count: visibleRead.length })}
             actions={visibleRead}
             connectionId={connectionId}
             appName={appName}
@@ -327,7 +327,7 @@ export function ActionsSection({
             }}
           />
           <ActionGroup
-            title={`Write (${visibleWrite.length})`}
+            title={t("permissionsPanel.writeGroupTitle", { count: visibleWrite.length })}
             actions={visibleWrite}
             connectionId={connectionId}
             appName={appName}
@@ -404,9 +404,9 @@ function ActionGroup({
           // connection's writes is one choice rather than one per action;
           // per-row overrides stay underneath.
           <label className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="sr-only">{`Set every action in ${title}`}</span>
+            <span className="sr-only">{t("permissionsPanel.setEveryActionInTitle", { title })}</span>
             <select
-              aria-label={`Set every action in ${title}`}
+              aria-label={t("permissionsPanel.setEveryActionInTitle", { title })}
               value={groupValue}
               disabled={disabled}
               onChange={(event) => {
@@ -419,7 +419,7 @@ function ActionGroup({
             >
               {groupValue === "" ? <option value="">{t("permissionsPanel.mixed")}</option> : null}
               {PERMISSION_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>{`Set all: ${option.label}`}</option>
+                <option key={option.value} value={option.value}>{t("permissionsPanel.setAllOption", { label: option.label })}</option>
               ))}
             </select>
           </label>
@@ -500,7 +500,7 @@ function ActionRow({
                 glance to spot and one click to move. */}
             <span
               className="rounded-full border border-border px-1.5 py-px text-xs font-medium uppercase tracking-wide text-muted-foreground"
-              title={`Paperclip classified this action as ${action.riskLevel}`}
+              title={t("permissionsPanel.paperclipClassifiedThisActionAs", { riskLevel: action.riskLevel })}
             >
               {action.riskLevel}
             </span>
@@ -514,7 +514,7 @@ function ActionRow({
             <TooltipProvider>
               <div
                 role="radiogroup"
-                aria-label={`${title} permission`}
+                aria-label={t("permissionsPanel.titlePermission", { title })}
                 className="inline-flex rounded-md border border-border bg-muted/40 p-0.5"
               >
               {PERMISSION_OPTIONS.map((option) => {
@@ -527,7 +527,7 @@ function ActionRow({
                         type="button"
                         role="radio"
                         aria-checked={selected}
-                        aria-label={`${title}: ${option.label}`}
+                        aria-label={t("permissionsPanel.optionAriaLabel", { title, label: option.label })}
                         disabled={disabled}
                         onClick={() => onSetPermission([action.id], option.value)}
                         className={cn(

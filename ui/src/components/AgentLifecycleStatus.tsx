@@ -8,18 +8,18 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
 const phases = {
-  preparing: ["Preparing agent", "Required resources are being prepared. Work stays queued."],
-  verifying: ["Verifying agent", "The saved execution configuration is being checked. Work stays queued."],
-  pausing: ["Pausing agent", "Waiting for execution and required resources to stop."],
-  resuming: ["Resuming agent", "Required resources are being started. Work stays queued."],
-  terminating: ["Terminating agent", "Stopping execution before resource cleanup."],
-  cleaning_up: ["Cleaning up agent", "Required resources are being removed. Termination is not complete."],
+  preparing: [t("agentLifecycleStatus.preparingAgent"), t("agentLifecycleStatus.requiredResourcesAreBeingPrepared")],
+  verifying: [t("agentLifecycleStatus.verifyingAgent"), t("agentLifecycleStatus.savedExecutionConfigurationIsBeingChecked")],
+  pausing: [t("agentLifecycleStatus.pausingAgent"), t("agentLifecycleStatus.waitingForExecutionAndResourcesToStop")],
+  resuming: [t("agentLifecycleStatus.resumingAgent"), t("agentLifecycleStatus.requiredResourcesAreBeingStarted")],
+  terminating: [t("agentLifecycleStatus.terminatingAgent"), t("agentLifecycleStatus.stoppingExecutionBeforeCleanup")],
+  cleaning_up: [t("agentLifecycleStatus.cleaningUpAgent"), t("agentLifecycleStatus.requiredResourcesAreBeingRemoved")],
 } satisfies Partial<Record<AgentLifecycleState, [string, string]>>;
 
 const failedPhases = {
-  preparing: "Agent preparation failed", verifying: "Agent verification failed",
-  pausing: "Agent pause failed", resuming: "Agent resume failed",
-  terminating: "Agent termination failed", cleaning_up: "Agent cleanup failed",
+  preparing: t("agentLifecycleStatus.agentPreparationFailed"), verifying: t("agentLifecycleStatus.agentVerificationFailed"),
+  pausing: t("agentLifecycleStatus.agentPauseFailed"), resuming: t("agentLifecycleStatus.agentResumeFailed"),
+  terminating: t("agentLifecycleStatus.agentTerminationFailed"), cleaning_up: t("agentLifecycleStatus.agentCleanupFailed"),
 };
 
 function pendingPhase(state?: AgentLifecycleState) {
@@ -62,9 +62,9 @@ export function AgentLifecycleStatus({ agent, onRetry, retryPending, refreshErro
     {phase && agent.lifecycleError && <div className="flex flex-wrap items-center gap-2 text-destructive">
       <span>{agent.lifecycleError}</span>
       <Button variant="outline" size="sm" disabled={retryPending} onClick={onRetry}>
-        {retryPending ? "Retrying…" : "Retry now"}
+        {retryPending ? t("agentLifecycleStatus.retrying") : t("agentLifecycleStatus.retryNow")}
       </Button>
     </div>}
-    {phase && agent.lifecycleError && <p className="text-muted-foreground">Paperclip retries automatically; Retry now checks again immediately.</p>}
+    {phase && agent.lifecycleError && <p className="text-muted-foreground">{t("agentLifecycleStatus.paperclipRetriesAutomatically")}</p>}
   </div>;
 }

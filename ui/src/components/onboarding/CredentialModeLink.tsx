@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "../../lib/utils";
 import type { CredentialMode } from "./ModelSourceTiles";
 import { LINK_LABEL_FADE_IN, LINK_LABEL_FADE_OUT } from "./onboarding-motion";
+import { t } from "@/i18n";
 
 /**
  * The credential-mode switch as a line of text instead of a checkbox — an
@@ -18,8 +19,8 @@ import { LINK_LABEL_FADE_IN, LINK_LABEL_FADE_OUT } from "./onboarding-motion";
  */
 
 const LINK_LABEL: Record<CredentialMode, string> = {
-  subscription: "Use subscription instead",
-  api: "Use API key instead",
+  subscription: t("credentialModeLink.useSubscriptionInstead"),
+  api: t("credentialModeLink.useApiKeyInstead"),
 };
 const NATIVE_MODES: CredentialMode[] = ["subscription", "api"];
 

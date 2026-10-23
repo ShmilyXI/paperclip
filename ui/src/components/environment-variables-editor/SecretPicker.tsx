@@ -177,8 +177,8 @@ export function SecretPicker({
           {
             key: `missing-${secretId}`,
             value: secretId,
-            label: `Missing secret (${secretId.slice(0, 8)}…)`,
-            title: `Missing secret (${secretId})`,
+            label: t("secretPicker.missingSecretTruncated", { id: secretId.slice(0, 8) }),
+            title: t("secretPicker.missingSecret", { id: secretId }),
             missing: true,
             disabled: true,
           },

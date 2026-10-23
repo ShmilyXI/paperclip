@@ -445,8 +445,8 @@ export function WorkTimelineChart({
     const related = layout.connectors.filter((c) => c.sourceRunId === bar.span.runId || c.targetRunId === bar.span.runId);
     if (related.length === 0) return null;
     return related.some((c) => c.dashed)
-      ? "dashed handoff: retry or changes requested"
-      : "solid handoff: delegation or assignment";
+      ? t("workTimelineChart.dashedHandoffRetryOrChanges")
+      : t("workTimelineChart.solidHandoffDelegationOrAssignment");
   };
 
   const showTooltip = (evt: React.MouseEvent, bar: PositionedBar) => {

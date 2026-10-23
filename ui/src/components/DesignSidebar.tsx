@@ -25,7 +25,7 @@ export function DesignSidebar({ onNewTask, recentTasks = [] }: { onNewTask: () =
       <div className="design-sidebar">
         <div className="design-sidebar-brand">
           <SidebarCompanyMenu showChevron={false} />
-          <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="design-sidebar-search" aria-label={t("designSidebar.globalSearch")} onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true, cancelable: true }))}><Search aria-hidden /></Button></TooltipTrigger><TooltipContent side="right">Search tasks, agents, projects</TooltipContent></Tooltip>
+          <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="design-sidebar-search" aria-label={t("designSidebar.globalSearch")} onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true, cancelable: true }))}><Search aria-hidden /></Button></TooltipTrigger><TooltipContent side="right">{t("designSidebar.searchTasksAgentsProjects")}</TooltipContent></Tooltip>
         </div>
         <nav className="design-sidebar-navigation" aria-label={t("designSidebar.mainNavigation")}>
           <div className="design-sidebar-primary">

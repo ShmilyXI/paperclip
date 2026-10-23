@@ -223,7 +223,7 @@ export function parseRunnerGoalCommand(value: string): ParsedRunnerGoalCommand {
     if (extra.length > 0) {
       return {
         matched: true,
-        error: `/goal ${subcommand} does not accept extra arguments.`,
+        error: t("taskChatComposer.goalSubcommandDoesNotAccept", { subcommand }),
       };
     }
     return {
@@ -302,15 +302,15 @@ function AssigneeIdentityAvatar({
 /** v7 per-mode placeholder copy; `{agent}` is the pending assignee's name. */
 function modePlaceholder(mode: IssueWorkMode, agentName: string, mobile: boolean): string {
   if (mobile) {
-    if (mode === "planning") return `Plan with ${agentName}…`;
-    if (mode === "ask") return `Ask ${agentName}…`;
-    return `Message ${agentName}…`;
+    if (mode === "planning") return t("taskChatComposer.planWithAgentname", { agentName });
+    if (mode === "ask") return t("taskChatComposer.askAgentname", { agentName });
+    return t("taskChatComposer.messageAgentname", { agentName });
   }
   switch (mode) {
     case "planning":
-      return `Plan with ${agentName} — shapes the plan doc, no code changes…`;
+      return t("taskChatComposer.planWithAgentnameShapesThe", { agentName });
     case "ask":
-      return `Ask ${agentName} a question — read-only, nothing runs…`;
+      return t("taskChatComposer.askAgentnameAQuestionRead", { agentName });
     default:
       return t("taskChat.messageAgentnameDescribeWhatYou", { agentName });
   }
@@ -642,10 +642,9 @@ export function TaskChatComposer({
     enableReassign && reassignOptions && reassignOptions.length > 0,
   );
   const assigneeValue = creation ? currentAssigneeValue : pendingAssignee ?? suggestedAssigneeValue ?? currentAssigneeValue;
-  const assigneeLabel =
-    reassignOptions?.find((o) => o.id === assigneeValue)?.label ?? t("common.unassigned");
-  const assigneeName =
-    assigneeLabel === "Unassigned" ? "the agent" : assigneeLabel;
+  const assigneeOption = reassignOptions?.find((o) => o.id === assigneeValue);
+  const assigneeLabel = assigneeOption?.label ?? t("common.unassigned");
+  const assigneeName = assigneeOption ? assigneeOption.label : t("taskChatComposer.theAgent");
   const effectivePlaceholder = queuedEdit
     ? t("taskChatComposer.editQueuedMessage")
     : (placeholder ?? modePlaceholder(pendingMode, assigneeName, mobile));
@@ -918,7 +917,7 @@ export function TaskChatComposer({
       ? ({ matched: false } as const)
       : parseRunnerGoalCommand(submittedBody);
     if (goalCommand.matched && conversationMode) {
-      setActionError("Create a separate task for work that needs an ongoing execution goal.");
+      setActionError(t("taskChatComposer.createASeparateTaskFor"));
       return;
     }
     if (goalCommand.matched) {
@@ -927,7 +926,7 @@ export function TaskChatComposer({
         return;
       }
       if (attachmentsRef.current.length > 0) {
-        setActionError("Remove attachments before using /goal.");
+        setActionError(t("taskChatComposer.removeAttachmentsBeforeUsingGoal"));
         return;
       }
       if (!onRunnerGoalCommand) {
@@ -953,7 +952,7 @@ export function TaskChatComposer({
         if (hasReassignment && goalCommand.command.action !== "focus") {
           const reassignment = parseAssigneeValue(assigneeValue);
           if (!reassignment?.assigneeAgentId || !onRunnerGoalReassign) {
-            setActionError("Select an agent before starting a session goal.");
+            setActionError(t("taskChatComposer.selectAnAgentBeforeStarting"));
             return;
           }
           await onRunnerGoalReassign(reassignment);
@@ -1229,7 +1228,7 @@ export function TaskChatComposer({
               ) : null}
               <div ref={setTakeoverControlsSlot} className="flex shrink-0 items-center" data-testid="task-chat-composer-takeover-controls-slot" />
               <Button type="button" size="icon-xs" variant="ghost" className="text-muted-foreground hover:text-foreground"
-                aria-label={`Dismiss ${takeover.label}`} disabled={takeoverBusy} onClick={takeover.onDismiss}>
+                aria-label={t("taskChatComposer.dismissLabel", { label: takeover.label })} disabled={takeoverBusy} onClick={takeover.onDismiss}>
                 <X aria-hidden />
               </Button>
             </div>
@@ -1434,7 +1433,7 @@ export function TaskChatComposer({
                     </AttachmentContent>
                     <AttachmentActions>
                       <AttachmentAction
-                        aria-label={`Remove ${attachment.name}`}
+                        aria-label={t("taskChatComposer.removeName", { name: attachment.name })}
                         disabled={!!uncertainSubmission}
                         onClick={() =>
                           setAttachments((prev) =>
@@ -1517,9 +1516,9 @@ export function TaskChatComposer({
                 value={assigneeValue}
                 options={reassignOptions ?? []}
                 placeholder={t("common.assignee")}
-                mobileTitle="Select assignee"
-                noneLabel="No assignee"
-                searchPlaceholder="Search assignees…"
+                mobileTitle={t("taskChatComposer.selectAssignee")}
+                noneLabel={t("taskChatComposer.noAssignee")}
+                searchPlaceholder={t("taskChatComposer.searchAssignees")}
                 emptyMessage={t("taskChat.noMatches")}
                 onChange={updatePendingAssignee}
                 disabled={disabled}

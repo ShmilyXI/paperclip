@@ -87,8 +87,8 @@ export function buildMonitorSurfaceCopy(
     return {
       bannerTitle: t("issueMonitorBanner.waitingForWorkspace"),
       stripTitle: t("issueMonitorBanner.waitingForWorkspace"),
-      bannerMeta: ["Another task is using this workspace. Work starts automatically when it is available."],
-      stripMeta: ["Work starts automatically when the workspace is available."],
+      bannerMeta: [t("issueMonitorBanner.anotherTaskIsUsingThis")],
+      stripMeta: [t("issueMonitorBanner.workStartsAutomaticallyWhenThe")],
       tone: "info",
       workspaceWait: true,
     };
@@ -100,8 +100,8 @@ export function buildMonitorSurfaceCopy(
     return {
       bannerTitle: t("issueMonitorBanner.pullRequestReviewRequested"),
       stripTitle: t("issueMonitorBanner.pullRequestReviewRequested"),
-      bannerMeta: [`Next check ${eta} · ${absolute} (your time)`],
-      stripMeta: [`Next check ${eta} · ${absolute}`],
+      bannerMeta: [t("issueMonitorBanner.nextCheckEtaAbsoluteYour", { eta, absolute })],
+      stripMeta: [t("issueMonitorBanner.nextCheckEtaAbsolute", { eta, absolute })],
       tone: derived.state === "overdue" ? "warning" : "info",
       pullRequestReview: true,
     };
@@ -110,8 +110,8 @@ export function buildMonitorSurfaceCopy(
     return {
       bannerTitle: t("issueMonitorBanner.poolExhausted"),
       stripTitle: t("issueMonitorBanner.poolExhausted"),
-      bannerMeta: [`Usage recheck ${eta} · ${absolute} (your time)`, "Tasks with a selected account keep it while waiting. Work resumes when usage permits."],
-      stripMeta: [`Usage recheck ${eta} · ${absolute}`, "Tasks with a selected account keep it while waiting."],
+      bannerMeta: [t("issueMonitorBanner.usageRecheckEtaAbsoluteYour", { eta, absolute }), t("issueMonitorBanner.tasksWithASelectedAccount")],
+      stripMeta: [t("issueMonitorBanner.usageRecheckEtaAbsolute", { eta, absolute }), t("issueMonitorBanner.tasksWithASelectedAccount2")],
       tone: "info",
     };
   }
@@ -125,25 +125,25 @@ export function buildMonitorSurfaceCopy(
     case "scheduled":
     case "retrying":
       bannerTitle = isScheduledRetryOnly ? t("issueMonitorBanner.agentResumesEta", { eta }) : t("issueMonitorBanner.waitingOnMonitorResumesEta", { eta });
-      stripTitle = `Resumes ${eta}`;
+      stripTitle = t("issueMonitorBanner.resumesEta", { eta });
       break;
     case "due-now":
       bannerTitle = isScheduledRetryOnly ? t("issueMonitorBanner.agentRetryDueNow") : t("issueMonitorBanner.waitingOnMonitorDueNow");
-      stripTitle = "Due now";
-      statusHint = "Checking momentarily…";
+      stripTitle = t("issueMonitorBanner.dueNow");
+      statusHint = t("issueMonitorBanner.checkingMomentarily");
       break;
     case "overdue":
     default:
       bannerTitle = isScheduledRetryOnly ? t("issueMonitorBanner.agentRetryEta", { eta }) : t("issueMonitorBanner.waitingOnMonitorEta", { eta });
       stripTitle = capitalize(eta);
-      statusHint = "Fires on next tick";
+      statusHint = t("issueMonitorBanner.firesOnNextTick");
       break;
   }
 
   const attemptLabel = derived.attemptCount >= 1 ? t("issueMonitorBanner.attemptAttemptcount", { attemptCount: derived.attemptCount }) : null;
   const serviceLabel = derived.serviceName ? t("issueMonitorBanner.watchingServicename", { serviceName: derived.serviceName }) : null;
 
-  const bannerMeta = [statusHint, `${absolute} (your time)`, attemptLabel, serviceLabel].filter(
+  const bannerMeta = [statusHint, t("issueMonitorBanner.absoluteYourTime", { absolute }), attemptLabel, serviceLabel].filter(
     (piece): piece is string => Boolean(piece),
   );
   const stripMeta = [statusHint, absolute, attemptLabel, serviceLabel].filter(

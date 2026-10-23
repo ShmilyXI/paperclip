@@ -57,26 +57,26 @@ export function MuseConnectionDetails({ connection, pairing, busy, error, offlin
       <MuseConnectionChecks state={state} />
       <dl className="space-y-2 text-xs">
         {[
-          ["Last persisted public receiver contact", timestamp(b.lastReceiverContactAt)],
-          ["Authenticated worker activity", timestamp(b.lastWorkerActivityAt)],
-          ["Last verified reply", timestamp(b.lastVerifiedReplyAt)],
-          ["Credential status", b.credentialState],
-          ["Refresh credential expires", timestamp(b.refreshExpiresAt)],
-          ["Client version", b.clientVersion ?? t("museRunnerConnection.notReported")],
-          ["Live assignments", String(b.liveAssignments)],
-          ["Uncertain native operations", String(b.uncertainOperations)],
-          ["Pending answers", String(b.pendingInputs)],
-          ["Usage and cost", "Unavailable"],
+          [t("museRunnerConnection.labelLastPersistedContact"), timestamp(b.lastReceiverContactAt)],
+          [t("museRunnerConnection.labelAuthenticatedWorkerActivity"), timestamp(b.lastWorkerActivityAt)],
+          [t("museRunnerConnection.labelLastVerifiedReply"), timestamp(b.lastVerifiedReplyAt)],
+          [t("museRunnerConnection.labelCredentialStatus"), b.credentialState],
+          [t("museRunnerConnection.labelRefreshCredentialExpires"), timestamp(b.refreshExpiresAt)],
+          [t("museRunnerConnection.labelClientVersion"), b.clientVersion ?? t("museRunnerConnection.notReported")],
+          [t("museRunnerConnection.labelLiveAssignments"), String(b.liveAssignments)],
+          [t("museRunnerConnection.labelUncertainNativeOperations"), String(b.uncertainOperations)],
+          [t("museRunnerConnection.labelPendingAnswers"), String(b.pendingInputs)],
+          [t("museRunnerConnection.labelUsageAndCost"), t("museRunnerConnection.unavailable")],
         ].map(([label, value]) => <div key={label} className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-muted-foreground">{label}</dt><dd className="font-mono">{value}</dd></div>)}
       </dl>
-      <p className="text-xs text-muted-foreground">{t("museRunnerConnection.receiverContactIsPersistedIn")} {Math.ceil(b.contactPersistenceLagMs / 1000)} seconds. Public receiver checks are unverified. Only an authenticated reply confirms Muse can work.</p>
+      <p className="text-xs text-muted-foreground">{t("museRunnerConnection.receiverContactIsPersistedIn")} {t("museRunnerConnection.contactPersistedSeconds", { seconds: Math.ceil(b.contactPersistenceLagMs / 1000) })}</p>
       {b.status === "revoked" && <p role="status" className="text-sm text-muted-foreground">{t("museRunnerConnection.disconnectedPaperclipCredentialsAndExecution")}</p>}
       {(b.cleanup.pending || b.status === "revoked") && <div className="space-y-2 text-sm text-muted-foreground">
         {"detectorRemovalRequested" in b.cleanup && b.cleanup.detectorRemovalRequested === true && !b.cleanup.detectorRemoved && <p>{t("museRunnerConnection.detectorRemovalRequestedCompletionIs")}</p>}
-        <p>Detector removal: {b.cleanup.detectorEvidence?.source === "operator_runtime_attestation" ? "operator-attested" : b.cleanup.detectorRemoved ? "acknowledged" : "not confirmed"}. Worker quiescence: {b.cleanup.workerQuiescenceReported ? "reported" : "not confirmed"}.</p>
+        <p>{t("museRunnerConnection.detectorRemovalLabel")} {b.cleanup.detectorEvidence?.source === "operator_runtime_attestation" ? t("museRunnerConnection.operatorAttested") : b.cleanup.detectorRemoved ? t("museRunnerConnection.acknowledged") : t("museRunnerConnection.notConfirmed")}. {t("museRunnerConnection.workerQuiescenceLabel")} {b.cleanup.workerQuiescenceReported ? t("museRunnerConnection.reported") : t("museRunnerConnection.notConfirmed")}.</p>
         {b.cleanup.authenticatedAfterRevocation === false && <p>{t("museRunnerConnection.afterDisconnectTheReceiverDisables")}</p>}
         {b.cleanup.expiresAt && <p className="text-xs">{t("museRunnerConnection.cleanupCapabilityExpires")} {formatDateTime(b.cleanup.expiresAt)}.</p>}
-        {b.cleanup.detectorEvidence && <p>Recorded {timestamp(b.cleanup.detectorEvidence.recordedAt)}: {b.cleanup.detectorEvidence.source === "operator_runtime_attestation" ? "operator attestation from a supported runtime hook listing" : "authenticated worker report"}. This is not independent provider confirmation.</p>}
+        {b.cleanup.detectorEvidence && <p>{t("museRunnerConnection.recordedAtSource", { time: timestamp(b.cleanup.detectorEvidence.recordedAt), source: b.cleanup.detectorEvidence.source === "operator_runtime_attestation" ? t("museRunnerConnection.operatorAttestationFromHook") : t("museRunnerConnection.authenticatedWorkerReport") })}. {t("museRunnerConnection.notIndependentProviderConfirmation")}</p>}
         {b.cleanup.attestationEligible && onAttestDetectorCleanup && !detectorSnapshot && <Button type="button" variant="outline" disabled={busy || offline} onClick={() => {
           if (!b.cleanup.hookScript) return;
           setDetectorSnapshot({ bindingId: b.id, generation: b.generation, expectedRevision: b.revision, qualificationId: b.qualification?.id ?? null, hookScript: b.cleanup.hookScript });
@@ -120,7 +120,7 @@ export function MuseConnectionDetails({ connection, pairing, busy, error, offlin
     </section>}
     {pairing && !b?.paired && <div className="space-y-2">
       <AgentSetupPrompt key={pairing.bindingId + pairing.revision} prompt={pairing.setupInstruction} label={t("museRunnerConnection.copySetupPrompt")} title={t("museRunnerConnection.connectYourMuse")} agent={{ name: "Muse", icon: <Bot className="size-5" /> }} description={t("museRunnerConnection.pasteIntoYourCurrentMuse")} />
-      <p className="text-xs text-muted-foreground">{t("museRunnerConnection.oneUseSetupExpires")} {formatDateTime(pairing.expiresAt)}. Muse keeps the connection credential in its secure vault. Hostname permission applies to future requests to this Paperclip hostname.</p>
+      <p className="text-xs text-muted-foreground">{t("museRunnerConnection.oneUseSetupExpires")} {t("museRunnerConnection.museKeepsCredential", { time: formatDateTime(pairing.expiresAt) })}</p>
     </div>}
     <div className="flex flex-wrap items-center gap-2">
       {live && <Button type="button" variant="outline" disabled={!configure || b.credentialState !== "active" || !b.paired || busy || testing} onClick={onTest}>{testing ? t("museRunnerConnection.testingBackgroundReply") : t("museRunnerConnection.testBackgroundReply")}</Button>}

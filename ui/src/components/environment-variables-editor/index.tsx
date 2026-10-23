@@ -33,12 +33,12 @@ import type { EnvironmentVariableDirtyFields } from "./Row";
 const DEFAULT_RESERVED_PREFIXES = ["PAPERCLIP_"];
 
 const DEFAULT_HINT =
-  "Set the KEY to the env var name the process expects, for example GH_TOKEN. Choose a secret to resolve a stored value at run start. PAPERCLIP_* variables are injected automatically.";
+  t("environmentVariablesEditor.setTheKeyToThe");
 
 // Canonical entries for dirty comparison. Must mirror the emit semantics of
 // valueFromRows (trimmed names, incomplete refs dropped, last-writer-wins on
 // trimmed duplicates) — otherwise a saved value that round-trips lossily shows
-// a phantom "Unsaved changes" banner the moment the form opens.
+// a phantom t("environmentVariablesEditor.unsavedChanges") banner the moment the form opens.
 function normalizedEnvEntries(
   value: Record<string, EnvBinding> | null | undefined,
 ): Array<[string, Record<string, unknown>]> {
@@ -84,7 +84,7 @@ const CHANGE_SUMMARY_MAX_NAMES = 3;
 function formatChangedNames(names: readonly string[]): string {
   const shown = names.slice(0, CHANGE_SUMMARY_MAX_NAMES).join(", ");
   return names.length > CHANGE_SUMMARY_MAX_NAMES
-    ? `${shown} +${names.length - CHANGE_SUMMARY_MAX_NAMES} more`
+    ? t("environmentVariablesEditor.shownNamesMore", { shown, NAMES: names.length - CHANGE_SUMMARY_MAX_NAMES })
     : shown;
 }
 
@@ -265,9 +265,9 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
 
   const changeSummaryText = useMemo(() => {
     const parts: string[] = [];
-    if (changeSummary.added.length > 0) parts.push(`New: ${formatChangedNames(changeSummary.added)}`);
-    if (changeSummary.changed.length > 0) parts.push(`Edited: ${formatChangedNames(changeSummary.changed)}`);
-    if (changeSummary.removed.length > 0) parts.push(`Removed: ${formatChangedNames(changeSummary.removed)}`);
+    if (changeSummary.added.length > 0) parts.push(t("environmentVariablesEditor.newAdded", { added: formatChangedNames(changeSummary.added) }));
+    if (changeSummary.changed.length > 0) parts.push(t("environmentVariablesEditor.editedChanged", { changed: formatChangedNames(changeSummary.changed) }));
+    if (changeSummary.removed.length > 0) parts.push(t("environmentVariablesEditor.removedRemoved", { removed: formatChangedNames(changeSummary.removed) }));
     return parts.join(" · ");
   }, [changeSummary]);
 
@@ -443,7 +443,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
       {attentionCount > 1 ? (
         <p className="inline-flex items-center gap-1.5 text-(length:--text-micro) font-medium text-amber-700 dark:text-amber-400">
           <AlertCircle className="size-3.5" />
-          {attentionCount} bindings need attention
+          {t("environmentVariablesEditor.bindingsNeedAttention", { count: attentionCount })}
         </p>
       ) : null}
 
@@ -512,7 +512,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
                 type="button"
                 onClick={() => bindRecentSecret(secret)}
                 className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 font-mono text-(length:--text-micro) text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
-                title={`Bind ${secret.name}`}
+                title={t("environmentVariablesEditor.bindName", { name: secret.name })}
               >
                 + {secret.name}
               </button>

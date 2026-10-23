@@ -117,11 +117,11 @@ export function TaskList({ items, allItems = items, initialColumns = defaultTask
     <TaskListViewport visibleColumns={columns} columnOrder={columnOrder} controls={<TaskListColumnSettings visibleColumns={columns} onVisibleColumnsChange={updateColumns} onColumnOrderChange={setColumnOrder} onResetDefaults={() => setSort(undefined)} />}>
       <TaskListColumnHeader sort={sort} onSortChange={setSort} onColumnOrderChange={setColumnOrder} />
       {items.length === 0 ? emptyState : (
-        <div aria-label={`${density} task list`}>
+        <div aria-label={t("taskList.densityTaskList", { density })}>
           {[...groups].map(([label, groupRoots]) => (
             <Fragment key={label}>
               {label ? <IssueGroupHeader label={label} className="task-list-group-heading" trailing={<span className="text-xs text-muted-foreground">{groupRoots.length}</span>} /> : null}
-              {groupRoots.map(issue => <TaskRowGroup key={issue.id} role="rowgroup" aria-label={`${issue.title} task group`}>{renderBranch(issue, 0)}</TaskRowGroup>)}
+              {groupRoots.map(issue => <TaskRowGroup key={issue.id} role="rowgroup" aria-label={t("taskList.titleTaskGroup", { title: issue.title })}>{renderBranch(issue, 0)}</TaskRowGroup>)}
             </Fragment>
           ))}
         </div>

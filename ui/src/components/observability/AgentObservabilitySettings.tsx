@@ -80,7 +80,7 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
   const providerChanged = !original || original.destination.provider !== provider;
   function save(overrideEnabled?: boolean) {
     if (requireFreshHeaders && headers.some(row => !row.value)) {
-      setValidation("Re-enter every header value for the new endpoint, or remove the header."); return;
+      setValidation(t("agentObservabilitySettings.reEnterEveryHeaderValue")); return;
     }
     const common = { expectedRevision: original?.revision ?? null, enabled: overrideEnabled ?? enabled, capture };
     const input = provider === "braintrust"
@@ -103,7 +103,7 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
           <Label htmlFor="agent-observability-provider">{t("agentObservabilitySettings.destination")}</Label>
           <select id="agent-observability-provider" className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm" value={provider}
             onChange={event => { setProvider(event.target.value as "braintrust" | "otlp"); setApiKey(""); setReplaceKey(false); setValidation(null); }}>
-            <option value="braintrust">Braintrust</option><option value="otlp">Custom OTLP</option>
+            <option value="braintrust">Braintrust</option><option value="otlp">{t("agentObservabilitySettings.customOtlp")}</option>
           </select>
         </div>
         {provider === "braintrust" ? <>
@@ -144,7 +144,7 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
       {hasConflict && <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => { reset(); onReload?.(); }}>{t("agentObservabilitySettings.reloadSavedSettings")}</Button>}
       {!dirty && receipt && <div role="status" className="space-y-1 text-sm">
         <p className="font-medium">{receipt.status === "accepted" ? t("agentObservabilitySettings.testPayloadAccepted") : receipt.status === "partial" ? t("agentObservabilitySettings.someTestRecordsWereRejected") : t("agentObservabilitySettings.testPayloadFailed")}</p>
-        <p className="text-xs text-muted-foreground">{new Date(receipt.finishedAt).toLocaleString()} · Sent from the Paperclip server.</p>
+        <p className="text-xs text-muted-foreground">{t("agentObservabilitySettings.sentFromTheServerAt", { time: new Date(receipt.finishedAt).toLocaleString() })}</p>
         {(["logs", "traces"] as const).map(signal => receipt.signals[signal].message && <p key={signal}>{signal === "logs" ? t("common.logs") : t("agentObservabilitySettings.traces")}: {receipt.signals[signal].message}</p>)}
       </div>}
       <div className="flex items-center justify-between gap-3">

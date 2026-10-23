@@ -48,12 +48,12 @@ export function TaskChatMarker({
         className="tc-enter-marker flex w-full items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-sm">
         <KeyRound className="mt-0.5 size-5 shrink-0 text-destructive" aria-hidden />
         <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <p className="font-semibold text-destructive">{agentName} couldn’t start</p>
+          <p className="font-semibold text-destructive">{agentName} {t("taskChatMarker.couldntStart")}</p>
           <p className="break-words font-medium text-foreground">
-            {agentName} is configured to use {credentialName || "an AI credential"}, but {deniedUser === "you" ? "you don’t" : `${deniedUser} doesn’t`} have access to that credential.
+            {t("taskChatMarker.isConfiguredToUse", { agentName, credential: credentialName || t("taskChatMarker.anAiCredential"), subject: deniedUser === "you" ? t("taskChatMarker.youDonT") : t("taskChatMarker.userDoesnT", { user: deniedUser }) })}
           </p>
           <p className="text-muted-foreground">
-            Choose an AI connection {deniedUser === "you" ? "you can" : `${deniedUser} can`} use, or ask an administrator to update {agentName}’s connection. Then try again.
+            {t("taskChatMarker.chooseAnAiConnection")} {deniedUser === "you" ? t("taskChatMarker.youCan") : t("taskChatMarker.userCan", { user: deniedUser })} {t("taskChatMarker.useOrAskAdminToUpdate", { agentName })}
           </p>
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <Button asChild variant="outline" size="sm"><Link to={settingsHref}>{t("taskChatMarker.changeAiConnection")}</Link></Button>

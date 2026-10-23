@@ -29,7 +29,7 @@ export function AgentRunnerSelect({
         aria-label={t("runner.runner")}
         disabled={disabled}
         value={value}
-        displayValue={value === "auto" ? (defaultRunner ? `${defaultRunner === "paperclip" ? t("agentRunnerSelect.paperclipRunner") : t("agentRunnerSelect.legacyRunner")} (default)` : pending ? t("agentRunnerSelect.checkingRunnerAvailability") : t("agentRunnerSelect.automaticSelectionUnavailable")) : undefined}
+        displayValue={value === "auto" ? (defaultRunner ? t("agentRunnerSelect.runnerDefaultSuffix", { runner: defaultRunner === "paperclip" ? t("agentRunnerSelect.paperclipRunner") : t("agentRunnerSelect.legacyRunner") }) : pending ? t("agentRunnerSelect.checkingRunnerAvailability") : t("agentRunnerSelect.automaticSelectionUnavailable")) : undefined}
         onValueChange={next => onChange(next as AgentRunnerChoice)}
         options={[
           { value: "paperclip", label: `${t("agentRunnerSelect.paperclipRunner")}${defaultRunner === "paperclip" ? t("agentRunnerSelect.defaultSuffix") : ""}`, disabled: !supportedRunners.includes("paperclip") && value !== "paperclip" },

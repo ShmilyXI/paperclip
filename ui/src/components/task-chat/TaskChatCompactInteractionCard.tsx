@@ -418,7 +418,7 @@ function ReceiptDisclosure({
                 </p>
               ) : null}
               <p className="mt-1 text-sm font-medium text-foreground">
-                Answer: {values.length > 0 ? values.join(", ") : t("taskChatCompactInteractionCard.noAnswer")}
+                {t("taskChatCompactInteractionCard.answerPrefix")} {values.length > 0 ? values.join(", ") : t("taskChatCompactInteractionCard.noAnswer")}
               </p>
             </div>
           );
@@ -435,7 +435,7 @@ function ReceiptDisclosure({
         <p className="text-sm text-foreground">{interaction.payload.prompt}</p>
         {interaction.status === "accepted" ? (
           <p className="mt-1 text-sm font-medium text-foreground">
-            Answer:{" "}
+            {t("taskChatCompactInteractionCard.answerPrefix")}{" "}
             {selectedLabels.length > 0
               ? selectedLabels.join(", ")
               : t("taskChatCompactInteractionCard.noOptionsSelected")}
@@ -514,8 +514,10 @@ function ReceiptDisclosure({
   } else if (interaction.kind === "connection_intent") {
     request = (
       <p className="text-sm text-foreground">
-        {interaction.payload.requestingAgentName} requested access to{" "}
-        {interaction.payload.serviceName}.
+        {t("taskChatCompactInteractionCard.agentRequestedAccessToService", {
+          agent: interaction.payload.requestingAgentName,
+          service: interaction.payload.serviceName,
+        })}
       </p>
     );
   } else {
@@ -533,13 +535,12 @@ function ReceiptDisclosure({
           <div className="rounded-sm bg-muted/45 px-3 py-2.5 text-sm">
             <p>
               <strong>{interaction.payload.toolAction.toolDisplayName}</strong>{" "}
-              · {interaction.payload.toolAction.risk} risk
+              {t("taskChatCompactInteractionCard.toolRisk", { risk: interaction.payload.toolAction.risk })}
             </p>
             <p className="mt-1">
-              Expires{" "}
-              {new Date(
-                interaction.payload.toolAction.expiresAt,
-              ).toLocaleString()}
+              {t("taskChatCompactInteractionCard.expiresAt", {
+                time: new Date(interaction.payload.toolAction.expiresAt).toLocaleString(),
+              })}
             </p>
             <div className="mt-2">
               <MarkdownBody externalReferences={externalReferences}>
@@ -895,13 +896,12 @@ function ConfirmationCard({
                   : "text-muted-foreground",
               )}
             >
-              {interaction.payload.toolAction.risk} risk
+              {t("taskChatCompactInteractionCard.toolRiskBare", { risk: interaction.payload.toolAction.risk })}
             </span>
             <span className="ml-auto text-xs text-muted-foreground">
-              Expires{" "}
-              {new Date(
-                interaction.payload.toolAction.expiresAt,
-              ).toLocaleString()}
+              {t("taskChatCompactInteractionCard.expiresAt", {
+                time: new Date(interaction.payload.toolAction.expiresAt).toLocaleString(),
+              })}
             </span>
           </div>
           <MarkdownBody externalReferences={externalReferences}>
@@ -1148,10 +1148,10 @@ function CheckboxConfirmationCard({
 
   const countHint =
     maximum < Number.POSITIVE_INFINITY
-      ? `${selected.size} selected · choose ${minimum}–${maximum}`
+      ? t("taskChatCompactInteractionCard.selectedChooseRange", { selected: selected.size, minimum, maximum })
       : minimum > 0
-        ? `${selected.size} selected · at least ${minimum}`
-        : `${selected.size} selected`;
+        ? t("taskChatCompactInteractionCard.selectedAtLeast", { selected: selected.size, minimum })
+        : t("taskChatCompactInteractionCard.selectedCount", { count: selected.size });
 
   return (
     <div>
@@ -1328,7 +1328,7 @@ function SuggestedTaskRow({
           </span>
           {hiddenCount > 0 ? (
             <span className="block text-xs text-muted-foreground">
-              + {hiddenCount} hidden follow-up
+              {t("taskChatCompactInteractionCard.hiddenFollowUp", { count: hiddenCount })}
             </span>
           ) : null}
         </span>
@@ -1496,7 +1496,10 @@ function SuggestedTasksCard({
       ) : null}
       <InteractionActionError message={actionError} />
       <ActionRow
-        hint={`${selected.size} of ${interaction.payload.tasks.length} selected`}
+        hint={t("taskChatCompactInteractionCard.selectedOfTotal", {
+          selected: selected.size,
+          total: interaction.payload.tasks.length,
+        })}
       >
         {rejecting ? (
           <>
@@ -1519,7 +1522,7 @@ function SuggestedTasksCard({
               {working === "reject" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              Send back
+              {t("taskChatCompactInteractionCard.sendBack")}
             </Button>
           </>
         ) : (
@@ -1544,7 +1547,7 @@ function SuggestedTasksCard({
               {working === "accept" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              Create selected
+              {t("taskChatCompactInteractionCard.createSelected")}
             </Button>
           </>
         )}
@@ -1717,7 +1720,7 @@ function ItemVerdictsCard({
   return (
     <div>
       <div className="mb-2 flex items-center text-xs text-muted-foreground">
-        <span>{drafts.size + resolvedById.size} decided</span>
+        <span>{t("taskChatCompactInteractionCard.decidedCount", { count: drafts.size + resolvedById.size })}</span>
         <TaskChatComposerTakeoverControls>
           <nav
             className="flex shrink-0 items-center gap-1"
@@ -1789,7 +1792,7 @@ function ItemVerdictsCard({
         <div
           className="mt-3 flex flex-wrap gap-1.5"
           role="group"
-          aria-label={`Verdict for ${item.label}`}
+          aria-label={t("taskChatCompactInteractionCard.verdictFor", { label: item.label })}
         >
           {enabledVerdicts.map((verdict) => (
             <Button

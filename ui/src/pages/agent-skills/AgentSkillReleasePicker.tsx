@@ -40,7 +40,7 @@ export function releaseName(release: CompanySkillVersion): string {
 export function releaseOptionLabel(release: CompanySkillVersion): string {
   const name = releaseName(release);
   const date = formatReleaseDate(release.releasedAt);
-  return date ? `${name} · released ${date}` : name;
+  return date ? t("agentSkillReleasePicker.nameReleasedDate", { name, date }) : name;
 }
 
 /** Compact badge label for a pinned release, e.g. `V7`. */

@@ -81,7 +81,7 @@ function OutputMediaPreview({
       <button
         type="button"
         className={className}
-        aria-label={`Browse ${filename} in gallery`}
+        aria-label={t("issueOutputSection.browseNamedInGallery", { filename })}
         onClick={() => onMediaClick(item)}
       >
         {preview}
@@ -95,7 +95,7 @@ function OutputMediaPreview({
       target="_blank"
       rel="noreferrer"
       className={className}
-      aria-label={`Open ${filename}`}
+      aria-label={t("issueOutputSection.openNamed", { filename })}
     >
       {preview}
     </a>
