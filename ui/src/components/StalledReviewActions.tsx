@@ -29,9 +29,9 @@ interface StalledReviewActionsProps {
 }
 
 const ACTION_PAST_TENSE: Record<StalledReviewDecisionAction, string> = {
-  approve: "Review approved — issue marked done.",
-  request_changes: "Changes requested — issue returned to the assignee.",
-  send_back: "Sent back to work — issue returned to the assignee.",
+  approve: t("stalledReviewActions.reviewApprovedIssueMarkedDone"),
+  request_changes: t("stalledReviewActions.changesRequestedIssueReturnedTo"),
+  send_back: t("stalledReviewActions.sentBackToWorkIssue"),
 };
 
 /**
@@ -72,7 +72,7 @@ export function StalledReviewActions({
     },
     onError: (error) => {
       pushToast({
-        title: "Could not record the review decision",
+        title: t("stalledReviewActions.couldNotRecordTheReview"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       });
@@ -105,7 +105,7 @@ export function StalledReviewActions({
       <Textarea
         value={note}
         onChange={(event) => setNote(event.target.value)}
-        placeholder="Add a note — required to request changes, optional otherwise…"
+        placeholder={t("stalledReviewActions.addANoteRequiredTo")}
         className="min-h-16 text-sm"
         data-testid="stalled-review-note"
         disabled={pending}
@@ -135,7 +135,7 @@ export function StalledReviewActions({
             size="sm"
             className="w-full border-amber-400/70 text-amber-900 hover:bg-amber-100 dark:border-amber-500/50 dark:text-amber-100 dark:hover:bg-amber-500/15 sm:w-auto sm:flex-1 @xl:flex-none"
             disabled={pending || noteEmpty}
-            title={noteEmpty ? "Add a note to request changes" : undefined}
+            title={noteEmpty ? t("stalledReviewActions.addANoteToRequest") : undefined}
             onClick={() => decide.mutate("request_changes")}
             data-testid="stalled-review-request-changes"
           >

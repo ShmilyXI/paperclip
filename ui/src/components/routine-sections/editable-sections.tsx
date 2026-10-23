@@ -310,17 +310,17 @@ export function OverviewSection({
           icon={Clock3}
           label={t("routineSections.triggers")}
           value={activeTriggers === 0 ? t("common.none") : `${activeTriggers} active`}
-          hint={nextFire ? `Next fire ${nextFire}` : "No schedule"}
+          hint={nextFire ? t("routineSections.nextFireNextfire", { nextFire }) : t("routineSections.noSchedule")}
           to={() => navigateToSection("triggers")}
           ariaLabel={`${activeTriggers} triggers. Open triggers.`}
         />
         <SummaryCard
           icon={Play}
           label={t("common.lastRun")}
-          value={lastRun ? lastRun.status.replaceAll("_", " ") : "No runs"}
-          hint={lastRun ? timeAgo(lastRun.triggeredAt) : "Trigger a run"}
+          value={lastRun ? lastRun.status.replaceAll("_", " ") : t("routineSections.noRuns")}
+          hint={lastRun ? timeAgo(lastRun.triggeredAt) : t("routineSections.triggerARun")}
           to={() => navigateToSection("runs")}
-          ariaLabel={lastRun ? `Last run ${lastRun.status}. Open runs.` : "No runs. Open runs."}
+          ariaLabel={lastRun ? t("routineSections.lastRunStatusOpenRuns", { status: lastRun.status }) : t("routineSections.noRunsOpenRuns")}
         />
       </div>
 
@@ -403,9 +403,7 @@ export function VariablesSection() {
     <div className="space-y-4">
       <div className="flex items-center gap-3 rounded-md border border-border bg-muted/20 px-4 py-3 text-xs">
         <span className="flex-1 text-muted-foreground">
-          {t("routineSections.variablesAreAutoDetectedFrom")} <code className="font-mono">{"{{placeholders}}"}</code> in
-          the title &amp; instructions. The variable name is read-only — rename by editing the
-          placeholder.
+          {t("routineSections.variablesAreAutoDetectedFrom")} <code className="font-mono">{"{{placeholders}}"}</code> {t("routineSections.inTheTitleInstructionsThe")}
         </span>
         <Button variant="secondary" size="sm" onClick={() => navigateToSection("overview")}>
           <Edit3 className="mr-1.5 h-3.5 w-3.5" />
@@ -423,7 +421,7 @@ export function VariablesSection() {
       ) : (
         <EmptyState
           icon={Braces}
-          message="No variables yet. Add a {{placeholder}} in the title or instructions to create one."
+          message={t("routineSections.noVariablesYetAddA")}
           action={t("routineSections.editInstructions")}
           onAction={() => navigateToSection("overview")}
         />

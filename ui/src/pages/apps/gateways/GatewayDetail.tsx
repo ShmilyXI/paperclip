@@ -105,7 +105,7 @@ export function GatewayDetail() {
     if (!gateway) return;
     setBreadcrumbs([
       { label: t("common.connectors"), href: "/apps" },
-      { label: "Gateways", href: "/apps/gateways" },
+      { label: t("gatewayDetail.gateways"), href: "/apps/gateways" },
       { label: gateway.name },
     ]);
     return () => setBreadcrumbs([]);
@@ -118,7 +118,7 @@ export function GatewayDetail() {
       }),
     onSuccess: async (updated) => {
       pushToast({
-        title: updated.status === "active" ? "Gateway on" : "Gateway off",
+        title: updated.status === "active" ? t("gatewayDetail.gatewayOn") : t("gatewayDetail.gatewayOff"),
         body:
           updated.status === "active"
             ? `${updated.name} is exposing its tools again.`
@@ -129,14 +129,14 @@ export function GatewayDetail() {
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't update the gateway",
+        title: t("gatewayDetail.couldnTUpdateTheGateway"),
         body: error instanceof Error ? error.message : String(error),
         tone: "error",
       }),
   });
 
   if (!selectedCompanyId) {
-    return <div className="p-6 text-sm text-muted-foreground">Select an organization to manage gateways.</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{t("gatewayDetail.selectAnOrganizationToManage")}</div>;
   }
   if (!activeTab) {
     return <Navigate replace to={gatewayTabHref(gatewayId, "overview")} />;
@@ -156,9 +156,9 @@ export function GatewayDetail() {
   if (!gateway) {
     return (
       <div className="max-w-3xl p-6">
-        <p className="text-sm text-muted-foreground">We couldn’t find that gateway.</p>
+        <p className="text-sm text-muted-foreground">{t("gatewayDetail.weCouldnTFindThat")}</p>
         <Button className="mt-4" variant="outline" onClick={() => navigate("/apps/gateways")}>
-          Back to gateways
+          {t("gatewayDetail.backToGateways")}
         </Button>
       </div>
     );
@@ -170,7 +170,7 @@ export function GatewayDetail() {
         <div className="min-w-0">
           <div className="text-xs text-muted-foreground">
             <Link to="/apps/gateways" className="hover:underline">
-              Apps · Gateways
+              {t("gatewayDetail.appsGateways")}
             </Link>
           </div>
           <h1 className="mt-1 text-2xl font-bold tracking-tight">{gateway.name}</h1>
@@ -183,12 +183,12 @@ export function GatewayDetail() {
           </Button>
           <Button onClick={() => setSnippetOpen(true)}>
             <Send className="mr-1.5 h-4 w-4" />
-            Client snippets
+            {t("gatewayDetail.clientSnippets")}
           </Button>
         </div>
       </div>
 
-      <nav className="flex items-center gap-6 overflow-x-auto border-b border-border text-sm" aria-label="Gateway tabs">
+      <nav className="flex items-center gap-6 overflow-x-auto border-b border-border text-sm" aria-label={t("gatewayDetail.gatewayTabs")}>
         {GATEWAY_TABS.map((item) => {
           const isActive = item.key === activeTab;
           return (

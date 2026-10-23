@@ -302,7 +302,7 @@ function planStatusClasses(
       return {
         shell: "border-2 border-red-500/80 bg-transparent",
         badge: "border-red-500/60 bg-red-500/10 text-red-900 dark:bg-red-500/15 dark:text-red-100",
-        label: outcome === "withdrawn" ? t("interaction.withdrawn") : "Changes requested",
+        label: outcome === "withdrawn" ? t("interaction.withdrawn") : t("issueThreadInteractionCard.changesRequested"),
         Icon: XCircle,
       };
     case "failed":
@@ -842,7 +842,7 @@ function SuggestTasksCard({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-        <span>{totalTasks === 1 ? "1 draft issue" : `${totalTasks} draft issues`}</span>
+        <span>{t("issueThreadInteractionCard.draftIssuesCount", { count: totalTasks })}</span>
         {interaction.payload.defaultParentId ? (
           <TaskField label={t("interaction.defaultParent")} value={interaction.payload.defaultParentId} tone="subtle" />
         ) : null}
@@ -872,8 +872,8 @@ function SuggestTasksCard({
           </div>
           <p className="mt-1 leading-6">
             {skippedCount > 0
-              ? `Created ${createdCount} draft ${createdCount === 1 ? "issue" : "issues"} and skipped ${skippedCount} during review.`
-              : `Created all ${createdCount} draft ${createdCount === 1 ? "issue" : "issues"}.`}
+              ? t("issueThreadInteractionCard.createdDraftsAndSkipped", { created: createdCount, skipped: skippedCount })
+              : t("issueThreadInteractionCard.createdAllDrafts", { created: createdCount })}
           </p>
         </div>
       ) : null}
@@ -898,12 +898,12 @@ function SuggestTasksCard({
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <span>
                 {selectedCount === totalTasks
-                  ? `All ${totalTasks} draft ${totalTasks === 1 ? "issue" : "issues"} selected`
-                  : `${selectedCount} of ${totalTasks} draft ${totalTasks === 1 ? "issue" : "issues"} selected`}
+                  ? t("issueThreadInteractionCard.allDraftsSelected", { count: totalTasks })
+                  : t("issueThreadInteractionCard.someDraftsSelected", { selected: selectedCount, total: totalTasks })}
               </span>
               {selectedCount < totalTasks ? (
                 <span>
-                  {totalTasks - selectedCount} will be skipped if you accept this interaction.
+                  {t("issueThreadInteractionCard.willBeSkipped", { count: totalTasks - selectedCount })}
                 </span>
               ) : null}
             </div>
@@ -920,7 +920,7 @@ function SuggestTasksCard({
                     {t("interaction.accepting")}
                   </>
                 ) : (
-                  selectedCount === totalTasks ? "Accept drafts" : "Accept selected drafts"
+                  selectedCount === totalTasks ? t("issueThreadInteractionCard.acceptDrafts") : t("issueThreadInteractionCard.acceptSelectedDrafts")
                 )}
               </Button>
               <Button
@@ -1266,7 +1266,7 @@ function AskUserQuestionsCard({
                   ) : null}
                 </div>
                 <TaskField
-                  label={question.selectionMode === "single" ? "Pick" : "Pick many"}
+                  label={question.selectionMode === "single" ? t("issueThreadInteractionCard.pick") : t("issueThreadInteractionCard.pickMany")}
                   value={question.required ? t("common.required") : t("common.optional")}
                   tone="subtle"
                 />
@@ -1388,7 +1388,7 @@ function AskUserQuestionsCard({
                     {t("interaction.submitting")}
                   </>
                 ) : (
-                  interaction.payload.submitLabel ?? "Submit answers"
+                  interaction.payload.submitLabel ?? t("issueThreadInteractionCard.submitAnswers")
                 )}
               </Button>
             </div>
@@ -1400,8 +1400,8 @@ function AskUserQuestionsCard({
         <div className="rounded-2xl border border-rose-300/60 bg-rose-50/85 p-4 text-sm leading-6 text-rose-950 dark:border-rose-500/40 dark:bg-rose-500/10 dark:text-rose-100">
           <div className="font-semibold">
             {interaction.result?.outcome === "withdrawn"
-              ? questions.length === 1 ? "Question withdrawn" : "Questions withdrawn"
-              : "Question cancelled"}
+              ? questions.length === 1 ? t("issueThreadInteractionCard.questionWithdrawn") : t("issueThreadInteractionCard.questionsWithdrawn")
+              : t("issueThreadInteractionCard.questionCancelled")}
           </div>
           {interaction.result?.cancellationReason ? (
             <p className="mt-1">{interaction.result.cancellationReason}</p>
@@ -1417,15 +1417,15 @@ function AskUserQuestionsCard({
             <AlertTriangle className="h-4 w-4" />
             {interaction.result?.outcome === "issue_closed"
               ? questions.length === 1
-                ? "Question expired when the issue closed"
-                : "Questions expired when the issue closed"
+                ? t("issueThreadInteractionCard.questionExpiredWhenTheIssue")
+                : t("issueThreadInteractionCard.questionsExpiredWhenTheIssue")
               : questions.length === 1
-                ? "Question expired by comment"
-                : "Questions expired by comment"}
+                ? t("issueThreadInteractionCard.questionExpiredByComment")
+                : t("issueThreadInteractionCard.questionsExpiredByComment")}
           </div>
           <p className="mt-1">
             {interaction.result?.outcome === "issue_closed"
-              ? "This question request expired automatically when the issue reached a terminal state."
+              ? t("issueThreadInteractionCard.thisQuestionRequestExpiredAutomatically")
               : "A later board/user comment superseded this question request. Create a fresh request if answers are still needed."}
           </p>
           {interaction.result?.commentId ? (
@@ -1577,8 +1577,8 @@ function RequestConfirmationResolution({
             </div>
             <p className="mt-1 leading-6">
               {resumeFailure.status === "retrying"
-                ? `Paperclip is retrying the agent resume after approval (attempt ${resumeFailure.attempt}/${resumeFailure.maxAttempts}).`
-                : "Paperclip needs attention before the agent can resume this approved work."}
+                ? t("issueThreadInteractionCard.retryingResume", { attempt: resumeFailure.attempt, maxAttempts: resumeFailure.maxAttempts })
+                : t("issueThreadInteractionCard.paperclipNeedsAttentionBeforeThe")}
             </p>
             {resumeFailure.errorCode ? (
               <p className="mt-1 leading-6">
@@ -1640,15 +1640,15 @@ function RequestConfirmationResolution({
          */}
         {expiredByIssueClosed ? null : (
           <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-amber-700">
-            {expiredByComment ? "Expired by comment" : "Expired by target change"}
+            {expiredByComment ? t("issueThreadInteractionCard.expiredByComment") : t("issueThreadInteractionCard.expiredByTargetChange")}
           </div>
         )}
         <p className="leading-6">
           {expiredByComment
             ? "A board comment superseded this confirmation before it was resolved."
             : expiredByIssueClosed
-              ? "This confirmation expired automatically when the issue reached a terminal state."
-              : "The requested target changed before this confirmation was resolved."}
+              ? t("issueThreadInteractionCard.thisConfirmationExpiredAutomaticallyWhen")
+              : t("issueThreadInteractionCard.theRequestedTargetChangedBefore")}
         </p>
         {expiredByComment && interaction.result?.commentId ? (
           <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-amber-950 hover:bg-amber-500/15 dark:text-amber-50">
@@ -1699,10 +1699,10 @@ function ToolActionResolution({
     try { formattedOutput = JSON.stringify(JSON.parse(output), null, 2); } catch { /* Plain-text results remain readable. */ }
   }
   const labels = {
-    pending: "Waiting for approval",
-    running: "Approved · Running…",
+    pending: t("issueThreadInteractionCard.waitingForApproval"),
+    running: t("issueThreadInteractionCard.approvedRunning"),
     executed: t("common.succeeded"),
-    failed: "Execution failed",
+    failed: t("issueThreadInteractionCard.executionFailed"),
     declined: t("interaction.declined"),
     expired: t("interaction.expired"),
     cancelled: t("common.cancelled"),
@@ -1721,7 +1721,7 @@ function ToolActionResolution({
       {output ? (
         <Collapsible open={resultOpen} onOpenChange={setResultOpen}>
           <CollapsibleTrigger asChild>
-            <button type="button" className="flex items-center gap-1.5 rounded-sm hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={resultOpen ? "Hide result details" : "Show result details"}>
+            <button type="button" className="flex items-center gap-1.5 rounded-sm hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={resultOpen ? t("issueThreadInteractionCard.hideResultDetails") : t("issueThreadInteractionCard.showResultDetails")}>
               {status}<ChevronDown className={cn("h-3 w-3", resultOpen && "rotate-180")} />
             </button>
           </CollapsibleTrigger>
@@ -1789,11 +1789,11 @@ function RequestToolActionCard({
       {isPending ? (
         <div className="mt-3 flex justify-end gap-2">
           <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working !== null} onClick={() => void decide("reject")}>
-            {working === "reject" ? "Declining…" : "Decline"}
+            {working === "reject" ? t("issueThreadInteractionCard.declining") : t("issueThreadInteractionCard.decline")}
           </Button>
           <div className="inline-flex" role="group" aria-label={t("interaction.approveRequest")}>
             <Button size="sm" variant={variant} className={payload.rememberActionScope ? "rounded-r-none" : undefined} disabled={!onAcceptInteraction || working !== null} onClick={() => void decide("accept")}>
-              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("common.saving2") : t("interaction.approving")}</> : "Approve & run"}
+              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("common.saving2") : t("interaction.approving")}</> : t("issueThreadInteractionCard.approveRun")}
             </Button>
             {payload.rememberActionScope ? (
               <DropdownMenu>
@@ -2071,13 +2071,13 @@ function RequestSecretProposalCard({
       {isPending ? (
         <ConfirmationActionRow
           resetKey={`${interaction.id}:${interaction.status}`}
-          approveLabel={interaction.payload.acceptLabel ?? "Approve & bind"}
+          approveLabel={interaction.payload.acceptLabel ?? t("issueThreadInteractionCard.approveBind")}
           reviseLabel="Add reason…"
           rejectLabel={interaction.payload.rejectLabel ?? t("common.reject")}
           approveVariant="cta"
           allowRevise={interaction.payload.allowDeclineReason !== false}
           rejectRequiresReason={interaction.payload.rejectRequiresReason === true}
-          reasonPlaceholder={interaction.payload.declineReasonPlaceholder ?? "Optional: explain why this binding should not be created."}
+          reasonPlaceholder={interaction.payload.declineReasonPlaceholder ?? t("issueThreadInteractionCard.optionalExplainWhyThisBinding")}
           working={working}
           actionError={actionError}
           preparingApproval={isInteractionPreparingApproval(interaction)}
@@ -2435,14 +2435,14 @@ function RequestConnectionAuthorizationCard({
   // person. Shown to a teammate it names the wrong account, so a reader who is
   // not the addressee gets the same fact stated about them. Caught by rendering
   // the card, not by reading it.
-  const agentLabel = requestingAgentLabel ?? "An agent";
+  const agentLabel = requestingAgentLabel ?? t("issueThreadInteractionCard.anAgent");
   const lead = isAddressee
     ? interaction.summary?.trim()
       || `${agentLabel} needs your ${providerName} identity for work running as you.`
     : `${agentLabel} ${state === "connected" ? "needed" : "needs"} ${addresseeLabel}'s ${providerName} identity for work running as them.`;
   // Only the actionable state needs the consent boundary spelled out; the other
   // states carry it in their own status line.
-  const consentSentence = state === "actionable" ? "No one else can complete this step." : null;
+  const consentSentence = state === "actionable" ? t("issueThreadInteractionCard.noOneElseCanComplete") : null;
 
   return (
     <div className="space-y-4">
@@ -2526,10 +2526,10 @@ function RequestConnectionAuthorizationCard({
         <ConnectionAuthorizationStatusLine
           Icon={state === "declined" ? MinusCircle : CircleDashed}
           testId={state === "declined" ? "connection-authorization-declined" : "connection-authorization-expired"}
-          headline={state === "declined" ? `${providerName} was not connected` : "This authorization request expired"}
+          headline={state === "declined" ? t("issueThreadInteractionCard.providernameWasNotConnected", { providerName }) : t("issueThreadInteractionCard.thisAuthorizationRequestExpired")}
           detail={
             declineReason
-              ?? `${requestingAgentLabel ?? "The agent"} can ask again with a new ${providerName} authorization link.`
+              ?? t("issueThreadInteractionCard.agentCanAskAgainWith", { agent: requestingAgentLabel ?? t("issueThreadInteractionCard.theAgent"), providerName })
           }
         />
       )}
@@ -2599,8 +2599,8 @@ function RequestConfirmationCard({
   const reasonPlaceholder =
     interaction.payload.declineReasonPlaceholder
     ?? (interaction.payload.acceptLabel === "Approve plan"
-      ? "Optional: what would you like revised?"
-      : "Optional: tell the agent what you'd change.");
+      ? t("issueThreadInteractionCard.optionalWhatWouldYouLike")
+      : t("issueThreadInteractionCard.optionalTellTheAgentWhat"));
 
   useEffect(() => {
     setActionError(null);
@@ -2804,8 +2804,8 @@ function RequestCheckboxConfirmationResolution({
         <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
           <span className="font-medium">
             {selectedCount === 0
-              ? "Confirmed with no options selected"
-              : `Confirmed ${selectedCount} of ${totalOptions} ${totalOptions === 1 ? "option" : "options"}`}
+              ? t("issueThreadInteractionCard.confirmedWithNoOptionsSelected")
+              : t("issueThreadInteractionCard.confirmedSomeOptions", { selected: selectedCount, total: totalOptions })}
           </span>
           <RequestConfirmationTargetChip interaction={interaction} target={target} />
         </div>
@@ -2948,7 +2948,7 @@ function RequestCheckboxConfirmationCard({
   const rejectRequiresReason = interaction.payload.rejectRequiresReason === true;
   const allowRevise = interaction.payload.allowDeclineReason !== false;
   const reasonPlaceholder =
-    interaction.payload.declineReasonPlaceholder ?? "Optional: tell the agent what you'd change.";
+    interaction.payload.declineReasonPlaceholder ?? t("issueThreadInteractionCard.optionalTellTheAgentWhat");
 
   const selectedCount = selectedOptionIds.size;
   const totalOptions = options.length;
@@ -2959,12 +2959,12 @@ function RequestCheckboxConfirmationCard({
 
   const validationMessage = belowMin
     ? minSelected === 1
-      ? "Select at least 1 option."
-      : `Select at least ${minSelected} options.`
+      ? t("issueThreadInteractionCard.selectAtLeast1Option")
+      : t("issueThreadInteractionCard.selectAtLeastMinselectedOptions", { minSelected })
     : aboveMax && maxSelected != null
       ? maxSelected === 1
-        ? "Select at most 1 option."
-        : `Select at most ${maxSelected} options.`
+        ? t("issueThreadInteractionCard.selectAtMost1Option")
+        : t("issueThreadInteractionCard.selectAtMostMaxselectedOptions", { maxSelected })
       : null;
 
   function toggleOption(optionId: string, checked: boolean) {
@@ -3024,12 +3024,12 @@ function RequestCheckboxConfirmationCard({
   }
 
   const selectionSummary = totalOptions > 0 && selectedCount === totalOptions
-    ? `All ${totalOptions} options selected`
-    : `${selectedCount} of ${totalOptions} ${totalOptions === 1 ? "option" : "options"} selected`;
+    ? t("issueThreadInteractionCard.allTotaloptionsOptionsSelected", { totalOptions })
+    : t("issueThreadInteractionCard.someOptionsSelected", { selected: selectedCount, total: totalOptions });
   const boundsHint = maxSelected != null
-    ? `Pick ${minSelected === maxSelected ? `exactly ${maxSelected}` : `${minSelected}-${maxSelected}`}.`
+    ? t("issueThreadInteractionCard.pickRange", { min: minSelected, max: maxSelected })
     : minSelected > 0
-      ? `Pick at least ${minSelected}.`
+      ? t("issueThreadInteractionCard.pickAtLeastMinselected", { minSelected })
       : null;
 
   return (
@@ -3128,14 +3128,14 @@ function RequestCheckboxConfirmationCard({
 const VERDICT_LABEL: Record<RequestItemVerdictValue, string> = {
   approve: t("common.approve"),
   reject: t("common.reject"),
-  defer: "Defer",
+  defer: t("issueThreadInteractionCard.defer"),
 };
 
 /** Present-tense past-participle label for a resolved verdict chip. */
 const VERDICT_RESOLVED_LABEL: Record<RequestItemVerdictValue, string> = {
   approve: t("common.approved"),
   reject: t("common.rejected"),
-  defer: "Deferred",
+  defer: t("issueThreadInteractionCard.deferred"),
 };
 
 function verdictChipClasses(verdict: RequestItemVerdictValue) {
@@ -3269,7 +3269,7 @@ function RequestItemVerdictsCard({
     [payload.requireReasonOn],
   );
   const allowBulkApprove = payload.allowBulkApprove !== false && enabledVerdicts.includes("approve");
-  const reasonLabel = payload.reasonLabel ?? "Reason";
+  const reasonLabel = payload.reasonLabel ?? t("issueThreadInteractionCard.reason");
 
   const resolvedById = useMemo(
     () => new Map<string, RequestItemVerdictsResultItem>((interaction.result?.items ?? []).map((item) => [item.id, item])),
@@ -3378,8 +3378,8 @@ function RequestItemVerdictsCard({
   }
 
   const applyLabel = draftCount === 0
-    ? "Apply 0 decisions"
-    : `Apply ${draftCount} decision${draftCount === 1 ? "" : "s"}`;
+    ? t("issueThreadInteractionCard.apply0Decisions")
+    : t("issueThreadInteractionCard.applyDecisions", { count: draftCount });
 
   return (
     <div className="space-y-4">
@@ -3405,10 +3405,10 @@ function RequestItemVerdictsCard({
           <div className="flex items-center gap-2 font-medium">
             <AlertTriangle className="h-4 w-4" aria-hidden />
             {interaction.result?.outcome === "superseded_by_comment"
-              ? "This review expired after a later comment."
+              ? t("issueThreadInteractionCard.thisReviewExpiredAfterA")
               : interaction.result?.outcome === "stale_target"
-                ? "This review expired after the target changed."
-                : "This review expired."}
+                ? t("issueThreadInteractionCard.thisReviewExpiredAfterThe")
+                : t("issueThreadInteractionCard.thisReviewExpired")}
           </div>
           {progress.decided > 0 ? (
             <p className="mt-1 text-xs leading-5">
@@ -3529,7 +3529,7 @@ function RequestItemVerdictsCard({
           <div className="text-xs text-muted-foreground">
             {draftCount > 0
               ? `${draftCount} draft verdict${draftCount === 1 ? "" : "s"} ready to apply`
-              : "Mark verdicts, then apply them in one pass."}
+              : t("issueThreadInteractionCard.markVerdictsThenApplyThem")}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {allowBulkApprove ? (
@@ -3763,7 +3763,7 @@ export function IssueThreadInteractionCard({
     adminOutcome === "withdrawn"
       ? t("interaction.withdrawn")
       : adminOutcome === "issue_closed"
-        ? "Expired · issue closed"
+        ? t("issueThreadInteractionCard.expiredIssueClosed")
         : activeStyles
           ? activeStyles.label
           : statusLabel(interaction.status);
@@ -3797,7 +3797,7 @@ export function IssueThreadInteractionCard({
                   <span>{statusText}</span>
                 ) : (
                   <>
-                    {isPlan ? "Plan" : interactionKindLabel(interaction.kind)}
+                    {isPlan ? t("issueThreadInteractionCard.plan") : interactionKindLabel(interaction.kind)}
                     <span className="text-current/60">/</span>
                     {statusText}
                   </>
@@ -3825,27 +3825,27 @@ export function IssueThreadInteractionCard({
             <div className="mt-3 text-lg font-bold text-foreground">
               {interaction.title
                 ?? (interaction.kind === "suggest_tasks"
-                  ? "Suggested task tree"
+                  ? t("issueThreadInteractionCard.suggestedTaskTree")
                   : interaction.kind === "ask_user_questions"
                     // Only a human-only card is genuinely "for the operator";
                     // an open card is answerable by any teammate (PAP-17280).
                     ? interaction.payload.title
                       ?? (audience.policy === "human_only"
-                        ? "Questions for the operator"
-                        : "Questions to answer")
+                        ? t("issueThreadInteractionCard.questionsForTheOperator")
+                        : t("issueThreadInteractionCard.questionsToAnswer"))
                   : interaction.kind === "request_checkbox_confirmation"
-                    ? "Checkbox confirmation requested"
+                    ? t("issueThreadInteractionCard.checkboxConfirmationRequested")
                     : isSecretProposal
-                      ? "Secret binding requested"
+                      ? t("issueThreadInteractionCard.secretBindingRequested")
                     : connectionAuthorization
-                      ? `Connect your ${connectionAuthorization.providerName} to continue`
+                      ? t("issueThreadInteractionCard.connectYourProvidernameToContinue", { providerName: connectionAuthorization.providerName })
                     : isToolAction
-                      ? "Tool approval requested"
+                      ? t("issueThreadInteractionCard.toolApprovalRequested")
                       : interaction.kind === "request_item_verdicts"
-                        ? "Review these items"
+                        ? t("issueThreadInteractionCard.reviewTheseItems")
                         : isPlan
-                          ? "Plan review"
-                          : "Confirmation requested")}
+                          ? t("issueThreadInteractionCard.planReview")
+                          : t("issueThreadInteractionCard.confirmationRequested"))}
             </div>
             {/* A connection-authorization card composes its own single body
                 below, because the closing sentence depends on whether the

@@ -41,7 +41,7 @@ export function SetupPanel({
       <SetupLinkSection title={t("common.agents")} summary={agentsSummary} onClick={onOpenPermissions} />
       <SetupLinkSection
         title={t("common.actions")}
-        summary={permissionsLoading ? "Loading permissions…" : permissionsSummary ?? "Manage permissions"}
+        summary={permissionsLoading ? t("appDetailSetupPanel.loadingPermissions") : permissionsSummary ?? t("appDetailSetupPanel.managePermissions")}
         onClick={onOpenPermissions}
       />
       {appDefinitionSlug(galleryEntry) === "google-sheets" && (
@@ -109,22 +109,22 @@ function PostHogConfigurationSection({ connection }: { connection: ToolConnectio
   const config = raw && typeof raw === "object" && !Array.isArray(raw)
     ? raw as Record<string, unknown>
     : {};
-  const method = connection.config?.connectionMethodKey === "mcp-oauth" ? "PostHog sign-in" : "Personal API key";
+  const method = connection.config?.connectionMethodKey === "mcp-oauth" ? t("appDetailSetupPanel.posthogSignIn") : t("appDetailSetupPanel.personalApiKey");
   const features = typeof config.features === "string" ? config.features : t("common.none");
   const tools = typeof config.tools === "string" && config.tools ? config.tools : t("common.none");
   const rows = [
     ["Connection method", method],
-    ["Project pin", typeof config.projectId === "string" ? config.projectId : "Use active project"],
-    ["Read-only mode", config.readOnly === true ? "On" : "Off"],
+    ["Project pin", typeof config.projectId === "string" ? config.projectId : t("appDetailSetupPanel.useActiveProject")],
+    ["Read-only mode", config.readOnly === true ? t("appDetailSetupPanel.on") : t("appDetailSetupPanel.off")],
     ["Feature groups", features],
     ["Individual tools", tools],
     ["Response mode", typeof config.mode === "string" ? config.mode : "tools"],
   ];
   return (
     <section>
-      <h2 className="text-sm font-bold text-foreground">PostHog access scope</h2>
+      <h2 className="text-sm font-bold text-foreground">{t("appDetailSetupPanel.posthogAccessScope")}</h2>
       <p className="mt-0.5 text-sm text-muted-foreground">
-        PostHog uses its normal account defaults unless you narrow the optional controls below.
+        {t("appDetailSetupPanel.posthogUsesItsNormalAccount")}
       </p>
       <dl className="mt-4 divide-y divide-border">
         {rows.map(([label, value]) => (
@@ -165,15 +165,15 @@ function GoogleSheetsAllowlistSection({
   return (
     <section>
       <div>
-        <h2 className="text-sm font-bold text-foreground">Sheets agents can use</h2>
+        <h2 className="text-sm font-bold text-foreground">{t("appDetailSetupPanel.sheetsAgentsCanUse")}</h2>
         <p className="mt-0.5 text-sm text-muted-foreground">
-          Agents can only use the sheets listed here.
+          {t("appDetailSetupPanel.agentsCanOnlyUseThe")}
         </p>
       </div>
 
       <div className="mt-4 space-y-2">
         {ids.length === 0 ? (
-          <div className="text-sm text-muted-foreground">No sheets are connected yet.</div>
+          <div className="text-sm text-muted-foreground">{t("appDetailSetupPanel.noSheetsAreConnectedYet")}</div>
         ) : (
           ids.map((id) => {
             const sheetUrl = googleSheetsUrlForId(id);
@@ -185,7 +185,7 @@ function GoogleSheetsAllowlistSection({
                   rel="noreferrer"
                   className="min-w-0 flex-1 text-sm font-medium text-foreground underline-offset-2 hover:underline"
                 >
-                  <span className="block truncate">Open sheet</span>
+                  <span className="block truncate">{t("appDetailSetupPanel.openSheet")}</span>
                   <span className="block truncate font-mono text-xs font-normal text-muted-foreground">
                     {sheetUrl}
                   </span>
@@ -198,7 +198,7 @@ function GoogleSheetsAllowlistSection({
                   size="sm"
                   variant="outline"
                   disabled={disabled || ids.length <= 1}
-                  title={ids.length <= 1 ? "Add another sheet before removing this one." : undefined}
+                  title={ids.length <= 1 ? t("appDetailSetupPanel.addAnotherSheetBeforeRemoving") : undefined}
                   onClick={() => saveIds(ids.filter((current) => current !== id))}
                 >
                   {t("common.remove")}
@@ -226,18 +226,18 @@ function GoogleSheetsAllowlistSection({
           onClick={() => {
             const parsed = parseGoogleSheetIds(draft);
             if (parsed.ids.length === 0) {
-              setError("Paste a Google Sheets link.");
+              setError(t("appDetailSetupPanel.pasteAGoogleSheetsLink"));
               return;
             }
             if (parsed.invalidCount > 0) {
-              setError("That doesn't look like a Google Sheets link.");
+              setError(t("appDetailSetupPanel.thatDoesnTLookLike"));
               return;
             }
             saveIds(Array.from(new Set([...ids, ...parsed.ids])));
             setDraft("");
           }}
         >
-          Add sheet
+          {t("appDetailSetupPanel.addSheet")}
         </Button>
       </div>
       {error && <div className="mt-2 text-xs text-destructive">{error}</div>}
@@ -265,7 +265,7 @@ export function QuarantinedActionsReview({
             Review {count} new {count === 1 ? "action" : "actions"}
           </div>
           <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">
-            Turn on the actions agents may use. Anything left off stays blocked when you save.
+            {t("appDetailSetupPanel.turnOnTheActionsAgents")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -275,7 +275,7 @@ export function QuarantinedActionsReview({
             disabled={disabled}
             onClick={() => setEnabledIds(new Set(entries.map((entry) => entry.id)))}
           >
-            Turn all on
+            {t("appDetailSetupPanel.turnAllOn")}
           </button>
           <button
             type="button"
@@ -283,7 +283,7 @@ export function QuarantinedActionsReview({
             disabled={disabled}
             onClick={() => setEnabledIds(new Set())}
           >
-            Turn all off
+            {t("appDetailSetupPanel.turnAllOff")}
           </button>
         </div>
       </div>
@@ -321,7 +321,7 @@ export function QuarantinedActionsReview({
           {selectedIds.length} of {count} will be on
         </span>
         <Button size="sm" disabled={disabled} onClick={() => onSubmit(selectedIds)}>
-          {disabled ? t("common.saving2") : "Save choices"}
+          {disabled ? t("common.saving2") : t("appDetailSetupPanel.saveChoices")}
         </Button>
       </div>
     </section>

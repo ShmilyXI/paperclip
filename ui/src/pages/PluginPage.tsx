@@ -131,7 +131,7 @@ export function PluginPage() {
     }
     return (
       <div className="space-y-4">
-        <p className="text-sm text-muted-foreground">Select an organization to view this page.</p>
+        <p className="text-sm text-muted-foreground">{t("pluginPage.selectAnOrganizationToView")}</p>
       </div>
     );
   }
@@ -147,7 +147,7 @@ export function PluginPage() {
     if (duplicateMatches.length > 1) {
       return (
         <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
-          Multiple plugins declare the route <code>{pluginRoutePath}</code>. Use the plugin-id route until the conflict is resolved.
+          {t("pluginPage.multiplePluginsDeclareTheRoute")} <code>{pluginRoutePath}</code>{t("pluginPage.useThePluginIdRoute")}
         </div>
       );
     }

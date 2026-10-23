@@ -181,7 +181,7 @@ function RecentTasksList({
         const restartIssue = await issuesApi.get(entry.id);
         setRestartWakeRetryPending(restartRetryStorageKey, entry.id, true);
         await issuesApi.releaseTreeHold(entry.id, state.activePauseHold.holdId, {
-          reason: "Restarted from Recent Tasks.",
+          reason: t("sidebar.restartedFromRecentTasks"),
         });
         if (restartIssue.assigneeAgentId) {
           const wakeResult = await agentsApi.wakeup(
@@ -201,7 +201,7 @@ function RecentTasksList({
         setRestartWakeRetryPending(restartRetryStorageKey, entry.id, false);
         toastActions?.pushToast({ title: t("sidebar.taskRestarted"), tone: "success" });
       } else if (state.activePauseHold) {
-        throw new Error("This task is paused by a parent task. Restart it from the pause root.");
+        throw new Error(t("sidebar.thisTaskIsPausedBy"));
       } else if (readRestartWakeRetryIssueIds(restartRetryStorageKey).has(entry.id)) {
         const restartIssue = await issuesApi.get(entry.id);
         if (restartIssue.assigneeAgentId) {
@@ -224,7 +224,7 @@ function RecentTasksList({
       } else {
         await issuesApi.createTreeHold(entry.id, {
           mode: "pause",
-          reason: "Paused from Recent Tasks.",
+          reason: t("sidebar.pausedFromRecentTasks"),
           releasePolicy: { strategy: "manual" },
         });
         toastActions?.pushToast({ title: t("sidebar.taskPaused"), tone: "success" });
@@ -297,7 +297,7 @@ function RecentTasksList({
                     onSelect={() => void toggleTaskPause(entry)}
                   >
                     <RefreshCw aria-hidden="true" />
-                    Pause/Restart
+                    {t("sidebar.pauseRestart")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

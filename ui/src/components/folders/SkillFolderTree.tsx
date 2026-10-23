@@ -257,7 +257,7 @@ export function SkillFolderRail({
         <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
           {t("common.folders")}
         </div>
-        <Button variant="ghost" size="icon-sm" title="New folder" onClick={() => onCreateFolder(null)}>
+        <Button variant="ghost" size="icon-sm" title={t("skillsUi.newFolder")} onClick={() => onCreateFolder(null)}>
           <Plus className="h-3.5 w-3.5" />
         </Button>
       </div>
@@ -402,7 +402,7 @@ export function SkillFolderRail({
           </div>
           <VirtualRow
             active={selection === "unfiled"}
-            label="Unfiled"
+            label={t("skillsUi.unfiled")}
             count={unfiledCount}
             icon={<FolderSwatch color={null} />}
             onSelect={() => onSelect("unfiled")}
@@ -583,7 +583,7 @@ function TreeBranch({
       >
         <button
           type="button"
-          aria-label={isOpen ? "Collapse folder" : "Expand folder"}
+          aria-label={isOpen ? t("skillsUi.collapseFolder") : t("skillsUi.expandFolder")}
           className={cn(
             "flex h-6 w-4 items-center justify-center text-muted-foreground",
             children.length === 0 && "invisible",
@@ -647,7 +647,7 @@ function TreeBranch({
               {editable ? (
                 <>
                   <DropdownMenuItem onSelect={() => onStartRename(folder)}>{t("common.rename")}</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => onEditFolder(folder)}>Edit color</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onEditFolder(folder)}>{t("skillsUi.editColor")}</DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => onMoveFolder(folder, isInMySkills ? "company" : "my")}>
                     <MoveRight className="h-3.5 w-3.5" />
                     Move to {isInMySkills ? t("common.organization") : t("skillsUi.mySkills")}
@@ -728,7 +728,7 @@ export function FolderBreadcrumb({
       {selection === "unfiled" ? (
         <>
           <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60" />
-          <span className="rounded px-1.5 py-0.5 font-medium text-foreground">Unfiled</span>
+          <span className="rounded px-1.5 py-0.5 font-medium text-foreground">{t("skillsUi.unfiled")}</span>
         </>
       ) : null}
       {trail.map((folder, index) => {
@@ -858,7 +858,7 @@ export function MoveToFolderDialog({
   const previewPath = chosen === undefined
     ? null
     : chosen === null
-      ? "Unfiled"
+      ? t("skillsUi.unfiled")
       : chosenFolder?.path ?? null;
 
   async function submitNewFolder() {
@@ -951,7 +951,7 @@ export function MoveToFolderDialog({
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search folders"
+            placeholder={t("skillsUi.searchFolders")}
             className="h-8 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
         </div>
@@ -965,7 +965,7 @@ export function MoveToFolderDialog({
             onClick={() => setTarget(null)}
           >
             <FolderSwatch color={null} />
-            <span className="min-w-0 flex-1 truncate">Unfiled</span>
+            <span className="min-w-0 flex-1 truncate">{t("skillsUi.unfiled")}</span>
             {currentFolderId == null ? <span className="text-xs text-muted-foreground">current</span> : null}
             {chosen === null ? <Check className="h-3.5 w-3.5" /> : null}
           </div>
@@ -1014,7 +1014,7 @@ export function MoveToFolderDialog({
             disabled={pending || chosen === undefined || chosen === currentFolderId}
             onClick={() => chosen !== undefined && onMove(chosen)}
           >
-            {pending ? "Moving…" : "Move here"}
+            {pending ? t("skillsUi.moving") : t("skillsUi.moveHere")}
           </Button>
         </DialogFooter>
       </DialogContent>

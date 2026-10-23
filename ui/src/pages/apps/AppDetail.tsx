@@ -201,13 +201,13 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
     )
     : grantsQuery.data?.capabilities.canConfigure === true;
   const reconnectUnavailableMessage = grantsQuery.isLoading
-    ? "Checking who can reconnect this identity…"
+    ? t("appDetail.checkingWhoCanReconnectThis")
     : grantsQuery.isError
-      ? "We couldn't verify who can reconnect this identity. Reload the page to try again."
+      ? t("appDetail.weCouldnTVerifyWho")
       : managedIdentityGrant?.kind === "user"
         && managedPersonalUserId !== grantsQuery.data?.currentUserId
-        ? "The person this connection belongs to must reconnect it."
-        : "You don't have permission to reconnect this identity.";
+        ? t("appDetail.thePersonThisConnectionBelongs")
+        : t("appDetail.youDonTHavePermission");
   const logoEntry = useMemo(
     () => galleryEntryFor((galleryQuery.data?.apps ?? []) as AppGalleryDisplayEntry[], connection, application),
     [galleryQuery.data, connection, application],
@@ -222,10 +222,10 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
   const owner = connection ? connectionOwnerProfile(connection, userProfileById) : null;
   const baseAppName = connection
     ? logoEntry ? appDefinitionName(logoEntry) : humanizeConnectionDisplayName(connection)
-    : "App";
+    : t("appDetail.app");
   const appName = connection
     ? connectionDisplayNameForOwner(connection, baseAppName, owner)
-    : "App";
+    : t("appDetail.app");
   const successNoticeShownFor = useRef<string | null>(null);
 
   useEffect(() => {
@@ -243,7 +243,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       : null;
     pushToast({
       title: t("connectors.appnameConnected", { appName }),
-      body: skillSourcePath ? "Choose a repository to import your skills." : "The connection is ready. Review permissions or test an action below.",
+      body: skillSourcePath ? t("appDetail.chooseARepositoryToImport") : t("appDetail.theConnectionIsReadyReview"),
       tone: "success",
     });
     navigate(skillSourcePath ?? appTabHref(connection.id, "permissions"), { replace: true });
@@ -423,7 +423,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       pushToast({
         title: t("connectors.audienceSaved"),
         body: (grant.members?.length ?? 0) === 0
-          ? "Every organization member can use this identity."
+          ? t("appDetail.everyOrganizationMemberCanUse")
           : `${grant.members?.length} ${grant.members?.length === 1 ? "member" : "members"} can use this identity.`,
         tone: "success",
       });
@@ -444,7 +444,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       queryClient.invalidateQueries({ queryKey: queryKeys.tools.connections(selectedCompanyId!) });
       queryClient.invalidateQueries({ queryKey: queryKeys.apps.attention(selectedCompanyId!) });
       pushToast({
-        title: `Found ${result.discoveredCount} ${result.discoveredCount === 1 ? "action" : "actions"}`,
+        title: `t("appDetail.foundActions", { count: result.discoveredCount })`,
         body: result.quarantinedCount > 0
           ? `${result.quarantinedCount} new ${result.quarantinedCount === 1 ? "action needs" : "actions need"} your OK.`
           : undefined,
@@ -685,7 +685,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
               {connection.config?.sourceTemplateKey === "composio" ? <p className="text-sm text-muted-foreground">
                 {t("connectors.thesePermissionsApplyToAll")}
               </p> : null}
-              {connection.config?.sourceTemplateKey !== "composio" && isRemoteMcpConnectorMethod(connection.config?.sourceTemplateKey, connection.config?.connectionMethodKey) && <p className="text-sm text-muted-foreground">Paperclip controls access to the tools listed here. App and action permissions inside these tools are managed in {baseAppName}.</p>}
+              {connection.config?.sourceTemplateKey !== "composio" && isRemoteMcpConnectorMethod(connection.config?.sourceTemplateKey, connection.config?.connectionMethodKey) && <p className="text-sm text-muted-foreground">{t("appDetail.paperclipControlsAccess", { app: baseAppName })}</p>}
               <PermissionsPanel
                 afterAgentAccess={<>{logoEntry?.agentInstructions && <ConnectionInstructionsSettings key={connection.id} connection={connection} provider={logoEntry.name} template={logoEntry.agentInstructions} canConfigure={grantsQuery.data?.capabilities?.canConfigure ?? false} />}{renderAgentSettings?.(connection)}</>}
                 actions={actionsContent}
@@ -704,7 +704,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
                 refreshPending={refreshTools.isPending}
                 permissionChangeWarning={
                   connection.credentialPolicy === "per_agent" && managedIdentityGrant?.providerTenant?.github
-                    ? "Shell Git and gh use this account for the run and are not constrained by per-tool Ask-first controls."
+                    ? t("appDetail.shellGitAndGhUse")
                     : undefined
                 }
                 onSaveAccess={(next) => apply({ access: connection.connectionPurpose === "ai" || managesRemoteMcpAccess ? next : accessIncludingInstalls(next, install) })}
@@ -847,7 +847,7 @@ function ToolsLoading({ mcpActions = false }: { mcpActions?: boolean }) {
   return (
     <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground" role="status">
       <Loader2 className="h-4 w-4 animate-spin" />
-      {mcpActions ? "Loading MCP actions, this may take a minute." : "Loading tools…"}
+      {mcpActions ? t("appDetail.loadingMcpActionsThisMay") : t("appDetail.loadingTools")}
     </div>
   );
 }

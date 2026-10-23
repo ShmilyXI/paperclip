@@ -192,16 +192,16 @@ export function Artifacts() {
   useEffect(() => {
     if (viewingSelectedStack && selectedGroup) {
       setBreadcrumbs([
-        { label: "Artifacts", href: "/artifacts" },
+        { label: t("artifacts.artifacts"), href: "/artifacts" },
         { label: `${selectedGroup.issue.identifier} · ${selectedGroup.title}` },
       ]);
     } else {
-      setBreadcrumbs([{ label: "Artifacts" }]);
+      setBreadcrumbs([{ label: t("artifacts.artifacts") }]);
     }
   }, [setBreadcrumbs, viewingSelectedStack, selectedGroup]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={Package} message="Select an organization to view artifacts." />;
+    return <EmptyState icon={Package} message={t("artifacts.selectAnOrganizationToView")} />;
   }
 
   const showGroupCards = viewingStackList;
@@ -209,15 +209,15 @@ export function Artifacts() {
 
   const emptyMessage = showGroupCards
     ? searching
-      ? "No artifact stacks match this search."
-      : "No artifact stacks yet."
+      ? t("artifacts.noArtifactStacksMatchThis")
+      : t("artifacts.noArtifactStacksYet")
     : searching
-      ? "No artifacts match this search."
+      ? t("artifacts.noArtifactsMatchThisSearch")
       : viewingSelectedStack
-        ? "No artifacts in this stack match the current filters."
+        ? t("artifacts.noArtifactsInThisStack")
         : kind === "all"
-          ? "No artifacts yet. Outputs attached to issues will appear here."
-          : "No artifacts of this type yet.";
+          ? t("artifacts.noArtifactsYetOutputsAttached")
+          : t("artifacts.noArtifactsOfThisType");
 
   return (
     <div className="w-full max-w-6xl space-y-5">
@@ -231,7 +231,7 @@ export function Artifacts() {
             className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-            All stacks
+            {t("artifacts.allStacks")}
           </Link>
           {selectedGroup ? (
             <span className="truncate text-muted-foreground">
@@ -261,11 +261,11 @@ export function Artifacts() {
           </div>
           <div ref={loadMoreRef} className="flex min-h-10 items-center justify-center pb-2 text-xs text-muted-foreground">
             {isFetchingNextPage
-              ? "Loading more artifacts..."
+              ? t("artifacts.loadingMoreArtifacts")
               : hasNextPage
                 ? null
                 : isFetching
-                  ? "Updating artifacts..."
+                  ? t("artifacts.updatingArtifacts")
                   : null}
           </div>
         </>

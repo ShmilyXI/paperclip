@@ -13,8 +13,8 @@ export function SkillSourceSyncControls({ automaticUpdates, refreshing, disabled
 }) {
   return <div className="flex flex-wrap items-center gap-3">
     {showPreference && <label className="flex items-center gap-2 text-xs text-muted-foreground">
-      <ToggleSwitch checked={automaticUpdates} disabled={disabled} onCheckedChange={onAutomaticUpdates} aria-label="Automatic updates" />
-      Automatic updates
+      <ToggleSwitch checked={automaticUpdates} disabled={disabled} onCheckedChange={onAutomaticUpdates} aria-label={t("skillSourceSyncControls.automaticUpdates")} />
+      {t("skillSourceSyncControls.automaticUpdates")}
     </label>}
     <Button size="sm" variant="outline" disabled={disabled || refreshing} onClick={onRefresh}>
       <RefreshCw className={refreshing ? 'size-3.5 animate-spin motion-reduce:animate-none' : 'size-3.5'} />

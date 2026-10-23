@@ -554,7 +554,7 @@ const EnumField = React.memo(({
         disabled={disabled}
       >
         <SelectTrigger className="w-full" aria-label={label} aria-required={isRequired}>
-          <SelectValue placeholder="Select an option" />
+          <SelectValue placeholder={t("jsonSchemaForm.selectAnOption")} />
         </SelectTrigger>
         <SelectContent>
           {showUnsetOption && (
@@ -669,7 +669,7 @@ const SecretField = React.memo(({
           value={
             stringValue.length === 0
               ? ""
-              : `Sensitive — ${stringValue.length} characters hidden. Click the eye to reveal.`
+              : t("jsonSchemaForm.sensitiveLengthCharactersHiddenClick", { length: stringValue.length })
           }
           readOnly
           placeholder={String(defaultValue ?? "")}
@@ -692,7 +692,7 @@ const SecretField = React.memo(({
           <Eye className="h-4 w-4 text-muted-foreground" />
         )}
         <span className="sr-only">
-          {isVisible ? "Hide secret" : "Show secret"}
+          {isVisible ? t("jsonSchemaForm.hideSecret") : t("jsonSchemaForm.showSecret")}
         </span>
       </Button>
     </div>
@@ -723,7 +723,7 @@ const SecretField = React.memo(({
           <Eye className="h-4 w-4 text-muted-foreground" />
         )}
         <span className="sr-only">
-          {isVisible ? "Hide secret" : "Show secret"}
+          {isVisible ? t("jsonSchemaForm.hideSecret") : t("jsonSchemaForm.showSecret")}
         </span>
       </Button>
     </div>
@@ -745,7 +745,7 @@ const SecretField = React.memo(({
           value={bindingValue}
           onChange={handlePickerChange}
           label=""
-          placeholder="Select an existing secret"
+          placeholder={t("jsonSchemaForm.selectAnExistingSecret")}
           allowVersionSelector={false}
           emptyHint="No active secrets yet. Create one or paste a raw value below."
           disabled={disabled}
@@ -764,7 +764,7 @@ const SecretField = React.memo(({
                   }}
                   disabled={disabled}
                 >
-                  Hide raw value input
+                  {t("jsonSchemaForm.hideRawValueInput")}
                 </button>
               ) : null}
             </div>
@@ -775,7 +775,7 @@ const SecretField = React.memo(({
               onClick={() => setShowRawInput(true)}
               disabled={disabled}
             >
-              Or paste a raw value
+              {t("jsonSchemaForm.orPasteARawValue")}
             </button>
           )
         ) : null}
@@ -976,7 +976,7 @@ const ArrayField = React.memo(({
           }}
         >
           <Plus className="mr-2 h-4 w-4" />
-          {isComplex ? "Add item" : t("common.add")}
+          {isComplex ? t("jsonSchemaForm.addItem") : t("common.add")}
         </Button>
       </div>
 
@@ -1021,13 +1021,13 @@ const ArrayField = React.memo(({
               }}
             >
               <Trash2 className="h-4 w-4" />
-              <span className="sr-only">Remove item</span>
+              <span className="sr-only">{t("jsonSchemaForm.removeItem")}</span>
             </Button>
           </div>
         ))}
         {items.length === 0 && (
           <div className="rounded-lg border border-dashed p-4 text-center text-xs text-muted-foreground">
-            No items added yet.
+            {t("jsonSchemaForm.noItemsAddedYet")}
           </div>
         )}
       </div>
@@ -1063,7 +1063,7 @@ function JsonObjectField({ value, onChange, disabled, label, error }: {
   };
   return <div className="space-y-2">
     <Textarea aria-label={`${label} JSON`} aria-invalid={!!error} value={text} onChange={(event) => change(event.target.value)} disabled={disabled} rows={5} className="font-mono text-sm" />
-    <p className="text-xs text-muted-foreground">Enter a JSON object using the action's argument names.</p>
+    <p className="text-xs text-muted-foreground">{t("jsonSchemaForm.enterAJsonObjectUsing")}</p>
     {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
   </div>;
 }
@@ -1390,7 +1390,7 @@ export function JsonSchemaForm({
           className,
         )}
       >
-        No configuration options available.
+        {t("jsonSchemaForm.noConfigurationOptionsAvailable")}
       </div>
     );
   }

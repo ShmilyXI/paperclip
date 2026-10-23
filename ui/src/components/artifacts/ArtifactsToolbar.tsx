@@ -9,17 +9,17 @@ import { cn } from "@/lib/utils";
 
 export const ARTIFACT_KIND_FILTERS: { value: ArtifactKindFilter; label: string }[] = [
   { value: "all", label: t("common.all") },
-  { value: "image", label: "Images" },
-  { value: "video", label: "Videos" },
+  { value: "image", label: t("artifactsToolbar.images") },
+  { value: "video", label: t("artifactsToolbar.videos") },
   { value: "document", label: t("common.documents") },
-  { value: "text", label: "Text" },
+  { value: "text", label: t("artifactsToolbar.text") },
   { value: "file", label: t("common.files") },
 ];
 
 export const ARTIFACT_GROUP_OPTIONS: { value: ArtifactGroupBy; label: string }[] = [
   { value: "none", label: t("common.none") },
   { value: "task", label: t("common.task") },
-  { value: "parent_task", label: "Parent task" },
+  { value: "parent_task", label: t("artifactsToolbar.parentTask") },
 ];
 
 export function artifactGroupByLabel(value: ArtifactGroupBy): string {
@@ -28,7 +28,7 @@ export function artifactGroupByLabel(value: ArtifactGroupBy): string {
 
 /** Canonical collection filters; compact standalone, standard in the toolbar. */
 export function ArtifactKindFilters({ kind, onKindChange, size = "compact" }: { kind: ArtifactKindFilter; onKindChange: (value: ArtifactKindFilter) => void; size?: TabSize }) {
-  return <TabFilters items={ARTIFACT_KIND_FILTERS} value={kind} onValueChange={onKindChange} size={size} label="Filter artifacts by type" />;
+  return <TabFilters items={ARTIFACT_KIND_FILTERS} value={kind} onValueChange={onKindChange} size={size} label={t("artifactsToolbar.filterArtifactsByType")} />;
 }
 
 export interface ArtifactsToolbarProps {
@@ -44,9 +44,9 @@ export interface ArtifactsToolbarProps {
 export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQuery, groupBy, onGroupByChange: selectGroupBy, kind, onKindChange: selectKind }: ArtifactsToolbarProps) {
   const grouping = groupBy !== "none";
   return (
-    <div data-canonical-toolbar="artifacts" role="toolbar" aria-label="Artifacts controls" className="flex flex-col items-start gap-4">
+    <div data-canonical-toolbar="artifacts" role="toolbar" aria-label={t("artifactsToolbar.artifactsControls")} className="flex flex-col items-start gap-4">
       <div className="design-toolbar-controls flex w-full flex-wrap items-center gap-4">
-        <ToolbarSearch query={draftQuery} onQueryChange={setDraftQuery} label="Search artifacts" placeholder="Search artifacts…" clearLabel="Clear artifact search" />
+        <ToolbarSearch query={draftQuery} onQueryChange={setDraftQuery} label={t("artifactsToolbar.searchArtifacts")} placeholder={t("artifactsToolbar.searchArtifacts2")} clearLabel="Clear artifact search" />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -55,7 +55,7 @@ export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQue
               variant="outline"
               size="icon"
               aria-label={`Group artifacts (currently ${artifactGroupByLabel(groupBy)})`}
-              title="Group artifacts"
+              title={t("artifactsToolbar.groupArtifacts")}
               data-testid="artifact-group-control"
               data-group-by={groupBy}
               data-active={grouping}

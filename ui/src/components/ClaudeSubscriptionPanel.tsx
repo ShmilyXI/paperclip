@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { quotaUnavailableMessage } from "@/lib/quota-refresh";
 import type { QuotaWindow } from "@paperclipai/shared";
 import { cn, quotaSourceDisplayName } from "@/lib/utils";
@@ -64,10 +65,10 @@ export function ClaudeSubscriptionPanel({
       <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
         <div className="min-w-0">
           <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-            Anthropic subscription
+            {t("claudeSubscriptionPanel.anthropicSubscription")}
           </div>
           <div className="mt-1 text-sm text-muted-foreground">
-            Quota from the Claude subscription connected to this server.
+            {t("claudeSubscriptionPanel.quotaFromTheClaudeSubscription")}
           </div>
         </div>
         {source ? (

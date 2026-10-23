@@ -375,7 +375,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
       }
     }
     updateDraft(working);
-    toast?.pushToast({ title: `Imported ${pairs.length} variable${pairs.length === 1 ? "" : "s"}`, tone: "success" });
+    toast?.pushToast({ title: t("environmentVariablesEditor.importedCount", { count: pairs.length }), tone: "success" });
     return true;
   }
 
@@ -485,7 +485,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
           })}
         </>
       ) : (
-        <p className="text-sm text-muted-foreground">No environment variables</p>
+        <p className="text-sm text-muted-foreground">{t("environmentVariablesEditor.noEnvironmentVariables")}</p>
       )}
 
       {/* Footer bar */}
@@ -497,14 +497,14 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
           className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
         >
           <Plus className="size-3.5" />
-          Add variable
+          {t("environmentVariablesEditor.addVariable")}
         </button>
 
         {quickBind.length > 0 && !disabled ? (
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="inline-flex items-center gap-1 text-(length:--text-micro) text-muted-foreground/70">
               <KeyRound className="size-3" />
-              Recently used:
+              {t("environmentVariablesEditor.recentlyUsed")}
             </span>
             {quickBind.map((secret) => (
               <button
@@ -545,7 +545,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
               className="inline-flex h-9 items-center gap-1.5 rounded-md border border-amber-500/30 bg-background px-3 text-sm font-medium text-foreground transition-colors hover:bg-amber-500/10 dark:bg-background/80"
             >
               <RotateCcw className="size-4" />
-              Revert
+              {t("environmentVariablesEditor.revert")}
             </button>
             <button
               type="button"
@@ -564,8 +564,7 @@ export const EnvironmentVariablesEditor = forwardRef<EnvironmentVariablesEditorH
         <p className="inline-flex items-start gap-1 text-(length:--text-micro) text-muted-foreground/70">
           <UserRound className="mt-0.5 size-3 shrink-0" />
           <span>
-            User secrets resolve from the user responsible for the run. Required bindings fail until that user
-            sets their value under Secrets → My secrets.
+            {t("environmentVariablesEditor.userSecretsResolveFromThe")}
           </span>
         </p>
       ) : null}

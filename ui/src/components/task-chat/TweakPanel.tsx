@@ -140,14 +140,14 @@ export function TweakPanel() {
         onPointerUp={onHeaderPointerUp}
       >
         <GripHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
-        <span>Motion tweak panel</span>
+        <span>{t("tweakPanel.motionTweakPanel")}</span>
         <div className="ml-auto flex items-center gap-1">
-          <button type="button" title="Reset all" onClick={resetAll} className="rounded p-0.5 hover:bg-accent">
+          <button type="button" title={t("tweakPanel.resetAll")} onClick={resetAll} className="rounded p-0.5 hover:bg-accent">
             <RotateCcw className="h-3.5 w-3.5" />
           </button>
           <button
             type="button"
-            title={minimized ? t("common.expand") : "Minimize"}
+            title={minimized ? t("common.expand") : t("tweakPanel.minimize")}
             onClick={() => setMinimized((m) => !m)}
             className="rounded p-0.5 hover:bg-accent"
           >
@@ -211,7 +211,7 @@ export function TweakPanel() {
               className="flex flex-1 items-center justify-center gap-1 rounded border border-border px-2 py-1 text-xs hover:bg-accent"
             >
               <Copy className="h-3.5 w-3.5" />
-              Copy as @theme
+              {t("tweakPanel.copyAsTheme")}
             </button>
           </div>
 
@@ -230,10 +230,10 @@ export function TweakPanel() {
               {/* Focusing the box copies it silently; say so, or the click looks inert. */}
               <p className="mt-1 text-(length:--text-nano) text-muted-foreground" aria-live="polite">
                 {exportCopy.copied
-                  ? "Copied to clipboard"
+                  ? t("tweakPanel.copiedToClipboard")
                   : exportCopy.failed
-                    ? "Copy failed — select the text and copy it manually"
-                    : "Click the box to copy"}
+                    ? t("tweakPanel.copyFailedSelectTheText")
+                    : t("tweakPanel.clickTheBoxToCopy")}
               </p>
             </>
           ) : null}

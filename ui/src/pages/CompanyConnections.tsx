@@ -24,7 +24,7 @@ export function CompanyConnections() {
   if (!selectedCompanyId) {
     return (
       <div className="text-sm text-muted-foreground">
-        No organization selected. Select an organization from the switcher above.
+        {t("companyConnections.noOrganizationSelectedSelectAn")}
       </div>
     );
   }

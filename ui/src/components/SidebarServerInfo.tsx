@@ -45,7 +45,7 @@ function localChangesLabel(health: HealthStatus | undefined): string {
     .filter(([count]) => Number(count) > 0)
     .map(([count, label]) => `${count} ${label}`);
 
-  return parts.length > 0 ? `Local changes present (${parts.join(", ")})` : "Local changes present";
+  return parts.length > 0 ? t("sidebarServerInfo.localChangesPresentJoin", { join: parts.join(", ") }) : t("sidebarServerInfo.localChangesPresent");
 }
 
 function ServerInfoRow({
@@ -107,17 +107,17 @@ export function SidebarServerInfo() {
   const restartedAt = restartTimestamp(health);
   const restartedAtIsValid = isValidTimestamp(restartedAt);
   const lastRestartedLabel = healthUnavailable
-    ? "Health unavailable"
+    ? t("sidebarServerInfo.healthUnavailable")
     : isWaitingForHealth
       ? t("common.loading")
       : formatTimestamp(restartedAt);
   const commit = healthUnavailable
-    ? "Health unavailable"
+    ? t("sidebarServerInfo.healthUnavailable")
     : isWaitingForHealth
       ? t("common.loading")
       : commitLabel(health);
   const localChanges = healthUnavailable
-    ? "Health unavailable"
+    ? t("sidebarServerInfo.healthUnavailable")
     : isWaitingForHealth
       ? t("common.loading")
       : localChangesLabel(health);
@@ -125,7 +125,7 @@ export function SidebarServerInfo() {
   return (
     <div className="mt-2 border-t border-border pt-2">
       <p className="px-3 pb-1 pt-1 text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
-        Server
+        {t("sidebarServerInfo.server")}
       </p>
       <ServerInfoRow
         icon={Clock3}

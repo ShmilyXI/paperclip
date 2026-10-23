@@ -257,7 +257,7 @@ export function CompanyAccess() {
   if (membersQuery.error) {
     const message =
       membersQuery.error instanceof ApiError && membersQuery.error.status === 403
-        ? "You do not have permission to manage organization members."
+        ? t("companyAccess.youDoNotHavePermission")
         : membersQuery.error instanceof Error
           ? membersQuery.error.message
           : t("access.failedToLoadOrganizationMembers");
@@ -309,7 +309,7 @@ export function CompanyAccess() {
 
       {access && !access.currentUserRole && (
         <div className="rounded-xl bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
-          This account can manage access here through instance-admin privileges, but it does not currently hold an active organization membership.
+          {t("companyAccess.thisAccountCanManageAccess")}
         </div>
       )}
 
@@ -344,7 +344,7 @@ export function CompanyAccess() {
                   context={
                     request.invite
                       ? `${request.invite.allowedJoinTypes} join invite${request.invite.humanRole ? ` • default role ${request.invite.humanRole}` : ""}`
-                      : "Invite metadata unavailable"
+                      : t("companyAccess.inviteMetadataUnavailable")
                   }
                   detail={`Submitted ${new Date(request.createdAt).toLocaleString()}`}
                   approveLabel="Approve human"
@@ -494,7 +494,7 @@ export function CompanyAccess() {
               }}
               disabled={updateMemberMutation.isPending}
             >
-              {updateMemberMutation.isPending ? t("common.saving2") : "Save member"}
+              {updateMemberMutation.isPending ? t("common.saving2") : t("companyAccess.saveMember")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -515,7 +515,7 @@ export function CompanyAccess() {
                 <div className="text-sm text-muted-foreground">{removingMember.user?.email || removingMember.principalId}</div>
                 <div className="mt-2 text-sm text-muted-foreground">
                   {assignedIssuesQuery.isLoading
-                    ? "Checking assigned tasks..."
+                    ? t("companyAccess.checkingAssignedTasks")
                     : `${assignedIssues.length} open assigned task${assignedIssues.length === 1 ? "" : "s"}`}
                 </div>
               </div>
@@ -580,7 +580,7 @@ export function CompanyAccess() {
               }}
               disabled={archiveMemberMutation.isPending || assignedIssuesQuery.isLoading}
             >
-              {archiveMemberMutation.isPending ? "Removing..." : t("access.removeMember")}
+              {archiveMemberMutation.isPending ? t("companyAccess.removing") : t("access.removeMember")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -618,7 +618,7 @@ export function CompanyAccessLegacyRoute() {
   }
 
   if (isLoading) {
-    return <div className="text-sm text-muted-foreground">Checking for advanced permission extensions...</div>;
+    return <div className="text-sm text-muted-foreground">{t("companyAccess.checkingForAdvancedPermissionExtensions")}</div>;
   }
 
   return (
@@ -629,15 +629,15 @@ export function CompanyAccessLegacyRoute() {
           <h1 className="text-lg font-semibold">{t("access.advancedPermissions")}</h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          Advanced access, scoped assignment, and explicit grant controls are provided by installed organization settings extensions.
+          {t("companyAccess.advancedAccessScopedAssignmentAnd")}
         </p>
       </div>
 
       <div className="space-y-4 rounded-xl border border-border px-5 py-5">
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold">Advanced permissions unavailable</h2>
+          <h2 className="text-sm font-semibold">{t("companyAccess.advancedPermissionsUnavailable")}</h2>
           <p className="text-sm text-muted-foreground">
-            Core Paperclip keeps enforcing organization boundaries and any existing restrictive policy data, but editing advanced permissions requires an installed extension.
+            {t("companyAccess.corePaperclipKeepsEnforcingOrganization")}
           </p>
           {errorMessage ? (
             <p className="text-sm text-destructive">Plugin extensions unavailable: {errorMessage}</p>

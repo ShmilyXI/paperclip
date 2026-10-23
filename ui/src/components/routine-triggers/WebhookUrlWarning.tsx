@@ -9,11 +9,11 @@ const warnings = {
   },
   private: {
     title: t("triggers.thisWebhookUrlAppearsTo"),
-    message: "Only senders with access to this network can reach this address. Apps on the public internet, such as GitHub, usually can’t deliver webhooks here.",
+    message: t("webhookUrlWarning.onlySendersWithAccessTo"),
   },
   tailscale: {
     title: t("triggers.thisTailscaleUrlMayNot"),
-    message: "Tailscale Serve is private to your tailnet, even with HTTPS. Apps outside your tailnet need Tailscale Funnel or another public HTTPS address. If Funnel is already enabled for this URL, you can continue.",
+    message: t("webhookUrlWarning.tailscaleServeIsPrivateTo"),
   },
   https: {
     title: t("triggers.useHttpsForWebhooksFrom"),

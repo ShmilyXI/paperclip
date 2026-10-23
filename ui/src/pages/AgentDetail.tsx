@@ -244,10 +244,10 @@ function formatEnvForDisplay(envValue: unknown, censorUsernameInLogs: boolean): 
 }
 
 const sourceLabels: Record<string, string> = {
-  timer: "Timer",
-  assignment: "Assignment",
-  on_demand: "On-demand",
-  automation: "Automation",
+  timer: t("agentDetail.timer"),
+  assignment: t("agentDetail.assignment"),
+  on_demand: t("agentDetail.onDemand"),
+  automation: t("agentDetail.automation"),
 };
 
 const LIVE_SCROLL_BOTTOM_TOLERANCE_PX = 32;
@@ -629,7 +629,7 @@ function WorkspaceOperationLogViewer({
         className="text-(length:--text-micro) text-muted-foreground underline underline-offset-2 hover:text-foreground"
         onClick={() => setOpen((value) => !value)}
       >
-        {open ? "Hide full log" : "Show full log"}
+        {open ? t("agentDetail.hideFullLog") : t("agentDetail.showFullLog")}
       </button>
       {open && (
         <div className="rounded-md border border-border bg-background/70 p-2">
@@ -736,7 +736,7 @@ function WorkspaceOperationsSection({
               )}
               {typeof metadata?.created === "boolean" && (
                 <div className="text-xs text-muted-foreground">
-                  {metadata.created ? "Created by this run" : "Reused existing workspace"}
+                  {metadata.created ? t("agentDetail.createdByThisRun") : t("agentDetail.reusedExistingWorkspace")}
                 </div>
               )}
               {operation.stderrExcerpt && operation.stderrExcerpt.trim() && (
@@ -1197,7 +1197,7 @@ export function AgentDetail() {
       {showLeftAgentNotice ? (
         <div className="flex items-center gap-3 border border-yellow-300/35 bg-yellow-300/10 px-3 py-2 text-sm text-yellow-900 dark:text-yellow-100">
           <p className="min-w-0 flex-1">
-            You left this agent. It no longer appears in your sidebar.
+            {t("agentDetail.youLeftThisAgentIt")}
           </p>
           <MembershipAction
             compact
@@ -1252,7 +1252,7 @@ export function AgentDetail() {
               <p className="text-amber-900/85 dark:text-amber-100/85">{agent.orgChainHealth.repairGuidance}</p>
             ) : (
               <p className="text-amber-900/85 dark:text-amber-100/85">
-                Assign this agent to an active manager/root, or explicitly pause or terminate the affected agent/subtree.
+                {t("agentDetail.assignThisAgentToAn")}
               </p>
             )}
           </div>
@@ -1346,13 +1346,12 @@ export function AgentDetail() {
               onClick={() => resetBuiltIn.mutate()}
               disabled={resetBuiltIn.isPending}
             >
-              {resetBuiltIn.isPending ? "Resetting…" : "Reset to defaults"}
+              {resetBuiltIn.isPending ? t("agentDetail.resetting") : t("agentDetail.resetToDefaults")}
             </Button>
           }
         >
-          Ships with Paperclip and powers <strong>{builtInFeatureLabel}</strong>. Configure it like
-          any agent — model, instructions, budget. It can be paused but not deleted; pausing it
-          pauses {builtInFeatureLabel}.
+          {t("agentDetail.shipsWithPaperclipAndPowers")} <strong>{builtInFeatureLabel}</strong>
+          {t("agentDetail.builtInConfigureLikeAnyAgent")} {builtInFeatureLabel}.
         </InlineBanner>
       )}
 
@@ -1516,7 +1515,7 @@ export function AgentDetail() {
       )}
 
       {showConfigActionBar && <footer className="sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 border-t border-border bg-background py-4">
-        <p role="status" className="text-xs text-muted-foreground">{configSaving ? "Saving changes…" : configDirty ? "You have unsaved changes." : ""}</p>
+        <p role="status" className="text-xs text-muted-foreground">{configSaving ? t("agentDetail.savingChanges") : configDirty ? t("agentDetail.youHaveUnsavedChanges") : ""}</p>
         <div className="flex gap-2">
           <Button variant="ghost" disabled={!configDirty || configSaving} onClick={() => cancelConfigActionRef.current?.()}>{t("common.discard")}</Button>
           <Button disabled={!configDirty || configSaving} onClick={() => {Promise.resolve(saveConfigActionRef.current?.()).catch(() => {});}}>{configSaving ? t("common.saving2") : t("common.saveChanges")}</Button>
@@ -1664,7 +1663,7 @@ function LatestRunCard({
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
               </span>
             )}
-            <span>{isLive ? "Live Run" : "Latest Run"}</span>
+            <span>{isLive ? t("agentDetail.liveRun") : t("agentDetail.latestRun")}</span>
             <span className="font-mono text-xs font-normal text-muted-foreground">
               &middot; {run.id.slice(0, 8)}
             </span>
@@ -1745,7 +1744,7 @@ export function AgentOverview({
     return map;
   }, [assignedIssues]);
   const configuredModel = agent.adapterType === "paperclip_runner" && agent.adapterConfig.provider === "muse"
-    ? "Managed by Muse"
+    ? t("agentDetail.managedByMuse")
     : asNonEmptyString(agent.adapterConfig?.model)
     ?? asNonEmptyString(agent.adapterConfig?.modelName)
     ?? asNonEmptyString(agent.runtimeConfig?.model)
@@ -1775,7 +1774,7 @@ export function AgentOverview({
           </div>
           <div className="space-y-3">
             <SummaryRow label={t("common.role")}><span className="text-sm">{roleLabels[agent.role] ?? agent.role}</span></SummaryRow>
-            <SummaryRow label={t("common.title")}><span className="text-sm">{agent.title ?? "Not set"}</span></SummaryRow>
+            <SummaryRow label={t("common.title")}><span className="text-sm">{agent.title ?? t("agentDetail.notSet")}</span></SummaryRow>
             <SummaryRow label={t("common.reportsTo")}>
               {reportsToAgent ? (
                 <Link className="text-sm hover:underline" to={agentDetailHref(agentRouteRef(reportsToAgent))}>
@@ -1813,8 +1812,8 @@ export function AgentOverview({
           </div>
           <div className="space-y-3">
             <SummaryRow label={t("common.adapter")}><span className="text-sm">{getAdapterDisplay(agentDisplayAdapterType(agent)).label}</span></SummaryRow>
-            {agent.adapterType === "paperclip_runner" && agent.adapterConfig.provider === "grok_bot" ? <><SummaryRow label={t("agentDetail.execution")}><span className="text-sm">Runs in Grok Bot</span></SummaryRow><SummaryRow label={t("agentDetail.usage")}><span className="text-sm">{t("agentDetail.notReported")}</span></SummaryRow></> : <SummaryRow label={t("common.model")}><span className="max-w-64 truncate text-sm font-mono">{configuredModel}</span></SummaryRow>}
-            <SummaryRow label="Session"><span className="max-w-64 truncate text-sm font-mono">{runtimeState?.sessionDisplayId ?? runtimeState?.sessionId ?? t("agentDetail.noSession")}</span></SummaryRow>
+            {agent.adapterType === "paperclip_runner" && agent.adapterConfig.provider === "grok_bot" ? <><SummaryRow label={t("agentDetail.execution")}><span className="text-sm">{t("agentDetail.runsInGrokBot")}</span></SummaryRow><SummaryRow label={t("agentDetail.usage")}><span className="text-sm">{t("agentDetail.notReported")}</span></SummaryRow></> : <SummaryRow label={t("common.model")}><span className="max-w-64 truncate text-sm font-mono">{configuredModel}</span></SummaryRow>}
+            <SummaryRow label={t("agentDetail.session")}><span className="max-w-64 truncate text-sm font-mono">{runtimeState?.sessionDisplayId ?? runtimeState?.sessionId ?? t("agentDetail.noSession")}</span></SummaryRow>
             <SummaryRow label={t("common.lastRun")}>
               <span className="text-sm">{lastRun ? `${lastRun.status} · ${relativeTime(lastRun.createdAt)}` : t("agentDetail.noRuns")}</span>
             </SummaryRow>
@@ -1974,7 +1973,7 @@ export function AgentRevisionsTab({
                   onClick={() => rollbackConfig.mutate(revision.id)}
                   disabled={rollbackConfig.isPending}
                 >
-                  Restore
+                  {t("agentDetail.restore")}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
@@ -2102,14 +2101,14 @@ export function ConfigurationTab({
   const taskAssignLocked = agent.role === "ceo" || canCreateAgents;
   const taskAssignHint =
     taskAssignSource === "ceo_role"
-      ? "Enabled automatically for CEO agents."
+      ? t("agentDetail.enabledAutomaticallyForCeoAgents")
       : taskAssignSource === "agent_creator"
-        ? "Enabled automatically while this agent can create new agents."
+        ? t("agentDetail.enabledAutomaticallyWhileThisAgent")
         : taskAssignSource === "explicit_grant"
-          ? "Enabled via explicit organization permission grant."
+          ? t("agentDetail.enabledViaExplicitOrganizationPermission")
           : taskAssignSource === "simple_default"
-            ? "Enabled by simple organization-wide task assignment defaults."
-            : "Disabled unless explicitly granted.";
+            ? t("agentDetail.enabledBySimpleOrganizationWide")
+            : t("agentDetail.disabledUnlessExplicitlyGranted");
 
   return (
     <div className="agent-settings-form space-y-6">
@@ -2130,7 +2129,7 @@ export function ConfigurationTab({
         environmentVariablesPlacement="configuration"
         compactTestFeedback
         sectionOrder={["identity", "adapter", "configuration", "environment", "environment-variables", "run-policy"]}
-        sectionTitles={{ adapter: t("common.adapter"), configuration: t("common.configuration"), identity: "Agent identity" }}
+        sectionTitles={{ adapter: t("common.adapter"), configuration: t("common.configuration"), identity: t("agentDetail.agentIdentity") }}
         canConfigureProviderTrace={canConfigureProviderTrace}
       /> : null}
 
@@ -2165,7 +2164,7 @@ export function ConfigurationTab({
             <div className="space-y-1">
               <div>{t("agentDetail.canCreateNewAgents")}</div>
               <p className="text-xs text-muted-foreground">
-                Lets this agent create or hire agents. This also grants task assignment authority.
+                {t("agentDetail.letsThisAgentCreateOr")}
               </p>
             </div>
             <ToggleSwitch
@@ -2184,7 +2183,7 @@ export function ConfigurationTab({
             <div className="space-y-1">
               <div>{t("agentDetail.canCreateImportSkills")}</div>
               <p className="text-xs text-muted-foreground">
-                Lets this agent install, import, create, and scan organization skills without creating agents.
+                {t("agentDetail.letsThisAgentInstallImport")}
               </p>
             </div>
             <ToggleSwitch
@@ -2689,7 +2688,7 @@ export function PromptsTab({
     return (
       <div className="max-w-3xl">
         <p className="text-sm text-muted-foreground">
-          Instructions bundles are only available for local adapters.
+          {t("agentDetail.instructionsBundlesAreOnlyAvailable")}
         </p>
       </div>
     );
@@ -2711,7 +2710,7 @@ export function PromptsTab({
         </div>
       )}
       {showSaveNotice && <p className="text-xs text-muted-foreground">
-        Saved instructions affect the next run. Active runs keep the instructions they started with, and instruction changes may start a fresh adapter session.
+        {t("agentDetail.savedInstructionsAffectTheNext")}
       </p>}
 
       <Collapsible defaultOpen={currentMode === "external"}>
@@ -2724,13 +2723,13 @@ export function PromptsTab({
             <div className="grid gap-x-6 gap-y-4 md:grid-cols-(--gtc-18)">
               <label className="space-y-1.5 min-w-0">
                 <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                  Mode
+                  {t("agentDetail.mode")}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={4}>
-                      Managed: Paperclip stores and serves the instructions bundle. External: you provide a path on disk where the instructions live.
+                      {t("agentDetail.managedPaperclipStoresAndServes")}
                     </TooltipContent>
                   </Tooltip>
                 </span>
@@ -2756,7 +2755,7 @@ export function PromptsTab({
                       setSelectedFile(nextEntryFile);
                     }}
                   >
-                    Managed
+                    {t("agentDetail.managed")}
                   </Button>
                   <Button
                     type="button"
@@ -2773,19 +2772,19 @@ export function PromptsTab({
                       setSelectedFile(externalBundle?.selectedFile ?? nextEntryFile);
                     }}
                   >
-                    External
+                    {t("agentDetail.external")}
                   </Button>
                 </div>
               </label>
               <label className="space-y-1.5 min-w-0">
                 <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                  Root path
+                  {t("agentDetail.rootPath")}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={4}>
-                      The absolute directory on disk where the instructions bundle lives. In managed mode this is set by Paperclip automatically.
+                      {t("agentDetail.theAbsoluteDirectoryOnDisk")}
                     </TooltipContent>
                   </Tooltip>
                 </span>
@@ -2828,13 +2827,13 @@ export function PromptsTab({
               </label>
               <label className="space-y-1.5">
                 <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                  Entry file
+                  {t("agentDetail.entryFile")}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={4}>
-                      The main file the agent reads first when loading instructions. Defaults to AGENTS.md.
+                      {t("agentDetail.theMainFileTheAgent")}
                     </TooltipContent>
                   </Tooltip>
                 </span>
@@ -2986,11 +2985,11 @@ export function PromptsTab({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <span className="ml-3 shrink-0 rounded border border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-200 px-1.5 py-0.5 text-(length:--text-nano) uppercase tracking-wide cursor-help">
-                        virtual file
+                        {t("agentDetail.virtualFile")}
                       </span>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={4}>
-                      Legacy inline prompt — this deprecated virtual file preserves the old promptTemplate content
+                      {t("agentDetail.legacyInlinePromptThisDeprecated")}
                     </TooltipContent>
                   </Tooltip>
                 );
@@ -3031,9 +3030,9 @@ export function PromptsTab({
                 <p className="text-xs text-muted-foreground">
                   {selectedFileExists
                     ? selectedFileSummary?.deprecated
-                      ? "Deprecated virtual file"
+                      ? t("agentDetail.deprecatedVirtualFile")
                       : `${selectedFileDetail?.language ?? "text"} file`
-                    : "New file in this bundle"}
+                    : t("agentDetail.newFileInThisBundle")}
                 </p>
               </div>
             </div>
@@ -3109,7 +3108,7 @@ export function PromptsTab({
                   {candidate.entryFile !== currentEntryFile && <p className="text-sm text-muted-foreground">{t("agentDetail.theInstructionEntryChangedThese")}</p>}
                   {candidate.entryFile !== currentEntryFile && candidate.content !== null && readOnlyCandidateRunId === candidate.runId && (
                     <div role="region" aria-label={`Preserved edits for ${candidate.entryFile}`} className="w-full space-y-3">
-                      <p className="text-sm text-muted-foreground">Read only: {candidate.entryFile}. To keep any of these edits in {currentEntryFile}, copy them and edit the current entry explicitly.</p>
+                      <p className="text-sm text-muted-foreground">{t("agentDetail.readOnlyNote", { entryFile: candidate.entryFile, currentEntryFile })}</p>
                       <CopyText text={candidate.content} ariaLabel={`Copy preserved edits for ${candidate.entryFile}`}
                         className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground">
                         <Copy className="h-3.5 w-3.5" />{t("agentDetail.copyPreservedEdits")}
@@ -3126,7 +3125,7 @@ export function PromptsTab({
             <details><summary className="cursor-pointer text-sm text-muted-foreground">{t("agentDetail.compareCurrentInstructions")}</summary>
               <pre className="whitespace-pre-wrap break-words rounded-md border border-border p-3 font-mono text-sm">{currentContent}</pre>
             </details>
-            {draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null) && <p className="text-sm text-destructive">The current instructions changed after this draft was loaded. Refresh the current revision, compare the instructions, and save your resolved draft again.</p>}
+            {draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null) && <p className="text-sm text-destructive">{t("agentDetail.theCurrentInstructionsChangedAfter")}</p>}
             {(resolveCandidate.error || draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null)) && <Button type="button" variant="outline" size="sm" disabled={isSaving} onClick={() => refreshCandidateBase.mutate()}>{t("agentDetail.refreshCurrentRevision")}</Button>}
           </div>}
           {(candidates.error || loadCandidate.error || resolveCandidate.error || refreshCandidateBase.error) && <p role="alert" className="text-sm text-destructive">{(candidates.error ?? loadCandidate.error ?? resolveCandidate.error ?? refreshCandidateBase.error)?.message} Your preserved edits remain available.</p>}
@@ -3146,7 +3145,7 @@ export function PromptsTab({
           {selectedFileDetail?.binary ? (
             <div className="space-y-3 rounded-md border border-border p-4">
               <p className="text-sm text-muted-foreground">{t("agentDetail.thisFileIsPreservedWith")}</p>
-              <a className="text-sm text-primary underline" href={agentsApi.downloadInstructionsFile(agent.id, selectedOrEntryFile, companyId)} download>Download {selectedOrEntryFile}</a>
+              <a className="text-sm text-primary underline" href={agentsApi.downloadInstructionsFile(agent.id, selectedOrEntryFile, companyId)} download>{t("common.download")} {selectedOrEntryFile}</a>
             </div>
           ) : selectedFileExists && fileLoading && !selectedFileDetail ? (
             <PromptEditorSkeleton />
@@ -3189,7 +3188,7 @@ export function PromptsTab({
                   if (draftBaseHashRef.current === undefined) draftBaseHashRef.current = selectedFileDetail?.contentHash ?? null;
                   setDraft(value ?? "");
                 }}
-                placeholder="# Agent instructions"
+                placeholder={t("agentDetail.agentInstructions")}
                 className="min-w-0 overflow-hidden"
                 contentClassName="min-h-(--sz-420px) max-w-full break-words text-sm leading-7"
                 imageUploadHandler={async (file) => {
@@ -3374,7 +3373,7 @@ export function RunsTab({
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors no-underline"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Back to runs
+            {t("agentDetail.backToRuns")}
           </Link>
           <RunDetail key={selectedRun.id} run={selectedRun} agentRouteId={agentRouteId} adapterType={adapterType} adapterConfig={adapterConfig} />
         </div>
@@ -3434,10 +3433,10 @@ export function RunAccountingMetrics({ run }: { run: HeartbeatRun }) {
   const metrics = runMetrics(run);
   if (!metrics.usageUnavailable && ![metrics.input, metrics.output, metrics.cached, metrics.cost].some(value => (value ?? 0) > 0)) return null;
   const values = [
-    ["Input", metrics.input === null ? "Unavailable" : formatTokens(metrics.input)],
-    [t("common.output"), metrics.output === null ? "Unavailable" : formatTokens(metrics.output)],
-    ["Cached", metrics.cached === null ? "Unavailable" : formatTokens(metrics.cached)],
-    [t("common.cost"), metrics.cost === null ? "Unavailable" : metrics.cost > 0 ? `$${metrics.cost.toFixed(4)}` : "-"],
+    [t("agentDetail.input"), metrics.input === null ? t("agentDetail.unavailable") : formatTokens(metrics.input)],
+    [t("common.output"), metrics.output === null ? t("agentDetail.unavailable") : formatTokens(metrics.output)],
+    [t("agentDetail.cached"), metrics.cached === null ? t("agentDetail.unavailable") : formatTokens(metrics.cached)],
+    [t("common.cost"), metrics.cost === null ? t("agentDetail.unavailable") : metrics.cost > 0 ? `$${metrics.cost.toFixed(4)}` : "-"],
   ];
   return (
     <div className="border-t sm:border-t-0 sm:border-l border-border p-4 grid grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-3 content-center tabular-nums">
@@ -3664,7 +3663,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
           break-glass handlers as the task detail page. */}
       <RunWorkspaceRecoverySurface run={run} />
       <AiConnectionPoolRunDetails context={run.contextSnapshot} />
-      {grokWork && <p className="text-sm text-muted-foreground">Runs in Grok Bot. Usage not reported. Stopping this session revokes Paperclip authority; remote execution may continue. Open the Grok Bot desktop app to inspect it. This view contains Paperclip-reported activity.</p>}
+      {grokWork && <p className="text-sm text-muted-foreground">{t("agentDetail.runsInGrokBotUsage")}</p>}
       {/* Run summary card */}
       <div className="border border-border rounded-lg overflow-hidden">
         <div className="flex flex-col sm:flex-row">
@@ -3685,7 +3684,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   onClick={() => cancelRun.mutate()}
                   disabled={cancelRun.isPending}
                 >
-                  {grokWork ? cancelRun.isPending ? "Stopping Paperclip work…" : "Stop Paperclip work" : cancelRun.isPending ? "Cancelling…" : t("common.cancel")}
+                  {grokWork ? cancelRun.isPending ? t("agentDetail.stoppingPaperclipWork") : t("agentDetail.stopPaperclipWork") : cancelRun.isPending ? t("agentDetail.cancelling") : t("common.cancel")}
                 </Button>
               )}
               {canResumeLostRun && (
@@ -3697,7 +3696,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   disabled={resumeRun.isPending}
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  {resumeRun.isPending ? "Resuming…" : t("common.resume")}
+                  {resumeRun.isPending ? t("agentDetail.resuming") : t("common.resume")}
                 </Button>
               )}
               {canRetryRun && !canResumeLostRun && (
@@ -3709,7 +3708,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   disabled={retryRun.isPending}
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  {retryRun.isPending ? "Retrying…" : t("common.retry")}
+                  {retryRun.isPending ? t("agentDetail.retrying") : t("common.retry")}
                 </Button>
               )}
               <Button
@@ -3719,7 +3718,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                 onClick={() => setInspectorOpen(true)}
               >
                 <Eye className="h-3.5 w-3.5 mr-1" />
-                Inspect run
+                {t("agentDetail.inspectRun")}
               </Button>
               <HoneycombRunLink
                 runId={run.id}
@@ -3734,7 +3733,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   disabled={rerunWithTrace.isPending}
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  {rerunWithTrace.isPending ? "Starting…" : "Re-run with provider trace"}
+                  {rerunWithTrace.isPending ? t("agentDetail.starting") : t("agentDetail.reRunWithProviderTrace")}
                 </Button>
               ) : null}
             </div>
@@ -3778,7 +3777,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                     const person = userDirectory?.users.find((entry) => entry.principalId === identity.responsibleUserId);
                     return (
                       <li key={identity.id}>
-                        <span className="text-foreground">{person?.user?.name ?? person?.user?.email ?? identity.responsibleUserId ?? "No responsible person"}</span>
+                        <span className="text-foreground">{person?.user?.name ?? person?.user?.email ?? identity.responsibleUserId ?? t("agentDetail.noResponsiblePerson")}</span>
                         {" · "}{identity.cause}{" · "}{identity.status}
                         {identity.github ? (
                           <span className="block">
@@ -3837,7 +3836,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                   onClick={() => runClaudeLogin.mutate()}
                   disabled={runClaudeLogin.isPending}
                 >
-                  {runClaudeLogin.isPending ? "Running claude login..." : "Login to Claude Code"}
+                  {runClaudeLogin.isPending ? t("agentDetail.runningClaudeLogin") : t("agentDetail.loginToClaudeCode")}
                 </Button>
                 {runClaudeLogin.isError && (
                   <p className="text-xs text-destructive">
@@ -3848,7 +3847,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
                 )}
                 {claudeLoginResult?.loginUrl && (
                   <p className="text-xs">
-                    Login URL:
+                    {t("agentDetail.loginUrl")}
                     <a
                       href={claudeLoginResult.loginUrl}
                       className="text-blue-600 underline underline-offset-2 ml-1 break-all dark:text-blue-400"
@@ -3902,13 +3901,13 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
             >
               <ChevronRight className={cn("h-3 w-3 transition-transform", sessionOpen && "rotate-90")} />
               Session
-              {sessionChanged && <span className="text-yellow-400 ml-1">(changed)</span>}
+              {sessionChanged && <span className="text-yellow-400 ml-1">{t("agentDetail.changed")}</span>}
             </button>
             {sessionOpen && (
               <div className="px-4 pb-3 space-y-1 text-xs">
                 {run.sessionIdBefore && (
                   <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground w-12">{sessionChanged ? "Before" : "ID"}</span>
+                    <span className="text-muted-foreground w-12">{sessionChanged ? t("agentDetail.before") : "ID"}</span>
                     <CopyText text={run.sessionIdBefore} className="font-mono" />
                   </div>
                 )}
@@ -4092,7 +4091,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
     if (parsed.length > 0) {
       // Live runs stream forever, so cap the retained tail. Terminated runs are
-      // paginated by the user via "Load more log" and keep their full history.
+      // paginated by the user via t("agentDetail.loadMoreLog") and keep their full history.
       appendLogLines(parsed);
     }
   }
@@ -4547,7 +4546,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
                 lastMetricsRef.current = readScrollMetrics(container);
               }}
             >
-              Jump to live
+              {t("agentDetail.jumpToLive")}
             </Button>
           )}
           {isLive && (
@@ -4568,7 +4567,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
           mode={transcriptMode}
           streaming={isLive}
           limit={isLive ? LIVE_TRANSCRIPT_RENDER_LIMIT : undefined}
-          emptyMessage={run.logRef ? "Waiting for transcript..." : "No persisted transcript for this run."}
+          emptyMessage={run.logRef ? t("agentDetail.waitingForTranscript") : t("agentDetail.noPersistedTranscriptForThis")}
         />
         {hasMoreLog && (
           <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
@@ -4579,7 +4578,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
               onClick={loadMorePersistedLog}
               disabled={loadingMoreLog}
             >
-              {loadingMoreLog ? t("common.loading") : "Load more log"}
+              {loadingMoreLog ? t("common.loading") : t("agentDetail.loadMoreLog")}
             </Button>
             <span className="text-xs text-muted-foreground">
               Showing the first {Math.round(logOffset / 1024).toLocaleString(dateLocale())} KB
@@ -4721,7 +4720,7 @@ export function KeysTab({ agentId, companyId }: { agentId: string; companyId?: s
       {newToken && (
         <div className="border border-yellow-300 dark:border-yellow-600/40 bg-yellow-50 dark:bg-yellow-500/5 rounded-lg p-4 space-y-2">
           <p className="text-sm font-medium text-yellow-700 dark:text-yellow-400">
-            API key created — copy it now, it will not be shown again.
+            {t("agentDetail.apiKeyCreatedCopyIt")}
           </p>
           <div className="flex items-center gap-2">
             <code className="flex-1 bg-neutral-100 dark:bg-neutral-950 rounded px-3 py-1.5 text-xs font-mono text-green-700 dark:text-green-300 truncate">
@@ -4760,10 +4759,10 @@ export function KeysTab({ agentId, companyId }: { agentId: string; companyId?: s
       <div className="border border-border rounded-lg p-4 space-y-3">
         <h3 className="text-xs font-medium text-muted-foreground flex items-center gap-2">
           <Key className="h-3.5 w-3.5" />
-          Create API Key
+          {t("agentDetail.createApiKey")}
         </h3>
         <p className="text-xs text-muted-foreground">
-          API keys allow this agent to authenticate calls to the Paperclip server.
+          {t("agentDetail.apiKeysAllowThisAgent")}
         </p>
         <div className="flex items-center gap-2">
           <Input
@@ -4796,7 +4795,7 @@ export function KeysTab({ agentId, companyId }: { agentId: string; companyId?: s
       {activeKeys.length > 0 && (
         <div>
           <h3 className="text-xs font-medium text-muted-foreground mb-2">
-            Active Keys
+            {t("agentDetail.activeKeys")}
           </h3>
           <div className="border border-border rounded-lg divide-y divide-border">
             {activeKeys.map((key: AgentKey) => (
@@ -4814,7 +4813,7 @@ export function KeysTab({ agentId, companyId }: { agentId: string; companyId?: s
                   onClick={() => revokeKey.mutate(key.id)}
                   disabled={revokeKey.isPending}
                 >
-                  Revoke
+                  {t("agentDetail.revoke")}
                 </Button>
               </div>
             ))}
@@ -4826,7 +4825,7 @@ export function KeysTab({ agentId, companyId }: { agentId: string; companyId?: s
       {revokedKeys.length > 0 && (
         <div>
           <h3 className="text-xs font-medium text-muted-foreground mb-2">
-            Revoked Keys
+            {t("agentDetail.revokedKeys")}
           </h3>
           <div className="border border-border rounded-lg divide-y divide-border opacity-50">
             {revokedKeys.map((key: AgentKey) => (

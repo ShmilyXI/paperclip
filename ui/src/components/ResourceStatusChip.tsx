@@ -34,40 +34,40 @@ interface VariantSpec {
 }
 
 const VARIANTS: Record<ResourceStatusVariant, VariantSpec> = {
-  ready: { color: "green", glyph: "●", label: "Ready", title: "Materialized and matches the shipped default" },
-  needs_setup: { color: "amber", glyph: "⚠", label: "Needs setup", title: "Present but not usable yet" },
-  missing: { color: "amber", glyph: "⚠", label: "Missing", title: "Expected resource absent; reconcile will recreate it" },
-  error: { color: "red", glyph: "✕", label: t("common.error"), title: "Failed to load or reconcile" },
+  ready: { color: "green", glyph: "●", label: t("resourceStatusChip.ready"), title: t("resourceStatusChip.materializedAndMatchesTheShipped") },
+  needs_setup: { color: "amber", glyph: "⚠", label: t("resourceStatusChip.needsSetup"), title: t("resourceStatusChip.presentButNotUsableYet") },
+  missing: { color: "amber", glyph: "⚠", label: t("resourceStatusChip.missing"), title: t("resourceStatusChip.expectedResourceAbsentReconcileWill") },
+  error: { color: "red", glyph: "✕", label: t("common.error"), title: t("resourceStatusChip.failedToLoadOrReconcile") },
   update_available: {
     color: "blue",
     glyph: "↑",
-    label: "Update available",
-    title: "Unedited — a newer shipped default can be applied",
+    label: t("resourceStatusChip.updateAvailable"),
+    title: t("resourceStatusChip.uneditedANewerShippedDefault"),
   },
   drifted: {
     color: "gray",
     glyph: "✎",
-    label: "Drifted",
-    title: "You've edited this; your changes are kept, not overwritten",
+    label: t("resourceStatusChip.drifted"),
+    title: t("resourceStatusChip.youVeEditedThisYour"),
   },
   schedule_off: {
     color: "gray",
     glyph: "◌",
-    label: "Schedule off",
-    title: "No background work runs until you enable it — costs zero tokens",
+    label: t("resourceStatusChip.scheduleOff"),
+    title: t("resourceStatusChip.noBackgroundWorkRunsUntil"),
   },
-  schedule_on: { color: "green", glyph: "●", label: t("common.weekly"), title: "Runs on the weekly schedule" },
+  schedule_on: { color: "green", glyph: "●", label: t("common.weekly"), title: t("resourceStatusChip.runsOnTheWeeklySchedule") },
   pending_approval: {
     color: "amber",
     glyph: "⚠",
     label: t("common.pendingApproval"),
-    title: "Waiting on board hire approval before it can run",
+    title: t("resourceStatusChip.waitingOnBoardHireApproval"),
   },
   proposal_pending: {
     color: "blue",
     glyph: "↑",
-    label: "Proposal pending",
-    title: "A proposed update is waiting for your review",
+    label: t("resourceStatusChip.proposalPending"),
+    title: t("resourceStatusChip.aProposedUpdateIsWaiting"),
   },
 };
 

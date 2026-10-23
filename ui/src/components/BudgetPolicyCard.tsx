@@ -21,7 +21,7 @@ function parseDollarInput(value: string) {
 }
 
 function windowLabel(windowKind: BudgetPolicySummary["windowKind"]) {
-  return windowKind === "lifetime" ? "Lifetime budget" : "Monthly UTC budget";
+  return windowKind === "lifetime" ? t("budgetPolicyCard.lifetimeBudget") : t("budgetPolicyCard.monthlyUtcBudget");
 }
 
 function statusTone(status: BudgetPolicySummary["status"]) {
@@ -59,25 +59,25 @@ export function BudgetPolicyCard({
   let reservationCents: string | null = null;
   try { if (!reservation.trim().startsWith("-")) reservationCents = usdToCents(reservation.trim()); } catch { /* Shown as invalid input below. */ }
   const reservationSection = onReservationChange ? <div className="space-y-2">
-    <label className="text-sm">Reserve per run (USD)
-      <Input aria-label="Reserve per run (USD)" aria-invalid={reservationCents === null} aria-describedby={reservationCents === null ? reservationErrorId : undefined}
+    <label className="text-sm">{t("budgetPolicyCard.reservePerRunUsd")}
+      <Input aria-label={t("budgetPolicyCard.reservePerRunUsd")} aria-invalid={reservationCents === null} aria-describedby={reservationCents === null ? reservationErrorId : undefined}
         value={reservation} onChange={event => setReservation(event.target.value)} inputMode="decimal" />
     </label>
-    {reservationCents === null && <p id={reservationErrorId} role="alert" className="text-xs text-destructive">Enter a valid amount of zero or more.</p>}
-    <p className="text-xs text-muted-foreground">An estimate held before each run starts. Zero disables the estimate. Actual provider charges may exceed it.</p>
+    {reservationCents === null && <p id={reservationErrorId} role="alert" className="text-xs text-destructive">{t("budgetPolicyCard.enterAValidAmountOf")}</p>}
+    <p className="text-xs text-muted-foreground">{t("budgetPolicyCard.anEstimateHeldBeforeEach")}</p>
     <Button variant="outline" disabled={isSaving || reservationCents === null || reservationCents === (summary.reservationCents ?? "0.0000000")}
-      onClick={() => { if (reservationCents !== null) onReservationChange(reservationCents); }}>Update reservation</Button>
+      onClick={() => { if (reservationCents !== null) onReservationChange(reservationCents); }}>{t("budgetPolicyCard.updateReservation")}</Button>
   </div> : null;
 
   const advancedSettings = onReservationChange || onUnpricedUsagePolicyChange ? (
     <details className="space-y-3">
-      <summary className="cursor-pointer text-sm font-medium">Advanced settings</summary>
+      <summary className="cursor-pointer text-sm font-medium">{t("budgetPolicyCard.advancedSettings")}</summary>
       <div className="space-y-4">
         {onUnpricedUsagePolicyChange && (
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={summary.unpricedUsagePolicy !== "allow"} disabled={isSaving}
               onChange={(event) => onUnpricedUsagePolicyChange(event.target.checked ? "block" : "allow")} />
-            Block new work when usage has no reliable price
+            {t("budgetPolicyCard.blockNewWorkWhenUsage")}
           </label>
         )}
         {reservationSection}
@@ -94,10 +94,10 @@ export function BudgetPolicyCard({
   const observedBudgetGrid = isPlain ? (
     <div className="grid gap-6 sm:grid-cols-2">
       <div>
-        <div className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">Observed</div>
+        <div className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">{t("budgetPolicyCard.observed")}</div>
         <div className="mt-2 text-xl font-semibold tabular-nums">{formatCents(summary.observedAmount)}</div>
         <div className="mt-1 text-xs text-muted-foreground">
-          {summary.amount > 0 ? `${summary.utilizationPercent}% of limit` : "No cap configured"}
+          {summary.amount > 0 ? `${summary.utilizationPercent}${t("budgetPolicyCard.percentOfLimit")}` : t("budgetPolicyCard.noCapConfigured")}
         </div>
       </div>
       <div>
@@ -113,10 +113,10 @@ export function BudgetPolicyCard({
   ) : (
     <div className="grid gap-3 sm:grid-cols-2">
       <div className="rounded-xl border border-border/70 bg-black/[0.18] px-4 py-3">
-        <div className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">Observed</div>
+        <div className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">{t("budgetPolicyCard.observed")}</div>
         <div className="mt-2 text-xl font-semibold tabular-nums">{formatCents(summary.observedAmount)}</div>
         <div className="mt-1 text-xs text-muted-foreground">
-          {summary.amount > 0 ? `${summary.utilizationPercent}% of limit` : "No cap configured"}
+          {summary.amount > 0 ? `${summary.utilizationPercent}% of limit` : t("budgetPolicyCard.noCapConfigured")}
         </div>
       </div>
       <div className="rounded-xl border border-border/70 bg-black/[0.18] px-4 py-3">
@@ -167,8 +167,8 @@ export function BudgetPolicyCard({
       <PauseCircle className="mt-0.5 h-4 w-4 shrink-0" />
       <div>
         {summary.scopeType === "project"
-          ? "Execution is paused for this project until the budget block is resolved."
-          : "Heartbeats are paused for this scope until the budget block is resolved."}
+          ? t("budgetPolicyCard.executionIsPausedForThis")
+          : t("budgetPolicyCard.heartbeatsArePausedForThis")}
       </div>
     </div>
   ) : null;
@@ -177,7 +177,7 @@ export function BudgetPolicyCard({
     <div className={cn("flex flex-col gap-3 sm:flex-row sm:items-end", isPlain ? "" : "rounded-xl border border-border/70 bg-background/50 p-3")}>
       <div className="min-w-0 flex-1">
         <label className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">
-          Budget (USD)
+          {t("budgetPolicyCard.budgetUsd")}
         </label>
         <Input
           value={draftBudget}
@@ -193,7 +193,7 @@ export function BudgetPolicyCard({
         }}
         disabled={!canSave || isSaving || parsedDraft === null}
       >
-        {isSaving ? t("common.saving") : summary.amount > 0 ? "Update budget" : "Set budget"}
+        {isSaving ? t("common.saving") : summary.amount > 0 ? t("budgetPolicyCard.updateBudget") : t("budgetPolicyCard.setBudget")}
       </Button>
     </div>
   ) : null;
@@ -220,7 +220,7 @@ export function BudgetPolicyCard({
             )}
           >
             <StatusIcon className="h-3.5 w-3.5" />
-            {summary.paused ? t("common.paused") : summary.status === "warning" ? t("common.warning") : summary.status === "hard_stop" ? "Hard stop" : "Healthy"}
+            {summary.paused ? t("common.paused") : summary.status === "warning" ? t("common.warning") : summary.status === "hard_stop" ? t("budgetPolicyCard.hardStop") : t("budgetPolicyCard.healthy")}
           </div>
         </div>
 
@@ -230,7 +230,7 @@ export function BudgetPolicyCard({
         {saveSection}
         {advancedSettings}
         {parsedDraft === null ? (
-          <p className="text-xs text-destructive">Enter a valid non-negative dollar amount.</p>
+          <p className="text-xs text-destructive">{t("budgetPolicyCard.enterAValidNonNegative")}</p>
         ) : null}
       </div>
     );
@@ -249,7 +249,7 @@ export function BudgetPolicyCard({
           </div>
           <div className={cn("inline-flex items-center gap-2 rounded-full border px-3 py-1 text-(length:--text-micro) uppercase tracking-(--tracking-caps)", statusTone(summary.status))}>
             <StatusIcon className="h-3.5 w-3.5" />
-            {summary.paused ? t("common.paused") : summary.status === "warning" ? t("common.warning") : summary.status === "hard_stop" ? "Hard stop" : "Healthy"}
+            {summary.paused ? t("common.paused") : summary.status === "warning" ? t("common.warning") : summary.status === "hard_stop" ? t("budgetPolicyCard.hardStop") : t("budgetPolicyCard.healthy")}
           </div>
         </div>
       </CardHeader>
@@ -260,7 +260,7 @@ export function BudgetPolicyCard({
         {saveSection}
         {advancedSettings}
         {parsedDraft === null ? (
-          <p className="text-xs text-destructive">Enter a valid non-negative dollar amount.</p>
+          <p className="text-xs text-destructive">{t("budgetPolicyCard.enterAValidNonNegative")}</p>
         ) : null}
       </CardContent>
     </Card>

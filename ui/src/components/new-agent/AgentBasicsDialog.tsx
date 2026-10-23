@@ -114,7 +114,7 @@ export function AgentBasicsDialog({
     setSaving(true);
     setSaveError(null);
     try {
-      if (!companyId) throw new Error("Select an organization to create an agent.");
+      if (!companyId) throw new Error(t("agentBasicsDialog.selectAnOrganizationToCreate"));
       let agent = saved.current;
       if (!agent && setupAgentId) agent = await agentsApi.get(setupId.current, companyId);
       const creatingRecord = !agent;
@@ -123,7 +123,7 @@ export function AgentBasicsDialog({
         const leader = existing.find(item => item.role === "ceo" && item.status !== "terminated");
         const provisionalAdapter = adapters?.some(item => item.type === "process" && item.disabled)
           ? choices[0]?.type : "process";
-        if (!provisionalAdapter) throw new Error("No agent adapters are available on this instance.");
+        if (!provisionalAdapter) throw new Error(t("agentBasicsDialog.noAgentAdaptersAreAvailable"));
         // This adapter is provisional; the setup hold prevents execution.
         agent = await agentsApi.create(companyId, {
           setupId: setupId.current, name: name.trim(), appearance: appearanceDraft.appearance,
@@ -160,7 +160,7 @@ export function AgentBasicsDialog({
       else onContinue({ name: agent.name, adapterType: nextAdapter, runnerProvider: nextProvider,
         runner: "auto", setupAgentId: agent.id });
     } catch (cause) {
-      if (active.current) setSaveError(cause instanceof Error ? cause.message : "Could not save agent setup.");
+      if (active.current) setSaveError(cause instanceof Error ? cause.message : t("agentBasicsDialog.couldNotSaveAgentSetup"));
     } finally {
       busy.current = false;
       if (active.current) setSaving(false);
@@ -181,18 +181,18 @@ export function AgentBasicsDialog({
       >
         <div
           className="flex items-center gap-2 px-6 py-5 text-xs text-muted-foreground"
-          aria-label="New agent progress"
+          aria-label={t("agentBasicsDialog.newAgentProgress")}
         >
           <span
             className={cn(step === "name" && "font-medium text-foreground")}
           >
-            1. Name
+            {t("agentBasicsDialog.n1Name")}
           </span>
           <ChevronRight className="size-3" />
           <span
             className={cn(step === "adapter" && "font-medium text-foreground")}
           >
-            2. Adapter
+            {t("agentBasicsDialog.n2Adapter")}
           </span>
         </div>
         <form
@@ -208,27 +208,27 @@ export function AgentBasicsDialog({
               <div className="space-y-2">
                 <DialogTitle className="text-3xl font-semibold tracking-tight">
                   {step === "name"
-                    ? "Meet your next agent"
-                    : "Choose an adapter"}
+                    ? t("agentBasicsDialog.meetYourNextAgent")
+                    : t("agentBasicsDialog.chooseAnAdapter")}
                 </DialogTitle>
                 <DialogDescription className="text-base">
                   {step === "name"
-                    ? "Start with a name. Make them your own."
-                    : `How should ${name.trim()} work?`}
+                    ? t("agentBasicsDialog.startWithANameMake")
+                    : t("agentBasicsDialog.howShouldTrimWork", { trim: name.trim() })}
                 </DialogDescription>
               </div>
             </div>
             {step === "name" ? (
               <div className="space-y-2">
                 <label htmlFor={id} className="text-sm font-medium">
-                  Agent name
+                  {t("agentBasicsDialog.agentName")}
                 </label>
                 <Input
                   id={id}
                   autoFocus
                   disabled={saving}
                   maxLength={100}
-                  placeholder="e.g. Darnold"
+                  placeholder={t("agentBasicsDialog.eGDarnold")}
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   className="h-12 text-base"
@@ -240,7 +240,7 @@ export function AgentBasicsDialog({
                     className="px-0 text-muted-foreground"
                     onClick={onInvite}
                   >
-                    Invite an external agent
+                    {t("agentBasicsDialog.inviteAnExternalAgent")}
                   </Button>
                 )}
               </div>
@@ -249,7 +249,7 @@ export function AgentBasicsDialog({
                 <legend className="sr-only">{t("common.adapter")}</legend>
                 {isPending && (
                   <p role="status" className="text-sm text-muted-foreground">
-                    Loading adapters…
+                    {t("agentBasicsDialog.loadingAdapters")}
                   </p>
                 )}
                 {error && (
@@ -297,10 +297,10 @@ export function AgentBasicsDialog({
                 {experimentalRunnerAvailable && <details className="space-y-3">
                   <summary className="cursor-pointer text-sm text-muted-foreground">{t("common.advanced")}</summary>
                   <div className="space-y-2">
-                    <label className="text-sm text-muted-foreground">Experimental harness</label>
-                    <SelectPopover aria-label="Experimental harness"
+                    <label className="text-sm text-muted-foreground">{t("agentBasicsDialog.experimentalHarness")}</label>
+                    <SelectPopover aria-label={t("agentBasicsDialog.experimentalHarness")}
                       value={adapterType === "paperclip_runner" ? runnerProvider : ""}
-                      placeholder="Choose a native harness…"
+                      placeholder={t("agentBasicsDialog.chooseANativeHarness")}
                       onValueChange={provider => { setRunnerProvider(provider); setAdapterType("paperclip_runner"); }}
                       options={[
                         { value: "grok", label: "Grok Build (Paperclip Runner)" },
@@ -332,7 +332,7 @@ export function AgentBasicsDialog({
               type="submit"
               disabled={saving || !name.trim() || (step === "adapter" && !validAdapter)}
             >
-              {saving ? t("common.saving2") : step === "name" ? "Choose adapter" : "Configure agent"}
+              {saving ? t("common.saving2") : step === "name" ? t("agentBasicsDialog.chooseAdapter") : t("agentBasicsDialog.configureAgent")}
               <ArrowRight className="size-4" />
             </Button>
           </div>

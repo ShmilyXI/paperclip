@@ -220,7 +220,7 @@ function firstNonEmptyLine(value: string | null | undefined): string | null {
 }
 
 function runFailureMessage(run: HeartbeatRun): string {
-  return firstNonEmptyLine(run.error) ?? firstNonEmptyLine(run.stderrExcerpt) ?? "Run exited with an error.";
+  return firstNonEmptyLine(run.error) ?? firstNonEmptyLine(run.stderrExcerpt) ?? t("legacyInbox.runExitedWithAnError");
 }
 
 function approvalStatusLabel(status: Approval["status"]): string {
@@ -392,7 +392,7 @@ export function FailedRunInboxRow({
             disabled={isRetrying}
           >
             <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-            {isRetrying ? "Retrying…" : t("common.retry")}
+            {isRetrying ? t("legacyInbox.retrying") : t("common.retry")}
           </Button>
           {!showUnreadSlot && (
             <button
@@ -416,7 +416,7 @@ export function FailedRunInboxRow({
           disabled={isRetrying}
         >
           <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-          {isRetrying ? "Retrying…" : t("common.retry")}
+          {isRetrying ? t("legacyInbox.retrying") : t("common.retry")}
         </Button>
         {!showUnreadSlot && (
           <button
@@ -1036,7 +1036,7 @@ export function Inbox() {
     if (currentUserId) {
       options.set(`user:${currentUserId}`, {
         id: `user:${currentUserId}`,
-        label: currentUserId === "local-board" ? t("common.board") : "Me",
+        label: currentUserId === "local-board" ? t("common.board") : t("legacyInbox.me"),
         kind: "user",
         searchText: currentUserId === "local-board" ? "board me human local-board" : `me board human ${currentUserId}`,
       });
@@ -1625,7 +1625,7 @@ export function Inbox() {
       navigate(`/approvals/${id}?resolved=approved`);
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to approve");
+      setActionError(err instanceof Error ? err.message : t("legacyInbox.failedToApprove"));
     },
   });
 
@@ -1636,7 +1636,7 @@ export function Inbox() {
       queryClient.invalidateQueries({ queryKey: queryKeys.approvals.list(selectedCompanyId!) });
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to reject");
+      setActionError(err instanceof Error ? err.message : t("legacyInbox.failedToReject"));
     },
   });
 
@@ -1651,7 +1651,7 @@ export function Inbox() {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to approve join request");
+      setActionError(err instanceof Error ? err.message : t("legacyInbox.failedToApproveJoinRequest"));
     },
   });
 
@@ -1664,7 +1664,7 @@ export function Inbox() {
       queryClient.invalidateQueries({ queryKey: queryKeys.sidebarBadges(selectedCompanyId!) });
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : "Failed to reject join request");
+      setActionError(err instanceof Error ? err.message : t("legacyInbox.failedToRejectJoinRequest"));
     },
   });
 
@@ -1691,8 +1691,8 @@ export function Inbox() {
     },
     onError: (error) => {
       pushToast({
-        title: "Run retry failed",
-        body: error instanceof Error ? error.message : "Unable to retry run",
+        title: t("legacyInbox.runRetryFailed"),
+        body: error instanceof Error ? error.message : t("legacyInbox.unableToRetryRun"),
         tone: "error",
       });
     },
@@ -1765,7 +1765,7 @@ export function Inbox() {
       return { companyId: selectedCompanyId, previousData };
     },
     onError: (err, id, context) => {
-      setActionError(err instanceof Error ? err.message : "Failed to archive task");
+      setActionError(err instanceof Error ? err.message : t("legacyInbox.failedToArchiveTask"));
       if (context?.companyId) clearLocalInboxArchive(context.companyId, id);
       setArchivingIssueIds((prev) => {
         const next = new Set(prev);
@@ -1806,7 +1806,7 @@ export function Inbox() {
       return { companyId: selectedCompanyId };
     },
     onError: (err, id, context) => {
-      setActionError(err instanceof Error ? err.message : "Failed to undo inbox archive");
+      setActionError(err instanceof Error ? err.message : t("legacyInbox.failedToUndoInboxArchive"));
       if (context?.companyId) {
         beginLocalInboxArchive(context.companyId, id);
         boundLocalInboxArchive(context.companyId, id);
@@ -2210,7 +2210,7 @@ export function Inbox() {
   }, [selectedIndex]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={InboxIcon} message="Select a company to view inbox." />;
+    return <EmptyState icon={InboxIcon} message={t("legacyInbox.selectACompanyToView")} />;
   }
 
   const hasRunFailures = failedRuns.length > 0;
@@ -2268,7 +2268,7 @@ export function Inbox() {
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search inbox…"
+            placeholder={t("legacyInbox.searchInbox")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
@@ -2298,13 +2298,13 @@ export function Inbox() {
             items={[
               {
                 value: "mine",
-                label: "Mine",
+                label: t("legacyInbox.mine"),
               },
               {
                 value: "recent",
                 label: t("common.recent"),
               },
-              { value: "unread", label: "Unread" },
+              { value: "unread", label: t("legacyInbox.unread") },
               { value: "blocked", label: t("common.blocked") },
               { value: "all", label: t("common.all") },
             ]}
@@ -2316,7 +2316,7 @@ export function Inbox() {
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search inbox…"
+              placeholder={t("legacyInbox.searchInbox")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => {
@@ -2364,7 +2364,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", blockedGroupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={t("legacyInbox.group")}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2393,7 +2393,7 @@ export function Inbox() {
                 visibleColumnSet={visibleIssueColumnSet}
                 onToggleColumn={toggleIssueColumn}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which inbox columns stay visible"
+                title={t("legacyInbox.chooseWhichInboxColumnsStay")}
                 iconOnly
               />
               <Popover>
@@ -2436,7 +2436,7 @@ export function Inbox() {
                 size="icon"
                 className={cn("hidden h-8 w-8 shrink-0 sm:inline-flex", nestingEnabled && "bg-accent")}
                 onClick={toggleNesting}
-                title={nestingEnabled ? "Disable parent-child nesting" : "Enable parent-child nesting"}
+                title={nestingEnabled ? t("legacyInbox.disableParentChildNesting") : t("legacyInbox.enableParentChildNesting")}
               >
                 <ListTree className="h-3.5 w-3.5" />
               </Button>
@@ -2462,7 +2462,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", groupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={t("legacyInbox.group")}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2497,7 +2497,7 @@ export function Inbox() {
                 visibleColumnSet={visibleIssueColumnSet}
                 onToggleColumn={toggleIssueColumn}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which inbox columns stay visible"
+                title={t("legacyInbox.chooseWhichInboxColumnsStay")}
                 iconOnly
               />
               {canMarkAllRead && (
@@ -2510,12 +2510,12 @@ export function Inbox() {
                     onClick={() => setShowMarkAllReadConfirm(true)}
                     disabled={markAllReadMutation.isPending}
                   >
-                    {markAllReadMutation.isPending ? "Marking…" : t("common.markAllAsRead")}
+                    {markAllReadMutation.isPending ? t("legacyInbox.marking") : t("common.markAllAsRead")}
                   </Button>
                   <Dialog open={showMarkAllReadConfirm} onOpenChange={setShowMarkAllReadConfirm}>
                     <DialogContent className="sm:max-w-md">
                       <DialogHeader>
-                        <DialogTitle>Mark all as read?</DialogTitle>
+                        <DialogTitle>{t("legacyInbox.markAllAsRead")}</DialogTitle>
                         <DialogDescription>
                           This will mark {unreadIssueIds.length} unread {unreadIssueIds.length === 1 ? "item" : "items"} as read.
                         </DialogDescription>
@@ -2550,15 +2550,15 @@ export function Inbox() {
             onValueChange={(value) => updateAllCategoryFilter(value as InboxCategoryFilter)}
           >
             <SelectTrigger className="h-8 w-(--sz-170px) text-xs">
-              <SelectValue placeholder="Category" />
+              <SelectValue placeholder={t("legacyInbox.category")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="everything">All categories</SelectItem>
-              <SelectItem value="issues_i_touched">My recent tasks</SelectItem>
-              <SelectItem value="join_requests">Join requests</SelectItem>
+              <SelectItem value="everything">{t("legacyInbox.allCategories")}</SelectItem>
+              <SelectItem value="issues_i_touched">{t("legacyInbox.myRecentTasks")}</SelectItem>
+              <SelectItem value="join_requests">{t("legacyInbox.joinRequests")}</SelectItem>
               <SelectItem value="approvals">{t("common.approvals")}</SelectItem>
-              <SelectItem value="failed_runs">Failed runs</SelectItem>
-              <SelectItem value="alerts">Alerts</SelectItem>
+              <SelectItem value="failed_runs">{t("legacyInbox.failedRuns")}</SelectItem>
+              <SelectItem value="alerts">{t("legacyInbox.alerts")}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -2568,12 +2568,12 @@ export function Inbox() {
               onValueChange={(value) => updateAllApprovalFilter(value as InboxApprovalFilter)}
             >
               <SelectTrigger className="h-8 w-(--sz-170px) text-xs">
-                <SelectValue placeholder="Approval status" />
+                <SelectValue placeholder={t("legacyInbox.approvalStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All approval statuses</SelectItem>
-                <SelectItem value="actionable">Needs action</SelectItem>
-                <SelectItem value="resolved">Resolved</SelectItem>
+                <SelectItem value="all">{t("legacyInbox.allApprovalStatuses")}</SelectItem>
+                <SelectItem value="actionable">{t("legacyInbox.needsAction")}</SelectItem>
+                <SelectItem value="resolved">{t("legacyInbox.resolved")}</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -2613,14 +2613,14 @@ export function Inbox() {
           icon={searchQuery.trim() ? Search : InboxIcon}
           message={
             searchQuery.trim()
-              ? "No inbox items match your search."
+              ? t("legacyInbox.noInboxItemsMatchYour")
               : tab === "mine"
-              ? "Inbox zero."
+              ? t("legacyInbox.inboxZero")
               : tab === "unread"
-              ? "No new inbox items."
+              ? t("legacyInbox.noNewInboxItems")
               : tab === "recent"
-                ? "No recent inbox items."
-                : "No inbox items match these filters."
+                ? t("legacyInbox.noRecentInboxItems")
+                : t("legacyInbox.noInboxItemsMatchThese")
           }
         />
       )}
@@ -2807,7 +2807,7 @@ export function Inbox() {
                       >
                         <div className="h-px flex-1 bg-border/80" />
                         <span className="shrink-0 text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
-                          {group.searchSection === "archived" ? t("common.archived") : "Other results"}
+                          {group.searchSection === "archived" ? t("common.archived") : t("legacyInbox.otherResults")}
                         </span>
                         <div className="h-px flex-1 bg-border/80" />
                       </div>,
@@ -2887,7 +2887,7 @@ export function Inbox() {
                         <div key={`today-divider-${group.key}-${index}`} className="my-2 flex items-center gap-3 px-4">
                           <div className="flex-1 border-t border-zinc-600" />
                           <span className="shrink-0 text-(length:--text-micro) font-medium uppercase tracking-wider text-zinc-500">
-                            Earlier
+                            {t("legacyInbox.earlier")}
                           </span>
                         </div>,
                       );
@@ -3102,7 +3102,7 @@ export function Inbox() {
           {showSeparatorBefore("alerts") && <Separator />}
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Alerts
+              {t("legacyInbox.alerts")}
             </h3>
             <div className="divide-y divide-border border border-border">
               {showAggregateAgentError && (

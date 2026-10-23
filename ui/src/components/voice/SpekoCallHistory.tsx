@@ -16,14 +16,14 @@ function charge(amount: string | null) {
 }
 export function SpekoCallReport({ report }: { report: VoiceCallReport }) {
   return <div className="space-y-3">
-    <dl className="flex flex-wrap gap-4 text-sm"><div><dt className="text-muted-foreground">Speko charge</dt><dd>{charge(report.costMicroUsd)}</dd></div>{report.durationSeconds !== null && <div><dt className="text-muted-foreground">{t("common.duration")}</dt><dd>{report.durationSeconds} seconds</dd></div>}</dl>
-    <p className="text-xs text-muted-foreground">Agent costs are separate. Recordings remain in Speko.</p>
-    {report.transcript.length ? <ol aria-label="Call transcript" className="space-y-3">{report.transcript.map(turn => <li key={turn.id} className="min-w-0"><p className="text-xs font-medium text-muted-foreground">{turn.speaker === "caller" ? "You" : t("common.agent")}{turn.interrupted ? " · interrupted" : ""}</p><p className="whitespace-pre-wrap break-words text-sm">{turn.text}</p></li>)}</ol>
-      : <p className="text-sm text-muted-foreground">{report.status === "unavailable" ? "The transcript is unavailable. Paperclip will retry while Speko finishes the report." : report.status === "pending" ? "The transcript will appear after Speko finishes the call report." : "Speko did not provide a transcript for this call."}</p>}
+    <dl className="flex flex-wrap gap-4 text-sm"><div><dt className="text-muted-foreground">{t("spekoCallHistory.spekoCharge")}</dt><dd>{charge(report.costMicroUsd)}</dd></div>{report.durationSeconds !== null && <div><dt className="text-muted-foreground">{t("common.duration")}</dt><dd>{t("spekoCallHistory.durationSeconds", { seconds: report.durationSeconds })}</dd></div>}</dl>
+    <p className="text-xs text-muted-foreground">{t("spekoCallHistory.agentCostsAreSeparateRecordings")}</p>
+    {report.transcript.length ? <ol aria-label={t("spekoCallHistory.callTranscript")} className="space-y-3">{report.transcript.map(turn => <li key={turn.id} className="min-w-0"><p className="text-xs font-medium text-muted-foreground">{turn.speaker === "caller" ? t("spekoCallHistory.you") : t("common.agent")}{turn.interrupted ? t("spekoCallHistory.interrupted") : ""}</p><p className="whitespace-pre-wrap break-words text-sm">{turn.text}</p></li>)}</ol>
+      : <p className="text-sm text-muted-foreground">{report.status === "unavailable" ? t("spekoCallHistory.theTranscriptIsUnavailablePaperclip") : report.status === "pending" ? t("spekoCallHistory.theTranscriptWillAppearAfter") : t("spekoCallHistory.spekoDidNotProvideA")}</p>}
   </div>;
 }
-const modeNames = { browser: "Browser voice", inbound_phone: "Incoming call", outbound_phone: "Outgoing call" } as const;
-const stateNames = { reserved: "Preparing", creating: "Connecting", creation_unknown: "Checking connection", connecting: "Connecting", active: t("common.inProgress"), awaiting_approval: "Awaiting approval", ending: "Ending", ended: "Completed", failed: t("common.failed"), expired: "Expired" } as const;
+const modeNames = { browser: t("spekoCallHistory.browserVoice"), inbound_phone: t("spekoCallHistory.incomingCall"), outbound_phone: t("spekoCallHistory.outgoingCall") } as const;
+const stateNames = { reserved: t("spekoCallHistory.preparing"), creating: t("spekoCallHistory.connecting"), creation_unknown: t("spekoCallHistory.checkingConnection"), connecting: t("spekoCallHistory.connecting"), active: t("common.inProgress"), awaiting_approval: t("spekoCallHistory.awaitingApproval"), ending: t("spekoCallHistory.ending"), ended: t("spekoCallHistory.completed"), failed: t("common.failed"), expired: t("spekoCallHistory.expired") } as const;
 export function SpekoCallActivityItem({ entry: { session, report }, onEnd, ending, presentation = "history" }: { entry: VoiceCallHistoryEntry; onEnd?(sessionId: string): void; ending?: boolean; presentation?: "history" | "activity" }) {
   const summary = useRef<HTMLElement | null>(null);
   const restoreFocus = useRef(false);
@@ -32,27 +32,27 @@ export function SpekoCallActivityItem({ entry: { session, report }, onEnd, endin
   }, [session.state]);
   return <details data-activity-kind="call" className={presentation === "activity" ? "px-2 py-3 transition-colors hover:bg-accent/50" : "rounded-md border border-border p-3"}>
     <summary ref={summary} className="cursor-pointer break-words text-sm font-medium">{modeNames[session.mode]} · {stateNames[session.state]}<span className="ml-2 text-xs font-normal text-muted-foreground">{new Date(session.createdAt).toLocaleString()}</span></summary>
-    <div className="mt-3 space-y-3"><Link className="text-sm text-primary underline" to={`/issues/${encodeURIComponent(session.issueId)}`}>Conversation task</Link>
-      {session.errorCode && <p className="text-sm text-muted-foreground">{session.errorCode === "cleanup_pending" ? "Confirming call cleanup with Speko." : "This call encountered a connection problem. Check your Speko connection before trying again."}</p>}
-      {!session.endedAt && !["ended", "failed", "expired"].includes(session.state) && session.callerAuthority !== "guest_intake" && onEnd && <Button size="sm" variant="outline" disabled={ending} onClick={() => { restoreFocus.current = true; onEnd(session.id); }}>{ending ? "Ending…" : "End call"}</Button>}
+    <div className="mt-3 space-y-3"><Link className="text-sm text-primary underline" to={`/issues/${encodeURIComponent(session.issueId)}`}>{t("spekoCallHistory.conversationTask")}</Link>
+      {session.errorCode && <p className="text-sm text-muted-foreground">{session.errorCode === "cleanup_pending" ? t("spekoCallHistory.confirmingCallCleanupWithSpeko") : t("spekoCallHistory.thisCallEncounteredAConnection")}</p>}
+      {!session.endedAt && !["ended", "failed", "expired"].includes(session.state) && session.callerAuthority !== "guest_intake" && onEnd && <Button size="sm" variant="outline" disabled={ending} onClick={() => { restoreFocus.current = true; onEnd(session.id); }}>{ending ? t("spekoCallHistory.ending2") : t("spekoCallHistory.endCall")}</Button>}
       <SpekoCallReport report={report} />
     </div>
   </details>;
 }
 export function SpekoUnapprovedCallActivityItem({ call, presentation = "history" }: { call: VoiceUnapprovedCallHistoryEntry; presentation?: "history" | "activity" }) {
-  return <div data-activity-kind="unapproved_call" className={presentation === "activity" ? "px-2 py-3 text-sm" : "rounded-md border border-border p-3 text-sm"}><p>{call.state === "denied" ? "Call denied" : call.state === "expired" ? "Approval expired" : "Missed call"} · {new Date(call.createdAt).toLocaleString()}</p><p className="text-xs text-muted-foreground">No private task was connected.</p></div>;
+  return <div data-activity-kind="unapproved_call" className={presentation === "activity" ? "px-2 py-3 text-sm" : "rounded-md border border-border p-3 text-sm"}><p>{call.state === "denied" ? t("spekoCallHistory.callDenied") : call.state === "expired" ? t("spekoCallHistory.approvalExpired") : t("spekoCallHistory.missedCall")} · {new Date(call.createdAt).toLocaleString()}</p><p className="text-xs text-muted-foreground">{t("spekoCallHistory.noPrivateTaskWasConnected")}</p></div>;
 }
 export interface SpekoCallHistoryViewProps { entries?: VoiceCallHistoryEntry[]; unapprovedCalls?: VoiceUnapprovedCallHistoryEntry[]; loading?: boolean; error?: string; incomingError?: string; endError?: string; onRetry(): void; onEnd?(sessionId: string): void; endingSessionId?: string }
 export function SpekoCallHistoryView({ entries = [], unapprovedCalls = [], loading, error, incomingError, endError, onRetry, onEnd, endingSessionId }: SpekoCallHistoryViewProps) {
-  return <section className="max-w-xl space-y-3" aria-label="Your calls">
-    <div className="flex items-center justify-between gap-3"><h2 className="text-lg font-semibold">Your calls</h2><Button size="sm" variant="ghost" onClick={onRetry} disabled={loading}>{t("common.refresh")}</Button></div>
-    {loading && <p role="status" className="text-sm text-muted-foreground">Loading calls…</p>}
+  return <section className="max-w-xl space-y-3" aria-label={t("spekoCallHistory.yourCalls")}>
+    <div className="flex items-center justify-between gap-3"><h2 className="text-lg font-semibold">{t("spekoCallHistory.yourCalls")}</h2><Button size="sm" variant="ghost" onClick={onRetry} disabled={loading}>{t("common.refresh")}</Button></div>
+    {loading && <p role="status" className="text-sm text-muted-foreground">{t("spekoCallHistory.loadingCalls")}</p>}
     {error && <div className="space-y-2"><p role="alert" className="text-sm text-destructive">{error}</p><Button size="sm" variant="outline" onClick={onRetry}>{t("common.tryAgain")}</Button></div>}
     {incomingError && <p role="alert" className="text-sm text-destructive">Unapproved calls could not be loaded. {incomingError}</p>}
     {endError && <p role="alert" className="text-sm text-destructive">The call could not be ended. {endError}</p>}
-    {!loading && !error && !incomingError && !entries.length && !unapprovedCalls.length && <p className="text-sm text-muted-foreground">Your browser conversations and phone calls will appear here.</p>}
+    {!loading && !error && !incomingError && !entries.length && !unapprovedCalls.length && <p className="text-sm text-muted-foreground">{t("spekoCallHistory.yourBrowserConversationsAndPhone")}</p>}
     {!error && entries.map(entry => <SpekoCallActivityItem key={entry.session.id} entry={entry} onEnd={onEnd} ending={endingSessionId === entry.session.id} />)}
-    {!incomingError && unapprovedCalls.length > 0 && <div className="space-y-2"><h3 className="text-sm font-medium">Unapproved incoming calls</h3><ul className="space-y-2">{unapprovedCalls.map(call => <li key={call.id}><SpekoUnapprovedCallActivityItem call={call} /></li>)}</ul></div>}
+    {!incomingError && unapprovedCalls.length > 0 && <div className="space-y-2"><h3 className="text-sm font-medium">{t("spekoCallHistory.unapprovedIncomingCalls")}</h3><ul className="space-y-2">{unapprovedCalls.map(call => <li key={call.id}><SpekoUnapprovedCallActivityItem call={call} /></li>)}</ul></div>}
   </section>;
 }
 export function useSpekoCallHistory(companyId: string, endpointId: string, enabled = true) {

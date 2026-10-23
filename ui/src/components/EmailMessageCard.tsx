@@ -58,14 +58,14 @@ export function EmailMessageCard({
   return (
     <article
       aria-label={
-        message.direction === "inbound" ? "Email received" : "Email sent"
+        message.direction === "inbound" ? t("emailMessageCard.emailReceived") : t("emailMessageCard.emailSent")
       }
       className={contextNotice ? "task-context-notice space-y-3" : "space-y-4 rounded-xl border border-border bg-card p-5"}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-2 text-sm font-semibold">
           <Mail className="size-4" />
-          {message.direction === "inbound" ? "Email received" : "Email sent"}
+          {message.direction === "inbound" ? t("emailMessageCard.emailReceived") : t("emailMessageCard.emailSent")}
         </span>
         <span className="text-xs text-muted-foreground">
           {new Date(message.timestamp).toLocaleString()}
@@ -76,7 +76,7 @@ export function EmailMessageCard({
           {message.from}
           {message.direction === "inbound" && (
             <span className="ml-2 rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
-              External
+              {t("emailMessageCard.external")}
             </span>
           )}
         </p>
@@ -106,17 +106,17 @@ export function EmailMessageCard({
                 className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-xs"
               >
                 <Paperclip className="size-3.5" />
-                {attachment?.originalFilename ?? "Open attachment"}
+                {attachment?.originalFilename ?? t("emailMessageCard.openAttachment")}
               </a>
             );
           })}
         </div>
       )}
       <details className="text-xs text-muted-foreground">
-        <summary className="cursor-pointer">Email details</summary>
+        <summary className="cursor-pointer">{t("emailMessageCard.emailDetails")}</summary>
         <div className="space-y-2 pt-3">
-          {!!message.bcc?.length && <p>Bcc: {message.bcc.join(", ")}</p>}
-          <p className="break-all">Message ID: {message.providerMessageId}</p>
+          {!!message.bcc?.length && <p>{t("emailMessageCard.bcc")} {message.bcc.join(", ")}</p>}
+          <p className="break-all">{t("emailMessageCard.messageId")} {message.providerMessageId}</p>
           {message.fullText !== message.text && (
             <div className="whitespace-pre-wrap break-words">
               {message.fullText}
@@ -127,20 +127,20 @@ export function EmailMessageCard({
       {publication && (
         <p className="border-t border-border pt-3 text-xs text-muted-foreground">
           {publication.outcome === "delivered"
-            ? "Delivered"
+            ? t("emailMessageCard.delivered")
             : publication.outcome === "failed"
-              ? "Delivery failed"
+              ? t("emailMessageCard.deliveryFailed")
               : publication.outcome === "uncertain"
-                ? "Delivery uncertain"
+                ? t("emailMessageCard.deliveryUncertain")
                 : publication.outcome === "queued"
                   ? t("common.queued")
-                  : "Sent"}
+                  : t("emailMessageCard.sent")}
           {publication.error ? ` · ${publication.error}` : ""}
         </p>
       )}
       {attachments.error && (
         <p role="alert" className="text-xs text-destructive">
-          Attachments could not be loaded.
+          {t("emailMessageCard.attachmentsCouldNotBeLoaded")}
         </p>
       )}
     </article>

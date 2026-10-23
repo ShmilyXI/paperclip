@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useState } from "react";
 import type { Agent } from "@paperclipai/shared";
@@ -51,7 +52,7 @@ export function ReportsToPicker({
           {unknownManager ? (
             <>
               <User className="h-3 w-3 shrink-0 text-muted-foreground" />
-              <span className="min-w-0 truncate text-muted-foreground">Unknown manager (stale ID)</span>
+              <span className="min-w-0 truncate text-muted-foreground">{t("reportsToPicker.unknownManagerStaleId")}</span>
             </>
           ) : current ? (
             <>
@@ -87,7 +88,7 @@ export function ReportsToPicker({
             setOpen(false);
           }}
         >
-          No manager
+          {t("reportsToPicker.noManager")}
         </button>
         {terminatedManager && (
           <div className="flex min-w-0 items-center gap-2 overflow-hidden px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-0.5">
@@ -99,7 +100,7 @@ export function ReportsToPicker({
         )}
         {unknownManager && (
           <div className="px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-0.5">
-            Saved manager is missing from this organization. Choose a new manager or clear.
+            {t("reportsToPicker.savedManagerIsMissingFrom")}
           </div>
         )}
         {rows.map((a) => (

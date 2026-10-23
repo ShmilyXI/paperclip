@@ -31,7 +31,7 @@ export function SkillSourceBranchRepairDialog({ repository, currentBranch, branc
     <DialogContent showCloseButton={!pending} onOpenAutoFocus={event => { event.preventDefault(); title.current?.focus(); }}
       onCloseAutoFocus={event => { if (onReturnFocus) { event.preventDefault(); onReturnFocus(); } }}>
       <DialogHeader>
-        <DialogTitle ref={title} tabIndex={-1} className="outline-none">Choose a new branch</DialogTitle>
+        <DialogTitle ref={title} tabIndex={-1} className="outline-none">{t("skillSourceBranchRepairDialog.chooseANewBranch")}</DialogTitle>
         <DialogDescription className="break-words">{repository} · Currently tracking {currentBranch === 'HEAD' ? 'the default branch' : currentBranch}</DialogDescription>
       </DialogHeader>
       <form className="flex min-w-0 flex-col gap-4" onSubmit={event => { event.preventDefault(); if (branch && !pending) void save(); }}>

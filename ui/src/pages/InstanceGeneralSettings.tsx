@@ -96,7 +96,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
   const visibleActionError = signOutMutation.error instanceof Error
     ? signOutMutation.error.message
     : signOutMutation.error
-      ? "Failed to sign out."
+      ? t("instanceGeneralSettings.failedToSignOut")
       : actionError;
 
   return (
@@ -132,19 +132,19 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
           </div>
           <div className="text-sm text-muted-foreground">
             {healthQuery.data?.deploymentMode === "local_trusted"
-              ? "Local trusted mode is optimized for a local operator. Browser requests run as local board context and no sign-in is required."
+              ? t("instanceGeneralSettings.localTrustedModeIsOptimized")
               : healthQuery.data?.deploymentExposure === "public"
-                ? "Authenticated public mode requires sign-in for board access and is intended for public URLs."
-                : "Authenticated private mode requires sign-in and is intended for LAN, VPN, or other private-network deployments."}
+                ? t("instanceGeneralSettings.authenticatedPublicModeRequiresSign")
+                : t("instanceGeneralSettings.authenticatedPrivateModeRequiresSign")}
           </div>
           <div className="grid gap-3 md:grid-cols-3">
             <StatusBox
               label={t("settings.authReadiness")}
-              value={healthQuery.data?.authReady ? "Ready" : "Not ready"}
+              value={healthQuery.data?.authReady ? t("instanceGeneralSettings.ready") : t("instanceGeneralSettings.notReady")}
             />
             <StatusBox
               label={t("settings.bootstrapStatus")}
-              value={healthQuery.data?.bootstrapStatus === "bootstrap_pending" ? "Setup required" : "Ready"}
+              value={healthQuery.data?.bootstrapStatus === "bootstrap_pending" ? t("instanceGeneralSettings.setupRequired") : t("instanceGeneralSettings.ready")}
             />
             <StatusBox
               label={t("settings.bootstrapInvite")}
@@ -161,9 +161,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
           <div className="space-y-1.5">
             <h2 className="text-sm font-semibold">{t("settings.censorUsernameInLogs")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
-              Hide the username segment in home-directory paths and similar operator-visible log output. Standalone
-              username mentions outside of paths are not yet masked in the live transcript view. This is off by
-              default.
+              {t("instanceGeneralSettings.hideTheUsernameSegmentIn")}
             </p>
           </div>
           <ToggleSwitch
@@ -182,9 +180,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
           <div className="space-y-1.5">
             <h2 className="text-sm font-semibold">{t("settings.backupRetention")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
-              Configure how long automatic database backups are retained. Backups run roughly
-              every hour and are compressed with gzip. Within the daily window all backups are
-              kept; beyond that, one backup per week and one per month are preserved.
+              {t("instanceGeneralSettings.configureHowLongAutomaticDatabase")}
             </p>
           </div>
 
@@ -286,8 +282,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
           <div className="space-y-1.5">
             <h2 className="text-sm font-semibold">{t("settings.aiFeedbackSharing")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
-              Control whether thumbs up and thumbs down votes can send the voted AI output to
-              Paperclip Labs. Votes are always saved locally.
+              {t("instanceGeneralSettings.controlWhetherThumbsUpAnd")}
             </p>
             {FEEDBACK_TERMS_URL ? (
               <a
@@ -302,8 +297,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
           </div>
           {feedbackDataSharingPreference === "prompt" ? (
             <div className="rounded-lg bg-accent/20 px-3 py-2 text-sm text-muted-foreground">
-              No default is saved yet. The next thumbs up or thumbs down choice will ask once and
-              then save the answer here.
+              {t("instanceGeneralSettings.noDefaultIsSavedYet")}
             </div>
           ) : null}
           <div className="flex flex-wrap gap-2">
@@ -348,11 +342,10 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             })}
           </div>
           <p className="text-xs text-muted-foreground">
-            To retest the first-use prompt in local dev, remove the{" "}
-            <code>feedbackDataSharingPreference</code> key from the{" "}
-            <code>instance_settings.general</code> JSON row for this instance, or set it back to{" "}
-            <code>"prompt"</code>. Unset and <code>"prompt"</code> both mean no default has been
-            chosen yet.
+            {t("instanceGeneralSettings.toRetestTheFirstUse")}{" "}
+            <code>feedbackDataSharingPreference</code>{" "}{t("instanceGeneralSettings.keyFromThe")}{" "}
+            <code>instance_settings.general</code>{" "}{t("instanceGeneralSettings.jsonRowForThisInstance")}{" "}
+            <code>"prompt"</code>{t("instanceGeneralSettings.unsetAnd")} <code>"prompt"</code> {t("instanceGeneralSettings.bothMeanNoDefaultHas")}
           </p>
         </div>
       </section>
@@ -378,7 +371,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             }}
           >
             <LogOut className="size-4" />
-            {signOutMutation.isPending ? "Signing out..." : t("common.signOut")}
+            {signOutMutation.isPending ? t("instanceGeneralSettings.signingOut") : t("common.signOut")}
           </Button>
         </div>
       </section>

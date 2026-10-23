@@ -58,7 +58,7 @@ export function SetMyUserSecretDialog({
 
   const save = useMutation({
     mutationFn: async () => {
-      if (!definition) throw new Error("No definition selected");
+      if (!definition) throw new Error(t("setMyUserSecretDialog.noDefinitionSelected"));
       const payload = isExternal
         ? { externalRef: externalRef.trim() }
         : { value: value.trim() };
@@ -76,7 +76,7 @@ export function SetMyUserSecretDialog({
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.myUserSecrets(companyId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.userDefinitions(companyId) });
       pushToast({
-        title: existingSecret ? "Value updated" : "Value saved",
+        title: existingSecret ? t("setMyUserSecretDialog.valueUpdated") : t("setMyUserSecretDialog.valueSaved"),
         body: definition?.name,
         tone: "success",
       });
@@ -89,7 +89,7 @@ export function SetMyUserSecretDialog({
           ? err.message
           : err instanceof Error
             ? err.message
-            : "Failed to save value",
+            : t("setMyUserSecretDialog.failedToSaveValue"),
       );
     },
   });
@@ -101,14 +101,13 @@ export function SetMyUserSecretDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {existingSecret ? "Update your value" : "Set your value"}
+            {existingSecret ? t("setMyUserSecretDialog.updateYourValue") : t("setMyUserSecretDialog.setYourValue")}
             <UserSecretChip />
           </DialogTitle>
           <DialogDescription>
             {definition ? (
               <>
-                This value is yours only. It is used when you are the user responsible for a run that
-                needs <span className="font-mono">{definition.key}</span>.
+                {t("setMyUserSecretDialog.thisValueIsYoursOnly")} <span className="font-mono">{definition.key}</span> 时才会用到它。
               </>
             ) : null}
           </DialogDescription>
@@ -128,31 +127,30 @@ export function SetMyUserSecretDialog({
 
             {isExternal ? (
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground">External reference</label>
+                <label className="text-xs font-medium text-foreground">{t("setMyUserSecretDialog.externalReference")}</label>
                 <Input
                   value={externalRef}
                   onChange={(event) => setExternalRef(event.target.value)}
-                  placeholder="provider reference or ARN"
+                  placeholder={t("setMyUserSecretDialog.providerReferenceOrArn")}
                   className="font-mono text-sm"
                   autoFocus
                 />
                 <p className="text-(length:--text-micro) text-muted-foreground">
-                  Points at your own credential in the configured provider. Paperclip stores the
-                  reference, not the value.
+                  {t("setMyUserSecretDialog.pointsAtYourOwnCredential")}
                 </p>
               </div>
             ) : (
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground">Your value</label>
+                <label className="text-xs font-medium text-foreground">{t("setMyUserSecretDialog.yourValue")}</label>
                 <Textarea
                   value={value}
                   onChange={(event) => setValue(event.target.value)}
-                  placeholder="Paste your token or credential"
+                  placeholder={t("setMyUserSecretDialog.pasteYourTokenOrCredential")}
                   className="font-mono text-sm min-h-(--sz-80px)"
                   autoFocus
                 />
                 <p className="text-(length:--text-micro) text-muted-foreground">
-                  Stored encrypted. Never shown back to anyone, including admins.
+                  {t("setMyUserSecretDialog.storedEncryptedNeverShownBack")}
                 </p>
               </div>
             )}
@@ -166,7 +164,7 @@ export function SetMyUserSecretDialog({
             {t("common.cancel")}
           </Button>
           <Button onClick={() => save.mutate()} disabled={!canSave || save.isPending}>
-            {save.isPending ? t("common.saving2") : existingSecret ? "Update value" : "Save value"}
+            {save.isPending ? t("common.saving2") : existingSecret ? t("setMyUserSecretDialog.updateValue") : t("setMyUserSecretDialog.saveValue")}
           </Button>
         </DialogFooter>
       </DialogContent>

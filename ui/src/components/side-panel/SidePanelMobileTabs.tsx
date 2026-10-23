@@ -46,13 +46,13 @@ export function SidePanelMobileTabs({ tabs, activeTabId, onActiveTabChange, onCl
             aria-label={`Switch tabs, ${tabs.length} open`}
             disabled={tabs.length === 0}
           >
-            <span id={activeTab ? `side-panel-tab-${activeTab.id}` : undefined} className="min-w-0 flex-1 truncate text-left">{activeTab?.label ?? "Choose a tab"}</span>
+            <span id={activeTab ? `side-panel-tab-${activeTab.id}` : undefined} className="min-w-0 flex-1 truncate text-left">{activeTab?.label ?? t("sidePanelMobileTabs.chooseATab")}</span>
             <span className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">{tabs.length}</span>
             <ChevronDown aria-hidden className="shrink-0" />
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          aria-label="Open tabs"
+          aria-label={t("sidePanelMobileTabs.openTabs")}
           align="start"
           className="w-(--side-panel-mobile-tabs-width) max-w-(--radix-popover-content-available-width) p-2"
           onOpenAutoFocus={(event) => {
@@ -63,12 +63,12 @@ export function SidePanelMobileTabs({ tabs, activeTabId, onActiveTabChange, onCl
           }}
           onCloseAutoFocus={(event) => {
             if (tabs.length !== 0) return;
-            const addButton = headerRef.current?.querySelector<HTMLButtonElement>('[aria-label="Open a new tab"]');
+            const addButton = headerRef.current?.querySelector<HTMLButtonElement>('[aria-label={t("sidePanelMobileTabs.openANewTab")}]');
             if (addButton) { event.preventDefault(); addButton.focus(); }
           }}
         >
-          <p className="px-2 py-2 text-xs font-medium text-muted-foreground">Open tabs</p>
-          <ul ref={listRef} aria-label="Open tabs" className="max-h-(--side-panel-mobile-tabs-max-height) overflow-y-auto overscroll-contain">
+          <p className="px-2 py-2 text-xs font-medium text-muted-foreground">{t("sidePanelMobileTabs.openTabs")}</p>
+          <ul ref={listRef} aria-label={t("sidePanelMobileTabs.openTabs")} className="max-h-(--side-panel-mobile-tabs-max-height) overflow-y-auto overscroll-contain">
             {tabs.map((tab) => (
               <li key={tab.id} className={cn("flex items-center rounded-md", tab.id === activeTabId && "bg-muted")}>
                 <button

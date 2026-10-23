@@ -17,8 +17,8 @@ type SnippetStyle = {
 
 const SNIPPET_STYLES: Record<string, SnippetStyle> = {
   comment: { Icon: MessageSquare, label: t("common.comment") },
-  document: { Icon: FileText, label: "Doc" },
-  artifact: { Icon: Paperclip, label: "Artifact" },
+  document: { Icon: FileText, label: t("searchResultRow.doc") },
+  artifact: { Icon: Paperclip, label: t("searchResultRow.artifact") },
   description: { Icon: Quote, label: t("common.description") },
 };
 
@@ -135,7 +135,7 @@ function SearchResultRowImpl({
               text={result.snippets[0]?.text ?? result.snippet}
               highlights={result.snippets[0]?.highlights}
               field="artifact"
-              fallbackLabel={result.sourceLabel ?? "Artifact"}
+              fallbackLabel={result.sourceLabel ?? t("searchResultRow.artifact")}
               multiline
             />
           ) : null}

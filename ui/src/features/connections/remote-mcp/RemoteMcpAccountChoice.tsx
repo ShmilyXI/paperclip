@@ -28,12 +28,11 @@ export function RemoteMcpAccountChoice({
       <div>
         <h1 className="text-xl font-bold">
           {upstreamServiceName
-            ? `Connect ${upstreamServiceName} through ${providerName}`
-            : `Connect ${providerName}`}
+            ? t("remoteMcpAccountChoice.connectUpstreamservicenameThroughProvidername", { upstreamServiceName, providerName })
+            : t("remoteMcpAccountChoice.connectProvidername", { providerName })}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Use an existing connection or connect a new account. Existing access
-          stays unchanged.
+          {t("remoteMcpAccountChoice.useAnExistingConnectionOr")}
         </p>
       </div>
       {upstreamServiceName && (
@@ -47,7 +46,7 @@ export function RemoteMcpAccountChoice({
       <ConnectionChoiceList
         choices={connections.map((connection) => ({
           ...connection,
-          description: "Provider account available",
+          description: t("remoteMcpAccountChoice.providerAccountAvailable"),
         }))}
         pendingId={pendingId}
         onSelect={onSelect}
@@ -66,7 +65,7 @@ export function RemoteMcpAccountChoice({
           {t("common.cancel")}
         </Button>
         <Button disabled={Boolean(pendingId)} onClick={onConnectNew}>
-          Connect new
+          {t("remoteMcpAccountChoice.connectNew")}
         </Button>
       </div>
     </div>

@@ -29,11 +29,11 @@ export function AgentRunnerSelect({
         aria-label={t("runner.runner")}
         disabled={disabled}
         value={value}
-        displayValue={value === "auto" ? (defaultRunner ? `${defaultRunner === "paperclip" ? "Paperclip Runner" : "Legacy runner"} (default)` : pending ? "Checking runner availability…" : "Automatic selection unavailable") : undefined}
+        displayValue={value === "auto" ? (defaultRunner ? `${defaultRunner === "paperclip" ? t("agentRunnerSelect.paperclipRunner") : t("agentRunnerSelect.legacyRunner")} (default)` : pending ? t("agentRunnerSelect.checkingRunnerAvailability") : t("agentRunnerSelect.automaticSelectionUnavailable")) : undefined}
         onValueChange={next => onChange(next as AgentRunnerChoice)}
         options={[
-          { value: "paperclip", label: `Paperclip Runner${defaultRunner === "paperclip" ? " (default)" : ""}`, disabled: !supportedRunners.includes("paperclip") && value !== "paperclip" },
-          { value: "legacy", label: `Legacy runner${defaultRunner === "legacy" ? " (default)" : ""}`, disabled: !supportedRunners.includes("legacy") && value !== "legacy" },
+          { value: "paperclip", label: `${t("agentRunnerSelect.paperclipRunner")}${defaultRunner === "paperclip" ? t("agentRunnerSelect.defaultSuffix") : ""}`, disabled: !supportedRunners.includes("paperclip") && value !== "paperclip" },
+          { value: "legacy", label: `${t("agentRunnerSelect.legacyRunner")}${defaultRunner === "legacy" ? t("agentRunnerSelect.defaultSuffix") : ""}`, disabled: !supportedRunners.includes("legacy") && value !== "legacy" },
         ]}
       />
       {error && <div className="mt-2 space-y-2">

@@ -122,7 +122,7 @@ export function ApprovalCard({
                   onClick={onApprove}
                   disabled={isPending}
                 >
-                  {pendingAction === "approve" ? "Approving..." : t("common.approve")}
+                  {pendingAction === "approve" ? t("approvalCard.approving") : t("common.approve")}
                 </Button>
                 <Button
                   variant="destructive"
@@ -130,7 +130,7 @@ export function ApprovalCard({
                   onClick={onReject}
                   disabled={isPending}
                 >
-                  {pendingAction === "reject" ? "Rejecting..." : t("common.reject")}
+                  {pendingAction === "reject" ? t("approvalCard.rejecting") : t("common.reject")}
                 </Button>
               </>
             )}
@@ -141,11 +141,11 @@ export function ApprovalCard({
                 to={detailLink}
                 className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "h-auto px-2 text-xs text-muted-foreground")}
               >
-                View details
+                {t("approvalCard.viewDetails")}
               </Link>
             ) : (
               <Button variant="ghost" size="sm" className="h-auto px-2 text-xs text-muted-foreground" onClick={onOpen}>
-                View details
+                {t("approvalCard.viewDetails")}
               </Button>
             )
           ) : null}

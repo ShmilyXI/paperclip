@@ -22,21 +22,21 @@ export function ArcadeDiscoverySetup({ connection, onClose }: { connection: Tool
     onSuccess: onClose,
   });
   return <Dialog open onOpenChange={open => { if (!open && !save.isPending) onClose(); }}><DialogContent>
-    <DialogHeader><DialogTitle>Sync Arcade accounts</DialogTitle>
-      <DialogDescription>See apps available through “{connection.name}”. Your gateway works without account sync.</DialogDescription>
+    <DialogHeader><DialogTitle>{t("arcadeDiscoverySetup.syncArcadeAccounts")}</DialogTitle>
+      <DialogDescription>{t("arcadeDiscoverySetup.seeAppsAvailableThrough", { name: connection.name })}</DialogDescription>
     </DialogHeader>
     <form className="space-y-4" onSubmit={event => { event.preventDefault(); save.mutate(); }}>
-      <div className="space-y-2"><Label htmlFor="arcade-discovery-key">Project API key</Label>
-        <p className="text-xs text-muted-foreground">Create a key in <a className="underline" href="https://app.arcade.dev" target="_blank" rel="noopener noreferrer">Arcade</a> for the same project as this gateway. The key is stored securely and used only for account sync.</p>
+      <div className="space-y-2"><Label htmlFor="arcade-discovery-key">{t("arcadeDiscoverySetup.projectApiKey")}</Label>
+        <p className="text-xs text-muted-foreground">{t("arcadeDiscoverySetup.createAKeyIn")} <a className="underline" href="https://app.arcade.dev" target="_blank" rel="noopener noreferrer">Arcade</a> {t("arcadeDiscoverySetup.forTheSameProjectAs")}</p>
         <Input id="arcade-discovery-key" type="password" autoComplete="off" required value={apiKey} onChange={event => setApiKey(event.target.value)} />
       </div>
-      <div className="space-y-2"><Label htmlFor="arcade-discovery-user">Arcade user ID</Label>
-        <p className="text-xs text-muted-foreground">Use the end-user ID configured for this gateway’s sign-in. This may differ from your email address.</p>
+      <div className="space-y-2"><Label htmlFor="arcade-discovery-user">{t("arcadeDiscoverySetup.arcadeUserId")}</Label>
+        <p className="text-xs text-muted-foreground">{t("arcadeDiscoverySetup.useTheEndUserId")}</p>
         <Input id="arcade-discovery-user" autoComplete="off" required value={userId} onChange={event => setUserId(event.target.value)} />
       </div>
-      {save.isError ? <p role="alert" className="text-sm text-destructive">{save.error instanceof Error ? save.error.message : "Couldn’t save account sync. Try again."}</p> : null}
+      {save.isError ? <p role="alert" className="text-sm text-destructive">{save.error instanceof Error ? save.error.message : t("arcadeDiscoverySetup.couldnTSaveAccountSync")}</p> : null}
       <DialogFooter className="sm:justify-between"><Button type="button" variant="ghost" disabled={save.isPending} onClick={onClose}>{t("common.cancel")}</Button>
-        <Button type="submit" disabled={!settled || save.isPending || !apiKey.trim() || !userId.trim()}>{save.isPending ? t("common.saving2") : "Save and sync"}</Button>
+        <Button type="submit" disabled={!settled || save.isPending || !apiKey.trim() || !userId.trim()}>{save.isPending ? t("common.saving2") : t("arcadeDiscoverySetup.saveAndSync")}</Button>
       </DialogFooter>
     </form>
   </DialogContent></Dialog>;

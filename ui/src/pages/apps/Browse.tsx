@@ -232,7 +232,7 @@ function connectionState(connection: ToolConnection): ConnectionState {
         connection.lastError ??
         (connection.authKind === "oauth"
           ? t("connectors.signInAgainToRestore")
-          : "Replace the credential to restore access."),
+          : t("browse.replaceTheCredentialToRestore")),
     };
   }
   return { kind: "connected", label: t("common.connected"), message: null };
@@ -313,7 +313,7 @@ function connectorAction(
       href: null,
       title:
         row.entry.availability.reason ??
-        "This connector is unavailable on this instance.",
+        t("browse.thisConnectorIsUnavailableOn"),
     };
   }
   if (chatHref) return { label: t("common.connect"), href: chatHref };
@@ -492,7 +492,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
       pushToast({
         title: t("connectors.connectionRemoved"),
         body:
-          target.pool ? "The connections in the pool are kept." : target.kind === "chat"
+          target.pool ? t("browse.theConnectionsInThePool") : target.kind === "chat"
             ? `${target.providerName} is disconnected. Existing Paperclip tasks remain available.`
             : target.remainingConnectionCount > 0
             ? `${target.providerName} still has ${target.remainingConnectionCount} active ${target.remainingConnectionCount === 1 ? "connection" : "connections"} available to agents.`
@@ -760,7 +760,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
       ![app.name, app.slug, ...app.aliases].some((alias) => nativeIdentities.has(aggregatorAppIdentity(alias))))
       .map((app) => ({
         key: `aggregator:${app.slug}`, slug: app.slug, name: app.name,
-        description: `Connect through ${app.routes.map((route) => AGGREGATOR_NAMES[route.provider]).join(" or ")}.`,
+        description: t("browse.connectThrough", { providers: app.routes.map((route) => AGGREGATOR_NAMES[route.provider]).join(" or ") }),
         brandKey: app.slug, logoUrl: app.routes[0]?.logoUrl, entry: null,
         applications: [], connections: [], chatEndpoints: [], aggregatorApp: app,
         upstreamApps: upstreamAppsBySlug.get(app.slug) ?? [], upstreamCatalogApp: app,
@@ -1010,14 +1010,14 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
               Remove {connectionToRemove?.accountName ?? "this"} connection?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {connectionToRemove?.pool ? "The connections in this pool are kept." : connectionToRemove && Object.values(AGGREGATOR_NAMES).includes(connectionToRemove.providerName as "Composio")
-                ? `This removes the saved ${connectionToRemove.providerName} connection from Paperclip and agents lose access through it. Your apps and accounts remain connected in ${connectionToRemove.providerName}.`
+              {connectionToRemove?.pool ? t("browse.theConnectionsInThisPool") : connectionToRemove && Object.values(AGGREGATOR_NAMES).includes(connectionToRemove.providerName as "Composio")
+                ? t("browse.thisRemovesTheSaved", { providerName: connectionToRemove.providerName })
                 : connectionToRemove?.kind === "chat"
-                ? `This connection will stop receiving new work from ${connectionToRemove.providerName}. Existing Paperclip tasks and conversation history remain available. This does not delete the app, bot, or account in ${connectionToRemove.providerName}.`
+                ? t("browse.thisConnectionWillStop", { providerName: connectionToRemove.providerName })
                 : connectionToRemove &&
                     connectionToRemove.remainingConnectionCount > 0
-                  ? `This connection's saved credentials are deleted and agents lose access through it immediately. They can still use ${connectionToRemove.providerName} through ${connectionToRemove.remainingConnectionCount} other active ${connectionToRemove.remainingConnectionCount === 1 ? "connection" : "connections"}.`
-                  : "The saved credentials are deleted and agents lose access immediately. Connecting it again later requires a new sign-in or key."}
+                  ? t("browse.thisConnectionsSavedCredentials", { providerName: connectionToRemove.providerName, count: connectionToRemove.remainingConnectionCount })
+                  : t("browse.theSavedCredentialsAreDeleted")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           {removeConnection.isError ? <p role="alert" className="text-sm text-destructive">
@@ -1041,7 +1041,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
               ) : (
                 <Trash2 />
               )}
-              {removeConnection.isPending ? "Removing…" : t("connectors.removeConnection")}
+              {removeConnection.isPending ? t("browse.removing") : t("connectors.removeConnection")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -1161,7 +1161,7 @@ export function ConnectorCard({
             })}
           </div>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            {row.aggregatorApp && row.upstreamApps?.some(app => app.accounts.length > 0) ? `Accounts managed in ${[...new Set(row.upstreamApps?.map(app => AGGREGATOR_NAMES[app.provider ?? "composio"]))].join(" and ")}.` : row.description}
+            {row.aggregatorApp && row.upstreamApps?.some(app => app.accounts.length > 0) ? t("browse.accountsManagedIn", { providers: [...new Set(row.upstreamApps?.map(app => AGGREGATOR_NAMES[app.provider ?? "composio"]))].join(" and ") }) : row.description}
           </p>
         </div>
         {copilotMethod && <Button
@@ -1276,12 +1276,12 @@ export function ConnectorCard({
                           onNavigate(`/apps/chat/${endpoint.id}/settings`)
                         }
                       >
-                        {endpoint.assignedAgentName} · {endpoint.provider === "agentmail" ? t("common.email") : endpoint.provider === "github" ? "Code review bot" : "Chat"}
+                        {endpoint.assignedAgentName} · {endpoint.provider === "agentmail" ? t("common.email") : endpoint.provider === "github" ? t("browse.codeReviewBot") : t("browse.chat")}
                       </button>
                       <p className="truncate text-xs text-muted-foreground">
                         {endpoint.providerAccountLabel ??
                           endpoint.botLabel ??
-                          "Provider identity"}
+                          t("browse.providerIdentity")}
                       </p>
                     </div>
                   </div>
@@ -1290,7 +1290,7 @@ export function ConnectorCard({
                       { createdByUserId: (endpoint.connectionId ? connectionById?.get(endpoint.connectionId)?.createdByUserId : null) ?? endpoint.sponsorUserId ?? null }, userProfileById,
                     )} />
                     {["paused", "attention", "revoked"].includes(endpoint.status) && <span className="text-xs text-muted-foreground">
-                      {endpoint.status === "attention" ? t("connectors.needsAttention") : endpoint.status === "revoked" ? "Access revoked" : t("common.paused")}
+                      {endpoint.status === "attention" ? t("connectors.needsAttention") : endpoint.status === "revoked" ? t("browse.accessRevoked") : t("common.paused")}
                     </span>}
                     {chatEndpointNeedsSetup(endpoint) ? (
                       <Button
@@ -1391,8 +1391,8 @@ function ConnectionAccountRow({
           >
             {state.kind === "attention"
               ? connection.requiresReauthorization === false
-                ? "Retry access"
-                : "Reconnect"
+                ? t("browse.retryAccess")
+                : t("browse.reconnect")
               : t("connectors.finishSetup")}
           </Button>
         ) : null}
@@ -1417,7 +1417,7 @@ function ConnectionAccountRow({
               {refreshingComposio ? <Loader2 className="animate-spin" /> : null}
               Refresh {isAppAggregator(row.slug) ? AGGREGATOR_NAMES[row.slug] : "Composio"}
             </DropdownMenuItem> : null}
-            {row.slug === "arcade" && onConfigureArcade ? <DropdownMenuItem onSelect={onConfigureArcade}>{discovery?.discovery.availability === "setup_required" ? "Set up account sync" : "Account sync settings"}</DropdownMenuItem> : null}
+            {row.slug === "arcade" && onConfigureArcade ? <DropdownMenuItem onSelect={onConfigureArcade}>{discovery?.discovery.availability === "setup_required" ? t("browse.setUpAccountSync") : t("browse.accountSyncSettings")}</DropdownMenuItem> : null}
             {row.slug === "executor" && onConfigureExecutor ? <DropdownMenuItem onSelect={onConfigureExecutor}>{t("connectors.consoleUrl")}</DropdownMenuItem> : null}
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onSelect={onRemove}>

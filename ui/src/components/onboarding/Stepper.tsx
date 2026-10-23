@@ -116,7 +116,7 @@ export function Stepper({
           <button
             key={segment}
             type="button"
-            aria-label={labels[segment - 1] ?? `Step ${segment}`}
+            aria-label={labels[segment - 1] ?? t("stepper.stepSegment", { segment })}
             aria-current={segment === step ? "step" : undefined}
             disabled={!jumpable}
             onClick={() => jumpable && onJumpToStep?.(segment)}

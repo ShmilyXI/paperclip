@@ -29,25 +29,25 @@ export const issueTrailingColumns: InboxIssueColumn[] = ["assignee", "kickedOffB
 const issueColumnLabels: Record<InboxIssueColumn, string> = {
   status: t("common.status"),
   id: "ID",
-  assignee: "Responsible",
-  kickedOffBy: "Kicked off by",
+  assignee: t("issueColumns.responsible"),
+  kickedOffBy: t("issueColumns.kickedOffBy"),
   project: t("common.project"),
   workspace: t("common.workspace"),
-  parent: "Parent task",
+  parent: t("issueColumns.parentTask"),
   labels: t("common.tags"),
   updated: t("common.lastUpdated"),
 };
 
 const issueColumnDescriptions: Record<InboxIssueColumn, string> = {
-  status: "Task state chip on the left edge.",
-  id: "Ticket identifier like PAP-1009.",
-  assignee: "Responsible agent or board user.",
-  kickedOffBy: "Board user or agent who created the task.",
-  project: "Linked project pill with its color.",
-  workspace: "Execution or project workspace used for the task.",
-  parent: "Parent task identifier and title.",
-  labels: "Task labels and tags.",
-  updated: "Latest visible activity time.",
+  status: t("issueColumns.taskStateChipOnThe"),
+  id: t("issueColumns.ticketIdentifierLikePap1009"),
+  assignee: t("issueColumns.responsibleAgentOrBoardUser"),
+  kickedOffBy: t("issueColumns.boardUserOrAgentWho"),
+  project: t("issueColumns.linkedProjectPillWithIts"),
+  workspace: t("issueColumns.executionOrProjectWorkspaceUsed"),
+  parent: t("issueColumns.parentTaskIdentifierAndTitle"),
+  labels: t("issueColumns.taskLabelsAndTags"),
+  updated: t("issueColumns.latestVisibleActivityTime"),
 };
 
 export function issueColumnDescription(
@@ -124,7 +124,7 @@ export function IssueColumnPicker({
         <DropdownMenuLabel className="px-2 pb-1 pt-1.5">
           <div className="space-y-1">
             <div className="text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-              Desktop task rows
+              {t("issueColumns.desktopTaskRows")}
             </div>
             <div className="text-sm font-medium text-foreground">
               {title}
@@ -159,10 +159,10 @@ export function IssueColumnPicker({
           >
             <span className="flex flex-col gap-0.5">
               <span className="text-sm font-medium text-foreground">
-                Date group separators
+                {t("issueColumns.dateGroupSeparators")}
               </span>
               <span className="text-xs leading-relaxed text-muted-foreground">
-                Show Today, Yesterday, and Earlier rules on newest-first task lists.
+                {t("issueColumns.showTodayYesterdayAndEarlier")}
               </span>
             </span>
           </DropdownMenuCheckboxItem>
@@ -172,7 +172,7 @@ export function IssueColumnPicker({
           onSelect={onResetColumns}
           className="rounded-lg px-3 py-2 text-sm"
         >
-          Reset defaults
+          {t("issueColumns.resetDefaults")}
           <span className="ml-auto text-xs text-muted-foreground">status, id, updated</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -238,7 +238,7 @@ export function InboxIssueMetaLeading({
               "text-blue-600 dark:text-blue-400",
             )}
           >
-            Live
+            {t("issueColumns.live")}
           </span>
         </Badge>
       )}
@@ -424,7 +424,7 @@ export function InboxIssueTrailingColumns({
 
           return (
             <span key={column} className="min-w-0 truncate text-xs text-muted-foreground">
-              No project
+              {t("issueColumns.noProject")}
             </span>
           );
         }
@@ -481,7 +481,7 @@ export function InboxIssueTrailingColumns({
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="top" sideOffset={6}>
-                    Filter by workspace
+                    {t("issueColumns.filterByWorkspace")}
                   </TooltipContent>
                 </Tooltip>
               ) : (

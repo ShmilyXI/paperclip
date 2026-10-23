@@ -1134,7 +1134,7 @@ function OnboardingWizardInner({
   const canUseLocalLogin = Boolean(managedSubscriptionProvider) && resolvedLoginEnvironment?.driver === "local" && (localLoginHealth.data?.localAiLoginSupported ?? localLoginHealth.data?.deploymentMode === "local_trusted");
   const localLogin = useLocalAiLogin(createdCompanyId, {
     provider: managedSubscriptionProvider ?? "anthropic", method: "subscription",
-    name: `My ${CONNECT_SOURCE_NAMES[adapterType] ?? managedProvider} subscription`,
+    name: t("onboardingWizard.myManagedproviderSubscription", { managedProvider: CONNECT_SOURCE_NAMES[adapterType] ?? managedProvider }),
     ownership: "personal", agentIds: [], allAgents: true,
   }, sourcePicked && (setupPrepared || Boolean(createdAgentId)) && effectiveOnboardingOpen && step === 4 && canUseLocalLogin && credentialMode !== "api" &&
     Boolean(managedProvider) && !savedSubscription && !savedKeys.storedLogin.data && !managedBindingForStep(),
@@ -1568,7 +1568,7 @@ function OnboardingWizardInner({
   const connectSourceLabel = isCopilot ? t("onboarding.githubCopilot") : CONNECT_SOURCE_NAMES[adapterType] ?? adapterType;
   const connectCta: { label: string; icon: FooterPrimaryIcon; disabled: boolean } =
     setupError ? { label: t("common.retry"), icon: "arrow", disabled: false } : connectProgress
-      ? { label: adapterEnvLoading ? "Testing…" : connectProgress, icon: "spinner", disabled: true }
+      ? { label: adapterEnvLoading ? t("onboardingWizard.testing") : connectProgress, icon: "spinner", disabled: true }
       : connectPhase === "waiting"
       ? { label: t("onboarding.waitingForCode"), icon: "spinner", disabled: true }
       : connectPhase === "connecting"
@@ -2008,7 +2008,7 @@ function OnboardingWizardInner({
     if (apiKeySecretRef.current?.key === key && apiKeySecretRef.current.companyId === companyId && apiKeySecretRef.current.envKey === envKey) return true;
     try {
       if (managedProvider) {
-        await aiConnectionsApi.create(companyId, { provider: managedProvider, method: "api_key", name: `My ${CONNECT_SOURCE_NAMES[adapterType] ?? managedProvider} API`, ownership: "personal", apiKey: key, agentIds: [], allAgents: true });
+        await aiConnectionsApi.create(companyId, { provider: managedProvider, method: "api_key", name: t("onboardingWizard.myManagedproviderApi", { managedProvider: CONNECT_SOURCE_NAMES[adapterType] ?? managedProvider }), ownership: "personal", apiKey: key, agentIds: [], allAgents: true });
         apiKeySecretRef.current = { key, companyId, envKey, aiConnection: { provider: managedProvider, method: "api_key", mode: "responsible_user" } };
         return true;
       }
@@ -2018,7 +2018,7 @@ function OnboardingWizardInner({
     } catch (err) {
       setError(
         err instanceof Error
-          ? `Could not store the API key: ${err.message}`
+          ? t("onboardingWizard.couldNotStoreTheApi", { message: err.message })
           : t("onboarding.couldNotStoreTheApi"),
       );
       return false;
@@ -2381,8 +2381,8 @@ function OnboardingWizardInner({
         if (!discoveredModels.some((entry) => entry.id === selectedModelId)) {
           setError(
             discoveredModels.length === 0
-              ? "No OpenCode models discovered. Run `opencode models` and authenticate providers."
-              : `Configured OpenCode model is unavailable: ${selectedModelId}`
+              ? t("onboardingWizard.noOpencodeModelsDiscoveredRun")
+              : t("onboardingWizard.configuredOpencodeModelIsUnavailable", { selectedModelId })
           );
           return;
         }
@@ -3107,7 +3107,7 @@ function OnboardingWizardInner({
                       </p>
                     ) : isCopilot && createdCompanyId ? (
                       <OnboardingLoginCard instruction={t("onboarding.connectGithubCopilotAndChoose")}>
-                        {!copilotEnvironmentReady ? <p role="alert" className="text-sm text-destructive">{loginEnvironmentResolution.error ?? "Waiting for execution environment settings. If this persists, check your instance settings."}</p> : <>
+                        {!copilotEnvironmentReady ? <p role="alert" className="text-sm text-destructive">{loginEnvironmentResolution.error ?? t("onboardingWizard.waitingForExecutionEnvironmentSettings")}</p> : <>
                           <AiConnectionField companyId={createdCompanyId} agentName={agentName} adapterType="copilot_runtime" environmentId={resolvedLoginEnvironmentId ?? undefined} value={copilotConnection} onChange={(binding) => {
                             const parsed = aiConnectionBindingSchema.safeParse(binding);
                             if (!parsed.success || parsed.data.provider !== "github" || parsed.data.method !== "api_key") {
@@ -3179,7 +3179,7 @@ function OnboardingWizardInner({
                         adapterType={adapterType}
                         environmentId={resolvedLoginEnvironmentId}
                         chrome="onboarding"
-                        aiConnection={managedProvider === "anthropic" || managedProvider === "openai" || managedProvider === "xai" ? { provider: managedProvider, method: "subscription", name: `My ${CONNECT_SOURCE_NAMES[adapterType] ?? managedProvider} subscription`, ownership: "personal", agentIds: [], allAgents: true } : undefined}
+                        aiConnection={managedProvider === "anthropic" || managedProvider === "openai" || managedProvider === "xai" ? { provider: managedProvider, method: "subscription", name: t("onboardingWizard.myManagedproviderSubscription", { managedProvider: CONNECT_SOURCE_NAMES[adapterType] ?? managedProvider }), ownership: "personal", agentIds: [], allAgents: true } : undefined}
                         autoStart
                         onPromptReady={(url) => {
                           setConnectAuthUrl(url);
@@ -3340,8 +3340,8 @@ function OnboardingWizardInner({
                             onClick={() => void handleUnsetAnthropicApiKey()}
                           >
                             {unsetAnthropicLoading
-                              ? "Retrying..."
-                              : "Unset ANTHROPIC_API_KEY"}
+                              ? t("onboardingWizard.retrying")
+                              : t("onboardingWizard.unsetAnthropicApiKey")}
                           </Button>
                         </div>
                       )}
@@ -3410,7 +3410,7 @@ function OnboardingWizardInner({
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">
                         {adapterType === "openclaw_gateway"
-                          ? "Gateway URL"
+                          ? t("onboardingWizard.gatewayUrl")
                           : "Webhook URL"}
                       </label>
                       <input
@@ -3523,7 +3523,7 @@ function AdapterEnvironmentResult({
     result.status === "pass"
       ? t("onboarding.passed")
       : result.status === "warn"
-      ? "Warnings"
+      ? t("onboardingWizard.warnings")
       : t("common.failed");
   const statusClass =
     result.status === "pass"

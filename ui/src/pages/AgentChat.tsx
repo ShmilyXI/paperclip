@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { agentChatsApi } from "@/api/agentChats";
@@ -71,13 +72,12 @@ export function AgentChat() {
   }, [agent, selectedCompanyId, chat.data, client, userId]);
   if (!loaded || agents.isPending || session.isPending || historyAgent.isFetching && !agent)
     return (
-      <p className="text-sm text-muted-foreground">Loading conversation…</p>
+      <p className="text-sm text-muted-foreground">{t("agentChat.loadingConversation")}</p>
     );
   if (!enabled && !chat.data)
     return (
       <p className="text-sm text-muted-foreground">
-        Agent Chat is disabled. Enable it in Experimental settings. Existing
-        history remains available through task links.
+        {t("agentChat.agentChatIsDisabledEnable")}
       </p>
     );
   if (agents.error || chat.error || !rosterAgent && historyAgent.error)
@@ -87,10 +87,10 @@ export function AgentChat() {
       </p>
     );
   if (!agent)
-    return <p className="text-sm text-destructive">Agent not found.</p>;
+    return <p className="text-sm text-destructive">{t("agentChat.agentNotFound")}</p>;
   if (chat.isPending)
     return (
-      <p className="text-sm text-muted-foreground">Loading conversation…</p>
+      <p className="text-sm text-muted-foreground">{t("agentChat.loadingConversation")}</p>
     );
   return (
     <TaskDetailSurface

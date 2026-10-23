@@ -61,7 +61,7 @@ function buildProjectWorkspaceGroups(items: WorkspaceOverviewItem[]): ProjectWor
     }
     groups.set(item.projectId, {
       projectId: item.projectId,
-      projectName: item.projectName ?? "Task workspaces",
+      projectName: item.projectName ?? t("workspaces.taskWorkspaces"),
       projectRef: item.projectId ? projectRouteRef({ id: item.projectId, name: item.projectName ?? t("common.project"), urlKey: item.projectUrlKey }) : null,
       summaries: [summary],
       lastUpdatedAt: summary.lastUpdatedAt,
@@ -125,12 +125,12 @@ export function Workspaces() {
       <SummarySlotCard
         companyId={selectedCompanyId}
         scopeKind="workspaces_overview"
-        title="Workspace summary"
-        description="Summarizer tracks workspace activity, live services, and follow-up needs across projects."
+        title={t("workspaces.workspaceSummary")}
+        description={t("workspaces.summarizerTracksWorkspaceActivityLive")}
       />
 
       {groups.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No workspace activity yet.</p>
+        <p className="text-sm text-muted-foreground">{t("workspaces.noWorkspaceActivityYet")}</p>
       ) : (
         <div className="space-y-8">
           {groups.map((group) => (
@@ -168,7 +168,7 @@ export function Workspaces() {
                 onClick={() => void overviewQuery.fetchNextPage()}
                 disabled={overviewQuery.isFetchingNextPage}
               >
-                {overviewQuery.isFetchingNextPage ? t("common.loading") : "Load more"}
+                {overviewQuery.isFetchingNextPage ? t("common.loading") : t("workspaces.loadMore")}
               </Button>
             </div>
           ) : null}

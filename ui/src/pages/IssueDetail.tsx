@@ -396,7 +396,7 @@ function createRunCancelledStatusUpdateError(
   const message =
     err instanceof Error
       ? `Run was stopped, but updating the task failed: ${err.message}`
-      : "Run was stopped, but updating the task failed. Retry the task status update.";
+      : t("issueDetail.runWasStoppedButUpdating");
   const error = new Error(message) as StopAndFinalizeRunError;
   error.runCancelledBeforeStatusUpdateFailed = true;
   return error;
@@ -1035,7 +1035,7 @@ function IssueDetailLoadingState({
               ) : (
                 <span className="inline-flex items-center gap-1 text-xs text-muted-foreground opacity-50 px-1 -mx-1 py-0.5">
                   <ProjectTile size="xs" />
-                  No project
+                  {t("issueDetail.noProject")}
                 </span>
               )}
             </>
@@ -1168,7 +1168,7 @@ function InboxMobileToolbar({
               }}
             >
               <Copy className="h-3 w-3" />
-              Copy as markdown
+              {t("issueDetail.copyAsMarkdown")}
             </button>
             <button
               className="flex items-center gap-2 w-full px-2 py-1.5 text-xs rounded hover:bg-accent/50"
@@ -1189,7 +1189,7 @@ function InboxMobileToolbar({
                 }}
               >
                 <EyeOff className="h-3 w-3" />
-                Hide this task
+                {t("issueDetail.hideThisTask")}
               </button>
             )}
           </PopoverContent>
@@ -2484,8 +2484,8 @@ const IssueDetailChatTab = memo(function IssueDetailChatTab({
         onClick={onLoadOlderComments}
       >
         {commentsLoadingOlder
-          ? "Loading earlier comments..."
-          : "Load earlier comments"}
+          ? t("issueDetail.loadingEarlierComments")
+          : t("issueDetail.loadEarlierComments")}
       </Button>
     </div>
   ) : null;
@@ -2658,8 +2658,8 @@ const IssueDetailChatTab = memo(function IssueDetailChatTab({
                   }
                 : undefined
             }
-            stopRunLabel={grokWork ? "Stop Paperclip work" : "Pause work"}
-            stoppingRunLabel={grokWork ? "Stopping Paperclip work…" : "Pausing..."}
+            stopRunLabel={grokWork ? t("issueDetail.stopPaperclipWork") : t("issueDetail.pauseWork")}
+            stoppingRunLabel={grokWork ? t("issueDetail.stoppingPaperclipWork") : t("issueDetail.pausing")}
             stopRunVariant={grokWork ? "stop" : "pause"}
             runFinalizationActions={runFinalizationActions}
             onAcceptInteraction={onAcceptInteraction}
@@ -2690,7 +2690,7 @@ const IssueDetailChatTab = memo(function IssueDetailChatTab({
               tryAgainNoLiveExecutionPathPending
             }
             footer={grokWork || stopGrokWork.error || classicQueuedDeliveryError ? <>
-              {grokWork && <p className="text-xs text-muted-foreground">Runs in Grok Bot · Usage not reported. Stop Paperclip work revokes this session’s authority; remote execution may continue. Open the Grok Bot desktop app to inspect it.</p>}
+              {grokWork && <p className="text-xs text-muted-foreground">{t("issueDetail.runsInGrokBotUsage")}</p>}
               {stopGrokWork.error && <p role="alert" className="text-sm text-destructive">{stopGrokWork.error.message}</p>}
               {classicQueuedDeliveryError && <p role="status" className="text-sm text-destructive">{classicQueuedDeliveryError}</p>}
               {footer}
@@ -2710,7 +2710,7 @@ const IssueDetailChatTab = memo(function IssueDetailChatTab({
         previewMode="playback"
         key={issueId}
         header={threadHeader}
-        agentName={agentMap.get(issueAssigneeAgentId ?? "")?.name ?? "Preview agent"}
+        agentName={agentMap.get(issueAssigneeAgentId ?? "")?.name ?? t("issueDetail.previewAgent")}
         agent={agentMap.get(issueAssigneeAgentId ?? "")}
         defaultConversation={issueQueryRef === "DES-1" || issueQueryRef === "DES-7"}
       >
@@ -2891,13 +2891,13 @@ function IssueDetailActivityTab({
       {shouldShowCostSummary && (
         <div className="mb-3 px-3 py-2 rounded-lg border border-border">
           <div className="text-sm font-medium text-muted-foreground mb-1">
-            Cost Summary
+            {t("issueDetail.costSummary")}
           </div>
           {!issueCostSummary.hasCost &&
           !issueCostSummary.hasTokens &&
           !hasIssueTreeCost ? (
             <div className="text-xs text-muted-foreground">
-              No cost data yet.
+              {t("issueDetail.noCostDataYet")}
             </div>
           ) : (
             <div className="space-y-1 text-xs text-muted-foreground tabular-nums">
@@ -4588,8 +4588,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title:
           status === "done"
-            ? "Run stopped and task done"
-            : "Run stopped and task cancelled",
+            ? t("issueDetail.runStoppedAndTaskDone")
+            : t("issueDetail.runStoppedAndTaskCancelled"),
         tone: "success",
       });
     },
@@ -4597,10 +4597,10 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       const runWasStopped = didRunCancelBeforeStatusUpdateFail(err);
       pushToast({
         title: runWasStopped
-          ? "Run stopped; task update failed"
+          ? t("issueDetail.runStoppedTaskUpdateFailed")
           : status === "done"
-            ? "Stop and done failed"
-            : "Stop and cancel failed",
+            ? t("issueDetail.stopAndDoneFailed")
+            : t("issueDetail.stopAndCancelFailed"),
         body:
           err instanceof Error
             ? err.message
@@ -4782,8 +4782,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title:
           variables.action === "approve"
-            ? "Approval approved"
-            : "Approval rejected",
+            ? t("issueDetail.approvalApproved")
+            : t("issueDetail.approvalRejected"),
         tone: "success",
       });
     },
@@ -4791,8 +4791,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title:
           variables.action === "approve"
-            ? "Approval failed"
-            : "Rejection failed",
+            ? t("issueDetail.approvalFailed")
+            : t("issueDetail.rejectionFailed"),
         body: err instanceof Error ? err.message : t("issueDetail.unableToUpdateApproval"),
         tone: "error",
       });
@@ -4947,8 +4947,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title:
           err instanceof CommentSubmissionUnknownError
-            ? "Comment save unconfirmed"
-            : "Comment failed",
+            ? t("issueDetail.commentSaveUnconfirmed")
+            : t("issueDetail.commentFailed"),
         body: err instanceof Error ? err.message : t("issueDetail.unableToPostComment"),
         tone: "error",
       });
@@ -5015,12 +5015,12 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title:
           interaction.kind === "request_confirmation"
-            ? "Request confirmed"
+            ? t("issueDetail.requestConfirmed")
             : interaction.kind === "request_checkbox_confirmation"
-              ? "Selection confirmed"
+              ? t("issueDetail.selectionConfirmed")
               : skippedCount > 0
-                ? `Accepted ${createdCount} draft${createdCount === 1 ? "" : "s"} and skipped ${skippedCount}`
-                : "Suggested tasks accepted",
+                ? t("issueDetail.acceptedDraftsAndSkipped", { count: createdCount, skipped: skippedCount })
+                : t("issueDetail.suggestedTasksAccepted"),
         tone: "success",
       });
     },
@@ -5051,7 +5051,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         title:
           interaction.kind === "request_confirmation"
             ? buildIssueThreadInteractionSummary(interaction)
-            : "Suggestion rejected",
+            : t("issueDetail.suggestionRejected"),
         tone: "success",
       });
     },
@@ -5116,8 +5116,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
           : false;
       pushToast({
         title: complete
-          ? "All verdicts applied"
-          : `Applied ${applied} decision${applied === 1 ? "" : "s"}`,
+          ? t("issueDetail.allVerdictsApplied")
+          : t("issueDetail.appliedDecisions", { count: applied }),
         tone: "success",
       });
     },
@@ -5353,8 +5353,8 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       pushToast({
         title:
           err instanceof CommentSubmissionUnknownError
-            ? "Comment save unconfirmed"
-            : "Comment failed",
+            ? t("issueDetail.commentSaveUnconfirmed")
+            : t("issueDetail.commentFailed"),
         body: err instanceof Error ? err.message : t("issueDetail.unableToPostComment"),
         tone: "error",
       });
@@ -5524,11 +5524,11 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         title:
           variables.sharingPreferenceAtSubmit === "prompt"
             ? variables.allowSharing
-              ? "Feedback saved. Future votes will share"
-              : "Feedback saved. Future votes will stay local"
+              ? t("issueDetail.feedbackSavedFutureVotesWill")
+              : t("issueDetail.feedbackSavedFutureVotesWill2")
             : variables.allowSharing
-              ? "Feedback saved and sharing enabled"
-              : "Feedback saved",
+              ? t("issueDetail.feedbackSavedAndSharingEnabled")
+              : t("issueDetail.feedbackSaved"),
         tone: "success",
       });
     },
@@ -6399,7 +6399,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       pushToast({
-        title: "Copy failed",
+        title: t("issueDetail.copyFailed"),
         body:
           error instanceof Error
             ? error.message
@@ -6597,7 +6597,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       {
         id: "cancel",
         label: t("issueDetail.stopAndCancel"),
-        pendingLabel: "Stopping and cancelling...",
+        pendingLabel: t("issueDetail.stoppingAndCancelling"),
         isPending:
           stopAndFinalizeRun.isPending &&
           stopAndFinalizeRun.variables?.status === "cancelled",
@@ -6611,7 +6611,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       {
         id: "done",
         label: t("issueDetail.stopAndDone"),
-        pendingLabel: "Stopping and marking done...",
+        pendingLabel: t("issueDetail.stoppingAndMarkingDone"),
         isPending:
           stopAndFinalizeRun.isPending &&
           stopAndFinalizeRun.variables?.status === "done",
@@ -6719,7 +6719,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
             issueAssigneeAgentIdForResume,
             {
               source: "assignment",
-              reason: "Assignee resumed from the task page",
+              reason: t("issueDetail.assigneeResumedFromTheTask"),
               payload: {
                 issueId: issueIdForResume,
                 mutation: "assignee_resumed",
@@ -7400,7 +7400,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         ) : (
           <span className="inline-flex items-center gap-1 text-xs text-muted-foreground opacity-50 px-1 -mx-1 py-0.5">
             <ProjectTile size="xs" />
-            No project
+            {t("issueDetail.noProject")}
           </span>
         )}
 
@@ -7643,7 +7643,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                   }}
                 >
                   <EyeOff className="h-3 w-3" />
-                  Hide this task
+                  {t("issueDetail.hideThisTask")}
                 </button>
               </PopoverContent>
             </Popover>

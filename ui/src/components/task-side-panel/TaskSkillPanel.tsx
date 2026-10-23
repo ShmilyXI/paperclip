@@ -22,29 +22,29 @@ export function TaskSkillPanel({ companyId, skillId }: { companyId: string; skil
     return (
       <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground" role="status">
         <Loader2 className="size-4 animate-spin" aria-hidden />
-        Loading skill…
+        {t("taskSkillPanel.loadingSkill")}
       </div>
     );
   }
   if (query.isError) {
     const status = query.error instanceof ApiError ? query.error.status : null;
     if (status === 404) {
-      return <div className="py-8 text-sm text-muted-foreground" role="status">Skill no longer available.</div>;
+      return <div className="py-8 text-sm text-muted-foreground" role="status">{t("taskSkillPanel.skillNoLongerAvailable")}</div>;
     }
     if (status === 403) {
-      return <div className="py-8 text-sm text-muted-foreground" role="alert">You do not have access to this skill.</div>;
+      return <div className="py-8 text-sm text-muted-foreground" role="alert">{t("taskSkillPanel.youDoNotHaveAccess")}</div>;
     }
     return (
       <div className="space-y-3 py-8 text-sm text-muted-foreground" role="alert">
-        <p>The skill could not be loaded.</p>
+        <p>{t("taskSkillPanel.theSkillCouldNotBe")}</p>
         <Button variant="outline" size="sm" onClick={() => void query.refetch()} disabled={query.isFetching}>
-          {query.isFetching ? "Retrying…" : t("common.retry")}
+          {query.isFetching ? t("taskSkillPanel.retrying") : t("common.retry")}
         </Button>
       </div>
     );
   }
   if (!query.data) {
-    return <div className="py-8 text-sm text-muted-foreground" role="status">Skill no longer available.</div>;
+    return <div className="py-8 text-sm text-muted-foreground" role="status">{t("taskSkillPanel.skillNoLongerAvailable")}</div>;
   }
   const skill = query.data;
   const previewMarkdown = parseFrontmatterMarkdown(skill.markdown).body;
@@ -62,18 +62,18 @@ export function TaskSkillPanel({ companyId, skillId }: { companyId: string; skil
             onClick={() => navigate(`/skills/studio/${encodeURIComponent(skill.id)}`)}
           >
             <ExternalLink className="mr-1.5 size-3.5" aria-hidden />
-            Open in Skill Studio
+            {t("taskSkillPanel.openInSkillStudio")}
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          {skill.slug} · {skill.currentVersion ? `Revision ${skill.currentVersion.revisionNumber}` : "Current version"}
+          {skill.slug} · {skill.currentVersion ? t("taskSkillPanel.revisionRevisionnumber", { revisionNumber: skill.currentVersion.revisionNumber }) : t("taskSkillPanel.currentVersion")}
         </p>
       </header>
       {skill.description ? <p className="text-sm text-muted-foreground">{skill.description}</p> : null}
       <section className="space-y-2">
         <h3 className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
           <FileText className="size-3.5" aria-hidden />
-          Skill instructions
+          {t("taskSkillPanel.skillInstructions")}
         </h3>
         <MarkdownBody>{previewMarkdown || "Skill instructions are empty."}</MarkdownBody>
       </section>

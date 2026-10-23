@@ -55,12 +55,12 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
 
   return <section aria-labelledby="connected-aggregator-apps-heading" className="space-y-3">
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <h2 id="connected-aggregator-apps-heading" className="text-sm font-semibold">Connected apps</h2>
-      <Button variant="outline" size="sm" aria-label={`Refresh ${providerName}`}
+      <h2 id="connected-aggregator-apps-heading" className="text-sm font-semibold">{t("connectedAggregatorApps.connectedApps")}</h2>
+      <Button variant="outline" size="sm" aria-label={t("connectedAggregatorApps.refreshProvidername", { providerName })}
         disabled={!settled || query.isLoading || syncing || Boolean(unavailable)}
         onClick={() => refresh.mutate(userId)}>
         <RefreshCw className={syncing ? "size-4 animate-spin" : "size-4"} aria-hidden="true" />
-        {syncing ? "Refreshing…" : `Refresh ${providerName}`}
+        {syncing ? t("connectedAggregatorApps.refreshing") : t("connectedAggregatorApps.refreshProvidername", { providerName })}
       </Button>
     </div>
     {loadFailed || syncFailed ? <p role="alert" className="text-sm text-destructive">
@@ -68,8 +68,8 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
     </p> : null}
     {syncing ? <p role="status" className="text-sm text-muted-foreground">
       Refreshing apps…{data?.sync.total ? ` ${data.sync.checked} of ${data.sync.total}` : ""}
-    </p> : refresh.isSuccess && !syncFailed && !unavailable ? <p role="status" className="text-sm text-muted-foreground">Apps refreshed.</p> : null}
-    {(!settled && !failed) || query.isLoading ? <p role="status" className="text-sm text-muted-foreground">Loading apps…</p>
+    </p> : refresh.isSuccess && !syncFailed && !unavailable ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.appsRefreshed")}</p> : null}
+    {(!settled && !failed) || query.isLoading ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.loadingApps")}</p>
       : apps.length ? <ul aria-label={`Connected ${providerName} apps`} tabIndex={0}
         className="max-h-80 overflow-y-auto rounded-lg border border-border divide-y divide-border">
         {apps.map(snapshots => {
@@ -77,9 +77,9 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
           const accounts = [...new Map(snapshots.flatMap(snapshot => snapshot.accounts).map(account => [account.id, account])).values()];
           const stale = loadFailed || syncFailed || unavailable || snapshots.some(snapshot => snapshot.freshness === "stale" || snapshot.errorAt);
           const connected = !stale && accounts.some(account => account.status === "ACTIVE");
-          const status = stale ? "Not verified" : connected ? t("common.connected")
-            : accounts.some(account => account.status === "UNVERIFIED") ? "Not verified"
-            : accounts.some(account => account.status === "INITIATED") ? "Waiting for sign-in" : "Needs sign-in";
+          const status = stale ? t("connectedAggregatorApps.notVerified") : connected ? t("common.connected")
+            : accounts.some(account => account.status === "UNVERIFIED") ? t("connectedAggregatorApps.notVerified")
+            : accounts.some(account => account.status === "INITIATED") ? t("connectedAggregatorApps.waitingForSignIn") : t("connectedAggregatorApps.needsSignIn");
           const logoUrl = catalogBySlug.get(app.appSlug)?.routes.find(route => route.provider === provider)?.logoUrl;
           return <li key={app.appSlug} className="flex items-center gap-3 px-3 py-3">
             <AppLogo name={app.appName} brandKey={app.appSlug} logoUrl={logoUrl} />
@@ -95,7 +95,7 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
           </li>;
         })}
       </ul> : !loadFailed && !syncFailed && !syncing ? <p className="text-sm text-muted-foreground">
-        {data?.discovery.message ?? `No connected apps found in ${providerName}.`}
+        {data?.discovery.message ?? t("connectedAggregatorApps.noConnectedAppsFoundIn", { providerName })}
       </p> : null}
   </section>;
 }

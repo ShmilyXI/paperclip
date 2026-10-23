@@ -453,7 +453,7 @@ function IssueChatLiveRunStatusLine({
   if (!active) return null;
 
   const primary = currentToolName
-    ? `Using ${currentToolName}`
+    ? t("issueChatThread.usingCurrenttoolname", { currentToolName })
     : lastAssistantSnippet
       ? lastAssistantSnippet
       : currentStatusMessage;
@@ -814,12 +814,12 @@ export function IssueAssigneePausedNotice({
 
   const pauseDetail =
     agent.pauseReason === "budget"
-      ? "It was paused by a budget hard stop."
+      ? t("issueChatThread.itWasPausedByA")
       : agent.pauseReason === "import"
-        ? "It arrived paused from an organization import — imported agents stay parked until you resume them."
+        ? t("issueChatThread.itArrivedPausedFromAn")
         : agent.pauseReason === "system"
-          ? "It was paused by the system."
-          : "It was paused manually.";
+          ? t("issueChatThread.itWasPausedByThe")
+          : t("issueChatThread.itWasPausedManually");
   // Budget pauses clear on their own when the budget resets; resuming by hand
   // would fight the hard stop, so the action is only offered for the rest.
   const canResume = Boolean(onResume) && agent.pauseReason !== "budget";
@@ -844,7 +844,7 @@ export function IssueAssigneePausedNotice({
               disabled={resuming}
               data-testid="issue-assignee-paused-resume"
             >
-              {resuming ? "Resuming…" : "Resume agent"}
+              {resuming ? t("issueChatThread.resuming") : t("issueChatThread.resumeAgent")}
             </Button>
           ) : undefined
         }
@@ -992,7 +992,7 @@ type ComposerAttachmentItem = {
 };
 
 function hasFilePayload(evt: ReactDragEvent<HTMLDivElement>) {
-  return Array.from(evt.dataTransfer?.types ?? []).includes(t("common.files"));
+  return Array.from(evt.dataTransfer?.types ?? []).includes("Files");
 }
 
 function formatAttachmentSize(bytes: number) {
@@ -1827,7 +1827,7 @@ function IssueChatProviderActivity({
               return (
                 <div key={String(child.childId ?? index)}>
                   <span className="font-medium">
-                    {String(child.role ?? "Child agent")}
+                    {String(child.role ?? t("issueChatThread.childAgent"))}
                   </span>{" "}
                   · {String(child.status ?? "unknown")}
                   {child.summary ? ` — ${String(child.summary)}` : ""}
@@ -1856,10 +1856,10 @@ function IssueChatProviderActivity({
                       {String(source.title ?? href)}
                     </a>
                   ) : (
-                    <span>{String(source.title ?? "Unavailable source")}</span>
+                    <span>{String(source.title ?? t("issueChatThread.unavailableSource"))}</span>
                   )}{" "}
                   <span className="text-muted-foreground">
-                    (provider-reported)
+                    {t("issueChatThread.providerReported")}
                   </span>
                 </div>
               );
@@ -2126,7 +2126,7 @@ function IssueChatUserMessage({
                 disabled={isInterruptingQueuedRun}
                 onClick={() => void onInterruptQueued(queueTargetRunId)}
               >
-                {isInterruptingQueuedRun ? "Interrupting..." : "Interrupt"}
+                {isInterruptingQueuedRun ? t("issueChatThread.interrupting") : t("issueChatThread.interrupt")}
               </Button>
             ) : null}
             {onCancelQueued ? (
@@ -2892,7 +2892,7 @@ function IssueChatFeedbackButtons({
               disabled={isSaving || !downvoteReason.trim()}
               onClick={handleSubmitReason}
             >
-              {isSaving ? t("common.saving") : "Save note"}
+              {isSaving ? t("common.saving") : t("issueChatThread.saveNote")}
             </Button>
           </div>
         </PopoverContent>
@@ -2923,7 +2923,7 @@ function IssueChatFeedbackButtons({
               <span className="font-medium text-foreground">{t("chatThread.donTAllow")}</span>{" "}
               to keep this vote and future votes local.
             </p>
-            <p>You can change this later in Settings &gt; General.</p>
+            <p>{t("issueChatThread.youCanChangeThisLater")}</p>
             {termsUrl ? (
               <a
                 href={termsUrl}
@@ -3050,7 +3050,7 @@ function ExpiredRequestConfirmationActivity({
               expanded && "rotate-180",
             )}
           />
-          {expanded ? "Hide confirmation" : "Expired confirmation"}
+          {expanded ? t("issueChatThread.hideConfirmation") : t("issueChatThread.expiredConfirmation")}
         </button>
       </div>
       {expanded ? (
@@ -5181,7 +5181,7 @@ const IssueChatComposer = forwardRef<
               ? {
                   ...item,
                   status: "error",
-                  error: "This file type cannot be attached here",
+                  error: t("issueChatThread.thisFileTypeCannotBe"),
                 }
               : item,
           ),
@@ -5528,12 +5528,12 @@ const IssueChatComposer = forwardRef<
             const sizeLabel = formatAttachmentSize(attachment.size);
             const statusLabel =
               attachment.status === "uploading"
-                ? "Uploading to task"
+                ? t("issueChatThread.uploadingToTask")
                 : attachment.status === "error"
                   ? (attachment.error ?? t("chatThread.uploadFailed"))
                   : attachment.inline
-                    ? "Inserted inline"
-                    : "Attached to task";
+                    ? t("issueChatThread.insertedInline")
+                    : t("issueChatThread.attachedToTask");
             return (
               <div
                 key={attachment.id}
@@ -5680,7 +5680,7 @@ const IssueChatComposer = forwardRef<
             size="icon-sm"
             disabled={stopControl.stopping}
             onClick={() => void stopControl.stop()}
-            aria-label={stopControl.stopping ? "Stopping…" : t("common.stop")}
+            aria-label={stopControl.stopping ? t("issueChatThread.stopping") : t("common.stop")}
             title={t("chatThread.stopResponse")}
           >
             {stopControl.stopping ? (
@@ -6583,8 +6583,8 @@ export function IssueChatThread({
   const resolvedEmptyMessage =
     emptyMessage ??
     (variant === "embedded"
-      ? "No run output yet."
-      : "This task conversation is empty. Start with a message below.");
+      ? t("issueChatThread.noRunOutputYet")
+      : t("issueChatThread.thisTaskConversationIsEmpty"));
   const previousErrorBoundaryMessagesRef = useRef<
     readonly ThreadMessage[] | null
   >(null);
@@ -6663,7 +6663,7 @@ export function IssueChatThread({
                   <TaskChatRunnerTurn items={[]} status="queued" startedAtMs={null}
                     agent={agentMap?.get(issueAssigneeAgentId)}
                     agentName={agentMap?.get(issueAssigneeAgentId)?.name}
-                    preparationLabel={submissionTakingLonger ? "Taking longer than usual…" : undefined} />
+                    preparationLabel={submissionTakingLonger ? t("issueChatThread.takingLongerThanUsual") : undefined} />
                 ) : null}
                 {showComposer ? (
                   <div

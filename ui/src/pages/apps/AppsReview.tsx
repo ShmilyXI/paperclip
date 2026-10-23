@@ -27,7 +27,7 @@ export function AppsReview() {
   }, [setBreadcrumbs]);
 
   if (!selectedCompanyId) {
-    return <div className="p-6 text-sm text-muted-foreground">Select an organization to review approvals.</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{t("appsReview.selectAnOrganizationToReview")}</div>;
   }
 
   return (
@@ -35,11 +35,11 @@ export function AppsReview() {
       <header>
         <h1 className="text-2xl font-bold tracking-tight">{t("common.review")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Actions your agents want to run that need your OK first. Approve, always-allow, or decline.
+          {t("appsReview.actionsYourAgentsWantTo")}
         </p>
       </header>
 
-      <ReviewQueueCard emptyState="reassure" heading="Waiting for your OK" />
+      <ReviewQueueCard emptyState="reassure" heading={t("appsReview.waitingForYourOk")} />
     </div>
   );
 }

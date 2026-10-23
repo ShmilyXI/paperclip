@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, MessageSquarePlus } from "lucide-react";
 import { chatEndpointsApi, type ChatProvider } from "@/api/chatEndpoints";
@@ -39,28 +40,28 @@ export function AgentChannelsPanel({
     <section className="max-w-3xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">Channels</h2>
+          <h2 className="text-lg font-semibold">{t("agentChannelsPanel.channels")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Chat and email identities connected to this agent.
+            {t("agentChannelsPanel.chatAndEmailIdentitiesConnected")}
           </p>
         </div>
         <Button asChild size="sm">
           <Link to={`/apps?chatAgentId=${encodeURIComponent(agentId)}`}>
             <MessageSquarePlus />
-            Connect a channel
+            {t("agentChannelsPanel.connectAChannel")}
           </Link>
         </Button>
       </div>
       {query.isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading channels…</p>
+        <p className="text-sm text-muted-foreground">{t("agentChannelsPanel.loadingChannels")}</p>
       ) : endpoints.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-5">
-          <p className="text-sm font-medium">No channels connected</p>
+          <p className="text-sm font-medium">{t("agentChannelsPanel.noChannelsConnected")}</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            {enabled || githubEnabled ? "Connect an agent identity from Connectors." : "Connect AgentMail from Connectors."}
+            {enabled || githubEnabled ? t("agentChannelsPanel.connectAnAgentIdentityFrom") : t("agentChannelsPanel.connectAgentmailFromConnectors")}
           </p>
           <Button asChild className="mt-3" variant="outline" size="sm">
-            <Link to="/apps">Open Connectors</Link>
+            <Link to="/apps">{t("agentChannelsPanel.openConnectors")}</Link>
           </Button>
         </div>
       ) : (
@@ -77,13 +78,13 @@ export function AgentChannelsPanel({
                 <p className="truncate text-xs text-muted-foreground">
                   {endpoint.botLabel ??
                     endpoint.providerAccountLabel ??
-                    "Provider identity"}
+                    t("agentChannelsPanel.providerIdentity")}
                 </p>
               </div>
               <Badge variant="outline">{endpoint.status.replace(/[_-]/g, " ")}</Badge>
               <Button asChild size="sm" variant="outline">
                 <Link to={`/apps/chat/${endpoint.id}/settings`}>
-                  Open connection <ExternalLink />
+                  {t("agentChannelsPanel.openConnection")} <ExternalLink />
                 </Link>
               </Button>
             </div>

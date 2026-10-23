@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { createContext, useContext, useId, useRef, useState, type ReactNode } from "react";
 import { Check, ChevronDown, Loader2, RotateCcw, TriangleAlert } from "lucide-react";
 import type { Agent, Issue, IssueCommentMetadata, IssueRecoveryAction } from "@paperclipai/shared";
@@ -57,14 +58,14 @@ export function dispositionRetryUnavailableReason(snapshot: DispositionRecoveryS
 }
 
 function descriptionFor(snapshot: DispositionRecoverySnapshot) {
-  const start = "The agent stopped without recording an outcome or a next step.";
-  if (snapshot.reason === "owner_budget_blocked") return `${start} Automatic recovery stopped because a spending or pause limit prevents the agent from running.`;
-  if (snapshot.reason === "owner_not_invokable") return `${start} Automatic recovery stopped because the assigned agent is unavailable.`;
+  const start = t("dispositionRecoveryNotice.theAgentStoppedWithoutRecording");
+  if (snapshot.reason === "owner_budget_blocked") return t("dispositionRecoveryNotice.startAutomaticRecoveryStoppedBecause", { start });
+  if (snapshot.reason === "owner_not_invokable") return t("dispositionRecoveryNotice.startAutomaticRecoveryStoppedBecause2", { start });
   if (snapshot.reason === "unchanged_source_state_exhausted") {
-    const attempts = snapshot.attemptCount === 2 ? "Two" : String(snapshot.attemptCount);
-    return `${start} ${attempts} automatic ${snapshot.attemptCount === 1 ? "attempt" : "attempts"} to resolve this failed.`;
+    if (snapshot.attemptCount === 2) return t("dispositionRecoveryNotice.attemptsFailedTwo", { start });
+    return t("dispositionRecoveryNotice.attemptsFailed", { start, count: snapshot.attemptCount });
   }
-  return `${start} Automatic recovery stopped. Review the details before trying again.`;
+  return t("dispositionRecoveryNotice.startAutomaticRecoveryStoppedReview", { start });
 }
 
 /** Same component in both task interfaces and Storybook; no prose controls actions. */
@@ -96,7 +97,7 @@ export function DispositionRecoveryNotice({ snapshot, createdAt, defaultExpanded
       await context.onRetry(snapshot.actionId);
       setRequested(true);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Refresh the task to check its current state, then try again.");
+      setError(cause instanceof Error ? cause.message : t("dispositionRecoveryNotice.refreshTheTaskToCheck"));
     } finally {
       inFlight.current = false;
       setPending(false);
@@ -109,15 +110,15 @@ export function DispositionRecoveryNotice({ snapshot, createdAt, defaultExpanded
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex flex-col gap-1" role="status" aria-live="polite">
           <h2 id={titleId} className="break-words text-sm font-medium text-foreground">
-            {requested ? "Retry requested" : historical ? "Agent needed attention" : "Agent needs attention"}
+            {requested ? t("dispositionRecoveryNotice.retryRequested") : historical ? t("dispositionRecoveryNotice.agentNeededAttention") : t("dispositionRecoveryNotice.agentNeedsAttention")}
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            {requested ? `The task was returned to To do for ${agentName}.` : descriptionFor(snapshot)}
+            {requested ? t("dispositionRecoveryNotice.theTaskWasReturnedTo", { agentName }) : descriptionFor(snapshot)}
           </p>
         </div>
         {unavailableReason && !requested ? (
           <p id={unavailableId} className="text-xs leading-relaxed text-muted-foreground">
-            {!historical && <span className="font-medium text-foreground">Retry unavailable. </span>}{unavailableReason}
+            {!historical && <span className="font-medium text-foreground">{t("dispositionRecoveryNotice.retryUnavailable")} </span>}{unavailableReason}
           </p>
         ) : null}
         {error ? <p role="alert" className="text-sm text-destructive">Couldn’t confirm the retry. {error}</p> : null}
@@ -125,11 +126,11 @@ export function DispositionRecoveryNotice({ snapshot, createdAt, defaultExpanded
           {!requested && !historical ? (
             <Button size="xs" variant="outline" disabled={pending || Boolean(unavailableReason)} aria-describedby={unavailableReason ? unavailableId : undefined} onClick={() => void retry()}>
               {pending ? <Loader2 aria-hidden="true" className="size-3 animate-spin motion-reduce:animate-none" /> : <RotateCcw aria-hidden="true" className="size-3" />}
-              {pending ? "Requesting retry…" : "Retry agent"}
+              {pending ? t("dispositionRecoveryNotice.requestingRetry") : t("dispositionRecoveryNotice.retryAgent")}
             </Button>
           ) : null}
           <Button size="xs" variant="ghost" className="text-muted-foreground" aria-expanded={expanded} aria-controls={detailsId} onClick={() => setExpanded(current => !current)}>
-            {expanded ? "Hide details" : "View details"}
+            {expanded ? t("dispositionRecoveryNotice.hideDetails") : t("dispositionRecoveryNotice.viewDetails")}
             <ChevronDown aria-hidden="true" className={cn("size-3", expanded && "rotate-180")} />
           </Button>
           {createdAt ? <time dateTime={createdAt} className="font-mono text-xs text-muted-foreground sm:ml-auto">{timeAgo(createdAt)}</time> : null}
@@ -137,12 +138,12 @@ export function DispositionRecoveryNotice({ snapshot, createdAt, defaultExpanded
         {expanded ? (
           <div id={detailsId} className="flex flex-col gap-3 rounded-lg border border-border bg-muted/20 p-3">
             <dl className="flex flex-col gap-2 text-xs">
-              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">Assigned when recovery stopped</dt><dd>{agentName}</dd></div>
-              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">Automatic attempts</dt><dd className="font-mono">{snapshot.attemptCount} of {snapshot.maxAttempts}</dd></div>
-              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">Automatic retries for this recovery</dt><dd>Stopped</dd></div>
+              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">{t("dispositionRecoveryNotice.assignedWhenRecoveryStopped")}</dt><dd>{agentName}</dd></div>
+              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">{t("dispositionRecoveryNotice.automaticAttempts")}</dt><dd className="font-mono">{snapshot.attemptCount} of {snapshot.maxAttempts}</dd></div>
+              <div className="flex flex-wrap justify-between gap-1"><dt className="text-muted-foreground">{t("dispositionRecoveryNotice.automaticRetriesForThisRecovery")}</dt><dd>{t("dispositionRecoveryNotice.stopped")}</dd></div>
             </dl>
-            <p className="text-xs leading-relaxed text-muted-foreground">Recovery asked the assigned agent to record an outcome or a next step. Retrying keeps the same task and agent, and checks the task’s current controls before continuing.</p>
-            <div className="flex flex-col gap-1"><span className="text-xs text-muted-foreground">Technical reason</span><code className="break-all font-mono text-xs">{snapshot.reason}</code></div>
+            <p className="text-xs leading-relaxed text-muted-foreground">{t("dispositionRecoveryNotice.recoveryAskedTheAssignedAgent")}</p>
+            <div className="flex flex-col gap-1"><span className="text-xs text-muted-foreground">{t("dispositionRecoveryNotice.technicalReason")}</span><code className="break-all font-mono text-xs">{snapshot.reason}</code></div>
           </div>
         ) : null}
       </div>

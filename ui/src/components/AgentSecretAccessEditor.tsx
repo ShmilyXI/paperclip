@@ -293,7 +293,7 @@ export function AgentSecretAccessEditor({
       {bindingProposals.length > 0 && onApproveProposal && onRejectProposal ? (
         <div className="space-y-2">
           <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
-            Proposed access
+            {t("agentSecretAccessEditor.proposedAccess")}
           </div>
           {bindingProposals.map((proposal) => {
             const secret = bindingSecretLabel(proposal);
@@ -334,7 +334,7 @@ export function AgentSecretAccessEditor({
       {/* Editable API-access grants (access.<ALIAS>). */}
       <div className="space-y-2">
         <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
-          API access (no env var)
+          {t("agentSecretAccessEditor.apiAccessNoEnvVar")}
         </div>
         {rows.length > 0 ? (
           <div className="space-y-2">
@@ -453,7 +453,7 @@ export function AgentSecretAccessEditor({
                         disabled={disabled || !selectedSecret}
                         aria-label={t("common.version")}
                       >
-                        <option value="latest">latest</option>
+                        <option value="latest">{t("agentSecretAccessEditor.latest")}</option>
                         {selectedSecret
                           ? Array.from({ length: Math.max(0, selectedSecret.latestVersion) }, (_, index) => {
                               const version = selectedSecret.latestVersion - index;
@@ -479,7 +479,7 @@ export function AgentSecretAccessEditor({
                   </div>
                   {aliasInvalid ? (
                     <p className="pl-0.5 text-(length:--text-micro) text-destructive">
-                      Invalid alias — use letters, digits and _
+                      {t("agentSecretAccessEditor.invalidAliasUseLettersDigits")}
                     </p>
                   ) : aliasDuplicate ? (
                     <p className="pl-0.5 text-(length:--text-micro) text-destructive">{t("secretAccess.duplicateAlias")}</p>
@@ -497,7 +497,7 @@ export function AgentSecretAccessEditor({
           className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
         >
           <Plus className="size-3.5" />
-          Add API access
+          {t("agentSecretAccessEditor.addApiAccess")}
         </button>
       </div>
 

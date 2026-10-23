@@ -30,7 +30,7 @@ export function RunsSection() {
       void queryClient.invalidateQueries({ queryKey: queryKeys.routines.detail(routine.id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.routines.runs(routine.id) });
     },
-    onError: (updateError) => pushToast({ title: "Failed to update task", body: updateError.message, tone: "error" }),
+    onError: (updateError) => pushToast({ title: t("operateSections.failedToUpdateTask"), body: updateError.message, tone: "error" }),
   });
 
   return (
@@ -76,11 +76,11 @@ export function ActivitySection({ isLoading = false, error }: { isLoading?: bool
     return Array.from(byDay.entries());
   }, [events]);
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading activity…</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">{t("operateSections.loadingActivity")}</p>;
   if (error) return <p role="alert" className="text-sm text-destructive">{error.message}</p>;
 
   if (events.length === 0) {
-    return <EmptyState icon={ActivityIcon} message="No activity yet." />;
+    return <EmptyState icon={ActivityIcon} message={t("operateSections.noActivityYet")} />;
   }
 
   return (

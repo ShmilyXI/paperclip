@@ -20,7 +20,7 @@ import { allowedToolsLabel } from "./gateway-helpers";
 export const gatewaysQueryKey = (companyId: string) => ["tools", "gateways", companyId] as const;
 
 /**
- * "New gateway" dialog. A gateway is one safe MCP endpoint that exposes only
+ * t("newGatewayDialog.newGateway") dialog. A gateway is one safe MCP endpoint that exposes only
  * the tools in its access profile. Matches the prosumer create flow from the
  * PAP-11178 design of record.
  */
@@ -64,7 +64,7 @@ export function NewGatewayDialog({
         contextScopeType: "company" satisfies ToolMcpGatewayContextScopeType,
       }),
     onSuccess: async (gateway) => {
-      pushToast({ title: "Gateway created", body: gateway.name, tone: "success" });
+      pushToast({ title: t("newGatewayDialog.gatewayCreated"), body: gateway.name, tone: "success" });
       await queryClient.invalidateQueries({ queryKey: gatewaysQueryKey(companyId) });
       setName("");
       setDescription("");
@@ -73,7 +73,7 @@ export function NewGatewayDialog({
     },
     onError: (error) => {
       pushToast({
-        title: "Gateway was not created",
+        title: t("newGatewayDialog.gatewayWasNotCreated"),
         body: error instanceof Error ? error.message : String(error),
         tone: "error",
       });
@@ -93,10 +93,9 @@ export function NewGatewayDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>New gateway</DialogTitle>
+          <DialogTitle>{t("newGatewayDialog.newGateway")}</DialogTitle>
           <DialogDescription>
-            One safe MCP endpoint that exposes only the apps in its access profile. Hand it to a client
-            like Cursor or Claude Desktop.
+            {t("newGatewayDialog.oneSafeMcpEndpointThat")}
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-4" onSubmit={submit}>
@@ -105,13 +104,13 @@ export function NewGatewayDialog({
             <Input
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="CTO agents"
+              placeholder={t("newGatewayDialog.ctoAgents")}
               required
               autoFocus
             />
           </label>
           <label className="block space-y-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Access profile</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("newGatewayDialog.accessProfile")}</span>
             <select
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={profileId}
@@ -120,7 +119,7 @@ export function NewGatewayDialog({
               disabled={noProfiles}
             >
               <option value="" disabled>
-                {profilesLoading ? "Loading profiles…" : "Choose a profile"}
+                {profilesLoading ? t("newGatewayDialog.loadingProfiles") : t("newGatewayDialog.chooseAProfile")}
               </option>
               {activeProfiles.map((profile) => (
                 <option key={profile.id} value={profile.id}>
@@ -129,21 +128,21 @@ export function NewGatewayDialog({
               ))}
             </select>
             <span className="text-xs text-muted-foreground">
-              The profile decides which tools this gateway allows. You can change it later.
+              {t("newGatewayDialog.theProfileDecidesWhichTools")}
             </span>
           </label>
           <label className="block space-y-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Description (optional)</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("newGatewayDialog.descriptionOptional")}</span>
             <textarea
               className="min-h-16 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="Who this endpoint is for and when it should be rotated."
+              placeholder={t("newGatewayDialog.whoThisEndpointIsFor")}
             />
           </label>
           {noProfiles ? (
             <p className="text-xs text-destructive">
-              Create an access profile under Advanced before adding a gateway.
+              {t("newGatewayDialog.createAnAccessProfileUnder")}
             </p>
           ) : null}
           <DialogFooter>
@@ -154,7 +153,7 @@ export function NewGatewayDialog({
               type="submit"
               disabled={createMutation.isPending || noProfiles || !name.trim() || !profileId}
             >
-              {createMutation.isPending ? t("common.creating") : "Create gateway"}
+              {createMutation.isPending ? t("common.creating") : t("newGatewayDialog.createGateway")}
             </Button>
           </DialogFooter>
         </form>

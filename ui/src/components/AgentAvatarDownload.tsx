@@ -29,7 +29,7 @@ export function AgentAvatarDownload({
         !response.ok ||
         !response.headers.get("content-type")?.startsWith("image/png")
       )
-        throw new Error("Avatar unavailable");
+        throw new Error(t("agentAvatarDownload.avatarUnavailable"));
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");
       link.href = url;
@@ -52,8 +52,8 @@ export function AgentAvatarDownload({
         asChild
       >
         <a
-          aria-label="Download avatar"
-          title="Download avatar"
+          aria-label={t("agentAvatarDownload.downloadAvatar")}
+          title={t("agentAvatarDownload.downloadAvatar")}
           href={avatarUrl}
           download={agentAvatarFilename(name)}
           aria-disabled={downloading}
@@ -67,12 +67,12 @@ export function AgentAvatarDownload({
           ) : (
             <Download className="size-4" />
           )}
-          {!iconOnly && "Download avatar"}
+          {!iconOnly && t("agentAvatarDownload.downloadAvatar")}
         </a>
       </Button>
       {failed && (
         <p role="alert" className="text-sm text-destructive">
-          Couldn’t download the avatar. Try downloading it again.
+          {t("agentAvatarDownload.couldnTDownloadTheAvatar")}
         </p>
       )}
     </div>

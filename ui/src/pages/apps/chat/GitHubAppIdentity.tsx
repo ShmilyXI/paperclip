@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ExternalLink, RefreshCw } from "lucide-react";
 import type { ChatEndpoint } from "@/api/chatEndpoints";
 import { AgentAvatarDownload } from "@/components/AgentAvatarDownload";
@@ -28,8 +29,8 @@ export function GitHubBotMention({ endpoint }: { endpoint: ChatEndpoint }) {
   return mention ? (
     <CopyText
       text={mention}
-      ariaLabel="Copy GitHub mention"
-      title="Copy GitHub mention"
+      ariaLabel={t("gitHubAppIdentity.copyGithubMention")}
+      title={t("gitHubAppIdentity.copyGithubMention")}
       className="break-all font-mono text-xs"
     >
       {mention}
@@ -46,11 +47,10 @@ export function GitHubAppBranding({
   avatarUrl?: string;
 }) {
   return (
-    <GitHubSettingsDisclosure title="GitHub App name and logo">
+    <GitHubSettingsDisclosure title={t("gitHubAppIdentity.githubAppNameAndLogo")}>
       <div className="mt-4 space-y-4">
         <p className="text-sm text-muted-foreground">
-          Change the name or upload a logo in the App’s Display information
-          settings on GitHub.
+          {t("gitHubAppIdentity.changeTheNameOrUpload")}
         </p>
         <div className="flex flex-wrap items-center gap-3">
           {avatarUrl && (
@@ -71,9 +71,9 @@ export function GitHubAppBranding({
               href={gitHubAppSettingsUrl(endpoint)}
               target="_blank"
               rel="noreferrer"
-              aria-label="Edit App name and logo on GitHub"
+              aria-label={t("gitHubAppIdentity.editAppNameAndLogo")}
             >
-              Edit on GitHub <ExternalLink className="size-4" />
+              {t("gitHubAppIdentity.editOnGithub")} <ExternalLink className="size-4" />
             </a>
           </Button>
         </div>
@@ -83,7 +83,7 @@ export function GitHubAppBranding({
             className="underline underline-offset-4"
             to={`/apps/chat/connect?provider=github&resume=${endpoint.id}&reconnect=1`}
           >
-            Reconnect afterward
+            {t("gitHubAppIdentity.reconnectAfterward")}
           </Link>{" "}
           to update it here.
         </p>
@@ -114,17 +114,17 @@ export function GitHubAppIdentityActions({
           href={gitHubAppSettingsUrl(endpoint)}
           target="_blank"
           rel="noreferrer"
-          aria-label="Edit App name and logo on GitHub"
-          title="Change the App name or upload its logo on GitHub"
+          aria-label={t("gitHubAppIdentity.editAppNameAndLogo")}
+          title={t("gitHubAppIdentity.changeTheAppNameOr")}
         >
-          Edit App <ExternalLink className="size-3.5" />
+          {t("gitHubAppIdentity.editApp")} <ExternalLink className="size-3.5" />
         </a>
       </Button>
       <Button variant="ghost" size="icon" asChild>
         <Link
           to={`/apps/chat/connect?provider=github&resume=${endpoint.id}&reconnect=1`}
-          aria-label="Refresh GitHub App identity"
-          title="Reconnect after renaming the App to refresh its @mention"
+          aria-label={t("gitHubAppIdentity.refreshGithubAppIdentity")}
+          title={t("gitHubAppIdentity.reconnectAfterRenamingTheApp")}
         >
           <RefreshCw className="size-3.5" />
         </Link>

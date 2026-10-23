@@ -76,7 +76,7 @@ export function AgentSelect({
           <Input
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            placeholder="Filter agents"
+            placeholder={t("agentMultiSelect.filterAgents")}
             className="h-8"
             autoFocus
           />
@@ -104,7 +104,7 @@ export function AgentSelect({
               </button>
             ))}
             {filteredAgents.length === 0 ? (
-              <div className="px-3 py-4 text-sm text-muted-foreground">No matches.</div>
+              <div className="px-3 py-4 text-sm text-muted-foreground">{t("agentMultiSelect.noMatches")}</div>
             ) : null}
           </div>
         )}
@@ -214,7 +214,7 @@ export function AgentMultiSelect({
               {triggerIcon}
               <span className="truncate">
                 {triggerLabel ?? (selectedCount === 0
-                  ? "Select agents"
+                  ? t("agentMultiSelect.selectAgents")
                   : `${selectedCount} ${selectedCount === 1 ? "agent" : "agents"} selected`)}
               </span>
             </span>
@@ -226,7 +226,7 @@ export function AgentMultiSelect({
           <Input
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            placeholder="Filter agents"
+            placeholder={t("agentMultiSelect.filterAgents")}
             className="h-8"
             autoFocus
           />
@@ -275,13 +275,13 @@ export function AgentMultiSelect({
               );
             })}
             {filteredAgents.length === 0 ? (
-              <div className="px-3 py-4 text-sm text-muted-foreground">No matches.</div>
+              <div className="px-3 py-4 text-sm text-muted-foreground">{t("agentMultiSelect.noMatches")}</div>
             ) : null}
           </div>
         )}
           <div className="flex items-center justify-between border-t border-border px-3 py-2">
             <span className="text-xs text-muted-foreground">
-              {workingAgentIds.size === 0 ? "No agents selected" : `${workingAgentIds.size} selected`}
+              {workingAgentIds.size === 0 ? t("agentMultiSelect.noAgentsSelected") : `${workingAgentIds.size} selected`}
             </span>
             <div className="flex items-center gap-2">
               {staged ? (

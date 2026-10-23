@@ -24,7 +24,7 @@ export interface GrokBotSetupContentProps {
   onCredentials: (url: string, key: string) => void;
   onBack: () => void; onExit: () => void; onNext: () => void; onRetry: () => void;
 }
-const steps = ["Identify Bot", "Connect access", "Enable assignments", "Verify"];
+const steps = ["Identify Bot", "Connect access", t("grokBotSetupContent.enableAssignments"), "Verify"];
 export function GrokBotSetupContent(p: GrokBotSetupContentProps) {
   const pairingCodeId = useId();
   const binding = p.connection?.binding;
@@ -43,55 +43,55 @@ export function GrokBotSetupContent(p: GrokBotSetupContentProps) {
     <div className="min-h-0 space-y-6 overflow-y-auto px-6 pb-6 pt-8 sm:px-8">
       <div className="space-y-3 pr-5">
         <AdapterMark type="grok_bot" className="size-10" />
-        <DialogTitle className="text-xl font-semibold tracking-tight">{ready ? "Your Grok Bot is connected" : "Connect your Grok Bot"}</DialogTitle>
-        <DialogDescription className="text-sm leading-relaxed">{ready ? `${p.details.botName} can receive assignments and work with ${p.companyName}.` : `Bring an existing Bot into ${p.companyName}. It continues to run in Grok Bot.`}</DialogDescription>
+        <DialogTitle className="text-xl font-semibold tracking-tight">{ready ? t("grokBotSetupContent.yourGrokBotIsConnected") : t("grokBotSetupContent.connectYourGrokBot")}</DialogTitle>
+        <DialogDescription className="text-sm leading-relaxed">{ready ? `${p.details.botName} can receive assignments and work with ${p.companyName}.` : t("grokBotSetupContent.bringAnExistingBotInto", { companyName: p.companyName })}</DialogDescription>
       </div>
-      <ol aria-label="Grok Bot setup" className="grid grid-cols-4 gap-2 text-xs text-muted-foreground">
+      <ol aria-label={t("grokBotSetupContent.grokBotSetup")} className="grid grid-cols-4 gap-2 text-xs text-muted-foreground">
         {steps.map((label, index) => <li key={label} aria-current={p.step === index ? "step" : undefined} className={p.step === index ? "font-medium text-foreground" : ""}>{index + 1}. {label}</li>)}
       </ol>
       {p.error && <div role="alert" className="space-y-2 text-sm text-destructive"><p>{p.error}</p><Button variant="outline" disabled={p.busy} onClick={p.onRetry}>{t("common.tryAgain")}</Button></div>}
-      {p.loading ? <p role="status" className="text-sm text-muted-foreground">Restoring saved setup…</p> : p.approvalHref ? <p className="text-sm text-muted-foreground">An organization admin needs to approve this agent. Setup is saved and will resume after approval.</p> : <>
+      {p.loading ? <p role="status" className="text-sm text-muted-foreground">{t("grokBotSetupContent.restoringSavedSetup")}</p> : p.approvalHref ? <p className="text-sm text-muted-foreground">{t("grokBotSetupContent.anOrganizationAdminNeedsTo")}</p> : <>
         {p.step === 0 && <div className="space-y-4">
-          <label className="block space-y-2 text-sm"><span>Paperclip name</span><Input value={p.details.name} disabled={p.created} onChange={e => p.onDetails({ ...p.details, name: e.target.value })} autoComplete="off" maxLength={100} /></label>
-          <label className="block space-y-2 text-sm"><span>Bot name in Grok</span><Input value={p.details.botName} disabled={p.created} onChange={e => p.onDetails({ ...p.details, botName: e.target.value })} autoComplete="off" maxLength={100} /></label>
-          <p className="text-xs text-muted-foreground">Use the name shown in the Grok Bot desktop app. Bot web links may no longer work.</p>
+          <label className="block space-y-2 text-sm"><span>{t("grokBotSetupContent.paperclipName")}</span><Input value={p.details.name} disabled={p.created} onChange={e => p.onDetails({ ...p.details, name: e.target.value })} autoComplete="off" maxLength={100} /></label>
+          <label className="block space-y-2 text-sm"><span>{t("grokBotSetupContent.botNameInGrok")}</span><Input value={p.details.botName} disabled={p.created} onChange={e => p.onDetails({ ...p.details, botName: e.target.value })} autoComplete="off" maxLength={100} /></label>
+          <p className="text-xs text-muted-foreground">{t("grokBotSetupContent.useTheNameShownIn")}</p>
           <label className="block space-y-2 text-sm"><span>{t("common.role")}</span><NativeSelect disabled={p.created} value={p.details.role ?? "general"} onChange={e => p.onDetails({ ...p.details, role: e.target.value as CreateGrokInvitation["role"] })}>{AGENT_ROLES.map(role => <option key={role} value={role}>{role.replaceAll("_", " ")}</option>)}</NativeSelect></label>
-          <label className="block space-y-2 text-sm"><span>{t("common.manager")}</span><NativeSelect disabled={p.created} value={p.details.reportsTo ?? ""} onChange={e => p.onDetails({ ...p.details, reportsTo: e.target.value || null })}><option value="">No manager</option>{p.managers.map(manager => <option key={manager.id} value={manager.id}>{manager.name}</option>)}</NativeSelect></label>
+          <label className="block space-y-2 text-sm"><span>{t("common.manager")}</span><NativeSelect disabled={p.created} value={p.details.reportsTo ?? ""} onChange={e => p.onDetails({ ...p.details, reportsTo: e.target.value || null })}><option value="">{t("grokBotSetupContent.noManager")}</option>{p.managers.map(manager => <option key={manager.id} value={manager.id}>{manager.name}</option>)}</NativeSelect></label>
         </div>}
         {p.step === 1 && <div className="space-y-4 text-sm">
-          <p>Copy the connection instructions into your Bot’s chat. Add the custom MCP plugin and complete its browser authorization.</p>
-          {p.connection?.resourceUrl && <AgentSetupPrompt prompt={buildGrokAccessPrompt(p.connection.resourceUrl, p.details.botName)} label="Copy connection instructions" title="Connect Paperclip access" description="Send these instructions to your Bot. The pairing code stays in your browser." />}
+          <p>{t("grokBotSetupContent.copyTheConnectionInstructionsInto")}</p>
+          {p.connection?.resourceUrl && <AgentSetupPrompt prompt={buildGrokAccessPrompt(p.connection.resourceUrl, p.details.botName)} label={t("grokBotSetupContent.copyConnectionInstructions")} title={t("grokBotSetupContent.connectPaperclipAccess")} description={t("grokBotSetupContent.sendTheseInstructionsToYour")} />}
           {!binding?.connected && p.pairing && <div className="space-y-2">
-            <label htmlFor={pairingCodeId}>One-use pairing code</label>
+            <label htmlFor={pairingCodeId}>{t("grokBotSetupContent.oneUsePairingCode")}</label>
             <div className="flex items-center gap-2">
               <Input id={pairingCodeId} value={p.pairing.pairingCode} readOnly type="password" autoComplete="off" />
-              <CopyText text={p.pairing.pairingCode} ariaLabel="Copy pairing code" className={buttonVariants({ variant: "outline", size: "sm" })}>Copy code</CopyText>
+              <CopyText text={p.pairing.pairingCode} ariaLabel={t("grokBotSetupContent.copyPairingCode")} className={buttonVariants({ variant: "outline", size: "sm" })}>{t("grokBotSetupContent.copyCode")}</CopyText>
             </div>
-            <p className="text-xs text-muted-foreground">Copy this code into Paperclip’s authorization page. Do not paste it into Bot chat. Expires {new Date(p.pairing.expiresAt).toLocaleTimeString()}.</p>
+            <p className="text-xs text-muted-foreground">{t("grokBotSetupContent.copyThisCodeIntoPaperclip")} {new Date(p.pairing.expiresAt).toLocaleTimeString()}.</p>
           </div>}
-          <p role="status" aria-live="polite" className="text-muted-foreground">{binding?.connected ? "Agent access connected." : "Watching for authorization. This connection works as the named agent."}</p>
-          <p className="text-xs text-muted-foreground">Grok plugins are account-wide. Linking one Bot does not isolate its credentials from other Bots on your account.</p>
+          <p role="status" aria-live="polite" className="text-muted-foreground">{binding?.connected ? t("grokBotSetupContent.agentAccessConnected") : t("grokBotSetupContent.watchingForAuthorizationThisConnection")}</p>
+          <p className="text-xs text-muted-foreground">{t("grokBotSetupContent.grokPluginsAreAccountWide")}</p>
         </div>}
         {p.step === 2 && <div className="space-y-4 text-sm">
-          <p>Ask your Bot to create a webhook-only routine, then open its Webhook panel in the desktop app.</p>
-          {binding && <AgentSetupPrompt prompt={buildGrokRoutinePrompt(binding.id, p.details.botName)} label="Copy routine instructions" title="Enable assignments" description="Send this to the connected Bot. The routine wakes it when Paperclip work changes." />}
-          <p className="text-xs text-muted-foreground">If clicking the routine does nothing, use the “Webhook URL” navigation link the Bot supplies.</p>
-          {routine?.configured && !p.editingCredentials && !p.webhookUrl && !p.webhookKey ? <div className="space-y-2"><p role="status" className="text-muted-foreground">Routine credentials are stored. Continue to verify both directions.</p>{p.onEditCredentials && <Button variant="outline" onClick={p.onEditCredentials} disabled={p.busy}>Replace routine credentials</Button>}</div> : <>
-            <label className="block space-y-2"><span>Webhook URL</span><Input value={p.webhookUrl} onChange={e => p.onCredentials(e.target.value, p.webhookKey)} type="password" autoComplete="off" spellCheck={false} /></label>
-            <label className="block space-y-2"><span>Webhook key</span><Input value={p.webhookKey} onChange={e => p.onCredentials(p.webhookUrl, e.target.value)} type="password" autoComplete="off" spellCheck={false} /></label>
+          <p>{t("grokBotSetupContent.askYourBotToCreate")}</p>
+          {binding && <AgentSetupPrompt prompt={buildGrokRoutinePrompt(binding.id, p.details.botName)} label={t("grokBotSetupContent.copyRoutineInstructions")} title={t("grokBotSetupContent.enableAssignments")} description={t("grokBotSetupContent.sendThisToTheConnected")} />}
+          <p className="text-xs text-muted-foreground">{t("grokBotSetupContent.ifClickingTheRoutineDoes")}</p>
+          {routine?.configured && !p.editingCredentials && !p.webhookUrl && !p.webhookKey ? <div className="space-y-2"><p role="status" className="text-muted-foreground">{t("grokBotSetupContent.routineCredentialsAreStoredContinue")}</p>{p.onEditCredentials && <Button variant="outline" onClick={p.onEditCredentials} disabled={p.busy}>{t("grokBotSetupContent.replaceRoutineCredentials")}</Button>}</div> : <>
+            <label className="block space-y-2"><span>{t("grokBotSetupContent.webhookUrl")}</span><Input value={p.webhookUrl} onChange={e => p.onCredentials(e.target.value, p.webhookKey)} type="password" autoComplete="off" spellCheck={false} /></label>
+            <label className="block space-y-2"><span>{t("grokBotSetupContent.webhookKey")}</span><Input value={p.webhookKey} onChange={e => p.onCredentials(p.webhookUrl, e.target.value)} type="password" autoComplete="off" spellCheck={false} /></label>
           </>}
-          <p className="text-xs text-muted-foreground">Copy these fields directly from Grok into Paperclip. Credentials are stored securely and are never included in instructions.</p>
+          <p className="text-xs text-muted-foreground">{t("grokBotSetupContent.copyTheseFieldsDirectlyFrom")}</p>
         </div>}
-        {p.step === 3 && <section aria-label="Grok connection checks" className="space-y-4 text-sm">
-          {[{ label: "Assignment delivered", done: delivered }, { label: "Reply received", done: replied }].map(check => <p key={check.label} className="flex items-center gap-3">{check.done ? <Check className="size-4" /> : pending ? <Loader2 className="size-4 animate-spin motion-reduce:animate-none" /> : <Circle className="size-4 text-muted-foreground" />}{check.label}<span className="text-muted-foreground">{check.done ? "Complete" : "Waiting"}</span></p>)}
-          <p role="status" aria-live="polite" className="text-muted-foreground">{routine?.recoveryNeeded ? "Recovery needed. Inspect Grok’s activity in this agent’s configuration before another delivery." : ready ? "Both directions verified. Your Bot is ready for tasks." : replied ? "Both directions verified. Paperclip is finishing agent setup." : exchange?.status === "rejected" ? "The routine rejected delivery. Check its URL and key, then try again." : delivered ? "The routine accepted delivery. Waiting for an authenticated reply to Paperclip." : "Send a harmless challenge. This creates no task."}</p>
-          <p className="text-xs text-muted-foreground">Grok runs externally. Usage and spending are not reported. Paperclip contact does not prove the Bot is continuously available.</p>
+        {p.step === 3 && <section aria-label={t("grokBotSetupContent.grokConnectionChecks")} className="space-y-4 text-sm">
+          {[{ label: t("grokBotSetupContent.assignmentDelivered"), done: delivered }, { label: t("grokBotSetupContent.replyReceived"), done: replied }].map(check => <p key={check.label} className="flex items-center gap-3">{check.done ? <Check className="size-4" /> : pending ? <Loader2 className="size-4 animate-spin motion-reduce:animate-none" /> : <Circle className="size-4 text-muted-foreground" />}{check.label}<span className="text-muted-foreground">{check.done ? t("grokBotSetupContent.complete") : t("grokBotSetupContent.waiting")}</span></p>)}
+          <p role="status" aria-live="polite" className="text-muted-foreground">{routine?.recoveryNeeded ? t("grokBotSetupContent.recoveryNeededInspectGrokS") : ready ? t("grokBotSetupContent.bothDirectionsVerifiedYourBot") : replied ? t("grokBotSetupContent.bothDirectionsVerifiedPaperclipIs") : exchange?.status === "rejected" ? t("grokBotSetupContent.theRoutineRejectedDeliveryCheck") : delivered ? t("grokBotSetupContent.theRoutineAcceptedDeliveryWaiting") : t("grokBotSetupContent.sendAHarmlessChallengeThis")}</p>
+          <p className="text-xs text-muted-foreground">{t("grokBotSetupContent.grokRunsExternallyUsageAnd")}</p>
         </section>}
       </>}
     </div>
     <div className="flex items-center justify-between gap-3 border-t px-6 py-4 sm:px-8">
-      <div className="flex items-center gap-2"><Button variant="ghost" onClick={p.onBack} disabled={p.busy}>{t("common.back")}</Button><Button variant="ghost" onClick={p.onExit} disabled={p.busy}>Save &amp; exit</Button></div>
-      {p.approvalHref ? <Button asChild><Link to={p.approvalHref} onClick={p.onExit}>Review approval</Link></Button> : <Button onClick={p.onNext} disabled={nextDisabled}>{p.busy ? t("common.saving2") : ready ? t("common.done") : p.step === 3 ? pending ? "Waiting for reply…" : replied ? "Finishing setup…" : "Verify connection" : t("common.continue")}</Button>}
+      <div className="flex items-center gap-2"><Button variant="ghost" onClick={p.onBack} disabled={p.busy}>{t("common.back")}</Button><Button variant="ghost" onClick={p.onExit} disabled={p.busy}>{t("grokBotSetupContent.saveExit")}</Button></div>
+      {p.approvalHref ? <Button asChild><Link to={p.approvalHref} onClick={p.onExit}>{t("grokBotSetupContent.reviewApproval")}</Link></Button> : <Button onClick={p.onNext} disabled={nextDisabled}>{p.busy ? t("common.saving2") : ready ? t("common.done") : p.step === 3 ? pending ? t("grokBotSetupContent.waitingForReply") : replied ? t("grokBotSetupContent.finishingSetup") : t("grokBotSetupContent.verifyConnection") : t("common.continue")}</Button>}
     </div>
   </>;
 }

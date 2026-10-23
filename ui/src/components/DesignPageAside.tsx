@@ -120,7 +120,7 @@ export function DesignPageAside({ children, title, maximized, storageKey }: {
     "--design-page-aside-available-width": bounds.max ? `${bounds.max}px` : undefined,
   } as CSSProperties}>
     {!maximized && <div
-      role="separator" aria-label="Resize right sidebar" aria-orientation="vertical"
+      role="separator" aria-label={t("designPageAside.resizeRightSidebar")} aria-orientation="vertical"
       aria-controls="design-page-aside-content" aria-valuemin={bounds.min} aria-valuemax={bounds.max} aria-valuenow={actualWidth}
       tabIndex={0} data-dragging={dragging ? "" : undefined}
       className="pane-resize-handle design-page-aside-resize group absolute inset-y-0 z-20 cursor-col-resize touch-none outline-none"

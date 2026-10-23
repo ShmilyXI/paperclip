@@ -15,15 +15,15 @@ export function ProfileDetailRoute() {
   useEffect(() => {
     setBreadcrumbs([
       { label: selectedCompany?.name ?? t("common.company"), href: "/dashboard" },
-      { label: "Apps", href: "/apps" },
-      { label: "Access profiles", href: advancedTabHref("profiles") },
-      { label: "Profile detail" },
+      { label: t("profileDetailRoute.apps"), href: "/apps" },
+      { label: t("profileDetailRoute.accessProfiles"), href: advancedTabHref("profiles") },
+      { label: t("profileDetailRoute.profileDetail") },
     ]);
     return () => setBreadcrumbs([]);
   }, [setBreadcrumbs, selectedCompany?.name]);
 
   if (!selectedCompanyId || !params.profileId) {
-    return <div className="p-6 text-sm text-muted-foreground">Select an organization and profile.</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{t("profileDetailRoute.selectAnOrganizationAndProfile")}</div>;
   }
 
   return (

@@ -89,13 +89,13 @@ export function buildRoutineProjectOptions(
 
 const SECTION_TITLES: Record<RoutineSectionKey, string> = {
   overview: t("common.overview"),
-  triggers: "Triggers",
-  variables: "Variables",
+  triggers: t("routineDetail.triggers"),
+  variables: t("routineDetail.variables"),
   secrets: t("common.secrets"),
-  delivery: "Delivery",
+  delivery: t("routineDetail.delivery"),
   runs: t("common.runs"),
   activity: t("common.activity"),
-  history: "Version history",
+  history: t("routineDetail.versionHistory"),
 };
 
 function autoResizeTextarea(element: HTMLTextAreaElement | null) {
@@ -427,7 +427,7 @@ export function RoutineDetail() {
     },
     onError: (runError) => {
       pushToast({
-        title: "Routine run failed",
+        title: t("routineDetail.routineRunFailed"),
         body: runError instanceof Error ? runError.message : t("routineDetail.paperclipCouldNotStartThe"),
         tone: "error",
       });
@@ -439,7 +439,7 @@ export function RoutineDetail() {
     onSuccess: async (_data, status) => {
       pushToast({
         title: t("routineDetail.routineSaved"),
-        body: status === "paused" ? "Automation paused." : "Automation enabled.",
+        body: status === "paused" ? t("routineDetail.automationPaused") : t("routineDetail.automationEnabled"),
         tone: "success",
       });
       await Promise.all([
@@ -612,7 +612,7 @@ export function RoutineDetail() {
       setSecretMessage({
         title:
           response.secretMaterials.length === 1
-            ? "Webhook trigger restored"
+            ? t("routineDetail.webhookTriggerRestored")
             : `${response.secretMaterials.length} webhook triggers restored`,
         entries: response.secretMaterials.map((recreated) => ({
           webhookUrl: recreated.webhookUrl,
@@ -777,7 +777,7 @@ export function RoutineDetail() {
         href="#routine-section"
         className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-20 focus:rounded focus:bg-background focus:px-3 focus:py-1.5 focus:text-sm"
       >
-        Skip to section
+        {t("routineDetail.skipToSection")}
       </a>
 
       {/* The global shell owns routine navigation. This surface keeps one
@@ -841,7 +841,7 @@ export function RoutineDetail() {
                 size="sm"
                 onClick={() => navigate(routineDetailHref(routine.id))}
               >
-                Back to overview
+                {t("routineDetail.backToOverview")}
               </Button>
             ) : (
               <Button
@@ -864,12 +864,12 @@ export function RoutineDetail() {
                   }}
                 >
                   <X className="h-3.5 w-3.5" />
-                  Cancel editing
+                  {t("routineDetail.cancelEditing")}
                 </Button>
               ) : (
                 <Button variant="outline" size="sm" onClick={() => setOverviewEditing(true)}>
                   <Pencil className="h-3.5 w-3.5" />
-                  Edit routine
+                  {t("routineDetail.editRoutine")}
                 </Button>
               )
             ) : null}
@@ -880,7 +880,7 @@ export function RoutineDetail() {
                 checked={automationEnabled}
                 onCheckedChange={contextValue.onToggleAutomation}
                 disabled={automationToggleDisabled}
-                aria-label={automationEnabled ? "Pause automatic triggers" : "Enable automatic triggers"}
+                aria-label={automationEnabled ? t("routineDetail.pauseAutomaticTriggers") : t("routineDetail.enableAutomaticTriggers")}
               />
               <span className={`text-sm font-medium ${automationLabelClassName}`}>{automationLabel}</span>
             </div>

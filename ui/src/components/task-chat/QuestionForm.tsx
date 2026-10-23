@@ -174,7 +174,7 @@ function SelectOption({
           <span>{label}</span>
           {recommended ? (
             <span className="rounded-sm bg-background/70 px-1.5 py-0.5 text-(length:--text-micro) font-medium text-muted-foreground">
-              Recommended
+              {t("questionForm.recommended")}
             </span>
           ) : null}
         </span>
@@ -222,7 +222,7 @@ export function QuestionResponseSummary({
               </span>
             </dt>
             <dd className="mt-0.5 text-foreground">
-              {values.length > 0 ? values.join(", ") : "No answer"}
+              {values.length > 0 ? values.join(", ") : t("questionForm.noAnswer")}
             </dd>
           </div>
         );
@@ -329,7 +329,7 @@ function QuestionFormForRequest({
   if (!question)
     return (
       <p className="text-sm text-muted-foreground">
-        No answerable questions were provided.
+        {t("questionForm.noAnswerableQuestionsWereProvided")}
       </p>
     );
   const answer = answers[question.id] ?? {};
@@ -401,7 +401,7 @@ function QuestionFormForRequest({
       // question and say so rather than dropping the send.
       setPage(invalidIndex);
       setError({
-        message: `Question ${invalidIndex + 1} needs an answer before you can send.`,
+        message: t("questionForm.questionInvalidindexNeedsAnAnswer", { invalidIndex: invalidIndex + 1 }),
         fromMissingAnswer: true,
       });
       return;
@@ -419,7 +419,7 @@ function QuestionFormForRequest({
         message:
           cause instanceof Error
             ? cause.message
-            : "The answers could not be submitted.",
+            : t("questionForm.theAnswersCouldNotBe"),
       });
     } finally {
       setWorking(null);
@@ -438,7 +438,7 @@ function QuestionFormForRequest({
         message:
           cause instanceof Error
             ? cause.message
-            : "The questions could not be cancelled.",
+            : t("questionForm.theQuestionsCouldNotBe"),
       });
     } finally {
       setWorking(null);
@@ -467,26 +467,26 @@ function QuestionFormForRequest({
     questionSet.questions.length > 1 ? (
       <nav
         className="flex shrink-0 items-center gap-1"
-        aria-label="Question pagination"
+        aria-label={t("questionForm.questionPagination")}
       >
         <Button
           type="button"
           size="icon-xs"
           variant="ghost"
-          aria-label="Previous question"
+          aria-label={t("questionForm.previousQuestion")}
           disabled={disabled || working != null || page === 0}
           onClick={() => setPage((current) => current - 1)}
         >
           <ChevronLeft aria-hidden />
         </Button>
         <span className="min-w-10 text-center tabular-nums">
-          {page + 1} of {questionSet.questions.length}
+          {t("questionForm.pageOfTotal", { page: page + 1, total: questionSet.questions.length })}
         </span>
         <Button
           type="button"
           size="icon-xs"
           variant="ghost"
-          aria-label="Next question"
+          aria-label={t("questionForm.nextQuestion")}
           // The arrows browse; they do not validate. A send that finds an
           // earlier answer missing returns to that question (see submit).
           disabled={disabled || working != null || isLastPage}
@@ -533,7 +533,7 @@ function QuestionFormForRequest({
       {questionSet.description ? (
         <div
           role="region"
-          aria-label="Question context"
+          aria-label={t("questionForm.questionContext")}
           tabIndex={0}
           className="mb-3 max-h-96 overflow-auto text-sm text-muted-foreground"
         >
@@ -542,7 +542,7 @@ function QuestionFormForRequest({
       ) : null}
       {question.answerMode === "text" ? (
         <div className="mb-2 flex items-center gap-3 text-xs text-muted-foreground">
-          {question.answerMode === "text" ? <span>Write an answer</span> : null}
+          {question.answerMode === "text" ? <span>{t("questionForm.writeAnAnswer")}</span> : null}
         </div>
       ) : null}
       {pagination ? (
@@ -584,7 +584,7 @@ function QuestionFormForRequest({
             value={answer.text ?? ""}
             disabled={disabled || working != null}
             onChange={(value) => updateAnswer({ text: value })}
-            placeholder="Write your answer"
+            placeholder={t("questionForm.writeYourAnswer")}
             imageUploadHandler={imageUploadHandler}
             mentions={mentions}
             autoFocus
@@ -615,8 +615,8 @@ function QuestionFormForRequest({
                     [question.id]: event.target.value,
                   }))
                 }
-                placeholder="Filter choices"
-                aria-label={`Filter choices for ${question.prompt}`}
+                placeholder={t("questionForm.filterChoices")}
+                aria-label={t("questionForm.filterChoicesForPrompt", { prompt: question.prompt })}
                 className="pl-8"
               />
             </label>
@@ -638,7 +638,7 @@ function QuestionFormForRequest({
             <div className="space-y-1.5">
               <SelectOption
                 id={`${id}-${question.id}-custom`}
-                label={question.customAnswer?.label ?? "Other"}
+                label={question.customAnswer?.label ?? t("questionForm.other")}
                 selected={isCustomActive}
                 multiple={multiple}
                 disabled={disabled || working != null}
@@ -650,7 +650,7 @@ function QuestionFormForRequest({
                   testId="question-other-answer-composer"
                   value={answer.customText ?? ""}
                   placeholder={
-                    question.customAnswer?.placeholder ?? "Type your answer"
+                    question.customAnswer?.placeholder ?? t("questionForm.typeYourAnswer")
                   }
                   disabled={disabled || working != null}
                   onChange={(value) =>
@@ -716,7 +716,7 @@ function QuestionFormForRequest({
           {working === "submit" ? (
             <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
           ) : null}
-          {isLastPage ? (questionSet.submitLabel ?? "Submit answers") : t("common.next")}
+          {isLastPage ? (questionSet.submitLabel ?? t("questionForm.submitAnswers")) : t("common.next")}
         </Button>
       </div>
     </div>

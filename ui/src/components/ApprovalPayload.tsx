@@ -4,10 +4,10 @@ import { MarkdownBody } from "./MarkdownBody";
 import { formatCents } from "../lib/utils";
 
 export const typeLabel: Record<string, string> = {
-  hire_agent: "Hire Agent",
+  hire_agent: t("approvals.hireAgent"),
   approve_ceo_strategy: "CEO Strategy",
-  budget_override_required: "Budget Override",
-  request_board_approval: "Board Approval",
+  budget_override_required: t("approvals.budgetOverride"),
+  request_board_approval: t("approvals.boardApproval"),
 };
 
 function firstNonEmptyString(...values: unknown[]): string | null {
@@ -201,7 +201,7 @@ function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unkn
       {recommendedAction && (
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3.5 py-3">
           <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-amber-700 dark:text-amber-300">
-            Recommended action
+            {t("approvals.recommendedAction")}
           </p>
           <MarkdownBody className="mt-1 leading-6 text-foreground">{recommendedAction}</MarkdownBody>
         </div>
@@ -228,7 +228,7 @@ function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unkn
       {proposedComment && (
         <div className="space-y-1.5">
           <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">
-            Proposed comment
+            {t("approvals.proposedComment")}
           </p>
           <pre className="max-h-48 overflow-auto rounded-lg border border-border/60 bg-muted/50 px-3.5 py-3 font-mono text-xs leading-5 text-muted-foreground whitespace-pre-wrap">
             {proposedComment}

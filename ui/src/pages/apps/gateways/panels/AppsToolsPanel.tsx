@@ -26,14 +26,14 @@ export function AppsToolsPanel({
 
       {apps.length === 0 ? (
         <div className="rounded-md border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          No apps are assigned to this gateway’s profile yet.
+          {t("appsToolsPanel.noAppsAreAssignedTo")}
         </div>
       ) : (
         <div className="overflow-x-auto rounded-lg border border-border">
           <table className="w-full min-w-(--sz-32rem) text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/40 text-left text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
-                <th className="px-4 py-2.5">App</th>
+                <th className="px-4 py-2.5">{t("appsToolsPanel.app")}</th>
                 <th className="px-4 py-2.5">{t("common.tools")}</th>
                 <th className="px-4 py-2.5">{t("common.status")}</th>
                 <th className="px-4 py-2.5 text-right" />
@@ -66,12 +66,12 @@ export function AppsToolsPanel({
                             : "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
                         )}
                       >
-                        {app.needsAttention ? "Needs attention" : "Healthy"}
+                        {app.needsAttention ? t("appsToolsPanel.needsAttention") : t("appsToolsPanel.healthy")}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
                       <Link to={href} className="text-xs font-medium text-primary hover:underline">
-                        Open →
+                        {t("appsToolsPanel.open")}
                       </Link>
                     </td>
                   </tr>

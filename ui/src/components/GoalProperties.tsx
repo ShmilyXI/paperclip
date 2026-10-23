@@ -112,7 +112,7 @@ export function GoalProperties({ goal, onUpdate }: GoalPropertiesProps) {
           )}
         </PropertyRow>
 
-        <PropertyRow label="Level">
+        <PropertyRow label={t("goalProperties.level")}>
           {onUpdate ? (
             <PickerButton
               current={goal.level}
@@ -140,7 +140,7 @@ export function GoalProperties({ goal, onUpdate }: GoalPropertiesProps) {
         </PropertyRow>
 
         {goal.parentId && (
-          <PropertyRow label="Parent Goal">
+          <PropertyRow label={t("goalProperties.parentGoal")}>
             <Link
               to={`/goals/${goal.parentId}`}
               className="text-sm hover:underline"

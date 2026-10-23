@@ -44,7 +44,7 @@ export interface SearchFilterDataProps {
   currentUserId: string | null;
 }
 
-// Non-terminal statuses — the single-click "Open items" preset from wireframe screen 2.
+// Non-terminal statuses — the single-click t("searchFilterBar.openItems") preset from wireframe screen 2.
 const OPEN_STATUS_PRESET: IssueStatus[] = ISSUE_STATUSES.filter(
   (status) => status !== "done" && status !== "cancelled",
 );
@@ -92,7 +92,7 @@ export function buildSearchFilterOptions({
   if (currentUserId) {
     assignee.push({
       value: "me",
-      label: "Me",
+      label: t("searchFilterBar.me"),
       icon: <User className="h-3.5 w-3.5 text-muted-foreground" />,
       count: count(counts?.assigneeUserId, currentUserId),
       searchText: "me mine",
@@ -171,7 +171,7 @@ export function SearchFilterBar({
         selected={filters.status ?? []}
         onToggle={(value) => toggleMulti("status", value)}
         onClear={() => onChange({ ...filters, status: [] })}
-        presets={[{ label: "Open items", values: OPEN_STATUS_PRESET }]}
+        presets={[{ label: t("searchFilterBar.openItems"), values: OPEN_STATUS_PRESET }]}
       />
       <SearchFilterMenu
         label={t("common.assignee")}
@@ -180,7 +180,7 @@ export function SearchFilterBar({
         onSelect={(value) => onChange(applyAssigneeToken(filters, value, data.currentUserId))}
         searchable
         searchPlaceholder="Search assignees…"
-        emptyMessage="No assignees"
+        emptyMessage={t("searchFilterBar.noAssignees")}
       />
       <SearchFilterMenu
         label={t("common.project")}
@@ -189,16 +189,16 @@ export function SearchFilterBar({
         onSelect={(value) => onChange({ ...filters, projectId: value })}
         searchable
         searchPlaceholder="Search projects…"
-        emptyMessage="No projects"
+        emptyMessage={t("searchFilterBar.noProjects")}
       />
       <SearchFilterMenu
-        label="Label"
+        label={t("searchFilterBar.label")}
         options={options.label}
         selected={filters.labelId ? [filters.labelId] : []}
         onSelect={(value) => onChange({ ...filters, labelId: value })}
         searchable
         searchPlaceholder="Search labels…"
-        emptyMessage="No labels"
+        emptyMessage={t("searchFilterBar.noLabels")}
       />
       {/* PAP-411: Priority filter menu hidden behind SHOW_TASK_PRIORITY_UI (search DSL stays intact). */}
       {SHOW_TASK_PRIORITY_UI && (

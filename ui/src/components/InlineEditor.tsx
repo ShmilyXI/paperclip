@@ -375,11 +375,11 @@ export function InlineEditor({
             )}
           >
             {autosaveState === "saving"
-              ? "Autosaving..."
+              ? t("inlineEditor.autosaving")
               : autosaveState === "saved"
                 ? t("common.saved")
                 : autosaveState === "error"
-                  ? "Could not save"
+                  ? t("inlineEditor.couldNotSave")
                   : t("common.idle")}
           </span>
         </div>

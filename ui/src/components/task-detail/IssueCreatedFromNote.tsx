@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { IssueCreationSource } from "@paperclipai/shared";
 import { GitBranch } from "lucide-react";
 import {
@@ -29,7 +30,7 @@ export function IssueCreatedFromNote({ createdFrom, issueLinkState, className }:
       className={cn("flex min-w-0 items-center gap-1 text-xs text-muted-foreground", className)}
     >
       <GitBranch aria-hidden className="h-3 w-3 shrink-0" />
-      <span className="shrink-0">Created from</span>
+      <span className="shrink-0">{t("issueCreatedFromNote.createdFrom")}</span>
       <Link
         to={createIssueDetailPath(ref)}
         state={issueLinkState}

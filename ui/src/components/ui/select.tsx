@@ -88,13 +88,13 @@ export function SelectPopover({
             ?? contentRef.current?.querySelector<HTMLButtonElement>('[role="option"]:not(:disabled)'))?.focus();
         }}
         onKeyDown={event => {
-          if (!["ArrowDown", "ArrowUp", t("common.home"), "End"].includes(event.key)
-            || (event.target instanceof HTMLInputElement && [t("common.home"), "End"].includes(event.key))) return;
+          if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)
+            || (event.target instanceof HTMLInputElement && ["Home", "End"].includes(event.key))) return;
           const items = [...event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="option"]:not(:disabled)')];
           if (!items.length) return;
           event.preventDefault();
           const current = items.indexOf(document.activeElement as HTMLButtonElement);
-          const next = event.key === t("common.home") ? 0 : event.key === "End" ? items.length - 1
+          const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1
             : current < 0 ? (event.key === "ArrowDown" ? 0 : items.length - 1)
             : (current + (event.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
           items[next]?.focus();

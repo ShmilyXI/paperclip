@@ -9,28 +9,28 @@ export function CostByUserTable({ report }: { report: CostByUserReport }) {
   return (
     <Card className="gap-3 py-4">
       <CardHeader className="gap-0 px-5">
-        <CardTitle className="text-base">By user</CardTitle>
+        <CardTitle className="text-base">{t("costByUserTable.byUser")}</CardTitle>
       </CardHeader>
       <CardContent className="px-5">
         <div className="overflow-x-auto">
-          <table aria-label="Costs by user" className="w-full text-sm">
+          <table aria-label={t("costByUserTable.costsByUser")} className="w-full text-sm">
             <thead className="text-muted-foreground">
               <tr className="border-b border-border">
                 <th scope="col" className="py-2 pr-4 text-left font-medium">{t("common.user")}</th>
                 <th scope="col" className="px-4 py-2 text-right font-medium">{t("common.runs")}</th>
-                <th scope="col" className="px-4 py-2 text-right font-medium">Input</th>
+                <th scope="col" className="px-4 py-2 text-right font-medium">{t("costByUserTable.input")}</th>
                 <th scope="col" className="px-4 py-2 text-right font-medium">{t("common.output")}</th>
                 <th scope="col" className="py-2 pl-4 text-right font-medium">{t("common.cost")}</th>
               </tr>
             </thead>
             <tbody>
               {report.rows.length === 0 && (
-                <tr><td colSpan={5} className="py-3 text-muted-foreground">No user-attributed costs yet.</td></tr>
+                <tr><td colSpan={5} className="py-3 text-muted-foreground">{t("costByUserTable.noUserAttributedCostsYet")}</td></tr>
               )}
               {report.rows.map(row => (
                 <tr key={row.userId ?? "unattributed"} className="border-b border-border last:border-0">
                   <th scope="row" className="py-3 pr-4 text-left font-normal">
-                    {row.userId ? <Identity name={row.userName ?? "Unknown user"} avatarUrl={row.userImage} /> : "Unattributed"}
+                    {row.userId ? <Identity name={row.userName ?? t("costByUserTable.unknownUser")} avatarUrl={row.userImage} /> : t("costByUserTable.unattributed")}
                   </th>
                   <td className="px-4 py-3 text-right tabular-nums">{row.runCount.toLocaleString()}</td>
                   <td className="px-4 py-3 text-right tabular-nums">
@@ -48,7 +48,7 @@ export function CostByUserTable({ report }: { report: CostByUserReport }) {
           </table>
         </div>
         {report.rows.some(row => row.userId === null) && (
-          <p className="mt-3 text-xs text-muted-foreground">Unattributed costs have no recorded user in this organization.</p>
+          <p className="mt-3 text-xs text-muted-foreground">{t("costByUserTable.unattributedCostsHaveNoRecorded")}</p>
         )}
       </CardContent>
     </Card>

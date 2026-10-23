@@ -58,7 +58,7 @@ export function TaskDetailTasksPanel({ ancestors = [], createdFrom = null, subta
       ? projects.find((candidate) => candidate.id === item.projectId) ?? item.project
       : null;
     const group = groups.get(key) ?? {
-      name: project?.name ?? (item.projectId ? t("common.project") : "No project"),
+      name: project?.name ?? (item.projectId ? t("common.project") : t("taskDetailTasksPanel.noProject")),
       path: item.projectId ? `/projects/${projectRouteRef(project ?? { id: item.projectId })}/issues` : undefined,
       tasks: [],
     };
@@ -66,24 +66,24 @@ export function TaskDetailTasksPanel({ ancestors = [], createdFrom = null, subta
     groups.set(key, group);
   }
   return (
-    <section className="flex flex-col gap-6" aria-label="Related tasks">
+    <section className="flex flex-col gap-6" aria-label={t("taskDetailTasksPanel.relatedTasks")}>
       {createdFrom && (
-        <TaskGroup name="Created from">
+        <TaskGroup name={t("taskDetailTasksPanel.createdFrom")}>
           <IssueCreatedFromNote createdFrom={createdFrom} issueLinkState={issueLinkState} className="px-2 text-sm" />
         </TaskGroup>
       )}
       {ancestors.length > 0 && (
-        <TaskGroup name="Ancestors">
+        <TaskGroup name={t("taskDetailTasksPanel.ancestors")}>
           <RelationNavigationList
             items={[...ancestors].reverse()}
             emptyMessage=""
-            ariaLabel="Ancestor tasks, root to parent"
+            ariaLabel={t("taskDetailTasksPanel.ancestorTasksRootToParent")}
             issueLinkState={issueLinkState}
           />
         </TaskGroup>
       )}
       {sortedSubtasks.length > 0 && (
-        <TaskGroup name="Subtasks">
+        <TaskGroup name={t("taskDetailTasksPanel.subtasks")}>
           <TaskDetailSubtasksPanel items={sortedSubtasks} issueLinkState={issueLinkState} />
         </TaskGroup>
       )}
@@ -92,15 +92,15 @@ export function TaskDetailTasksPanel({ ancestors = [], createdFrom = null, subta
           <TaskDetailTaskList items={group.tasks} ariaLabel={`${group.name} tasks`} issueLinkState={issueLinkState} />
         </TaskGroup>
       ))}
-      {isLoading && <p role="status" className="text-sm text-muted-foreground">Loading tasks…</p>}
+      {isLoading && <p role="status" className="text-sm text-muted-foreground">{t("taskDetailTasksPanel.loadingTasks")}</p>}
       {hasError && (
         <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
-          <span>Could not load all tasks.</span>
+          <span>{t("taskDetailTasksPanel.couldNotLoadAllTasks")}</span>
           {onRetry && <Button variant="ghost" size="sm" onClick={onRetry}>{t("common.retry")}</Button>}
         </div>
       )}
       {!isLoading && !hasError && !createdFrom && ancestors.length === 0 && subtasks.length === 0 && createdTasks.length === 0 && (
-        <p className="py-6 text-center text-sm text-muted-foreground">No tasks yet.</p>
+        <p className="py-6 text-center text-sm text-muted-foreground">{t("taskDetailTasksPanel.noTasksYet")}</p>
       )}
     </section>
   );

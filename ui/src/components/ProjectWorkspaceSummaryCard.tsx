@@ -13,7 +13,7 @@ import { Copy, ExternalLink, FolderOpen, GitBranch, Loader2, Play, Square } from
 import { Badge } from "@/components/ui/badge";
 
 function workspaceKindLabel(kind: ProjectWorkspaceSummary["kind"]) {
-  return kind === "execution_workspace" ? "Execution workspace" : "Project workspace";
+  return kind === "execution_workspace" ? t("projectWorkspaceSummaryCard.executionWorkspace") : t("projectWorkspaceSummaryCard.projectWorkspace");
 }
 
 function truncatePath(path: string) {
@@ -128,7 +128,7 @@ export function ProjectWorkspaceSummaryCard({
                 ) : (
                   <Play className="mr-2 h-3.5 w-3.5" />
                 )}
-                {hasRunningServices ? "Stop services" : "Start services"}
+                {hasRunningServices ? t("projectWorkspaceSummaryCard.stopServices") : t("projectWorkspaceSummaryCard.startServices")}
               </Button>
             ) : null}
             {summary.kind === "execution_workspace" && summary.executionWorkspaceId && summary.executionWorkspaceStatus ? (
@@ -142,7 +142,7 @@ export function ProjectWorkspaceSummaryCard({
                   status: summary.executionWorkspaceStatus!,
                 })}
               >
-                {summary.executionWorkspaceStatus === "cleanup_failed" ? "Retry close" : "Close workspace"}
+                {summary.executionWorkspaceStatus === "cleanup_failed" ? t("projectWorkspaceSummaryCard.retryClose") : t("projectWorkspaceSummaryCard.closeWorkspace")}
               </Button>
             ) : null}
           </div>
@@ -154,7 +154,7 @@ export function ProjectWorkspaceSummaryCard({
               <div className="flex items-start gap-2">
                 <GitBranch className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                 <div className="min-w-0 flex-1">
-                  <div className="text-(length:--text-micro) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">Branch</div>
+                  <div className="text-(length:--text-micro) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">{t("projectWorkspaceSummaryCard.branch")}</div>
                   <div className="flex items-start gap-2">
                     <CopyText
                       text={summary.branchName}
@@ -166,7 +166,7 @@ export function ProjectWorkspaceSummaryCard({
                     </CopyText>
                     <CopyText
                       text={summary.branchName}
-                      ariaLabel="Copy branch"
+                      ariaLabel={t("projectWorkspaceSummaryCard.copyBranch")}
                       className="mt-0.5 shrink-0 text-muted-foreground hover:text-foreground"
                       copiedLabel="Branch copied"
                     >
@@ -199,7 +199,7 @@ export function ProjectWorkspaceSummaryCard({
                     </CopyText>
                     <CopyText
                       text={summary.cwd}
-                      ariaLabel="Copy path"
+                      ariaLabel={t("projectWorkspaceSummaryCard.copyPath")}
                       className="mt-0.5 shrink-0 text-muted-foreground hover:text-foreground"
                       copiedLabel="Path copied"
                     >
@@ -214,7 +214,7 @@ export function ProjectWorkspaceSummaryCard({
               <div className="flex items-start gap-2">
                 <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                 <div className="min-w-0">
-                  <div className="text-(length:--text-micro) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">Service</div>
+                  <div className="text-(length:--text-micro) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">{t("projectWorkspaceSummaryCard.service")}</div>
                   <a
                     href={summary.primaryServiceUrl}
                     target="_blank"
@@ -237,7 +237,7 @@ export function ProjectWorkspaceSummaryCard({
         {summary.issues.length > 0 ? (
           <div className="space-y-2">
             <div className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-              Linked tasks
+              {t("projectWorkspaceSummaryCard.linkedTasks")}
             </div>
             <div className="flex flex-wrap gap-2">
               {visibleIssues.map((issue) => (

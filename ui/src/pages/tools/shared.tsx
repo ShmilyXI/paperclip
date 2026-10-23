@@ -13,7 +13,7 @@ import { ApiError } from "@/api/client";
 
 /** Risk classification badge for a catalog tool. */
 export function RiskBadge({ risk }: { risk: ToolRiskLevel | null | undefined }) {
-  if (!risk) return <Badge variant="outline">unknown</Badge>;
+  if (!risk) return <Badge variant="outline">{t("toolsShared.unknown")}</Badge>;
   const variant =
     risk === "high" || risk === "critical"
       ? "destructive"
@@ -35,9 +35,9 @@ export function CapabilityBadges({
 }) {
   return (
     <span className="inline-flex flex-wrap gap-1">
-      {isReadOnly ? <Badge variant="outline">read-only</Badge> : null}
-      {isWrite ? <Badge variant="secondary">write</Badge> : null}
-      {isDestructive ? <Badge variant="destructive">destructive</Badge> : null}
+      {isReadOnly ? <Badge variant="outline">{t("toolsShared.readOnly")}</Badge> : null}
+      {isWrite ? <Badge variant="secondary">{t("toolsShared.write")}</Badge> : null}
+      {isDestructive ? <Badge variant="destructive">{t("toolsShared.destructive")}</Badge> : null}
     </span>
   );
 }
@@ -84,25 +84,25 @@ function decisionToStatusKey(decision: string): { key: string; label: string } {
   switch (decision) {
     case "allow":
     case "allowed":
-      return { key: "allowed", label: "allowed" };
+      return { key: "allowed", label: t("toolsShared.allowed") };
     case "deny":
     case "denied":
-      return { key: "denied", label: "denied" };
+      return { key: "denied", label: t("toolsShared.denied") };
     case "block":
-      return { key: "block", label: "block" };
+      return { key: "block", label: t("toolsShared.block") };
     case "require_approval":
     case "requires_approval":
-      return { key: "require-approval", label: "require approval" };
+      return { key: "require-approval", label: t("toolsShared.requireApproval") };
     case "redact":
     case "redacted":
-      return { key: "redacted", label: "redacted" };
+      return { key: "redacted", label: t("toolsShared.redacted") };
     case "rate_limited":
-      return { key: "rate-limit", label: "rate limited" };
+      return { key: "rate-limit", label: t("toolsShared.rateLimited") };
     case "defer":
     case "deferred":
-      return { key: "deferred", label: "deferred" };
+      return { key: "deferred", label: t("toolsShared.deferred") };
     case "hidden":
-      return { key: "hidden", label: "hidden" };
+      return { key: "hidden", label: t("toolsShared.hidden") };
     default:
       return { key: decision, label: decision };
   }
@@ -117,7 +117,7 @@ export function DecisionBadge({ decision }: { decision: ToolPolicyDecision | str
 
 /** Compact relative time, falling back to absolute. */
 export function RelativeTime({ value }: { value: Date | string | null | undefined }) {
-  if (!value) return <span className="text-muted-foreground">never</span>;
+  if (!value) return <span className="text-muted-foreground">{t("toolsShared.never")}</span>;
   const date = typeof value === "string" ? new Date(value) : value;
   if (Number.isNaN(date.getTime())) return <span className="text-muted-foreground">—</span>;
   const diffMs = Date.now() - date.getTime();
@@ -190,7 +190,7 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
         <div className="flex items-start gap-2 text-sm text-destructive">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
-            <p className="font-medium">Could not load this view</p>
+            <p className="font-medium">{t("toolsShared.couldNotLoadThisView")}</p>
             <p className="text-destructive/80">{message}</p>
           </div>
         </div>

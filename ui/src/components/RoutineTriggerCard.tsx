@@ -66,7 +66,7 @@ export function RoutineTriggerCard({
   const humanCron = trigger.kind === "schedule" ? describeCron(draft.cronExpression) : null;
   const lastResultFailed = /fail|error/i.test(trigger.lastResult ?? "");
   const lastResultLabel = trigger.lastResult?.startsWith("Created execution issue ")
-    ? "Task created"
+    ? t("routineTriggerCard.taskCreated")
     : trigger.lastResult;
 
   return (
@@ -95,9 +95,9 @@ export function RoutineTriggerCard({
           ) : null}
           <span className="text-xs text-muted-foreground">
             {trigger.kind === "schedule" && trigger.nextRunAt
-              ? `Next: ${new Date(trigger.nextRunAt).toLocaleString()}`
+              ? t("routineTriggerCard.nextTolocalestring", { toLocaleString: new Date(trigger.nextRunAt).toLocaleString() })
               : trigger.kind === "webhook"
-                ? "Webhook"
+                ? t("routineTriggerCard.webhook")
                 : "API"}
           </span>
         </div>
@@ -105,17 +105,17 @@ export function RoutineTriggerCard({
 
       {trigger.kind === "webhook" && trigger.webhookUrl && (
         <div className="space-y-1.5">
-          <Label htmlFor={`webhook-url-${trigger.id}`} className="text-xs">Webhook URL</Label>
+          <Label htmlFor={`webhook-url-${trigger.id}`} className="text-xs">{t("routineTriggerCard.webhookUrl")}</Label>
           <Input id={`webhook-url-${trigger.id}`} value={trigger.webhookUrl} readOnly onFocus={(event) => event.target.select()} />
           <p className="text-xs text-muted-foreground">
-            Send a POST request with Content-Type: application/json. Keep this URL private when signing is disabled.
+            {t("routineTriggerCard.sendAPostRequestWith")}
           </p>
         </div>
       )}
 
       <div className="grid gap-3 md:grid-cols-2">
         <div className="space-y-1.5">
-          <Label className="text-xs">Label</Label>
+          <Label className="text-xs">{t("routineTriggerCard.label")}</Label>
           <Input
             value={draft.label}
             disabled={disabled}
@@ -124,7 +124,7 @@ export function RoutineTriggerCard({
         </div>
         {trigger.kind === "schedule" && (
           <div className="space-y-1.5 md:col-span-2">
-            <Label className="text-xs">Schedule</Label>
+            <Label className="text-xs">{t("routineTriggerCard.schedule")}</Label>
             <ScheduleEditor
               value={draft.cronExpression}
               onChange={(cronExpression) =>
@@ -136,7 +136,7 @@ export function RoutineTriggerCard({
         {trigger.kind === "webhook" && (
           <>
             <div className="space-y-1.5">
-              <Label className="text-xs">Signing mode</Label>
+              <Label className="text-xs">{t("routineTriggerCard.signingMode")}</Label>
               <Select
                 value={draft.signingMode}
                 onValueChange={(signingMode) =>
@@ -158,7 +158,7 @@ export function RoutineTriggerCard({
             </div>
             {!SIGNING_MODES_WITHOUT_REPLAY_WINDOW.has(draft.signingMode) && (
               <div className="space-y-1.5">
-                <Label className="text-xs">Replay window (seconds)</Label>
+                <Label className="text-xs">{t("routineTriggerCard.replayWindowSeconds")}</Label>
                 <Input
                   value={draft.replayWindowSec}
                   disabled={disabled}
@@ -186,7 +186,7 @@ export function RoutineTriggerCard({
           {trigger.kind === "webhook" && (
             <Button variant="outline" size="sm" onClick={() => onRotate(trigger.id)}>
               <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
-              Rotate secret
+              {t("routineTriggerCard.rotateSecret")}
             </Button>
           )}
           <Button
@@ -197,7 +197,7 @@ export function RoutineTriggerCard({
             }
           >
             <Save className="mr-1.5 h-3.5 w-3.5" />
-            Save trigger
+            {t("routineTriggerCard.saveTrigger")}
           </Button>
         </div>
       )}

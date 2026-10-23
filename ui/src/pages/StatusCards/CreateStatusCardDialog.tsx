@@ -68,25 +68,24 @@ export function CreateStatusCardDialog({
       ]);
       close();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Could not create the card."),
+    onError: (err) => setError(err instanceof Error ? err.message : t("createStatusCardDialog.couldNotCreateTheCard")),
   });
 
   return (
     <Dialog open={open} onOpenChange={(next) => (next ? onOpenChange(true) : close())}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>New card</DialogTitle>
+          <DialogTitle>{t("createStatusCardDialog.newCard")}</DialogTitle>
           <DialogDescription>
-            One message sets up the whole card: say what you want to watch and what each update
-            should tell you. The agent builds the query from it and writes every update against it.
+            {t("createStatusCardDialog.oneMessageSetsUpThe")}
           </DialogDescription>
         </DialogHeader>
 
-        {error ? <InlineBanner tone="danger" title="Create failed">{error}</InlineBanner> : null}
+        {error ? <InlineBanner tone="danger" title={t("createStatusCardDialog.createFailed")}>{error}</InlineBanner> : null}
 
         <div className="space-y-3">
           <label htmlFor="status-card-prompt" className="block pb-1 text-sm font-semibold">
-            What do you want to keep an eye on?
+            {t("createStatusCardDialog.whatDoYouWantTo")}
           </label>
           <Textarea
             id="status-card-prompt"
@@ -94,11 +93,11 @@ export function CreateStatusCardDialog({
             onChange={(event) => setPrompt(event.target.value)}
             rows={5}
             autoFocus
-            placeholder="Keep an eye on the ID and Cloud projects. Tell me whether the service is live, and if not, the exact three actions needed to get it to production."
+            placeholder={t("createStatusCardDialog.keepAnEyeOnThe")}
             className="text-sm"
           />
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground">Examples</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("createStatusCardDialog.examples")}</span>
             {EXAMPLES.map((example) => (
               <button
                 key={example}
@@ -116,7 +115,7 @@ export function CreateStatusCardDialog({
           <label className="block text-sm font-semibold">{t("common.agent")}</label>
           <SummarizerAgentSelect companyId={companyId} value={agentId} onChange={setAgentId} enabled={open} />
           <p className="text-xs text-muted-foreground">
-            Runs this card's setup and updates. Leave on the default unless another agent should own it.
+            {t("createStatusCardDialog.runsThisCardSSetup")}
           </p>
         </div>
 

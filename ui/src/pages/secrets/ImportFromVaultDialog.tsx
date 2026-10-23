@@ -161,7 +161,7 @@ function RowResultBadge({ status }: { status: RemoteSecretImportRowResult["statu
           variant="outline"
           className="gap-1 px-1.5 py-0 font-normal text-muted-foreground border-border/60"
         >
-          <Link2 className="h-3 w-3" /> Skipped
+          <Link2 className="h-3 w-3" /> {t("importFromVaultDialog.skipped")}
         </Badge>
       );
     case "error":
@@ -478,21 +478,21 @@ export function ImportFromVaultDialog({
         awsVaults.find((vault) => vault.id === vaultId)?.displayName ?? "AWS";
       if (result.errorCount === draftList.length && result.errorCount > 0) {
         toast.pushToast({
-          title: "Import failed",
-          body: `No secrets were imported from ${vaultName}.`,
+          title: t("importFromVaultDialog.importFailed"),
+          body: t("importFromVaultDialog.noSecretsWereImportedFrom", { vaultName }),
           tone: "error",
         });
       } else {
         toast.pushToast({
-          title: result.errorCount > 0 ? "Import completed with errors" : "Import complete",
-          body: `${result.importedCount} created · ${result.skippedCount} skipped · ${result.errorCount} failed`,
+          title: result.errorCount > 0 ? t("importFromVaultDialog.importCompletedWithErrors") : t("importFromVaultDialog.importComplete"),
+          body: t("importFromVaultDialog.importedcountCreatedSkippedcountSkippedErrorcount", { importedCount: result.importedCount, skippedCount: result.skippedCount, errorCount: result.errorCount }),
           tone: result.errorCount > 0 ? "warn" : "success",
         });
       }
     },
     onError: (error) => {
       toast.pushToast({
-        title: "Import failed",
+        title: t("importFromVaultDialog.importFailed"),
         body: readableErrorMessage(error),
         tone: "error",
       });
@@ -553,7 +553,7 @@ export function ImportFromVaultDialog({
       })
       .catch((error) => {
         toast.pushToast({
-          title: "Could not load more results",
+          title: t("importFromVaultDialog.couldNotLoadMoreResults"),
           body: readableErrorMessage(error),
           tone: "error",
         });
@@ -615,7 +615,7 @@ export function ImportFromVaultDialog({
     if (importMutation.isPending) return;
     if (!force && step !== "result" && selection.size > 0 && !importResult) {
       const ok = window.confirm(
-        `Discard ${selection.size} pending import${selection.size === 1 ? "" : "s"}?`,
+        t("importFromVaultDialog.discardPendingImports", { count: selection.size }),
       );
       if (!ok) return;
     }
@@ -656,10 +656,10 @@ export function ImportFromVaultDialog({
         <header className="flex items-start justify-between gap-3 border-b border-border/60 px-5 py-4">
           <div className="flex flex-col gap-1">
             <DialogTitle className="text-base font-semibold">
-              Import from AWS Secrets Manager
+              {t("importFromVaultDialog.importFromAwsSecretsManager")}
             </DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground">
-              Bring AWS-managed secrets into Paperclip as external references.
+              {t("importFromVaultDialog.bringAwsManagedSecretsInto")}
             </DialogDescription>
             <Stepper step={step} />
           </div>
@@ -667,7 +667,7 @@ export function ImportFromVaultDialog({
             type="button"
             className="rounded-sm text-muted-foreground transition-opacity hover:opacity-100 opacity-70"
             onClick={() => handleClose()}
-            aria-label="Close import dialog"
+            aria-label={t("importFromVaultDialog.closeImportDialog")}
           >
             <X className="h-4 w-4" />
           </button>
@@ -750,7 +750,7 @@ export function ImportFromVaultDialog({
                 onClick={() => setStep("review")}
                 disabled={totalSelected === 0}
               >
-                Continue → Review
+                {t("importFromVaultDialog.continueReview")}
               </Button>
             )}
             {step === "review" && (
@@ -765,7 +765,7 @@ export function ImportFromVaultDialog({
               >
                 {importMutation.isPending ? (
                   <>
-                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Importing…
+                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> {t("importFromVaultDialog.importing")}
                   </>
                 ) : (
                   `Import ${draftList.length}`
@@ -885,8 +885,8 @@ function SelectStep(props: SelectStepProps) {
       <div className="flex min-h-0 flex-1 items-center justify-center p-6" data-testid="select-empty-vaults">
         <EmptyState
           icon={Cloud}
-          message="No AWS provider vault configured. Add one to import secrets."
-          action={onManageVaults ? "Manage vaults" : undefined}
+          message={t("importFromVaultDialog.noAwsProviderVaultConfigured")}
+          action={onManageVaults ? t("importFromVaultDialog.manageVaults") : undefined}
           onAction={onManageVaults}
         />
       </div>
@@ -898,7 +898,7 @@ function SelectStep(props: SelectStepProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-center gap-2 border-b border-border/60 px-5 py-3">
-        <label className="text-xs uppercase tracking-wide text-muted-foreground">Vault</label>
+        <label className="text-xs uppercase tracking-wide text-muted-foreground">{t("importFromVaultDialog.vault")}</label>
         {awsVaults.length === 1 && eligible.length === 1 ? (
           <span className="text-xs font-medium" data-testid="vault-static-label">
             {eligible[0].displayName}
@@ -908,8 +908,8 @@ function SelectStep(props: SelectStepProps) {
             value={vaultId ?? undefined}
             onValueChange={onVaultChange}
           >
-            <SelectTrigger size="sm" className="text-xs" aria-label="Select AWS vault">
-              <SelectValue placeholder="Select an AWS vault" />
+            <SelectTrigger size="sm" className="text-xs" aria-label={t("importFromVaultDialog.selectAwsVault")}>
+              <SelectValue placeholder={t("importFromVaultDialog.selectAnAwsVault")} />
             </SelectTrigger>
             <SelectContent>
               {awsVaults.map((vault) => {
@@ -947,9 +947,9 @@ function SelectStep(props: SelectStepProps) {
           <Input
             value={searchInput}
             onChange={(event) => onSearchInput(event.target.value)}
-            placeholder="Search by name, ARN, tag"
+            placeholder={t("importFromVaultDialog.searchByNameArnTag")}
             className="pl-7 pr-7 text-xs"
-            aria-label="Search remote secrets"
+            aria-label={t("importFromVaultDialog.searchRemoteSecrets")}
             data-testid="vault-search"
           />
           {showSearchSpinner && (
@@ -962,7 +962,7 @@ function SelectStep(props: SelectStepProps) {
           size="sm"
           onClick={onRefresh}
           disabled={previewLoading || !vaultId}
-          aria-label="Refresh remote secrets"
+          aria-label={t("importFromVaultDialog.refreshRemoteSecrets")}
         >
           <RefreshCw className={cn("h-3.5 w-3.5", previewLoading && "animate-spin")} />
         </Button>
@@ -979,7 +979,7 @@ function SelectStep(props: SelectStepProps) {
             className="h-6 px-2 text-xs"
             onClick={() => onShowOnlySelectedChange(!showOnlySelected)}
           >
-            {showOnlySelected ? "Show all" : "Show selected"}
+            {showOnlySelected ? t("importFromVaultDialog.showAll") : t("importFromVaultDialog.showSelected")}
           </Button>
         </div>
       )}
@@ -1003,11 +1003,11 @@ function SelectStep(props: SelectStepProps) {
                     disabled={selectableInLoaded.length === 0}
                   />
                 </th>
-                <th className="px-2 py-2 text-left font-medium">Remote name</th>
-                <th className="px-2 py-2 text-left font-medium">Reference</th>
-                <th className="px-2 py-2 text-left font-medium">Last changed</th>
-                <th className="px-2 py-2 text-left font-medium">Suggested name</th>
-                <th className="px-2 py-2 text-left font-medium">State</th>
+                <th className="px-2 py-2 text-left font-medium">{t("importFromVaultDialog.remoteName")}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("importFromVaultDialog.reference")}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("importFromVaultDialog.lastChanged")}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("importFromVaultDialog.suggestedName")}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("importFromVaultDialog.state")}</th>
               </tr>
             </thead>
             <tbody data-testid="vault-table-body">
@@ -1063,7 +1063,7 @@ function SelectStep(props: SelectStepProps) {
                         {candidate.status === "duplicate" &&
                           candidate.conflicts.find((c) => c.type === "exact_reference")?.existingSecretId && (
                             <span className="text-(length:--text-micro) text-muted-foreground">
-                              Already imported
+                              {t("importFromVaultDialog.alreadyImported")}
                             </span>
                           )}
                       </div>
@@ -1134,11 +1134,11 @@ function PreviewErrorBanner({ error, onRetry }: { error: unknown; onRetry: () =>
             ? "AWS denied list access"
             : isThrottling
               ? "AWS throttled the listing request"
-              : "Could not load remote secrets"}
+              : t("importFromVaultDialog.couldNotLoadRemoteSecrets")}
         </div>
         <div className="mt-1 text-xs leading-relaxed text-destructive/80">
           {isPermission
-            ? "The AWS principal behind this vault is missing secretsmanager:ListSecrets. Update IAM and try again."
+            ? t("importFromVaultDialog.theAwsPrincipalBehindThis")
             : message}
         </div>
         <div className="mt-2 flex items-center gap-2">
@@ -1152,7 +1152,7 @@ function PreviewErrorBanner({ error, onRetry }: { error: unknown; onRetry: () =>
               rel="noreferrer"
               className="inline-flex items-center gap-1 text-xs font-medium underline"
             >
-              IAM reference <ExternalLink className="h-3 w-3" />
+              {t("importFromVaultDialog.iamReference")} <ExternalLink className="h-3 w-3" />
             </a>
           )}
         </div>
@@ -1183,7 +1183,7 @@ function EmptyCandidates({ query }: { query: string }) {
   return (
     <EmptyState
       icon={Database}
-      message="No secrets visible to this vault."
+      message={t("importFromVaultDialog.noSecretsVisibleToThis")}
     />
   );
 }
@@ -1202,7 +1202,7 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
       <div className="flex min-h-0 flex-1 items-center justify-center p-6">
         <EmptyState
           icon={Info}
-          message="No secrets selected. Go back to pick remote secrets to import."
+          message={t("importFromVaultDialog.noSecretsSelectedGoBack")}
         />
       </div>
     );
@@ -1246,7 +1246,7 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
                   </div>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                     <label className="flex flex-col gap-1 text-xs">
-                      <span className="text-muted-foreground">Paperclip name</span>
+                      <span className="text-muted-foreground">{t("importFromVaultDialog.paperclipName")}</span>
                       <Input
                         value={draft.name}
                         onChange={(e) =>
@@ -1277,7 +1277,7 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
                       />
                     </label>
                     <label className="flex flex-col gap-1 text-xs">
-                      <span className="text-muted-foreground">Description (optional)</span>
+                      <span className="text-muted-foreground">{t("importFromVaultDialog.descriptionOptional")}</span>
                       <Input
                         value={draft.description}
                         onChange={(e) =>
@@ -1347,10 +1347,10 @@ function ResultStep({ result, draftList }: ResultStepProps) {
 
   const heading =
     result.errorCount === result.results.length && result.errorCount > 0
-      ? "Import failed"
+      ? t("importFromVaultDialog.importFailed")
       : result.errorCount === 0 && result.skippedCount === 0
-        ? `All ${result.importedCount} secrets imported`
-        : "Import complete";
+        ? t("importFromVaultDialog.allImportedcountSecretsImported", { importedCount: result.importedCount })
+        : t("importFromVaultDialog.importComplete");
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -1367,7 +1367,7 @@ function ResultStep({ result, draftList }: ResultStepProps) {
           <ResultGroup label={t("common.created")} rows={grouped.created} draftLookup={draftLookup} />
         )}
         {grouped.skipped.length > 0 && (
-          <ResultGroup label="Skipped" rows={grouped.skipped} draftLookup={draftLookup} />
+          <ResultGroup label={t("importFromVaultDialog.skipped")} rows={grouped.skipped} draftLookup={draftLookup} />
         )}
         {grouped.failed.length > 0 && (
           <ResultGroup label={t("common.failed")} rows={grouped.failed} draftLookup={draftLookup} />
@@ -1456,7 +1456,7 @@ function FooterStatus({
     return (
       <div className="text-xs text-muted-foreground">
         {totalSelected === 0
-          ? "Select remote secrets to import"
+          ? t("importFromVaultDialog.selectRemoteSecretsToImport")
           : `${totalSelected} selected`}
       </div>
     );

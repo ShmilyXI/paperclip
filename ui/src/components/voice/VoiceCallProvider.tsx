@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { NativeVoiceConversation, type NativeVoiceConversationProps } from "./NativeVoiceConversation";
@@ -21,9 +22,9 @@ export function VoiceCallProvider({ children, companyId, userId }: {
   const value = useMemo(() => ({ active: Boolean(current), open }), [current, open]);
   return <VoiceCallContext.Provider value={value}>
     {children}
-    {current && <aside aria-label="Current voice call" className="fixed inset-x-4 bottom-4 z-50 max-h-(--sz-calc-18) overflow-y-auto rounded-lg border border-border bg-background p-4 shadow-lg sm:left-auto sm:w-96">
+    {current && <aside aria-label={t("voiceCallProvider.currentVoiceCall")} className="fixed inset-x-4 bottom-4 z-50 max-h-(--sz-calc-18) overflow-y-auto rounded-lg border border-border bg-background p-4 shadow-lg sm:left-auto sm:w-96">
       <NativeVoiceConversation {...current.props} key={current.id} managed autoStart onEndedChange={setEnded} />
-      {ended && <Button variant="ghost" size="sm" onClick={() => { setCall(null); requestAnimationFrame(() => { if (returnFocus.current?.isConnected) returnFocus.current.focus(); }); }}>Close voice panel</Button>}
+      {ended && <Button variant="ghost" size="sm" onClick={() => { setCall(null); requestAnimationFrame(() => { if (returnFocus.current?.isConnected) returnFocus.current.focus(); }); }}>{t("voiceCallProvider.closeVoicePanel")}</Button>}
     </aside>}
   </VoiceCallContext.Provider>;
 }

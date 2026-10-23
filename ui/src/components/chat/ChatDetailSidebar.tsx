@@ -27,7 +27,7 @@ export function ChatDetailSidebar({
   return (
     <aside className="flex h-full min-h-0 w-full flex-col border-r border-border bg-background">
       <nav
-        aria-label="Chat connection"
+        aria-label={t("chatDetailSidebar.chatConnection")}
         data-slot="contextual-sidebar-nav"
         className={contextualSidebarStyles.nav}
       >
@@ -43,20 +43,20 @@ export function ChatDetailSidebar({
           />
           <NavItem
             to={`/apps/chat/${endpointId}/access`}
-            label="Access"
+            label={t("chatDetailSidebar.access")}
             icon={Users}
             end
           />
           {endpoint.data?.provider === "github" && (
             <NavItem
               to={`/apps/chat/${endpointId}/reviews`}
-              label="Reviews"
+              label={t("chatDetailSidebar.reviews")}
               icon={GitPullRequest}
             />
           )}
           <NavItem
             to={`/apps/chat/${endpointId}/conversations`}
-            label="Conversations"
+            label={t("chatDetailSidebar.conversations")}
             icon={MessageSquare}
             end
           />

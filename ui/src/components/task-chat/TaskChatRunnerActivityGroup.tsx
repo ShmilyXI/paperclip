@@ -55,7 +55,7 @@ function presentation(item: Activity, active: boolean) {
     const running = active && Boolean(item.streaming);
     return {
       icon: Brain,
-      label: running ? "Thinking" : "Thought",
+      label: running ? t("taskChatRunnerActivityGroup.thinking") : t("taskChatRunnerActivityGroup.thought"),
       target: item.lines
         .filter((line) => line.trim())
         .at(-1)
@@ -391,7 +391,7 @@ export function TaskChatRunnerActivityGroup({
             <ol
               id={historyId}
               className="flex min-w-0 flex-col gap-1"
-              aria-label="Activity history"
+              aria-label={t("taskChatRunnerActivityGroup.activityHistory")}
               data-testid="task-chat-runner-activity-list"
             >
               {activities.map((activity, index) => (

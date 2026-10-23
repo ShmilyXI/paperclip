@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo } from "react";
 import type { CostByBiller, CostByProviderModel } from "@paperclipai/shared";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -82,7 +83,7 @@ export function BillerSpendCard({
       <CardContent className="px-4 pb-4 pt-3 space-y-4">
         {showBudgetUtilization && budgetMonthlyCents > 0 && (
           <QuotaBar
-            label="Period spend"
+            label={t("billerSpendCard.periodSpend")}
             percentUsed={budgetPct}
             leftLabel={formatCents(row.costCents)}
             rightLabel={`${Math.round(budgetPct)}% of company budget`}
@@ -104,7 +105,7 @@ export function BillerSpendCard({
             <div className="border-t border-border" />
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Billing types
+                {t("billerSpendCard.billingTypes")}
               </p>
               <div className="space-y-1.5">
                 {billingTypeBreakdown.map(([billingType, costCents]) => (
@@ -123,7 +124,7 @@ export function BillerSpendCard({
             <div className="border-t border-border" />
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Upstream providers
+                {t("billerSpendCard.upstreamProviders")}
               </p>
               <div className="space-y-1.5">
                 {providerBreakdown.map((entry) => (

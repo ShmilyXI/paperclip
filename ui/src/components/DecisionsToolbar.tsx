@@ -61,8 +61,8 @@ export function DecisionsToolbar({
 }: DecisionsToolbarProps) {
   const activeFilterCount = countActiveAttentionFilters(filters);
   return (
-    <div data-canonical-toolbar="decisions" role="toolbar" aria-label="Decisions controls" className="flex flex-wrap items-center gap-2">
-      <ToolbarSearch query={query} onQueryChange={onQueryChange} label="Search decisions" placeholder="Search decisions…" />
+    <div data-canonical-toolbar="decisions" role="toolbar" aria-label={t("decisionsToolbar.decisionsControls")} className="flex flex-wrap items-center gap-2">
+      <ToolbarSearch query={query} onQueryChange={onQueryChange} label={t("decisionsToolbar.searchDecisions")} placeholder={t("decisionsToolbar.searchDecisions2")} />
       {/* Filter */}
       <Popover>
         <PopoverTrigger asChild>
@@ -90,9 +90,9 @@ export function DecisionsToolbar({
             variant="outline"
             size="icon"
             className={cn("h-8 w-8 shrink-0", groupBy !== "none" && "bg-accent")}
-            title="Group"
+            title={t("decisionsToolbar.group")}
             data-active={groupBy !== "none"}
-            aria-label="Group"
+            aria-label={t("decisionsToolbar.group")}
           >
             <Layers className="h-3.5 w-3.5" />
           </Button>
@@ -199,7 +199,7 @@ function FilterMenu({
       )}
 
       {options.severities.length > 1 && (
-        <FilterSection title="Severity">
+        <FilterSection title={t("decisionsToolbar.severity")}>
           {options.severities.map((severity) => (
             <FilterRow
               key={severity}
@@ -223,7 +223,7 @@ function FilterMenu({
           ))}
           {options.hasNoProject && (
             <FilterRow
-              label="No project"
+              label={t("decisionsToolbar.noProject")}
               checked={filters.projectIds.includes(NO_GROUP_SENTINEL)}
               onToggle={() => toggle("projectIds", NO_GROUP_SENTINEL)}
             />
@@ -243,7 +243,7 @@ function FilterMenu({
           ))}
           {options.hasNoWorkspace && (
             <FilterRow
-              label="No workspace"
+              label={t("decisionsToolbar.noWorkspace")}
               checked={filters.workspaceIds.includes(NO_GROUP_SENTINEL)}
               onToggle={() => toggle("workspaceIds", NO_GROUP_SENTINEL)}
             />

@@ -28,7 +28,7 @@ function limitValue(window: AiConnectionUsageLimit) {
   if (window.usedPercent != null) return `${usageNumber(window.usedPercent)}% used`;
   if (window.used != null) return `${amount(window.used, window.unit)} used`;
   if (window.remainingPercent != null) return `${usageNumber(window.remainingPercent)}% left`;
-  return "Not reported";
+  return t("aiConnectionUsagePanel.notReported");
 }
 
 function limitDetails(window: AiConnectionUsageLimit) {
@@ -47,10 +47,10 @@ function limitDetails(window: AiConnectionUsageLimit) {
 
 function overageSummary(usage: AiConnectionUsage) {
   const overage = usage.overage!;
-  const details = [overage.available === true ? "Available"
-    : overage.enabled === false ? "Off"
-    : overage.available === false ? (overage.enabled === true ? "On · Unavailable" : "Unavailable")
-    : overage.enabled === true ? "On · Availability unknown" : "Not reported"];
+  const details = [overage.available === true ? t("aiConnectionUsagePanel.available")
+    : overage.enabled === false ? t("aiConnectionUsagePanel.off")
+    : overage.available === false ? (overage.enabled === true ? t("aiConnectionUsagePanel.onUnavailable") : t("aiConnectionUsagePanel.unavailable"))
+    : overage.enabled === true ? t("aiConnectionUsagePanel.onAvailabilityUnknown") : t("aiConnectionUsagePanel.notReported")];
   if (overage.unlimited === true) details.push(t("common.unlimited"));
   else if (overage.balance != null && (overage.balance !== 0 || overage.enabled !== false)) details.push(amount(overage.balance, overage.unit));
   if (overage.remaining != null && (overage.remaining !== 0 || overage.enabled !== false)
@@ -68,8 +68,8 @@ function usageError(usage: AiConnectionUsage) {
     case "provider_unavailable": return "Provider unavailable. Try again.";
     case "invalid_response": return "Couldn’t read usage. Try again.";
     case "connection_unavailable": return "Reconnect to check usage.";
-    case "unsupported": return "Usage unavailable.";
-    default: return usage.message ?? "Usage unavailable.";
+    case "unsupported": return t("aiConnectionUsagePanel.usageUnavailable");
+    default: return usage.message ?? t("aiConnectionUsagePanel.usageUnavailable");
   }
 }
 
@@ -80,20 +80,20 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
   const supported = supportsAiConnectionUsage(account.provider, account.method);
   const usage = cachedOnly ? observation : probe.isSuccess ? probe.data : undefined;
   return (
-    <section aria-label="Account usage limits" className="space-y-3">
+    <section aria-label={t("aiConnectionUsagePanel.accountUsageLimits")} className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold">Usage</h3>
+        <h3 className="text-sm font-semibold">{t("aiConnectionUsagePanel.usage")}</h3>
         {supported && !cachedOnly && <Button variant="outline" size="sm" disabled={probe.isPending || account.status !== "connected"} onClick={() => probe.mutate()}>
-          {probe.isPending ? "Checking…" : usage?.status === "ok" ? t("common.refresh") : "Check usage"}
+          {probe.isPending ? t("aiConnectionUsagePanel.checking") : usage?.status === "ok" ? t("common.refresh") : t("aiConnectionUsagePanel.checkUsage")}
         </Button>}
       </div>
-      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">Usage not observed.</p>}
-      {!supported && <p className="text-xs text-muted-foreground">Unavailable for this sign-in method.</p>}
+      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">{t("aiConnectionUsagePanel.usageNotObserved")}</p>}
+      {!supported && <p className="text-xs text-muted-foreground">{t("aiConnectionUsagePanel.unavailableForThisSignIn")}</p>}
       {probe.error && <p role="alert" className="text-sm text-destructive">{probe.error.message}</p>}
       {usage && usage.status !== "ok" && <p role={usage.status === "unsupported" ? "status" : "alert"} className="text-sm text-muted-foreground">{usageError(usage)}</p>}
       {usage?.status === "ok" && (
         <div className="space-y-3" aria-live="polite">
-          {usage.limits.length === 0 && <p className="text-xs text-muted-foreground">Usage not reported.</p>}
+          {usage.limits.length === 0 && <p className="text-xs text-muted-foreground">{t("aiConnectionUsagePanel.usageNotReported")}</p>}
           {usage.limits.map((window) => {
             const details = limitDetails(window);
             return <div key={window.id} className="space-y-1.5">
@@ -106,7 +106,7 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
             </div>;
           })}
           {usage.overage && <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span className="text-muted-foreground">Overage</span>
+            <span className="text-muted-foreground">{t("aiConnectionUsagePanel.overage")}</span>
             <span className="font-mono">{overageSummary(usage)}</span>
           </div>}
           <p className="text-xs text-muted-foreground">{t("common.updated")} <time className="font-mono" dateTime={usage.checkedAt} title={formatDateTime(usage.checkedAt)}>{formatDateTime(usage.checkedAt, { includeYear: false })}</time>{usage.planType ? ` · ${usage.planType}` : ""}</p>

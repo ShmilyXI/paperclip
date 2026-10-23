@@ -49,7 +49,7 @@ export function AgentMailIntentSetup({ companyId, agentId, requestId, savedCrede
   const changeKey = useMutation({
     mutationFn: async (pendingRequestId: string) => {
       const pending = (await emailApi.list(companyId)).find(inbox => inbox.id === pendingRequestId && inbox.status !== "archived");
-      if (pending?.address) throw new Error(`The address ${pending.address} is already reserved. Finish setup with its saved key.`);
+      if (pending?.address) throw new Error(t("agentMailIntentSetup.theAddressAddressIsAlready", { address: pending.address }));
       if (pending) await emailApi.control(pending.id, "remove");
     },
     onSuccess: () => {
@@ -96,20 +96,20 @@ export function AgentMailIntentSetup({ companyId, agentId, requestId, savedCrede
     }
   }}>
     {credentialId || inboxConnectionId
-      ? <p className="text-sm text-muted-foreground">{inboxConnectionId ? "Your inbox is ready. Continue to resume the chat." : "API key saved. Finish creating the inbox."}</p>
+      ? <p className="text-sm text-muted-foreground">{inboxConnectionId ? t("agentMailIntentSetup.yourInboxIsReadyContinue") : "API key saved. Finish creating the inbox."}</p>
       : <AgentMailCredentialField companyId={companyId} connectionId={selectedCredentialId}
           onConnectionChange={id => { setSelectedCredentialId(id); setApiKey(""); }}
           value={apiKey} onChange={setApiKey} disabled={setup.isPending || changeKey.isPending || declining} />}
     {credentialId && !inboxConnectionId && <Button type="button" variant="link" size="sm" className="h-auto p-0"
       disabled={setup.isPending || changeKey.isPending || declining} onClick={() => changeKey.mutate(setupRequestId)}>
-      {changeKey.isPending ? "Checking setup…" : "Change API key"}
+      {changeKey.isPending ? t("agentMailIntentSetup.checkingSetup") : t("agentMailIntentSetup.changeApiKey")}
     </Button>}
     {changeKey.error && <p className="text-sm text-destructive" role="alert">{changeKey.error.message}</p>}
     {setup.error && <p className="text-sm text-destructive" role="alert">{setup.error.message}</p>}
     <div className="flex items-center justify-between gap-2">
-      <Button type="button" variant="ghost" disabled={setup.isPending || changeKey.isPending || declining} onClick={onDecline}>Not now</Button>
+      <Button type="button" variant="ghost" disabled={setup.isPending || changeKey.isPending || declining} onClick={onDecline}>{t("agentMailIntentSetup.notNow")}</Button>
       <Button type="submit" disabled={setup.isPending || changeKey.isPending || declining || (!credentialId && !selectedCredentialId && !inboxConnectionId && !apiKey.trim())}>
-        {setup.isPending ? "Connecting…" : inboxConnectionId ? t("common.continue") : credentialId ? "Finish setup" : "Connect AgentMail"}
+        {setup.isPending ? t("agentMailIntentSetup.connecting") : inboxConnectionId ? t("common.continue") : credentialId ? t("agentMailIntentSetup.finishSetup") : t("agentMailIntentSetup.connectAgentmail")}
       </Button>
     </div>
   </form>;

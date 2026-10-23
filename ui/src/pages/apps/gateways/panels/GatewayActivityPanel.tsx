@@ -13,12 +13,12 @@ import { ErrorState, RelativeTime } from "@/pages/tools/shared";
 const PAGE_SIZE = 25;
 
 const OUTCOME_META: Record<ToolAuditOutcome, { label: string; status: string }> = {
-  allowed: { label: "Allowed", status: "allowed" },
+  allowed: { label: t("gatewayActivityPanel.allowed"), status: "allowed" },
   blocked: { label: t("common.blocked"), status: "denied" },
-  asked_first: { label: "Asked first", status: "require-approval" },
-  waiting: { label: "Waiting", status: "deferred" },
+  asked_first: { label: t("gatewayActivityPanel.askedFirst"), status: "require-approval" },
+  waiting: { label: t("gatewayActivityPanel.waiting"), status: "deferred" },
   failed: { label: t("common.failed"), status: "failed" },
-  unknown: { label: "Recorded", status: "unchecked" },
+  unknown: { label: t("gatewayActivityPanel.recorded"), status: "unchecked" },
 };
 
 function detailString(details: Record<string, unknown> | null, key: string): string | null {
@@ -66,9 +66,9 @@ function Fact({ label, value, mono = false }: { label: string; value: string; mo
 function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
   const [open, setOpen] = useState(false);
   const outcome = OUTCOME_META[event.normalizedOutcome] ?? OUTCOME_META.unknown;
-  const actor = event.agentDisplayName ?? "Client";
-  const app = event.appDisplayName ?? event.connectionDisplayName ?? event.applicationDisplayName ?? "App";
-  const tool = event.toolDisplayName ?? event.invocation?.toolName ?? "Tool call";
+  const actor = event.agentDisplayName ?? t("gatewayActivityPanel.client");
+  const app = event.appDisplayName ?? event.connectionDisplayName ?? event.applicationDisplayName ?? t("gatewayActivityPanel.app");
+  const tool = event.toolDisplayName ?? event.invocation?.toolName ?? t("gatewayActivityPanel.toolCall");
   const rawTool = event.invocation?.toolName ?? detailString(event.details, "tool") ?? detailString(event.details, "toolName");
   const reason = detailString(event.details, "reasonCode");
   const argumentsText = formatSummary(
@@ -108,18 +108,18 @@ function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
       {open ? (
         <div className="border-t border-border bg-muted/30 px-4 py-3 pl-10 text-xs">
           <dl>
-            {rawTool ? <Fact label="Tool" value={rawTool} mono /> : null}
-            {event.invocation?.status ? <Fact label="Call status" value={event.invocation.status} /> : null}
-            {event.invocation?.policyDecision ? <Fact label="Decision" value={event.invocation.policyDecision} /> : null}
-            {reason ? <Fact label="Reason" value={reason} mono /> : null}
+            {rawTool ? <Fact label={t("gatewayActivityPanel.tool")} value={rawTool} mono /> : null}
+            {event.invocation?.status ? <Fact label={t("gatewayActivityPanel.callStatus")} value={event.invocation.status} /> : null}
+            {event.invocation?.policyDecision ? <Fact label={t("gatewayActivityPanel.decision")} value={event.invocation.policyDecision} /> : null}
+            {reason ? <Fact label={t("gatewayActivityPanel.reason")} value={reason} mono /> : null}
             {duration ? <Fact label={t("common.duration")} value={duration} /> : null}
-            {event.invocation?.id ? <Fact label="Invocation ID" value={event.invocation.id} mono /> : null}
-            {event.invocation?.errorCode ? <Fact label="Error code" value={event.invocation.errorCode} mono /> : null}
+            {event.invocation?.id ? <Fact label={t("gatewayActivityPanel.invocationId")} value={event.invocation.id} mono /> : null}
+            {event.invocation?.errorCode ? <Fact label={t("gatewayActivityPanel.errorCode")} value={event.invocation.errorCode} mono /> : null}
             {event.invocation?.errorMessage ? <Fact label={t("common.error")} value={event.invocation.errorMessage} /> : null}
           </dl>
           {argumentsText ? (
             <div className="mt-2 space-y-1">
-              <div className="text-muted-foreground">Arguments (redacted)</div>
+              <div className="text-muted-foreground">{t("gatewayActivityPanel.argumentsRedacted")}</div>
               <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-xs text-foreground">
                 {argumentsText}
               </pre>
@@ -127,7 +127,7 @@ function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
           ) : null}
           {resultText ? (
             <div className="mt-3 space-y-1">
-              <div className="text-muted-foreground">Result (redacted)</div>
+              <div className="text-muted-foreground">{t("gatewayActivityPanel.resultRedacted")}</div>
               <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-xs text-foreground">
                 {resultText}
               </pre>
@@ -180,11 +180,11 @@ export function GatewayActivityPanel({
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        Calls through this gateway from the last 30 days. Open a row to inspect its tool, redacted arguments, result, and decision.
+        {t("gatewayActivityPanel.callsThroughThisGatewayFrom")}
       </p>
       {events.length === 0 ? (
         <div className="rounded-md border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          No calls have gone through this gateway yet.
+          {t("gatewayActivityPanel.noCallsHaveGoneThrough")}
         </div>
       ) : (
         <ul className="divide-y divide-border rounded-lg border border-border">
@@ -199,7 +199,7 @@ export function GatewayActivityPanel({
             onClick={() => activityQuery.fetchNextPage()}
             disabled={activityQuery.isFetchingNextPage}
           >
-            {activityQuery.isFetchingNextPage ? t("common.loading2") : "Load more"}
+            {activityQuery.isFetchingNextPage ? t("common.loading2") : t("gatewayActivityPanel.loadMore")}
           </Button>
         </div>
       ) : null}

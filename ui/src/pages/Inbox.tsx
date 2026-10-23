@@ -292,7 +292,7 @@ function firstNonEmptyLine(value: string | null | undefined): string | null {
 }
 
 function runFailureMessage(run: HeartbeatRun): string {
-  return firstNonEmptyLine(run.error) ?? firstNonEmptyLine(run.stderrExcerpt) ?? "Run exited with an error.";
+  return firstNonEmptyLine(run.error) ?? firstNonEmptyLine(run.stderrExcerpt) ?? t("inbox.runExitedWithAnError");
 }
 
 function approvalStatusLabel(status: Approval["status"]): string {
@@ -389,12 +389,12 @@ export function FailedRunInboxRow({
   const interruption = issue?.interruption;
   useSecondTick(interruption?.state === "retry_scheduled");
   const retrySeconds = Math.max(0, Math.ceil((Date.parse(interruption?.nextRetryAt ?? "") - Date.now()) / 1000));
-  const displayError = isRetrying || interruption?.state === "working" ? "Thinking"
-    : interruption?.state === "retry_scheduled" ? `Trying again in ${retrySeconds}s…`
-      : interruption?.state === "failed" ? "Couldn’t finish this attempt. Your message is saved."
+  const displayError = isRetrying || interruption?.state === "working" ? t("inbox.thinking")
+    : interruption?.state === "retry_scheduled" ? t("inbox.tryingAgainInRetrysecondsS", { retrySeconds })
+      : interruption?.state === "failed" ? t("inbox.couldnTFinishThisAttempt")
         : interruption?.state === "waiting_for_user" ? ({
-          approval: "Approval required", reconnect: "Reconnect account", assign_agent: "Assign an agent", choose_model: "Choose a supported model",
-          resume: "Work is paused", budget: "Budget limit reached",
+          approval: t("inbox.approvalRequired"), reconnect: t("inbox.reconnectAccount"), assign_agent: t("inbox.assignAnAgent"), choose_model: t("inbox.chooseASupportedModel"),
+          resume: t("inbox.workIsPaused"), budget: t("inbox.budgetLimitReached"),
         }[interruption.userAction ?? "resume"]) : runFailureMessage(run);
   const retryAvailable = !interruption || interruption.canRetry;
   const showUnreadSlot = unreadState !== null;
@@ -475,7 +475,7 @@ export function FailedRunInboxRow({
             disabled={isRetrying}
           >
             <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-            {isRetrying ? "Thinking" : t("common.retry")}
+            {isRetrying ? t("inbox.thinking") : t("common.retry")}
           </Button>}
           {!showUnreadSlot && (
             <button
@@ -499,7 +499,7 @@ export function FailedRunInboxRow({
           disabled={isRetrying}
         >
           <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-          {isRetrying ? "Thinking" : t("common.retry")}
+          {isRetrying ? t("inbox.thinking") : t("common.retry")}
         </Button>}
         {!showUnreadSlot && (
           <button
@@ -1188,7 +1188,7 @@ function StreamlinedInbox({
     if (currentUserId) {
       options.set(`user:${currentUserId}`, {
         id: `user:${currentUserId}`,
-        label: currentUserId === "local-board" ? t("common.board") : "Me",
+        label: currentUserId === "local-board" ? t("common.board") : t("inbox.me"),
         kind: "user",
         searchText: currentUserId === "local-board" ? "board me human local-board" : `me board human ${currentUserId}`,
       });
@@ -2453,9 +2453,9 @@ function StreamlinedInbox({
       issueFilters.statuses.includes(status as IssueFilterState["statuses"][number]),
     );
   const issueFilterFeedback = issueFilters.liveOnly
-    ? "Live runs only — tasks currently connected to an agent run."
+    ? t("inbox.liveRunsOnlyTasksCurrently")
     : activeStatusFilterApplied
-      ? "Active statuses — open tasks, whether or not an agent is running."
+      ? t("inbox.activeStatusesOpenTasksWhether")
       : null;
   return (
     <div className="space-y-6">
@@ -2610,7 +2610,7 @@ function StreamlinedInbox({
                 size="icon"
                 className={cn("hidden h-8 w-8 shrink-0 sm:inline-flex", nestingEnabled && "bg-accent")}
                 onClick={toggleNesting}
-                title={nestingEnabled ? "Disable parent-child nesting" : "Enable parent-child nesting"}
+                title={nestingEnabled ? t("inbox.disableParentChildNesting") : t("inbox.enableParentChildNesting")}
               >
                 <ListTree className="h-3.5 w-3.5" />
               </Button>
@@ -2706,7 +2706,7 @@ function StreamlinedInbox({
                     onClick={() => setShowMarkAllReadConfirm(true)}
                     disabled={markAllReadMutation.isPending}
                   >
-                    {markAllReadMutation.isPending ? "Marking…" : t("common.markAllAsRead")}
+                    {markAllReadMutation.isPending ? t("inbox.marking") : t("common.markAllAsRead")}
                   </Button>
                   <Dialog open={showMarkAllReadConfirm} onOpenChange={setShowMarkAllReadConfirm}>
                     <DialogContent className="sm:max-w-md">
@@ -2779,14 +2779,14 @@ function StreamlinedInbox({
           icon={searchQuery.trim() ? Search : InboxIcon}
           message={
             searchQuery.trim()
-              ? "No inbox items match your search."
+              ? t("inbox.noInboxItemsMatchYour")
               : tab === "mine"
-              ? "Inbox zero."
+              ? t("inbox.inboxZero")
               : tab === "unread"
-              ? "No new inbox items."
+              ? t("inbox.noNewInboxItems")
               : tab === "recent"
-                ? "No recent inbox items."
-                : "No inbox items match these filters."
+                ? t("inbox.noRecentInboxItems")
+                : t("inbox.noInboxItemsMatchThese")
           }
         />
       )}
@@ -2867,7 +2867,7 @@ function StreamlinedInbox({
                           type="button"
                           data-slot="icon-button"
                           className="inline-flex h-4 w-4 shrink-0 items-center justify-center"
-                          aria-label={isExpanded ? "Collapse sub-tasks" : "Expand sub-tasks"}
+                          aria-label={isExpanded ? t("inbox.collapseSubTasks") : t("inbox.expandSubTasks")}
                           onClick={(event) => {
                             event.preventDefault();
                             event.stopPropagation();
@@ -3005,7 +3005,7 @@ function StreamlinedInbox({
                       >
                         <div className="h-px flex-1 bg-border/80" />
                         <span className="shrink-0 text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
-                          {group.searchSection === "archived" ? t("common.archived") : "Other results"}
+                          {group.searchSection === "archived" ? t("common.archived") : t("inbox.otherResults")}
                         </span>
                         <div className="h-px flex-1 bg-border/80" />
                       </div>,
@@ -3113,7 +3113,7 @@ function StreamlinedInbox({
                             className="shrink-0 text-(length:--text-micro) font-medium uppercase tracking-wider text-muted-foreground/70"
                             data-date-group-label=""
                           >
-                            Earlier
+                            {t("inbox.earlier")}
                           </span>
                         </div>,
                       );
@@ -3328,7 +3328,7 @@ function StreamlinedInbox({
           {showSeparatorBefore("alerts") && <Separator />}
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Alerts
+              {t("inbox.alerts")}
             </h3>
             <div className="divide-y divide-border border border-border">
               {showAggregateAgentError && (

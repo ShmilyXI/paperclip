@@ -110,7 +110,7 @@ export function TaskList({ items, allItems = items, initialColumns = defaultTask
   };
   const groups = new Map<string, Issue[]>();
   for (const root of roots) {
-    const label = groupBy === "status" ? issueFilterLabel(root.status) : groupBy === "project" ? root.project?.name ?? "No project" : "";
+    const label = groupBy === "status" ? issueFilterLabel(root.status) : groupBy === "project" ? root.project?.name ?? t("taskList.noProject") : "";
     groups.set(label, [...(groups.get(label) ?? []), root]);
   }
   return (

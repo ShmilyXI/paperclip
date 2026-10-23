@@ -50,7 +50,7 @@ export function DecisionDateChips({ value, custom, onChange }: DecisionDateChips
         <PopoverContent align="start" className="w-auto space-y-2 p-3">
           <div className="flex flex-col gap-1.5">
             <label className="text-(length:--text-nano) font-medium uppercase tracking-wide text-muted-foreground">
-              From
+              {t("decisionDateChips.from")}
             </label>
             <input
               type="date"
@@ -62,7 +62,7 @@ export function DecisionDateChips({ value, custom, onChange }: DecisionDateChips
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-(length:--text-nano) font-medium uppercase tracking-wide text-muted-foreground">
-              To
+              {t("decisionDateChips.to")}
             </label>
             <input
               type="date"

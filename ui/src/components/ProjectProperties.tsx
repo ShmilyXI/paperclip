@@ -86,7 +86,7 @@ function SaveIndicator({ state }: { state: ProjectFieldSaveState }) {
     return (
       <span className="inline-flex items-center gap-1 text-(length:--text-micro) text-muted-foreground">
         <Loader2 className="h-3 w-3 animate-spin" />
-        Saving
+        {t("projectProperties.saving")}
       </span>
     );
   }
@@ -117,7 +117,7 @@ function FieldLabel({
   state: ProjectFieldSaveState;
 }) {
   // The label column is a fixed 80px wide, so the indicator stacks below the
-  // label instead of sitting beside it; otherwise "Description" + "Saving"
+  // label instead of sitting beside it; otherwise "Description" + t("projectProperties.saving")
   // overflows into the value column and overlaps the field content.
   return (
     <div className="flex flex-col items-start gap-0.5">
@@ -165,13 +165,13 @@ function ArchiveDangerZone({
     <div className="space-y-3 rounded-md border border-destructive/40 bg-destructive/5 px-4 py-4">
       <p className="text-sm text-muted-foreground">
         {isArchive
-          ? "Archive this project to hide it from the sidebar and project selectors."
-          : "Unarchive this project to restore it in the sidebar and project selectors."}
+          ? t("projectProperties.archiveThisProjectToHide")
+          : t("projectProperties.unarchiveThisProjectToRestore")}
       </p>
       {archivePending ? (
         <Button size="sm" variant="destructive" disabled>
           <Loader2 className="h-3 w-3 animate-spin mr-1" />
-          {isArchive ? "Archiving..." : "Unarchiving..."}
+          {isArchive ? t("projectProperties.archiving") : t("projectProperties.unarchiving")}
         </Button>
       ) : confirming ? (
         <div className="flex items-center gap-2">
@@ -422,8 +422,8 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
   const clearLocalWorkspace = () => {
     const confirmed = window.confirm(
       codebase.repoUrl
-        ? "Clear local folder from this workspace?"
-        : "Delete this workspace local folder?",
+        ? t("projectProperties.clearLocalFolderFromThis")
+        : t("projectProperties.deleteThisWorkspaceLocalFolder"),
     );
     if (!confirmed) return;
     persistCodebase({ cwd: null });
@@ -436,15 +436,13 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
           <AlertDialogHeader>
             <AlertDialogTitle>{t("projectProps.openThisProjectToThe")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Everyone in the company will be able to discover this project. Its private tasks stay private.
-              Members who only have access through this project will lose access to those tasks.
-              Share tasks directly first if you want them to keep access.
+              {t("projectProperties.everyoneInTheCompanyWill")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("projectProps.keepPrivate")}</AlertDialogCancel>
             <AlertDialogAction onClick={() => commitField("visibility", { visibility: "open" })}>
-              Open to company
+              {t("projectProperties.openToCompany")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -488,7 +486,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm">
               <ToggleSwitch
-                aria-label="Private project"
+                aria-label={t("projectProperties.privateProject")}
                 checked={project.visibility === "private"}
                 onCheckedChange={(checked) => {
                   if (!checked) {
@@ -499,12 +497,12 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                 }}
                 disabled={!canManagePrivacy || (!onUpdate && !onFieldUpdate)}
               />
-              <span>{project.visibility === "private" ? t("common.private") : "Open to company"}</span>
+              <span>{project.visibility === "private" ? t("common.private") : t("projectProperties.openToCompany")}</span>
             </label>
             <p className="text-(length:--text-micro) text-muted-foreground">
               {project.visibility === "private"
-                ? "Only access members can discover this project. Tasks shared directly remain readable on their own."
-                : "Everyone in the company can discover this project. Individually private tasks keep their own access rules."}
+                ? t("projectProperties.onlyAccessMembersCanDiscover")
+                : t("projectProperties.everyoneInTheCompanyCan")}
             </p>
             {project.visibility === "private" ? <ProjectAccessMembers project={project} canManage={canManagePrivacy} /> : null}
           </div>
@@ -558,8 +556,8 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
               </TooltipTrigger>
               <TooltipContent side="top">
                 {hideHostPaths
-                  ? "Repo identifies the source of truth. Agents check it out in the platform-managed environment."
-                  : "Repo identifies the source of truth. Local folder is the default place agents write code."}
+                  ? t("projectProperties.repoIdentifiesTheSourceOf")
+                  : t("projectProperties.repoIdentifiesTheSourceOf2")}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -599,7 +597,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                         setWorkspaceError(null);
                       }}
                     >
-                      {codebase.localFolder ? "Change local folder" : "Set local folder"}
+                      {codebase.localFolder ? t("projectProperties.changeLocalFolder") : t("projectProperties.setLocalFolder")}
                     </Button>
                     {codebase.localFolder ? (
                       <Button
@@ -618,7 +616,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
 
             {hasAdditionalLegacyWorkspaces && (
               <div className="text-(length:--text-micro) text-muted-foreground">
-                Additional legacy workspace records exist on this project. Paperclip is using the primary workspace as the codebase view.
+                {t("projectProperties.additionalLegacyWorkspaceRecordsExist")}
               </div>
             )}
 
@@ -656,7 +654,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                             {service.url}
                           </a>
                         ) : (
-                          service.command ?? "No URL"
+                          service.command ?? t("projectProperties.noUrl")
                         )}
                       </div>
                       {service.exposure && service.exposure.state !== "removed" ? (
@@ -687,7 +685,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                   className="w-full rounded border border-border bg-transparent px-2 py-1 text-xs font-mono outline-none"
                   value={workspaceCwd}
                   onChange={(e) => setWorkspaceCwd(e.target.value)}
-                  placeholder="/absolute/path/to/workspace"
+                  placeholder={t("projectProperties.absolutePathToWorkspace")}
                 />
                 <ChoosePathButton />
               </div>
@@ -748,7 +746,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="top">
-                    Project-owned defaults for isolated task checkouts and execution workspace behavior.
+                    {t("projectProperties.projectOwnedDefaultsForIsolated")}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -760,7 +758,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                       <SaveIndicator state={fieldState("execution_workspace_enabled")} />
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Let tasks choose between the project's primary checkout and an isolated execution workspace.
+                      {t("projectProperties.letTasksChooseBetweenThe")}
                     </div>
                   </div>
                   {onUpdate || onFieldUpdate ? (
@@ -788,7 +786,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                           <SaveIndicator state={fieldState("execution_workspace_default_mode")} />
                         </div>
                         <div className="text-(length:--text-micro) text-muted-foreground">
-                          If disabled, new tasks stay on the project's primary checkout unless someone opts in.
+                          {t("projectProperties.ifDisabledNewTasksStay")}
                         </div>
                       </div>
                       <ToggleSwitch
@@ -853,15 +851,15 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                         onClick={() => setExecutionWorkspaceAdvancedOpen((open) => !open)}
                       >
                         {executionWorkspaceAdvancedOpen
-                          ? "Hide advanced checkout settings"
-                          : "Show advanced checkout settings"}
+                          ? t("projectProperties.hideAdvancedCheckoutSettings")
+                          : t("projectProperties.showAdvancedCheckoutSettings")}
                       </button>
                     </div>
 
                     {executionWorkspaceAdvancedOpen ? (
                       <div className="space-y-3">
                         <div className="text-xs text-muted-foreground">
-                          Host-managed implementation: <span className="text-foreground">{t("projectProps.gitWorktree")}</span>
+                          {t("projectProperties.hostManagedImplementation")} <span className="text-foreground">{t("projectProps.gitWorktree")}</span>
                         </div>
                         {showExecutionWorkspaceEnvironmentControl ? (
                           <div>
@@ -1011,7 +1009,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                             placeholder="bash ./scripts/provision-worktree-runtime.sh"
                           />
                           <p className="mt-1 text-xs text-muted-foreground">
-                            Runs once before the first runtime-service start (heavy setup, e.g. DB seed). Leave empty to keep eager provisioning.
+                            {t("projectProperties.runsOnceBeforeTheFirst")}
                           </p>
                         </div>
                         <div>
@@ -1039,8 +1037,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                           />
                         </div>
                         <p className="text-(length:--text-micro) text-muted-foreground">
-                          Provision runs inside the derived worktree before agent execution. Teardown is stored here for
-                          future cleanup flows.
+                          {t("projectProperties.provisionRunsInsideTheDerived")}
                         </p>
                       </div>
                     ) : null}
@@ -1058,7 +1055,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
           <Separator className="my-4" />
           <div className="space-y-4 py-4">
             <div className="text-xs font-medium text-destructive uppercase tracking-wide">
-              Danger Zone
+              {t("projectProperties.dangerZone")}
             </div>
             <ArchiveDangerZone
               project={project}

@@ -416,12 +416,12 @@ export function Connections() {
                     connection && isRetiredComposioConnection(connection) ? RETIRED_COMPOSIO_MESSAGE :
                     status.tone === "attention"
                       ? connection?.authKind === "oauth"
-                        ? "Reconnect required — sign in again to restore access."
-                        : "The key stopped working — reconnect to fix."
+                        ? t("connections.reconnectRequiredSignInAgain")
+                        : t("connections.theKeyStoppedWorkingReconnect")
                       : status.tone === "paused"
-                        ? "Paused — agents can’t use it right now."
+                        ? t("connections.pausedAgentsCanTUse")
                         : status.tone === "not_connected"
-                          ? "Connect it so agents can use it."
+                          ? t("connections.connectItSoAgentsCan")
                           : row.displayName !== application.name
                             ? application.name
                             : null;
@@ -432,7 +432,7 @@ export function Connections() {
                     ? t("common.connect")
                     : connection && isRetiredComposioConnection(connection) ? t("common.review")
                     : status.tone === "attention"
-                      ? "Reconnect"
+                      ? t("connections.reconnect")
                       : t("common.permissions");
                   return (
                     <tr
@@ -550,8 +550,11 @@ export function Connections() {
             </AlertDialogTitle>
             <AlertDialogDescription>
               {connectionToDelete && connectionToDelete.remainingConnectionCount > 0
-                ? `This connection's saved credentials are deleted and agents lose access through it immediately. Agents can still use ${connectionToDelete.appName} through ${connectionToDelete.remainingConnectionCount} other active ${connectionToDelete.remainingConnectionCount === 1 ? "connection" : "connections"}.`
-                : "The saved credentials are deleted and agents lose access immediately. Connecting it again later needs a new sign-in or key."}
+                ? t("connections.credentialsDeletedMoreRemain", {
+                    app: connectionToDelete.appName,
+                    count: connectionToDelete.remainingConnectionCount,
+                  })
+                : t("connections.theSavedCredentialsAreDeleted")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -565,7 +568,7 @@ export function Connections() {
               }}
             >
               {deleteConnection.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-              {deleteConnection.isPending ? t("common.deleting") : "Delete connection"}
+              {deleteConnection.isPending ? t("common.deleting") : t("connections.deleteConnection")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -611,7 +614,7 @@ function CloudConnectorEnrollmentBanner({
       <Cloud className="h-5 w-5 text-muted-foreground" />
       <div className="min-w-0 flex-1">
         <div className="text-sm font-semibold text-foreground">
-          {status?.status === "pending" ? "Finish Paperclip Cloud enrollment" : "Enable Paperclip-managed sign-in"}
+          {status?.status === "pending" ? t("connections.finishPaperclipCloudEnrollment") : t("connections.enablePaperclipManagedSignIn")}
         </div>
         <div className="text-xs text-muted-foreground">
           {t("connectors.confirmThisServerSExact")}
@@ -619,7 +622,7 @@ function CloudConnectorEnrollmentBanner({
       </div>
       <Button variant="outline" size="sm" disabled={busy} onClick={onEnable}>
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-        {status?.status === "pending" ? "Continue enrollment" : t("common.enable")}
+        {status?.status === "pending" ? t("connections.continueEnrollment") : t("common.enable")}
       </Button>
     </div>
   );
@@ -688,8 +691,7 @@ function EmptyConnections({ onBrowse }: { onBrowse: () => void }) {
         </div>
         <p className="mt-4 text-sm font-medium text-foreground">{t("connectors.noConnectionsYet")}</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Add one from <span className="font-medium text-foreground">Apps</span> to give your agents
-          the tools they need.
+          {t("connections.addOneFrom")} <span className="font-medium text-foreground">{t("connections.apps")}</span> {t("connections.toGiveYourAgentsThe")}
         </p>
         <Button className="mt-6" onClick={onBrowse}>
           {t("connectors.browseApps")}

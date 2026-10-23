@@ -116,15 +116,15 @@ function KeySection({
         <div className="flex items-start gap-3">
           <Lock className="mt-0.5 h-4 w-4 text-muted-foreground" />
           <div>
-            <h2 className="text-sm font-medium text-foreground">Reconnect</h2>
+            <h2 className="text-sm font-medium text-foreground">{t("appDetailAdvancedPanel.reconnect")}</h2>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              {canReplace ? "Replace the stored credential." : unavailableMessage}
+              {canReplace ? t("appDetailAdvancedPanel.replaceTheStoredCredential") : unavailableMessage}
             </p>
           </div>
         </div>
         {canReplace && !open && (
           <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
-            Reconnect
+            {t("appDetailAdvancedPanel.reconnect")}
           </Button>
         )}
       </div>
@@ -177,7 +177,7 @@ export function ReconnectCard({
         navigateTopLevel(target.url);
       } catch (error) {
         pushToast({
-          title: "Couldn’t start sign-in",
+          title: t("appDetailAdvancedPanel.couldnTStartSignIn"),
           body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
           tone: "error",
         });
@@ -185,7 +185,7 @@ export function ReconnectCard({
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn’t start sign-in",
+        title: t("appDetailAdvancedPanel.couldnTStartSignIn"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -194,15 +194,15 @@ export function ReconnectCard({
     mutationFn: () => toolsApi.checkConnectionHealth(connection.id),
     onSuccess: () => {
       pushToast({
-        title: "Vercel credential verified",
-        body: `${humanizeConnectionDisplayName(connection)} is back online.`,
+        title: t("appDetailAdvancedPanel.vercelCredentialVerified"),
+        body: t("appDetailAdvancedPanel.connectionIsBackOnline", { connection: humanizeConnectionDisplayName(connection) }),
         tone: "success",
       });
       onReconnected();
     },
     onError: (error) => pushToast({
-      title: "Credential still needs attention",
-      body: error instanceof Error ? error.message : "Review the connector in Vercel Connect and try again.",
+      title: t("appDetailAdvancedPanel.credentialStillNeedsAttention"),
+      body: error instanceof Error ? error.message : t("appDetailAdvancedPanel.reviewTheConnectorInVercel"),
       tone: "error",
     }),
   });
@@ -214,34 +214,34 @@ export function ReconnectCard({
     <div className="flex flex-col gap-4 rounded-lg border border-amber-500/50 bg-amber-500/10 px-4 py-3">
       <div className="min-w-0">
         <h2 className="text-sm font-semibold text-amber-900 dark:text-amber-100">
-          {methodUnavailable ? "Connection no longer supported" : oauth ? "Reconnect required" : "This app needs reconnecting"}
+          {methodUnavailable ? t("appDetailAdvancedPanel.connectionNoLongerSupported") : oauth ? t("appDetailAdvancedPanel.reconnectRequired") : t("appDetailAdvancedPanel.thisAppNeedsReconnecting")}
         </h2>
         <p className="mt-0.5 text-sm text-amber-800 dark:text-amber-200">
           {methodUnavailable
-            ? "Add a supported connection from Connectors, then remove this connection."
+            ? t("appDetailAdvancedPanel.addASupportedConnectionFrom")
             : connection.healthMessage?.trim() || (oauth
-            ? "Authorization expired or was revoked. Sign in again to restore access."
-            : "The key stopped working. Paste a new one to get it back online.")}
+            ? t("appDetailAdvancedPanel.authorizationExpiredOrWasRevoked")
+            : t("appDetailAdvancedPanel.theKeyStoppedWorkingPaste"))}
         </p>
       </div>
       <div className="shrink-0">
         {!canReconnect ? (
           <p className="text-sm text-amber-800 dark:text-amber-200">
-            {reconnectUnavailableMessage ?? "You don't have permission to reconnect this identity."}
+            {reconnectUnavailableMessage ?? t("appDetailAdvancedPanel.youDonTHavePermission")}
           </p>
         ) : methodUnavailable ? (
           <Button size="sm" variant="outline" asChild>
             <Link to={`/apps/connect?source=${encodeURIComponent(galleryEntry!.slug)}`}>
-              Add supported connection
+              {t("appDetailAdvancedPanel.addSupportedConnection")}
             </Link>
           </Button>
         ) : onReconnect ? (
-          <Button size="sm" variant="outline" onClick={onReconnect}>Reconnect</Button>
+          <Button size="sm" variant="outline" onClick={onReconnect}>{t("appDetailAdvancedPanel.reconnect")}</Button>
         ) : managedByVercel && !oauth ? (
           <div className="flex items-center gap-2">
             <Button type="button" size="sm" variant="outline" asChild>
               <a href="https://vercel.com/connect" target="_blank" rel="noreferrer">
-                Manage in Vercel <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
+                {t("appDetailAdvancedPanel.manageInVercel")} <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
               </a>
             </Button>
             <Button
@@ -262,7 +262,7 @@ export function ReconnectCard({
             onClick={() => reconnectOAuth.mutate()}
           >
             {reconnectOAuth.isPending && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
-            {reconnectOAuth.isPending ? "Opening sign-in…" : "Reconnect"}
+            {reconnectOAuth.isPending ? t("appDetailAdvancedPanel.openingSignIn") : t("appDetailAdvancedPanel.reconnect")}
           </Button>
         ) : (
           <ReconnectForm connection={connection} galleryEntry={galleryEntry} onReconnected={onReconnected} />
@@ -299,7 +299,7 @@ function ReconnectForm({
     .filter((ref) => ref.placement === "header" || ref.placement === "url")
     .map((ref) => ({
       configPath: connectionCredentialConfigPath(ref),
-      label: ref.placement === "url" ? "MCP server URL" : ref.prefix === "Bearer " ? "App key" : ref.key ?? ref.name,
+      label: ref.placement === "url" ? "MCP server URL" : ref.prefix === "Bearer " ? t("appDetailAdvancedPanel.appKey") : ref.key ?? ref.name,
       helpUrl: "",
       required: true,
     }));
@@ -319,14 +319,14 @@ function ReconnectForm({
         result.connection.healthStatus === "ok" || result.connection.healthStatus === "healthy" || result.connection.healthStatus === "unknown";
       if (healthy) {
         pushToast({
-          title: "Reconnected",
-          body: `${humanizeConnectionDisplayName(connection)} is back online.`,
+          title: t("appDetailAdvancedPanel.reconnected"),
+          body: t("appDetailAdvancedPanel.connectionIsBackOnline", { connection: humanizeConnectionDisplayName(connection) }),
           tone: "success",
         });
         onReconnected();
       } else {
         pushToast({
-          title: "Still not working",
+          title: t("appDetailAdvancedPanel.stillNotWorking"),
           body: result.connection.healthMessage?.trim() || "That key didn't check out. Try another.",
           tone: "error",
         });
@@ -334,8 +334,8 @@ function ReconnectForm({
     },
     onError: (error) =>
       pushToast({
-        title: "That key didn't work",
-        body: error instanceof Error ? error.message : "Check the key and try again.",
+        title: t("appDetailAdvancedPanel.thatKeyDidnTWork"),
+        body: error instanceof Error ? error.message : t("appDetailAdvancedPanel.checkTheKeyAndTry"),
         tone: "error",
       }),
   });
@@ -347,7 +347,7 @@ function ReconnectForm({
   if (connection.credentialSource === "vercel_connect") {
     return (
       <p className="text-sm text-muted-foreground">
-        Credentials for this connection are managed in Vercel Connect.
+        {t("appDetailAdvancedPanel.credentialsForThisConnectionAre")}
       </p>
     );
   }
@@ -374,7 +374,7 @@ function ReconnectForm({
                 rel="noreferrer"
                 className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-foreground underline underline-offset-2"
               >
-                Where do I find this? <ArrowUpRight className="h-3 w-3" />
+                {t("appDetailAdvancedPanel.whereDoIFindThis")} <ArrowUpRight className="h-3 w-3" />
               </a>
             )}
           </div>
@@ -382,18 +382,18 @@ function ReconnectForm({
       ) : (
         <Input
           type="password"
-          aria-label="App key"
+          aria-label={t("appDetailAdvancedPanel.appKey")}
           autoComplete="off"
           value={single}
           onChange={(e) => setSingle(e.target.value)}
-          placeholder="Paste your new key"
+          placeholder={t("appDetailAdvancedPanel.pasteYourNewKey")}
           className="h-10 font-mono"
         />
       )}
       <div className="flex items-center gap-2">
         <Button size="sm" disabled={!filled || reconnect.isPending} onClick={() => reconnect.mutate()}>
           {reconnect.isPending && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
-          {reconnect.isPending ? "Checking..." : "Check & reconnect"}
+          {reconnect.isPending ? t("appDetailAdvancedPanel.checking") : t("appDetailAdvancedPanel.checkReconnect")}
         </Button>
         {onCancel && (
           <Button size="sm" variant="ghost" onClick={onCancel} disabled={reconnect.isPending}>
@@ -412,7 +412,7 @@ function TechnicalDetails({ connection }: { connection: ToolConnection }) {
       <section>
         <CollapsibleTrigger asChild>
           <button type="button" className="flex w-full items-center gap-3 py-1 text-left">
-            <span className="min-w-0 flex-1 text-sm font-medium text-foreground">Connection details</span>
+            <span className="min-w-0 flex-1 text-sm font-medium text-foreground">{t("appDetailAdvancedPanel.connectionDetails")}</span>
             <ChevronRight
               className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-90")}
             />
@@ -502,9 +502,9 @@ export function DangerZone({
           <div className="mt-3 divide-y divide-border border-t border-border">
             {connection && onToggleConnection ? (
               <div className="flex items-center justify-between gap-4 py-4">
-                <h2 className="text-sm font-medium text-foreground">Pause connection</h2>
+                <h2 className="text-sm font-medium text-foreground">{t("appDetailAdvancedPanel.pauseConnection")}</h2>
                 <ToggleSwitch
-                  aria-label="Pause connection"
+                  aria-label={t("appDetailAdvancedPanel.pauseConnection")}
                   checked={paused}
                   disabled={toggleDisabled}
                   onCheckedChange={onToggleConnection}
@@ -528,10 +528,10 @@ export function DangerZone({
             {connection?.authKind === "oauth" && !methodUnavailable && (onReconnectIdentity || !canReplaceCredential) ? (
               <div className="flex flex-wrap items-center justify-between gap-3 py-4">
                 <div>
-                  <p className="text-sm font-medium text-foreground">Reconnect</p>
+                  <p className="text-sm font-medium text-foreground">{t("appDetailAdvancedPanel.reconnect")}</p>
                   <p className="text-xs text-muted-foreground">
                     {canReplaceCredential
-                      ? `Sign in to ${identityProviderName} again.`
+                      ? t("appDetailAdvancedPanel.signInToIdentityprovidernameAgain", { identityProviderName })
                       : credentialUnavailableMessage}
                   </p>
                 </div>
@@ -554,9 +554,9 @@ export function DangerZone({
               && onRevokeIdentity ? (
                 <div className="flex flex-wrap items-center justify-between gap-3 py-4">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Revoke identity</p>
+                    <p className="text-sm font-medium text-foreground">{t("appDetailAdvancedPanel.revokeIdentity")}</p>
                     <p className="text-xs text-muted-foreground">
-                      Disconnect the identity currently used by this app.
+                      {t("appDetailAdvancedPanel.disconnectTheIdentityCurrentlyUsed")}
                     </p>
                   </div>
                   <Button
@@ -564,14 +564,14 @@ export function DangerZone({
                     size="sm"
                     onClick={() => setRevokeTarget(identityGrant)}
                   >
-                    Revoke
+                    {t("appDetailAdvancedPanel.revoke")}
                   </Button>
                 </div>
             ) : null}
 
             <div className="flex flex-wrap items-center justify-between gap-3 py-4">
               <div>
-                <p className="text-sm font-medium text-foreground">Remove this app</p>
+                <p className="text-sm font-medium text-foreground">{t("appDetailAdvancedPanel.removeThisApp")}</p>
                 <p className="text-xs text-muted-foreground">
                   {`Deletes credentials for ${appName} and removes agent access. Reconnecting requires a new sign-in or key.`}
                 </p>
@@ -588,7 +588,7 @@ export function DangerZone({
                 </div>
               ) : (
                 <Button variant="destructive" size="sm" onClick={() => setConfirming(true)}>
-                  Remove app
+                  {t("appDetailAdvancedPanel.removeApp")}
                 </Button>
               )}
             </div>

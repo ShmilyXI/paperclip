@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import {
   CheckCircle2,
@@ -248,7 +249,7 @@ export function TaskChatTurnStatusIsland({ model }: { model: TaskChatTurnStatusM
         align="center"
         sideOffset={8}
         className="w-(--sz-turn-status-popover) p-2"
-        aria-label="Turn plan"
+        aria-label={t("taskChatTurnStatusIsland.turnPlan")}
         onPointerEnter={(event) => {
           if (event.pointerType === "mouse") cancelClose();
         }}
@@ -258,7 +259,7 @@ export function TaskChatTurnStatusIsland({ model }: { model: TaskChatTurnStatusM
         onEscapeKeyDown={() => setPinned(false)}
         onInteractOutside={() => setPinned(false)}
       >
-        <ol className="flex flex-col gap-1" aria-label="Within-turn checklist">
+        <ol className="flex flex-col gap-1" aria-label={t("taskChatTurnStatusIsland.withinTurnChecklist")}>
           {plan.steps.map((step, index) => (
             <li
               key={step.id}

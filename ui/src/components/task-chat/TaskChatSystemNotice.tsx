@@ -102,7 +102,7 @@ export function TaskChatSystemNotice({
       data-testid="task-chat-system-notice"
       data-tone={streamlined ? tone : undefined}
       role={streamlined ? "group" : undefined}
-      aria-label={streamlined ? `System update: ${title}` : undefined}
+      aria-label={streamlined ? t("taskChatSystemNotice.systemUpdateTitle", { title }) : undefined}
     >
       <div className="flex max-w-(--pct-85) items-center gap-1.5">
         <button
@@ -134,7 +134,7 @@ export function TaskChatSystemNotice({
             disabled={tryAgainNoLiveExecutionPathPending}
             data-testid="task-chat-no-live-path-try-again"
           >
-            {tryAgainNoLiveExecutionPathPending ? "Trying again..." : t("common.tryAgain")}
+            {tryAgainNoLiveExecutionPathPending ? t("taskChatSystemNotice.tryingAgain") : t("common.tryAgain")}
           </Button>
         ) : null}
       </div>
@@ -170,7 +170,7 @@ export function TaskChatSystemNotice({
                 disabled={tryAgainNoLiveExecutionPathPending}
                 data-testid="task-chat-no-live-path-try-again"
               >
-                {tryAgainNoLiveExecutionPathPending ? "Trying again..." : t("common.tryAgain")}
+                {tryAgainNoLiveExecutionPathPending ? t("taskChatSystemNotice.tryingAgain") : t("common.tryAgain")}
               </Button>
             </div>
           ) : null}

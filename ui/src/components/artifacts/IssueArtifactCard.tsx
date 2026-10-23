@@ -65,7 +65,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
       aria-label={`Open in tab: ${props.title}`}
       onClick={() => openTextAttachment(attachmentId, props.filename)}
     >
-      Open in tab
+      {t("issueArtifactCard.openInTab")}
     </Button>
   ) : null;
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -144,7 +144,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
             {downloadPath ? (
               <Button asChild size="sm" variant="outline">
                 <a href={downloadPath} download={props.filename}>
-                  Download file
+                  {t("issueArtifactCard.downloadFile")}
                 </a>
               </Button>
             ) : null}
@@ -171,7 +171,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
                 disabled={data.isFetching}
                 onClick={() => setCsvRequested(true)}
               >
-                {data.isFetching ? "Loading preview…" : "Preview data"}
+                {data.isFetching ? t("issueArtifactCard.loadingPreview") : t("issueArtifactCard.previewData")}
               </Button>
             ) : null}
           </>
@@ -183,14 +183,14 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
             ? "CSV is too large to preview. Download the file to view it."
             : data.isError
               ? data.error.message
-              : "CSV preview is unavailable. Download the file to view it."}
+              : t("issueArtifactCard.csvPreviewIsUnavailableDownload")}
           {data.isError && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => void data.refetch()}
             >
-              Retry preview
+              {t("issueArtifactCard.retryPreview")}
             </Button>
           )}
         </div>
@@ -216,7 +216,7 @@ export function IssueWorkProductArtifactCard({
     updatedAt: formatDateTime(wp.updatedAt),
     statusBadge:
       wp.healthStatus === "unhealthy" ? (
-        <Badge variant="destructive">Unhealthy</Badge>
+        <Badge variant="destructive">{t("issueArtifactCard.unhealthy")}</Badge>
       ) : chip ? (
         <Badge variant="outline">{chip.label}</Badge>
       ) : undefined,

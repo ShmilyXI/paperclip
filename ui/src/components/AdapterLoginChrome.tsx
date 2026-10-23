@@ -95,7 +95,7 @@ export function OnboardingLoginCard({
       <div
         className="flex min-h-(--sz-108px) items-center justify-center rounded-xl bg-muted/40"
         role="status"
-        aria-label="Preparing the sign-in"
+        aria-label={t("adapterLoginChrome.preparingTheSignIn")}
       >
         <Loader2 className="size-4 animate-spin text-muted-foreground" />
       </div>
@@ -311,7 +311,7 @@ export function OnboardingLoginCodeRow({
       </AnimatePresence>
       <LoginCardCopyButton
         value={code}
-        label="Copy the code"
+        label={t("adapterLoginChrome.copyTheCode")}
         onCopied={() => {
           // No wait here. A press is a direct action, and delaying its
           // acknowledgement would read as the button having missed.
@@ -462,7 +462,7 @@ export function ProviderApiKeyCard({
     <OnboardingLoginCard
       instruction={`Provide your ${providerName} API key to connect`}
     >
-      <OnboardingCardField {...field} label="API key" masked />
+      <OnboardingCardField {...field} label={t("adapterLoginChrome.apiKey")} masked />
     </OnboardingLoginCard>
   );
 }
@@ -491,14 +491,14 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
       setSubmitting(false);
     }
   }
-  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Preparing sign-in…</p>;
+  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("adapterLoginChrome.preparingSignIn")}</p>;
   const ready = login?.status === "ready";
   return <div className="min-w-0 max-w-full space-y-3 text-sm text-muted-foreground">
     {ready ? <>
       <p role="status" className="flex items-center gap-2 text-foreground"><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{provider} is signed in. Click Connect to use this account.</p>
-      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => browserLogin ? login?.retry() : setShowCommand(true)}>Use a different account</button>}
-    </> : !browserLogin && <p>{isolated ? `Sign in to ${provider} for this connection on the machine running Paperclip. Your existing terminal login stays separate.` : `Connect uses your local ${provider} account on the machine running Paperclip.`}</p>}
-    {browserLogin && !ready && !login?.authorizationUrl && !login?.error && <p role="status">Preparing browser sign-in…</p>}
+      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => browserLogin ? login?.retry() : setShowCommand(true)}>{t("adapterLoginChrome.useADifferentAccount")}</button>}
+    </> : !browserLogin && <p>{isolated ? t("adapterLoginChrome.signInToProviderFor", { provider }) : t("adapterLoginChrome.connectUsesYourLocalProvider", { provider })}</p>}
+    {browserLogin && !ready && !login?.authorizationUrl && !login?.error && <p role="status">{t("adapterLoginChrome.preparingBrowserSignIn")}</p>}
     {browserLogin && !ready && !login?.error && login?.authorizationUrl && <ProviderSubscriptionCard
       providerName={connectSourceName(adapterType)}
       authorizationUrl={login.authorizationUrl}
@@ -511,14 +511,14 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
           onSubmit={() => void submitBrowserCode()}
           disabled={submitting}
         />
-        <Button type="button" disabled={!browserCode.trim() || submitting} onClick={() => void submitBrowserCode()}>Submit code</Button>
+        <Button type="button" disabled={!browserCode.trim() || submitting} onClick={() => void submitBrowserCode()}>{t("adapterLoginChrome.submitCode")}</Button>
       </div> : <OnboardingLoginCodeRow code={login.code ?? ""} />}
     </ProviderSubscriptionCard>}
     {!browserLogin && (!ready || showCommand) && !login?.error && <>
-      <p>Run this in a terminal on that machine and finish signing in in your browser. We’ll check automatically when you return.</p>
+      <p>{t("adapterLoginChrome.runThisInATerminal")}</p>
       {command && <div className="flex min-w-0 max-w-full items-start gap-2 rounded-md border bg-muted p-3 text-foreground">
         <pre className="min-w-0 flex-1 whitespace-pre-wrap break-all font-mono text-xs"><code>{command}</code></pre>
-        <LoginCardCopyButton value={command} label="Copy sign-in command" />
+        <LoginCardCopyButton value={command} label={t("adapterLoginChrome.copySignInCommand")} />
       </div>}
     </>}
     {login?.error && <p role="alert">{login.error}</p>}

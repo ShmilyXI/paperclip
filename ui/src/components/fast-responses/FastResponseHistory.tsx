@@ -29,13 +29,13 @@ export function FastResponseHistory({
   });
   if (query.isPending)
     return (
-      <p className="text-sm text-muted-foreground">Loading fast responses…</p>
+      <p className="text-sm text-muted-foreground">{t("fastResponseHistory.loadingFastResponses")}</p>
     );
   if (query.error)
     return (
       <div role="alert">
         <p className="text-sm text-destructive">
-          Could not load fast responses.
+          {t("fastResponseHistory.couldNotLoadFastResponses")}
         </p>
         <Button variant="outline" onClick={() => void query.refetch()}>
           {t("common.tryAgain")}

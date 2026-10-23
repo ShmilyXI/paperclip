@@ -108,7 +108,7 @@ function buildFolderGroup(
     options.push({
       key: `folder-up-${pathKey(currentPath)}`,
       value: folderValue(parentPath),
-      label: "Up one folder",
+      label: t("secretPicker.upOneFolder"),
       title: pathLabel(parentPath),
       searchText: pathLabel(parentPath),
       kind: "back",
@@ -120,7 +120,7 @@ function buildFolderGroup(
 
   return {
     id: "browse-secrets",
-    label: currentPath.length > 0 ? pathLabel(currentPath) : "Browse secrets",
+    label: currentPath.length > 0 ? pathLabel(currentPath) : t("secretPicker.browseSecrets"),
     options,
   };
 }
@@ -172,7 +172,7 @@ export function SecretPicker({
     if (boundMissing) {
       result.push({
         id: "current-missing",
-        label: "Current",
+        label: t("secretPicker.current"),
         options: [
           {
             key: `missing-${secretId}`,
@@ -192,7 +192,7 @@ export function SecretPicker({
     if (recent.length > 0) {
       result.push({
         id: "recently-used",
-        label: "Recently used",
+        label: t("secretPicker.recentlyUsed"),
         options: recent.map((secret) => ({
           key: `recent-${secret.id}`,
           value: secret.id,
@@ -208,7 +208,7 @@ export function SecretPicker({
 
     result.push({
       id: "all-secrets",
-      label: recent.length > 0 ? "All secrets" : undefined,
+      label: recent.length > 0 ? t("secretPicker.allSecrets") : undefined,
       options: secrets.map((secret) => ({
         key: `all-${secret.id}`,
         value: secret.id,
@@ -254,9 +254,9 @@ export function SecretPicker({
       deriveGroups={deriveGroups}
       disabled={disabled}
       disablePortal={disablePortal}
-      placeholder="Select secret…"
+      placeholder={t("secretPicker.selectSecret")}
       searchPlaceholder="Search secrets…"
-      emptyMessage="No matching secrets"
+      emptyMessage={t("secretPicker.noMatchingSecrets")}
       triggerClassName={cn(
         "h-(--sz-34px) min-h-(--sz-34px) font-mono text-sm",
         boundMissing && "border-destructive text-destructive",
@@ -265,7 +265,7 @@ export function SecretPicker({
       )}
       renderValue={(option) => {
         if (!option) {
-          return <span className="text-muted-foreground">Select secret…</span>;
+          return <span className="text-muted-foreground">{t("secretPicker.selectSecret")}</span>;
         }
         if (option.missing) {
           return (
@@ -325,10 +325,10 @@ export function SecretPicker({
                 <Plus className="size-3.5 shrink-0" />
                 {query.trim() ? (
                   <span>
-                    Create secret <span className="font-mono">&ldquo;{query.trim()}&rdquo;</span>…
+                    {t("secretPicker.createSecret")} <span className="font-mono">&ldquo;{query.trim()}&rdquo;</span>…
                   </span>
                 ) : (
-                  <span>Create new secret…</span>
+                  <span>{t("secretPicker.createNewSecret")}</span>
                 )}
               </span>
             ),

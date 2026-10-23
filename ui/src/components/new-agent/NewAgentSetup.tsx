@@ -523,8 +523,8 @@ function Setup({
     )
       throw new Error(
         adapterType === "cursor_cloud"
-          ? "Enter a Cursor API key."
-          : `Enter ${envKey} or select an organization secret.`,
+          ? t("newAgentSetup.enterACursorApiKey")
+          : t("newAgentSetup.enterEnvkeyOrSelectAn", { envKey }),
       );
     if (adapterType === "hermes_gateway") {
       try {
@@ -791,8 +791,8 @@ function Setup({
         className="text-sm text-muted-foreground"
       >
         {savedAgent.error
-          ? "Could not load the created agent. Return to Agents to view it."
-          : "Loading your agent…"}
+          ? t("newAgentSetup.couldNotLoadTheCreated")
+          : t("newAgentSetup.loadingYourAgent")}
       </p>
     );
   if (!name || !adapterType || created?.metadata?.setupAdapterPending === true)
@@ -811,7 +811,7 @@ function Setup({
       />
     );
   if (!created && connectionSettingsReady) return <div className="space-y-4">
-    <p role={error ? "alert" : "status"}>{error ?? "Creating your agent…"}</p>
+    <p role={error ? "alert" : "status"}>{error ?? t("newAgentSetup.creatingYourAgent")}</p>
     {error && <Button onClick={() => setCreationAttempt(value => value + 1)}>{t("common.retry")}</Button>}
   </div>;
   const steps = [
@@ -821,8 +821,8 @@ function Setup({
   ];
   const labels = {
     connect: t("common.connect"),
-    runtime: "Configure",
-    saved: "Confirmation",
+    runtime: t("newAgentSetup.configure"),
+    saved: t("newAgentSetup.confirmation"),
   };
   const confirmationEnvironment = created?.defaultEnvironmentId
     ? envs.data?.find((env) => env.id === created.defaultEnvironmentId)
@@ -845,7 +845,7 @@ function Setup({
         ? "Hermes Gateway"
         : confirmationEnvironment
           ? environmentDisplayLabel(confirmationEnvironment)
-          : "Local machine";
+          : t("newAgentSetup.localMachine");
   const setupError =
     adapters.error ??
     adapterInventory.error ??
@@ -871,7 +871,7 @@ function Setup({
                 <span>
                   ·{" "}
                   {runnerProvider === "codex"
-                    ? "Native app server runner"
+                    ? t("newAgentSetup.nativeAppServerRunner")
                     : "Paperclip Runner"}
                 </span>
               )}
@@ -1016,8 +1016,8 @@ function Setup({
                       <h2 className="flex items-center gap-3 text-lg font-semibold">
                         <Check className="size-5" />
                         {created.status === "pending_approval"
-                          ? "Agent submitted for approval"
-                          : isDot ? "Your Dot agent has been created" : "Your agent is ready"}
+                          ? t("newAgentSetup.agentSubmittedForApproval")
+                          : isDot ? t("newAgentSetup.yourDotAgentHasBeen") : t("newAgentSetup.yourAgentIsReady")}
                       </h2>
                       <dl className="grid grid-cols-2 gap-4 text-sm">
                         <dt className="text-muted-foreground">{t("common.adapter")}</dt>
@@ -1035,8 +1035,8 @@ function Setup({
                       </dl>
                       <p className="text-sm text-muted-foreground">
                         {created.status === "pending_approval"
-                          ? "An organization administrator must approve this agent before it can work."
-                          : isDot ? "Pair your Dot and test event delivery in configuration before assigning work." : "Assign a task when you’re ready for this agent to work."}
+                          ? t("newAgentSetup.anOrganizationAdministratorMustApprove")
+                          : isDot ? t("newAgentSetup.pairYourDotAndTest") : t("newAgentSetup.assignATaskWhenYou")}
                       </p>
                     </div>
                     <div className="flex flex-wrap justify-between gap-3">
@@ -1045,7 +1045,7 @@ function Setup({
                         onClick={() => navigate(isDot ? "/agents/all" : `${agentUrl(created)}/runtime`)}
                       >
                         <Settings2 className="size-4" />
-                        {isDot ? "Back to Agents" : "Edit configuration"}
+                        {isDot ? t("newAgentSetup.backToAgents") : t("newAgentSetup.editConfiguration")}
                       </Button>
                       <Button
                         disabled={created.status === "pending_approval"}
@@ -1054,7 +1054,7 @@ function Setup({
                           : openNewIssue({ assigneeAgentId: created.id, status: "todo" })
                         }
                       >
-                        {isDot ? "Pair Dot" : `Assign ${created.name} a Task`}
+                        {isDot ? t("newAgentSetup.pairDot") : t("newAgentSetup.assignNameATask", { name: created.name })}
                         <ArrowRight className="size-4" />
                       </Button>
                     </div>
@@ -1074,8 +1074,8 @@ function Setup({
                       <section className="space-y-5">
                         {isDot && <>
                           <p className="text-sm text-muted-foreground">{t("newAgent.createThisAgentThenCopy")}</p>
-                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">Enable Assistant connections (MCP) in Experimental settings before pairing.</p>}
-                          <ToggleField label={t("newAgent.allowExternallyBilledProvider")} hint="Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply."
+                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">{t("newAgentSetup.enableAssistantConnectionsMcpIn")}</p>}
+                          <ToggleField label={t("newAgent.allowExternallyBilledProvider")} hint={t("newAgentSetup.dotDoesNotReportToken")}
                             checked={allowUnmeteredProvider} onChange={value => { setAllowUnmeteredProvider(value); resetTest(); }} />
                         </>}
                         {!connectionAdapter && aiProviderForAdapter(brandType) && (
@@ -1210,13 +1210,13 @@ function Setup({
                                     }}
                                     placeholder={
                                       selectedBinding
-                                        ? "Using saved key"
+                                        ? t("newAgentSetup.usingSavedKey")
                                         : [
                                               "cursor_cloud",
                                               "hermes_gateway",
                                             ].includes(adapterType)
                                           ? t("common.required")
-                                          : "Optional if already configured"
+                                          : t("newAgentSetup.optionalIfAlreadyConfigured")
                                     }
                                   />
                                   {adapterType === "cursor_cloud" && (
@@ -1441,7 +1441,7 @@ function Setup({
                           Boolean(connectionAdapter && !connection)
                         }
                       >
-                        {saving ? t("common.saving2") : "Finish setup"}
+                        {saving ? t("common.saving2") : t("newAgentSetup.finishSetup")}
                         <Check className="size-4" />
                       </Button>}
                     </div>

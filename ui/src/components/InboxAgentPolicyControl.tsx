@@ -14,18 +14,18 @@ import { RadioCardGroup, type RadioCardOption } from "@/components/ui/radio-card
 const MODE_OPTIONS: RadioCardOption[] = [
   {
     value: "open",
-    title: "Any of my agents",
-    description: "Let any agent you manage archive tasks out of your inbox.",
+    title: t("inboxAgentPolicyControl.anyOfMyAgents"),
+    description: t("inboxAgentPolicyControl.letAnyAgentYouManage"),
   },
   {
     value: "allowlist",
-    title: "Only chosen agents",
-    description: "Restrict inbox tidying to the agents you pick below.",
+    title: t("inboxAgentPolicyControl.onlyChosenAgents"),
+    description: t("inboxAgentPolicyControl.restrictInboxTidyingToThe"),
   },
   {
     value: "disabled",
-    title: "Off",
-    description: "Agents can never archive tasks from your inbox.",
+    title: t("inboxAgentPolicyControl.off"),
+    description: t("inboxAgentPolicyControl.agentsCanNeverArchiveTasks"),
   },
 ];
 
@@ -39,7 +39,7 @@ interface Draft {
 }
 
 /**
- * "Let agents tidy my inbox" user-settings control. A single
+ * t("inboxAgentPolicyControl.letAgentsTidyMyInbox") user-settings control. A single
  * three-state policy — `open` / `allowlist` / `disabled` — round-tripped through
  * the per-user endpoints. When `allowlist` is selected the user picks which
  * of their agents may archive. The one-click Undo/Unarchive affordance and the
@@ -113,30 +113,29 @@ export function InboxAgentPolicyControl({ companyId }: { companyId: string | nul
   if (policyQuery.error) {
     return (
       <div className="text-sm text-destructive">
-        {policyQuery.error instanceof Error ? policyQuery.error.message : "Failed to load inbox agent policy."}
+        {policyQuery.error instanceof Error ? policyQuery.error.message : t("inboxAgentPolicyControl.failedToLoadInboxAgent")}
       </div>
     );
   }
 
   if (policyQuery.isLoading || !draft) {
-    return <div className="text-sm text-muted-foreground">Loading inbox agent policy…</div>;
+    return <div className="text-sm text-muted-foreground">{t("inboxAgentPolicyControl.loadingInboxAgentPolicy")}</div>;
   }
 
   return (
-    <section className="space-y-4" aria-label="Let agents tidy my inbox">
+    <section className="space-y-4" aria-label={t("inboxAgentPolicyControl.letAgentsTidyMyInbox")}>
       <div className="space-y-1">
         <div className="flex items-center gap-2">
           <Inbox className="h-5 w-5 text-muted-foreground" />
-          <h2 className="text-base font-semibold">Let agents tidy my inbox</h2>
+          <h2 className="text-base font-semibold">{t("inboxAgentPolicyControl.letAgentsTidyMyInbox")}</h2>
         </div>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Choose whether the agents you manage may archive tasks out of your inbox on your behalf. You can
-          undo any archive, and every agent archive is attributed in the task&apos;s properties.
+          {t("inboxAgentPolicyControl.chooseWhetherTheAgentsYou")}
         </p>
       </div>
 
       <RadioCardGroup
-        ariaLabel="Inbox agent archiving policy"
+        ariaLabel={t("inboxAgentPolicyControl.inboxAgentArchivingPolicy")}
         value={draft.mode}
         onValueChange={(value) => setDraft((current) => (current ? { ...current, mode: value as InboxAgentPolicyMode } : current))}
         options={MODE_OPTIONS}
@@ -145,7 +144,7 @@ export function InboxAgentPolicyControl({ companyId }: { companyId: string | nul
 
       {draft.mode === "allowlist" ? (
         <div className="max-w-2xl space-y-2">
-          <div className="text-sm font-medium">Agents allowed to tidy my inbox</div>
+          <div className="text-sm font-medium">{t("inboxAgentPolicyControl.agentsAllowedToTidyMy")}</div>
           <AgentMultiSelect
             agents={agentOptions}
             selectedAgentIds={selectedAgentIds}
@@ -156,19 +155,19 @@ export function InboxAgentPolicyControl({ companyId }: { companyId: string | nul
             }
             triggerLabel={
               selectedAgentIds.size === 0
-                ? "Select agents"
+                ? t("inboxAgentPolicyControl.selectAgents")
                 : `${selectedAgentIds.size} ${selectedAgentIds.size === 1 ? "agent" : "agents"} selected`
             }
             triggerFullWidth={false}
             showSelectionPreview={false}
-            emptyMessage="You don’t manage any agents yet."
+            emptyMessage={t("inboxAgentPolicyControl.youDonTManageAny")}
           />
         </div>
       ) : null}
 
       {updateMutation.error ? (
         <div className="max-w-2xl rounded-md border border-destructive/40 bg-destructive/5 px-3 py-2 text-sm text-destructive">
-          {updateMutation.error instanceof Error ? updateMutation.error.message : "Failed to save inbox agent policy."}
+          {updateMutation.error instanceof Error ? updateMutation.error.message : t("inboxAgentPolicyControl.failedToSaveInboxAgent")}
         </div>
       ) : null}
 

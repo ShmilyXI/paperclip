@@ -124,7 +124,7 @@ export function MemberMultiSelect({
             <span className="flex min-w-0 items-center">
               <span className="truncate">
                 {triggerLabel ?? (selectedCount === 0
-                  ? "Select people"
+                  ? t("memberMultiSelect.selectPeople")
                   : `${selectedCount} ${selectedCount === 1 ? "person" : "people"} selected`)}
               </span>
             </span>
@@ -179,13 +179,13 @@ export function MemberMultiSelect({
                 );
               })}
               {filteredMembers.length === 0 ? (
-                <div className="px-3 py-4 text-sm text-muted-foreground">No matches.</div>
+                <div className="px-3 py-4 text-sm text-muted-foreground">{t("memberMultiSelect.noMatches")}</div>
               ) : null}
             </div>
           )}
           <div className="flex items-center justify-between border-t border-border px-3 py-2">
             <span className="text-xs text-muted-foreground" aria-live="polite">
-              {workingUserIds.size === 0 ? "No people selected" : `${workingUserIds.size} selected`}
+              {workingUserIds.size === 0 ? t("memberMultiSelect.noPeopleSelected") : `${workingUserIds.size} selected`}
             </span>
             <div className="flex items-center gap-2">
               {staged ? (

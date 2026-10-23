@@ -2181,7 +2181,7 @@ export function TeamRow({
 }
 
 // ---------------------------------------------------------------------------
-// TeamCard — square tile for the onboarding "Pick a starter team" grid
+// TeamCard — square tile for the onboarding t("teamCatalog.pickAStarterTeam") grid
 // (design §6 + §12.5). Rendered in a 3-col grid of `defaultInstall` bundled
 // teams. Selection is owned by the parent (the onboarding step) so the same
 // tile works for the future live flow without rework.
@@ -2375,7 +2375,7 @@ export function TeamCatalog() {
   const anyFilterActive = q !== "" || kindFilter !== "all" || categoryFilter !== "" || riskFilter !== "any";
 
   // Installed teams collapse under a single `INSTALLED · N` group and drop out
-  // of their BUNDLED/OPTIONAL home (design §5 "Already installed").
+  // of their BUNDLED/OPTIONAL home (design §5 t("teamCatalog.alreadyInstalled")).
   const grouped = useMemo(() => {
     const installed = filtered.filter((t) => installedById.has(t.id));
     const remaining = filtered.filter((t) => !installedById.has(t.id));

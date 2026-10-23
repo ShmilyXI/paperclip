@@ -52,7 +52,7 @@ export function SecretPopoverForm({
     }
     return null;
   })();
-  const valueError = value.length === 0 ? (touched ? "Value is required" : null) : null;
+  const valueError = value.length === 0 ? (touched ? t("createSecretPopover.valueIsRequired") : null) : null;
   const canSubmit = !submitting && trimmedName.length > 0 && value.length > 0 && !nameError;
 
   async function handleSubmit() {
@@ -63,13 +63,13 @@ export function SecretPopoverForm({
     try {
       await onSubmit(trimmedName, value);
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "Failed to create secret");
+      setError(submitError instanceof Error ? submitError.message : t("createSecretPopover.failedToCreateSecret"));
       setSubmitting(false);
     }
   }
 
-  const ctaLabel = mode === "create" ? "Create & bind" : "Store & bind";
-  const heading = mode === "create" ? "Create secret" : "Store value as secret";
+  const ctaLabel = mode === "create" ? t("createSecretPopover.createBind") : t("createSecretPopover.storeBind");
+  const heading = mode === "create" ? t("createSecretPopover.createSecret") : t("createSecretPopover.storeValueAsSecret");
 
   return (
     <div className="w-72 space-y-3">
@@ -77,8 +77,8 @@ export function SecretPopoverForm({
         <PopoverTitle className="text-sm font-medium">{heading}</PopoverTitle>
         {mode === "store" ? (
           <PopoverDescription className="text-(length:--text-micro) text-muted-foreground">
-            Moves the typed value into an encrypted organization secret and binds{" "}
-            <span className="font-mono">{initialName || "this variable"}</span> to it.
+            {t("createSecretPopover.movesTypedValue")}{" "}
+            <span className="font-mono">{initialName || t("createSecretPopover.thisVariable")}</span> {t("createSecretPopover.toIt")}
           </PopoverDescription>
         ) : null}
       </div>
@@ -91,7 +91,7 @@ export function SecretPopoverForm({
           autoFocus
           spellCheck={false}
           placeholder="secret_name"
-          aria-label="Secret name"
+          aria-label={t("createSecretPopover.secretName")}
           aria-invalid={nameError ? true : undefined}
           onChange={(event) => setName(event.target.value)}
           onBlur={() => setTouched(true)}
@@ -115,14 +115,14 @@ export function SecretPopoverForm({
             readOnly={mode === "store"}
             spellCheck={false}
             placeholder={mode === "create" ? "value" : undefined}
-            aria-label="Secret value"
+            aria-label={t("createSecretPopover.secretValue")}
             aria-invalid={valueError ? true : undefined}
             onChange={mode === "create" ? (event) => setValue(event.target.value) : undefined}
           />
           <button
             type="button"
             className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:text-foreground"
-            aria-label={reveal ? "Hide value" : "Show value"}
+            aria-label={reveal ? t("createSecretPopover.hideValue") : t("createSecretPopover.showValue")}
             onClick={() => setReveal((prev) => !prev)}
           >
             {reveal ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}

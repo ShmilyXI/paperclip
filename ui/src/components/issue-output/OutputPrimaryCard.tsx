@@ -73,13 +73,13 @@ export function OutputPrimaryCard({ item, creatorName, onMediaClick }: OutputPri
           <p className="break-words text-sm font-semibold text-foreground">{filename}</p>
           {item.degraded ? (
             <p className="mt-0.5 text-(length:--text-micro) text-destructive">
-              Output metadata is unavailable — this file can’t be played or downloaded here.
+              {t("outputPrimaryCard.outputMetadataIsUnavailableThis")}
             </p>
           ) : (
             <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-(length:--text-micro) text-muted-foreground">
               {item.isPrimary && (
                 <Badge variant="secondary" className="px-1.5 py-0 text-(length:--text-nano)">
-                  Primary
+                  {t("outputPrimaryCard.primary")}
                 </Badge>
               )}
               {meta && <span>{meta.contentType}</span>}
@@ -103,7 +103,7 @@ export function OutputPrimaryCard({ item, creatorName, onMediaClick }: OutputPri
                 onClick={() => onMediaClick(item)}
               >
                 <Maximize2 className="h-4 w-4" />
-                Browse
+                {t("outputPrimaryCard.browse")}
               </Button>
             ) : null}
             {!isMedia || !onMediaClick || isVideo ? (

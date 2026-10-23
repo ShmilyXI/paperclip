@@ -83,7 +83,7 @@ export function CaseIdentifierKey({
     >
       <CaseCopyableToken
         value={identifier}
-        label="case ID"
+        label={t("caseIdentifierKey.caseId")}
         className="shrink-0 font-mono text-xs text-muted-foreground"
         containerClassName="shrink-0"
         stopPropagation={stopPropagation}
@@ -91,7 +91,7 @@ export function CaseIdentifierKey({
       {caseKey ? (
         <CaseCopyableToken
           value={caseKey}
-          label="case key"
+          label={t("caseIdentifierKey.caseKey")}
           className="font-mono text-xs text-muted-foreground"
           stopPropagation={stopPropagation}
         />

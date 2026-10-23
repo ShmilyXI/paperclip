@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { AiConnectionPicker } from "./AiConnectionPicker";
 import { LocalProviderLoginInstructions, ProviderApiKeyCard } from "@/components/AdapterLoginChrome";
@@ -17,10 +18,10 @@ const account: AiConnectionSummary = {
   method: "subscription",
   id: "example",
   grantId: "example-grant",
-  name: "My Claude subscription",
+  name: t("aiConnectionDesignExamples.myClaudeSubscription"),
   ownership: "personal",
   ownerUserId: "example-user",
-  ownerName: "You",
+  ownerName: t("aiConnectionDesignExamples.you"),
   status: "connected",
   isDefault: true,
 };
@@ -34,12 +35,9 @@ export function AiConnectionDesignExamples() {
   return (
     <div className="flex max-w-2xl flex-col gap-5">
       <p className="text-sm text-muted-foreground">
-        Shared AI connection identity, account selection, and existing
-        authentication chrome. The full interactive state matrix lives in
-        Storybook under AI Connections / Review. Example controls below do not
-        connect accounts.
+        {t("aiConnectionDesignExamples.sharedAiConnectionIdentityAccount")}
       </p>
-      <p className="text-sm text-muted-foreground">Provider lists and account management use Browse and AppDetail from the Connectors interface. The picker below uses ConnectionChoiceList, also used by ConnectionSetupFlow.</p>
+      <p className="text-sm text-muted-foreground">{t("aiConnectionDesignExamples.providerListsAndAccountManagement")}</p>
       <AiConnectionPicker
         requirement={requirement}
         connections={[account]}
@@ -57,7 +55,7 @@ export function AiConnectionDesignExamples() {
         disabled
         onChange={() => {}}
         onSubmit={() => {}}
-        placeholder="Enter API key here"
+        placeholder={t("aiConnectionDesignExamples.enterApiKeyHere")}
       />
       <LocalProviderLoginInstructions
         adapterType="claude_local"

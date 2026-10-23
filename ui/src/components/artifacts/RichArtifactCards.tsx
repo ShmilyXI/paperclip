@@ -170,17 +170,17 @@ export interface PullRequestCardProps extends ArtifactIdentity, DiffProps {
 }
 
 const checksLabel = {
-  passed: "Checks passed",
-  pending: "Checks pending",
-  failed: "Checks failed",
-  unknown: "Checks not available",
+  passed: t("richArtifactCards.checksPassed"),
+  pending: t("richArtifactCards.checksPending"),
+  failed: t("richArtifactCards.checksFailed"),
+  unknown: t("richArtifactCards.checksNotAvailable"),
 };
 const stateLabel = {
   open: t("common.open"),
   draft: t("common.draft"),
-  merged: "Merged",
-  closed: "Closed",
-  unknown: "State unknown",
+  merged: t("richArtifactCards.merged"),
+  closed: t("richArtifactCards.closed"),
+  unknown: t("richArtifactCards.stateUnknown"),
 };
 
 export function PullRequestCard(props: PullRequestCardProps) {
@@ -263,7 +263,7 @@ export function PullRequestCard(props: PullRequestCardProps) {
       </div>
       <Footer
         {...props}
-        action={<SourceLink url={url}>Open pull request</SourceLink>}
+        action={<SourceLink url={url}>{t("richArtifactCards.openPullRequest")}</SourceLink>}
       />
     </Card>
   );
@@ -297,7 +297,7 @@ export function CommitCard(props: CommitCardProps) {
       </div>
       <Footer
         {...props}
-        action={<SourceLink url={props.url}>View commit</SourceLink>}
+        action={<SourceLink url={props.url}>{t("richArtifactCards.viewCommit")}</SourceLink>}
       />
     </Card>
   );
@@ -409,13 +409,13 @@ export function DocumentCard(props: DocumentCardProps) {
                 aria-expanded={props.expanded}
                 onClick={props.onOpen}
               >
-                {props.expanded ? "Close document" : "Read document"}
+                {props.expanded ? t("richArtifactCards.closeDocument") : t("richArtifactCards.readDocument")}
               </Button>
             ) : (
               <Viewer
                 title={props.title}
                 description={props.filename}
-                action="Read document"
+                action={t("richArtifactCards.readDocument")}
               >
                 <Markdown body={props.body} />
               </Viewer>
@@ -464,7 +464,7 @@ function DataTable({ columns, rows }: Pick<DataCardProps, "columns" | "rows">) {
         </tbody>
       </table>
       {rows.length === 0 && (
-        <p className="p-4 text-xs text-muted-foreground">No rows</p>
+        <p className="p-4 text-xs text-muted-foreground">{t("richArtifactCards.noRows")}</p>
       )}
     </div>
   );
@@ -482,7 +482,7 @@ export function DataCard(props: DataCardProps) {
       </div>
       <div className="flex flex-col gap-3 p-5">
         <span className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Table2 className="size-4" /> CSV · {props.truncated ? "First " : ""}
+          <Table2 className="size-4" /> CSV · {props.truncated ? `${t("richArtifactCards.first")} ` : ""}
           {props.rows.length} {props.rows.length === 1 ? "row" : "rows"} ·{" "}
           {props.columns.length}{" "}
           {props.columns.length === 1 ? "column" : "columns"}
@@ -511,7 +511,7 @@ export function DataCard(props: DataCardProps) {
                     `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`
                   }
                 >
-                  Download CSV
+                  {t("richArtifactCards.downloadCsv")}
                 </a>
               </Button>
             </Viewer>
@@ -535,7 +535,7 @@ function ImageContent({ src, alt }: { src: string; alt: string }) {
   ) : (
     <div className="flex aspect-video flex-col items-center justify-center gap-3 text-muted-foreground">
       <ImageIcon className="size-8" />
-      <span className="text-xs">No preview available</span>
+      <span className="text-xs">{t("richArtifactCards.noPreviewAvailable")}</span>
     </div>
   );
 }
@@ -576,13 +576,13 @@ export function ImageCard(props: ImageCardProps) {
               aria-label={`View image: ${props.title}`}
               onClick={props.onOpen}
             >
-              View image
+              {t("richArtifactCards.viewImage")}
             </Button>
           ) : (
             <Viewer
               title={props.title}
               description={props.filename}
-              action="View image"
+              action={t("richArtifactCards.viewImage")}
             >
               <ImageContent src={props.imageUrl} alt={props.alt} />
             </Viewer>
@@ -632,10 +632,10 @@ export function VideoCard(props: VideoCardProps) {
               aria-label={`Open video: ${props.title}`}
               onClick={props.onOpen}
             >
-              Open video
+              {t("richArtifactCards.openVideo")}
             </Button>
           ) : (
-            <SourceLink url={props.videoUrl}>Open video</SourceLink>
+            <SourceLink url={props.videoUrl}>{t("richArtifactCards.openVideo")}</SourceLink>
           )
         }
       />
@@ -658,7 +658,7 @@ export function LinkPreviewCard(props: LinkPreviewCardProps) {
       )}
       <div className="flex flex-col gap-4 p-5">
         <span className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Globe className="size-4" /> Link preview
+          <Globe className="size-4" /> {t("richArtifactCards.linkPreview")}
         </span>
         <Identity {...props} />
         <span className="break-all font-mono text-xs text-muted-foreground">
@@ -667,7 +667,7 @@ export function LinkPreviewCard(props: LinkPreviewCardProps) {
       </div>
       <Footer
         {...props}
-        action={<SourceLink url={props.url}>Open link</SourceLink>}
+        action={<SourceLink url={props.url}>{t("richArtifactCards.openLink")}</SourceLink>}
       />
     </Card>
   );
@@ -717,17 +717,17 @@ export function FileCard(props: FileCardProps) {
           <div className="flex flex-wrap items-center gap-2">
             {props.actions}
             {props.openUrl && (
-              <SourceLink url={props.openUrl}>Open file</SourceLink>
+              <SourceLink url={props.openUrl}>{t("richArtifactCards.openFile")}</SourceLink>
             )}
             {props.downloadUrl ? (
               <Button asChild size="sm" variant="outline">
                 <a href={props.downloadUrl} download={props.filename}>
-                  Download file
+                  {t("richArtifactCards.downloadFile")}
                 </a>
               </Button>
             ) : (
               <Button size="sm" variant="outline" disabled>
-                Download unavailable
+                {t("richArtifactCards.downloadUnavailable")}
               </Button>
             )}
           </div>

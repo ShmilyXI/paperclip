@@ -39,19 +39,19 @@ export function ChatConversationList({
     return (
       <EmptyState
         icon={MessageSquare}
-        message="No conversations yet"
+        message={t("chatConversationList.noConversationsYet")}
         description={
           provider === "speko"
-            ? "Open an assigned task and choose Talk to agent."
+            ? t("chatConversationList.openAnAssignedTaskAnd")
             : provider === "agentmail"
-            ? "Send an email to this agent’s address to start one."
-            : "Mention the agent in an enabled destination to start one."
+            ? t("chatConversationList.sendAnEmailToThis")
+            : t("chatConversationList.mentionTheAgentInAn")
         }
       />
     );
   return (
     <ul
-      aria-label="Conversations"
+      aria-label={t("chatConversationList.conversations")}
       className="divide-y divide-border border-y border-border"
     >
       {rows.map((row) => (
@@ -74,11 +74,11 @@ export function ChatConversationList({
                   className="break-words font-medium hover:underline"
                   to={`/issues/${row.issueId}`}
                 >
-                  {row.issueTitle ?? row.issueIdentifier ?? "Paperclip task"}
+                  {row.issueTitle ?? row.issueIdentifier ?? t("chatConversationList.paperclipTask")}
                 </Link>
               ) : (
                 <span className="font-medium">
-                  {row.issueTitle ?? "Waiting for task"}
+                  {row.issueTitle ?? t("chatConversationList.waitingForTask")}
                 </span>
               )}
             </div>
@@ -100,7 +100,7 @@ export function ChatConversationList({
                   {formatDateTime(row.updatedAt)}
                 </time>
               )}
-              {row.state === "completed" && <span>Completed</span>}
+              {row.state === "completed" && <span>{t("chatConversationList.completed")}</span>}
             </div>
           </div>
           {row.state !== "active" && row.state !== "completed" && (

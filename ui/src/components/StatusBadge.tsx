@@ -1,4 +1,3 @@
-import { t } from "@/i18n";
 import { statusLabel } from "@/lib/i18n-labels";
 import type { CSSProperties } from "react";
 import { cn } from "../lib/utils";

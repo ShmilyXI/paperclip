@@ -40,7 +40,7 @@ export function stateChipFor(
   reviewState: IssueWorkProduct["reviewState"] | string | null | undefined,
 ): StateChip | null {
   if (reviewState === "changes_requested" || status === "changes_requested") {
-    return { label: "Changes requested", tone: "failure" };
+    return { label: t("richWorkProductCard.changesRequested"), tone: "failure" };
   }
   if (reviewState === "needs_board_review" || status === "ready_for_review") {
     return { label: t("common.review"), tone: "review" };
@@ -49,7 +49,7 @@ export function stateChipFor(
     return { label: t("common.failed"), tone: "failure" };
   }
   if (["pending", "opening"].includes(status ?? "")) {
-    return { label: status === "opening" ? "Opening" : t("common.pending"), tone: "progress", dashed: true };
+    return { label: status === "opening" ? t("richWorkProductCard.opening") : t("common.pending"), tone: "progress", dashed: true };
   }
   if (kind === "pull_request" && (status === "active" || status === "open")) {
     return { label: t("common.open"), tone: "progress" };
@@ -58,16 +58,16 @@ export function stateChipFor(
     return { label: t("common.draft"), tone: "review" };
   }
   if (kind === "pull_request" && status === "merged") {
-    return { label: "Merged", tone: "success" };
+    return { label: t("richWorkProductCard.merged"), tone: "success" };
   }
   if (kind === "pull_request" && status === "closed") {
-    return { label: "Closed", tone: "neutral" };
+    return { label: t("richWorkProductCard.closed"), tone: "neutral" };
   }
   if (kind === "runtime_service" && status === "active") {
     return { label: t("common.running"), tone: "progress" };
   }
   if (kind === "runtime_service" && status === "closed") {
-    return { label: "Stopped", tone: "failure" };
+    return { label: t("richWorkProductCard.stopped"), tone: "failure" };
   }
   return null;
 }
@@ -164,14 +164,14 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
       break;
     case "branch":
       Icon = GitBranch;
-      meta = [href ? "Branch" : "Branch · no remote link", stringMeta(metadata, "repository", "repo", "repositoryName"), stringMeta(metadata, "branch", "branchName") ?? workProduct.externalId, urlLabel(workProduct.url)];
+      meta = [href ? t("richWorkProductCard.branch") : t("richWorkProductCard.branchNoRemoteLink"), stringMeta(metadata, "repository", "repo", "repositoryName"), stringMeta(metadata, "branch", "branchName") ?? workProduct.externalId, urlLabel(workProduct.url)];
       action = "Open on GitHub";
       break;
     case "artifact": {
       Icon = isImage ? Image : isVideo ? Film : File;
       const size = numberMeta(metadata, "byteSize", "size");
-      meta = [isImage ? t("common.image") : isVideo ? "Video" : stringMeta(metadata, "kind", "fileType") ?? t("common.file"), size === null ? null : formatBytes(size)];
-      action = isImage || isVideo ? "Open gallery" : t("common.download");
+      meta = [isImage ? t("common.image") : isVideo ? t("richWorkProductCard.video") : stringMeta(metadata, "kind", "fileType") ?? t("common.file"), size === null ? null : formatBytes(size)];
+      action = isImage || isVideo ? t("richWorkProductCard.openGallery") : t("common.download");
       break;
     }
     case "document":
@@ -200,9 +200,9 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
   const unhealthyChip =
     workProduct.healthStatus === "unhealthy"
       ? workProduct.type === "preview_url"
-        ? { label: "Down", tone: "failure" as const }
+        ? { label: t("richWorkProductCard.down"), tone: "failure" as const }
         : workProduct.type === "runtime_service" && workProduct.status !== "closed"
-          ? { label: "Unhealthy", tone: "failure" as const }
+          ? { label: t("richWorkProductCard.unhealthy"), tone: "failure" as const }
           : null
       : null;
   const chip =
@@ -284,11 +284,11 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
         {!compact && summary && !linklessBranch ? <p className={cn("mt-1 text-xs text-muted-foreground", detailsOpen ? "whitespace-pre-wrap break-words" : "line-clamp-2")}>{summary}</p> : null}
         {expandable && detailsOpen ? (
           <div className="mt-2 flex flex-col gap-1 text-xs text-muted-foreground">
-            {workProduct.type !== "branch" ? <p>No link was provided for this work product.</p> : null}
+            {workProduct.type !== "branch" ? <p>{t("richWorkProductCard.noLinkWasProvidedFor")}</p> : null}
             <p>{workProduct.provider} · {workProduct.status.replaceAll("_", " ")} · Updated {formatDateTime(workProduct.updatedAt)}</p>
             {linklessBranch && summary ? (
               <details className="relative z-10 mt-1">
-                <summary className="w-fit cursor-pointer font-medium text-foreground">Saved description</summary>
+                <summary className="w-fit cursor-pointer font-medium text-foreground">{t("richWorkProductCard.savedDescription")}</summary>
                 <p className="mt-1 whitespace-pre-wrap break-words">{summary}</p>
               </details>
             ) : null}
@@ -304,7 +304,7 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
             aria-label={`Open in tab: ${workProduct.title}`}
             className="inline-flex items-center gap-1 text-xs font-medium text-foreground after:absolute after:inset-0 after:rounded-md focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
           >
-            {compact ? null : <span className="hidden @sm:inline">Open in tab</span>}<FileText aria-hidden className="h-3 w-3" />
+            {compact ? null : <span className="hidden @sm:inline">{t("richWorkProductCard.openInTab")}</span>}<FileText aria-hidden className="h-3 w-3" />
           </button>
         ) : null}
         {mediaPath ? (
@@ -323,7 +323,7 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
             aria-expanded={detailsOpen}
             className="inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-foreground after:absolute after:inset-0 after:rounded-md focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
           >
-            <span>{detailsOpen ? "Hide details" : "Show details"}</span>
+            <span>{detailsOpen ? t("richWorkProductCard.hideDetails") : t("richWorkProductCard.showDetails")}</span>
             <ChevronDown aria-hidden className={cn("h-4 w-4", detailsOpen && "rotate-180")} />
           </button>
         ) : null}

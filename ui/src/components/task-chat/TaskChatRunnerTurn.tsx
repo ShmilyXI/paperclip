@@ -88,7 +88,7 @@ function RunnerTurnStatus({
   const elapsed = formatCompactDuration(elapsedMs);
 
   const failed = terminalStatusFailed(status);
-  const label = terminal ? (failed ? "Stopped" : "Worked") : waitingLabel ?? "Working";
+  const label = terminal ? (failed ? t("taskChatRunnerTurn.stopped") : t("taskChatRunnerTurn.worked")) : waitingLabel ?? t("taskChatRunnerTurn.working");
   const suffix = terminal
     ? elapsed ? ` ${failed ? "after" : "for"} ${elapsed}` : ""
     : waitingLabel ? elapsed ? ` · ${elapsed}` : "" : ` for ${elapsed ?? "0s"}`;
@@ -101,7 +101,7 @@ function RunnerTurnStatus({
       aria-live="polite"
       aria-atomic="true"
     >
-      {continuedAfterSteering ? <span data-conversation-meta="">Continued after steering · </span> : null}
+      {continuedAfterSteering ? <span data-conversation-meta="">{t("taskChatRunnerTurn.continuedAfterSteering")} </span> : null}
       {label}<span data-conversation-meta="">{suffix}</span>
     </span>
   );
@@ -111,7 +111,7 @@ function RunnerCurrentActivityTail({ status, waitingLabel }: { status: string; w
   const shimmer = useTaskChatShimmer("working");
   if (isTerminalRunStatus(status)) return null;
   return <div className="mt-2 flex min-h-8 min-w-0 items-center gap-2 px-1 py-1 text-xs text-muted-foreground" data-testid="task-chat-current-activity" data-turn-position="tail">
-    <span className={cn(!waitingLabel && shimmer && "shimmer-text shimmer-text-muted")} aria-live="polite" data-testid="task-chat-current-activity-label">{waitingLabel ?? "Thinking"}</span>
+    <span className={cn(!waitingLabel && shimmer && "shimmer-text shimmer-text-muted")} aria-live="polite" data-testid="task-chat-current-activity-label">{waitingLabel ?? t("taskChatRunnerTurn.thinking")}</span>
   </div>;
 }
 
@@ -237,7 +237,7 @@ export function TaskChatRunnerTurn({
           role="status"
           data-testid="task-chat-activity-unavailable"
         >
-          Live runner activity is temporarily unavailable. Retrying…
+          {t("taskChatRunnerTurn.liveRunnerActivityIsTemporarily")}
         </div>
       ) : null}
       {timelineRows.length > 0 ? (

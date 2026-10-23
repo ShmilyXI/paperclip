@@ -18,12 +18,12 @@ export function ComposioAppManager({ app, connections, initialConnectionId, onCl
   const [connectionId, setConnectionId] = useState(initialConnectionId ?? connections[0]?.id ?? "");
   const connection = connections.find(candidate => candidate.id === connectionId);
   return <Dialog open onOpenChange={open => { if (!open) onClose(); }}><DialogContent>
-    <DialogHeader><DialogTitle>Manage {app.name}</DialogTitle><DialogDescription>Accounts and sign-in are managed in Composio.</DialogDescription></DialogHeader>
-    {connections.length > 1 ? <div className="space-y-2"><Label htmlFor="composio-manage-gateway">Composio account</Label>
+    <DialogHeader><DialogTitle>Manage {app.name}</DialogTitle><DialogDescription>{t("composioAppManager.accountsAndSignInAre")}</DialogDescription></DialogHeader>
+    {connections.length > 1 ? <div className="space-y-2"><Label htmlFor="composio-manage-gateway">{t("composioAppManager.composioAccount")}</Label>
       <select id="composio-manage-gateway" value={connectionId} onChange={event => setConnectionId(event.target.value)} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
         {connections.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name}</option>)}
       </select></div> : null}
-    {connection ? <ComposioAccountObservations key={connection.id} app={app} connection={connection} onClose={onClose} /> : <p role="alert">This Composio connection is no longer available.</p>}
+    {connection ? <ComposioAccountObservations key={connection.id} app={app} connection={connection} onClose={onClose} /> : <p role="alert">{t("composioAppManager.thisComposioConnectionIsNo")}</p>}
   </DialogContent></Dialog>;
 }
 
@@ -42,26 +42,27 @@ function ComposioAccountObservations({ app, connection, onClose }: { app: Aggreg
       const toolkits = snapshots.length ? snapshots.map(snapshot => snapshot.toolkit) : [app.routes.find(route => route.provider === "composio")!.toolkit];
       queries.setQueryData(key, await toolsApi.refreshComposioApps(connection.id, toolkits));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Couldn’t check Composio. Try again.");
+      setError(cause instanceof Error ? cause.message : t("composioAppManager.couldnTCheckComposioTry"));
       await queries.invalidateQueries({ queryKey: key });
     } finally { setBusy(false); }
   }
   return <>
-    {error || accountsQuery.isError ? <p role="alert" className="text-sm text-destructive">{error ?? "Couldn’t load Composio accounts. Refresh to try again."}</p> : null}
-    {accountsQuery.isLoading ? <p role="status" className="text-sm text-muted-foreground">Loading accounts…</p> : accounts.length === 0 ? <p className="text-sm text-muted-foreground">No connected {app.name} accounts.</p> : <div className="divide-y divide-border">
+    {error || accountsQuery.isError ? <p role="alert" className="text-sm text-destructive">{error ?? t("composioAppManager.couldnTLoadComposioAccounts")}</p> : null}
+    {accountsQuery.isLoading ? <p role="status" className="text-sm text-muted-foreground">{t("composioAppManager.loadingAccounts")}</p> : accounts.length === 0 ? <p className="text-sm text-muted-foreground">No connected {app.name} accounts.</p> : <div className="divide-y divide-border">
       {accounts.map(({ account, snapshot }) => <div key={`${snapshot.toolkit}:${account.id}`} className="py-3">
         <p className="truncate text-sm font-medium">{account.alias || `${app.name} account`}</p>
         <p className="text-xs text-muted-foreground">{snapshot.errorAt || Date.now() - new Date(snapshot.checkedAt).getTime() > 5 * 60_000
-          ? "Last known account · Refresh to verify" : account.status === "ACTIVE" ? t("common.connected") : account.status === "INITIATED" ? "Waiting for sign-in" : "Needs sign-in"}{account.isDefault ? " · Default" : ""}</p>
+          ? t("composioAppManager.lastKnownAccountRefreshTo") : account.status === "ACTIVE" ? t("common.connected") : account.status === "INITIATED" ? t("composioAppManager.waitingForSignIn") : t("composioAppManager.needsSignIn")}{account.isDefault ? " · Default" : ""}</p>
       </div>)}
     </div>}
     <div className="space-y-1 text-xs text-muted-foreground">
-      <p>Via <Link to={`/apps/${connection.id}/permissions`} onClick={onClose} className="underline underline-offset-2">“{connection.name}”</Link></p>
-      <p>Composio permissions apply to all apps on this connection.</p>
+      <p>{t("composioAppManager.via")} <Link to={`/apps/${connection.id}/permissions`} onClick={onClose} className="underline underline-offset-2">“{connection.name}”</Link></p>
+      <p>{t("composioAppManager.composioPermissionsApplyToAll")}</p>
     </div>
     <DialogFooter className="sm:items-center sm:justify-between"><Button variant="ghost" onClick={onClose}>{t("common.close")}</Button>
-      <div className="flex items-center gap-2"><Button variant="ghost" disabled={busy} onClick={() => void refresh()}>{busy ? "Checking…" : t("common.refresh")}</Button>
-        <Button asChild><a href={COMPOSIO_APP_MANAGEMENT_URL} target="_blank" rel="noopener noreferrer">Open in Composio<ExternalLink className="size-4" /></a></Button></div>
+      <div className="flex items-center gap-2"><Button variant="ghost" disabled={busy} onClick={() => void refresh()}>{busy ? t("composioAppManager.checking") : t("common.refresh")}</Button>
+        <Button asChild><a href={COMPOSIO_APP_MANAGEMENT_URL} target="_blank" rel="noopener noreferrer">{t("composioAppManager.openInComposio")}<ExternalLink className="size-4" /></a></Button></div>
     </DialogFooter>
   </>;
 }
+

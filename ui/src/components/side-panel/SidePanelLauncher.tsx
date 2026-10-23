@@ -75,7 +75,7 @@ function LauncherContent({
                       </span>
                     ) : null}
                   </span>
-                  {item.alreadyOpen ? <Check className="size-4 text-muted-foreground" aria-label="Already open" /> : null}
+                  {item.alreadyOpen ? <Check className="size-4 text-muted-foreground" aria-label={t("sidePanelLauncher.alreadyOpen")} /> : null}
                   {item.shortcut ? <CommandShortcut>{item.shortcut}</CommandShortcut> : null}
                 </CommandItem>
               ))}

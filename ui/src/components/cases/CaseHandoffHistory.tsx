@@ -28,13 +28,13 @@ export function CaseHandoffHistory({ caseId, task, agents }: { caseId: string; t
     getNextPageParam: page => page.nextCursor ?? undefined,
   });
   const handoffs = history.data?.pages.flatMap(page => page.items) ?? [];
-  return <section className="space-y-3" aria-label="Case handoffs">
-    <h2 className="text-sm font-semibold">Handoffs</h2>
-    {history.isLoading ? <p className="text-sm text-muted-foreground">Loading handoffs…</p> : null}
-    {history.isError ? <p role="alert" className="text-sm text-destructive">Handoffs couldn’t be loaded.</p> : null}
-    {!history.isLoading && !history.isError && handoffs.length === 0 ? <p className="text-sm text-muted-foreground">No handoffs yet.</p> : null}
+  return <section className="space-y-3" aria-label={t("caseHandoffHistory.caseHandoffs")}>
+    <h2 className="text-sm font-semibold">{t("caseHandoffHistory.handoffs")}</h2>
+    {history.isLoading ? <p className="text-sm text-muted-foreground">{t("caseHandoffHistory.loadingHandoffs")}</p> : null}
+    {history.isError ? <p role="alert" className="text-sm text-destructive">{t("caseHandoffHistory.handoffsCouldnTBeLoaded")}</p> : null}
+    {!history.isLoading && !history.isError && handoffs.length === 0 ? <p className="text-sm text-muted-foreground">{t("caseHandoffHistory.noHandoffsYet")}</p> : null}
     <ol className="divide-y divide-border">{handoffs.map(handoff => <HandoffRow key={handoff.id} handoff={handoff} task={task} agents={agents} />)}</ol>
-    {history.hasNextPage ? <Button variant="ghost" size="sm" disabled={history.isFetchingNextPage} onClick={() => void history.fetchNextPage()}>Load older handoffs</Button> : null}
+    {history.hasNextPage ? <Button variant="ghost" size="sm" disabled={history.isFetchingNextPage} onClick={() => void history.fetchNextPage()}>{t("caseHandoffHistory.loadOlderHandoffs")}</Button> : null}
   </section>;
 }
 
@@ -42,8 +42,8 @@ function HandoffRow({ handoff, task, agents }: { handoff: CaseHandoffView; task?
   const createdAt = new Date(handoff.createdAt).toISOString();
   const terminal = handoff.destinationKind === "done";
   const settled = handoff.state === "delivered" || handoff.state === "completed";
-  const stateLabel = handoff.state === "cancelled" ? (handoff.assignmentAppliedAt ? "Applied · delivery cancelled" : "Cancelled before transfer") : settled ? null
-    : terminal ? "Waiting for task completion" : handoff.assignmentAppliedAt ? "Applied · waiting for delivery" : "Pending transfer";
+  const stateLabel = handoff.state === "cancelled" ? (handoff.assignmentAppliedAt ? t("caseHandoffHistory.appliedDeliveryCancelled") : t("caseHandoffHistory.cancelledBeforeTransfer")) : settled ? null
+    : terminal ? t("caseHandoffHistory.waitingForTaskCompletion") : handoff.assignmentAppliedAt ? t("caseHandoffHistory.appliedWaitingForDelivery") : t("caseHandoffHistory.pendingTransfer");
   const handoffTask = task?.id === handoff.issueId ? task : null;
   return <li>
     <details className="group">
@@ -67,8 +67,8 @@ function HandoffRow({ handoff, task, agents }: { handoff: CaseHandoffView; task?
       </summary>
       <div className="space-y-2 pb-4 pl-6">
         {handoff.workflowTransition && <p className="text-xs text-muted-foreground">
-          {handoff.workflowTransition.from.name ?? "Case instructions"}{handoff.workflowTransition.from.phase ? ` · ${handoff.workflowTransition.from.phase}` : ""}
-          {" → "}{handoff.workflowTransition.to.name ?? "Case instructions"} · {handoff.workflowTransition.to.phase}
+          {handoff.workflowTransition.from.name ?? t("caseHandoffHistory.caseInstructions")}{handoff.workflowTransition.from.phase ? ` · ${handoff.workflowTransition.from.phase}` : ""}
+          {" → "}{handoff.workflowTransition.to.name ?? t("caseHandoffHistory.caseInstructions")} · {handoff.workflowTransition.to.phase}
         </p>}
         {handoff.lastError && !settled && handoff.state !== "cancelled" ? <p className="text-xs text-muted-foreground">{handoff.lastError}</p> : null}
         <MarkdownBody linkIssueReferences linkCaseReferences>{handoff.instructions}</MarkdownBody>

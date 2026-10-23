@@ -19,7 +19,7 @@ export function SlackCapabilitiesView({
   return (
     <section className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        Read, search, and act in Slack. Some actions require approval.
+        {t("slackToolSettings.readSearchAndActIn")}
       </p>
       {error && (
         <p role="alert" className="text-sm text-destructive">
@@ -28,7 +28,7 @@ export function SlackCapabilitiesView({
       )}
       {!capabilities && !error && (
         <p role="status" className="text-sm text-muted-foreground">
-          Checking Slack permissions…
+          {t("slackToolSettings.checkingSlackPermissions")}
         </p>
       )}
       {capabilities && (
@@ -36,20 +36,19 @@ export function SlackCapabilitiesView({
           {capabilities.missingScopes.length > 0 && (
             <div className="rounded-lg border border-border bg-muted p-3 space-y-2">
               <p className="text-sm font-medium">
-                Add permissions to unlock more tools
+                {t("slackToolSettings.addPermissionsToUnlockMore")}
               </p>
               <p className="text-sm">
-                Your existing connection still works. In{" "}
+                {t("slackToolSettings.yourExistingConnectionStillWorks")}{" "}
                 <a
                   className="underline underline-offset-4"
                   href="https://api.slack.com/apps"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Slack app settings
+                  {t("slackToolSettings.slackAppSettings")}
                 </a>
-                , choose your app, open OAuth &amp; Permissions, add these Bot
-                Token Scopes, then reinstall the app to your workspace.
+                {t("slackToolSettings.chooseYourAppOpenOauth")}
               </p>
               <p className="text-xs font-mono break-words">
                 {capabilities.missingScopes.join(", ")}
@@ -88,7 +87,7 @@ export function SlackSearchView({
       await action();
     } catch (e) {
       setError(
-        e instanceof Error ? e.message : "Unable to update Slack search",
+        e instanceof Error ? e.message : t("slackToolSettings.unableToUpdateSlackSearch"),
       );
     } finally {
       setPending(false);
@@ -96,11 +95,9 @@ export function SlackSearchView({
   };
   return (
     <section className="space-y-3">
-      <h3 className="text-sm font-semibold">Your Slack search access</h3>
+      <h3 className="text-sm font-semibold">{t("slackToolSettings.yourSlackSearchAccess")}</h3>
       <p className="text-sm text-muted-foreground">
-        Optional personal authorization enables private search on supported
-        runtimes. It cannot read channels the bot hasn’t joined or let the bot
-        write as you. Basic channel reading works without it.
+        {t("slackToolSettings.optionalPersonalAuthorizationEnablesPrivate")}
       </p>
       {!status.nativeSearchAvailable && (
         <p role="status" className="text-sm text-muted-foreground">
@@ -109,14 +106,14 @@ export function SlackSearchView({
       )}
       {status.connected ? (
         <div className="flex items-center justify-between gap-3">
-          <span className="text-sm">Slack search connected</span>
+          <span className="text-sm">{t("slackToolSettings.slackSearchConnected")}</span>
           <Button
             variant="outline"
             size="sm"
             disabled={pending}
             onClick={() => void perform(onDisconnect)}
           >
-            Disconnect search
+            {t("slackToolSettings.disconnectSearch")}
           </Button>
         </div>
       ) : (
@@ -125,19 +122,18 @@ export function SlackSearchView({
           disabled={pending || !status.configured}
           onClick={() => void perform(onConnect)}
         >
-          Connect Slack search
+          {t("slackToolSettings.connectSlackSearch")}
         </Button>
       )}
       {!status.configured && (
         <p className="text-sm text-muted-foreground">
-          A connection manager needs to configure your Slack app’s OAuth
-          credentials first.
+          {t("slackToolSettings.aConnectionManagerNeedsTo")}
         </p>
       )}
       {status.canConfigure && (
         <details className="text-sm">
           <summary className="cursor-pointer text-muted-foreground">
-            OAuth app configuration for connection managers
+            {t("slackToolSettings.oauthAppConfigurationForConnection")}
           </summary>
           <form
             className="mt-3 space-y-3"
@@ -150,17 +146,15 @@ export function SlackSearchView({
             }}
           >
             <p className="text-sm">
-              In Slack app settings, add this redirect URL under OAuth &amp;
-              Permissions. Add user scopes <code>search:read.public</code>,{" "}
+              {t("slackToolSettings.inSlackAppSettingsAdd")} <code>search:read.public</code>,{" "}
               <code>search:read.private</code> and{" "}
-              <code>search:read.files</code>. Find Client ID and Client Secret
-              under Basic Information.
+              <code>search:read.files</code>{t("slackToolSettings.findClientIdAndClient")}
             </p>
             <p className="text-xs font-mono break-all">
-              {status.redirectUri ?? "Configure a public HTTPS URL first."}
+              {status.redirectUri ?? t("slackToolSettings.configureAPublicHttpsUrl")}
             </p>
             <div className="space-y-2">
-              <label htmlFor={`${id}-client`}>Client ID</label>
+              <label htmlFor={`${id}-client`}>{t("slackToolSettings.clientId")}</label>
               <Input
                 id={`${id}-client`}
                 value={clientId}
@@ -168,7 +162,7 @@ export function SlackSearchView({
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor={`${id}-secret`}>Client Secret</label>
+              <label htmlFor={`${id}-secret`}>{t("slackToolSettings.clientSecret")}</label>
               <Input
                 id={`${id}-secret`}
                 type="password"
@@ -183,7 +177,7 @@ export function SlackSearchView({
                 size="sm"
                 disabled={pending || !clientId || !clientSecret}
               >
-                Save OAuth configuration
+                {t("slackToolSettings.saveOauthConfiguration")}
               </Button>
             </div>
           </form>
@@ -239,7 +233,7 @@ export function SlackSearchAccess({
   if (!query.data)
     return (
       <p role="status" className="text-sm text-muted-foreground">
-        Loading search access…
+        {t("slackToolSettings.loadingSearchAccess")}
       </p>
     );
   return (

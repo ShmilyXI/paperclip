@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Blocks } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,10 +22,10 @@ export function ConnectionProvenanceChip({
     return (
       <span
         className={chipClass}
-        title={connectorUid ? `Credentials managed by Vercel Connect (${connectorUid})` : "Credentials managed by Vercel Connect"}
+        title={connectorUid ? t("connectionProvenanceChip.credentialsManagedByVercelConnect2", { connectorUid }) : t("connectionProvenanceChip.credentialsManagedByVercelConnect")}
       >
         <Blocks className="h-3 w-3" />
-        via Vercel Connect
+        {t("connectionProvenanceChip.viaVercelConnect")}
       </span>
     );
   }

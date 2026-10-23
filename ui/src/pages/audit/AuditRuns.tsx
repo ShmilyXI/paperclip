@@ -44,7 +44,7 @@ function readableSource(source: string) {
 }
 
 function routineRunTitle(run: RoutineRunSummary) {
-  return run.linkedIssue?.title ?? run.trigger?.label ?? "Routine run";
+  return run.linkedIssue?.title ?? run.trigger?.label ?? t("auditRuns.routineRun");
 }
 
 function RoutineScopedRuns({
@@ -61,7 +61,7 @@ function RoutineScopedRuns({
   if (isLoading) {
     return (
       <div className="border-y border-border py-14 text-center text-sm text-muted-foreground">
-        Loading routine runs…
+        {t("auditRuns.loadingRoutineRuns")}
       </div>
     );
   }
@@ -76,18 +76,18 @@ function RoutineScopedRuns({
   }
 
   if (runs.length === 0) {
-    return <EmptyState icon={Activity} message="No routine runs yet." />;
+    return <EmptyState icon={Activity} message={t("auditRuns.noRoutineRunsYet")} />;
   }
 
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg font-semibold text-foreground">Routine runs</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("auditRuns.routineRuns")}</h2>
         <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          Executions created by this routine, newest first.
+          {t("auditRuns.executionsCreatedByThisRoutine")}
         </p>
       </div>
-      <ul className="divide-y divide-border border-y border-border" aria-label="Routine runs">
+      <ul className="divide-y divide-border border-y border-border" aria-label={t("auditRuns.routineRuns")}>
         {runs.map((run) => {
           const content = (
             <>
@@ -204,8 +204,7 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
       <div>
         <h2 className="text-lg font-semibold text-foreground">{t("common.runs")}</h2>
         <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          Recent agent executions across the organization. Open a run to inspect its transcript,
-          output, and task context.
+          {t("auditRuns.recentAgentExecutionsAcrossThe")}
         </p>
       </div>
 
@@ -214,10 +213,10 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
           <span>{t("common.agent")}</span>
           <Select value={agentId} onValueChange={(value) => updateFilter("agentId", value)}>
             <SelectTrigger className="w-48">
-              <SelectValue placeholder="All agents" />
+              <SelectValue placeholder={t("auditRuns.allAgents")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL}>All agents</SelectItem>
+              <SelectItem value={ALL}>{t("auditRuns.allAgents")}</SelectItem>
               {(agents.data ?? []).map((agent) => (
                 <SelectItem key={agent.id} value={agent.id}>
                   {agent.name}
@@ -230,10 +229,10 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
           <span>{t("common.status")}</span>
           <Select value={status} onValueChange={(value) => updateFilter("runStatus", value)}>
             <SelectTrigger className="w-40">
-              <SelectValue placeholder="All statuses" />
+              <SelectValue placeholder={t("auditRuns.allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL}>All statuses</SelectItem>
+              <SelectItem value={ALL}>{t("auditRuns.allStatuses")}</SelectItem>
               {statuses.map((value) => (
                 <SelectItem key={value} value={value}>
                   {readableSource(value)}
@@ -244,19 +243,19 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
         </label>
         {agentId !== ALL || status !== ALL ? (
           <Button variant="ghost" size="sm" onClick={clearFilters}>
-            Clear filters
+            {t("auditRuns.clearFilters")}
           </Button>
         ) : null}
       </div>
 
       {runs.isLoading ? (
         <div className="border-y border-border py-14 text-center text-sm text-muted-foreground">
-          Loading runs…
+          {t("auditRuns.loadingRuns")}
         </div>
       ) : runs.error ? (
         <div className="flex flex-col items-center gap-3 border-y border-border py-14 text-center">
           <p className="text-sm text-muted-foreground">
-            {runs.error instanceof Error ? runs.error.message : "Failed to load runs."}
+            {runs.error instanceof Error ? runs.error.message : t("auditRuns.failedToLoadRuns")}
           </p>
           <Button variant="outline" size="sm" onClick={() => runs.refetch()}>
             {t("common.tryAgain")}
@@ -265,10 +264,10 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
       ) : visibleRuns.length === 0 ? (
         <EmptyState
           icon={agentId !== ALL || status !== ALL ? CircleDotDashed : Activity}
-          message={agentId !== ALL || status !== ALL ? "No runs match these filters." : "No runs yet."}
+          message={agentId !== ALL || status !== ALL ? t("auditRuns.noRunsMatchTheseFilters") : t("auditRuns.noRunsYet")}
         />
       ) : (
-        <ul className="divide-y divide-border border-y border-border" aria-label="Recent runs">
+        <ul className="divide-y divide-border border-y border-border" aria-label={t("auditRuns.recentRuns")}>
           {visibleRuns.map((run) => {
             const agent = agentById.get(run.agentId);
             const summary = runSummary(run);
@@ -282,7 +281,7 @@ export function AuditRuns({ companyId, routineId }: { companyId: string; routine
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-medium text-foreground">
-                        {agent?.name ?? "Unknown agent"}
+                        {agent?.name ?? t("auditRuns.unknownAgent")}
                       </span>
                       <span className="font-mono text-(length:--text-micro) text-muted-foreground">
                         {run.id.slice(0, 8)}

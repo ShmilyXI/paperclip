@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle } from "lucide-react";
@@ -76,7 +77,7 @@ export function MissingUserSecretsBanner({
                   <code className="text-(length:--text-micro) text-muted-foreground">{entry.definition.key}</code>
                 </span>
                 <Button size="sm" onClick={() => setDialogFor(entry)}>
-                  Set value
+                  {t("missingUserSecretsBanner.setValue")}
                 </Button>
               </li>
             ))}
@@ -86,7 +87,7 @@ export function MissingUserSecretsBanner({
               to={secretsPath}
               className="mt-2 inline-block text-(length:--text-micro) font-medium underline underline-offset-2"
             >
-              Manage all my secrets
+              {t("missingUserSecretsBanner.manageAllMySecrets")}
             </Link>
           ) : null}
         </div>

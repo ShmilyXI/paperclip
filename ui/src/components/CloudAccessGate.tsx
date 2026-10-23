@@ -32,17 +32,17 @@ export function CloudAccessError({
       <RefreshCw className="size-6 text-muted-foreground" aria-hidden="true" />
       <div className="flex flex-col gap-2" role="status">
         <h1 className="text-xl font-semibold">
-          {temporary ? "Reconnecting to Paperclip" : "Unable to load Paperclip"}
+          {temporary ? t("cloudAccessGate.reconnectingToPaperclip") : t("cloudAccessGate.unableToLoadPaperclip")}
         </h1>
         <p className="text-sm text-muted-foreground">
           {temporary
-            ? "The server may be restarting or your connection was interrupted. We’ll try again every few seconds and reconnect automatically."
-            : "We couldn’t check your access to this instance. Try again, or contact your instance administrator if this continues."}
+            ? t("cloudAccessGate.theServerMayBeRestarting")
+            : t("cloudAccessGate.weCouldnTCheckYour")}
         </p>
       </div>
       <div>
         <Button variant="outline" onClick={onRetry} disabled={retrying}>
-          {retrying ? "Connecting…" : t("common.tryAgain")}
+          {retrying ? t("cloudAccessGate.connecting") : t("common.tryAgain")}
         </Button>
       </div>
     </div>
@@ -53,13 +53,12 @@ function NoBoardAccessPage() {
   return (
     <div className="mx-auto max-w-xl py-10">
       <Card className="block p-6">
-        <h1 className="text-xl font-semibold">No organization access</h1>
+        <h1 className="text-xl font-semibold">{t("cloudAccessGate.noOrganizationAccess")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          This account is signed in, but it does not have an active organization membership or instance-admin access on
-          this Paperclip instance.
+          {t("cloudAccessGate.thisAccountIsSignedIn")}
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Use an organization invite or sign in with an account that already belongs to this org.
+          {t("cloudAccessGate.useAnOrganizationInviteOr")}
         </p>
       </Card>
     </div>
@@ -215,7 +214,7 @@ export function CloudAccessGate({ allowMembershipRequest = false }: { allowMembe
     <>
       {isReconnecting && (
         <div role="status" className="bg-muted px-4 py-2 text-center text-sm text-muted-foreground">
-          Connection interrupted. Reconnecting automatically…
+          {t("cloudAccessGate.connectionInterruptedReconnectingAutomatically")}
         </div>
       )}
       <Outlet />

@@ -116,13 +116,13 @@ export function CaseActivityFeed({ events }: { events: CaseEvent[] }) {
   }
 
   const filterLabel = active.size === 0
-    ? "All activity"
+    ? t("caseActivityFeed.allActivity")
     : active.size === 1
       ? EVENT_LABEL[[...active][0]!] ?? [...active][0]!
       : `${active.size} filters`;
 
   if (events.length === 0) {
-    return <p className="py-6 text-center text-sm text-muted-foreground">No activity yet.</p>;
+    return <p className="py-6 text-center text-sm text-muted-foreground">{t("caseActivityFeed.noActivityYet")}</p>;
   }
 
   return (
@@ -140,9 +140,9 @@ export function CaseActivityFeed({ events }: { events: CaseEvent[] }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>Activity filter</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("caseActivityFeed.activityFilter")}</DropdownMenuLabel>
             <DropdownMenuItem onSelect={() => setActive(new Set())}>
-              All activity
+              {t("caseActivityFeed.allActivity")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {presentKinds.map((kind) => (
@@ -158,7 +158,7 @@ export function CaseActivityFeed({ events }: { events: CaseEvent[] }) {
         </DropdownMenu>
       </div>
       {filtered.length === 0 ? (
-        <p className="py-6 text-center text-sm text-muted-foreground">No events match this filter.</p>
+        <p className="py-6 text-center text-sm text-muted-foreground">{t("caseActivityFeed.noEventsMatchThisFilter")}</p>
       ) : (
         <div className="divide-y divide-border">
           {filtered.map((event) => (

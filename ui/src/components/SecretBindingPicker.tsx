@@ -149,12 +149,12 @@ export function SecretBindingPicker({
       setCreateError(null);
     },
     onError: (error) => {
-      setCreateError(error instanceof Error ? error.message : "Failed to create secret");
+      setCreateError(error instanceof Error ? error.message : t("secretBindingPicker.failedToCreateSecret"));
     },
   });
 
   const versionDisplay = (selector: SecretVersionSelector | undefined) => {
-    if (selector === undefined || selector === VERSION_LATEST) return "latest";
+    if (selector === undefined || selector === VERSION_LATEST) return t("secretBindingPicker.latest");
     return `v${selector}`;
   };
 
@@ -200,8 +200,8 @@ export function SecretBindingPicker({
                 {missingHint
                   ? `${missingHint.name} — ${missingHint.companyName ?? "another organization"}`
                   : hintsPending
-                    ? `Secret (${value.secretId.slice(0, 8)}…)`
-                    : `Missing secret (${value.secretId.slice(0, 8)}…)`}
+                    ? t("secretBindingPicker.secretSlice", { slice: value.secretId.slice(0, 8) })
+                    : t("secretBindingPicker.missingSecretSlice", { slice: value.secretId.slice(0, 8) })}
               </option>
             ) : null}
             {filteredSecrets.map((secret) => (
@@ -224,7 +224,7 @@ export function SecretBindingPicker({
             disabled={disabled || !value || !selectedSecret}
             aria-label={t("common.version")}
           >
-            <option value={VERSION_LATEST}>latest</option>
+            <option value={VERSION_LATEST}>{t("secretBindingPicker.latest")}</option>
             {selectedSecret
               ? Array.from({ length: Math.max(0, selectedSecret.latestVersion) }, (_, index) => {
                   const version = selectedSecret.latestVersion - index;
@@ -244,7 +244,7 @@ export function SecretBindingPicker({
           size="sm"
           onClick={() => setCreateOpen(true)}
           disabled={disabled || !selectedCompanyId}
-          aria-label="Create secret"
+          aria-label={t("secretBindingPicker.createSecret")}
         >
           <Plus className="h-3.5 w-3.5" />
         </Button>
@@ -252,7 +252,7 @@ export function SecretBindingPicker({
 
       {selectedSecret ? (
         <p className={cn("text-(length:--text-micro) text-muted-foreground", statusTone(selectedSecret.status))}>
-          {selectedSecret.status !== "active" ? `Status: ${selectedSecret.status}. ` : null}
+          {selectedSecret.status !== "active" ? t("secretBindingPicker.statusLabel", { status: selectedSecret.status }) : null}
           Bound to {versionDisplay(value?.version)} · {selectedSecret.key}
         </p>
       ) : crossCompanyHint ? (
@@ -264,20 +264,20 @@ export function SecretBindingPicker({
         <p className="text-(length:--text-micro) text-destructive flex items-center gap-1">
           <AlertCircle className="h-3 w-3" />
           {missingHint.status === "deleted"
-            ? "The previously selected secret was deleted. Pick another or remove the binding."
-            : `This secret is ${missingHint.status}; runs cannot resolve it until it is active again.`}
+            ? t("secretBindingPicker.thePreviouslySelectedSecretWas")
+            : t("secretBindingPicker.thisSecretIsStatusRuns", { status: missingHint.status })}
         </p>
       ) : hintsPending ? (
         <p className="text-(length:--text-micro) text-muted-foreground flex items-center gap-1">
           <AlertCircle className="h-3 w-3" />
           {hintsContext?.status === "error"
-            ? "Could not load this secret reference's details."
-            : "Checking this secret reference…"}
+            ? t("secretBindingPicker.couldNotLoadThisSecret")
+            : t("secretBindingPicker.checkingThisSecretReference")}
         </p>
       ) : selectedMissing ? (
         <p className="text-(length:--text-micro) text-destructive flex items-center gap-1">
           <AlertCircle className="h-3 w-3" />
-          The previously selected secret is no longer available. Pick another or remove the binding.
+          {t("secretBindingPicker.thePreviouslySelectedSecretIs")}
         </p>
       ) : (filteredSecrets.length === 0 && !secretsQuery.isPending) ? (
         <p className="text-(length:--text-micro) text-muted-foreground">{emptyHint}</p>
@@ -286,7 +286,7 @@ export function SecretBindingPicker({
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Create new secret</DialogTitle>
+            <DialogTitle>{t("secretBindingPicker.createNewSecret")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
             <div>
@@ -306,11 +306,11 @@ export function SecretBindingPicker({
                 value={createValue}
                 onChange={(event) => setCreateValue(event.target.value)}
                 rows={3}
-                placeholder="Paste the secret value"
+                placeholder={t("secretBindingPicker.pasteTheSecretValue")}
                 className="font-mono text-xs"
               />
               <p className="text-(length:--text-micro) text-muted-foreground mt-1">
-                The value is stored once and never re-displayed. Rotate to replace.
+                {t("secretBindingPicker.theValueIsStoredOnce")}
               </p>
             </div>
             <div>
@@ -319,7 +319,7 @@ export function SecretBindingPicker({
                 id="secret-description"
                 value={createDescription}
                 onChange={(event) => setCreateDescription(event.target.value)}
-                placeholder="Optional notes (no values)"
+                placeholder={t("secretBindingPicker.optionalNotesNoValues")}
               />
             </div>
             {createError ? <p className="text-xs text-destructive">{createError}</p> : null}

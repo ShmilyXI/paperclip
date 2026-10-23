@@ -158,8 +158,8 @@ export function ApprovalDetail() {
       ? {
           label:
             (linkedIssues?.length ?? 0) > 1
-              ? "Review linked tasks"
-              : "Review linked task",
+              ? t("approvalDetail.reviewLinkedTasks")
+              : t("approvalDetail.reviewLinkedTask"),
           to: `/issues/${primaryLinkedIssue.identifier ?? primaryLinkedIssue.id}`,
         }
       : linkedAgentId
@@ -185,7 +185,7 @@ export function ApprovalDetail() {
               <div>
                 <p className="text-sm text-green-800 dark:text-green-100 font-medium">{t("approvals.approvalConfirmed")}</p>
                 <p className="text-xs text-green-700 dark:text-green-200/90">
-                  Requesting agent was notified to review this approval and linked tasks.
+                  {t("approvalDetail.requestingAgentWasNotifiedTo")}
                 </p>
               </div>
             </div>
@@ -228,7 +228,7 @@ export function ApprovalDetail() {
             onClick={() => setShowRawPayload((v) => !v)}
           >
             <ChevronRight className={`h-3 w-3 transition-transform ${showRawPayload ? "rotate-90" : ""}`} />
-            See full request
+            {t("approvalDetail.seeFullRequest")}
           </button>
           {showRawPayload && (
             <pre className="text-xs bg-muted/40 rounded-md p-3 overflow-x-auto">
@@ -258,7 +258,7 @@ export function ApprovalDetail() {
               ))}
             </div>
             <p className="text-(length:--text-micro) text-muted-foreground mt-2">
-              Linked tasks remain open until the requesting agent follows up and closes them.
+              {t("approvalDetail.linkedTasksRemainOpenUntil")}
             </p>
           </div>
         )}
@@ -285,7 +285,7 @@ export function ApprovalDetail() {
           )}
           {isBudgetApproval && approval.status === "pending" && (
             <p className="text-sm text-muted-foreground">
-              Resolve this budget stop from the budget controls on <Link to="/costs" className="underline underline-offset-2">/costs</Link>.
+              {t("approvalDetail.resolveThisBudgetStopFrom")} <Link to="/costs" className="underline underline-offset-2">/costs</Link>.
             </p>
           )}
           {approval.status === "pending" && (
@@ -295,7 +295,7 @@ export function ApprovalDetail() {
               onClick={() => revisionMutation.mutate()}
               disabled={revisionMutation.isPending}
             >
-              Request revision
+              {t("approvalDetail.requestRevision")}
             </Button>
           )}
           {approval.status === "revision_requested" && (
@@ -305,7 +305,7 @@ export function ApprovalDetail() {
               onClick={() => resubmitMutation.mutate()}
               disabled={resubmitMutation.isPending}
             >
-              Mark resubmitted
+              {t("approvalDetail.markResubmitted")}
             </Button>
           )}
           {approval.status === "rejected" && approval.type === "hire_agent" && linkedAgentId && (
@@ -319,7 +319,7 @@ export function ApprovalDetail() {
               }}
               disabled={deleteAgentMutation.isPending}
             >
-              Delete disapproved agent
+              {t("approvalDetail.deleteDisapprovedAgent")}
             </Button>
           )}
         </div>
@@ -361,7 +361,7 @@ export function ApprovalDetail() {
             onClick={() => addCommentMutation.mutate()}
             disabled={!commentBody.trim() || addCommentMutation.isPending}
           >
-            {addCommentMutation.isPending ? "Posting…" : "Post comment"}
+            {addCommentMutation.isPending ? t("approvalDetail.posting") : t("approvalDetail.postComment")}
           </Button>
         </div>
       </div>

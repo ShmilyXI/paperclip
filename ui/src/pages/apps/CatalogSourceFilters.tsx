@@ -6,5 +6,5 @@ export type CatalogSource = typeof CATALOG_SOURCES[number];
 export const CATALOG_SOURCE_NAMES = { paperclip: "Paperclip", composio: "Composio", arcade: "Arcade", executor: "Executor", installed: t("common.installed"), all: t("common.all") };
 
 export function CatalogSourceFilters({ source, onChange }: { source: CatalogSource; onChange: (source: CatalogSource) => void }) {
-  return <TabFilters label="App filters" size="standard" items={CATALOG_SOURCES.map(value => ({ value, label: CATALOG_SOURCE_NAMES[value] }))} value={source} onValueChange={onChange} />;
+  return <TabFilters label={t("catalogSourceFilters.appFilters")} size="standard" items={CATALOG_SOURCES.map(value => ({ value, label: CATALOG_SOURCE_NAMES[value] }))} value={source} onValueChange={onChange} />;
 }

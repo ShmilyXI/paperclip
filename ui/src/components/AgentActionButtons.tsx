@@ -391,7 +391,7 @@ export function AgentActionButtons({
           title={t("agentActions.exactProviderTrafficWillBe")}
         >
           <Bug className="h-3.5 w-3.5" />
-          Raw tracing on
+          {t("agentActionButtons.rawTracingOn")}
         </span>
       ) : null}
       <Button
@@ -461,7 +461,7 @@ export function AgentActionButtons({
             <AlertDialogFooter>
               <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
               <AlertDialogAction onClick={() => agentAction.mutate("pause")}>
-                Pause anyway
+                {t("agentActionButtons.pauseAnyway")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -502,7 +502,7 @@ export function AgentActionButtons({
             }}
           >
             <Copy className="h-3 w-3" />
-            Copy Agent ID
+            {t("agentActionButtons.copyAgentId")}
           </button>
           <button
             className="flex items-center gap-2 w-full px-2 py-1.5 text-xs rounded hover:bg-accent/50"
@@ -512,7 +512,7 @@ export function AgentActionButtons({
             }}
           >
             <RotateCcw className="h-3 w-3" />
-            Reset Sessions
+            {t("agentActionButtons.resetSessions")}
           </button>
           {!hideTerminate && (
             <button

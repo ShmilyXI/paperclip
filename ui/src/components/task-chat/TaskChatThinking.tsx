@@ -26,10 +26,10 @@ export function TaskChatThinking({
   const shimmer = useTaskChatShimmer(item.id);
   const body = item.lines.join("\n").trim();
   const preview = flattenSelfTalk(body);
-  const baseLabel = item.channel === "detail" ? "Reasoning detail" : "Reasoning";
+  const baseLabel = item.channel === "detail" ? t("taskChatThinking.reasoningDetail") : t("taskChatThinking.reasoning");
   const label = active
-    ? body ? `${baseLabel}…` : "Thinking…"
-    : item.summaryLabel ?? (body ? baseLabel : "Thought");
+    ? body ? `${baseLabel}…` : t("taskChatThinking.thinking")
+    : item.summaryLabel ?? (body ? baseLabel : t("taskChatThinking.thought"));
 
   if (body && !active) {
     return (

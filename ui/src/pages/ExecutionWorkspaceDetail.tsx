@@ -167,7 +167,7 @@ function parseWorkspaceRuntimeJson(value: string) {
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
       return {
         ok: false as const,
-        error: "Workspace commands JSON must be a JSON object.",
+        error: t("execWorkspace.workspaceCommandsJsonMustBe"),
       };
     }
     return { ok: true as const, value: parsed as Record<string, unknown> };
@@ -205,7 +205,7 @@ export function readConfiguredRuntimeServicePorts(runtimeConfig: Record<string, 
       entries.push({
         collection,
         index,
-        name: typeof config.name === "string" && config.name.trim() ? config.name : `Service ${index + 1}`,
+        name: typeof config.name === "string" && config.name.trim() ? config.name : t("execWorkspace.serviceIndex", { index: index + 1 }),
         port: typeof portValue === "number" ? portValue : null,
         invalidPort: (typeof portConfig === "number" || hasObjectPortValue)
           && (typeof portValue !== "number" || !Number.isInteger(portValue) || portValue < 1 || portValue > 65535),
@@ -618,7 +618,7 @@ function WorkspaceRoutineRow({
           ) : null}
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-          <span>{routine.assigneeAgentId ? "Default agent set" : "Choose agent when running"}</span>
+          <span>{routine.assigneeAgentId ? t("execWorkspace.defaultAgentSet") : t("execWorkspace.chooseAgentWhenRunning")}</span>
           <span>Last run {formatOptionalDateTime(routine.lastRun?.triggeredAt ?? routine.lastTriggeredAt)}</span>
           <span className="flex flex-wrap gap-1">
             {variableNames.map((name) => (
@@ -637,7 +637,7 @@ function WorkspaceRoutineRow({
         onClick={() => onRunNow(routine)}
       >
         {isRunning ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Play className="mr-2 h-4 w-4" />}
-        {isRunning ? "Running..." : t("common.runNow")}
+        {isRunning ? t("execWorkspace.running") : t("common.runNow")}
       </Button>
     </div>
   );
@@ -963,12 +963,12 @@ export function ExecutionWorkspaceDetail() {
       setRuntimeActionErrorMessage(null);
       setRuntimeActionMessage(
         request.action === "run"
-          ? "Workspace job completed."
+          ? t("execWorkspace.workspaceJobCompleted")
           : request.action === "stop"
-            ? "Workspace service stopped."
+            ? t("execWorkspace.workspaceServiceStopped")
             : request.action === "restart"
-              ? "Workspace service restarted."
-              : "Workspace service started.",
+              ? t("execWorkspace.workspaceServiceRestarted")
+              : t("execWorkspace.workspaceServiceStarted"),
       );
     },
     onError: (error) => {
@@ -1103,14 +1103,14 @@ export function ExecutionWorkspaceDetail() {
             pendingRequest={pendingRuntimeAction}
             serviceEmptyMessage={
               effectiveRuntimeConfig
-                ? "No services have been started for this execution workspace yet."
-                : "No workspace command config is defined for this execution workspace yet."
+                ? t("execWorkspace.noServicesHaveBeenStarted")
+                : t("execWorkspace.noWorkspaceCommandConfigIs")
             }
             jobEmptyMessage="No one-shot jobs are configured for this execution workspace yet."
             disabledHint={
               canStartRuntimeServices
                 ? null
-                : "Execution workspaces need a working directory before local commands can run, and services also need runtime config."
+                : t("execWorkspace.executionWorkspacesNeedAWorking")
             }
             onAction={(request) => runRuntimeControlRequests([request])}
           />
@@ -1120,7 +1120,7 @@ export function ExecutionWorkspaceDetail() {
               <CardHeader>
                 <CardTitle>{t("execWorkspace.workspaceSettings")}</CardTitle>
                 <CardDescription>
-                  Edit the concrete path, repo, branch, provisioning, teardown, and runtime overrides attached to this execution workspace. Saved changes affect future runs; Paperclip may refresh or replace a reused workspace when config changes.
+                  {t("execWorkspace.editTheConcretePathRepo")}
                 </CardDescription>
                 <CardAction>
                   <Button
@@ -1130,7 +1130,7 @@ export function ExecutionWorkspaceDetail() {
                     onClick={() => setCloseDialogOpen(true)}
                     disabled={workspace.status === "archived"}
                   >
-                    {workspace.status === "cleanup_failed" ? "Retry close" : "Close workspace"}
+                    {workspace.status === "cleanup_failed" ? t("execWorkspace.retryClose") : t("execWorkspace.closeWorkspace")}
                   </Button>
                 </CardAction>
               </CardHeader>
@@ -1240,7 +1240,7 @@ export function ExecutionWorkspaceDetail() {
 
                       <Field
                         label={t("execWorkspace.runtimeProvisionCommand")}
-                        hint="Runs once before the first runtime-service start. Leave empty to keep eager provisioning."
+                        hint={t("execWorkspace.runsOnceBeforeTheFirst2")}
                       >
                         <Textarea
                           className="min-h-20 font-mono"
@@ -1250,7 +1250,7 @@ export function ExecutionWorkspaceDetail() {
                         />
                       </Field>
 
-                      <Field label={t("execWorkspace.teardownCommand")} hint="Runs when the execution workspace is archived or cleaned up">
+                      <Field label={t("execWorkspace.teardownCommand")} hint={t("execWorkspace.runsWhenTheExecutionWorkspace")}>
                         <Textarea
                           className="min-h-20 font-mono"
                           value={form.teardownCommand}
@@ -1259,7 +1259,7 @@ export function ExecutionWorkspaceDetail() {
                         />
                       </Field>
 
-                      <Field label={t("execWorkspace.cleanupCommand")} hint="Workspace-specific cleanup before teardown">
+                      <Field label={t("execWorkspace.cleanupCommand")} hint={t("execWorkspace.workspaceSpecificCleanupBeforeTeardown")}>
                         <Textarea
                           className="min-h-16 font-mono"
                           value={form.cleanupCommand}
@@ -1283,10 +1283,10 @@ export function ExecutionWorkspaceDetail() {
                         </div>
                         <p className="text-sm text-muted-foreground">
                           {runtimeConfigSource === "execution_workspace"
-                            ? "This execution workspace currently overrides the project workspace runtime config."
+                            ? t("execWorkspace.thisExecutionWorkspaceCurrentlyOverrides")
                             : runtimeConfigSource === "project_workspace"
-                              ? "This execution workspace is inheriting the project workspace runtime config."
-                              : "No runtime config is currently defined on this execution workspace or its project workspace."}
+                              ? t("execWorkspace.thisExecutionWorkspaceIsInheriting")
+                              : t("execWorkspace.noRuntimeConfigIsCurrently")}
                         </p>
                       </div>
                       <Button
@@ -1310,10 +1310,10 @@ export function ExecutionWorkspaceDetail() {
                   <details className="rounded-md border border-dashed border-border/70 bg-background px-4 py-3">
                     <summary className="cursor-pointer text-sm font-medium">{t("execWorkspace.advancedRuntimeJson")}</summary>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      Override the inherited workspace command model only when this execution workspace truly needs different service or job behavior.
+                      {t("execWorkspace.overrideTheInheritedWorkspaceCommand")}
                     </p>
                     <div className="mt-3">
-                      <Field label={t("execWorkspace.workspaceCommandsJson")} hint="Legacy `services` arrays still work, but `commands` supports both services and jobs.">
+                      <Field label={t("execWorkspace.workspaceCommandsJson")} hint={t("execWorkspace.legacyServicesArraysStillWork")}>
                         <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
                           <input
                             id="inherit-runtime-config"
@@ -1349,7 +1349,7 @@ export function ExecutionWorkspaceDetail() {
                       <div>
                         <div className="text-sm font-medium">{t("execWorkspace.servicePorts")}</div>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          Set a fixed port for a service or leave it blank to use its configured automatic behavior. Editing an inherited service creates an execution-workspace runtime override.
+                          {t("execWorkspace.setAFixedPortFor")}
                         </p>
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">
@@ -1427,7 +1427,7 @@ export function ExecutionWorkspaceDetail() {
               </CardHeader>
               <CardContent>
               <DetailRow label={t("common.project")}>
-                {project ? <Link to={`/projects/${projectRef}`} className="hover:underline">{project.name}</Link> : <MonoValue value={workspace.projectId ?? "No project"} />}
+                {project ? <Link to={`/projects/${projectRef}`} className="hover:underline">{project.name}</Link> : <MonoValue value={workspace.projectId ?? t("execWorkspace.noProject")} />}
               </DetailRow>
               <DetailRow label={t("execWorkspace.projectWorkspace")}>
                 {project && linkedProjectWorkspace ? (
@@ -1504,15 +1504,15 @@ export function ExecutionWorkspaceDetail() {
               <DetailRow label={t("execWorkspace.baseRef")}>
                 {workspace.baseRef ? <MonoValue value={workspace.baseRef} copy /> : t("common.none")}
               </DetailRow>
-              <DetailRow label="Branch">
+              <DetailRow label={t("execWorkspace.branch")}>
                 {workspace.branchName ? <MonoValue value={workspace.branchName} copy /> : t("common.none")}
               </DetailRow>
               <DetailRow label={t("execWorkspace.opened")}>{formatDateTime(workspace.openedAt)}</DetailRow>
               <DetailRow label={t("execWorkspace.lastUsed")}>{formatDateTime(workspace.lastUsedAt)}</DetailRow>
-              <DetailRow label="Cleanup">
+              <DetailRow label={t("execWorkspace.cleanup")}>
                 {workspace.cleanupEligibleAt
                   ? `${formatDateTime(workspace.cleanupEligibleAt)}${workspace.cleanupReason ? ` · ${workspace.cleanupReason}` : ""}`
-                  : "Not scheduled"}
+                  : t("execWorkspace.notScheduled")}
               </DetailRow>
               </CardContent>
             </Card>

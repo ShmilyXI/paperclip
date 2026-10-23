@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import type { IssueDocument } from "@paperclipai/shared";
 import { ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY } from "@paperclipai/shared";
@@ -49,7 +50,7 @@ export function IssueContinuationHandoff({
           type="button"
           className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
           onClick={() => setExpanded((current) => !current)}
-          aria-label={expanded ? "Collapse continuation handoff" : "Expand continuation handoff"}
+          aria-label={expanded ? t("issueContinuationHandoff.collapseContinuationHandoff") : t("issueContinuationHandoff.expandContinuationHandoff")}
           aria-expanded={expanded}
         >
           {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
@@ -69,9 +70,9 @@ export function IssueContinuationHandoff({
         </div>
         <AgentSetupPrompt
           prompt={document.body}
-          label="Continue with an agent"
-          title="Task handoff"
-          description="Paste this into your agent to continue from this handoff."
+          label={t("issueContinuationHandoff.continueWithAnAgent")}
+          title={t("issueContinuationHandoff.taskHandoff")}
+          description={t("issueContinuationHandoff.pasteThisIntoYourAgent")}
           align="end"
         />
       </div>

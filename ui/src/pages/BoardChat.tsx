@@ -78,7 +78,7 @@ function TypingBubble() {
           "bg-card border border-border text-foreground [border-radius:14px_14px_14px_4px]",
         )}
       >
-        <span className="typing-dots" aria-label="typing">
+        <span className="typing-dots" aria-label={t("boardChat.typing")}>
           <span />
           <span />
           <span />
@@ -94,7 +94,7 @@ export function BoardChat() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Conference Room" }]);
+    setBreadcrumbs([{ label: t("boardChat.conferenceRoom") }]);
   }, [setBreadcrumbs]);
 
   const splitContainerRef = useRef<HTMLDivElement>(null);
@@ -561,7 +561,7 @@ export function BoardChat() {
         clearTimeout(fetchTimeout);
 
         if (!res.ok || !res.body) {
-          throw new Error("Board chat stream not available");
+          throw new Error(t("boardChat.boardChatStreamNotAvailable"));
         }
 
         setStatusText("Thinking...");
@@ -622,7 +622,7 @@ export function BoardChat() {
         console.error("Board chat error:", err);
         setStatusText("");
         setErrorText(
-          "The board assistant is unavailable right now. Please try again in a moment.",
+          t("boardChat.theBoardAssistantIsUnavailable"),
         );
       } finally {
         setSending(false);
@@ -646,9 +646,9 @@ export function BoardChat() {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center max-w-sm">
-          <h2 className="text-lg font-semibold">No organization selected</h2>
+          <h2 className="text-lg font-semibold">{t("boardChat.noOrganizationSelected")}</h2>
           <p className="text-sm text-muted-foreground mt-2">
-            Select an organization to start chatting with your board concierge.
+            {t("boardChat.selectAnOrganizationToStart")}
           </p>
         </div>
       </div>
@@ -677,10 +677,10 @@ export function BoardChat() {
             />
             <div className="min-w-0 flex-1">
               <h3 className="text-sm font-semibold">
-                {ceoAgent?.name ?? "Conference Room"}
+                {ceoAgent?.name ?? t("boardChat.conferenceRoom")}
               </h3>
               <p className="text-xs text-muted-foreground">
-                {selectedCompany?.name ?? "Your organization"}
+                {selectedCompany?.name ?? t("boardChat.yourOrganization")}
               </p>
             </div>
             <div className="flex shrink-0 items-center gap-0.5">
@@ -691,12 +691,12 @@ export function BoardChat() {
                     variant="ghost"
                     size="icon-sm"
                     className="text-muted-foreground"
-                    aria-label="chat history"
+                    aria-label={t("boardChat.chatHistory")}
                   >
                     <History className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">chat history</TooltipContent>
+                <TooltipContent side="bottom">{t("boardChat.chatHistory")}</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -705,12 +705,12 @@ export function BoardChat() {
                     variant="ghost"
                     size="icon-sm"
                     className="text-muted-foreground"
-                    aria-label="new chat"
+                    aria-label={t("boardChat.newChat")}
                   >
                     <MessageSquarePlus className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">new chat</TooltipContent>
+                <TooltipContent side="bottom">{t("boardChat.newChat")}</TooltipContent>
               </Tooltip>
             </div>
           </div>
@@ -744,20 +744,20 @@ export function BoardChat() {
 
                 const chips: Array<{ label: string; prompt: string }> = [
                   {
-                    label: "Draft an Organization Brief",
-                    prompt: `Draft a one-page Organization Brief for ${companyName} — include our mission, team roster, and first priorities.`,
+                    label: t("boardChat.draftAnOrganizationBrief"),
+                    prompt: t("boardChat.draftAOnePageOrganization", { companyName }),
                   },
                   {
-                    label: "Create a hiring plan",
-                    prompt: `Create a hiring plan for ${companyName}. List the next roles to hire, in priority order, with a short rationale for each.`,
+                    label: t("boardChat.createAHiringPlan"),
+                    prompt: t("boardChat.createAHiringPlanFor", { companyName }),
                   },
                   {
-                    label: "Outline our first 30 days",
-                    prompt: `Outline our first 30 days. Break it into weekly priorities with who owns what.`,
+                    label: t("boardChat.outlineOurFirst30Days"),
+                    prompt: t("boardChat.outlineOurFirst30DaysPrompt"),
                   },
                   {
-                    label: "Write an intro pitch",
-                    prompt: `Write a short intro pitch for ${companyName} that I could reuse for investors, customers, or recruits.`,
+                    label: t("boardChat.writeAnIntroPitch"),
+                    prompt: t("boardChat.writeAShortIntroPitch", { companyName }),
                   },
                 ];
 
@@ -817,7 +817,7 @@ export function BoardChat() {
                 const agent = comment.authorAgentId
                   ? agentMap.get(comment.authorAgentId) ?? null
                   : ceoAgent ?? null;
-                const agentName = agent?.name ?? "Assistant";
+                const agentName = agent?.name ?? t("boardChat.assistant");
                 const agentIconValue = agent?.icon ?? null;
                 return (
                   <div key={comment.id} className="flex flex-col items-start">
@@ -929,7 +929,7 @@ export function BoardChat() {
             <button
               type="button"
               onClick={() => scrollToLatest("smooth")}
-              aria-label="Jump to latest messages"
+              aria-label={t("boardChat.jumpToLatestMessages")}
               // design-allow(card-pattern): floating scroll-to-bottom <button>, not a content card (C5a Run 3)
               className="absolute bottom-24 left-1/2 z-20 grid h-8 w-8 -translate-x-1/2 place-items-center rounded-full border border-border bg-card text-foreground shadow-md transition-colors duration-150 hover:bg-accent hover:border-muted-foreground/30"
             >
@@ -955,7 +955,7 @@ export function BoardChat() {
               value={input}
               onChange={setInput}
               onSubmit={handleSend}
-              placeholder="Ask anything about your organization..."
+              placeholder={t("boardChat.askAnythingAboutYourOrganization")}
               submitKey="enter"
               surface="translucent"
               submitting={sending}
@@ -970,7 +970,7 @@ export function BoardChat() {
         <div
           role="separator"
           aria-orientation="vertical"
-          aria-label="Resize board chat and agent feed"
+          aria-label={t("boardChat.resizeBoardChatAndAgent")}
           className="group relative hidden w-3 shrink-0 cursor-col-resize bg-background md:flex"
           onMouseDown={handleSplitDragStart}
         >
@@ -995,7 +995,7 @@ export function BoardChat() {
               size="icon"
               variant="secondary"
               className="fixed bottom-20 right-4 z-20 h-10 w-10 rounded-full shadow-lg"
-              aria-label="Open agent feed"
+              aria-label={t("boardChat.openAgentFeed")}
             >
               <Activity className="h-4 w-4" />
             </Button>

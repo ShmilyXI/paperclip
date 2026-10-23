@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Agent } from "@paperclipai/shared";
 import { toolsApi } from "@/api/tools";
@@ -34,23 +35,23 @@ export function EmailConnectionAccess({
     },
   });
   if (grants.isLoading || installs.isLoading)
-    return <p className="text-sm text-muted-foreground">Loading access…</p>;
+    return <p className="text-sm text-muted-foreground">{t("emailConnectionAccess.loadingAccess")}</p>;
   if (grants.error || installs.error)
     return (
       <p role="alert" className="text-sm text-destructive">
-        Connection access could not be loaded.
+        {t("emailConnectionAccess.connectionAccessCouldNotBe")}
       </p>
     );
   const active = grants.data?.grants.filter((g) => g.status === "active") ?? [];
   const everyone = active.some((g) => g.kind === "organization");
   const personal = active.find((g) => g.kind === "user");
   const humanLabel = everyone
-    ? "Any human in the organization"
+    ? t("emailConnectionAccess.anyHumanInTheOrganization")
     : personal
       ? personal.subjectUserId === grants.data?.currentUserId
-        ? "Just me"
-        : "Only the credential owner"
-      : "Access revoked";
+        ? t("emailConnectionAccess.justMe")
+        : t("emailConnectionAccess.onlyTheCredentialOwner")
+      : t("emailConnectionAccess.accessRevoked");
   const allAgents =
     installs.data?.installs.some((i) => i.targetType === "company") ?? false;
   const selected = new Set(
@@ -63,22 +64,22 @@ export function EmailConnectionAccess({
     <div className="space-y-8">
       <section className="space-y-3">
         <h2 className="text-sm font-semibold">
-          Which humans can use this credential?
+          {t("emailConnectionAccess.whichHumansCanUseThis")}
         </h2>
         <p className="text-sm">{humanLabel}</p>
       </section>
       <section className="space-y-4">
         <h2 className="text-sm font-semibold">
-          Which agents can use this connection?
+          {t("emailConnectionAccess.whichAgentsCanUseThis")}
         </h2>
         <RadioCardGroup
-          ariaLabel="Which agents can use this connection"
+          ariaLabel={t("emailConnectionAccess.whichAgentsCanUseThis2")}
           value={allAgents ? "all" : "selected"}
           disabled={disabled}
           className="sm:grid-cols-2"
           options={[
-            { value: "selected", title: "Just agents I pick" },
-            { value: "all", title: "Any agent" },
+            { value: "selected", title: t("emailConnectionAccess.justAgentsIPick") },
+            { value: "all", title: t("emailConnectionAccess.anyAgent") },
           ]}
           onValueChange={(value) =>
             save.mutate(
@@ -107,7 +108,7 @@ export function EmailConnectionAccess({
           />
         )}
         <p className="text-xs text-muted-foreground">
-          Removing an assigned agent stops receiving and sending from its inbox.
+          {t("emailConnectionAccess.removingAnAssignedAgentStops")}
         </p>
         {save.error && (
           <p role="alert" className="text-sm text-destructive">

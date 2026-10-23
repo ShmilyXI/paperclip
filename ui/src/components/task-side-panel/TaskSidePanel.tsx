@@ -286,7 +286,7 @@ export function TaskSidePanel({
     readTaskSidePanelState(accountScope, issue.companyId, issue.id, fileTabsEnabled),
   );
   const taskCount = tasksTab?.count ?? childIssues.length;
-  const taskLabel = tasksTab ? t("common.tasks") : "Subtasks";
+  const taskLabel = tasksTab ? t("common.tasks") : t("taskSidePanel.subtasks");
   const initialSubtasksAvailableRef = useRef(showRelatedTasks && (taskCount > 0 || tasksTab?.hasError === true));
   const subtasksDismissedRef = useRef(
     restoredRef.current?.userInteracted === true
@@ -425,7 +425,7 @@ export function TaskSidePanel({
       planDocument === null
     ) return;
     const document = documents.find((candidate) => candidate.key === documentDeepLink.documentKey);
-    const label = document ? documentDisplayTitle(document) : documentDeepLink.documentKey === "plan" ? "Plan" : documentDeepLink.documentKey;
+    const label = document ? documentDisplayTitle(document) : documentDeepLink.documentKey === "plan" ? t("taskSidePanel.plan") : documentDeepLink.documentKey;
     // A refresh must not replay a link after the user selects another tab.
     handledDocumentRequestRef.current = documentDeepLink.requestId;
     controller.openTab(taskPanelDocumentTab(documentDeepLink.documentKey, label));
@@ -567,7 +567,7 @@ export function TaskSidePanel({
   const visualTabs = useMemo<SidePanelTabItem[]>(() => controller.tabs.map((tab) => {
     const document = tab.payload.kind === "issue-document" ? documentByKey.get(tab.payload.documentKey) : null;
     const browserIndex = browsersQuery.data?.findIndex((browser) => tab.payload.kind === "browser" && (browser.id === tab.payload.browserId || browser.sessionId === tab.payload.browserId)) ?? -1;
-    const browserLabel = browserIndex >= 0 && (browsersQuery.data?.length ?? 0) > 1 ? `Browser ${browserIndex + 1}` : null;
+    const browserLabel = browserIndex >= 0 && (browsersQuery.data?.length ?? 0) > 1 ? t("taskSidePanel.browserBrowserindex", { browserIndex: browserIndex + 1 }) : null;
     return {
       id: tab.id,
       type: tab.type,
@@ -581,16 +581,16 @@ export function TaskSidePanel({
 
   const launcherSections = useMemo<SidePanelLauncherSection[]>(() => {
     const primary: SidePanelLauncherItem[] = conversationAgentId ? [
-      { id: "agent-tasks", label: t("common.tasks"), description: "Tasks this agent worked on", icon: <ListChecks />, alreadyOpen: controller.tabs.some((tab) => tab.id === "agent-tasks") },
-      { id: "artifacts", label: "Artifacts", description: "Files this agent produced", icon: <Box />, alreadyOpen: controller.tabs.some((tab) => tab.id === "artifacts") },
+      { id: "agent-tasks", label: t("common.tasks"), description: t("taskSidePanel.tasksThisAgentWorkedOn"), icon: <ListChecks />, alreadyOpen: controller.tabs.some((tab) => tab.id === "agent-tasks") },
+      { id: "artifacts", label: t("taskSidePanel.artifacts"), description: t("taskSidePanel.filesThisAgentProduced"), icon: <Box />, alreadyOpen: controller.tabs.some((tab) => tab.id === "artifacts") },
       { id: "properties", label: t("common.properties"), icon: <SlidersHorizontal />, alreadyOpen: controller.tabs.some((tab) => tab.id === "properties") },
     ] : [
       { id: "properties", label: t("common.properties"), icon: <SlidersHorizontal />, alreadyOpen: controller.tabs.some((tab) => tab.id === "properties") },
-      ...(subtasksAvailable ? [{ id: "subtasks", label: taskLabel, description: tasksTab?.hasError ? "Could not load all tasks" : `${taskCount} total`, icon: <ListTree />, alreadyOpen: controller.tabs.some((tab) => tab.id === "subtasks") }] : []),
-      { id: "artifacts", label: "Artifacts", icon: <Box />, alreadyOpen: controller.tabs.some((tab) => tab.id === "artifacts") },
+      ...(subtasksAvailable ? [{ id: "subtasks", label: taskLabel, description: tasksTab?.hasError ? t("taskSidePanel.couldNotLoadAllTasks") : `${taskCount} total`, icon: <ListTree />, alreadyOpen: controller.tabs.some((tab) => tab.id === "subtasks") }] : []),
+      { id: "artifacts", label: t("taskSidePanel.artifacts"), icon: <Box />, alreadyOpen: controller.tabs.some((tab) => tab.id === "artifacts") },
     ];
     for (const [index, browser] of (browsersQuery.data ?? []).entries()) {
-      primary.push({ id: `browser:${browser.id}`, label: (browsersQuery.data?.length ?? 0) > 1 ? `Browser ${index + 1}` : "Browser", description: browser.status, icon: <Globe />, alreadyOpen: controller.tabs.some(tab => tab.id === `browser:${browser.id}`) });
+      primary.push({ id: `browser:${browser.id}`, label: (browsersQuery.data?.length ?? 0) > 1 ? t("taskSidePanel.browserIndex", { index: index + 1 }) : t("taskSidePanel.browser"), description: browser.status, icon: <Globe />, alreadyOpen: controller.tabs.some(tab => tab.id === `browser:${browser.id}`) });
     }
     if (fileTabsEnabled) {
       primary.push({ id: "files", label: t("common.files"), icon: <FolderOpen />, shortcut: "G F", alreadyOpen: controller.tabs.some((tab) => tab.id === "files") });
@@ -599,7 +599,7 @@ export function TaskSidePanel({
       ...(planDocument ? [{
         id: "document:plan",
         label: documentDisplayTitle(planDocument),
-        description: `Revision ${planDocument.latestRevisionNumber ?? 1}`,
+        description: t("taskSidePanel.revisionLatestrevisionnumber", { latestRevisionNumber: planDocument.latestRevisionNumber ?? 1 }),
         icon: <Lightbulb />,
         alreadyOpen: controller.tabs.some((tab) => tab.id === "document:plan"),
       }] : []),
@@ -618,7 +618,7 @@ export function TaskSidePanel({
       { id: "open", label: t("common.open"), items: primary },
     ];
     if (documentItems.length > 0) {
-      sections.push({ id: "documents", label: "Task documents", items: documentItems });
+      sections.push({ id: "documents", label: t("taskSidePanel.taskDocuments"), items: documentItems });
     }
     if (fileTabsEnabled) {
       const recentItems = recentFilesQuery.data?.state === "available"
@@ -632,10 +632,10 @@ export function TaskSidePanel({
         : [];
       sections.push({
         id: "recent-files",
-        label: "Recent workspace files",
+        label: t("taskSidePanel.recentWorkspaceFiles"),
         items: recentItems,
         loading: recentFilesQuery.isLoading,
-        error: recentFilesQuery.isError ? "Recent files are temporarily unavailable." : null,
+        error: recentFilesQuery.isError ? t("taskSidePanel.recentFilesAreTemporarilyUnavailable") : null,
       });
     }
     return sections;
@@ -695,7 +695,7 @@ export function TaskSidePanel({
               ? "h-(--side-panel-tab-height) w-(--side-panel-tab-height) rounded-md"
               : "h-(--side-panel-tab-height) w-(--side-panel-tab-height) rounded-(--side-panel-control-radius)",
           )}
-          aria-label="Open a new tab"
+          aria-label={t("taskSidePanel.openANewTab")}
         >
           <Plus aria-hidden />
         </Button>
@@ -844,7 +844,7 @@ export function TaskSidePanel({
           {header}
           {onRequestClose ? (
             mobile ? (
-              <Button variant="ghost" size="icon" className="size-(--sz-44px) shrink-0" aria-label="Close side panel" onClick={onRequestClose}>
+              <Button variant="ghost" size="icon" className="size-(--sz-44px) shrink-0" aria-label={t("taskSidePanel.closeSidePanel")} onClick={onRequestClose}>
                 <X aria-hidden />
               </Button>
             ) : <SidePanelToggleButton open onToggle={onRequestClose} />

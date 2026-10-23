@@ -124,7 +124,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
     onSuccess: (definition) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.userDefinitions(companyId) });
       pushToast({
-        title: editing ? "Definition updated" : "Definition created",
+        title: editing ? t("userSecretDefinitionsTab.definitionUpdated") : t("userSecretDefinitionsTab.definitionCreated"),
         body: definition.name,
         tone: "success",
       });
@@ -139,12 +139,12 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
       secretsApi.removeUserSecretDefinition(companyId, definition.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.userDefinitions(companyId) });
-      pushToast({ title: "Definition removed", tone: "info" });
+      pushToast({ title: t("userSecretDefinitionsTab.definitionRemoved"), tone: "info" });
       setDeleteTarget(null);
     },
     onError: (err) =>
       pushToast({
-        title: "Could not remove definition",
+        title: t("userSecretDefinitionsTab.couldNotRemoveDefinition"),
         body: err instanceof Error ? err.message : undefined,
         tone: "error",
       }),
@@ -157,15 +157,13 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
       <div className="flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/5 px-4 py-3 text-xs text-violet-800 dark:text-violet-200">
         <UserRound className="h-4 w-4 mt-0.5 shrink-0" />
         <p>
-          Define credentials that <span className="font-medium">each member supplies for
-          themselves</span>. You set the shape here; every user enters their own value under My
-          secrets. Coverage shows how many members have set a value — never the values themselves.
+          {t("userSecretDefinitionsTab.defineCredentialsThat")} <span className="font-medium">{t("userSecretDefinitionsTab.eachMemberSuppliesForThemselves")}</span>{t("userSecretDefinitionsTab.youSetTheShapeHere")}
         </p>
       </div>
 
       <div className="flex items-center justify-end">
         <Button size="sm" onClick={openCreate}>
-          <Plus className="mr-1 h-3.5 w-3.5" /> New user secret
+          <Plus className="mr-1 h-3.5 w-3.5" /> {t("userSecretDefinitionsTab.newUserSecret")}
         </Button>
       </div>
 
@@ -181,8 +179,8 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
         ) : definitions.length === 0 && !definitionsQuery.isPending ? (
           <EmptyState
             icon={UserRound}
-            message="No user secret definitions yet. Create one to require each member to supply their own credential."
-            action="New user secret"
+            message={t("userSecretDefinitionsTab.noUserSecretDefinitionsYet")}
+            action={t("userSecretDefinitionsTab.newUserSecret")}
             onAction={openCreate}
           />
         ) : (
@@ -235,11 +233,11 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              {editing ? "Edit user secret" : "New user secret"}
+              {editing ? t("userSecretDefinitionsTab.editUserSecret") : t("userSecretDefinitionsTab.newUserSecret")}
               <UserSecretChip />
             </DialogTitle>
             <DialogDescription>
-              Members supply their own value for this credential. No value is entered here.
+              {t("userSecretDefinitionsTab.membersSupplyTheirOwnValue")}
             </DialogDescription>
           </DialogHeader>
 
@@ -256,7 +254,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
                     key: keyDirty ? current.key : keyFromName(name),
                   }));
                 }}
-                placeholder="Personal GitHub token"
+                placeholder={t("userSecretDefinitionsTab.personalGithubToken")}
                 autoFocus
               />
             </div>
@@ -273,7 +271,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
                 disabled={Boolean(editing)}
               />
               <p className="text-(length:--text-micro) text-muted-foreground">
-                Stable identifier referenced by env bindings. {editing ? "Cannot be changed." : ""}
+                Stable identifier referenced by env bindings. {editing ? t("userSecretDefinitionsTab.cannotBeChanged") : ""}
               </p>
             </div>
             <div className="space-y-1">
@@ -283,19 +281,19 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
                 onChange={(event) =>
                   setForm((current) => ({ ...current, description: event.target.value }))
                 }
-                placeholder="What this credential is for"
+                placeholder={t("userSecretDefinitionsTab.whatThisCredentialIsFor")}
               />
             </div>
             <div className="space-y-1">
               <label className="text-xs font-medium text-foreground">
-                Usage guidance <span className="text-muted-foreground">(optional)</span>
+                {t("userSecretDefinitionsTab.usageGuidance")} <span className="text-muted-foreground">{t("userSecretDefinitionsTab.optional")}</span>
               </label>
               <Textarea
                 value={form.usageGuidance}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, usageGuidance: event.target.value }))
                 }
-                placeholder="Tell members how to create their token, required scopes, etc."
+                placeholder={t("userSecretDefinitionsTab.tellMembersHowToCreate")}
                 className="min-h-(--sz-70px) text-sm"
               />
             </div>
@@ -337,10 +335,9 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
       <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Remove user secret?</DialogTitle>
+            <DialogTitle>{t("userSecretDefinitionsTab.removeUserSecret")}</DialogTitle>
             <DialogDescription>
-              This removes the definition <span className="font-mono">{deleteTarget?.key}</span> for
-              the whole company. Existing member values become unreferenced. This cannot be undone.
+              {t("userSecretDefinitionsTab.thisRemovesTheDefinition")} <span className="font-mono">{deleteTarget?.key}</span> {t("userSecretDefinitionsTab.forTheWholeCompanyExisting")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -352,7 +349,7 @@ export function UserSecretDefinitionsTab({ companyId }: { companyId: string }) {
               onClick={() => deleteTarget && remove.mutate(deleteTarget)}
               disabled={remove.isPending}
             >
-              {remove.isPending ? "Removing…" : t("common.remove")}
+              {remove.isPending ? t("userSecretDefinitionsTab.removing") : t("common.remove")}
             </Button>
           </DialogFooter>
         </DialogContent>

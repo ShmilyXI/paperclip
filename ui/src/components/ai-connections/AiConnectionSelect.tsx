@@ -123,14 +123,14 @@ export function AiConnectionSelect({
         <SelectTrigger id={selectId} aria-label={t("common.connection")} className="w-full">
           <SelectValue
             placeholder={
-              loading ? "Loading connections…" : "Choose a connection"
+              loading ? t("aiConnectionSelect.loadingConnections") : t("aiConnectionSelect.chooseAConnection")
             }
           >
             {selected
-              ? <ConnectionLabel connection={selected} label={value?.mode === "responsible_user" ? "Responsible user’s default" : undefined} />
+              ? <ConnectionLabel connection={selected} label={value?.mode === "responsible_user" ? t("aiConnectionSelect.responsibleUserSDefault") : undefined} />
               : value?.mode === "responsible_user"
-                ? "Responsible user’s default"
-                : value ? "Unavailable connection" : undefined}
+                ? t("aiConnectionSelect.responsibleUserSDefault")
+                : value ? t("aiConnectionSelect.unavailableConnection") : undefined}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
@@ -151,17 +151,17 @@ export function AiConnectionSelect({
           {(canUseDefault || value?.mode === "responsible_user") && (
             <SelectItem value="responsible_user" disabled={!canUseDefault}>
               <span className="flex size-5 shrink-0 items-center justify-center"><UserRound className="size-4" /></span>
-              Responsible user’s default
+              {t("aiConnectionSelect.responsibleUserSDefault")}
             </SelectItem>
           )}
           <SelectItem value="connect">
             <span className="flex size-5 shrink-0 items-center justify-center"><Plus className="size-4" /></span>
-            Connect an account…
+            {t("aiConnectionSelect.connectAnAccount")}
           </SelectItem>
         </SelectContent>
       </Select>
       {!readOnly && onReconnect && !loading && !error && (
-        <Button type="button" variant="outline" onClick={onReconnect}>Reconnect account</Button>
+        <Button type="button" variant="outline" onClick={onReconnect}>{t("aiConnectionSelect.reconnectAccount")}</Button>
       )}
       {error && (
         <div className="space-y-2">
@@ -169,22 +169,21 @@ export function AiConnectionSelect({
             {error}
           </p>
           <Button type="button" variant="outline" onClick={onRetry}>
-            Retry connections
+            {t("aiConnectionSelect.retryConnections")}
           </Button>
         </div>
       )}
       {value?.mode === "responsible_user" && !personal && !loading && !error ? (
         <p role="alert" className="text-sm text-destructive">
-          You have no default account for this provider. Connect an account or choose another connection.
+          {t("aiConnectionSelect.youHaveNoDefaultAccount")}
         </p>
       ) : unavailable ? (
         <p role="alert" className="text-sm text-destructive">
-          This connection is unavailable. Choose another connection.
+          {t("aiConnectionSelect.thisConnectionIsUnavailableChoose")}
         </p>
       ) : incompatible ? (
         <p role="alert" className="text-sm text-destructive">
-          This connection does not support the selected harness. Choose a
-          compatible connection.
+          {t("aiConnectionSelect.thisConnectionDoesNotSupport")}
         </p>
       ) : selected && aiConnectionProblem(selected) ? (
         <p role="alert" className="text-sm text-destructive">

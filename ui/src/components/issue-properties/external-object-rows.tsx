@@ -176,7 +176,7 @@ export function ExternalObjectRows({
 
   if (externalObjectsError) {
     return (
-      <PropertyRow label="External objects">
+      <PropertyRow label={t("externalObjectRows.externalObjects")}>
         <span className="text-xs text-muted-foreground">
           Couldn't load external objects.
           {onRetryExternalObjects ? (
@@ -198,7 +198,7 @@ export function ExternalObjectRows({
 
   if (externalObjectsLoading) {
     return (
-      <PropertyRow label="External objects">
+      <PropertyRow label={t("externalObjectRows.externalObjects")}>
         <span className="h-4 w-24 animate-pulse rounded bg-muted/40" />
       </PropertyRow>
     );
@@ -227,7 +227,7 @@ export function ExternalObjectRows({
           );
         })}
       {expanded || hiddenExternalObjectCount > 0 ? (
-        <PropertyRow label="References">
+        <PropertyRow label={t("externalObjectRows.references")}>
           <ExpandRelationListButton
             hiddenCount={hiddenExternalObjectCount}
             expanded={expanded}

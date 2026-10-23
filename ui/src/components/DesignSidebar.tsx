@@ -25,29 +25,29 @@ export function DesignSidebar({ onNewTask, recentTasks = [] }: { onNewTask: () =
       <div className="design-sidebar">
         <div className="design-sidebar-brand">
           <SidebarCompanyMenu showChevron={false} />
-          <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="design-sidebar-search" aria-label="Global search" onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true, cancelable: true }))}><Search aria-hidden /></Button></TooltipTrigger><TooltipContent side="right">Search tasks, agents, projects</TooltipContent></Tooltip>
+          <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="design-sidebar-search" aria-label={t("designSidebar.globalSearch")} onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true, cancelable: true }))}><Search aria-hidden /></Button></TooltipTrigger><TooltipContent side="right">Search tasks, agents, projects</TooltipContent></Tooltip>
         </div>
-        <nav className="design-sidebar-navigation" aria-label="Main navigation">
+        <nav className="design-sidebar-navigation" aria-label={t("designSidebar.mainNavigation")}>
           <div className="design-sidebar-primary">
             <Button variant="ghost" className="design-sidebar-new-task" onClick={onNewTask}><CirclePlus aria-hidden />{t("common.newTask")}</Button>
             <SidebarNavItem className="design-sidebar-item" to={`${root}/dashboard`} label={t("common.dashboard")} icon={LayoutDashboard} />
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/chats`} label="Chat" icon={MessageCircle} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/chats`} label={t("designSidebar.chat")} icon={MessageCircle} />
           </div>
-          <SidebarSection label="Work">
+          <SidebarSection label={t("designSidebar.work")}>
             <SidebarNavItem className="design-sidebar-item" to={`${root}/issues`} label={t("common.tasks")} icon={CircleCheck} />
             <SidebarNavItem className="design-sidebar-item" to={`${root}/projects`} label={t("common.projects")} icon={FolderOpen} />
             <SidebarNavItem className="design-sidebar-item" to={`${root}/routines`} label={t("common.routines")} icon={Repeat} />
-            <SidebarNavItem className="design-sidebar-item" to={`${root}/artifacts`} label="Artifacts" icon={Package} />
+            <SidebarNavItem className="design-sidebar-item" to={`${root}/artifacts`} label={t("designSidebar.artifacts")} icon={Package} />
           </SidebarSection>
-          <SidebarSection label="Org">
+          <SidebarSection label={t("designSidebar.org")}>
             <SidebarNavItem className="design-sidebar-item" to={`${root}/agents`} label={t("common.agents")} icon={Users} />
             <SidebarNavItem className="design-sidebar-item" to={`${root}/skills`} label={t("common.skills")} icon={Boxes} />
             <SidebarNavItem className="design-sidebar-item" to={`${root}/apps`} label={t("common.connectors")} icon={Unplug} />
             <SidebarNavItem className="design-sidebar-item" to={`${root}/activity`} label={t("common.audit")} icon={History} />
           </SidebarSection>
           {companyRecentTasks.length > 0 ? <div className="design-sidebar-recents">
-            <SidebarSection label="Recent Tasks">
-              <div onScroll={handleRecentScroll} className="design-sidebar-recent-list scrollbar-while-scrolling" role="region" aria-label="Recent tasks" tabIndex={0}>
+            <SidebarSection label={t("designSidebar.recentTasks")}>
+              <div onScroll={handleRecentScroll} className="design-sidebar-recent-list scrollbar-while-scrolling" role="region" aria-label={t("designSidebar.recentTasks2")} tabIndex={0}>
               {companyRecentTasks.map(issue => <SidebarNavItem key={issue.id} className="design-sidebar-item" to={`${root}/issues/${issue.identifier}`} label={issue.title} />)}
               </div>
             </SidebarSection>

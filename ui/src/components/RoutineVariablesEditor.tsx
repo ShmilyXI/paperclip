@@ -84,7 +84,7 @@ export function RoutineVariablesEditor({
     <Collapsible open={open} onOpenChange={setOpen} className="overflow-hidden rounded-lg border border-border/70">
       <CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2 text-left">
         <div>
-          <p className="text-sm font-medium">Variables</p>
+          <p className="text-sm font-medium">{t("routineVariablesEditor.variables")}</p>
           <p className="text-xs text-muted-foreground">
             Detected from `{"{{name}}"}` placeholders in the title and instructions.
           </p>
@@ -99,13 +99,13 @@ export function RoutineVariablesEditor({
                 {`{{${variable.name}}}`}
               </Badge>
               <span className="text-xs text-muted-foreground">
-                Prompt the user for this value before each manual run.
+                {t("routineVariablesEditor.promptTheUserForThis")}
               </span>
             </div>
 
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-1.5">
-                <Label className="text-xs">Label</Label>
+                <Label className="text-xs">{t("routineVariablesEditor.label")}</Label>
                 <Input
                   value={variable.label ?? ""}
                   onChange={(event) => onChange(updateVariableList(syncedVariables, variable.name, (current) => ({
@@ -140,7 +140,7 @@ export function RoutineVariablesEditor({
 
               <div className="space-y-1.5 md:col-span-2">
                 <div className="flex items-center justify-between gap-3">
-                  <Label className="text-xs">Default value</Label>
+                  <Label className="text-xs">{t("routineVariablesEditor.defaultValue")}</Label>
                   <label className="flex items-center gap-2 text-xs text-muted-foreground">
                     <input
                       type="checkbox"
@@ -175,9 +175,9 @@ export function RoutineVariablesEditor({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="__unset__">No default</SelectItem>
-                      <SelectItem value="true">True</SelectItem>
-                      <SelectItem value="false">False</SelectItem>
+                      <SelectItem value="__unset__">{t("routineVariablesEditor.noDefault")}</SelectItem>
+                      <SelectItem value="true">{t("routineVariablesEditor.true")}</SelectItem>
+                      <SelectItem value="false">{t("routineVariablesEditor.false")}</SelectItem>
                     </SelectContent>
                   </Select>
                 ) : variable.type === "select" ? (
@@ -197,11 +197,11 @@ export function RoutineVariablesEditor({
                                 : null,
                           })));
                         }}
-                        placeholder="high, medium, low"
+                        placeholder={t("routineVariablesEditor.highMediumLow")}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Default option</Label>
+                      <Label className="text-xs">{t("routineVariablesEditor.defaultOption")}</Label>
                       <Select
                         value={typeof variable.defaultValue === "string" ? variable.defaultValue : "__unset__"}
                         onValueChange={(next) => onChange(updateVariableList(syncedVariables, variable.name, (current) => ({
@@ -210,10 +210,10 @@ export function RoutineVariablesEditor({
                         })))}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="No default" />
+                          <SelectValue placeholder={t("routineVariablesEditor.noDefault")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="__unset__">No default</SelectItem>
+                          <SelectItem value="__unset__">{t("routineVariablesEditor.noDefault")}</SelectItem>
                           {variable.options.map((option) => (
                             <SelectItem key={option} value={option}>{option}</SelectItem>
                           ))}
@@ -238,7 +238,7 @@ export function RoutineVariablesEditor({
                       ...current,
                       defaultValue: event.target.value || null,
                     })))}
-                    placeholder={variable.type === "number" ? "42" : "Default value"}
+                    placeholder={variable.type === "number" ? "42" : t("routineVariablesEditor.defaultValue")}
                   />
                 )}
               </div>
@@ -260,12 +260,12 @@ const BUILTIN_VARIABLE_DOCS: BuiltinVariableDoc[] = [
   {
     name: "date",
     example: "2026-04-28",
-    description: "Current date in YYYY-MM-DD format (UTC) at the time the routine runs.",
+    description: t("routineVariablesEditor.currentDateInYyyyMm"),
   },
   {
     name: "timestamp",
-    example: "April 28, 2026 at 12:17 PM UTC",
-    description: "Human-readable date and time (UTC) at the time the routine runs.",
+    example: t("routineVariablesEditor.april282026At12"),
+    description: t("routineVariablesEditor.humanReadableDateAndTime"),
   },
 ];
 
@@ -282,7 +282,7 @@ export function RoutineVariablesHint() {
           type="button"
           onClick={() => setHelpOpen(true)}
           className="shrink-0 rounded-full p-0.5 text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Show variable help"
+          aria-label={t("routineVariablesEditor.showVariableHelp")}
         >
           <HelpCircle className="h-3.5 w-3.5" />
         </button>
@@ -291,48 +291,46 @@ export function RoutineVariablesHint() {
       <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
         <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle>Routine variables</DialogTitle>
+            <DialogTitle>{t("routineVariablesEditor.routineVariables")}</DialogTitle>
             <DialogDescription>
-              How to prompt for inputs and which variables Paperclip fills in automatically.
+              {t("routineVariablesEditor.howToPromptForInputs")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-5 text-sm">
             <section className="space-y-2">
               <h3 className="text-xs font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-                Custom variables
+                {t("routineVariablesEditor.customVariables")}
               </h3>
               <p className="text-muted-foreground">
-                Type{" "}
+                {t("routineVariablesEditor.type")}{" "}
                 <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground">
                   {"{{variable_name}}"}
                 </code>{" "}
-                anywhere in the title or instructions. Paperclip detects each placeholder, lists it
-                under <span className="font-medium text-foreground">Variables</span>, and prompts
-                for a value before each run.
+                {t("routineVariablesEditor.anywhereInTheTitle")}{" "}
+                <span className="font-medium text-foreground">{t("routineVariablesEditor.variables")}</span>{t("routineVariablesEditor.andPromptsForAValue")}
               </p>
               <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
-                <li>Names must start with a letter and may use letters, numbers, and underscores.</li>
-                <li>Pick a type (text, textarea, number, boolean, select, date), default value, and whether it is required.</li>
-                <li>Variable names ending in capital Date, such as startDate, are created as date variables by default.</li>
-                <li>The same name reused across the title and instructions is treated as one variable.</li>
+                <li>{t("routineVariablesEditor.namesMustStartWithA")}</li>
+                <li>{t("routineVariablesEditor.pickATypeTextTextarea")}</li>
+                <li>{t("routineVariablesEditor.variableNamesEndingInCapital")}</li>
+                <li>{t("routineVariablesEditor.theSameNameReusedAcross")}</li>
               </ul>
             </section>
 
             <section className="space-y-2">
               <h3 className="text-xs font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-                Built-in variables
+                {t("routineVariablesEditor.builtInVariables")}
               </h3>
               <p className="text-muted-foreground">
-                These are filled in automatically — no setup needed and they will not appear in the
-                Variables list.
+                {t("routineVariablesEditor.theseAreFilledInAutomatically")}
               </p>
               <div className="overflow-hidden rounded-lg border border-border/70">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-muted/40 text-muted-foreground">
                     <tr>
-                      <th className="px-3 py-2 font-medium">Placeholder</th>
-                      <th className="px-3 py-2 font-medium">Example</th>
+                      <th className="px-3 py-2 font-medium">{t("routineVariablesEditor.placeholder")}</th>
+                      <th className="px-3 py-2 font-medium">{t("routineVariablesEditor.example")}</th>
                       <th className="px-3 py-2 font-medium">{t("common.description")}</th>
                     </tr>
                   </thead>

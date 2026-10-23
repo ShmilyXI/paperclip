@@ -53,8 +53,8 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
   async function requestRestartNow() {
     const warning =
       currentDevServer.activeRunCount > 0
-        ? `Restart Paperclip now? This may interrupt ${activeRunLabel}.`
-        : "Restart Paperclip now?";
+        ? t("devRestartBanner.restartPaperclipNowThisMay", { activeRunLabel })
+        : t("devRestartBanner.restartPaperclipNow");
     if (!window.confirm(warning)) return;
 
     setRestartPending(true);
@@ -62,7 +62,7 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
       await healthApi.requestDevServerRestart();
     } catch (error) {
       setRestartPending(false);
-      window.alert(error instanceof Error ? error.message : "Failed to request restart");
+      window.alert(error instanceof Error ? error.message : t("devRestartBanner.failedToRequestRestart"));
     }
   }
 
@@ -72,10 +72,10 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-(--tracking-caps)">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-            <span>Restart Required</span>
+            <span>{t("devRestartBanner.restartRequired")}</span>
             {devServer.autoRestartEnabled ? (
               <Badge variant="ghost" className="bg-amber-900/10 text-(length:--text-nano) tracking-(--tracking-eyebrow) dark:bg-amber-100/10">
-                Auto-Restart On
+                {t("devRestartBanner.autoRestartOn")}
               </Badge>
             ) : null}
           </div>
@@ -103,17 +103,17 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
           {devServer.waitingForIdle ? (
             <div className="inline-flex items-center gap-2 rounded-full bg-amber-900/10 px-3 py-1.5 dark:bg-amber-100/10">
               <TimerReset className="h-3.5 w-3.5" />
-              <span>Waiting for {activeRunLabel} to finish</span>
+              <span>{t("devRestartBanner.waitingForRun", { run: activeRunLabel })}</span>
             </div>
           ) : devServer.autoRestartEnabled ? (
             <div className="inline-flex items-center gap-2 rounded-full bg-amber-900/10 px-3 py-1.5 dark:bg-amber-100/10">
               <RotateCcw className="h-3.5 w-3.5" />
-              <span>Auto-restart will trigger when the instance is idle</span>
+              <span>{t("devRestartBanner.autoRestartWillTriggerWhen")}</span>
             </div>
           ) : (
             <div className="inline-flex items-center gap-2 rounded-full bg-amber-900/10 px-3 py-1.5 dark:bg-amber-100/10">
               <RotateCcw className="h-3.5 w-3.5" />
-              <span>{t("common.restart")} <code>pnpm dev:once</code> after the active work is safe to interrupt</span>
+              <span>{t("common.restart")} <code>pnpm dev:once</code> {t("devRestartBanner.afterTheActiveWorkIs")}</span>
             </div>
           )}
           <button
@@ -125,7 +125,7 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
             disabled={restartPending}
           >
             <RotateCcw className="h-3.5 w-3.5" />
-            <span>{restartPending ? "Restart requested" : "Restart now"}</span>
+            <span>{restartPending ? t("devRestartBanner.restartRequested") : t("devRestartBanner.restartNow")}</span>
           </button>
         </div>
       </div>

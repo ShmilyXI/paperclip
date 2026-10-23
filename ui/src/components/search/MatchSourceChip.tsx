@@ -16,9 +16,9 @@ const chipStyles: Record<MatchSourceChipKind, string> = {
 
 const chipLabels: Record<MatchSourceChipKind, string> = {
   title: t("common.title"),
-  identifier: "Identifier",
+  identifier: t("matchSourceChip.identifier"),
   comment: t("common.comment"),
-  document: "Doc",
+  document: t("matchSourceChip.doc"),
 };
 
 export interface MatchSourceChipProps {

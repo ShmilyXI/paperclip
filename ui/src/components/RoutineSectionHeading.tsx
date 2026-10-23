@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Copy } from "lucide-react";
 import { CopyText } from "./CopyText";
 
@@ -17,8 +18,8 @@ export function RoutineSectionHeading({
       {copyText != null ? (
         <CopyText
           text={copyText}
-          ariaLabel="Copy description"
-          title="Copy description"
+          ariaLabel={t("routineSectionHeading.copyDescription")}
+          title={t("routineSectionHeading.copyDescription")}
           copiedLabel="Description copied"
           className="inline-flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
         >

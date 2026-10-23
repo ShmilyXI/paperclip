@@ -97,7 +97,7 @@ export function ExecutionParticipantPicker({
   const Icon = stageType === "review" ? Eye : ShieldCheck;
 
   if (!policyAvailable) {
-    return <span role="status" className="text-xs text-muted-foreground">Execution policy unavailable. Refresh to try again.</span>;
+    return <span role="status" className="text-xs text-muted-foreground">{t("executionParticipantPicker.executionPolicyUnavailableRefreshTo")}</span>;
   }
 
   return (
@@ -148,7 +148,7 @@ export function ExecutionParticipantPicker({
               onClick={() => toggle(`user:${currentUserId}`)}
             >
               <User className="h-3 w-3 shrink-0 text-muted-foreground" />
-              Assign to me
+              {t("executionParticipantPicker.assignToMe")}
             </button>
           )}
           {issue.createdByUserId && issue.createdByUserId !== currentUserId && (
@@ -160,7 +160,7 @@ export function ExecutionParticipantPicker({
               onClick={() => toggle(`user:${issue.createdByUserId}`)}
             >
               <User className="h-3 w-3 shrink-0 text-muted-foreground" />
-              {creatorUserLabel ?? "Requester"}
+              {creatorUserLabel ?? t("executionParticipantPicker.requester")}
             </button>
           )}
           {otherUserOptions

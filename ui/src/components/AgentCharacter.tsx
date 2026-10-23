@@ -1,4 +1,3 @@
-import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import { resolveAgentAppearance, type CharacterState } from "@paperclipai/shared";
 import { cn } from "@/lib/utils";

@@ -127,14 +127,14 @@ function AgentAccessSection({
   return (
     <section className="space-y-4 border-t border-border pt-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-sm font-semibold text-foreground">Which agents can use this connection?</h2>
+        <h2 className="text-sm font-semibold text-foreground">{t("permissionsPanel.whichAgentsCanUseThis")}</h2>
         {disabled ? <span className="text-xs text-muted-foreground">{t("common.saving2")}</span> : null}
       </div>
 
       {canManage ? (
         <div className="space-y-3">
           <RadioCardGroup
-            ariaLabel="Which agents can use this connection"
+            ariaLabel={t("permissionsPanel.whichAgentsCanUseThis2")}
             value={access.mode}
             disabled={disabled}
             className="sm:grid-cols-2"
@@ -148,16 +148,16 @@ function AgentAccessSection({
             options={[
               {
                 value: "specific",
-                title: "Just agents I pick",
+                title: t("permissionsPanel.justAgentsIPick"),
                 description: install.onAll
-                  ? "Unavailable while this connection is installed for every agent."
-                  : "Available only to selected agents.",
+                  ? t("permissionsPanel.unavailableWhileThisConnectionIs")
+                  : t("permissionsPanel.availableOnlyToSelectedAgents"),
                 disabled: install.onAll,
               },
               {
                 value: "all",
-                title: "Any agent",
-                description: "Available across your company.",
+                title: t("permissionsPanel.anyAgent"),
+                description: t("permissionsPanel.availableAcrossYourCompany"),
               },
             ]}
           />
@@ -168,11 +168,11 @@ function AgentAccessSection({
               selectedAgentIds={access.agentIds}
               disabled={disabled}
               triggerLabel={access.agentIds.size === 0
-                ? "Choose agents"
+                ? t("permissionsPanel.chooseAgents")
                 : `${access.agentIds.size} ${access.agentIds.size === 1 ? "agent" : "agents"} selected`}
-              emptyMessage="You cannot edit any agents yet."
+              emptyMessage={t("permissionsPanel.youCannotEditAnyAgents")}
               isAgentDisabled={(agent) => requiredAgentIds.has(agent.id)}
-              getDescription={(agent) => requiredAgentIds.has(agent.id) ? "Required by this connection's install setting" : agent.title}
+              getDescription={(agent) => requiredAgentIds.has(agent.id) ? t("permissionsPanel.requiredByThisConnectionS") : agent.title}
               onChange={(agentIds) => onSave({
                 mode: "specific",
                 agentIds: new Set([...agentIds, ...requiredAgentIds]),
@@ -181,9 +181,9 @@ function AgentAccessSection({
           ) : null}
         </div>
       ) : access.mode === "all" ? (
-        <p className="text-sm text-muted-foreground">Any agent can use this connection.</p>
+        <p className="text-sm text-muted-foreground">{t("permissionsPanel.anyAgentCanUseThis")}</p>
       ) : selectedAgents.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No agents can use this connection.</p>
+        <p className="text-sm text-muted-foreground">{t("permissionsPanel.noAgentsCanUseThis")}</p>
       ) : (
         <div className="space-y-0.5">
           {selectedAgents.map((agent) => (
@@ -291,8 +291,8 @@ export function ActionsSection({
           <div className="relative min-w-(--sz-12rem) flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              aria-label="Find an action"
-              placeholder="Find an action…"
+              aria-label={t("permissionsPanel.findAnAction")}
+              placeholder={t("permissionsPanel.findAnAction2")}
               className="pl-9"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -417,7 +417,7 @@ function ActionGroup({
               }}
               className="h-7 rounded-md border border-input bg-background px-2 text-xs text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
             >
-              {groupValue === "" ? <option value="">Mixed</option> : null}
+              {groupValue === "" ? <option value="">{t("permissionsPanel.mixed")}</option> : null}
               {PERMISSION_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>{`Set all: ${option.label}`}</option>
               ))}
@@ -450,9 +450,9 @@ const PERMISSION_OPTIONS: Array<{
   description: string;
   icon: typeof Ban;
 }> = [
-  { value: "off", label: "Off", description: "Agents cannot run this action.", icon: Ban },
-  { value: "ask", label: "Ask first", description: "A human must approve each call.", icon: ShieldQuestion },
-  { value: "allowed", label: "Allowed", description: "Runs without approval.", icon: Check },
+  { value: "off", label: t("permissionsPanel.off"), description: t("permissionsPanel.agentsCannotRunThisAction"), icon: Ban },
+  { value: "ask", label: t("permissionsPanel.askFirst"), description: t("permissionsPanel.aHumanMustApproveEach"), icon: ShieldQuestion },
+  { value: "allowed", label: t("permissionsPanel.allowed"), description: t("permissionsPanel.runsWithoutApproval"), icon: Check },
 ];
 
 function ActionRow({

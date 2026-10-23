@@ -36,38 +36,38 @@ export function ComposioAppSetup({ name, toolkit, connections, onClose, onBack, 
       await queries.invalidateQueries({ queryKey: queryKeys.tools.composioApps(connection.id), exact: true });
       await queries.invalidateQueries({ queryKey: queryKeys.tools.aggregatorApps(connection.id, userId), exact: true });
       if (next.status === "connected") {
-        pushToast({ title: `${name} is connected through Composio.`, tone: "success" });
+        pushToast({ title: t("composioAppSetup.nameIsConnectedThroughComposio", { name }), tone: "success" });
         onClose();
       }
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Couldn’t configure this app. Try again.");
+      setError(cause instanceof Error ? cause.message : t("composioAppSetup.couldnTConfigureThisApp"));
     } finally { setBusy(false); }
   }
 
   return <div className="space-y-4">
     <div className="space-y-2">
-      <Label htmlFor="composio-app-account">Composio account</Label>
+      <Label htmlFor="composio-app-account">{t("composioAppSetup.composioAccount")}</Label>
       <select id="composio-app-account" value={connectionId} disabled={busy} onChange={event => {
         setConnectionId(event.target.value); setResult(null); setError(null);
       }} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         {connections.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name}</option>)}
-        <option value="__new__">Connect a new account…</option>
+        <option value="__new__">{t("composioAppSetup.connectANewAccount")}</option>
       </select>
     </div>
     {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
-    {result ? <p role="status" className="text-sm text-muted-foreground">Finish connecting {name} in Composio, then return here.</p> : null}
+    {result ? <p role="status" className="text-sm text-muted-foreground">{t("composioAppSetup.finishConnecting")} {name} in Composio, then return here.</p> : null}
     {result?.authorizationUrl ? <Button asChild variant="outline" className="w-full">
       <a href={result.authorizationUrl} target="_blank" rel="noopener noreferrer">Connect {name} in Composio<ExternalLink className="size-4" /></a>
     </Button> : null}
     <div className="flex items-center justify-between gap-2">
       <Button variant="ghost" disabled={busy} onClick={onBack ?? onClose}>{onBack ? t("common.back") : t("common.cancel")}</Button>
       <div className="flex items-center gap-2">
-      {result && result.status !== "connected" ? <Button variant="ghost" disabled={busy} onClick={() => void submit({ action: "start" })}>Get a new link</Button> : null}
+      {result && result.status !== "connected" ? <Button variant="ghost" disabled={busy} onClick={() => void submit({ action: "start" })}>{t("composioAppSetup.getANewLink")}</Button> : null}
       <Button disabled={!settled || busy || (!connection && connectionId !== "__new__")} onClick={() => {
         if (connectionId === "__new__") onConnectNew();
         else void submit(result ? { action: "complete" } : { action: "start" });
       }}>
-        {busy ? "Checking…" : connectionId === "__new__" ? "Connect new account" : result ? "I’ve connected it" : t("common.continue")}
+        {busy ? t("composioAppSetup.checking") : connectionId === "__new__" ? t("composioAppSetup.connectNewAccount") : result ? "I’ve connected it" : t("common.continue")}
       </Button>
       </div>
     </div>

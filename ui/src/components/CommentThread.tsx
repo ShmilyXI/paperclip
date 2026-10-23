@@ -258,7 +258,7 @@ function CopyMarkdownButton({ text }: { text: string }) {
     }
   }, []);
 
-  const label = status === "copied" ? t("common.copied") : status === "failed" ? "Copy failed" : t("common.copy");
+  const label = status === "copied" ? t("common.copied") : status === "failed" ? t("commentThread.copyFailed") : t("common.copy");
 
   return (
     <button
@@ -363,7 +363,7 @@ function CommentCard({
           ) : null}
           {followUpRequested ? (
             <Badge variant="outline" className="text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow)">
-              Follow-up
+              {t("commentThread.followUp")}
             </Badge>
           ) : null}
           {companyId && !isPending && !isDeleted ? (
@@ -383,7 +383,7 @@ function CommentCard({
             />
           ) : null}
           {isPending ? (
-            <span className="text-xs text-muted-foreground">{isQueued ? "Queueing..." : "Sending..."}</span>
+            <span className="text-xs text-muted-foreground">{isQueued ? t("commentThread.queueing") : t("commentThread.sending")}</span>
           ) : (
             <a
               href={`#comment-${comment.id}`}
@@ -634,7 +634,7 @@ const TimelineList = memo(function TimelineList({
                   <Link to={`/agents/${run.agentId}`} className="font-medium text-foreground transition-colors hover:underline">
                     {actorName}
                   </Link>
-                  <span className="text-muted-foreground">run</span>
+                  <span className="text-muted-foreground">{t("commentThread.run")}</span>
                   <Link
                     to={`/agents/${run.agentId}/runs/${run.runId}`}
                     className="inline-flex items-center rounded-md border border-border bg-accent/40 px-2 py-1 font-mono text-xs text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
@@ -667,7 +667,7 @@ const TimelineList = memo(function TimelineList({
                   ) : null}
                   {run.environmentLease?.provider ? (
                     <span>
-                      Provider <span className="text-foreground">{run.environmentLease.provider}</span>
+                      {t("commentThread.provider")} <span className="text-foreground">{run.environmentLease.provider}</span>
                     </span>
                   ) : null}
                   {run.environmentLease ? (
@@ -998,7 +998,7 @@ export function CommentThread({
                 disabled={interruptingQueuedRunId === queuedComments[0].queueTargetRunId}
                 onClick={() => void onInterruptQueued(queuedComments[0]!.queueTargetRunId!)}
               >
-                {interruptingQueuedRunId === queuedComments[0].queueTargetRunId ? "Interrupting..." : "Interrupt"}
+                {interruptingQueuedRunId === queuedComments[0].queueTargetRunId ? t("commentThread.interrupting") : t("commentThread.interrupt")}
               </Button>
             ) : null}
           </div>

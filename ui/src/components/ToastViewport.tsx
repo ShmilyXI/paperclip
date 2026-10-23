@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AgentAvatar } from "./AgentAvatar";
 import { deriveInitials } from "./Identity";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -92,7 +93,7 @@ function AnimatedToast({
         </div>
         <button
           type="button"
-          aria-label="Dismiss notification"
+          aria-label={t("toastViewport.dismissNotification")}
           onClick={() => onDismiss(toast.id)}
           className="mt-0.5 shrink-0 rounded p-1 opacity-50 hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/10"
         >

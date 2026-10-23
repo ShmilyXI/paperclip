@@ -43,47 +43,47 @@ export function PromptInjectionPreventionSettingsView({ settings, choices, model
   }, [newlyConnectedId, choices, onConnectionChange]);
   const selected = choices.find(c => c.grantId === draft.grantId);
   const dirty = revision !== draftRevision;
-  return <section aria-label="Prompt Injection Prevention" className="max-w-2xl space-y-4">
-    <h2 className="text-lg font-semibold">Prompt Injection Prevention</h2>
-    <p className="text-sm text-muted-foreground">Check tool results for instructions that could redirect your agents. The selected provider receives tool content and charges API usage. Built-in detection is used when the model is unavailable.</p>
+  return <section aria-label={t("promptInjectionPrevention.promptInjectionPrevention")} className="max-w-2xl space-y-4">
+    <h2 className="text-lg font-semibold">{t("promptInjectionPrevention.promptInjectionPrevention")}</h2>
+    <p className="text-sm text-muted-foreground">{t("promptInjectionPrevention.checkToolResultsForInstructions")}</p>
     <ConnectionChoiceList selectedId={draft.grantId ?? undefined} disabled={saving || testing}
-      choices={choices.map(c => ({ id: c.grantId, name: c.name, description: c.status === "connected" ? t("common.connected") : "Needs attention",
+      choices={choices.map(c => ({ id: c.grantId, name: c.name, description: c.status === "connected" ? t("common.connected") : t("promptInjectionPrevention.needsAttention"),
         icon: <AppLogo name="OpenRouter" brandKey="openrouter" size={24} /> }))}
       onSelect={grantId => {
         const c = choices.find(c => c.grantId === grantId)!;
         setDraft(d => ({ ...d, connectionId: c.id, grantId, model: d.model || PROMPT_INJECTION_DEFAULT_MODEL, enabled: true }));
         onConnectionChange?.(c.id);
       }} />
-    {!choices.length && <p className="text-sm text-muted-foreground">Add a shared OpenRouter API connection to use model checks.</p>}
+    {!choices.length && <p className="text-sm text-muted-foreground">{t("promptInjectionPrevention.addASharedOpenrouterApi")}</p>}
     <div className="flex items-center gap-3">
-      {onAdd && <Button variant="outline" size="sm" disabled={saving || testing} onClick={onAdd}>Add OpenRouter connection</Button>}
-      <Link to="/apps" className="text-sm underline underline-offset-4">Manage connections</Link>
+      {onAdd && <Button variant="outline" size="sm" disabled={saving || testing} onClick={onAdd}>{t("promptInjectionPrevention.addOpenrouterConnection")}</Button>}
+      <Link to="/apps" className="text-sm underline underline-offset-4">{t("promptInjectionPrevention.manageConnections")}</Link>
     </div>
     {draft.connectionId && <fieldset disabled={saving || testing} className="space-y-4">
-      {(!selected || selected.status !== "connected") && <p role="status" className="text-sm text-muted-foreground">The saved connection is unavailable. Choose a replacement, disable model checks, or clear the selection. Built-in detection stays active.</p>}
+      {(!selected || selected.status !== "connected") && <p role="status" className="text-sm text-muted-foreground">{t("promptInjectionPrevention.theSavedConnectionIsUnavailable")}</p>}
       <div className="space-y-2">
         <label htmlFor={`${modelId}-input`} className="text-sm font-medium">{t("common.model")}</label>
         <Input id={`${modelId}-input`} list={modelId} value={draft.model} placeholder={PROMPT_INJECTION_DEFAULT_MODEL}
           onChange={e => setDraft(d => ({ ...d, model: e.target.value }))} />
         <datalist id={modelId}>{models.map(m => <option key={m.id} value={m.id}>{m.label ?? m.id}</option>)}</datalist>
       </div>
-      <ToggleField label="Use model for prompt injection checks" checked={draft.enabled} onChange={enabled => setDraft(d => ({ ...d, enabled }))} />
+      <ToggleField label={t("promptInjectionPrevention.useModelForPromptInjection")} checked={draft.enabled} onChange={enabled => setDraft(d => ({ ...d, enabled }))} />
       <Button variant="ghost" size="sm" onClick={() => {
         setDraft(d => ({ ...d, connectionId: null, grantId: null, enabled: false })); onConnectionChange?.(null);
-      }}>Clear selection</Button>
+      }}>{t("promptInjectionPrevention.clearSelection")}</Button>
     </fieldset>}
     {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
     {!dirty && result && <div role={result.passed ? "status" : "alert"} className={result.passed ? "space-y-2 text-sm" : "space-y-2 text-sm text-destructive"}>
-      <p>{result.passed ? "Both model checks passed." : "Model checks did not pass. Check the connection and model, then try again."}</p>
-      {result.samples.map(s => <p key={s.name} className="text-xs">{s.name}: {s.passed ? "Passed" : s.reason ? `Model unavailable (${s.reason}); built-in detection is the fallback.` : "Incorrect verdict"} · {(s.durationMs / 1000).toFixed(2)} seconds</p>)}
+      <p>{result.passed ? t("promptInjectionPrevention.bothModelChecksPassed") : t("promptInjectionPrevention.modelChecksDidNotPass")}</p>
+      {result.samples.map(s => <p key={s.name} className="text-xs">{s.name}: {s.passed ? t("promptInjectionPrevention.passed") : s.reason ? t("promptInjectionPrevention.modelUnavailableReasonBuiltIn", { reason: s.reason }) : t("promptInjectionPrevention.incorrectVerdict")} · {(s.durationMs / 1000).toFixed(2)} {t("promptInjectionPrevention.seconds")}</p>)}
     </div>}
     <div className="flex items-center justify-between gap-3">
       <div className="space-y-1">
-        <Button variant="outline" size="sm" onClick={onTest} disabled={dirty || !settings.enabled || saving || testing}>{testing ? "Testing…" : "Test model checks"}</Button>
-        <p className="text-xs text-muted-foreground">{dirty ? "Save changes before testing." : "Tests two fixed samples with an API charge."}</p>
+        <Button variant="outline" size="sm" onClick={onTest} disabled={dirty || !settings.enabled || saving || testing}>{testing ? t("promptInjectionPrevention.testing") : t("promptInjectionPrevention.testModelChecks")}</Button>
+        <p className="text-xs text-muted-foreground">{dirty ? t("promptInjectionPrevention.saveChangesBeforeTesting") : t("promptInjectionPrevention.testsTwoFixedSamplesWith")}</p>
       </div>
       {dirty && <Button disabled={saving || testing || !updatePromptInjectionPreventionSchema.safeParse(draft).success || (draft.enabled && selected?.status !== "connected")}
-        onClick={() => onSave(draft)}>{saving ? t("common.saving2") : "Save prompt injection settings"}</Button>}
+        onClick={() => onSave(draft)}>{saving ? t("common.saving2") : t("promptInjectionPrevention.savePromptInjectionSettings")}</Button>}
     </div>
   </section>;
 }
@@ -101,18 +101,18 @@ export function PromptInjectionPreventionSettingsSection({ companyId }: { compan
   useEffect(() => { setAdding(false); setNewlyConnectedId(null); setConnectionId(null); }, [companyId]);
   const save = useMutation({ mutationFn: (data: UpdatePromptInjectionPrevention) => promptInjectionPreventionApi.update(companyId, data),
     onSuccess: settings => { test.reset(); client.setQueryData(key, { ...query.data, settings }); } });
-  if (query.isPending) return <p className="text-sm text-muted-foreground">Loading prompt injection settings…</p>;
-  if (query.error) return <div role="alert" className="space-y-2"><p className="text-sm text-destructive">Could not load prompt injection settings.</p><Button variant="outline" onClick={() => void query.refetch()}>{t("common.tryAgain")}</Button></div>;
+  if (query.isPending) return <p className="text-sm text-muted-foreground">{t("promptInjectionPrevention.loadingPromptInjectionSettings")}</p>;
+  if (query.error) return <div role="alert" className="space-y-2"><p className="text-sm text-destructive">{t("promptInjectionPrevention.couldNotLoadPromptInjection")}</p><Button variant="outline" onClick={() => void query.refetch()}>{t("common.tryAgain")}</Button></div>;
   if (!query.data?.canManage || !query.data.settings) return null;
   return <>
     <PromptInjectionPreventionSettingsView key={companyId} settings={query.data.settings} choices={query.data.choices} models={models.data}
       newlyConnectedId={newlyConnectedId} saving={save.isPending} testing={test.isPending}
-      error={save.error?.message ?? test.error?.message ?? (models.error ? "Could not load model suggestions. You can still enter and save a model ID." : null)}
+      error={save.error?.message ?? test.error?.message ?? (models.error ? t("promptInjectionPrevention.couldNotLoadModelSuggestions") : null)}
       result={test.variables === revision ? test.data : null} onConnectionChange={setConnectionId} onDraftChange={resetTest}
       onSave={value => save.mutate(value)} onTest={() => test.mutate(revision)} onAdd={() => setAdding(true)} />
     <Dialog open={adding} onOpenChange={setAdding}>
       <DialogContent className="sm:max-w-2xl max-h-(--sz-85vh) overflow-y-auto">
-        <DialogHeader><DialogTitle>Add an OpenRouter connection</DialogTitle><DialogDescription>Use a shared API connection for prompt injection checks.</DialogDescription></DialogHeader>
+        <DialogHeader><DialogTitle>{t("promptInjectionPrevention.addAnOpenrouterConnection")}</DialogTitle><DialogDescription>{t("promptInjectionPrevention.useASharedApiConnection")}</DialogDescription></DialogHeader>
         <ConnectionSetupFlow host="dialog" serviceSlug="openrouter" forceNewConnection aiConnection={{ provider: "openrouter", method: "api_key", mode: "shared" }} requiredAiOwnership="shared"
           onCancel={() => setAdding(false)} onComplete={async result => {
             const refreshed = await query.refetch();

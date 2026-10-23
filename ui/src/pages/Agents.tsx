@@ -427,7 +427,7 @@ export function Agents({ initialView = "list" }: { initialView?: AgentsView } = 
         metaSpacerClassName="hidden @5xl:block"
         trailing={
           <div className="flex items-center gap-3">
-            {agentChat.enabled && <Button variant="ghost" size="sm" onClick={event => { event.preventDefault(); event.stopPropagation(); navigate(`/chats/${agentRouteRef(agent)}`); }}>Chat</Button>}
+            {agentChat.enabled && <Button variant="ghost" size="sm" onClick={event => { event.preventDefault(); event.stopPropagation(); navigate(`/chats/${agentRouteRef(agent)}`); }}>{t("agents.chat")}</Button>}
             <div className="hidden sm:flex items-center gap-3">
               {liveRunByAgent.has(agent.id) && (
                 <LiveRunIndicator

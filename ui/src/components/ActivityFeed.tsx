@@ -487,7 +487,7 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
           <div className="flex items-center gap-2 px-4 py-1.5" key={`sep-${index}`}>
             <div className="h-px flex-1 bg-border" />
             <span className="text-(length:--text-nano) font-medium text-muted-foreground uppercase tracking-wider">
-              Earlier
+              {t("activityFeed.earlier")}
             </span>
             <div className="h-px flex-1 bg-border" />
           </div>
@@ -569,7 +569,7 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
       const issueName = entityNameMap.get(`issue:${groupKey}`);
       const issueTitle = entityTitleMap.get(`issue:${groupKey}`);
       const label = isOther
-        ? "Other activity"
+        ? t("activityFeed.otherActivity")
         : `${issueName ?? groupKey}${issueTitle ? ` — ${issueTitle}` : ""}`;
 
       return (
@@ -591,19 +591,19 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
     if (!agents) return null;
     if (agents.length === 0) {
       return {
-        text: "No agents set up yet. Add an agent to get started.",
+        text: t("activityFeed.noAgentsSetUpYet"),
         showPulse: false,
       };
     }
     const allPaused = agents.every((a) => a.status === "paused");
     if (allPaused) {
       return {
-        text: "All agents are paused. Resume agents from the sidebar to see activity.",
+        text: t("activityFeed.allAgentsArePausedResume"),
         showPulse: false,
       };
     }
     return {
-      text: "Your agents are running — activity will appear here shortly.",
+      text: t("activityFeed.yourAgentsAreRunningActivity"),
       showPulse: true,
     };
   }, [agents]);
@@ -622,9 +622,9 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
           aria-hidden
         />
         <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-semibold">Agent Feed</h3>
+          <h3 className="text-sm font-semibold">{t("activityFeed.agentFeed")}</h3>
           <p className="text-xs text-muted-foreground">
-            Live activity from your agents
+            {t("activityFeed.liveActivityFromYourAgents")}
           </p>
         </div>
         <div className="flex items-center gap-1">
@@ -636,14 +636,14 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
                 variant={groupMode === "by-task" ? "secondary" : "ghost"}
                 size="icon-sm"
                 className="shrink-0 text-muted-foreground"
-                aria-label="group by task"
+                aria-label={t("activityFeed.groupByTask")}
                 onClick={() => setGroupMode((m) => (m === "flat" ? "by-task" : "flat"))}
               >
                 <Layers className="h-3.5 w-3.5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              {groupMode === "flat" ? "Group by task" : "Show flat"}
+              {groupMode === "flat" ? t("activityFeed.groupByTask2") : t("activityFeed.showFlat")}
             </TooltipContent>
           </Tooltip>
 
@@ -657,13 +657,13 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
                     variant={filter !== "all" || showAllActivity ? "secondary" : "ghost"}
                     size="icon-sm"
                     className="shrink-0 text-muted-foreground"
-                    aria-label="filter by"
+                    aria-label={t("activityFeed.filterBy")}
                   >
                     <ListFilter className="h-3.5 w-3.5" />
                   </Button>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
-              <TooltipContent side="bottom">Filter by</TooltipContent>
+              <TooltipContent side="bottom">{t("activityFeed.filterBy2")}</TooltipContent>
             </Tooltip>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuRadioGroup
@@ -681,7 +681,7 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
                 checked={showAllActivity}
                 onCheckedChange={(v) => setShowAllActivity(!!v)}
               >
-                Show all activity
+                {t("activityFeed.showAllActivity")}
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -704,7 +704,7 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
                 </span>
               )}
               <p className="text-center text-sm text-muted-foreground">
-                {emptyMessage?.text ?? "Activity from your agents will appear here."}
+                {emptyMessage?.text ?? t("activityFeed.activityFromYourAgentsWill")}
               </p>
             </div>
           </div>

@@ -190,7 +190,7 @@ export function AnnotationPanelBody(props: AnnotationPanelProps) {
             props.onFocusThread(null);
             props.onOpenChange(false);
           }}
-          aria-label="Close annotation panel"
+          aria-label={t("documentAnnotationPanel.closeAnnotationPanel")}
         >
           <X className="h-4 w-4" />
         </Button>
@@ -280,7 +280,7 @@ export function AnnotationPanelBody(props: AnnotationPanelProps) {
                 }
               }
             }}
-            placeholder="Write a comment…"
+            placeholder={t("documentAnnotationPanel.writeAComment")}
             disabled={props.newCommentDisabled}
             className="resize-y rounded-none text-sm"
           />
@@ -307,7 +307,7 @@ export function AnnotationPanelBody(props: AnnotationPanelProps) {
               }
               onClick={() => createThread.mutate(composerValue.trim())}
             >
-              {createThread.isPending ? "Posting…" : t("common.comment")}
+              {createThread.isPending ? t("documentAnnotationPanel.posting") : t("common.comment")}
             </Button>
           </div>
         </div>
@@ -384,7 +384,7 @@ export function ThreadCard(props: {
                   }
                 }
               }}
-              placeholder="Reply…"
+              placeholder={t("documentAnnotationPanel.reply")}
               className="resize-y rounded-none text-sm"
               disabled={props.pendingReply}
             />
@@ -403,7 +403,7 @@ export function ThreadCard(props: {
                   </>
                 ) : (
                   <>
-                    <Check className="h-3 w-3" /> Resolve
+                    <Check className="h-3 w-3" /> {t("documentAnnotationPanel.resolve")}
                   </>
                 )}
               </Button>
@@ -413,7 +413,7 @@ export function ThreadCard(props: {
                 disabled={!props.replyDraft.trim() || props.pendingReply}
                 onClick={props.onSubmitReply}
               >
-                {props.pendingReply ? "Sending…" : t("common.reply")}
+                {props.pendingReply ? t("documentAnnotationPanel.sending") : t("common.reply")}
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -423,7 +423,7 @@ export function ThreadCard(props: {
                     size="icon-xs"
                     className="text-muted-foreground"
                     title={t("common.moreActions")}
-                    aria-label="More thread actions"
+                    aria-label={t("documentAnnotationPanel.moreThreadActions")}
                   >
                     <MoreHorizontal className="h-3.5 w-3.5" />
                   </Button>
@@ -436,7 +436,7 @@ export function ThreadCard(props: {
                     }}
                   >
                     <Copy className="h-3.5 w-3.5" />
-                    Copy link
+                    {t("documentAnnotationPanel.copyLink")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

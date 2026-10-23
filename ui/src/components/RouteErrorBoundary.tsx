@@ -43,9 +43,9 @@ class RouteErrorBoundaryInner extends Component<RouteErrorBoundaryInnerProps, Ro
     return (
       <div className="mx-auto max-w-2xl space-y-4 px-4 py-10">
         <div>
-          <h1 className="text-lg font-semibold">This page hit an error</h1>
+          <h1 className="text-lg font-semibold">{t("routeErrorBoundary.thisPageHitAnError")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Something went wrong while rendering this page. You can go back and try again, or reload.
+            {t("routeErrorBoundary.somethingWentWrongWhileRendering")}
           </p>
         </div>
         <pre className="overflow-auto rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive whitespace-pre-wrap">
@@ -56,7 +56,7 @@ class RouteErrorBoundaryInner extends Component<RouteErrorBoundaryInnerProps, Ro
             {t("common.goBack")}
           </Button>
           <Button size="sm" onClick={() => window.location.reload()}>
-            Reload page
+            {t("routeErrorBoundary.reloadPage")}
           </Button>
         </div>
       </div>

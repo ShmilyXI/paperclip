@@ -77,8 +77,8 @@ export function FingerprintChip({
       type="button"
       onClick={() => {
         copyTextToClipboard(full)
-          .then(() => pushToast({ title: "Fingerprint copied", tone: "success" }))
-          .catch(() => pushToast({ title: "Couldn’t copy fingerprint", tone: "error" }));
+          .then(() => pushToast({ title: t("proposalReview.fingerprintCopied"), tone: "success" }))
+          .catch(() => pushToast({ title: t("proposalReview.couldnTCopyFingerprint"), tone: "error" }));
       }}
       title={`Copy full digest — ${full}`}
       className={cn(
@@ -95,7 +95,7 @@ export function FingerprintChip({
 
 /**
  * An agent-authored justification, framed as an *untrusted claim* rather than
- * trusted UI copy. The muted "Reason given by the agent" caption primes the
+ * trusted UI copy. The muted t("proposalReview.reasonGivenByTheAgent") caption primes the
  * approver to read it skeptically — the Q0 social-engineering concern: an agent
  * can write "Pre-approved by the CEO" and otherwise inherit the interface's
  * credibility.
@@ -109,7 +109,7 @@ export function ProposalJustification({
 }) {
   return (
     <div className={cn("space-y-0.5", className)}>
-      <p className="text-(length:--text-micro) text-muted-foreground">Reason given by the agent</p>
+      <p className="text-(length:--text-micro) text-muted-foreground">{t("proposalReview.reasonGivenByTheAgent")}</p>
       <p className="whitespace-pre-wrap break-words text-xs text-foreground/80">
         “{justification}”
       </p>
@@ -154,7 +154,7 @@ export function DeliveryBadge({ configPath }: { configPath: string | null }) {
   );
 }
 
-/** Distinct "Proposed" pill used wherever a proposal is inlined among live rows. */
+/** Distinct t("proposalReview.proposed") pill used wherever a proposal is inlined among live rows. */
 export function ProposedBadge({ className }: { className?: string }) {
   return (
     <Badge
@@ -165,7 +165,7 @@ export function ProposedBadge({ className }: { className?: string }) {
         className,
       )}
     >
-      <ShieldAlert className="size-3" /> Proposed
+      <ShieldAlert className="size-3" /> {t("proposalReview.proposed")}
     </Badge>
   );
 }
@@ -220,7 +220,7 @@ export interface UseProposalReview {
 
 /**
  * Shared approve/reject workflow for secret & binding proposals. Both the
- * board Proposals tab and the agent-settings "Proposed" rows use this so the
+ * board Proposals tab and the agent-settings t("proposalReview.proposed") rows use this so the
  * confirm/reject affordances behave identically everywhere.
  */
 export function useProposalReview(
@@ -262,10 +262,10 @@ export function useProposalReview(
     },
     onSuccess: (result) => {
       pushToast({
-        title: result.kind === "secret" ? "Secret approved" : "Binding approved",
+        title: result.kind === "secret" ? t("proposalReview.secretApproved") : t("proposalReview.bindingApproved"),
         body:
           result.kind === "secret"
-            ? (result.proposedName ?? "Secret created")
+            ? (result.proposedName ?? t("proposalReview.secretCreated"))
             : `${result.target?.name ?? t("common.agent")} · ${bindingEnvKey(result) || "binding"}`,
         tone: "success",
       });
@@ -281,7 +281,7 @@ export function useProposalReview(
       secretsApi.rejectProposal(companyId!, proposal.id, { reason: reason.trim() }),
     onSuccess: (result) => {
       pushToast({
-        title: "Proposal rejected",
+        title: t("proposalReview.proposalRejected"),
         body: result.kind === "secret" ? (result.proposedName ?? undefined) : undefined,
         tone: "info",
       });
@@ -398,19 +398,19 @@ function ApproveDialog({
           <>
             <DialogHeader>
               <DialogTitle>
-                {isSecret ? "Approve & create secret" : "Approve binding"}
+                {isSecret ? t("proposalReview.approveCreateSecret") : t("proposalReview.approveBinding")}
               </DialogTitle>
               <DialogDescription>
                 {isSecret
-                  ? "The value is created as the proposing agent recorded it. Re-folder or rename it before it lands."
-                  : "Grant the target agent access to this secret. This runs with your permissions."}
+                  ? t("proposalReview.theValueIsCreatedAs")
+                  : t("proposalReview.grantTheTargetAgentAccess")}
               </DialogDescription>
             </DialogHeader>
 
             {/* Provenance recap — keeps the social-engineering surface visible. */}
             <div className="space-y-1.5 rounded-md border border-border bg-muted/30 p-2.5 text-xs">
               <div className="flex items-center gap-1.5 text-muted-foreground">
-                <span>Proposed by</span>
+                <span>{t("proposalReview.proposedBy")}</span>
                 <AgentRefChip agent={draft.proposal.proposedBy} className="font-medium text-foreground" />
               </div>
               <ProposalJustification justification={draft.proposal.justification} />
@@ -443,11 +443,11 @@ function ApproveDialog({
                   </div>
                 </div>
                 <p className="text-(length:--text-micro) text-muted-foreground">
-                  Lands as{" "}
+                  {t("proposalReview.landsAs")}{" "}
                   {previewName ? (
                     <SecretPathName name={previewName} className="font-mono" />
                   ) : (
-                    <span className="italic">enter a name</span>
+                    <span className="italic">{t("proposalReview.enterAName")}</span>
                   )}
                 </p>
 
@@ -463,7 +463,7 @@ function ApproveDialog({
 
                 {localConfigs.length > 0 ? (
                   <div className="space-y-1">
-                    <Label htmlFor="approve-provider-config">Provider vault</Label>
+                    <Label htmlFor="approve-provider-config">{t("proposalReview.providerVault")}</Label>
                     <select
                       id="approve-provider-config"
                       value={draft.providerConfigId}
@@ -472,7 +472,7 @@ function ApproveDialog({
                       }
                       className="h-9 w-full rounded-md border border-input bg-transparent px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                     >
-                      <option value="">Deployment default</option>
+                      <option value="">{t("proposalReview.deploymentDefault")}</option>
                       {localConfigs.map((config) => (
                         <option key={config.id} value={config.id}>
                           {config.displayName}
@@ -505,12 +505,12 @@ function ApproveDialog({
               </Button>
               <Button onClick={onConfirm} disabled={pending || !canConfirm}>
                 {pending
-                  ? "Approving…"
+                  ? t("proposalReview.approving")
                   : isSecret
-                    ? "Approve & create"
+                    ? t("proposalReview.approveCreate")
                     : draft.cascade
-                      ? "Approve secret & bind"
-                      : "Approve binding"}
+                      ? t("proposalReview.approveSecretBind")
+                      : t("proposalReview.approveBinding")}
               </Button>
             </DialogFooter>
           </>
@@ -534,7 +534,7 @@ function BindingApproveBody({
     <div className="space-y-3 text-sm">
       <div className="space-y-2 rounded-md border border-border p-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs text-muted-foreground">Target agent</span>
+          <span className="text-xs text-muted-foreground">{t("proposalReview.targetAgent")}</span>
           {proposal.target ? (
             <AgentRefChip agent={proposal.target} className="text-sm font-medium" />
           ) : (
@@ -542,14 +542,14 @@ function BindingApproveBody({
           )}
         </div>
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs text-muted-foreground">Delivered as</span>
+          <span className="text-xs text-muted-foreground">{t("proposalReview.deliveredAs")}</span>
           <span className="flex items-center gap-1.5">
             <DeliveryBadge configPath={proposal.configPath} />
             <code className="font-mono text-xs">{envKey || proposal.configPath}</code>
           </span>
         </div>
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs text-muted-foreground">Secret</span>
+          <span className="text-xs text-muted-foreground">{t("proposalReview.secret")}</span>
           <span className="flex items-center gap-1.5">
             <KeyRound className="size-3.5 text-muted-foreground" />
             <span className="font-medium">{secret.name}</span>
@@ -565,12 +565,12 @@ function BindingApproveBody({
             checked={draft.cascade}
             onCheckedChange={(checked) => onChange({ ...draft, cascade: checked === true })}
             className="mt-0.5"
-            aria-label="Also approve the proposed secret"
+            aria-label={t("proposalReview.alsoApproveTheProposedSecret")}
           />
           <span className="text-foreground/90">
-            Also approve the proposed secret{" "}
-            <span className="font-medium">{secret.name}</span> and create it in the same step. The
-            binding can’t land without it.
+            {t("proposalReview.alsoApproveSecretPrefix")}{" "}
+            <span className="font-medium">{secret.name}</span>{" "}
+            {t("proposalReview.alsoApproveSecretSuffix")}
           </span>
         </label>
       ) : null}
@@ -606,22 +606,22 @@ function RejectDialog({
         {proposal ? (
           <>
             <DialogHeader>
-              <DialogTitle>Reject proposal</DialogTitle>
+              <DialogTitle>{t("proposalReview.rejectProposal")}</DialogTitle>
               <DialogDescription>
-                The reason is sent back to{" "}
-                <AgentRefChip agent={proposal.proposedBy} className="text-foreground" />. Dependent
-                bindings are rejected too.
+                {t("proposalReview.rejectReasonPrefix")}{" "}
+                <AgentRefChip agent={proposal.proposedBy} className="text-foreground" />
+                {t("proposalReview.rejectReasonSuffix")}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-1">
-              <Label htmlFor="reject-reason">Reason</Label>
+              <Label htmlFor="reject-reason">{t("proposalReview.reason")}</Label>
               <Textarea
                 id="reject-reason"
                 value={reason}
                 onChange={(event) => onReasonChange(event.target.value)}
                 rows={3}
                 autoFocus
-                placeholder="Why is this being rejected?"
+                placeholder={t("proposalReview.whyIsThisBeingRejected")}
               />
             </div>
             {error ? (
@@ -634,7 +634,7 @@ function RejectDialog({
                 {t("common.cancel")}
               </Button>
               <Button variant="destructive" onClick={onConfirm} disabled={pending || !canConfirm}>
-                {pending ? "Rejecting…" : t("common.reject")}
+                {pending ? t("proposalReview.rejecting") : t("common.reject")}
               </Button>
             </DialogFooter>
           </>
@@ -682,7 +682,7 @@ export function ProposalActions({
               <span tabIndex={0}>{approveButton}</span>
             </TooltipTrigger>
             <TooltipContent className="max-w-72">
-              {proposal.approveBlockReason ?? "You don’t have permission to approve this."}
+              {proposal.approveBlockReason ?? t("proposalReview.youDonTHavePermission")}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

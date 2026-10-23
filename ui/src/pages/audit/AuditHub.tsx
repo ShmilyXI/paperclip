@@ -110,7 +110,7 @@ export function AuditHub({ section }: { section: AuditSection }) {
   }, [setSearchParams]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={History} message="Select an organization to view Audit." />;
+    return <EmptyState icon={History} message={t("auditHub.selectAnOrganizationToView")} />;
   }
 
   return (

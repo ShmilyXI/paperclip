@@ -27,7 +27,7 @@ export type SystemNoticeMetadataSection = {
 
 export type SystemNoticeProps = {
   tone?: SystemNoticeTone;
-  /** Short label that names the system actor + tone, e.g. "System warning". Required so tone is not color-only. */
+  /** Short label that names the system actor + tone, e.g. t("systemNotice.systemWarning"). Required so tone is not color-only. */
   label?: string;
   /** Short visible body — one or two sentences from the system perspective. */
   body: ReactNode;
@@ -257,11 +257,11 @@ export function SystemNotice({
   const resolvedLabel =
     label ??
     {
-      neutral: "System notice",
-      info: "System notice",
-      success: "System notice",
-      warning: "System warning",
-      danger: "System alert",
+      neutral: t("systemNotice.systemNotice"),
+      info: t("systemNotice.systemNotice"),
+      success: t("systemNotice.systemNotice"),
+      warning: t("systemNotice.systemWarning"),
+      danger: t("systemNotice.systemAlert"),
     }[tone];
 
   return (
@@ -327,7 +327,7 @@ export function SystemNotice({
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
             )}
           >
-            <span>{open ? "Hide details" : t("common.details")}</span>
+            <span>{open ? t("systemNotice.hideDetails") : t("common.details")}</span>
             <ChevronDown
               className={cn(
                 "h-3.5 w-3.5 transition-transform duration-150",

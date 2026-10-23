@@ -40,7 +40,7 @@ export function GoalPropertiesToggleButton({
         panelVisible ? "opacity-0 pointer-events-none w-0 overflow-hidden" : "opacity-100",
       )}
       onClick={onShowProperties}
-      title="Show properties"
+      title={t("goalDetail.showProperties")}
     >
       <SlidersHorizontal className="h-4 w-4" />
     </Button>
@@ -100,7 +100,7 @@ export function GoalDetail() {
 
   const uploadImage = useMutation({
     mutationFn: async (file: File) => {
-      if (!resolvedCompanyId) throw new Error("No organization selected");
+      if (!resolvedCompanyId) throw new Error(t("goalDetail.noOrganizationSelected"));
       return assetsApi.uploadImage(
         resolvedCompanyId,
         file,
@@ -195,11 +195,11 @@ export function GoalDetail() {
               onClick={() => openNewGoal({ parentId: goalId })}
             >
               <Plus className="h-3.5 w-3.5 mr-1.5" />
-              Sub Goal
+              {t("goalDetail.subGoal")}
             </Button>
           </div>
           {childGoals.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No sub-goals.</p>
+            <p className="text-sm text-muted-foreground">{t("goalDetail.noSubGoals")}</p>
           ) : (
             <GoalTree goals={childGoals} goalLink={(g) => `/goals/${g.id}`} />
           )}
@@ -207,7 +207,7 @@ export function GoalDetail() {
 
         <TabsContent value="projects" className="mt-4">
           {linkedProjects.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No linked projects.</p>
+            <p className="text-sm text-muted-foreground">{t("goalDetail.noLinkedProjects")}</p>
           ) : (
             <div className="border border-border">
               {linkedProjects.map((project) => (

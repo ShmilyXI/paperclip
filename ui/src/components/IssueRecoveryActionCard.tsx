@@ -132,30 +132,30 @@ export interface IssueRecoveryActionCardProps {
 }
 
 const KIND_LABEL: Record<IssueRecoveryActionKind, string> = {
-  missing_disposition: "Missing Disposition",
-  deliberate_wait_without_target: "Wait Without A Target",
-  stranded_assigned_issue: "Stranded Task",
-  workspace_validation: "Workspace Validation",
-  configuration_validation: "Configuration Validation",
-  active_run_watchdog: "Active Watchdog",
-  issue_graph_liveness: "Task Needs Next Step",
+  missing_disposition: t("issueRecoveryActionCard.missingDisposition"),
+  deliberate_wait_without_target: t("issueRecoveryActionCard.waitWithoutATarget"),
+  stranded_assigned_issue: t("issueRecoveryActionCard.strandedTask"),
+  workspace_validation: t("issueRecoveryActionCard.workspaceValidation"),
+  configuration_validation: t("issueRecoveryActionCard.configurationValidation"),
+  active_run_watchdog: t("issueRecoveryActionCard.activeWatchdog"),
+  issue_graph_liveness: t("issueRecoveryActionCard.taskNeedsNextStep"),
 };
 
 const KIND_HEADLINE: Record<IssueRecoveryActionKind, string> = {
   missing_disposition:
-    "This task's run finished, but no next step was chosen. Choose what happens next — try the task again, mark it done, or send it for review.",
+    t("issueRecoveryActionCard.thisTaskSRunFinished"),
   deliberate_wait_without_target:
-    "This task's last run stopped to wait, but there is no reviewer, blocker, monitor, or approval to wait for. Paperclip is repairing the next step; the task stays with its owner.",
+    t("issueRecoveryActionCard.thisTaskSLastRun"),
   stranded_assigned_issue:
-    "Paperclip retried this task's last run, but there is still no queued run, reviewer, blocker, or other next owner. To get it moving, choose what happens next — try the task again, mark it done, or send it for review.",
+    t("issueRecoveryActionCard.paperclipRetriedThisTaskS"),
   workspace_validation:
-    "Paperclip stopped this run because the task's git workspace could not be validated.",
+    t("issueRecoveryActionCard.paperclipStoppedThisRunBecause"),
   configuration_validation:
-    "Paperclip stopped before dispatching this run because required secret/env bindings are missing.",
+    t("issueRecoveryActionCard.paperclipStoppedBeforeDispatchingThis"),
   active_run_watchdog:
-    "The active run has been silent. Recovery is observing without interrupting it.",
+    t("issueRecoveryActionCard.theActiveRunHasBeen"),
   issue_graph_liveness:
-    "Paperclip could not find a clear next step for this open task. Choose whether to continue work, send it for review, mark it done, or record what is blocking it.",
+    t("issueRecoveryActionCard.paperclipCouldNotFindA"),
 };
 
 /** Shared shell for the retry-timing pill so every timing state reads as the same control. */
@@ -545,7 +545,7 @@ function BreakGlassOverride({
           className="border-red-400/60 text-red-700 hover:bg-red-500/10 dark:border-red-500/40 dark:text-red-300"
         >
           <OctagonAlert className="h-3.5 w-3.5" aria-hidden />
-          I&apos;ve verified this — reconcile anyway
+          {t("issueRecoveryActionCard.iVeVerifiedThisReconcile")}
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -565,8 +565,7 @@ function BreakGlassOverride({
           <p className="text-xs leading-5 text-muted-foreground">
             This overrides Paperclip&apos;s safety check and points the recorded workspace at the live
             branch{" "}
-            <span className="font-medium text-foreground/80">without an ancestry proof</span>. Confirm
-            the divergence below and record why before continuing.
+            <span className="font-medium text-foreground/80">{t("issueRecoveryActionCard.withoutAnAncestryProof")}</span>{t("issueRecoveryActionCard.confirmTheDivergenceBelowAnd")}
           </p>
         </div>
         <dl
@@ -594,13 +593,13 @@ function BreakGlassOverride({
         </dl>
         <div className="space-y-1">
           <Label htmlFor="recovery-breakglass-reason" className="text-(length:--text-micro) text-muted-foreground">
-            {t("recovery.reason")} <span className="text-red-600 dark:text-red-400">(required — recorded in the audit log)</span>
+            {t("recovery.reason")} <span className="text-red-600 dark:text-red-400">{t("issueRecoveryActionCard.requiredRecordedInTheAudit")}</span>
           </Label>
           <Textarea
             id="recovery-breakglass-reason"
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder="e.g. Verified the live branch carries only the intended follow-up commits; safe to adopt."
+            placeholder={t("issueRecoveryActionCard.eGVerifiedTheLive")}
             className="min-h-20 text-xs"
             data-testid="recovery-breakglass-reason"
             aria-required="true"
@@ -618,7 +617,7 @@ function BreakGlassOverride({
             onConfirm(trimmedReason);
           }}
         >
-          {pending ? "Reconciling…" : "Reconcile anyway (break-glass)"}
+          {pending ? t("issueRecoveryActionCard.reconciling") : t("issueRecoveryActionCard.reconcileAnywayBreakGlass")}
         </Button>
       </PopoverContent>
     </Popover>
@@ -649,7 +648,7 @@ function RepairWorkspace({
   const dirtyCount = divergence.dirtyFileCount;
   const dirtyLabel =
     dirtyCount === null
-      ? "Uncommitted changes"
+      ? t("issueRecoveryActionCard.uncommittedChanges")
       : `${dirtyCount} uncommitted ${dirtyCount === 1 ? "change" : "changes"}`;
   const trigger = (
     <Button
@@ -700,9 +699,7 @@ function RepairWorkspace({
             {t("recovery.repairWorkspace")}
           </div>
           <p className="text-xs leading-5 text-muted-foreground">
-            This is lossless — no reason required. Your uncommitted changes are committed onto a fresh
-            rescue branch, then the recorded branch is restored so the task can resume. The live branch
-            is left exactly as it is.
+            {t("issueRecoveryActionCard.thisIsLosslessNoReason")}
           </p>
         </div>
         <dl
@@ -719,7 +716,7 @@ function RepairWorkspace({
             <dt className="shrink-0 text-muted-foreground">{t("recovery.liveBranch")}</dt>
             <dd className="min-w-0 truncate font-mono text-foreground/90">
               {divergence.liveBranch ?? "detached"}
-              <span className="ml-1 font-sans text-muted-foreground">(left untouched)</span>
+              <span className="ml-1 font-sans text-muted-foreground">{t("issueRecoveryActionCard.leftUntouched")}</span>
             </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
@@ -750,7 +747,7 @@ function RepairWorkspace({
             onConfirm();
           }}
         >
-          {pending ? "Repairing…" : "Quarantine changes & restore branch"}
+          {pending ? t("issueRecoveryActionCard.repairing") : t("issueRecoveryActionCard.quarantineChangesRestoreBranch")}
         </Button>
       </PopoverContent>
     </Popover>
@@ -772,7 +769,7 @@ function readWakePolicySummary(action: IssueRecoveryAction): string | null {
   if (type === "manual_repair_required") return "Repair needed before retry";
   if (type === "monitor") {
     const interval = readEvidenceString(policy.intervalLabel);
-    return interval ? `Check scheduled · ${interval}` : "Check scheduled";
+    return interval ? t("issueRecoveryActionCard.checkScheduledInterval", { interval }) : t("issueRecoveryActionCard.checkScheduled");
   }
   return type.replaceAll("_", " ");
 }
@@ -918,8 +915,8 @@ function lineageHeadline(lineage: RecoveryRetryLineage): string {
   }
   if (lineage.lane === "source_owner") {
     return lineage.exhausted
-      ? "This task's last run stopped to wait, but nothing was waiting for it. The original owner has used every automatic repair attempt, so the next step needs a decision. The task stays with its owner."
-      : "This task's last run stopped to wait, but nothing was waiting for it. Paperclip is retrying the original owner to record a real next step. The task stays with its owner, and no action is needed yet.";
+      ? t("issueRecoveryActionCard.thisTaskSLastRun2")
+      : t("issueRecoveryActionCard.thisTaskSLastRun3");
   }
   if (lineage.lane === "recovery_owner") {
     return "The original owner could not record a next step within its retry budget. A recovery owner is now repairing the path only — the task itself still belongs to its original owner.";
@@ -1028,9 +1025,9 @@ export function IssueRecoveryActionCard({
   // A lane with no path left must not keep advertising a retry that will never run — whether
   // the budget ran out or the scheduled attempt simply never fired.
   const wakeSummary = lineage?.retryExpired
-    ? "The scheduled retry did not run — a retry or a decision is needed"
+    ? t("issueRecoveryActionCard.theScheduledRetryDidNot")
     : lineage?.exhausted && !lineage.liveRunId && lineage.lane !== "board"
-    ? "Automatic retries are finished — a decision is needed"
+    ? t("issueRecoveryActionCard.automaticRetriesAreFinishedA")
     : readWakePolicySummary(action);
   const evidenceSummary = pickEvidenceSummary(action);
   const sourceRunId = readEvidenceRunId(action, "sourceRunId") ?? readEvidenceRunId(action, "latestRunId");
@@ -1220,7 +1217,7 @@ export function IssueRecoveryActionCard({
                 data-recovery-max-attempts={lineage.maxAttempts ?? undefined}
               >
                 <AttemptMeter lineage={lineage} />
-                <span>{attemptLabel ?? "Attempts not bounded"}</span>
+                <span>{attemptLabel ?? t("issueRecoveryActionCard.attemptsNotBounded")}</span>
                 {lineage.liveRunId ? (
                   <span
                     className={RETRY_PILL_CLASS}
@@ -1238,7 +1235,7 @@ export function IssueRecoveryActionCard({
                     data-testid="recovery-next-retry"
                     data-recovery-retry-expired="true"
                   >
-                    {retryOffset ? `Retry missed ${retryOffset}` : "Retry missed"}
+                    {retryOffset ? t("issueRecoveryActionCard.retryMissedRetryoffset", { retryOffset }) : t("issueRecoveryActionCard.retryMissed")}
                   </span>
                 ) : retryOffset ? (
                   <span
@@ -1246,7 +1243,7 @@ export function IssueRecoveryActionCard({
                     title={formatTimeAbsolute(lineage.nextRetryAt) ?? undefined}
                     data-testid="recovery-next-retry"
                   >
-                    {retryOffset === "now" ? "Next try now" : `Next try ${retryOffset}`}
+                    {retryOffset === "now" ? t("issueRecoveryActionCard.nextTryNow") : t("issueRecoveryActionCard.nextTryRetryoffset", { retryOffset })}
                   </span>
                 ) : lineage.exhausted ? (
                   <span className={RETRY_PILL_CLASS} data-testid="recovery-next-retry">
@@ -1478,7 +1475,7 @@ export function IssueRecoveryActionCard({
                     })
                   }
                 >
-                  {reissuePending ? t("common.creating") : "Create isolated re-issue"}
+                  {reissuePending ? t("common.creating") : t("issueRecoveryActionCard.createIsolatedReIssue")}
                 </Button>
               </PopoverContent>
             </Popover>

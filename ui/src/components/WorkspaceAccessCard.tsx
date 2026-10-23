@@ -32,11 +32,11 @@ const STATE_BADGE_CLASSES: Record<ActiveWorkspaceAccessState, string> = {
 };
 
 const STATE_LABELS: Record<ActiveWorkspaceAccessState, string> = {
-  provisioning: "Provisioning",
-  validating: "Validating clone",
-  ready: "Ready",
-  degraded: "Degraded",
-  repairing: "Repairing",
+  provisioning: t("workspaceAccessCard.provisioning"),
+  validating: t("workspaceAccessCard.validatingClone"),
+  ready: t("workspaceAccessCard.ready"),
+  degraded: t("workspaceAccessCard.degraded"),
+  repairing: t("workspaceAccessCard.repairing"),
   failed: t("common.failed"),
 };
 
@@ -117,12 +117,12 @@ export function WorkspaceAccessCard({
           </Button>
           {access.state === "ready" && !access.handoffAvailable ? (
             <span className="text-xs text-muted-foreground">
-              Signs in with the snapshot-local credentials captured when this clone was made.
+              {t("workspaceAccessCard.signsInWithTheSnapshot")}
             </span>
           ) : null}
           {access.state === "ready" && access.handoffAvailable ? (
             <span className="text-xs text-muted-foreground">
-              Uses a single-use login handoff — no password needed.
+              {t("workspaceAccessCard.usesASingleUseLogin")}
             </span>
           ) : null}
         </div>

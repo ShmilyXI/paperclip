@@ -922,7 +922,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
           if (!looksEmpty()) return;
           setRichEditorError({
             code: "MDE-EMPTY",
-            message: "Rich editor failed to load content",
+            message: t("markdownEditor.richEditorFailedToLoad"),
           });
         }, RICH_EDITOR_EMPTY_CONFIRM_MS);
       }, RICH_EDITOR_EMPTY_CHECK_MS);
@@ -981,7 +981,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
             }, 100);
             return src;
           } catch (err) {
-            const message = err instanceof Error ? err.message : "Image upload failed";
+            const message = err instanceof Error ? err.message : t("markdownEditor.imageUploadFailed");
             setUploadError(message);
             throw err;
           }
@@ -1293,7 +1293,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
   }, [handleAutocompletePress]);
 
   function hasFilePayload(evt: DragEvent<HTMLDivElement>) {
-    return Array.from(evt.dataTransfer?.types ?? []).includes(t("common.files"));
+    return Array.from(evt.dataTransfer?.types ?? []).includes("Files");
   }
 
   const canDropFile = fileDropTarget === "editor" && Boolean(imageUploadHandler || onDropFile);
@@ -1301,7 +1301,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     const clipboard = event.clipboardData;
     if (!clipboard || !ref.current) return;
     const types = new Set(Array.from(clipboard.types));
-    if (types.has(t("common.files")) || types.has("text/html")) return;
+    if (types.has("Files") || types.has("text/html")) return;
     if (isPasteInsideCodeLikeElement(containerRef.current, event)) return;
 
     const rawText = clipboard.getData("text/plain");
@@ -1342,7 +1342,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       >
         <div className="flex items-start justify-between gap-3 px-3 pt-2 text-xs text-muted-foreground">
           <p>
-            Rich editor unavailable for this markdown. Showing raw source instead.{" "}
+            {t("markdownEditor.richEditorUnavailableForThis")}{" "}
             <span data-testid="markdown-editor-fallback-code" className="font-mono">
               {richEditorError.code}
             </span>
@@ -1358,7 +1358,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
               setRichEditorError(null);
             }}
           >
-            Retry rich editor
+            {t("markdownEditor.retryRichEditor")}
           </button>
         </div>
         <textarea

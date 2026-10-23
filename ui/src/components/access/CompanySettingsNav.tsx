@@ -13,12 +13,12 @@ const items = [
   { value: "members", label: t("common.members"), href: "/company/settings/members" },
   { value: "secrets", label: t("common.secrets"), href: "/company/settings/secrets" },
   { value: "instance-profile", label: t("common.profile"), href: `${INSTANCE_SETTINGS_PATH_PREFIX}/profile` },
-  { value: "instance-environments", label: "Environments", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/environments` },
+  { value: "instance-environments", label: t("companySettingsNav.environments"), href: `${INSTANCE_SETTINGS_PATH_PREFIX}/environments` },
   { value: "connections", label: t("common.connections"), href: "/company/settings/connections" },
-  { value: "instance-access", label: "Access", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/access` },
+  { value: "instance-access", label: t("companySettingsNav.access"), href: `${INSTANCE_SETTINGS_PATH_PREFIX}/access` },
   { value: "instance-experimental", label: t("common.experimental"), href: `${INSTANCE_SETTINGS_PATH_PREFIX}/experimental` },
   { value: "instance-plugins", label: t("common.plugins"), href: `${INSTANCE_SETTINGS_PATH_PREFIX}/plugins` },
-  { value: "instance-adapters", label: "Adapters", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/adapters` },
+  { value: "instance-adapters", label: t("companySettingsNav.adapters"), href: `${INSTANCE_SETTINGS_PATH_PREFIX}/adapters` },
 ] as const;
 
 type CompanySettingsTab = (typeof items)[number]["value"];

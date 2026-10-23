@@ -264,10 +264,10 @@ export function CommandPalette() {
             >
               <Search className="mr-2 h-4 w-4" />
               <span className="flex-1 truncate">
-                Search all for <span className="font-semibold">&ldquo;{searchQuery}&rdquo;</span>
+                {t("commandPalette.searchAllFor")} <span className="font-semibold">&ldquo;{searchQuery}&rdquo;</span>
               </span>
               <span className="ml-auto inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <span>open full search</span>
+                <span>{t("commandPalette.openFullSearch")}</span>
                 <kbd className="rounded border border-border bg-background px-1 py-0.5 text-(length:--text-nano)">↵</kbd>
               </span>
             </CommandItem>

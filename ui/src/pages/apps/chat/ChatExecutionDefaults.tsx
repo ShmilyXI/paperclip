@@ -60,23 +60,23 @@ export function ChatExecutionDefaults({ companyId, value, resource = false, onSa
     if (pending || !dirty) return;
     setPending(true); setError(null); setSavedFrom(null);
     try { await onSave(Object.keys(current).length ? current : null); setSavedFrom(valueKey); }
-    catch (cause) { setError(cause instanceof Error ? cause.message : "Couldn’t save task defaults. Try again."); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : t("chatExecutionDefaults.couldnTSaveTaskDefaults")); }
     finally { setPending(false); }
   }}>
     <div className="space-y-1">
-      <h3 id={`${id}-title`} className="text-sm font-semibold">Task defaults</h3>
-      <p className="text-sm text-muted-foreground">Applies to new conversations. Existing tasks keep their files and project.</p>
+      <h3 id={`${id}-title`} className="text-sm font-semibold">{t("chatExecutionDefaults.taskDefaults")}</h3>
+      <p className="text-sm text-muted-foreground">{t("chatExecutionDefaults.appliesToNewConversationsExisting")}</p>
     </div>
-    {(projects.isError || workspaces.isError) && <p role="alert" className="text-sm text-destructive">Couldn’t load available projects or workspaces. <button type="button" className="underline" onClick={() => { void projects.refetch(); void workspaces.refetch(); }}>{t("common.tryAgain")}</button></p>}
+    {(projects.isError || workspaces.isError) && <p role="alert" className="text-sm text-destructive">{t("chatExecutionDefaults.couldnTLoadAvailableProjects")} <button type="button" className="underline" onClick={() => { void projects.refetch(); void workspaces.refetch(); }}>{t("common.tryAgain")}</button></p>}
     <div className="space-y-2">
       <label htmlFor={`${id}-project`} className="text-sm font-medium">{t("common.project")}</label>
       <NativeSelect id={`${id}-project`} value={projectValue} disabled={pending || projects.isPending} onChange={(event) => {
         const { projectId: _previous, ...rest } = current;
         change(event.target.value === "inherit" ? rest : { ...rest, projectId: event.target.value === "none" ? null : event.target.value });
       }}>
-        <option value="inherit">{resource ? "Use connection defaults" : "Use task defaults"}</option>
-        <option value="none">No project</option>
-        {current.projectId && !projects.data?.some((project) => project.id === current.projectId) && <option value={current.projectId}>Saved project (unavailable)</option>}
+        <option value="inherit">{resource ? t("chatExecutionDefaults.useConnectionDefaults") : t("chatExecutionDefaults.useTaskDefaults")}</option>
+        <option value="none">{t("chatExecutionDefaults.noProject")}</option>
+        {current.projectId && !projects.data?.some((project) => project.id === current.projectId) && <option value={current.projectId}>{t("chatExecutionDefaults.savedProjectUnavailable")}</option>}
         {(projects.data ?? []).map((project) => <option key={project.id} value={project.id}>{project.name}</option>)}
       </NativeSelect>
     </div>
@@ -89,25 +89,25 @@ export function ChatExecutionDefaults({ companyId, value, resource = false, onSa
         else if (key === "clear") change({ ...rest, workspace: null });
         else { const workspace = choices.get(key); if (workspace) change({ ...rest, workspace }); }
       }}>
-        <option value="inherit">{resource ? "Use connection defaults" : "Use project or task defaults"}</option>
-        {resource && <option value="clear">Use project or task defaults</option>}
-        {!resource && workspaceValue === "clear" && <option value="clear">Use project or task defaults</option>}
-        <option value="task">Task files — separate folder</option>
-        {current.workspace && !choices.has(workspaceValue) && <option value={workspaceValue}>Saved workspace (unavailable)</option>}
+        <option value="inherit">{resource ? t("chatExecutionDefaults.useConnectionDefaults") : t("chatExecutionDefaults.useProjectOrTaskDefaults")}</option>
+        {resource && <option value="clear">{t("chatExecutionDefaults.useProjectOrTaskDefaults")}</option>}
+        {!resource && workspaceValue === "clear" && <option value="clear">{t("chatExecutionDefaults.useProjectOrTaskDefaults")}</option>}
+        <option value="task">{t("chatExecutionDefaults.taskFilesSeparateFolder")}</option>
+        {current.workspace && !choices.has(workspaceValue) && <option value={workspaceValue}>{t("chatExecutionDefaults.savedWorkspaceUnavailable")}</option>}
         {(projects.data ?? []).filter((project) => project.workspaces?.length).map((project) => <optgroup key={project.id} label={project.name}>
           {project.workspaces.flatMap((source) => [
             <option key={`${source.id}:isolated`} value={`source:${source.id}:managed_isolated`}>{source.name} — isolated checkout</option>,
             <option key={`${source.id}:shared`} value={`source:${source.id}:shared`}>{source.name} — shared folder</option>,
           ])}
         </optgroup>)}
-        {(workspaces.data?.length ?? 0) > 0 && <optgroup label="Existing workspaces">{workspaces.data!.map((workspace) => <option key={workspace.id} value={`existing:${workspace.id}`}>{workspace.name}</option>)}</optgroup>}
+        {(workspaces.data?.length ?? 0) > 0 && <optgroup label={t("chatExecutionDefaults.existingWorkspaces")}>{workspaces.data!.map((workspace) => <option key={workspace.id} value={`existing:${workspace.id}`}>{workspace.name}</option>)}</optgroup>}
       </NativeSelect>
-      <p className="text-xs text-muted-foreground">Project and workspace access is checked for each task. A shared folder must also be allowed by the agent’s execution policy.</p>
+      <p className="text-xs text-muted-foreground">{t("chatExecutionDefaults.projectAndWorkspaceAccessIs")}</p>
     </div>
     {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
     <div className="flex items-center justify-between gap-3">
-      <div>{dirty ? <Button type="button" variant="ghost" disabled={pending} onClick={() => { setDraft(null); setError(null); }}>{t("common.cancel")}</Button> : saved ? <span role="status" className="text-sm text-muted-foreground">Saved for new tasks.</span> : null}</div>
-      <Button type="submit" disabled={!dirty || pending}>{pending ? t("common.saving2") : "Save defaults"}</Button>
+      <div>{dirty ? <Button type="button" variant="ghost" disabled={pending} onClick={() => { setDraft(null); setError(null); }}>{t("common.cancel")}</Button> : saved ? <span role="status" className="text-sm text-muted-foreground">{t("chatExecutionDefaults.savedForNewTasks")}</span> : null}</div>
+      <Button type="submit" disabled={!dirty || pending}>{pending ? t("common.saving2") : t("chatExecutionDefaults.saveDefaults")}</Button>
     </div>
   </form>;
 }

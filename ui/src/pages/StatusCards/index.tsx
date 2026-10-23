@@ -76,25 +76,25 @@ export function StatusCards() {
     mutationFn: (id: string) => statusCardsApi.refresh(id),
     onMutate: () => setActionError(null),
     onSuccess: () => invalidateLists(),
-    onError: (err) => setActionError(err instanceof Error ? err.message : "Could not refresh the card."),
+    onError: (err) => setActionError(err instanceof Error ? err.message : t("statusCardsIndex.couldNotRefreshTheCard")),
   });
   const recompileMutation = useMutation({
     mutationFn: (id: string) => statusCardsApi.recompile(id),
     onMutate: () => setActionError(null),
     onSuccess: () => invalidateLists(),
-    onError: (err) => setActionError(err instanceof Error ? err.message : "Could not run the card."),
+    onError: (err) => setActionError(err instanceof Error ? err.message : t("statusCardsIndex.couldNotRunTheCard")),
   });
   const archiveMutation = useMutation({
     mutationFn: (id: string) => statusCardsApi.patch(id, { archived: true }),
     onMutate: () => setActionError(null),
     onSuccess: () => invalidateLists(),
-    onError: (err) => setActionError(err instanceof Error ? err.message : "Could not archive the card."),
+    onError: (err) => setActionError(err instanceof Error ? err.message : t("statusCardsIndex.couldNotArchiveTheCard")),
   });
   const restoreMutation = useMutation({
     mutationFn: (id: string) => statusCardsApi.patch(id, { archived: false }),
     onMutate: () => setActionError(null),
     onSuccess: () => invalidateLists(),
-    onError: (err) => setActionError(err instanceof Error ? err.message : "Could not restore the card."),
+    onError: (err) => setActionError(err instanceof Error ? err.message : t("statusCardsIndex.couldNotRestoreTheCard")),
   });
 
   const openDetail = (id: string, tab: string = "summary") => {
@@ -131,27 +131,27 @@ export function StatusCards() {
           ) : null}
           <Button onClick={() => setCreateOpen(true)} disabled={!selectedCompanyId}>
             <Plus className="h-4 w-4" />
-            New card
+            {t("statusCardsIndex.newCard")}
           </Button>
         </div>
       </div>
 
-      {actionError ? <InlineBanner tone="warning" title="Heads up">{actionError}</InlineBanner> : null}
+      {actionError ? <InlineBanner tone="warning" title={t("statusCardsIndex.headsUp")}>{actionError}</InlineBanner> : null}
 
       {activeQuery.isLoading ? (
         <div className="flex items-center gap-2 py-12 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Loading cards…
+          <Loader2 className="h-4 w-4 animate-spin" /> {t("statusCardsIndex.loadingCards")}
         </div>
       ) : activeQuery.isError ? (
-        <InlineBanner tone="danger" title="Could not load status cards">
-          {activeQuery.error instanceof Error ? activeQuery.error.message : "Try again."}
+        <InlineBanner tone="danger" title={t("statusCardsIndex.couldNotLoadStatusCards")}>
+          {activeQuery.error instanceof Error ? activeQuery.error.message : t("statusCardsIndex.tryAgain")}
         </InlineBanner>
       ) : activeCards.length === 0 ? (
         <EmptyState
           icon={FlaskConical}
-          title="No status cards yet"
-          message="Create a card to keep a living summary of the issues you care about."
-          action={selectedCompanyId ? "New card" : undefined}
+          title={t("statusCardsIndex.noStatusCardsYet")}
+          message={t("statusCardsIndex.createACardToKeep")}
+          action={selectedCompanyId ? t("statusCardsIndex.newCard") : undefined}
           onAction={() => setCreateOpen(true)}
         />
       ) : (
@@ -181,7 +181,7 @@ export function StatusCards() {
             onClick={() => setShowArchived((prev) => !prev)}
             className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
           >
-            {showArchived ? "Hide archived" : `Show archived (${archivedCards.length})`}
+            {showArchived ? t("statusCardsIndex.hideArchived") : t("statusCardsIndex.showArchivedLength", { length: archivedCards.length })}
           </button>
           {showArchived
             ? archivedCards.map((card) => (

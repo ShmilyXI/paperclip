@@ -55,7 +55,7 @@ export function StageSecretsPanel({
     return (
       <EmptyState
         icon={KeyRound}
-        message="Secrets are available only to step automation. Pick an agent to run this step, then add the secrets it needs."
+        message={t("stageSecretsPanel.secretsAreAvailableOnlyTo")}
         action="Set up automation"
         onAction={onSetupAutomation}
       />
@@ -73,15 +73,13 @@ export function StageSecretsPanel({
           <KeyRound className="h-3.5 w-3.5 mt-0.5 shrink-0" />
         )}
         <p>
-          These env vars are injected when{" "}
-          <span className="font-medium text-foreground">{displayName}</span> runs this step. They override
-          matching project and agent env on collisions. <span className="font-mono">PAPERCLIP_*</span> names
-          are reserved.
+          {t("stageSecretsPanel.envVarsInjectedPrefix")}{" "}
+          <span className="font-medium text-foreground">{displayName}</span> {t("stageSecretsPanel.runsThisStepTheyOverride")} <span className="font-mono">PAPERCLIP_*</span>{" "}{t("stageSecretsPanel.envVarsInjectedSuffix")}
         </p>
       </div>
 
       {secretsLoading ? (
-        <p className="text-sm text-muted-foreground">Loading secrets…</p>
+        <p className="text-sm text-muted-foreground">{t("stageSecretsPanel.loadingSecrets")}</p>
       ) : (
         <EnvironmentVariablesEditor
           value={value}
@@ -94,7 +92,7 @@ export function StageSecretsPanel({
       <div className="flex items-center gap-3">
         <Button type="button" onClick={onSave} disabled={!dirty || saving}>
           <Save className="h-4 w-4 mr-1.5" />
-          {saving ? t("common.saving2") : "Save secrets"}
+          {saving ? t("common.saving2") : t("stageSecretsPanel.saveSecrets")}
         </Button>
         {dirty && !saving ? <span className="text-xs text-muted-foreground">{t("common.unsavedChanges")}</span> : null}
       </div>

@@ -1,4 +1,3 @@
-import { t } from "@/i18n";
 import type { IssueDocument } from "@paperclipai/shared";
 import { Lightbulb, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";

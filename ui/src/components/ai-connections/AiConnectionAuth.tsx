@@ -76,9 +76,9 @@ function AuthAttempt({
       {state.phase === "connected" ? (
         <>
           <p role="status" className="text-sm">
-            Connected. This account is saved in Connections and can be reused.
+            {t("aiConnectionAuth.connectedThisAccountIsSaved")}
           </p>
-          <Button onClick={onDone}>Use connection</Button>
+          <Button onClick={onDone}>{t("aiConnectionAuth.useConnection")}</Button>
         </>
       ) : (
         <>
@@ -86,7 +86,7 @@ function AuthAttempt({
             <p role="status" className="text-sm text-muted-foreground">
               {state.phase === "unsupported"
                 ? state.message
-                : "This provider does not offer a subscription connection."}
+                : t("aiConnectionAuth.thisProviderDoesNotOffer")}
             </p>
           ) : (
             <>
@@ -97,7 +97,7 @@ function AuthAttempt({
               )}
               {state.phase === "cancelled" && (
                 <p role="status" className="text-sm text-muted-foreground">
-                  Sign-in cancelled. No connection was created.
+                  {t("aiConnectionAuth.signInCancelledNoConnection")}
                 </p>
               )}
               {method === "api_key" ? (
@@ -106,7 +106,7 @@ function AuthAttempt({
                   value={value}
                   onChange={setValue}
                   onSubmit={submit}
-                  placeholder="Enter API key here"
+                  placeholder={t("aiConnectionAuth.enterApiKeyHere")}
                   disabled={busy}
                   autoFocus
                 />
@@ -162,22 +162,22 @@ function AuthAttempt({
             {!unsupported &&
               (method === "api_key" ? (
                 <Button disabled={busy || !value.trim()} onClick={submit}>
-                  {busy ? "Connecting…" : t("common.connect")}
+                  {busy ? t("aiConnectionAuth.connecting") : t("common.connect")}
                 </Button>
               ) : state.phase === "waiting" ? (
                 provider === "anthropic" ? (
                   <Button disabled={!value.trim()} onClick={submit}>
-                    Submit code
+                    {t("aiConnectionAuth.submitCode")}
                   </Button>
                 ) : (
                   <span role="status" className="text-sm text-muted-foreground">
-                    Waiting for sign-in…
+                    {t("aiConnectionAuth.waitingForSignIn")}
                   </span>
                 )
               ) : (
                 <Button disabled={busy} onClick={onStart}>
                   {busy
-                    ? "Preparing sign-in…"
+                    ? t("aiConnectionAuth.preparingSignIn")
                     : state.phase === "idle"
                       ? t("common.signIn")
                       : t("common.tryAgain")}

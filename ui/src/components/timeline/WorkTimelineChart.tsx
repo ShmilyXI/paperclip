@@ -1,4 +1,4 @@
-import { dateLocale } from "@/i18n";
+import { dateLocale, t } from "@/i18n";
 import { agentAvatarUrl } from "@/lib/agent-avatar-url";
 import { resolveAgentAppearance } from "@paperclipai/shared";
 /**
@@ -947,7 +947,7 @@ function MiniMap({
           height={H - 2}
           width={handleW}
           testId="timeline-minimap-left-handle"
-          label="Drag left edge to resize visible range"
+          label={t("workTimelineChart.dragLeftEdgeToResize")}
           onMouseDown={(e) => startRangeDrag("left", e)}
         />
         <MiniMapHandle
@@ -956,7 +956,7 @@ function MiniMap({
           height={H - 2}
           width={handleW}
           testId="timeline-minimap-right-handle"
-          label="Drag right edge to resize visible range"
+          label={t("workTimelineChart.dragRightEdgeToResize")}
           onMouseDown={(e) => startRangeDrag("right", e)}
         />
       </svg>

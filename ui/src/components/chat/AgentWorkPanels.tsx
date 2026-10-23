@@ -151,7 +151,7 @@ export function AgentTasksPanel({
   const capped = (tasksQuery.data?.length ?? 0) >= AGENT_TASK_LIMIT;
 
   return (
-    <section className="flex flex-col gap-3" aria-label="Agent tasks">
+    <section className="flex flex-col gap-3" aria-label={t("agentWorkPanels.agentTasks")}>
       <div className="flex items-center gap-1">
         <div className="relative min-w-0 flex-1">
           <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -175,7 +175,7 @@ export function AgentTasksPanel({
         />
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="icon" className="h-8 w-8 shrink-0" title={t("common.sort")} aria-label="Sort tasks">
+            <Button variant="outline" size="icon" className="h-8 w-8 shrink-0" title={t("common.sort")} aria-label={t("agentWorkPanels.sortTasks")}>
               <ArrowUpDown className="h-3.5 w-3.5" />
             </Button>
           </PopoverTrigger>
@@ -209,16 +209,16 @@ export function AgentTasksPanel({
       </div>
 
       {tasksQuery.isPending ? (
-        <PanelMessage>Loading tasks…</PanelMessage>
+        <PanelMessage>{t("agentWorkPanels.loadingTasks")}</PanelMessage>
       ) : tasksQuery.isError ? (
-        <PanelMessage tone="error">Could not load this agent's tasks.</PanelMessage>
+        <PanelMessage tone="error">{t("agentWorkPanels.couldNotLoadThisAgent")}</PanelMessage>
       ) : total === 0 ? (
-        <PanelMessage>This agent hasn't worked on any tasks yet.</PanelMessage>
+        <PanelMessage>{t("agentWorkPanels.thisAgentHasnTWorked")}</PanelMessage>
       ) : visible.length === 0 ? (
         <PanelMessage>
           {capped
-            ? `No tasks match these filters among the ${AGENT_TASK_LIMIT} most recently updated.`
-            : "No tasks match these filters."}
+            ? t("agentWorkPanels.noTasksMatchTheseFilters", { LIMIT: AGENT_TASK_LIMIT })
+            : t("agentWorkPanels.noTasksMatchTheseFilters2")}
         </PanelMessage>
       ) : (
         <div className="flex flex-col gap-2">
@@ -294,15 +294,15 @@ export function AgentArtifactsPanel({ companyId, agentId }: { companyId: string;
     queryFn: () => listAgentArtifacts(companyId, agentId),
   });
 
-  if (artifactsQuery.isPending) return <PanelMessage>Loading artifacts…</PanelMessage>;
-  if (artifactsQuery.isError) return <PanelMessage tone="error">Could not load this agent's artifacts.</PanelMessage>;
+  if (artifactsQuery.isPending) return <PanelMessage>{t("agentWorkPanels.loadingArtifacts")}</PanelMessage>;
+  if (artifactsQuery.isError) return <PanelMessage tone="error">{t("agentWorkPanels.couldNotLoadThisAgent2")}</PanelMessage>;
   const { artifacts, truncated } = artifactsQuery.data;
-  if (artifacts.length === 0) return <PanelMessage>This agent hasn't produced any artifacts yet.</PanelMessage>;
+  if (artifacts.length === 0) return <PanelMessage>{t("agentWorkPanels.thisAgentHasnTProduced")}</PanelMessage>;
   return (
-    <section className="flex flex-col gap-2" aria-label="Agent artifacts">
+    <section className="flex flex-col gap-2" aria-label={t("agentWorkPanels.agentArtifacts")}>
       {artifacts.map((artifact) => <AgentArtifactCard key={artifact.id} artifact={artifact} />)}
       {truncated ? (
-        <p className="px-1 text-xs text-muted-foreground">Showing this agent's {artifacts.length} most recent artifacts.</p>
+        <p className="px-1 text-xs text-muted-foreground">{t("agentWorkPanels.showingThisAgentS")} {artifacts.length} most recent artifacts.</p>
       ) : null}
     </section>
   );

@@ -202,11 +202,11 @@ export function AgentsUsingSkillDialog({
       ]);
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : "Failed to update agent skills.";
+      const message = error instanceof Error ? error.message : t("agentsUsingSkillDialog.failedToUpdateAgentSkills");
       toast?.pushToast({
         tone: "error",
-        title: "Update failed",
-        body: message.includes("403") ? "You don't have permission to change this agent's skills." : message,
+        title: t("agentsUsingSkillDialog.updateFailed"),
+        body: message.includes("403") ? t("agentsUsingSkillDialog.youDonTHavePermission") : message,
       });
     },
   });
@@ -236,7 +236,7 @@ export function AgentsUsingSkillDialog({
           <DialogTitle>Agents using {skill.name}</DialogTitle>
           <DialogDescription>
             {count === 0
-              ? "No agents have this skill assigned yet."
+              ? t("agentsUsingSkillDialog.noAgentsHaveThisSkill")
               : `${count} ${count === 1 ? "agent has" : "agents have"} this skill in their desired set.`}
           </DialogDescription>
         </DialogHeader>
@@ -245,8 +245,8 @@ export function AgentsUsingSkillDialog({
           {count === 0 ? (
             <div className="rounded-md border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">
               {canManage
-                ? "Add an agent below to assign this skill."
-                : "This skill isn't assigned to any agents."}
+                ? t("agentsUsingSkillDialog.addAnAgentBelowTo")
+                : t("agentsUsingSkillDialog.thisSkillIsnTAssigned")}
             </div>
           ) : (
             <ul className="divide-y divide-border">
@@ -368,7 +368,7 @@ function AgentRow({
           <span className="text-xs text-muted-foreground">
             {agent.versionId
               ? `v${pinnedRevision ?? "?"}`
-              : `Latest${latestRevision !== null ? ` (v${latestRevision})` : ""}`}
+              : `${t("agentsUsingSkillDialog.latest")}${latestRevision !== null ? ` (v${latestRevision})` : ""}`}
           </span>
         )}
         {behindLatest > 0 ? (
@@ -441,9 +441,9 @@ function AddAgentPicker({
       groups={groups}
       loading={loading}
       loadingMessage="Loading agents..."
-      placeholder="Add agent…"
+      placeholder={t("agentsUsingSkillDialog.addAgent")}
       searchPlaceholder="Search agents..."
-      emptyMessage="All eligible agents already have this skill."
+      emptyMessage={t("agentsUsingSkillDialog.allEligibleAgentsAlreadyHave")}
       disabled={disabled}
       onValueChange={(_value, option) => {
         onSelect(option.agent);
@@ -454,7 +454,7 @@ function AddAgentPicker({
       renderValue={() => (
         <span className="flex items-center gap-1.5 text-muted-foreground">
           <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-          Add agent…
+          {t("agentsUsingSkillDialog.addAgent")}
         </span>
       )}
       renderOption={(option) => (

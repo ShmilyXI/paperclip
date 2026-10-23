@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { AccountQuotaPanels } from "./AccountQuotaPanels";
 import { quotaUnavailableMessage } from "@/lib/quota-refresh";
 import { useMemo } from "react";
@@ -173,14 +174,14 @@ export function ProviderQuotaCard({
         {hasBudget && (
           <div className="space-y-3">
             <QuotaBar
-              label="Period spend"
+              label={t("providerQuotaCard.periodSpend")}
               percentUsed={budgetPct}
               leftLabel={formatCents(totalCostCents)}
               rightLabel={`${Math.round(budgetPct)}% of company budget`}
               showDeficitNotch={showDeficitNotch}
             />
             <QuotaBar
-              label="This week"
+              label={t("providerQuotaCard.thisWeek")}
               percentUsed={weekPct}
               leftLabel={formatCents(weekSpendCents)}
               rightLabel={`~${formatCents(Math.round(weeklyBudgetShare))} / wk`}
@@ -195,7 +196,7 @@ export function ProviderQuotaCard({
             <div className="border-t border-border" />
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Rolling windows
+                {t("providerQuotaCard.rollingWindows")}
               </p>
               <div className="space-y-2.5">
                 {ROLLING_WINDOWS.map((w) => {
@@ -234,7 +235,7 @@ export function ProviderQuotaCard({
             <div className="border-t border-border" />
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Subscription
+                {t("providerQuotaCard.subscription")}
               </p>
               <p className="text-xs text-muted-foreground">
                 <span className="font-mono text-foreground">{totalSubRuns}</span> runs
@@ -322,7 +323,7 @@ export function ProviderQuotaCard({
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                  Subscription quota
+                  {t("providerQuotaCard.subscriptionQuota")}
                 </p>
                 {quotaSource && !isClaudeQuotaPanel && !isCodexQuotaPanel ? (
                   <span className="text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">

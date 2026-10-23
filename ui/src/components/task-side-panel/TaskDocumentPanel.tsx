@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { IssueDocument } from "@paperclipai/shared";
@@ -38,14 +39,14 @@ export function TaskDocumentPanel({
     return (
       <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground" role="status">
         <Loader2 className="size-4 animate-spin" aria-hidden />
-        Loading document…
+        {t("taskDocumentPanel.loadingDocument")}
       </div>
     );
   }
   if (query.isError) {
     return (
       <div className="py-8 text-sm text-muted-foreground" role="alert">
-        The document could not be loaded. Retry from the tab launcher or refresh the task.
+        {t("taskDocumentPanel.theDocumentCouldNotBe")}
       </div>
     );
   }
@@ -55,9 +56,9 @@ export function TaskDocumentPanel({
       <div className="flex items-start gap-3 py-8 text-sm" role="status">
         <FileQuestion className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden />
         <div className="space-y-1">
-          <p className="font-medium">Document no longer available</p>
+          <p className="font-medium">{t("taskDocumentPanel.documentNoLongerAvailable")}</p>
           <p className="text-muted-foreground">
-            This tab is preserved so the missing resource is explicit. Close it or choose another document.
+            {t("taskDocumentPanel.thisTabIsPreservedSo")}
           </p>
         </div>
       </div>
@@ -96,7 +97,7 @@ export function TaskDocumentPanel({
           <MarkdownBody>{document.body}</MarkdownBody>
         </IssueDocumentAnnotations>
       ) : (
-        <p className="text-sm text-muted-foreground">Document is empty.</p>
+        <p className="text-sm text-muted-foreground">{t("taskDocumentPanel.documentIsEmpty")}</p>
       )}
     </article>
   );

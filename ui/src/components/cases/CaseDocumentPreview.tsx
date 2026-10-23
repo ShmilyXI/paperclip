@@ -38,15 +38,15 @@ export function CaseDocumentPreview({ caseIdentifier, document: documentRef }: {
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>
-          {taskRef ? <Link to={`/issues/${taskRef.taskIdentifier ?? taskRef.taskId}#document-${encodeURIComponent(taskRef.key)}`} className="hover:underline">{taskRef.taskIdentifier ?? "Task document"}</Link> : `${caseIdentifier} · Saved on case`}
-          {document?.latestRevisionNumber != null ? ` · Revision ${document.latestRevisionNumber}` : ""}
+          {taskRef ? <Link to={`/issues/${taskRef.taskIdentifier ?? taskRef.taskId}#document-${encodeURIComponent(taskRef.key)}`} className="hover:underline">{taskRef.taskIdentifier ?? t("caseDocumentPreview.taskDocument")}</Link> : t("caseDocumentPreview.savedOnCase", { caseIdentifier })}
+          {document?.latestRevisionNumber != null ? t("caseDocumentPreview.revisionSuffix", { number: document.latestRevisionNumber }) : ""}
         </DialogDescription>
       </DialogHeader>
-      {current.isLoading ? <p className="text-sm text-muted-foreground">Loading document…</p> : current.isError ? <p role="alert" className="text-sm text-destructive">This document couldn’t be loaded.</p> : document ? <div className="space-y-6">
+      {current.isLoading ? <p className="text-sm text-muted-foreground">{t("caseDocumentPreview.loadingDocument")}</p> : current.isError ? <p role="alert" className="text-sm text-destructive">{t("caseDocumentPreview.thisDocumentCouldnTBe")}</p> : document ? <div className="space-y-6">
         <SourceTrustBadge sourceTrust={document.sourceTrust} artifactLabel="document" />
-        {document.body ? <MarkdownBody linkIssueReferences linkCaseReferences>{document.body}</MarkdownBody> : <p className="text-sm text-muted-foreground">This document is empty.</p>}
+        {document.body ? <MarkdownBody linkIssueReferences linkCaseReferences>{document.body}</MarkdownBody> : <p className="text-sm text-muted-foreground">{t("caseDocumentPreview.thisDocumentIsEmpty")}</p>}
         <details open={historyOpen} onToggle={event => setHistoryOpen(event.currentTarget.open)} className="space-y-3">
-          <summary className="w-fit cursor-pointer text-sm text-muted-foreground hover:text-foreground">Revision history</summary>
+          <summary className="w-fit cursor-pointer text-sm text-muted-foreground hover:text-foreground">{t("caseDocumentPreview.revisionHistory")}</summary>
           {historyOpen && <CaseRevisionRail caseIdentifier={caseIdentifier} documentKey={documentRef.key} taskId={taskRef?.taskId} />}
         </details>
       </div> : null}

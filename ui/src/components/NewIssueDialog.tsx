@@ -916,13 +916,13 @@ export function NewIssueDialog() {
   }
 
   function handleFileDragEnter(evt: DragEvent<HTMLDivElement>) {
-    if (!evt.dataTransfer.types.includes(t("common.files"))) return;
+    if (!evt.dataTransfer.types.includes("Files")) return;
     evt.preventDefault();
     setIsFileDragOver(true);
   }
 
   function handleFileDragOver(evt: DragEvent<HTMLDivElement>) {
-    if (!evt.dataTransfer.types.includes(t("common.files"))) return;
+    if (!evt.dataTransfer.types.includes("Files")) return;
     evt.preventDefault();
     evt.dataTransfer.dropEffect = "copy";
     setIsFileDragOver(true);

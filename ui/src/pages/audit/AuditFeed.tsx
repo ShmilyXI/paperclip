@@ -152,7 +152,7 @@ function AuditActor({
   // deleted or authorization-filtered agents that are absent from the directory.
   const label =
     record.actorType === "plugin"
-      ? "Plugin"
+      ? t("auditFeed.plugin")
       : record.actorType === "agent"
         ? t("common.agent")
         : record.actorType === "user"
@@ -247,8 +247,8 @@ function AuditRow({
             </p>
           ) : null}
           {workflowTransition?.from && workflowTransition?.to ? <p className="text-xs text-muted-foreground">
-            {workflowTransition.from.name ?? "Case instructions"}{workflowTransition.from.phase ? ` · ${workflowTransition.from.phase}` : ""}
-            {" → "}{workflowTransition.to.name ?? "Case instructions"} · {workflowTransition.to.phase}
+            {workflowTransition.from.name ?? t("auditFeed.caseInstructions")}{workflowTransition.from.phase ? ` · ${workflowTransition.from.phase}` : ""}
+            {" → "}{workflowTransition.to.name ?? t("auditFeed.caseInstructions")} · {workflowTransition.to.phase}
           </p> : null}
           {documentKey ? (
             <p className="text-xs text-muted-foreground">
@@ -564,8 +564,8 @@ export function AuditFeed({
             <h2 className="text-lg font-semibold text-foreground">{t("common.activity")}</h2>
             <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
               {resolvedMode === "agents"
-                ? "Every recorded agent action, newest first — with the responsible person and run behind each one."
-                : "Everything happening in your organization, newest first — people, agents, and the system. Each line is one recorded action."}
+                ? t("auditFeed.everyRecordedAgentActionNewest")
+                : t("auditFeed.everythingHappeningInYourOrganization")}
             </p>
           </div>
         </div>
@@ -578,7 +578,7 @@ export function AuditFeed({
             <TabsTrigger
               value="agents"
               disabled={accessTier === "basic"}
-              title={accessTier === "basic" ? "Agent Actions requires audit access" : undefined}
+              title={accessTier === "basic" ? t("auditFeed.agentActionsRequiresAuditAccess") : undefined}
             >
               {t("audit.agentActions")}
             </TabsTrigger>
@@ -589,12 +589,12 @@ export function AuditFeed({
       {hasLockedScope ? (
         <div className="border-y border-border px-1 py-2 text-xs text-muted-foreground">
           {lockedRunId
-            ? `Scoped to run ${lockedRunId.slice(0, 8)}`
+            ? t("auditFeed.scopedToRunSlice", { slice: lockedRunId.slice(0, 8) })
             : lockedAgentId
-              ? "Scoped to one agent"
+              ? t("auditFeed.scopedToOneAgent")
               : scopedCase
                 ? <>{t("audit.case")} <Link to={caseHref(scopedCase.identifier)} className="font-medium text-primary hover:underline">{scopedCase.identifier} · {scopedCase.title}</Link></>
-                : `Scoped to ${lockedEntity?.label ?? lockedEntity?.type ?? "entity"}`}
+                : t("auditFeed.scopedToEntity", { entity: lockedEntity?.label ?? lockedEntity?.type ?? "entity" })}
         </div>
       ) : null}
 
@@ -715,7 +715,7 @@ export function AuditFeed({
         </label>
         {hasActiveFilters ? (
           <Button variant="ghost" size="sm" onClick={clearFilters}>
-            Clear filters
+            {t("auditFeed.clearFilters")}
           </Button>
         ) : null}
         {canUseAdvancedControls ? (
@@ -727,7 +727,7 @@ export function AuditFeed({
             disabled={exporting || feed.isLoading || items.length === 0}
           >
             <Download className="mr-1.5 h-4 w-4" />
-            {exporting ? "Exporting…" : "Export CSV"}
+            {exporting ? t("auditFeed.exporting") : t("auditFeed.exportCsv")}
           </Button>
         ) : null}
       </div>
@@ -759,19 +759,19 @@ export function AuditFeed({
             <ScrollText className="h-10 w-10 text-muted-foreground/40" />
             <div>
               <p className="text-sm font-medium text-foreground">
-                {hasActiveFilters ? "No actions match these filters" : "Nothing here yet"}
+                {hasActiveFilters ? t("auditFeed.noActionsMatchTheseFilters") : t("auditFeed.nothingHereYet")}
               </p>
               <p className="mt-1 max-w-md text-sm text-muted-foreground">
                 {hasActiveFilters
-                  ? "Try a wider date range or different filters."
+                  ? t("auditFeed.tryAWiderDateRange")
                   : resolvedMode === "agents"
-                    ? "As soon as your agents start doing things, their actions show up here."
-                    : "As soon as anyone in your organization does something, it shows up here."}
+                    ? t("auditFeed.asSoonAsYourAgents")
+                    : t("auditFeed.asSoonAsAnyoneIn")}
               </p>
             </div>
             {hasActiveFilters ? (
               <Button variant="outline" size="sm" onClick={clearFilters}>
-                Clear filters
+                {t("auditFeed.clearFilters")}
               </Button>
             ) : null}
           </CardContent>
@@ -800,7 +800,7 @@ export function AuditFeed({
             onClick={() => feed.fetchNextPage()}
             disabled={feed.isFetchingNextPage}
           >
-            {feed.isFetchingNextPage ? t("common.loading2") : "Load more"}
+            {feed.isFetchingNextPage ? t("common.loading2") : t("auditFeed.loadMore")}
           </Button>
         </div>
       ) : null}

@@ -394,7 +394,7 @@ function ResizablePropertiesPanel({
           <div
             role="separator"
             aria-orientation="vertical"
-            aria-label="Resize panel"
+            aria-label={t("propertiesPanel.resizePanel")}
             data-dragging={dragging ? "" : undefined}
             className="pane-resize-handle group absolute inset-y-0 z-10 cursor-col-resize touch-none"
             style={{ left: -4, width: 8 }}

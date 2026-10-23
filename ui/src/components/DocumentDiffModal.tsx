@@ -96,19 +96,19 @@ export function DocumentDiffModal({
         <div className="flex items-center justify-between gap-4">
           <DialogHeader className="shrink-0">
             <DialogTitle>
-              Diff — <span className="font-mono text-sm">{documentKey}</span>
+              {t("documentDiffModal.diff")} <span className="font-mono text-sm">{documentKey}</span>
             </DialogTitle>
           </DialogHeader>
 
           <div className="flex items-center gap-4 shrink-0">
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="border-red-500/30 bg-red-500/10 text-(length:--text-nano) uppercase tracking-wider text-red-400">Old</Badge>
+              <Badge variant="outline" className="border-red-500/30 bg-red-500/10 text-(length:--text-nano) uppercase tracking-wider text-red-400">{t("documentDiffModal.old")}</Badge>
               <Select
                 value={effectiveLeftId ?? ""}
                 onValueChange={(value) => setLeftRevisionId(value)}
               >
                 <SelectTrigger className="h-7 w-60 text-xs border-border/60">
-                  <SelectValue placeholder="Select revision" />
+                  <SelectValue placeholder={t("documentDiffModal.selectRevision")} />
                 </SelectTrigger>
                 <SelectContent>
                   {sortedRevisions.map((revision) => (
@@ -126,7 +126,7 @@ export function DocumentDiffModal({
                 onValueChange={(value) => setRightRevisionId(value)}
               >
                 <SelectTrigger className="h-7 w-60 text-xs border-border/60">
-                  <SelectValue placeholder="Select revision" />
+                  <SelectValue placeholder={t("documentDiffModal.selectRevision")} />
                 </SelectTrigger>
                 <SelectContent>
                   {sortedRevisions.map((revision) => (
@@ -142,18 +142,18 @@ export function DocumentDiffModal({
 
         <div className="overflow-auto flex-1 rounded-md border border-border text-xs">
           {!revisions ? (
-            <div className="p-6 text-center text-muted-foreground text-sm">Loading revisions...</div>
+            <div className="p-6 text-center text-muted-foreground text-sm">{t("documentDiffModal.loadingRevisions")}</div>
           ) : !leftRevision || !rightRevision ? (
-            <div className="p-6 text-center text-muted-foreground text-sm">Select two revisions to compare.</div>
+            <div className="p-6 text-center text-muted-foreground text-sm">{t("documentDiffModal.selectTwoRevisionsToCompare")}</div>
           ) : leftRevision.id === rightRevision.id ? (
-            <div className="p-6 text-center text-muted-foreground text-sm">Both sides are the same revision.</div>
+            <div className="p-6 text-center text-muted-foreground text-sm">{t("documentDiffModal.bothSidesAreTheSame")}</div>
           ) : (
             <div className="font-mono text-xs leading-6">
               <div className="grid grid-cols-(--gtc-1) border-b border-border/60 bg-muted/30 px-3 py-2 text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
-                <span>Old</span>
+                <span>{t("documentDiffModal.old")}</span>
                 <span>{t("common.new")}</span>
                 <span />
-                <span>Content</span>
+                <span>{t("documentDiffModal.content")}</span>
               </div>
               {diffRows.map((row, index) => (
                 <div

@@ -279,15 +279,15 @@ function sourceMeta(sourceBadge: CompanySkillSourceBadge, sourceLabel: string | 
     case "github":
       return isSkillsShManaged
         ? { icon: VercelMark, label: sourceLabel ?? "skills.sh", managedLabel: "skills.sh managed" }
-        : { icon: GithubIcon, label: sourceLabel ?? "GitHub", managedLabel: "GitHub managed" };
+        : { icon: GithubIcon, label: sourceLabel ?? "GitHub", managedLabel: t("companySkills.githubManaged") };
     case "url":
       return { icon: Link2, label: sourceLabel ?? t("common.url"), managedLabel: "URL managed" };
     case "local":
-      return { icon: Folder, label: sourceLabel ?? t("common.folder"), managedLabel: "Folder managed" };
+      return { icon: Folder, label: sourceLabel ?? t("common.folder"), managedLabel: t("companySkills.folderManaged") };
     case "paperclip":
-      return { icon: Paperclip, label: sourceLabel ?? "Paperclip", managedLabel: "Paperclip managed" };
+      return { icon: Paperclip, label: sourceLabel ?? "Paperclip", managedLabel: t("companySkills.paperclipManaged") };
     default:
-      return { icon: Boxes, label: sourceLabel ?? t("skills.catalog"), managedLabel: "Catalog managed" };
+      return { icon: Boxes, label: sourceLabel ?? t("skills.catalog"), managedLabel: t("companySkills.catalogManaged") };
   }
 }
 
@@ -338,7 +338,7 @@ const SOURCE_FILTER_LABELS: Record<SourceFilter, string> = {
   company: t("common.organization"),
   bundled: t("skills.bundled"),
   optional: t("common.optional"),
-  external: "External",
+  external: t("companySkills.external"),
 };
 
 function readonlyMetadataValue(metadata: Record<string, unknown> | null | undefined, key: string): string | null {
@@ -396,7 +396,7 @@ function SourceFilterMenu({
           variant="ghost"
           size="icon-sm"
           className={cn("relative shrink-0", activeFilterCount > 0 && "text-blue-600 dark:text-blue-400")}
-          title={activeFilterCount > 0 ? `Filters: ${activeFilterCount}` : t("common.filter")}
+          title={activeFilterCount > 0 ? t("companySkills.filtersActivefiltercount", { activeFilterCount }) : t("common.filter")}
         >
           <Filter className="h-3.5 w-3.5" />
           {activeFilterCount > 0 ? (
@@ -442,7 +442,7 @@ function CatalogFilterMenu({
           variant="ghost"
           size="icon-sm"
           className={cn("relative shrink-0", activeFilterCount > 0 && "text-blue-600 dark:text-blue-400")}
-          title={activeFilterCount > 0 ? `Filters: ${activeFilterCount}` : t("common.filter")}
+          title={activeFilterCount > 0 ? t("companySkills.filtersActivefiltercount", { activeFilterCount }) : t("common.filter")}
         >
           <Filter className="h-3.5 w-3.5" />
           {activeFilterCount > 0 ? (
@@ -648,8 +648,8 @@ function categorySetKey(categories: string[]) {
 }
 
 function skillSettingsToastBody(skill: Pick<CompanySkillDetail, "categories" | "sharingScope">) {
-  const sharing = skill.sharingScope === "private" ? "Sharing: private" : "Sharing: organization";
-  const categories = skill.categories.length ? `Categories: ${skill.categories.join(", ")}` : "Categories: none";
+  const sharing = skill.sharingScope === "private" ? t("companySkills.sharingPrivate") : t("companySkills.sharingOrganization");
+  const categories = skill.categories.length ? t("companySkills.categoriesJoin", { join: skill.categories.join(", ") }) : t("companySkills.categoriesNone");
   return `${sharing} | ${categories}`;
 }
 
@@ -876,7 +876,7 @@ function SkillCard({
           {badgeFolder !== undefined ? (
             <div className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
               <FolderSwatch color={badgeFolder?.color} className="h-2 w-2" />
-              <span className="truncate">{badgeFolder ? badgeFolder.name : "Unfiled"}</span>
+              <span className="truncate">{badgeFolder ? badgeFolder.name : t("companySkills.unfiled")}</span>
             </div>
           ) : null}
         </div>
@@ -937,9 +937,9 @@ function SkillCard({
           <span>
             {card.installed
               ? card.agentCount > 0
-                ? `Enabled for ${card.agentCount} ${card.agentCount === 1 ? "agent" : "agents"}`
-                : "Not enabled for any agents"
-              : "Available to install"}
+                ? t("companySkills.enabledForAgents", { count: card.agentCount })
+                : t("companySkills.notEnabledForAnyAgents")
+              : t("companySkills.availableToInstall")}
           </span>
           {card.starCount > 0 ? (
             <>
@@ -1326,11 +1326,11 @@ export function DiscoveryGrid({
                 message={
                   totalCount === 0
                     ? installedView
-                      ? authoredView ? "No skills yet. Create a skill to start working in Studio." : "No installed skills yet. Discover a skill or create one."
-                      : "No skills are available to discover yet."
+                      ? authoredView ? t("companySkills.noSkillsYetCreateA") : t("companySkills.noInstalledSkillsYetDiscover")
+                      : t("companySkills.noSkillsAreAvailableTo")
                     : search || activeCategory || sourceFilterActive
-                      ? "No skills match your filters."
-                      : "No skills in this view yet."
+                      ? t("companySkills.noSkillsMatchYourFilters")
+                      : t("companySkills.noSkillsInThisView")
                 }
               />
               {totalCount === 0 ? (
@@ -1581,7 +1581,7 @@ function NewSkillWizard({
                 >
                   <span className="block font-medium">{scope === "company" ? t("common.organization") : t("common.private")}</span>
                   <span className="mt-1 block text-xs text-muted-foreground">
-                    {scope === "company" ? "Visible inside this organization." : "Only visible in your library."}
+                    {scope === "company" ? t("companySkills.visibleInsideThisOrganization") : t("companySkills.onlyVisibleInYourLibrary")}
                   </span>
                 </button>
               ))}
@@ -1618,7 +1618,7 @@ function NewSkillWizard({
             </Button>
           ) : (
             <Button size="sm" onClick={submit} disabled={isPending || !nameValid}>
-              {isPending ? t("common.creating2") : draft.forkedFromSkillId ? "Create fork" : "Create skill"}
+              {isPending ? t("common.creating2") : draft.forkedFromSkillId ? t("companySkills.createFork") : t("companySkills.createSkill")}
             </Button>
           )}
         </div>
@@ -1711,7 +1711,7 @@ function CatalogList({
             type="button"
             className="flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-sm text-muted-foreground opacity-80 transition-(--tp-background-color-color-opacity) hover:bg-accent hover:text-foreground group-hover:opacity-100"
             onClick={() => onToggleSkill(skill.id)}
-            aria-label={expanded ? `Collapse ${skill.name}` : `Expand ${skill.name}`}
+            aria-label={expanded ? t("companySkills.collapseName", { name: skill.name }) : t("companySkills.expandName", { name: skill.name })}
           >
             {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
           </button>
@@ -1822,7 +1822,7 @@ function CatalogDetailPane({
     cta = (
       <Button onClick={onInstall} disabled={loadingPrimaryAction}>
         {skill.trustLevel === "scripts_executables" ? <AlertTriangle className="mr-1.5 h-3.5 w-3.5" /> : <Download className="mr-1.5 h-3.5 w-3.5" />}
-        {loadingPrimaryAction ? "Preparing..." : "Install skill in this organization"}
+        {loadingPrimaryAction ? t("companySkills.preparing") : t("companySkills.installSkillInThisOrganization")}
       </Button>
     );
   } else if (hashOutOfSync) {
@@ -2022,7 +2022,7 @@ export function InstallPreviewDialog({
       <DialogContent className="sm:max-w-2xl" showCloseButton={!isPending}>
         <DialogHeader>
           <DialogTitle>
-            {defaultAction === "update" ? t("common.update") : defaultAction === "replace" ? "Replace" : t("common.install")} · {skill.name}
+            {defaultAction === "update" ? t("common.update") : defaultAction === "replace" ? t("companySkills.replace") : t("common.install")} · {skill.name}
           </DialogTitle>
           <DialogDescription>
             <span className="capitalize">{skill.kind}</span> · {skill.category}
@@ -2436,7 +2436,7 @@ function SkillList({
                 type="button"
                 className="flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-sm text-muted-foreground opacity-80 transition-(--tp-background-color-color-opacity) hover:bg-accent hover:text-foreground group-hover:opacity-100"
                 onClick={() => onToggleSkill(skill.id)}
-                aria-label={expanded ? `Collapse ${skill.name}` : `Expand ${skill.name}`}
+                aria-label={expanded ? t("companySkills.collapseName", { name: skill.name }) : t("companySkills.expandName", { name: skill.name })}
               >
                 {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
               </button>
@@ -2654,7 +2654,7 @@ function SkillLocationCard({
   onMove?: () => void;
 }) {
   const { copied, failed, copy } = useCopyAction();
-  const canonical = folderPath && folderPath.length > 0 ? folderPath : "Unfiled";
+  const canonical = folderPath && folderPath.length > 0 ? folderPath : t("companySkills.unfiled");
   return (
     <section>
       <div className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("common.location")}</div>
@@ -2671,7 +2671,7 @@ function SkillLocationCard({
           }}
         >
           <Copy className="mr-1.5 h-3.5 w-3.5" />
-          {copied ? t("common.copied") : failed ? "Copy failed" : "Copy path"}
+          {copied ? t("common.copied") : failed ? t("companySkills.copyFailed") : t("companySkills.copyPath")}
         </Button>
         {onMove ? (
           <Button size="sm" variant="outline" onClick={onMove}>
@@ -2994,10 +2994,10 @@ export function SkillDetailPage({
                   variant="outline"
                   size="sm"
                   onClick={onFork}
-                  title={skill.editableReason ?? "Fork this skill to edit it."}
+                  title={skill.editableReason ?? t("companySkills.forkThisSkillToEdit")}
                 >
                   <GitFork className="mr-1.5 h-3.5 w-3.5" />
-                  {skill.sourceType === "github" ? "Make a copy" : "Fork"}
+                  {skill.sourceType === "github" ? t("companySkills.makeACopy") : t("companySkills.fork")}
                 </Button>
               ) : null}
             </div>
@@ -3042,9 +3042,9 @@ export function SkillDetailPage({
           {fileLoading ? (
             <PageSkeleton variant="detail" />
           ) : file?.markdown ? (
-            <MarkdownBody softBreaks={false} linkIssueReferences={false}>{body || skill.description || "No overview yet."}</MarkdownBody>
+            <MarkdownBody softBreaks={false} linkIssueReferences={false}>{body || skill.description || t("companySkills.noOverviewYet")}</MarkdownBody>
           ) : (
-            <p className="text-sm text-muted-foreground">{skill.description ?? "No overview yet."}</p>
+            <p className="text-sm text-muted-foreground">{skill.description ?? t("companySkills.noOverviewYet")}</p>
           )}
         </section>
         <section className="grid min-w-0 gap-3 text-sm sm:grid-cols-2">
@@ -3064,13 +3064,13 @@ export function SkillDetailPage({
             <div className="text-xs text-muted-foreground">{t("skills.mode")}</div>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               {skill.editable ? (
-                "Editable"
+                t("companySkills.editable")
               ) : (
                 <>
                   <span>{t("skills.readOnly")}</span>
                   <Button type="button" variant="outline" size="xs" onClick={onFork}>
                     <GitFork className="mr-1 h-3 w-3" />
-                    {skill.sourceType === "github" ? "Make a copy" : "Fork"}
+                    {skill.sourceType === "github" ? t("companySkills.makeACopy") : "Fork"}
                   </Button>
                 </>
               )}
@@ -3086,7 +3086,7 @@ export function SkillDetailPage({
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-3">
           <div className="text-sm text-muted-foreground">
-            {versionsLoading ? "Loading versions..." : `${versions.length} ${versions.length === 1 ? "version" : "versions"}`}
+            {versionsLoading ? t("companySkills.loadingVersions") : `${versions.length} ${versions.length === 1 ? "version" : "versions"}`}
           </div>
           <Button
             type="button"
@@ -3298,10 +3298,10 @@ export function SkillDetailPage({
                 onClick={onToggleStar}
                 disabled={starPending}
                 className="inline-flex items-center gap-1.5 border-l border-border px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground disabled:opacity-50"
-                title={detail.starredByCurrentActor ? "Unstar this skill" : "Star this skill"}
+                title={detail.starredByCurrentActor ? t("companySkills.unstarThisSkill") : t("companySkills.starThisSkill")}
               >
                 <Star className={cn("h-3.5 w-3.5", detail.starredByCurrentActor && "fill-current text-yellow-400")} />
-                <span className="hidden sm:inline">{detail.starredByCurrentActor ? "Starred" : t("common.star")}</span>
+                <span className="hidden sm:inline">{detail.starredByCurrentActor ? t("companySkills.starred") : t("common.star")}</span>
                 <span className="font-medium text-foreground">{detail.starCount}</span>
               </button>
               <button
@@ -3311,7 +3311,7 @@ export function SkillDetailPage({
                 title={t("skills.forkThisSkill")}
               >
                 <GitFork className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{skill.sourceType === "github" ? "Make a copy" : "Fork"}</span>
+                <span className="hidden sm:inline">{skill.sourceType === "github" ? t("companySkills.makeACopy") : "Fork"}</span>
                 <span className="font-medium text-foreground">{detail.forkCount}</span>
               </button>
             </div>
@@ -3574,7 +3574,7 @@ export function SkillDetailPage({
                 disabled={!settingsDirty || updateSettingsPending}
               >
                 <Save className="mr-1.5 h-3.5 w-3.5" />
-                {updateSettingsPending ? t("common.saving2") : "Save settings"}
+                {updateSettingsPending ? t("common.saving2") : t("companySkills.saveSettings")}
               </Button>
             </div>
             {detail.editable ? (
@@ -3588,10 +3588,10 @@ export function SkillDetailPage({
                     className="shrink-0"
                     onClick={onDelete}
                     disabled={deletePending}
-                    title={detail.usedByAgents.length > 0 ? "Detach this skill from all agents before removing it." : undefined}
+                    title={detail.usedByAgents.length > 0 ? t("companySkills.detachThisSkillFromAll") : undefined}
                   >
                     <Trash2 className="mr-1.5 h-3.5 w-3.5" />
-                    {deletePending ? "Removing…" : t("common.remove")}
+                    {deletePending ? t("companySkills.removing") : t("common.remove")}
                   </Button>
                 </div>
               </div>
@@ -3675,7 +3675,7 @@ function SkillPane({
   const displaySourcePath = detail.sourcePath ? middleTruncate(detail.sourcePath) : null;
   const removeBlocked = usedBy.length > 0;
   const removeDisabledReason = removeBlocked
-    ? "Detach this skill from all agents before removing it."
+    ? t("companySkills.detachThisSkillFromAll")
     : null;
 
   return (
@@ -3706,7 +3706,7 @@ function SkillPane({
               title={removeDisabledReason ?? undefined}
             >
               <Trash2 className="mr-1.5 h-3.5 w-3.5" />
-              {deletePending ? "Removing..." : t("common.remove")}
+              {deletePending ? t("companySkills.removing2") : t("common.remove")}
             </Button>
             {detail.editable ? (
               <button
@@ -3714,7 +3714,7 @@ function SkillPane({
                 onClick={() => setEditMode(!editMode)}
               >
                 <Pencil className="h-3.5 w-3.5" />
-                {editMode ? "Stop editing" : t("common.edit")}
+                {editMode ? t("companySkills.stopEditing") : t("common.edit")}
               </button>
             ) : (
               <div className="text-sm text-muted-foreground">{detail.editableReason}</div>
@@ -3791,7 +3791,7 @@ function SkillPane({
             </div>
             <div className="flex items-center gap-2">
               <span className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">{t("skills.mode")}</span>
-              <span>{detail.editable ? "Editable" : t("skills.readOnly")}</span>
+              <span>{detail.editable ? t("companySkills.editable") : t("skills.readOnly")}</span>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -4275,7 +4275,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     setBreadcrumbs([
       { label: t("common.skills"), href: "/skills" },
       ...(collectionView === "authored" ? [{ label: t("skills.mySkills") }] : isStudioNew
-        ? [{ label: studioForkFromId ? "Fork skill" : "New skill" }]
+        ? [{ label: studioForkFromId ? t("companySkills.forkSkill") : t("companySkills.newSkill") }]
         : activeDetail
           ? skillDetailBreadcrumbs(activeDetail, skillFoldersQuery.data).slice(1)
           : routeSkillToken
@@ -4317,7 +4317,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       pushToast({
         tone: "success",
         title: t("skills.skillsImported"),
-        body: `${result.imported.length} skill${result.imported.length === 1 ? "" : "s"} added.`,
+        body: t("companySkills.skillsAdded", { count: result.imported.length }),
       });
       if (result.warnings[0]) {
         pushToast({ tone: "warn", title: t("skills.importWarnings"), body: result.warnings[0] });
@@ -4336,7 +4336,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     ),
     onMutate: (projectId) => {
       setScanStatusMessage(
-        projectId ? "Refreshing project skills..." : "Scanning project workspaces for skills...",
+        projectId ? t("companySkills.refreshingProjectSkills") : t("companySkills.scanningProjectWorkspacesForSkills"),
       );
     },
     onSuccess: async (result) => {
@@ -4381,7 +4381,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       setCreateError(null);
       pushToast({
         tone: "success",
-        title: skill.forkedFromSkillId ? "Skill fork created" : "Skill created",
+        title: skill.forkedFromSkillId ? t("companySkills.skillForkCreated") : t("companySkills.skillCreated"),
         body: t("skills.nameIsNowEditableIn", { name: skill.name }),
       });
     },
@@ -4485,7 +4485,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       pushToast({
         tone: "success",
         title: t("skills.skillUpdated"),
-        body: skill.sourceRef ? `Pinned to ${shortRef(skill.sourceRef)}` : skill.name,
+        body: skill.sourceRef ? t("companySkills.pinnedToSourceref", { sourceRef: shortRef(skill.sourceRef) }) : skill.name,
       });
     },
     onError: (error) => {
@@ -4644,10 +4644,10 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       setInstallDialogState((current) => ({ ...current, open: false, error: null }));
       pushToast({
         tone: "success",
-        title: result.action === "created" ? "Skill installed" : result.action === "updated" ? t("skills.skillUpdated") : "Skill is up to date",
+        title: result.action === "created" ? t("companySkills.skillInstalled") : result.action === "updated" ? t("skills.skillUpdated") : t("companySkills.skillIsUpToDate"),
         body: result.action === "created"
           ? enabledCount > 0
-            ? `${result.skill.name} — enabled for ${enabledCount} agent${enabledCount === 1 ? "" : "s"}.`
+            ? t("companySkills.enabledForAgentsToast", { count: enabledCount, name: result.skill.name })
             : `${result.skill.name} is in the library but not enabled for any agent yet. Use "Add to agent" to enable it.`
           : result.skill.name,
       });
@@ -4655,7 +4655,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         pushToast({
           tone: "warn",
           title: t("skills.skillInstalledButEnablingFailed"),
-          body: `Could not enable ${result.skill.name} for ${enableFailures} agent${enableFailures === 1 ? "" : "s"}. Use "Add to agent" on the skill page.`,
+          body: t("companySkills.couldNotEnable", { count: enableFailures, name: result.skill.name }),
         });
       }
       if (result.warnings[0]) {
@@ -4797,7 +4797,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         queryClient.invalidateQueries({ queryKey: queryKeys.companySkills.list(selectedCompanyId!) }),
         queryClient.invalidateQueries({ queryKey: queryKeys.folders.list(selectedCompanyId!, "skill") }),
       ]);
-      pushToast({ tone: "success", title: t("skills.skillsMoved"), body: `${ids.length} skill${ids.length === 1 ? "" : "s"} filed.` });
+      pushToast({ tone: "success", title: t("skills.skillsMoved"), body: t("companySkills.skillsFiled", { count: ids.length }) });
     } catch (moveError) {
       pushToast({
         tone: "error",
@@ -4904,7 +4904,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         title: ids.length === 1 ? t("skills.skillMoved") : t("skills.skillsMoved"),
         body: folderId
           ? `Filed under ${skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder"}.`
-          : "Moved to Unfiled.",
+          : t("companySkills.movedToUnfiled"),
       });
     } catch (moveError) {
       pushToast({
@@ -4977,7 +4977,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         }
         await attachAgentsMutation.mutateAsync({ agentId, desiredSkills: currentEntries });
       }
-      pushToast({ tone: "success", title: t("skills.agentsUpdated"), body: `${nextAgentIds.length} agent(s) attached.` });
+      pushToast({ tone: "success", title: t("skills.agentsUpdated"), body: t("companySkills.lengthAgentSAttached", { length: nextAgentIds.length }) });
     } catch (error) {
       pushToast({ tone: "error", title: t("skills.updateFailed"), body: error instanceof Error ? error.message : t("skills.failedToUpdateAgentSkills") });
     }
@@ -5030,7 +5030,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       pushToast({
         tone: "success",
         title: t("skills.skillRemoved"),
-        body: `${skill.name} was removed from the organization skill library.`,
+        body: t("companySkills.nameWasRemovedFromThe", { name: skill.name }),
       });
     },
     onError: (error) => {
@@ -5113,10 +5113,10 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     ? (catalogListQuery.data ?? []).find((entry) => entry.key === activeDetail.key)?.source ?? null
     : null;
   const studioBackHref = studioForkDetailQuery.data ? routeForSkill(studioForkDetailQuery.data) : "/skills";
-  const studioTitle = studioForkFromId ? "Fork skill" : "Create a new skill";
+  const studioTitle = studioForkFromId ? t("companySkills.forkSkill") : t("companySkills.createANewSkill");
   const studioDescription = studioForkFromId
-    ? "Review the fork metadata and create an editable organization copy."
-    : "Create an editable organization skill in the Paperclip workspace.";
+    ? t("companySkills.reviewTheForkMetadataAnd")
+    : t("companySkills.createAnEditableOrganizationSkill");
   return (
     <>
       {policyDenial.denial ? (
@@ -5135,8 +5135,8 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
           <div className="space-y-3 text-sm">
             <p>
               {deleteTargetDetail
-                ? `You are about to remove ${deleteTargetDetail.name}.`
-                : "You are about to remove this skill."}
+                ? t("companySkills.youAreAboutToRemove", { name: deleteTargetDetail.name })
+                : t("companySkills.youAreAboutToRemove2")}
             </p>
             {deleteTargetDetail?.usedByAgents?.length ? (
               <div className="rounded-md border border-border px-3 py-3 text-muted-foreground">
@@ -5164,7 +5164,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
                   onClick={() => deleteSkill.mutate()}
                   disabled={deleteSkill.isPending || !deleteTargetSkillId}
                 >
-                  {deleteSkill.isPending ? "Removing..." : t("skills.removeSkill")}
+                  {deleteSkill.isPending ? t("companySkills.removing2") : t("skills.removeSkill")}
                 </Button>
               </>
             )}
@@ -5177,7 +5177,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
           <DialogHeader>
             <DialogTitle>{t("skills.addASkillSource")}</DialogTitle>
             <DialogDescription>
-              Paste a local path, GitHub URL, or `skills.sh` command into the field first.
+              {t("companySkills.pasteALocalPathGithub")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 text-sm">
@@ -5204,7 +5204,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
               <span>
                 <span className="block font-medium">{t("skills.searchGithub")}</span>
                 <span className="mt-1 block text-muted-foreground">
-                  Look for repositories with `SKILL.md`, then paste the repo URL here.
+                  {t("companySkills.lookForRepositoriesWithSkill")}
                 </span>
               </span>
               <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
@@ -5278,7 +5278,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
             >
               <span>
                 <span className="block font-medium">{t("skills.searchGithub")}</span>
-                <span className="mt-1 block text-muted-foreground">Look for repositories with `SKILL.md`, then paste the repo URL.</span>
+                <span className="mt-1 block text-muted-foreground">{t("companySkills.lookForRepositoriesWithSkill2")}</span>
               </span>
               <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
             </a>
@@ -5339,7 +5339,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
           if (!open) setMoveDialog(null);
         }}
         result={railSkillFolderResult}
-        title={moveDialog?.title ?? "Move to folder"}
+        title={moveDialog?.title ?? t("companySkills.moveToFolder")}
         subtitle={moveDialog?.subtitle ?? null}
         currentFolderId={moveDialog?.currentFolderId ?? null}
         onMove={(folderId) => void performDialogMove(folderId)}
@@ -5429,7 +5429,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
             if (!card.skillId) return;
             setMoveDialog({
               skillIds: [card.skillId],
-              title: `Move "${card.name}"`,
+              title: t("companySkills.moveName", { name: card.name }),
               subtitle: t("skills.chooseADestinationFolder"),
               currentFolderId: card.folderId ?? null,
             });
@@ -5463,7 +5463,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
               title: t("skills.skillMoved"),
               body: folderId
                 ? `Moved "${card.name}" to ${skillFolderResult?.folders.find((folder) => folder.id === folderId)?.name ?? "folder"}.`
-                : `Moved "${card.name}" to Unfiled.`,
+                : t("companySkills.movedNameToUnfiled", { name: card.name }),
               action: {
                 label: t("common.undo"),
                 onClick: () => moveSkillToFolder.mutate({ itemId: skillId, folderId: previousFolderId }),
@@ -5532,7 +5532,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
           onUpdateSettings={(updates) => activeDetail && updateSkillSettings.mutate({ skillId: activeDetail.id, updates })}
           onMoveToFolder={activeDetail ? () => setMoveDialog({
             skillIds: [activeDetail.id],
-            title: `Move "${activeDetail.name}"`,
+            title: t("companySkills.moveName", { name: activeDetail.name }),
             subtitle: t("skills.chooseADestinationFolder"),
             currentFolderId: activeDetail.folderId ?? null,
           }) : undefined}

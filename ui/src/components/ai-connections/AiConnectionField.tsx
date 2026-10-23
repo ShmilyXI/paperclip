@@ -128,21 +128,20 @@ export function AiConnectionField({
     <div className="space-y-4">
       {value && value.mode !== "router" && (!["opencode_local", "pi_local"].includes(adapterType) || Boolean(model)) && !isAiConnectionCompatible(value, adapterType, model) && (
         <p role="alert" className="text-sm text-destructive">
-          This connection does not support the current harness and model. Choose
-          a compatible connection before saving.
+          {t("aiConnectionField.thisConnectionDoesNotSupport")}
         </p>
       )}
       {(compatiblePools.length > 0 || value?.mode === "router") && <label className="block space-y-1 text-sm">
-        AI connection
+        {t("aiConnectionField.aiConnection")}
         <select className="block w-full rounded-md border bg-background px-3 py-2" disabled={readOnly} value={value?.mode === "router" ? value.connectionId : ""} onChange={event => {
           if (event.target.value) changeBinding({ mode: "router", connectionId: event.target.value });
           else changeBinding({ mode: "responsible_user", provider, method });
         }}>
-          <option value="">Individual account</option>
+          <option value="">{t("aiConnectionField.individualAccount")}</option>
           {compatiblePools.map(pool => <option key={pool.id} value={pool.id}>{pool.name} · Experimental pool</option>)}
-          {value?.mode === "router" && !compatiblePools.some(pool => pool.id === value.connectionId) && <option value={value.connectionId}>Pool unavailable — enable routing and the pool</option>}
+          {value?.mode === "router" && !compatiblePools.some(pool => pool.id === value.connectionId) && <option value={value.connectionId}>{t("aiConnectionField.poolUnavailableEnableRoutingAnd")}</option>}
         </select>
-        {value?.mode === "router" && <span className="text-muted-foreground">New tasks rotate. Existing tasks keep their account.</span>}
+        {value?.mode === "router" && <span className="text-muted-foreground">{t("aiConnectionField.newTasksRotateExistingTasks")}</span>}
       </label>}
       {value?.mode !== "router" && <AiConnectionSelect
         adapterType={adapterType}
@@ -171,21 +170,20 @@ export function AiConnectionField({
       >
         <DialogContent className="max-h-(--sz-85vh) overflow-y-auto sm:max-w-2xl" onCloseAutoFocus={restoreFocus}>
           <DialogHeader>
-            <DialogTitle>{pendingAdoption?.mode === "router" ? `Use ${accounts.data?.pools?.find(pool => pool.id === pendingAdoption.connectionId)?.name ?? "this pool"}?` : `Adopt Connections for ${agentName}`}</DialogTitle>
+            <DialogTitle>{pendingAdoption?.mode === "router" ? t("aiConnectionField.usePoolNameQuestion", { poolName: accounts.data?.pools?.find(pool => pool.id === pendingAdoption.connectionId)?.name ?? "this pool" }) : t("aiConnectionField.adoptConnectionsForAgentname", { agentName })}</DialogTitle>
             <DialogDescription>
-              {pendingAdoption?.mode === "router" ? "Reset existing sessions that use an account outside this pool." : "Saving validates access to the selected connection. Existing sessions keep their account or require an explicit reset before adoption."}
+              {pendingAdoption?.mode === "router" ? t("aiConnectionField.resetExistingSessionsThatUse") : t("aiConnectionField.savingValidatesAccessToThe")}
             </DialogDescription>
           </DialogHeader>
           {pendingAdoption?.mode !== "router" && <p className="text-sm">
             {pendingAdoption?.mode === "responsible_user"
-              ? `Responsible user’s default. For you: ${accounts.data?.connections.find((account) => account.isDefault && account.provider === provider)?.name ?? "Not connected"}. Other users use their own default.`
+              ? t("aiConnectionField.responsibleUserDefault", { accountName: accounts.data?.connections.find((account) => account.isDefault && account.provider === provider)?.name ?? "Not connected" })
               : accounts.data?.connections.find(
                   (account) => account.id === pendingAdoption?.connectionId,
                 )?.name}
           </p>}
           {pendingAdoption?.mode !== "router" && <p className="text-xs text-muted-foreground">
-            After adoption, missing credentials block execution. Previous
-            authentication will not be used as a fallback.
+            {t("aiConnectionField.afterAdoptionMissingCredentialsBlock")}
           </p>}
           <DialogFooter>
             <Button
@@ -200,7 +198,7 @@ export function AiConnectionField({
                 setPendingAdoption(undefined);
               }}
             >
-              {pendingAdoption?.mode === "router" ? "Use pool" : "Use this binding when saved"}
+              {pendingAdoption?.mode === "router" ? t("aiConnectionField.usePool") : t("aiConnectionField.useThisBindingWhenSaved")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -208,9 +206,9 @@ export function AiConnectionField({
       <Dialog open={connecting} onOpenChange={(open) => { if (!selectDefault.isPending) setConnecting(open); }}>
         <DialogContent className="max-h-(--sz-85vh) overflow-y-auto sm:max-w-2xl" onCloseAutoFocus={restoreFocus}>
           <DialogHeader>
-            <DialogTitle>{reconnecting ? "Reconnect account" : "Connect account"}</DialogTitle>
+            <DialogTitle>{reconnecting ? t("aiConnectionField.reconnectAccount") : t("aiConnectionField.connectAccount")}</DialogTitle>
             <DialogDescription>
-              {advancedSetup ? "Choose a provider connection for this agent." : reconnecting ? "Sign in again to repair your current default account. Its agent access stays the same." : "This account will become your default for this provider. Your tasks will use it; other users keep their own default."}
+              {advancedSetup ? t("aiConnectionField.chooseAProviderConnectionFor") : reconnecting ? t("aiConnectionField.signInAgainToRepair") : t("aiConnectionField.thisAccountWillBecomeYour")}
             </DialogDescription>
           </DialogHeader>
           {advancedSetup ? <AiProviderSetup
@@ -226,13 +224,13 @@ export function AiConnectionField({
           /> : <>
           {!reconnecting && !savedAccount && <label className="flex items-center gap-2 text-sm">
             <Checkbox checked={allAgents} disabled={!accounts.data?.canManageConnections} onCheckedChange={(checked) => setAllAgents(checked === true)} />
-            Allow all agents in this company to use this account for my tasks
+            {t("aiConnectionField.allowAllAgentsInThis")}
           </label>}
           {savedAccount ? <div className="space-y-4">
             {selectDefault.error ? <>
               <p role="alert" className="text-sm text-destructive">{selectDefault.error.message}</p>
-              <Button onClick={() => selectDefault.mutate(savedAccount)}>Retry default selection</Button>
-            </> : <p role="status" className="text-sm text-muted-foreground">Selecting your default account…</p>}
+              <Button onClick={() => selectDefault.mutate(savedAccount)}>{t("aiConnectionField.retryDefaultSelection")}</Button>
+            </> : <p role="status" className="text-sm text-muted-foreground">{t("aiConnectionField.selectingYourDefaultAccount")}</p>}
           </div> :
           <AiConnectionCredentialStep
             companyId={companyId}
@@ -252,8 +250,8 @@ export function AiConnectionField({
             }}
           />}
           {!reconnecting && !savedAccount && <details>
-            <summary className="cursor-pointer text-sm text-muted-foreground">Advanced providers</summary>
-            <Button type="button" variant="ghost" onClick={() => setAdvancedSetup(true)}>Choose another provider or gateway</Button>
+            <summary className="cursor-pointer text-sm text-muted-foreground">{t("aiConnectionField.advancedProviders")}</summary>
+            <Button type="button" variant="ghost" onClick={() => setAdvancedSetup(true)}>{t("aiConnectionField.chooseAnotherProviderOrGateway")}</Button>
           </details>}
           </>}
         </DialogContent>

@@ -31,7 +31,7 @@ export function RoutineAuditActivity({
   if (activity.isLoading) {
     return (
       <div className="border-y border-border py-14 text-center text-sm text-muted-foreground">
-        Loading routine activity…
+        {t("routineAuditActivity.loadingRoutineActivity")}
       </div>
     );
   }
@@ -40,7 +40,7 @@ export function RoutineAuditActivity({
     return (
       <div className="flex flex-col items-center gap-3 border-y border-border py-14 text-center">
         <p className="text-sm text-muted-foreground">
-          {activity.error instanceof Error ? activity.error.message : "Failed to load routine activity."}
+          {activity.error instanceof Error ? activity.error.message : t("routineAuditActivity.failedToLoadRoutineActivity")}
         </p>
         <Button variant="outline" size="sm" onClick={() => activity.refetch()}>
           {t("common.tryAgain")}
@@ -51,11 +51,11 @@ export function RoutineAuditActivity({
 
   const events = activity.data ?? [];
   if (events.length === 0) {
-    return <EmptyState icon={Activity} message="No routine activity yet." />;
+    return <EmptyState icon={Activity} message={t("routineAuditActivity.noRoutineActivityYet")} />;
   }
 
   return (
-    <div className="border-y border-border" aria-label="Routine activity">
+    <div className="border-y border-border" aria-label={t("routineAuditActivity.routineActivity")}>
       {events.map((event) => (
         <RoutineActivityRow key={event.id} event={event} />
       ))}

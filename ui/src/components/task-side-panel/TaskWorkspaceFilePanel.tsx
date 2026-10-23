@@ -68,8 +68,8 @@ export function TaskWorkspaceFilePanel({
               type="button"
               variant="ghost"
               size="icon-sm"
-              aria-label="Copy file contents"
-              title={copied ? t("common.copied") : "Copy file contents"}
+              aria-label={t("taskWorkspaceFilePanel.copyFileContents")}
+              title={copied ? t("common.copied") : t("taskWorkspaceFilePanel.copyFileContents")}
               onClick={() => {
                 void copyTextToClipboard(contentQuery.data!.content.data).then(() => {
                   setCopied(true);
@@ -80,10 +80,10 @@ export function TaskWorkspaceFilePanel({
               {copied ? <Check aria-hidden /> : <Copy aria-hidden />}
             </Button>
           ) : null}
-          {renderedPreview && contentQuery.data ? <FilePreviewModeToggle mode={previewMode} onChange={setPreviewMode} label="File preview mode" /> : null}
+          {renderedPreview && contentQuery.data ? <FilePreviewModeToggle mode={previewMode} onChange={setPreviewMode} label={t("taskWorkspaceFilePanel.filePreviewMode")} /> : null}
           {downloadUrl ? (
             <Button asChild variant="ghost" size="icon-sm">
-              <a href={downloadUrl} download={resource?.title} aria-label="Download file" title="Download file">
+              <a href={downloadUrl} download={resource?.title} aria-label={t("taskWorkspaceFilePanel.downloadFile")} title={t("taskWorkspaceFilePanel.downloadFile")}>
                 <Download aria-hidden />
               </a>
             </Button>

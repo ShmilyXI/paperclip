@@ -52,13 +52,13 @@ export function ReviewQueueCard({
 
   if (!selectedCompanyId) return null;
   if (query.isLoading) return null;
-  if (query.isError) return <p role="alert" className="text-sm text-destructive">Could not load connection reviews. Please refresh to try again.</p>;
+  if (query.isError) return <p role="alert" className="text-sm text-destructive">{t("reviewQueueCard.couldNotLoadConnectionReviews")}</p>;
 
   if (items.length === 0) {
     if (emptyState === "hidden") return null;
     return (
       <div className={plain ? "py-5 text-sm text-muted-foreground" : "rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground"}>
-        Nothing is waiting for your OK right now.
+        {t("reviewQueueCard.nothingIsWaitingForYour")}
       </div>
     );
   }
@@ -112,7 +112,7 @@ function ReviewRow({
     mutationFn: () => toolsApi.approveActionRequest(companyId, item.request.id),
     onMutate: () => setResolving("allow"),
     onSuccess: () => {
-      pushToast({ title: "Allowed once", body: `${actionLabel(item)} can run this time.`, tone: "success" });
+      pushToast({ title: t("reviewQueueCard.allowedOnce"), body: `${actionLabel(item)} can run this time.`, tone: "success" });
       invalidate();
     },
     onError: (error) => {
@@ -129,7 +129,7 @@ function ReviewRow({
     onMutate: () => setResolving("always"),
     onSuccess: () => {
       pushToast({
-        title: "Always allowed",
+        title: t("reviewQueueCard.alwaysAllowed"),
         body: `${actionLabel(item)} won’t ask again.`,
         tone: "success",
       });
@@ -147,7 +147,7 @@ function ReviewRow({
     mutationFn: () => toolsApi.declineActionRequest(companyId, item.request.id),
     onMutate: () => setResolving("decline"),
     onSuccess: () => {
-      pushToast({ title: "Declined", body: `${actionLabel(item)} won’t run.`, tone: "info" });
+      pushToast({ title: t("reviewQueueCard.declined"), body: `${actionLabel(item)} won’t run.`, tone: "info" });
       invalidate();
     },
     onError: (error) => {
@@ -190,11 +190,11 @@ function ReviewRow({
         </div>
       ) : (
         <p className="mt-1 text-sm text-muted-foreground">
-          An agent wants to run this action. Your connection policy requires approval first.
+          {t("reviewQueueCard.anAgentWantsToRun")}
         </p>
       )}
 
-      {item.requestedByAgentId && item.connectionId && !item.request.approvalId ? <p className="mt-2 text-xs text-muted-foreground">Always allow lets this agent use this action with different arguments on this connection, within the current project when present.</p> : null}
+      {item.requestedByAgentId && item.connectionId && !item.request.approvalId ? <p className="mt-2 text-xs text-muted-foreground">{t("reviewQueueCard.alwaysAllowLetsThisAgent")}</p> : null}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Button size="sm" onClick={() => allowOnce.mutate()} disabled={busy}>
           {resolving === "allow" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Check className="mr-1.5 h-3.5 w-3.5" />}
@@ -223,7 +223,7 @@ function failToast(
   error: unknown,
 ) {
   pushToast({
-    title: "Couldn’t save that",
+    title: t("reviewQueueCard.couldnTSaveThat"),
     body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
     tone: "error",
   });

@@ -47,7 +47,7 @@ export function turnSummaryMetrics(
 /** "✓ Worked · 38s · 3 tools · +34 −3 · 12.3k tokens" (parts omitted when unknown). */
 export function turnSummaryText(summary: TaskChatTurnItem["summary"]): string {
   const metrics = turnSummaryMetrics(summary);
-  const label = summary.failed ? "Stopped" : "Worked";
+  const label = summary.failed ? t("taskChatTurn.stopped") : t("taskChatTurn.worked");
   return metrics ? `${label} · ${metrics}` : label;
 }
 
@@ -101,12 +101,12 @@ export function TaskChatTurn({
             />
           ) : null}
           {!item.historical ? <span className="min-w-0 truncate">
-            {item.continuedAfterSteering ? "Continued after steering · " : ""}
+            {item.continuedAfterSteering ? t("taskChatTurn.continuedAfterSteering") : ""}
             {item.summary.durationLabel
-              ? `${item.summary.failed ? "Stopped" : "Worked"} for ${item.summary.durationLabel}`
+              ? `${item.summary.failed ? t("taskChatTurn.stopped") : t("taskChatTurn.worked")} for ${item.summary.durationLabel}`
               : item.summary.failed
-                ? "Stopped"
-                : "Worked"}
+                ? t("taskChatTurn.stopped")
+                : t("taskChatTurn.worked")}
           </span> : null}
         </div> : null}
         {item.items.length > 0 ? (
@@ -208,10 +208,10 @@ export function TaskChatTurn({
       ) : null}
       <span>
         {item.historical ? t("common.activity") : item.standaloneHeader && item.summary.durationLabel
-          ? `${item.summary.failed ? "Stopped" : "Worked"} for ${item.summary.durationLabel}`
+          ? `${item.summary.failed ? t("taskChatTurn.stopped") : t("taskChatTurn.worked")} for ${item.summary.durationLabel}`
           : item.summary.failed
-            ? "Stopped"
-            : "Worked"}
+            ? t("taskChatTurn.stopped")
+            : t("taskChatTurn.worked")}
       </span>
       {!item.standaloneHeader && turnSummaryMetrics(item.summary) ? (
         // Time/tools/tokens is demoted, not deleted (PAP-502): it stays in the

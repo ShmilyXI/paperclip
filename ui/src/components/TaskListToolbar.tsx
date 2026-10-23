@@ -24,24 +24,24 @@ export function TaskListToolbar({ view, onViewChange, query, onQueryChange, sear
   filters: ComponentProps<typeof IssueFiltersPopover>;
 }) {
   return (
-    <div data-canonical-toolbar="tasks" className="design-page-toolbar" role="toolbar" aria-label="Task list controls">
+    <div data-canonical-toolbar="tasks" className="design-page-toolbar" role="toolbar" aria-label={t("taskListToolbar.taskListControls")}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild><Button variant="outline" className="design-toolbar-button design-view-trigger" aria-label={`Task view: ${views.find(option => option.value === view)!.label}`}>{views.find(option => option.value === view)!.label}<ChevronDown aria-hidden /></Button></DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="task-list-options" aria-label="Task views">
-          <DropdownMenuLabel asChild><FlyoutHeader className="task-list-options-heading">Views</FlyoutHeader></DropdownMenuLabel>
+        <DropdownMenuContent align="start" className="task-list-options" aria-label={t("taskListToolbar.taskViews")}>
+          <DropdownMenuLabel asChild><FlyoutHeader className="task-list-options-heading">{t("taskListToolbar.views")}</FlyoutHeader></DropdownMenuLabel>
           <DropdownMenuRadioGroup asChild value={view} onValueChange={value => onViewChange(value as TaskListView)}><FlyoutOptions className="task-list-options-items">
             {views.map(option => <DropdownMenuRadioItem className="task-list-options-item" key={option.value} value={option.value}>{option.label}</DropdownMenuRadioItem>)}
           </FlyoutOptions></DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ToolbarSearch query={query} onQueryChange={onQueryChange} inputRef={searchRef} label={t("common.searchTasks")} placeholder="Search tasks…" />
-      <div className="design-view-toggle" role="group" aria-label="Task layout">
+      <ToolbarSearch query={query} onQueryChange={onQueryChange} inputRef={searchRef} label={t("common.searchTasks")} placeholder={t("taskListToolbar.searchTasks")} />
+      <div className="design-view-toggle" role="group" aria-label={t("taskListToolbar.taskLayout")}>
         {[{ value: "list", label: t("common.listView"), icon: List }, { value: "board", label: t("common.boardView"), icon: Columns3 }].map(({ value, label, icon: Icon }) => (
           <Tooltip key={value}><TooltipTrigger asChild><Button variant="ghost" className="design-toolbar-button design-toolbar-icon" aria-label={label} aria-pressed={layout === value} onClick={() => onLayoutChange(value as "list" | "board")}><Icon aria-hidden /></Button></TooltipTrigger><TooltipContent>{label}</TooltipContent></Tooltip>
         ))}
       </div>
       <div className="design-toolbar-actions">
-        <Tooltip><TooltipTrigger asChild><Button variant="outline" className="design-toolbar-button design-toolbar-icon" disabled={layout !== "list"} aria-label={allExpanded ? "Collapse all tasks" : "Expand all tasks"} onClick={onToggleExpanded}><ListTree aria-hidden /></Button></TooltipTrigger><TooltipContent>{allExpanded ? "Collapse all tasks" : "Expand all tasks"}</TooltipContent></Tooltip>
+        <Tooltip><TooltipTrigger asChild><Button variant="outline" className="design-toolbar-button design-toolbar-icon" disabled={layout !== "list"} aria-label={allExpanded ? t("taskListToolbar.collapseAllTasks") : t("taskListToolbar.expandAllTasks")} onClick={onToggleExpanded}><ListTree aria-hidden /></Button></TooltipTrigger><TooltipContent>{allExpanded ? t("taskListToolbar.collapseAllTasks") : t("taskListToolbar.expandAllTasks")}</TooltipContent></Tooltip>
         <div className="design-toolbar-filter"><IssueFiltersPopover {...filters} presentation="refreshed" buttonVariant="outline" iconOnly enableExternalObjectFilters={false} /></div>
         <Button className="design-toolbar-button design-new-task" onClick={onNewTask}><CirclePlus aria-hidden />{t("common.newTask")}</Button>
       </div>

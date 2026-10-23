@@ -68,21 +68,21 @@ function formatServiceUrl(url: string | null | undefined) {
 function statusMeta(entry: WorkspaceServiceControlEntry): { label: string; unhealthy: boolean } {
   switch (entry.state) {
     case "provisioning":
-      return { label: "Provisioning…", unhealthy: false };
+      return { label: t("workspaceServiceControlBar.provisioning"), unhealthy: false };
     case "starting":
-      return { label: "Starting…", unhealthy: false };
+      return { label: t("workspaceServiceControlBar.starting"), unhealthy: false };
     case "stopping":
-      return { label: "Stopping…", unhealthy: false };
+      return { label: t("workspaceServiceControlBar.stopping"), unhealthy: false };
     case "restarting":
-      return { label: "Restarting…", unhealthy: false };
+      return { label: t("workspaceServiceControlBar.restarting"), unhealthy: false };
     case "failed":
       return { label: t("common.failed"), unhealthy: false };
     case "running":
       return entry.healthStatus === "unhealthy"
-        ? { label: "Unhealthy", unhealthy: true }
+        ? { label: t("workspaceServiceControlBar.unhealthy"), unhealthy: true }
         : { label: t("common.running"), unhealthy: false };
     default:
-      return { label: "Stopped", unhealthy: false };
+      return { label: t("workspaceServiceControlBar.stopped"), unhealthy: false };
   }
 }
 
@@ -115,7 +115,7 @@ function CopyUrlButton({ url, disabled }: { url: string; disabled?: boolean }) {
   useEffect(() => () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
-  const copyLabel = copyState === "copied" ? "URL copied" : copyState === "failed" ? "Copy failed" : "Copy URL";
+  const copyLabel = copyState === "copied" ? "URL copied" : copyState === "failed" ? t("workspaceServiceControlBar.copyFailed") : t("workspaceServiceControlBar.copyUrl");
   return (
     <Button
       variant="ghost"
@@ -152,7 +152,7 @@ function UrlSegment({ entry, compact }: { entry: WorkspaceServiceControlEntry; c
   const live = entry.state === "running" && Boolean(entry.url);
 
   if (!displayUrl) {
-    return <span className="font-mono text-xs text-muted-foreground/70">no url</span>;
+    return <span className="font-mono text-xs text-muted-foreground/70">{t("workspaceServiceControlBar.noUrl")}</span>;
   }
   return (
     <>
@@ -301,7 +301,7 @@ function ServiceDetail({
             onClick={onViewLogs}
             className="font-medium text-foreground underline underline-offset-2 hover:text-foreground/80"
           >
-            View logs
+            {t("workspaceServiceControlBar.viewLogs")}
           </button>
         </>
       ) : null}
@@ -433,7 +433,7 @@ function MultiServiceBar({
 
   const aggregateEntry: WorkspaceServiceControlEntry = {
     key: "__all__",
-    name: "All services",
+    name: t("workspaceServiceControlBar.allServices"),
     state: anyTransitional
       ? "starting"
       : anyFailed
@@ -472,9 +472,9 @@ function MultiServiceBar({
                 ))}
               </div>
               <div className="flex items-center gap-1 border-t border-border px-4 py-2">
-                <Button variant="ghost" size="xs" onClick={() => onAction("start", null)}>Start all</Button>
-                <Button variant="ghost" size="xs" onClick={() => onAction("stop", null)}>Stop all</Button>
-                <Button variant="ghost" size="xs" onClick={() => onAction("restart", null)}>Restart all</Button>
+                <Button variant="ghost" size="xs" onClick={() => onAction("start", null)}>{t("workspaceServiceControlBar.startAll")}</Button>
+                <Button variant="ghost" size="xs" onClick={() => onAction("stop", null)}>{t("workspaceServiceControlBar.stopAll")}</Button>
+                <Button variant="ghost" size="xs" onClick={() => onAction("restart", null)}>{t("workspaceServiceControlBar.restartAll")}</Button>
                 {onManageServices ? (
                   <Button
                     variant="link"
@@ -482,7 +482,7 @@ function MultiServiceBar({
                     className="ml-auto text-muted-foreground"
                     onClick={onManageServices}
                   >
-                    Manage in Services tab →
+                    {t("workspaceServiceControlBar.manageInServicesTab")}
                   </Button>
                 ) : null}
               </div>
@@ -496,7 +496,7 @@ function MultiServiceBar({
                 <UrlSegment entry={primary} />
               </>
             ) : (
-              <span className="font-mono text-xs text-muted-foreground/70">no url</span>
+              <span className="font-mono text-xs text-muted-foreground/70">{t("workspaceServiceControlBar.noUrl")}</span>
             )}
           </div>
           <div className="mx-3 hidden h-5 w-px bg-border sm:block" />

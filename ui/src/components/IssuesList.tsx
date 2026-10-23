@@ -331,7 +331,7 @@ export function issueAgeBucket(date: Date | string, now: number = Date.now()): 0
 }
 
 export function issueAgeSeparatorLabel(bucket: 1 | 2): string {
-  return bucket === 1 ? "Older than a day" : "Older than a week";
+  return bucket === 1 ? t("issuesList.olderThanADay") : t("issuesList.olderThanAWeek");
 }
 
 export function issueAgeBucketsCrossed(
@@ -683,7 +683,7 @@ function SubIssueProgressSummaryStrip({
           {target && targetIssue ? (
             <>
               <div className="text-xs font-medium text-muted-foreground">
-                {target.kind === "next" ? "Next up" : "Waiting on blockers"}
+                {target.kind === "next" ? t("issuesList.nextUp") : t("issuesList.waitingOnBlockers")}
               </div>
               <Link
                 to={createIssueDetailPath(targetPathId)}
@@ -1338,7 +1338,7 @@ function StreamlinedIssuesList({
         })
         .map((key) => ({
           key,
-          label: key === "__no_workspace" ? "No Workspace" : (workspaceNameMap.get(key) ?? key.slice(0, 8)),
+          label: key === "__no_workspace" ? t("issuesList.noWorkspace") : (workspaceNameMap.get(key) ?? key.slice(0, 8)),
           items: groups[key]!,
         }));
     }
@@ -1354,7 +1354,7 @@ function StreamlinedIssuesList({
         })
         .map((key) => ({
           key,
-          label: key === "__no_project" ? "No Project" : (projectById.get(key)?.name ?? key.slice(0, 8)),
+          label: key === "__no_project" ? t("issuesList.noProject") : (projectById.get(key)?.name ?? key.slice(0, 8)),
           items: groups[key]!,
         }));
     }
@@ -1369,7 +1369,7 @@ function StreamlinedIssuesList({
         })
         .map((key) => ({
           key,
-          label: key === "__no_parent" ? "No Parent" : (issueTitleMap.get(key) ?? key.slice(0, 8)),
+          label: key === "__no_parent" ? t("issuesList.noParent") : (issueTitleMap.get(key) ?? key.slice(0, 8)),
           items: groups[key]!,
         }));
     }
@@ -1734,8 +1734,8 @@ function StreamlinedIssuesList({
     viewState.groupBy,
   ]);
 
-  const createActionLabel = createIssueLabel ? `Create ${createIssueLabel}` : "Create Task";
-  const createButtonLabel = createIssueLabel ? `New ${createIssueLabel}` : t("common.newTask");
+  const createActionLabel = createIssueLabel ? `${t("issuesList.createPrefix")}${createIssueLabel}` : t("issuesList.createTask");
+  const createButtonLabel = createIssueLabel ? `${t("issuesList.newPrefix")}${createIssueLabel}` : t("common.newTask");
   const openCreateIssueDialog = useCallback((group?: { key: string; items: Issue[] }) => {
     openNewIssue(newIssueDefaults(group));
   }, [newIssueDefaults, openNewIssue]);
@@ -1789,7 +1789,7 @@ function StreamlinedIssuesList({
       {/* Toolbar */}
       <IssuesToolbar
         className="paperclip-task-list-toolbar"
-        ariaLabel={toolbarPresentation === "collection" ? "Task controls" : undefined}
+        ariaLabel={toolbarPresentation === "collection" ? t("issuesList.taskControls") : undefined}
         context={toolbarContext ? (
           <div className="flex min-w-0 items-center gap-2">
             {toolbarContext}
@@ -1844,7 +1844,7 @@ function StreamlinedIssuesList({
               size="icon"
               className={cn("hidden h-8 w-8 shrink-0 sm:inline-flex", viewState.nestingEnabled && "bg-accent")}
               onClick={() => updateView({ nestingEnabled: !viewState.nestingEnabled })}
-              title={viewState.nestingEnabled ? "Disable parent-child nesting" : "Enable parent-child nesting"}
+              title={viewState.nestingEnabled ? t("issuesList.disableParentChildNesting") : t("issuesList.enableParentChildNesting")}
             >
               <ListTree className="h-3.5 w-3.5" />
             </Button>
@@ -1858,7 +1858,7 @@ function StreamlinedIssuesList({
                 size="icon"
                 className={cn("h-8 w-8 shrink-0", boardCompactCards && "bg-accent")}
                 onClick={() => updateView({ boardCardDensity: boardCompactCards ? "comfortable" : "compact" })}
-                title={boardCompactCards ? "Use comfortable cards" : "Use compact cards"}
+                title={boardCompactCards ? t("issuesList.useComfortableCards") : t("issuesList.useCompactCards")}
               >
                 <ChevronsDownUp className="h-3.5 w-3.5" />
               </Button>
@@ -1868,7 +1868,7 @@ function StreamlinedIssuesList({
                 size="icon"
                 className={cn("h-8 w-8 shrink-0", boardCollapsedStatuses.length > 0 && "bg-accent")}
                 onClick={() => updateView({ boardColdLaneMode: boardCollapsedStatuses.length > 0 ? "expanded" : "collapsed" })}
-                title={boardCollapsedStatuses.length > 0 ? "Expand cold lanes" : "Collapse cold lanes"}
+                title={boardCollapsedStatuses.length > 0 ? t("issuesList.expandColdLanes") : t("issuesList.collapseColdLanes")}
               >
                 <PanelTopClose className="h-3.5 w-3.5" />
               </Button>
@@ -2055,7 +2055,7 @@ function StreamlinedIssuesList({
           Some board columns are showing up to {ISSUE_BOARD_COLUMN_RESULT_LIMIT} tasks. Refine filters or search to reveal the rest.
         </p>
       )}
-      {hierarchy.error ? <p className="text-sm text-destructive">Failed to load task hierarchy: {hierarchy.error.message}</p> : null}
+      {hierarchy.error ? <p className="text-sm text-destructive">{t("issuesList.failedToLoadTaskHierarchy")} {hierarchy.error.message}</p> : null}
       {!isLoading && !externalObjectFilterLoading && visibleListRowCount === 0 && viewState.viewMode === "list" && (
         <EmptyState
           icon={CircleDot}
@@ -2290,7 +2290,7 @@ function StreamlinedIssuesList({
                               type="button"
                               data-slot="icon-button"
                               className="inline-flex h-4 w-4 shrink-0 items-center justify-center"
-                              aria-label={isExpanded ? "Collapse sub-tasks" : "Expand sub-tasks"}
+                              aria-label={isExpanded ? t("issuesList.collapseSubTasks") : t("issuesList.expandSubTasks")}
                               onClick={toggleCollapse}
                             >
                               <ChevronRight className={cn("h-3.5 w-3.5 transition-transform", isExpanded && "rotate-90")} />
@@ -2448,7 +2448,7 @@ function StreamlinedIssuesList({
                                           assignIssue(issue.id, null, null);
                                         }}
                                       >
-                                        No responsible
+                                        {t("issuesList.noResponsible")}
                                       </button>
                                       {currentUserId && (
                                         <button
@@ -2557,10 +2557,10 @@ function StreamlinedIssuesList({
             <div className="py-2" data-testid="issues-load-more-sentinel">
               <p className="text-xs text-muted-foreground">
                 {isLoadingMoreIssues || (hierarchyEnabled && hierarchy.isFetching)
-                  ? "Loading more tasks..."
+                  ? t("issuesList.loadingMoreTasks")
                   : remainingIssueRowCount > 0
-                    ? `Rendering ${Math.min(renderedIssueRowLimit, visibleListRowCount)} of ${visibleListRowCount} tasks`
-                    : "Scroll to load more tasks"}
+                    ? t("issuesList.renderingTasks", { shown: Math.min(renderedIssueRowLimit, visibleListRowCount), total: visibleListRowCount })
+                    : t("issuesList.scrollToLoadMoreTasks")}
               </p>
             </div>
           )}

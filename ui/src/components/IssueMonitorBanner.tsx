@@ -85,8 +85,8 @@ export function buildMonitorSurfaceCopy(
 
   if (derived.source === "scheduled-retry" && scheduledRetryReason === "workspace_busy") {
     return {
-      bannerTitle: "Waiting for workspace",
-      stripTitle: "Waiting for workspace",
+      bannerTitle: t("issueMonitorBanner.waitingForWorkspace"),
+      stripTitle: t("issueMonitorBanner.waitingForWorkspace"),
       bannerMeta: ["Another task is using this workspace. Work starts automatically when it is available."],
       stripMeta: ["Work starts automatically when the workspace is available."],
       tone: "info",
@@ -98,8 +98,8 @@ export function buildMonitorSurfaceCopy(
   const absolute = formatMonitorAbsolute(derived.nextCheckAt, {}, now); // local time, e.g. "Today, 4:08 PM"
   if (derived.source === "monitor" && derived.serviceName?.toLowerCase() === "github" && pendingPullRequestReviews > 0) {
     return {
-      bannerTitle: "Pull request review requested",
-      stripTitle: "Pull request review requested",
+      bannerTitle: t("issueMonitorBanner.pullRequestReviewRequested"),
+      stripTitle: t("issueMonitorBanner.pullRequestReviewRequested"),
       bannerMeta: [`Next check ${eta} · ${absolute} (your time)`],
       stripMeta: [`Next check ${eta} · ${absolute}`],
       tone: derived.state === "overdue" ? "warning" : "info",
@@ -108,8 +108,8 @@ export function buildMonitorSurfaceCopy(
   }
   if (derived.source === "scheduled-retry" && scheduledRetryReason === "ai_connection_pool_wait") {
     return {
-      bannerTitle: "Pool exhausted",
-      stripTitle: "Pool exhausted",
+      bannerTitle: t("issueMonitorBanner.poolExhausted"),
+      stripTitle: t("issueMonitorBanner.poolExhausted"),
       bannerMeta: [`Usage recheck ${eta} · ${absolute} (your time)`, "Tasks with a selected account keep it while waiting. Work resumes when usage permits."],
       stripMeta: [`Usage recheck ${eta} · ${absolute}`, "Tasks with a selected account keep it while waiting."],
       tone: "info",
@@ -124,24 +124,24 @@ export function buildMonitorSurfaceCopy(
   switch (derived.state) {
     case "scheduled":
     case "retrying":
-      bannerTitle = isScheduledRetryOnly ? `Agent resumes ${eta}` : `Waiting on monitor — resumes ${eta}`;
+      bannerTitle = isScheduledRetryOnly ? t("issueMonitorBanner.agentResumesEta", { eta }) : t("issueMonitorBanner.waitingOnMonitorResumesEta", { eta });
       stripTitle = `Resumes ${eta}`;
       break;
     case "due-now":
-      bannerTitle = isScheduledRetryOnly ? "Agent retry due now" : "Waiting on monitor — due now";
+      bannerTitle = isScheduledRetryOnly ? t("issueMonitorBanner.agentRetryDueNow") : t("issueMonitorBanner.waitingOnMonitorDueNow");
       stripTitle = "Due now";
       statusHint = "Checking momentarily…";
       break;
     case "overdue":
     default:
-      bannerTitle = isScheduledRetryOnly ? `Agent retry ${eta}` : `Waiting on monitor — ${eta}`;
+      bannerTitle = isScheduledRetryOnly ? t("issueMonitorBanner.agentRetryEta", { eta }) : t("issueMonitorBanner.waitingOnMonitorEta", { eta });
       stripTitle = capitalize(eta);
       statusHint = "Fires on next tick";
       break;
   }
 
-  const attemptLabel = derived.attemptCount >= 1 ? `Attempt ${derived.attemptCount}` : null;
-  const serviceLabel = derived.serviceName ? `Watching: ${derived.serviceName}` : null;
+  const attemptLabel = derived.attemptCount >= 1 ? t("issueMonitorBanner.attemptAttemptcount", { attemptCount: derived.attemptCount }) : null;
+  const serviceLabel = derived.serviceName ? t("issueMonitorBanner.watchingServicename", { serviceName: derived.serviceName }) : null;
 
   const bannerMeta = [statusHint, `${absolute} (your time)`, attemptLabel, serviceLabel].filter(
     (piece): piece is string => Boolean(piece),
@@ -186,7 +186,7 @@ function CheckNowButton({
       onClick={onCheckNow}
       disabled={checkingNow}
     >
-      {checkingNow ? "Checking…" : reviewRequested ? "Check status" : "Check now"}
+      {checkingNow ? t("issueMonitorBanner.checking") : reviewRequested ? t("issueMonitorBanner.checkStatus") : t("issueMonitorBanner.checkNow")}
     </Button>
   );
 }
@@ -222,7 +222,7 @@ function CancelMonitorButton({ onCancel }: { onCancel: () => Promise<unknown> })
         {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={pending}>{t("monitor.keepMonitor")}</AlertDialogCancel>
-          <Button type="button" variant="destructive" disabled={pending} onClick={() => void cancel()}>{pending ? "Cancelling…" : t("monitor.cancelMonitor")}</Button>
+          <Button type="button" variant="destructive" disabled={pending} onClick={() => void cancel()}>{pending ? t("issueMonitorBanner.cancelling") : t("monitor.cancelMonitor")}</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -311,10 +311,10 @@ export function IssueMonitorComposerStrip({
       </div>
       <p className="mt-1.5 text-xs text-muted-foreground">
         {copy.pullRequestReview
-          ? "Review on GitHub, then check status to have the agent verify the result."
+          ? t("issueMonitorBanner.reviewOnGithubThenCheck")
           : copy.workspaceWait
-          ? "You can keep sending instructions while the agent waits."
-          : "Sending a reply wakes the agent now — before the scheduled check."}
+          ? t("issueMonitorBanner.youCanKeepSendingInstructions")
+          : t("issueMonitorBanner.sendingAReplyWakesThe")}
       </p>
       {checkError ? <p role="alert" className="text-sm text-destructive">{checkError}</p> : null}
     </div>

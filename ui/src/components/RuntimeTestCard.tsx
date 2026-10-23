@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   CircleCheck,
   CircleAlert,
@@ -12,38 +13,38 @@ export type TestState = "idle" | "running" | "pass" | "fail";
 
 const copy = {
   idle: {
-    title: "Test your agent",
-    description: "Check that your runtime and model can respond.",
-    action: "Run test",
+    title: t("runtimeTestCard.testYourAgent"),
+    description: t("runtimeTestCard.checkThatYourRuntimeAnd"),
+    action: t("runtimeTestCard.runTest"),
   },
   running: {
-    title: "Testing connection",
-    description: "Checking the runtime and waiting for a model response…",
-    action: "Testing…",
+    title: t("runtimeTestCard.testingConnection"),
+    description: t("runtimeTestCard.checkingTheRuntimeAndWaiting"),
+    action: t("runtimeTestCard.testing"),
   },
   pass: {
-    title: "Connection successful",
-    description: "Your runtime checks passed. Review the details below.",
-    action: "Test again",
+    title: t("runtimeTestCard.connectionSuccessful"),
+    description: t("runtimeTestCard.yourRuntimeChecksPassedReview"),
+    action: t("runtimeTestCard.testAgain"),
   },
   warn: {
-    title: "Connection needs attention",
-    description: "Review the test details before running your agent.",
-    action: "Test again",
+    title: t("runtimeTestCard.connectionNeedsAttention"),
+    description: t("runtimeTestCard.reviewTheTestDetailsBefore"),
+    action: t("runtimeTestCard.testAgain"),
   },
   fail: {
-    title: "Couldn't connect",
-    description: "Check your model and provider connection, then try again.",
-    action: "Retry test",
+    title: t("runtimeTestCard.couldnTConnect"),
+    description: t("runtimeTestCard.checkYourModelAndProvider"),
+    action: t("runtimeTestCard.retryTest"),
   },
 } as const;
 
 const prerequisiteCopy = {
-  idle: { title: "Check prerequisites", description: "Check instance settings and public connection configuration.", action: "Check setup" },
-  running: { title: "Checking prerequisites", description: "Checking instance settings and public connection configuration…", action: "Checking…" },
-  pass: { title: "Setup checks passed", description: "Review the setup details before assigning work.", action: "Check again" },
-  warn: { title: "Pairing required", description: "Create this agent, then pair it and verify event delivery.", action: "Check again" },
-  fail: { title: "Prerequisite check failed", description: "Review the setup details and retry.", action: "Retry check" },
+  idle: { title: t("runtimeTestCard.checkPrerequisites"), description: t("runtimeTestCard.checkInstanceSettingsAndPublic"), action: t("runtimeTestCard.checkSetup") },
+  running: { title: t("runtimeTestCard.checkingPrerequisites"), description: t("runtimeTestCard.checkingInstanceSettingsAndPublic"), action: t("runtimeTestCard.checking") },
+  pass: { title: t("runtimeTestCard.setupChecksPassed"), description: t("runtimeTestCard.reviewTheSetupDetailsBefore"), action: t("runtimeTestCard.checkAgain") },
+  warn: { title: t("runtimeTestCard.pairingRequired"), description: t("runtimeTestCard.createThisAgentThenPair"), action: t("runtimeTestCard.checkAgain") },
+  fail: { title: t("runtimeTestCard.prerequisiteCheckFailed"), description: t("runtimeTestCard.reviewTheSetupDetailsAnd"), action: t("runtimeTestCard.retryCheck") },
 } as const;
 
 export function RuntimeTestCard({
@@ -67,12 +68,12 @@ export function RuntimeTestCard({
     ? result?.checks.find(check => check.code === "acpx_runtime_package_missing")
     : undefined;
   const content = missingRuntime
-    ? { ...copy.fail, title: "Runtime missing", description: missingRuntime.message }
+    ? { ...copy.fail, title: t("runtimeTestCard.runtimeMissing"), description: missingRuntime.message }
     : (variant === "prerequisites" ? prerequisiteCopy : copy)[state];
   const description = metadataOnly && state === "idle"
-    ? "Verify your saved token, runtime installation, and selected model without sending a model prompt."
+    ? t("runtimeTestCard.verifyYourSavedTokenRuntime")
     : metadataOnly && state === "running"
-      ? "Checking the saved token, runtime, and selected model…"
+      ? t("runtimeTestCard.checkingTheSavedTokenRuntime")
       : content.description;
   const Icon =
     state === "running"
@@ -84,7 +85,7 @@ export function RuntimeTestCard({
           : Play;
   return (
     <section
-      aria-label="Runtime test"
+      aria-label={t("runtimeTestCard.runtimeTest")}
       className="rounded-lg border border-border bg-card"
     >
       <div className="flex items-start gap-3 p-4 sm:items-center">
@@ -139,7 +140,7 @@ export function RuntimeTestCard({
               aria-hidden="true"
               className="size-3 transition-transform group-open:rotate-90"
             />
-            Test details
+            {t("runtimeTestCard.testDetails")}
           </summary>
           <ul className="space-y-3 px-4 pb-4">
             {result.checks.map((check) => (

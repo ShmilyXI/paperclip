@@ -266,7 +266,7 @@ function summarizeToolInput(name: string, input: unknown, density: TranscriptDen
   const record = asRecord(input);
   if (!record) {
     const serialized = compactWhitespace(formatUnknown(input));
-    return serialized ? truncate(serialized, compactMax) : `Inspect ${name} input`;
+    return serialized ? truncate(serialized, compactMax) : t("runTranscriptView.inspectNameInput", { name });
   }
 
   const command = typeof record.command === "string"
@@ -341,15 +341,15 @@ function displayToolName(name: string, input: unknown): string {
 }
 
 function summarizeToolResult(result: string | undefined, isError: boolean | undefined, density: TranscriptDensity): string {
-  if (!result) return isError ? "Tool failed" : "Waiting for result";
+  if (!result) return isError ? t("runTranscriptView.toolFailed") : t("runTranscriptView.waitingForResult");
   const structured = parseStructuredToolResult(result);
   if (structured) {
     if (structured.body) {
       return truncate(structured.body.split("\n")[0] ?? structured.body, density === "compact" ? 84 : 140);
     }
-    if (structured.status === "completed") return "Completed";
+    if (structured.status === "completed") return t("runTranscriptView.completed");
     if (structured.status === "failed" || structured.status === "error") {
-      return structured.exitCode ? `Failed with exit code ${structured.exitCode}` : t("common.failed");
+      return structured.exitCode ? t("runTranscriptView.failedWithExitCodeExitcode", { exitCode: structured.exitCode }) : t("common.failed");
     }
   }
   const lines = result
@@ -405,14 +405,14 @@ function summarizeToolDecision(decision: ToolRunDecision | null): { label: strin
   if (!decision) return null;
   if (decision.pendingAction) {
     return {
-      label: "Needs approval",
+      label: t("runTranscriptView.needsApproval"),
       className: "text-amber-700 dark:text-amber-300",
-      detail: `Action request ${decision.pendingAction.actionRequestId.slice(0, 8)}`,
+      detail: t("runTranscriptView.actionRequestSlice", { slice: decision.pendingAction.actionRequestId.slice(0, 8) }),
     };
   }
   if (decision.denialReason || decision.invocation.status === "denied" || decision.outcome === "denied") {
     return {
-      label: "Denied",
+      label: t("runTranscriptView.denied"),
       className: "text-red-700 dark:text-red-300",
       detail: decision.denialReason ?? decision.reasonCode ?? undefined,
     };
@@ -428,13 +428,13 @@ function summarizeToolDecision(decision: ToolRunDecision | null): { label: strin
     return { label: t("common.approved"), className: "text-emerald-700 dark:text-emerald-300" };
   }
   if (decision.actionRequest?.status === "executed") {
-    return { label: "Executed", className: "text-emerald-700 dark:text-emerald-300" };
+    return { label: t("runTranscriptView.executed"), className: "text-emerald-700 dark:text-emerald-300" };
   }
   if (decision.decision === "allow" || decision.invocation.status === "authorized" || decision.invocation.status === "executing" || decision.invocation.status === "succeeded") {
-    return { label: "Allowed", className: "text-emerald-700 dark:text-emerald-300" };
+    return { label: t("runTranscriptView.allowed"), className: "text-emerald-700 dark:text-emerald-300" };
   }
   if (decision.decision === "require_approval" || decision.invocation.approvalState === "pending") {
-    return { label: "Needs approval", className: "text-amber-700 dark:text-amber-300" };
+    return { label: t("runTranscriptView.needsApproval"), className: "text-amber-700 dark:text-amber-300" };
   }
   return {
     label: humanizeLabel(decision.invocation.status),
@@ -604,10 +604,10 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
       blocks.push({
         type: "event",
         ts: entry.ts,
-        label: entry.complete ? "workspace diff" : "workspace changes",
+        label: entry.complete ? t("runTranscriptView.workspaceDiff") : t("runTranscriptView.workspaceChanges"),
         tone: "info",
-        text: `${entry.totals.files} changed ${entry.totals.files === 1 ? "file" : "files"}`,
-        detail: entry.source === "runner_verified" ? "Verified from workspace" : "Reported by harness",
+        text: t("runTranscriptView.changedFiles", { count: entry.totals.files }),
+        detail: entry.source === "runner_verified" ? t("runTranscriptView.verifiedFromWorkspace") : t("runTranscriptView.reportedByHarness"),
       });
       continue;
     }
@@ -703,7 +703,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
         ts: entry.ts,
         label: "result",
         tone: entry.isError ? "error" : "info",
-        text: entry.text.trim() || entry.errors[0] || (entry.isError ? "Run failed" : "Completed"),
+        text: entry.text.trim() || entry.errors[0] || (entry.isError ? t("runTranscriptView.runFailed") : t("runTranscriptView.completed")),
         detail:
           !entry.isError && entry.text.trim().length > 0
             ? `${formatTokens(entry.inputTokens)} / ${formatTokens(entry.outputTokens)} / $${entry.costUsd.toFixed(6)}`
@@ -877,11 +877,11 @@ function TranscriptProviderActivity({ block, density }: { block: Extract<Transcr
     </button>
     {open ? <div className="mt-2 space-y-2 border-l border-border pl-5 text-xs">
       {steps.length > 0 ? <ol className="space-y-1">{steps.map((step, index) => <li key={String(step.stepId ?? index)}><span className="mr-2" aria-hidden="true">{step.status === "completed" ? "✓" : step.status === "blocked" ? "!" : "○"}</span>{String(step.body ?? "")}</li>)}</ol> : null}
-      {children.length > 0 ? <ul className="space-y-1">{children.map((child, index) => <li key={String(child.childId ?? index)}><strong>{String(child.role ?? "Child agent")}</strong> · {String(child.status ?? "unknown")}<div className="text-muted-foreground">{String(child.summary ?? "")}</div></li>)}</ul> : null}
-      {sources.length > 0 ? <ul className="space-y-1">{sources.map((source, index) => { const url = typeof source.url === "string" && /^https?:\/\//.test(source.url) ? source.url : null; return <li key={String(source.sourceId ?? index)}>{url ? <a className="underline" href={url} target="_blank" rel="noreferrer">{String(source.title ?? url)}</a> : String(source.title ?? "Unavailable source")} <span className="text-muted-foreground">Provider-reported</span></li>; })}</ul> : null}
+      {children.length > 0 ? <ul className="space-y-1">{children.map((child, index) => <li key={String(child.childId ?? index)}><strong>{String(child.role ?? t("runTranscriptView.childAgent"))}</strong> · {String(child.status ?? "unknown")}<div className="text-muted-foreground">{String(child.summary ?? "")}</div></li>)}</ul> : null}
+      {sources.length > 0 ? <ul className="space-y-1">{sources.map((source, index) => { const url = typeof source.url === "string" && /^https?:\/\//.test(source.url) ? source.url : null; return <li key={String(source.sourceId ?? index)}>{url ? <a className="underline" href={url} target="_blank" rel="noreferrer">{String(source.title ?? url)}</a> : String(source.title ?? t("runTranscriptView.unavailableSource"))} <span className="text-muted-foreground">{t("runTranscriptView.providerReported")}</span></li>; })}</ul> : null}
       {output ? <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded bg-background p-2 font-mono">{output}</pre> : null}
       {block.family === "provider_notice" && Array.isArray(block.payload.details) ? <dl className="space-y-1">{block.payload.details.slice(0, 64).map((value, index) => { const detail = asRecord(value); return detail && typeof detail.name === "string" && typeof detail.value === "string" ? <div key={index}><dt className="text-muted-foreground">{detail.name}</dt><dd className="whitespace-pre-wrap break-words">{detail.value}</dd></div> : null; })}</dl> : null}
-      {block.family === "model_identity" ? <div><span className="text-muted-foreground">Requested</span> {String(block.payload.requestedModel ?? "—")} · <span className="text-muted-foreground">Effective</span> {String(block.payload.effectiveModel ?? "—")}</div> : null}
+      {block.family === "model_identity" ? <div><span className="text-muted-foreground">{t("runTranscriptView.requested")}</span> {String(block.payload.requestedModel ?? "—")} · <span className="text-muted-foreground">{t("runTranscriptView.effective")}</span> {String(block.payload.effectiveModel ?? "—")}</div> : null}
     </div> : null}
   </div>;
 }
@@ -938,7 +938,7 @@ function TranscriptMessageBlock({
             <span className="tc-live-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-70" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-current" />
           </span>
-          Streaming
+          {t("runTranscriptView.streaming")}
         </div>
       )}
     </div>
@@ -1002,7 +1002,7 @@ function ToolDecisionDetails({ decision, compact }: { decision: ToolRunDecision 
       compact ? "text-(length:--text-micro)" : "text-xs",
     )}>
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <span className="font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">Decision</span>
+        <span className="font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">{t("runTranscriptView.decision")}</span>
         <ToolDecisionBadge decision={decision} />
         {decision.reasonCode && <span className="font-mono text-muted-foreground">{decision.reasonCode}</span>}
       </div>
@@ -1042,8 +1042,8 @@ function TranscriptToolCard({
     block.status === "running"
       ? t("common.running")
       : block.status === "error"
-        ? "Errored"
-        : "Completed";
+        ? t("runTranscriptView.errored")
+        : t("runTranscriptView.completed");
   const statusTone =
     block.status === "running"
       ? "text-blue-700 dark:text-blue-300"
@@ -1097,7 +1097,7 @@ function TranscriptToolCard({
           type="button"
           className="mt-0.5 inline-flex h-5 w-5 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
           onClick={() => setOpen((value) => !value)}
-          aria-label={open ? "Collapse tool details" : "Expand tool details"}
+          aria-label={open ? t("runTranscriptView.collapseToolDetails") : t("runTranscriptView.expandToolDetails")}
         >
           {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </button>
@@ -1108,7 +1108,7 @@ function TranscriptToolCard({
             <div className={cn("grid gap-3", compact ? "grid-cols-1" : "lg:grid-cols-2")}>
               <div>
                 <div className="mb-1 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-                  Input
+                  {t("runTranscriptView.input")}
                 </div>
                 <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-(length:--text-micro) text-foreground/80">
                   {formatToolPayload(block.input) || "<empty>"}
@@ -1122,7 +1122,7 @@ function TranscriptToolCard({
                   "overflow-x-auto whitespace-pre-wrap break-words font-mono text-(length:--text-micro)",
                   block.status === "error" ? "text-red-700 dark:text-red-300" : "text-foreground/80",
                 )}>
-                  {block.result ? formatToolPayload(block.result) : "Waiting for result..."}
+                  {block.result ? formatToolPayload(block.result) : t("runTranscriptView.waitingForResult2")}
                 </pre>
               </div>
             </div>
@@ -1162,10 +1162,10 @@ function TranscriptCommandGroup({
   const isRunning = Boolean(runningItem);
   const showExpandedErrorState = open && hasError;
   const title = isRunning
-    ? "Executing command"
+    ? t("runTranscriptView.executingCommand")
     : block.items.length === 1
-      ? "Executed command"
-      : `Executed ${block.items.length} commands`;
+      ? t("runTranscriptView.executedCommand")
+      : t("runTranscriptView.executedLengthCommands", { length: block.items.length });
   const subtitle = runningItem
     ? summarizeToolInput("command_execution", runningItem.input, density)
     : null;
@@ -1224,7 +1224,7 @@ function TranscriptCommandGroup({
           )}
           {!subtitle && latestItem?.status === "error" && open && (
             <div className={cn("mt-1", compact ? "text-xs" : "text-sm", statusTone)}>
-              Command failed
+              {t("runTranscriptView.commandFailed")}
             </div>
           )}
         </div>
@@ -1238,7 +1238,7 @@ function TranscriptCommandGroup({
             event.stopPropagation();
             setOpen((value) => !value);
           }}
-          aria-label={open ? "Collapse command details" : "Expand command details"}
+          aria-label={open ? t("runTranscriptView.collapseCommandDetails") : t("runTranscriptView.expandCommandDetails")}
         >
           {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </button>
@@ -1303,12 +1303,12 @@ function TranscriptToolGroup({
   const toolLabel =
     uniqueNames.length === 1
       ? humanizeLabel(uniqueNames[0])
-      : `${uniqueNames.length} tools`;
+      : t("runTranscriptView.lengthTools", { length: uniqueNames.length });
   const title = isRunning
-    ? `Using ${toolLabel}`
+    ? t("runTranscriptView.usingToollabel", { toolLabel })
     : block.items.length === 1
-      ? `Used ${toolLabel}`
-      : `Used ${toolLabel} (${block.items.length} calls)`;
+      ? t("runTranscriptView.usedToollabel", { toolLabel })
+      : t("runTranscriptView.usedToollabelLengthCalls", { toolLabel, length: block.items.length });
   const subtitle = runningItem
     ? summarizeToolInput(runningItem.name, runningItem.input, density)
     : null;
@@ -1368,7 +1368,7 @@ function TranscriptToolGroup({
           type="button"
           className={cn("inline-flex h-5 w-5 items-center justify-center text-muted-foreground transition-colors hover:text-foreground", subtitle && "mt-0.5")}
           onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
-          aria-label={open ? "Collapse tool details" : "Expand tool details"}
+          aria-label={open ? t("runTranscriptView.collapseToolDetails") : t("runTranscriptView.expandToolDetails")}
         >
           {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </button>
@@ -1397,7 +1397,7 @@ function TranscriptToolGroup({
                   : item.status === "error" ? "text-red-700 dark:text-red-300"
                   : "text-emerald-700 dark:text-emerald-300"
                 )}>
-                  {item.status === "running" ? t("common.running") : item.status === "error" ? "Errored" : "Completed"}
+                  {item.status === "running" ? t("common.running") : item.status === "error" ? t("runTranscriptView.errored") : t("runTranscriptView.completed")}
                 </span>
                 <ToolDecisionBadge decision={findToolDecision(toolDecisionMaps, item)} />
               </div>
@@ -1709,7 +1709,7 @@ function TranscriptStdoutRow({
           type="button"
           className="inline-flex h-5 w-5 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
           onClick={() => setOpen((value) => !value)}
-          aria-label={open ? "Collapse stdout" : "Expand stdout"}
+          aria-label={open ? t("runTranscriptView.collapseStdout") : t("runTranscriptView.expandStdout")}
         >
           {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </button>

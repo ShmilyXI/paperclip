@@ -959,7 +959,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const inheritedEnvironmentLabel = instanceDefaultEnvironment
     ? environmentDisplayLabel(instanceDefaultEnvironment)
     : managedSandboxOnly
-      ? "Paperclip Computer"
+      ? t("agentConfig.paperclipComputer")
       : t("common.local");
 
   const modelProvider = adapterType === "opencode_local" && aiConnectionBindingSchema.safeParse(
@@ -1532,14 +1532,13 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             <div className="min-w-0 flex-1 space-y-1">
               <p className="text-sm font-medium">{t("agentConfig.upgradeToPaperclipRunner")}</p>
               <p className="text-sm text-muted-foreground">
-                Keep {harnessType === "claude_local" ? "Claude" : "Codex"}, your model, account, and compatible settings.
-                New sessions start fresh; past runs stay available.
+                {t("agentConfig.upgradeRunnerExplanation", { harness: harnessType === "claude_local" ? "Claude" : "Codex" })}
               </p>
               {isDirty ? <p className="text-xs text-muted-foreground">{t("agentConfig.yourUnsavedChangesWillBe")}</p> : null}
             </div>
             <Button size="sm" className="self-end sm:self-auto" onClick={upgradeRunner} disabled={runnerUpgradePending || (!isCreate && props.isSaving)}>
               {runnerUpgradePending ? <Loader2 className="size-4 animate-spin" /> : null}
-              {runnerUpgradePending ? "Upgrading…" : "Upgrade runner"}
+              {runnerUpgradePending ? t("agentConfig.upgrading") : t("agentConfig.upgradeRunner")}
             </Button>
           </div>
           {runnerUpgradeError ? <p role="alert" className="text-sm text-destructive">{runnerUpgradeError}</p> : null}
@@ -1608,7 +1607,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                       String(config.promptTemplate ?? ""),
                     )}
                     onChange={(v) => mark("adapterConfig", "promptTemplate", v ?? "")}
-                    placeholder="You are agent {{ agent.name }}. Your role is {{ agent.role }}..."
+                    placeholder={t("agentConfig.youAreAgentAgentName")}
                     contentClassName="min-h-(--sz-88px) text-sm font-mono"
                     imageUploadHandler={async (file) => {
                       const namespace = `agents/${props.agent.id}/prompt-template`;
@@ -1639,7 +1638,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
             <Field
               label={t("agentConfig.defaultEnvironment")}
-              hint="This instance runs all agents in the Kubernetes sandbox. Local execution is disabled."
+              hint={t("agentConfig.thisInstanceRunsAllAgents")}
             >
               {kubernetesEnvironment ? (
                 <div className={cn(inputClass, "flex items-center text-muted-foreground")}>
@@ -1647,9 +1646,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 </div>
               ) : (
                 <div className="rounded-md border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
-                  This instance requires the Kubernetes sandbox, but no managed Kubernetes
-                  environment is available for this organization yet. Configure one before creating
-                  agents; execution will not fall back to local.
+                  {t("agentConfig.kubernetesSandboxRequired")}
                 </div>
               )}
             </Field>
@@ -1879,7 +1876,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 }}
                 open={modelOpen}
                 onOpenChange={setModelOpen}
-                defaultLabel={adapterType === "claude_local" ? `Default (${DEFAULT_CLAUDE_LOCAL_MODEL})` : undefined}
+                defaultLabel={adapterType === "claude_local" ? t("agentConfig.defaultModel", { MODEL: DEFAULT_CLAUDE_LOCAL_MODEL }) : undefined}
                 allowDefault={adapterType !== "opencode_local" && adapterType !== "pi_local" && adapterType !== "paperclip_runner"}
                 required={adapterType === "opencode_local" || adapterType === "pi_local"}
                 groupByProvider={!connectionModels && (adapterType === "opencode_local" || adapterType === "pi_local")}
@@ -1941,7 +1938,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                     codexSearchEnabled &&
                     currentThinkingEffort === "minimal" && (
                       <p className="text-xs text-amber-400">
-                        Codex may reject `minimal` thinking when search is enabled.
+                        {t("agentConfig.codexMayRejectMinimalThinking")}
                       </p>
                     )}
                 </>
@@ -1981,7 +1978,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                     />
                   </Field>
                   <div className="rounded-md border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
-                    Bootstrap prompt is legacy and will be removed in a future release. Consider moving this content into the agent&apos;s prompt template or instructions file instead.
+                    {t("agentConfig.bootstrapPromptIsLegacyAnd")}
                   </div>
                 </>
               )}
@@ -2058,7 +2055,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                       : mark("adapterConfig", "extraArgs", v?.trim() ? parseCommaArgs(v) : null)
                   }
                   className={inputClass}
-                  placeholder="e.g. --verbose, --foo=bar"
+                  placeholder={t("agentConfig.eGVerboseFooBar")}
                 />
               </Field>
 
@@ -2269,7 +2266,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           >
             <ToggleField
               label={t("agentConfig.captureRawProviderTraces")}
-              hint="Stores exact provider traffic for every future run until disabled. Traces may contain sensitive prompts and tool arguments, are administrator-only, and expire after 24 hours."
+              hint={t("agentConfig.storesExactProviderTrafficFor")}
               checked={eff<unknown>("debug", "providerTrace", debug.providerTrace) === "raw"}
               onChange={(enabled) =>
                 mark("debug", "providerTrace", enabled ? "raw" : undefined)
@@ -2279,7 +2276,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               <div className="mt-3 flex items-start gap-2 rounded-md border border-border bg-background/60 px-3 py-2 text-xs text-foreground">
                 <Bug className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                 <span>
-                  Raw tracing is on for future runs. Paperclip keeps at most 64 MiB per run and automatically deletes it after 24 hours.
+                  {t("agentConfig.rawTracingIsOnFor")}
                 </span>
               </div>
             ) : null}
@@ -2370,10 +2367,10 @@ function AdapterLoginTerminalState({
   }
   const label =
     status === "timed_out"
-      ? "Login timed out"
+      ? t("agentConfig.loginTimedOut")
       : status === "cancelled"
-        ? "Login cancelled"
-        : "Login failed";
+        ? t("agentConfig.loginCancelled")
+        : t("agentConfig.loginFailed");
   return (
     <div className="flex items-start gap-2 text-(length:--text-micro) text-destructive">
       <TriangleAlert className="size-3 shrink-0" />
@@ -2469,7 +2466,7 @@ export type AdapterLoginPanelProps = AdapterLoginDescriptor & {
 /**
  * The account a source signs in to, named where one is known.
  *
- * "Sign in to the environment" describes the plumbing — a login performed inside
+ * t("agentConfig.signInToTheEnvironment") describes the plumbing — a login performed inside
  * a sandbox — and is the honest label when the provider is unknown. But for the
  * two sources onboarding offers, the customer is signing in to Anthropic or to
  * OpenAI, and naming that is what tells them which password manager entry to
@@ -2483,7 +2480,7 @@ const ADAPTER_LOGIN_PROVIDER: Record<string, string> = {
 
 function adapterLoginTitle(adapterType: string): string {
   const provider = ADAPTER_LOGIN_PROVIDER[adapterType];
-  return provider ? `Sign in to ${provider}` : "Sign in to the environment";
+  return provider ? t("agentConfig.signInToProvider", { provider }) : t("agentConfig.signInToTheEnvironment");
 }
 
 export function AdapterLoginPanel(props: AdapterLoginPanelProps) {
@@ -2803,10 +2800,10 @@ function DisplayedCodeLoginPanel({
         ) : failed ? (
           <p role="alert" className="pl-2 text-xs text-destructive">
             {status === "timed_out"
-              ? "The login timed out. Start it again."
+              ? t("agentConfig.theLoginTimedOutStart")
               : status === "cancelled"
-                ? "The login was cancelled."
-                : "The login did not finish. Start it again."}
+                ? t("agentConfig.theLoginWasCancelled")
+                : t("agentConfig.theLoginDidNotFinish")}
           </p>
         ) : (
           <OnboardingLoginCodeRow code={prompt?.code ?? ""} autoCopy />
@@ -3614,7 +3611,7 @@ function SubmittedBrowserCodeLoginPanel({
             disabled={startDisabled}
             onClick={() => startLogin.mutate()}
           >
-            {storedToken && !isActive && !isStored ? "Sign in to replace" : t("common.signIn")}
+            {storedToken && !isActive && !isStored ? t("agentConfig.signInToReplace") : t("common.signIn")}
           </Button>
         </div>
       </div>
@@ -3759,7 +3756,7 @@ function SubmittedBrowserCodeLoginPanel({
 
 export function AdapterEnvironmentResult({ result }: { result: AdapterEnvironmentTestResult }) {
   const statusLabel =
-    result.status === "pass" ? "Passed" : result.status === "warn" ? "Warnings" : t("common.failed");
+    result.status === "pass" ? t("agentConfig.passed") : result.status === "warn" ? t("agentConfig.warnings") : t("common.failed");
   const statusClass =
     result.status === "pass"
       ? "text-green-700 dark:text-green-300 border-green-300 dark:border-green-500/40 bg-green-50 dark:bg-green-500/10"
@@ -3813,7 +3810,7 @@ export function AdapterTypeDropdown({
   const adapterList = useMemo(() =>
     [...listAdapterOptions(type => adapterLabels[type] ?? getAdapterLabel(type)),
       ...(openAiDotEnabled ? [{ value: "openai_dot", label: "OpenAI Dot", experimental: true, comingSoon: false }] : []),
-      ...(museEnabled ? [{ value: "muse", label: "Muse — Personal agent", experimental: true, comingSoon: false }] : []),
+      ...(museEnabled ? [{ value: "muse", label: t("agentConfig.musePersonalAgent"), experimental: true, comingSoon: false }] : []),
     ].filter(item => (item.value !== "paperclip_runner" || nativeRunnerEnabled) && !disabledTypes.has(item.value))
       .sort((a, b) => Number(a.value === "paperclip_runner") - Number(b.value === "paperclip_runner")),
     [disabledTypes, openAiDotEnabled, nativeRunnerEnabled, museEnabled]);
@@ -3969,7 +3966,7 @@ export function ModelDropdown({
           }}
         >
           <option value="" disabled={!allowDefault}>
-            {allowDefault ? (defaultLabel ?? t("common.default")) : loadingModels ? t("agentConfig.loadingModels") : required ? "Select model (required)" : "Select model"}
+            {allowDefault ? (defaultLabel ?? t("common.default")) : loadingModels ? t("agentConfig.loadingModels") : required ? t("agentConfig.selectModelRequired") : t("agentConfig.selectModel")}
           </option>
           {extraModels.map(id => <option key={id} value={id}>{models.find(model => model.id === id)?.label ?? id}</option>)}
           {groupedModels.map(({ provider, entries }) => groupByProvider ? (
@@ -3988,7 +3985,7 @@ export function ModelDropdown({
         )}
         {loadingModels && <p role="status" className="mt-2 text-xs text-muted-foreground">{t("agentConfig.loadingModels")}</p>}
         {onRefreshModels && <Button type="button" variant="ghost" size="sm" disabled={refreshingModels}
-          onClick={() => void onRefreshModels()}>{refreshingModels ? "Refreshing…" : "Refresh models"}</Button>}
+          onClick={() => void onRefreshModels()}>{refreshingModels ? t("agentConfig.refreshing") : t("agentConfig.refreshModels")}</Button>}
       </Field>
     );
   }
@@ -3997,7 +3994,7 @@ export function ModelDropdown({
     <Field label={t("common.model")} hint={help.model}>
       <SelectPopover aria-label={t("common.model")} value={value}
         displayValue={<span className={cn("truncate", !value && "text-muted-foreground")}>
-          {selected?.label ?? (value || (allowDefault ? (defaultLabel ?? t("common.default")) : required ? "Select model (required)" : "Select model"))}
+          {selected?.label ?? (value || (allowDefault ? (defaultLabel ?? t("common.default")) : required ? t("agentConfig.selectModelRequired") : t("agentConfig.selectModel")))}
         </span>}
         open={open}
         onOpenChange={(nextOpen) => {
@@ -4009,7 +4006,7 @@ export function ModelDropdown({
           <div className="relative mb-1">
             <input
               className="w-full px-2 py-1.5 pr-6 text-xs bg-transparent outline-none border-b border-border placeholder:text-muted-foreground/50"
-              placeholder={creatable ? "Search models... (type to create)" : "Search models..."}
+              placeholder={creatable ? t("agentConfig.searchModelsTypeToCreate") : t("agentConfig.searchModels")}
               value={modelSearch}
               onChange={(e) => setModelSearch(e.target.value)}
               autoFocus
@@ -4040,7 +4037,7 @@ export function ModelDropdown({
                 <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                 <path d="M3 3v5h5" />
               </svg>
-              {detectingModel ? "Detecting..." : detectedModel ? (detectModelLabel?.replace(/^Detect\b/, "Re-detect") ?? "Re-detect from config") : (detectModelLabel ?? "Detect from config")}
+              {detectingModel ? t("agentConfig.detecting") : detectedModel ? (detectModelLabel?.replace(/^Detect\b/, "Re-detect") ?? t("agentConfig.reDetectFromConfig")) : (detectModelLabel ?? t("agentConfig.detectFromConfig"))}
             </button>
           )}
           {onRefreshModels && !modelSearch.trim() && (
@@ -4058,7 +4055,7 @@ export function ModelDropdown({
                 <path d="M21 12a9 9 0 0 1-15.28 6.36L3 16" />
                 <path d="M8 16H3v5" />
               </svg>
-              {refreshingModels ? "Refreshing..." : "Refresh models"}
+              {refreshingModels ? t("agentConfig.refreshing2") : t("agentConfig.refreshModels")}
             </button>
           )}
           {value && (!models.some((m) => m.id === value) || promotedModelIds.has(value)) && (
@@ -4190,8 +4187,8 @@ export function ModelDropdown({
               <div className="px-2 py-2 space-y-2">
                 <p className="text-xs text-muted-foreground">
                   {loadingModels ? t("agentConfig.loadingModels") : onDetectModel
-                    ? (emptyDetectHint ?? "No model detected yet. Enter a provider/model manually.")
-                    : "No models found."}
+                    ? (emptyDetectHint ?? t("agentConfig.noModelDetectedYetEnter"))
+                    : t("agentConfig.noModelsFound")}
                 </p>
               </div>
             )}

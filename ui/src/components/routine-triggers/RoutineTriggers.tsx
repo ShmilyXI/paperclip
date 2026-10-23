@@ -164,7 +164,7 @@ export function RoutineTriggers() {
         >
           <span className="flex-1">
             {trigger.kind === "schedule"
-              ? "Schedule"
+              ? t("routineTriggers.schedule")
               : trigger.kind === "api"
                 ? "API trigger"
                 : "Webhook"}{" "}
@@ -228,7 +228,7 @@ export function RoutineTriggers() {
             }
             title={
               trigger.kind === "schedule"
-                ? (describeCron(trigger.cronExpression) ?? "Schedule")
+                ? (describeCron(trigger.cronExpression) ?? t("routineTriggers.schedule"))
                 : trigger.kind === "api"
                   ? "API trigger"
                   : trigger.signingMode === "github_hmac"
@@ -237,19 +237,19 @@ export function RoutineTriggers() {
             }
             summary={
               trigger.setupPending
-                ? "Setup unfinished · Events only test the connection"
+                ? t("routineTriggers.setupUnfinishedEventsOnlyTest")
                 : !trigger.enabled
                   ? t("common.paused")
                   : trigger.kind === "schedule"
                     ? (trigger.timezone ?? "UTC")
                     : trigger.kind === "api"
-                      ? "Run through the API"
+                      ? t("routineTriggers.runThroughTheApi")
                       : trigger.lastWebhookDelivery?.status === "rejected"
-                        ? "Authentication failed · Check the key in your app"
+                        ? t("routineTriggers.authenticationFailedCheckTheKey")
                         : trigger.lastWebhookDelivery?.status === "received" &&
                             !trigger.lastWebhookDelivery.test
-                          ? "Receiving events"
-                          : "Ready · Waiting for an event"
+                          ? t("routineTriggers.receivingEvents")
+                          : t("routineTriggers.readyWaitingForAnEvent")
             }
             expanded={expanded === trigger.id}
             editLabel={trigger.setupPending ? t("triggers.resumeSetup") : undefined}
@@ -302,7 +302,7 @@ export function RoutineTriggers() {
                   })
                 }
               >
-                {trigger.enabled ? "Pause trigger" : "Enable trigger"}
+                {trigger.enabled ? t("routineTriggers.pauseTrigger") : t("routineTriggers.enableTrigger")}
               </Button>
             )}
           </RoutineTriggerCard>
@@ -544,7 +544,7 @@ function WebhookSettings({
             <CopyField
               label={
                 trigger.signingMode === "bearer"
-                  ? "Authorization header value"
+                  ? t("routineTriggers.authorizationHeaderValue")
                   : t("triggers.secretKey")
               }
               value={
@@ -573,9 +573,7 @@ function WebhookSettings({
       )}
       {trigger.signingMode === "hmac_sha256" && (
         <p className="text-sm text-muted-foreground">
-          Sign the timestamp, a period, and the exact JSON body with
-          HMAC-SHA256. Send X-Paperclip-Timestamp and X-Paperclip-Signature:
-          sha256=&lt;signature&gt;.
+          {t("routineTriggers.signTheTimestampAPeriod")}
         </p>
       )}
       <Button
@@ -642,9 +640,9 @@ function WebhookSettings({
           <p role="status" className="text-sm">
             {checked
               ? delivery.status === "received"
-                ? "Event received · Authentication passed"
-                : "Event arrived, but authentication failed. Check the key in your app."
-              : "Waiting for an event from your app…"}
+                ? t("routineTriggers.eventReceivedAuthenticationPassed")
+                : t("routineTriggers.eventArrivedButAuthenticationFailed")
+              : t("routineTriggers.waitingForAnEventFrom")}
           </p>
         </DialogContent>
       </Dialog>

@@ -36,8 +36,8 @@ export function IssueScheduledRetryCard({
 
   if (scheduledRetry.scheduledRetryReason === "workspace_busy") {
     return (
-      <InlineBanner tone="info" icon={Clock} title="Waiting for workspace" className="mb-3">
-        Another task is using this workspace. Work starts automatically when it is available.
+      <InlineBanner tone="info" icon={Clock} title={t("issueScheduledRetryCard.waitingForWorkspace")} className="mb-3">
+        {t("issueScheduledRetryCard.anotherTaskIsUsingThis")}
       </InlineBanner>
     );
   }
@@ -58,8 +58,8 @@ export function IssueScheduledRetryCard({
       ? scheduledRetry.scheduledRetryAttempt
       : null;
 
-  const badgeLabel = continuation ? "Continuation scheduled" : "Retry scheduled";
-  const titleAction = continuation ? "Automatic continuation" : "Automatic retry";
+  const badgeLabel = continuation ? t("issueScheduledRetryCard.continuationScheduled") : t("issueScheduledRetryCard.retryScheduled");
+  const titleAction = continuation ? t("issueScheduledRetryCard.automaticContinuation") : t("issueScheduledRetryCard.automaticRetry");
   let titleSuffix: string;
   if (relative === "now") {
     titleSuffix = "due now";
@@ -71,8 +71,8 @@ export function IssueScheduledRetryCard({
   const title = `${titleAction} ${titleSuffix}`;
 
   const helperIdle = continuation
-    ? "Pulls continuation forward immediately"
-    : "Pulls retry forward immediately";
+    ? t("issueScheduledRetryCard.pullsContinuationForwardImmediately")
+    : t("issueScheduledRetryCard.pullsRetryForwardImmediately");
   const isError = retryNow.isError || retryNow.lastError !== null;
   const isSuccessTransient = retryNow.isSuccess
     && (retryNow.data?.outcome === "promoted" || retryNow.data?.outcome === "already_promoted");
@@ -142,27 +142,27 @@ export function IssueScheduledRetryCard({
             {retryNow.isPending ? (
               <span className="inline-flex items-center gap-1.5">
                 <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
-                Retrying…
+                {t("issueScheduledRetryCard.retrying")}
               </span>
             ) : isSuccessTransient ? (
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-                {retryNow.data?.outcome === "already_promoted" ? "Already promoted" : "Promoted"}
+                {retryNow.data?.outcome === "already_promoted" ? t("issueScheduledRetryCard.alreadyPromoted") : t("issueScheduledRetryCard.promoted")}
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5">
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
-                Retry now
+                {t("issueScheduledRetryCard.retryNow")}
               </span>
             )}
           </Button>
           <span className="text-right text-xs text-muted-foreground sm:max-w-(--sz-12rem)">
             {retryNow.isPending
-              ? "Promoting scheduled retry"
+              ? t("issueScheduledRetryCard.promotingScheduledRetry")
               : isSuccessTransient
                 ? retryNow.data?.outcome === "already_promoted"
-                  ? "Already promoted — run starting"
-                  : "Promoted — run starting"
+                  ? t("issueScheduledRetryCard.alreadyPromotedRunStarting")
+                  : t("issueScheduledRetryCard.promotedRunStarting")
                 : retryNow.data?.outcome === "waiting" && retryNow.data.scheduledRetry?.runId === scheduledRetry.runId
                   ? retryNow.data.message
                   : helperIdle}
@@ -192,7 +192,7 @@ export function RetryErrorBand({ error, onRetry, className }: RetryErrorBandProp
     >
       <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <div className="min-w-0 flex-1">
-        <div className="font-medium">Couldn't retry now</div>
+        <div className="font-medium">{t("issueScheduledRetryCard.couldnTRetryNow")}</div>
         <div className="mt-0.5 text-muted-foreground">{error.message}</div>
       </div>
       <button

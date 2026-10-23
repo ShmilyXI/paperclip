@@ -39,11 +39,11 @@ export function MyUserSecretsTab({ companyId }: { companyId: string }) {
     mutationFn: (secret: CompanySecret) => secretsApi.removeMyUserSecret(companyId, secret.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.myUserSecrets(companyId) });
-      pushToast({ title: "Value cleared", tone: "info" });
+      pushToast({ title: t("myUserSecretsTab.valueCleared"), tone: "info" });
     },
     onError: (err) =>
       pushToast({
-        title: "Could not clear value",
+        title: t("myUserSecretsTab.couldNotClearValue"),
         body: err instanceof Error ? err.message : undefined,
         tone: "error",
       }),
@@ -82,7 +82,7 @@ export function MyUserSecretsTab({ companyId }: { companyId: string }) {
         ) : entries.length === 0 && !mySecretsQuery.isPending ? (
           <EmptyState
             icon={KeyRound}
-            message="No user secrets are defined for this organization yet. An admin defines which credentials each member supplies."
+            message={t("myUserSecretsTab.noUserSecretsAreDefined")}
           />
         ) : (
           <ul className="space-y-2">
@@ -162,7 +162,7 @@ function MyUserSecretRow({
         </Badge>
         {!disabledDefinition ? (
           <Button size="sm" variant={secret ? "outline" : "default"} onClick={onSet}>
-            {secret ? t("common.update") : "Set value"}
+            {secret ? t("common.update") : t("myUserSecretsTab.setValue")}
           </Button>
         ) : null}
         {secret ? (
@@ -172,7 +172,7 @@ function MyUserSecretRow({
             className="text-muted-foreground hover:text-destructive"
             onClick={onClear}
             disabled={clearing}
-            title="Clear my value"
+            title={t("myUserSecretsTab.clearMyValue")}
           >
             <Trash2 className="h-3.5 w-3.5" />
           </Button>

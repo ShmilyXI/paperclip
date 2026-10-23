@@ -273,7 +273,7 @@ export function SearchableSelect<
           <button
             type="button"
             className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
-            aria-label="Close selector"
+            aria-label={t("searchableSelect.closeSelector")}
             onClick={() => closePopover({ suppressTriggerFocus: true })}
           >
             <X className="size-5" />

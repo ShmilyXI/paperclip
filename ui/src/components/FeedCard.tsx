@@ -470,7 +470,7 @@ export function FeedCard({
         )}
       </span>
       {isPinned && (
-        <span className="shrink-0 text-xs text-muted-foreground">Review →</span>
+        <span className="shrink-0 text-xs text-muted-foreground">{t("feedCard.review")}</span>
       )}
       <span data-fc="time" className="shrink-0 text-muted-foreground">
         {timeAgo(event.createdAt)}

@@ -17,16 +17,16 @@ export function ExecutorManagementSetup({ connection, onClose }: { connection: T
   const { userId, settled } = useAccountIdentity();
   const save = useMutation({ mutationFn: async () => {
     const managementUrl = aggregatorManagementUrl("executor", url.trim());
-    if (!managementUrl) throw new Error("Enter an HTTPS console URL without credentials.");
+    if (!managementUrl) throw new Error(t("executorManagementSetup.enterAnHttpsConsoleUrl"));
     await toolsApi.updateConnection(connection.id, { config: { ...connection.config, managementUrl } });
     await queries.invalidateQueries({ queryKey: queryKeys.tools.aggregatorApps(connection.id, userId) });
     const result = await toolsApi.syncAggregatorApps(connection.id, true);
     queries.setQueryData(queryKeys.tools.aggregatorApps(connection.id, userId), result);
   }, onSuccess: async () => { await queries.invalidateQueries({ queryKey: queryKeys.tools.connections(connection.companyId) }); onClose(); } });
   return <Dialog open onOpenChange={open => { if (!open && !save.isPending) onClose(); }}><DialogContent>
-    <DialogHeader><DialogTitle>Executor console</DialogTitle><DialogDescription>Choose where to manage accounts for “{connection.name}”. Include your workspace path.</DialogDescription></DialogHeader>
+    <DialogHeader><DialogTitle>{t("executorManagementSetup.executorConsole")}</DialogTitle><DialogDescription>Choose where to manage accounts for “{connection.name}”. Include your workspace path.</DialogDescription></DialogHeader>
     <form className="space-y-4" onSubmit={event => { event.preventDefault(); save.mutate(); }}>
-      <div className="space-y-2"><Label htmlFor="executor-console-url">Console URL</Label><Input id="executor-console-url" type="url" required value={url} onChange={event => setUrl(event.target.value)} /></div>
+      <div className="space-y-2"><Label htmlFor="executor-console-url">{t("executorManagementSetup.consoleUrl")}</Label><Input id="executor-console-url" type="url" required value={url} onChange={event => setUrl(event.target.value)} /></div>
       {save.isError ? <p role="alert" className="text-sm text-destructive">{save.error.message}</p> : null}
       <DialogFooter className="sm:justify-between"><Button type="button" variant="ghost" onClick={onClose} disabled={save.isPending}>{t("common.cancel")}</Button><Button type="submit" disabled={!settled || save.isPending || !url.trim()}>{save.isPending ? t("common.saving2") : t("common.save")}</Button></DialogFooter>
     </form>

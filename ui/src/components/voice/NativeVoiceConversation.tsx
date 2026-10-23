@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { voiceSessionsApi } from "@/api/voiceSessions";
@@ -29,14 +30,14 @@ export function NativeVoiceConversation(props: NativeVoiceConversationProps) {
   const [newConversation, setNewConversation] = useState(false);
   if (host && !props.managed) return <div className="flex flex-col gap-2">
     {!props.issueId && <ConversationChoice value={newConversation} disabled={host.active} onChange={setNewConversation} />}
-    <Button size="sm" variant="outline" disabled={host.active} onClick={() => host.open({ ...props, newConversation })}>{host.active ? "Voice panel open" : "Start voice"}</Button>
+    <Button size="sm" variant="outline" disabled={host.active} onClick={() => host.open({ ...props, newConversation })}>{host.active ? t("nativeVoiceConversation.voicePanelOpen") : t("nativeVoiceConversation.startVoice")}</Button>
   </div>;
   return <VoiceSessionView {...props} />;
 }
 
 function ConversationChoice({ value, disabled, onChange }: { value: boolean; disabled: boolean; onChange(value: boolean): void }) {
-  return <label className="flex flex-col gap-2 text-sm">Conversation
-    <select disabled={disabled} aria-label="Conversation" className="rounded-md border border-input bg-background p-2 text-sm" value={value ? "new" : "continue"} onChange={event => onChange(event.target.value === "new")}><option value="continue">Continue conversation</option><option value="new">New conversation</option></select>
+  return <label className="flex flex-col gap-2 text-sm">{t("nativeVoiceConversation.conversation")}
+    <select disabled={disabled} aria-label={t("nativeVoiceConversation.conversation")} className="rounded-md border border-input bg-background p-2 text-sm" value={value ? "new" : "continue"} onChange={event => onChange(event.target.value === "new")}><option value="continue">{t("nativeVoiceConversation.continueConversation")}</option><option value="new">{t("nativeVoiceConversation.newConversation")}</option></select>
   </label>;
 }
 
@@ -80,10 +81,10 @@ export function VoiceSessionView({ companyId, endpointId, issueId, agentName, au
   return (
     <div className="flex min-w-0 flex-col gap-4">
       {!issueId && !sessionId && !autoStart && <ConversationChoice value={newConversation} disabled={starting} onChange={setNewConversation} />}
-      {boundIssueId && <Link className="text-sm text-primary underline" to={`/issues/${encodeURIComponent(boundIssueId)}`}>View conversation task</Link>}
+      {boundIssueId && <Link className="text-sm text-primary underline" to={`/issues/${encodeURIComponent(boundIssueId)}`}>{t("nativeVoiceConversation.viewConversationTask")}</Link>}
       <VoiceConversationPanel agentName={agentName} autoStart={autoStart} accessRevoked={accessRevoked} onEndedChange={onEndedChange} dependencies={dependencies} notification={notification.data ?? undefined} />
-      {(notification.isError || accessLost) && <p role="alert" className="text-sm text-destructive">{accessRevoked ? "Access to this call is no longer available. The call is being closed." : "Task updates are temporarily unavailable. The connection will retry; end the call if the problem continues."}</p>}
-      <p className="text-xs text-muted-foreground">Speko handles the audio and may retain recordings according to your workspace settings. Paperclip keeps task history. Speko usage is billed separately from agent work. Calls are limited to ten minutes.</p>
+      {(notification.isError || accessLost) && <p role="alert" className="text-sm text-destructive">{accessRevoked ? t("nativeVoiceConversation.accessToThisCallIs") : t("nativeVoiceConversation.taskUpdatesAreTemporarilyUnavailable")}</p>}
+      <p className="text-xs text-muted-foreground">{t("nativeVoiceConversation.spekoHandlesTheAudioAnd")}</p>
     </div>
   );
 }

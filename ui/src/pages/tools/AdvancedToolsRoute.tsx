@@ -42,7 +42,7 @@ export function AdvancedToolsRoute() {
         <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-6">
           <div className="flex items-center gap-2 text-foreground">
             <ShieldAlert className="h-5 w-5 text-muted-foreground" />
-            <h1 className="text-lg font-semibold">Advanced setup requires editing access</h1>
+            <h1 className="text-lg font-semibold">{t("advancedToolsRoute.advancedSetupRequiresEditingAccess")}</h1>
           </div>
           <p className="text-sm text-muted-foreground">
             This area lets company editors wire up tools that aren't in the gallery. Ask a company editor if you

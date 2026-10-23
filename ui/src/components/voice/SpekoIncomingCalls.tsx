@@ -13,24 +13,24 @@ export function SpekoIncomingCallCard({call, tasks = [], busy, error, onDecide}:
   const heading = useRef<HTMLHeadingElement>(null);
   const pending = ["guest_intake", "awaiting_approval", "approving"].includes(call.state);
   useEffect(() => { if (!pending) heading.current?.focus(); }, [pending]);
-  if (call.state === "guest_intake") return <section className="max-w-xl space-y-3 rounded-md border border-border p-3" aria-label="Incoming conversation">
-    <h3 className="text-sm font-semibold">Incoming conversation</h3>
-    {call.intakeIssueId && <Link className="text-sm text-primary underline" to={`/issues/${call.intakeIssueId}`}>Open conversation task</Link>}
-    <p className="text-sm text-muted-foreground">This caller is talking to the agent in a new low-trust task.</p>
+  if (call.state === "guest_intake") return <section className="max-w-xl space-y-3 rounded-md border border-border p-3" aria-label={t("spekoIncomingCalls.incomingConversation")}>
+    <h3 className="text-sm font-semibold">{t("spekoIncomingCalls.incomingConversation")}</h3>
+    {call.intakeIssueId && <Link className="text-sm text-primary underline" to={`/issues/${call.intakeIssueId}`}>{t("spekoIncomingCalls.openConversationTask")}</Link>}
+    <p className="text-sm text-muted-foreground">{t("spekoIncomingCalls.thisCallerIsTalkingTo")}</p>
     {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-    <Button variant="outline" disabled={busy} onClick={() => onDecide({approve: false, approvalCode: call.approvalCode})}>End call</Button>
+    <Button variant="outline" disabled={busy} onClick={() => onDecide({approve: false, approvalCode: call.approvalCode})}>{t("spekoIncomingCalls.endCall")}</Button>
   </section>;
-  return <section className="max-w-xl space-y-3 rounded-md border border-border p-3" aria-label="Incoming call approval">
-    <h3 ref={heading} tabIndex={-1} className="text-sm font-semibold">{call.state === "approved" ? "Call approved" : call.state === "denied" ? "Call denied" : call.state === "expired" ? "Call expired" : call.state === "ended" ? "Caller hung up" : "Incoming call awaiting approval"}</h3>
-    {call.intakeIssueId && <Link className="text-sm text-primary underline" to={`/issues/${encodeURIComponent(call.intakeIssueId)}`}>Review phone intake</Link>}
+  return <section className="max-w-xl space-y-3 rounded-md border border-border p-3" aria-label={t("spekoIncomingCalls.incomingCallApproval")}>
+    <h3 ref={heading} tabIndex={-1} className="text-sm font-semibold">{call.state === "approved" ? t("spekoIncomingCalls.callApproved") : call.state === "denied" ? t("spekoIncomingCalls.callDenied") : call.state === "expired" ? t("spekoIncomingCalls.callExpired") : call.state === "ended" ? t("spekoIncomingCalls.callerHungUp") : t("spekoIncomingCalls.incomingCallAwaitingApproval")}</h3>
+    {call.intakeIssueId && <Link className="text-sm text-primary underline" to={`/issues/${encodeURIComponent(call.intakeIssueId)}`}>{t("spekoIncomingCalls.reviewPhoneIntake")}</Link>}
     {pending ? <form className="space-y-3" onSubmit={event => {event.preventDefault(); if (code !== call.approvalCode) {setInvalid(true); return;} setInvalid(false); onDecide({approve: true, approvalCode: code, ...(issueId ? {issueId} : {})});}}>
-      <p className="text-sm text-muted-foreground">Approve only the call you are currently on. Enter the six-digit code spoken on the phone. Approval gives this call your access to the selected task.</p>
-      <label className="grid gap-2 text-sm font-medium">Code spoken on your call<Input inputMode="numeric" autoComplete="off" maxLength={6} value={code} disabled={busy} aria-invalid={invalid} onChange={event => {setCode(event.target.value); setInvalid(false);}} /></label>
-      <label className="grid min-w-0 gap-2 text-sm font-medium">Conversation task<select aria-label="Conversation task" className="w-full min-w-0 rounded-md border border-input bg-background p-2 text-sm" disabled={busy} value={issueId} onChange={event => setIssueId(event.target.value)}><option value="">Continue your conversation, or create one</option>{tasks.map(task => <option key={task.id} value={task.id}>{task.label}</option>)}</select></label>
-      {invalid && <p role="alert" className="text-sm text-destructive">That code does not match this live call. Ask the phone agent to repeat it.</p>}
+      <p className="text-sm text-muted-foreground">{t("spekoIncomingCalls.approveOnlyTheCallYou")}</p>
+      <label className="grid gap-2 text-sm font-medium">{t("spekoIncomingCalls.codeSpokenOnYourCall")}<Input inputMode="numeric" autoComplete="off" maxLength={6} value={code} disabled={busy} aria-invalid={invalid} onChange={event => {setCode(event.target.value); setInvalid(false);}} /></label>
+      <label className="grid min-w-0 gap-2 text-sm font-medium">{t("spekoIncomingCalls.conversationTask")}<select aria-label={t("spekoIncomingCalls.conversationTask")} className="w-full min-w-0 rounded-md border border-input bg-background p-2 text-sm" disabled={busy} value={issueId} onChange={event => setIssueId(event.target.value)}><option value="">{t("spekoIncomingCalls.continueYourConversationOrCreate")}</option>{tasks.map(task => <option key={task.id} value={task.id}>{task.label}</option>)}</select></label>
+      {invalid && <p role="alert" className="text-sm text-destructive">{t("spekoIncomingCalls.thatCodeDoesNotMatch")}</p>}
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <div className="flex items-center justify-between gap-3"><Button type="button" variant="ghost" disabled={busy} onClick={() => onDecide({approve: false, approvalCode: call.approvalCode})}>Deny call</Button><Button type="submit" disabled={busy}>{busy ? "Confirming…" : "Approve live call"}</Button></div>
-    </form> : <p className="text-sm text-muted-foreground">{call.state === "approved" ? "Approval was sent for this call. Earlier instructions were discarded. Follow the call in Activity." : "This call cannot access your private tasks."}</p>}
+      <div className="flex items-center justify-between gap-3"><Button type="button" variant="ghost" disabled={busy} onClick={() => onDecide({approve: false, approvalCode: call.approvalCode})}>{t("spekoIncomingCalls.denyCall")}</Button><Button type="submit" disabled={busy}>{busy ? t("spekoIncomingCalls.confirming") : t("spekoIncomingCalls.approveLiveCall")}</Button></div>
+    </form> : <p className="text-sm text-muted-foreground">{call.state === "approved" ? t("spekoIncomingCalls.approvalWasSentForThis") : t("spekoIncomingCalls.thisCallCannotAccessYour")}</p>}
   </section>;
 }
 export function SpekoIncomingCalls({companyId, endpointId, agentId}: {companyId: string; endpointId: string; agentId: string}) {
@@ -50,9 +50,9 @@ export function SpekoIncomingCalls({companyId, endpointId, agentId}: {companyId:
   useEffect(() => {
     if (restoreTaskFocus.current && !tasks.isFetching && !tasks.isError) {
       restoreTaskFocus.current = false;
-      host.current?.querySelector<HTMLSelectElement>('select[aria-label="Conversation task"]')?.focus();
+      host.current?.querySelector<HTMLSelectElement>(`select[aria-label="${t("spekoIncomingCalls.conversationTask")}"]`)?.focus();
     }
   }, [tasks.data, tasks.isFetching, tasks.isError]);
   const mutation = useMutation({mutationFn: ({id, ...input}: {id: string; approve: boolean; approvalCode: string; issueId?: string}) => voicePhoneApi.decide(companyId, endpointId, id, input), onSuccess: result => { setDecision(result); return query.refetch(); }});
-  return <div ref={host} className="space-y-3">{needsTaskSelection && tasks.isError && <div role="alert" className="space-y-2 text-sm"><p>Task list could not be loaded. Retry to choose an existing task.</p><Button variant="outline" disabled={tasks.isFetching} onClick={() => { restoreTaskFocus.current = true; void tasks.refetch().then(result => { if (result.isError) restoreTaskFocus.current = false; }); }}>Retry tasks</Button></div>}{query.error && <p role="alert" className="text-sm text-destructive">Incoming call approval is unavailable. {query.error.message}</p>}{!query.error && [...(query.data ?? []).filter(call => call.id !== decision?.id), ...(decision ? [decision] : [])].map(call => <SpekoIncomingCallCard key={call.id} call={call} tasks={tasks.data?.filter(task => !["done", "cancelled"].includes(task.status)).map(task => ({id: task.id, label: `${task.identifier ?? t("common.task")} · ${task.title}`}))} busy={mutation.isPending && mutation.variables?.id === call.id} error={mutation.variables?.id === call.id ? mutation.error?.message : undefined} onDecide={input => mutation.mutate({id: call.id, ...input})} />)}</div>;
+  return <div ref={host} className="space-y-3">{needsTaskSelection && tasks.isError && <div role="alert" className="space-y-2 text-sm"><p>{t("spekoIncomingCalls.taskListCouldNotBe")}</p><Button variant="outline" disabled={tasks.isFetching} onClick={() => { restoreTaskFocus.current = true; void tasks.refetch().then(result => { if (result.isError) restoreTaskFocus.current = false; }); }}>{t("spekoIncomingCalls.retryTasks")}</Button></div>}{query.error && <p role="alert" className="text-sm text-destructive">{t("spekoIncomingCalls.incomingCallApprovalIsUnavailable")} {query.error.message}</p>}{!query.error && [...(query.data ?? []).filter(call => call.id !== decision?.id), ...(decision ? [decision] : [])].map(call => <SpekoIncomingCallCard key={call.id} call={call} tasks={tasks.data?.filter(task => !["done", "cancelled"].includes(task.status)).map(task => ({id: task.id, label: `${task.identifier ?? t("common.task")} · ${task.title}`}))} busy={mutation.isPending && mutation.variables?.id === call.id} error={mutation.variables?.id === call.id ? mutation.error?.message : undefined} onDecide={input => mutation.mutate({id: call.id, ...input})} />)}</div>;
 }

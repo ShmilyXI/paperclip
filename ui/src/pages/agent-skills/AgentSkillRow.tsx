@@ -121,7 +121,7 @@ export function AgentSkillRow({
   );
 
   const trailing = readOnly ? (
-    <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" aria-label="Read-only" />
+    <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" aria-label={t("agentSkillRow.readOnly")} />
   ) : (
     (() => {
       const toggle = (

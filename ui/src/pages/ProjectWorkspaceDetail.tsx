@@ -140,7 +140,7 @@ function parseRuntimeConfigJson(value: string) {
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
       return {
         ok: false as const,
-        error: "Workspace commands JSON must be a JSON object.",
+        error: t("projectWorkspaceDetail.workspaceCommandsJsonMustBe"),
       };
     }
     return { ok: true as const, value: parsed as Record<string, unknown> };
@@ -378,12 +378,12 @@ export function ProjectWorkspaceDetail() {
       setErrorMessage(null);
       setRuntimeActionMessage(
         request.action === "run"
-          ? "Workspace job completed."
+          ? t("projectWorkspaceDetail.workspaceJobCompleted")
           : request.action === "stop"
-            ? "Workspace service stopped. Task execution is not paused."
+            ? t("projectWorkspaceDetail.workspaceServiceStoppedTaskExecution")
             : request.action === "restart"
-              ? "Workspace service restarted. Task execution is not paused."
-              : "Workspace service started.",
+              ? t("projectWorkspaceDetail.workspaceServiceRestartedTaskExecution")
+              : t("projectWorkspaceDetail.workspaceServiceStarted"),
       );
     },
     onError: (error) => {
@@ -464,7 +464,7 @@ export function ProjectWorkspaceDetail() {
             {setPrimaryWorkspace.isPending
               ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               : <Check className="mr-2 h-4 w-4" />}
-            Make primary
+            {t("projectWorkspaceDetail.makePrimary")}
           </Button>
         ) : (
           <div className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-300 sm:max-w-sm">
@@ -615,7 +615,7 @@ export function ProjectWorkspaceDetail() {
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
-                <Field label={t("projectWorkspace.setupCommand")} hint="Runs when this workspace needs custom bootstrap">
+                <Field label={t("projectWorkspace.setupCommand")} hint={t("projectWorkspaceDetail.runsWhenThisWorkspaceNeeds")}>
                   <textarea
                     className="min-h-28 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.setupCommand}
@@ -623,7 +623,7 @@ export function ProjectWorkspaceDetail() {
                     placeholder="pnpm install && pnpm dev"
                   />
                 </Field>
-                <Field label={t("projectWorkspace.cleanupCommand")} hint="Runs before project-level execution workspace teardown">
+                <Field label={t("projectWorkspace.cleanupCommand")} hint={t("projectWorkspaceDetail.runsBeforeProjectLevelExecution")}>
                   <textarea
                     className="min-h-28 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.cleanupCommand}
@@ -639,7 +639,7 @@ export function ProjectWorkspaceDetail() {
                   Paperclip derives Services and Jobs from this JSON. Prefer editing named commands first; use raw JSON for advanced lifecycle, port, readiness, or environment settings.
                 </p>
                 <div className="mt-3">
-                  <Field label={t("projectWorkspace.workspaceCommandsJson")} hint="Execution workspaces inherit this config unless they override it. Legacy `services` arrays still work, but `commands` supports both services and jobs.">
+                  <Field label={t("projectWorkspace.workspaceCommandsJson")} hint={t("projectWorkspaceDetail.executionWorkspacesInheritThisConfig")}>
                     <textarea
                       className="min-h-96 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                       value={form.runtimeConfig}
@@ -654,7 +654,7 @@ export function ProjectWorkspaceDetail() {
             <div className="mt-5 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <Button className="w-full sm:w-auto" disabled={!isDirty || updateWorkspace.isPending} onClick={saveChanges}>
                 {updateWorkspace.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                Save changes
+                {t("common.saveChanges")}
               </Button>
               <Button
                 variant="outline"
@@ -723,8 +723,8 @@ export function ProjectWorkspaceDetail() {
               pendingRequest={pendingRuntimeAction}
               serviceEmptyMessage={
                 workspace.runtimeConfig?.workspaceRuntime
-                  ? "No services have been started for this workspace yet."
-                  : "No workspace command config is defined for this workspace yet."
+                  ? t("projectWorkspaceDetail.noServicesHaveBeenStarted")
+                  : t("projectWorkspaceDetail.noWorkspaceCommandConfigIs")
               }
               jobEmptyMessage="No one-shot jobs are configured for this workspace yet."
               disabledHint="Project workspaces need a working directory before local commands can run, and services also need runtime config."
@@ -750,7 +750,7 @@ export function ProjectWorkspaceDetail() {
           />
         ) : pluginDetailSlotsLoading || pluginDetailSlotsError ? (
           <div className="rounded-lg border border-dashed border-border bg-background px-4 py-8 text-sm text-muted-foreground">
-            {pluginDetailSlotsError ? pluginDetailSlotsError : "Loading workspace plugin..."}
+            {pluginDetailSlotsError ? pluginDetailSlotsError : t("projectWorkspaceDetail.loadingWorkspacePlugin")}
           </div>
         ) : (
           <MissingPluginTabPlaceholder

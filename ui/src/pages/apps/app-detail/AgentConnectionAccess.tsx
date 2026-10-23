@@ -32,7 +32,7 @@ export function AgentConnectionAccess({ connectionId, profiles, policies, catalo
     try {
       await onRemove(profileId);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Couldn't remove this access grant. Please try again.");
+      setError(cause instanceof Error ? cause.message : t("agentConnectionAccess.couldnTRemoveThisAccess"));
     } finally {
       setPending(null);
     }
@@ -40,8 +40,8 @@ export function AgentConnectionAccess({ connectionId, profiles, policies, catalo
 
   return <section className="space-y-4 border-t border-border pt-8">
     <div className="space-y-2">
-      <h2 className="text-sm font-semibold">Additional agent access</h2>
-      <p className="text-sm text-muted-foreground">These agents can use the listed actions in addition to the permissions above. Removing a grant restores their other permissions.</p>
+      <h2 className="text-sm font-semibold">{t("agentConnectionAccess.additionalAgentAccess")}</h2>
+      <p className="text-sm text-muted-foreground">{t("agentConnectionAccess.theseAgentsCanUseThe")}</p>
     </div>
     {grants.map(profile => {
       const agentId = profile.metadata!.agentId as string;
@@ -54,7 +54,7 @@ export function AgentConnectionAccess({ connectionId, profiles, policies, catalo
             <span className="text-sm font-medium">{agent?.name ?? t("common.agent")}</span>
           </div>
           {canManage && <Button variant="outline" size="sm" disabled={pending !== null} onClick={() => void remove(profile.id)}>
-            {pending === profile.id ? "Removing…" : "Remove grant"}
+            {pending === profile.id ? t("agentConnectionAccess.removing") : t("agentConnectionAccess.removeGrant")}
           </Button>}
         </div>
         <ul className="space-y-2">
@@ -65,7 +65,7 @@ export function AgentConnectionAccess({ connectionId, profiles, policies, catalo
               && policy.selectors?.catalogEntryId === tool.id);
             return <li key={tool.id} className="flex items-center justify-between gap-4 text-sm">
               <span className="min-w-0 break-all">{tool.title || tool.toolName}</span>
-              <span className="shrink-0 text-muted-foreground">{askFirst ? "Ask first" : "Allowed"}</span>
+              <span className="shrink-0 text-muted-foreground">{askFirst ? t("agentConnectionAccess.askFirst") : t("agentConnectionAccess.allowed")}</span>
             </li>;
           })}
         </ul>

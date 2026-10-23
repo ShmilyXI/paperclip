@@ -51,7 +51,7 @@ export function CompanySettingsPluginPage() {
     if (hasInvalidCompanyPrefix) {
       return <NotFoundPage scope="invalid_company_prefix" requestedPrefix={routeCompanyPrefix} />;
     }
-    return <div className="text-sm text-muted-foreground">Select an organization to view this page.</div>;
+    return <div className="text-sm text-muted-foreground">{t("companySettingsPluginPage.selectAnOrganizationToView")}</div>;
   }
 
   if (!settingsRoutePath || isLoading) {
@@ -69,7 +69,7 @@ export function CompanySettingsPluginPage() {
   if (pageSlots.length > 1) {
     return (
       <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
-        Multiple plugins declare the company settings route <code>{settingsRoutePath}</code>. Disable one plugin or change its route.
+        {t("companySettingsPluginPage.multiplePluginsDeclareTheCompany")} <code>{settingsRoutePath}</code>{t("companySettingsPluginPage.disableOnePluginOrChange")}
       </div>
     );
   }

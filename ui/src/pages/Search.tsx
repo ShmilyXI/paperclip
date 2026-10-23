@@ -63,7 +63,7 @@ const SCOPE_LABELS: Record<CompanySearchScope, string> = {
   issues: t("common.tasks"),
   comments: t("common.comments"),
   documents: t("common.documents"),
-  artifacts: "Artifacts",
+  artifacts: t("search.artifacts"),
   agents: t("common.agents"),
   projects: t("common.projects"),
 };
@@ -813,7 +813,7 @@ function SearchTabContent({
         <AlertTriangle className="h-10 w-10 text-destructive" aria-hidden />
         <div className="text-base font-semibold">{t("search.couldnTRunThatSearch")}</div>
         <p className="text-sm text-muted-foreground">
-          {status ? `The server returned ${status}.` : "The request failed."} Your input and filters are still here, so
+          {status ? t("search.theServerReturnedStatus", { status }) : t("search.theRequestFailed")} Your input and filters are still here, so
           you can retry or fall back to the Tasks filter.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -861,7 +861,7 @@ function SearchTabContent({
         <FileQuestion className="h-10 w-10 text-muted-foreground" aria-hidden />
         <div className="text-base font-semibold">No results for &ldquo;{trimmedQuery}&rdquo;</div>
         <p className="text-sm text-muted-foreground">
-          We couldn’t find a match in {describeScope(scope).toLowerCase()}. Try widening the scope or rephrasing your
+          {t("search.weCouldnTFindA")} {describeScope(scope).toLowerCase()}. Try widening the scope or rephrasing your
           query.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">

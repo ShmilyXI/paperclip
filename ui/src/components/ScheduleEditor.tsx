@@ -8,13 +8,13 @@ import { nextCronFires, parseCronExpression } from "../lib/cron-fires";
 export type SchedulePreset = "every_minute" | "every_hour" | "every_day" | "weekdays" | "weekly" | "monthly" | "custom";
 
 const PRESETS: { value: SchedulePreset; label: string }[] = [
-  { value: "every_minute", label: "Every minute" },
-  { value: "every_hour", label: "Every hour" },
-  { value: "every_day", label: "Every day" },
-  { value: "weekdays", label: "Weekdays" },
+  { value: "every_minute", label: t("scheduleEditor.everyMinute") },
+  { value: "every_hour", label: t("scheduleEditor.everyHour") },
+  { value: "every_day", label: t("scheduleEditor.everyDay") },
+  { value: "weekdays", label: t("scheduleEditor.weekdays") },
   { value: "weekly", label: t("common.weekly") },
   { value: "monthly", label: t("common.monthly") },
-  { value: "custom", label: "Custom (cron)" },
+  { value: "custom", label: t("scheduleEditor.customCron") },
 ];
 
 const HOURS = Array.from({ length: 24 }, (_, i) => ({
@@ -28,13 +28,13 @@ const MINUTES = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 const DAYS_OF_WEEK = [
-  { value: "1", label: "Mon" },
-  { value: "2", label: "Tue" },
-  { value: "3", label: "Wed" },
-  { value: "4", label: "Thu" },
-  { value: "5", label: "Fri" },
-  { value: "6", label: "Sat" },
-  { value: "0", label: "Sun" },
+  { value: "1", label: t("scheduleEditor.mon") },
+  { value: "2", label: t("scheduleEditor.tue") },
+  { value: "3", label: t("scheduleEditor.wed") },
+  { value: "4", label: t("scheduleEditor.thu") },
+  { value: "5", label: t("scheduleEditor.fri") },
+  { value: "6", label: t("scheduleEditor.sat") },
+  { value: "0", label: t("scheduleEditor.sun") },
 ];
 
 const DAYS_OF_MONTH = Array.from({ length: 31 }, (_, i) => ({
@@ -127,7 +127,7 @@ function describeSchedule(cron: string): string {
 
   switch (preset) {
     case "every_minute":
-      return "Every minute";
+      return t("scheduleEditor.everyMinute");
     case "every_hour":
       return `Every hour at :${minute.padStart(2, "0")}`;
     case "every_day":
@@ -162,7 +162,7 @@ export function getScheduleCronValidation(cron: string): {
   if (!trimmed) {
     return {
       valid: false,
-      message: "Enter a 5-field cron expression.",
+      message: t("scheduleEditor.enterA5FieldCron"),
       nextFires: [],
     };
   }
@@ -171,7 +171,7 @@ export function getScheduleCronValidation(cron: string): {
   if (fields.length !== 5) {
     return {
       valid: false,
-      message: `Use exactly 5 fields; this has ${fields.length}.`,
+      message: t("scheduleEditor.useExactly5FieldsThis", { length: fields.length }),
       nextFires: [],
     };
   }
@@ -179,7 +179,7 @@ export function getScheduleCronValidation(cron: string): {
   if (!parseCronExpression(trimmed)) {
     return {
       valid: false,
-      message: "Cron fields must use valid numbers, ranges, lists, wildcards, or steps.",
+      message: t("scheduleEditor.cronFieldsMustUseValid"),
       nextFires: [],
     };
   }
@@ -187,7 +187,7 @@ export function getScheduleCronValidation(cron: string): {
   const nextFires = nextCronFires(trimmed, 3, { timeZone: "UTC" });
   return {
     valid: true,
-    message: nextFires.length > 0 ? "Valid cron." : "Valid cron, but no upcoming fires were found.",
+    message: nextFires.length > 0 ? t("scheduleEditor.validCron") : t("scheduleEditor.validCronButNoUpcoming"),
     nextFires,
   };
 }
@@ -248,8 +248,8 @@ export function ScheduleEditor({
   return (
     <div className="space-y-3">
       <Select value={preset} onValueChange={(v) => handlePresetChange(v as SchedulePreset)}>
-        <SelectTrigger className="w-full" aria-label="Schedule frequency">
-          <SelectValue placeholder="Choose frequency..." />
+        <SelectTrigger className="w-full" aria-label={t("scheduleEditor.scheduleFrequency")}>
+          <SelectValue placeholder={t("scheduleEditor.chooseFrequency")} />
         </SelectTrigger>
         <SelectContent>
           {PRESETS.map((p) => (
@@ -278,12 +278,12 @@ export function ScheduleEditor({
               }
             }}
             placeholder="0 10 * * *"
-            aria-label="Cron expression"
+            aria-label={t("scheduleEditor.cronExpression")}
             aria-invalid={!customValidation.valid}
             className="font-mono text-sm"
           />
           <p className="text-xs text-muted-foreground">
-            Five fields: minute hour day-of-month month day-of-week
+            {t("scheduleEditor.fiveFieldsMinuteHourDay")}
           </p>
           <p
             className={customValidation.valid ? "text-xs text-muted-foreground" : "text-xs text-destructive"}
@@ -299,7 +299,7 @@ export function ScheduleEditor({
         <div className="flex flex-wrap items-center gap-2">
           {preset !== "every_minute" && preset !== "every_hour" && (
             <>
-              <span className="text-sm text-muted-foreground">at</span>
+              <span className="text-sm text-muted-foreground">{t("scheduleEditor.at")}</span>
               <Select
                 value={hour}
                 onValueChange={(h) => {
@@ -342,7 +342,7 @@ export function ScheduleEditor({
 
           {preset === "every_hour" && (
             <>
-              <span className="text-sm text-muted-foreground">at minute</span>
+              <span className="text-sm text-muted-foreground">{t("scheduleEditor.atMinute")}</span>
               <Select
                 value={minute}
                 onValueChange={(m) => {
@@ -366,7 +366,7 @@ export function ScheduleEditor({
 
           {preset === "weekly" && (
             <>
-              <span className="text-sm text-muted-foreground">on</span>
+              <span className="text-sm text-muted-foreground">{t("scheduleEditor.on")}</span>
               <div className="flex gap-1">
                 {DAYS_OF_WEEK.map((d) => (
                   <Button
@@ -390,7 +390,7 @@ export function ScheduleEditor({
 
           {preset === "monthly" && (
             <>
-              <span className="text-sm text-muted-foreground">on day</span>
+              <span className="text-sm text-muted-foreground">{t("scheduleEditor.onDay")}</span>
               <Select
                 value={dayOfMonth}
                 onValueChange={(dom) => {

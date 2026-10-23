@@ -74,10 +74,10 @@ export function StandaloneBrowserControls({ mobile }: { mobile: boolean }) {
         return;
       }
       await copyTextToClipboard(url);
-      toastActions?.pushToast({ title: "Link copied", tone: "success" });
+      toastActions?.pushToast({ title: t("standaloneBrowserControls.linkCopied"), tone: "success" });
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
-      toastActions?.pushToast({ title: "Share failed", body: "Try opening the page in your browser.", tone: "error" });
+      toastActions?.pushToast({ title: t("standaloneBrowserControls.shareFailed"), body: t("standaloneBrowserControls.tryOpeningThePageIn"), tone: "error" });
     }
   }, [toastActions]);
 
@@ -95,7 +95,7 @@ export function StandaloneBrowserControls({ mobile }: { mobile: boolean }) {
       <ControlButton label={t("common.share")} onClick={share}>
         <Share2 className="h-4 w-4" />
       </ControlButton>
-      <ControlButton label="Open in Browser" onClick={openInBrowser}>
+      <ControlButton label={t("standaloneBrowserControls.openInBrowser")} onClick={openInBrowser}>
         <ExternalLink className="h-4 w-4" />
       </ControlButton>
     </div>

@@ -50,7 +50,7 @@ function CredentialSettings({
     <div className="space-y-3">
       <div className="space-y-2">
         <Label htmlFor={`${id}-limit`}>
-          Maximum cost per browser run (USD)
+          {t("browserUseSettingsPanel.maximumCostPerBrowserRun")}
         </Label>
         <Input
           id={`${id}-limit`}
@@ -58,16 +58,15 @@ function CredentialSettings({
           min="0"
           step="0.01"
           value={limit}
-          placeholder="Use the remaining Paperclip budget"
+          placeholder={t("browserUseSettingsPanel.useTheRemainingPaperclipBudget")}
           onChange={(e) => setLimit(e.target.value)}
         />
         <p className="text-sm text-muted-foreground">
-          The agent can choose a lower limit. Paperclip also applies any
-          remaining hard budget limit.
+          {t("browserUseSettingsPanel.theAgentCanChooseA")}
         </p>
       </div>
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">Allowed saved profiles</legend>
+        <legend className="text-sm font-medium">{t("browserUseSettingsPanel.allowedSavedProfiles")}</legend>
         <p className="text-sm text-muted-foreground">
           Fresh browsers are the default. Selected profiles let agents use their
           saved website logins. Manage profiles in{" "}
@@ -97,10 +96,10 @@ function CredentialSettings({
           </Label>
         ))}
         {profiles.data?.length === 0 && (
-          <p className="text-sm text-muted-foreground">No saved profiles.</p>
+          <p className="text-sm text-muted-foreground">{t("browserUseSettingsPanel.noSavedProfiles")}</p>
         )}
         {profiles.isLoading && (
-          <p className="text-sm text-muted-foreground">Loading profiles…</p>
+          <p className="text-sm text-muted-foreground">{t("browserUseSettingsPanel.loadingProfiles")}</p>
         )}
         {profiles.isError && (
           <p role="alert" className="text-sm text-destructive">
@@ -117,13 +116,12 @@ function CredentialSettings({
       </fieldset>
       {saved.isError || save.isError ? (
         <p role="alert" className="text-sm text-destructive">
-          Could not save or load browser settings. Check your credential access
-          and try again.
+          {t("browserUseSettingsPanel.couldNotSaveOrLoad")}
         </p>
       ) : null}
       {save.isSuccess && (
         <p role="status" className="text-sm text-muted-foreground">
-          Browser settings saved.
+          {t("browserUseSettingsPanel.browserSettingsSaved")}
         </p>
       )}
       <div className="flex justify-end">
@@ -138,7 +136,7 @@ function CredentialSettings({
           }
           onClick={() => save.mutate()}
         >
-          Save browser settings
+          {t("browserUseSettingsPanel.saveBrowserSettings")}
         </Button>
       </div>
     </div>
@@ -163,10 +161,10 @@ export function BrowserUseSettingsPanel({
   const grantId = selected || eligible[0]?.id;
   return (
     <section className="space-y-4">
-      <h2 className="text-lg font-semibold">Browser settings</h2>
+      <h2 className="text-lg font-semibold">{t("browserUseSettingsPanel.browserSettings")}</h2>
       {eligible.length > 1 && (
         <Label className="flex flex-col gap-2">
-          Credential
+          {t("browserUseSettingsPanel.credential")}
           <select
             value={grantId}
             onChange={(e) => setSelected(e.target.value)}
@@ -174,7 +172,7 @@ export function BrowserUseSettingsPanel({
           >
             {eligible.map((g, i) => (
               <option key={g.id} value={g.id}>
-                {g.kind === "user" ? "Personal" : "Shared"} credential {i + 1}
+                {g.kind === "user" ? t("browserUseSettingsPanel.personal") : t("browserUseSettingsPanel.shared")} credential {i + 1}
               </option>
             ))}
           </select>
@@ -188,8 +186,7 @@ export function BrowserUseSettingsPanel({
         />
       ) : (
         <p className="text-sm text-muted-foreground">
-          The credential owner or a shared connection manager can configure
-          saved profiles and cost limits.
+          {t("browserUseSettingsPanel.theCredentialOwnerOrA")}
         </p>
       )}
     </section>

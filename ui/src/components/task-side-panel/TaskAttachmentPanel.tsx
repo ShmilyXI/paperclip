@@ -17,8 +17,8 @@ export const TEXT_PREVIEW_MAX_BYTES = 512 * 1024;
 
 /** Bound the actual response, not just producer-supplied attachment metadata. */
 export async function readTextPreview(response: Response) {
-  if (!response.ok) throw new Error(`Could not load file (${response.status}).`);
-  if (!response.body) throw new Error("The file response is empty.");
+  if (!response.ok) throw new Error(t("taskAttachmentPanel.couldNotLoadFileStatus", { status: response.status }));
+  if (!response.body) throw new Error(t("taskAttachmentPanel.theFileResponseIsEmpty"));
   const reader = response.body.getReader();
   const decoder = new TextDecoder("utf-8", { fatal: true });
   let bytes = 0;
@@ -28,11 +28,11 @@ export async function readTextPreview(response: Response) {
       const chunk = await reader.read();
       if (chunk.done) break;
       bytes += chunk.value.byteLength;
-      if (bytes > TEXT_PREVIEW_MAX_BYTES) throw new Error("This file is too large to preview. Download it instead.");
+      if (bytes > TEXT_PREVIEW_MAX_BYTES) throw new Error(t("taskAttachmentPanel.thisFileIsTooLarge"));
       text += decoder.decode(chunk.value, { stream: true });
     }
     text += decoder.decode();
-    if (text.includes("\0")) throw new Error("This file contains binary data. Download it instead.");
+    if (text.includes("\0")) throw new Error(t("taskAttachmentPanel.thisFileContainsBinaryData"));
     return text;
   } finally {
     await reader.cancel();
@@ -56,13 +56,13 @@ export function TextAttachmentPreview({ title, text, markdown, html = false, csv
     <div className="flex h-full min-h-0 flex-col">
       <header className="flex items-center gap-2 border-b border-border px-3 py-2">
         <h2 className="min-w-0 flex-1 truncate text-sm font-medium" title={title}>{title}</h2>
-        {markdown || html || csv ? <FilePreviewModeToggle mode={mode} onChange={setMode} label={html ? "HTML view" : csv ? "CSV view" : "Markdown view"} /> : null}
+        {markdown || html || csv ? <FilePreviewModeToggle mode={mode} onChange={setMode} label={html ? "HTML view" : csv ? "CSV view" : t("taskAttachmentPanel.markdownView")} /> : null}
         <Button asChild variant="ghost" size="icon-sm">
           <a href={downloadUrl} download aria-label={`Download ${title}`} title={`Download ${title}`}><Download aria-hidden /></a>
         </Button>
       </header>
       <div className={renderHtml || renderCsv ? "flex min-h-0 flex-1 flex-col overflow-hidden" : "min-h-0 flex-1 overflow-auto p-4"}>
-        {text.length === 0 ? <p className="text-sm text-muted-foreground">File is empty.</p>
+        {text.length === 0 ? <p className="text-sm text-muted-foreground">{t("taskAttachmentPanel.fileIsEmpty")}</p>
           : renderCsv ? <CsvPreview text={text} title={title} />
           : renderHtml ? <HtmlArtifactPreview html={text} title={title} />
           : markdown && mode === "rendered" ? <MarkdownBody mediaMode="reference">{text}</MarkdownBody>
@@ -89,19 +89,19 @@ export function TaskAttachmentPanel({ issueId, attachmentId }: { issueId: string
     enabled: Boolean(eligible),
     retry: false,
   });
-  if (attachments.isLoading) return <p className="p-4 text-sm" role="status">Loading file…</p>;
-  if (attachments.isError) return <div className="p-4" role="alert">Could not load attachment details. <Button onClick={() => void attachments.refetch()}>{t("common.retry")}</Button></div>;
-  if (!attachment) return <p className="p-4 text-sm" role="status">File no longer available. Close this tab or choose another file.</p>;
+  if (attachments.isLoading) return <p className="p-4 text-sm" role="status">{t("taskAttachmentPanel.loadingFile")}</p>;
+  if (attachments.isError) return <div className="p-4" role="alert">{t("taskAttachmentPanel.couldNotLoadAttachmentDetails")} <Button onClick={() => void attachments.refetch()}>{t("common.retry")}</Button></div>;
+  if (!attachment) return <p className="p-4 text-sm" role="status">{t("taskAttachmentPanel.fileNoLongerAvailableClose")}</p>;
   const downloadUrl = attachmentDownloadPath(attachment);
   if (!eligible || content.isError) {
     return (
       <div className="space-y-3 p-4" role="alert">
-        <p className="text-sm">{content.isError ? "Could not preview this file. Retry or download it." : "This file is too large or is not supported for text preview. Download it instead."}</p>
+        <p className="text-sm">{content.isError ? t("taskAttachmentPanel.couldNotPreviewThisFile") : t("taskAttachmentPanel.thisFileIsTooLarge2")}</p>
         {eligible ? <Button onClick={() => void content.refetch()}>{t("common.retry")}</Button> : null}
-        <Button asChild variant="outline"><a href={downloadUrl} download>Download file</a></Button>
+        <Button asChild variant="outline"><a href={downloadUrl} download>{t("taskAttachmentPanel.downloadFile")}</a></Button>
       </div>
     );
   }
-  if (content.data === undefined) return <p className="p-4 text-sm" role="status">Loading file…</p>;
+  if (content.data === undefined) return <p className="p-4 text-sm" role="status">{t("taskAttachmentPanel.loadingFile")}</p>;
   return <TextAttachmentPreview key={attachment.id} title={attachment.originalFilename ?? attachment.id} text={content.data} csv={isCsvFile(attachment.originalFilename ?? "", attachment.contentType)} markdown={isMarkdownAttachment(attachment)} html={isHtmlPreview(attachment.contentType, attachment.originalFilename)} downloadUrl={downloadUrl} />;
 }

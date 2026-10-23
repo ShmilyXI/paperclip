@@ -45,7 +45,7 @@ export function Curtain({
 
 /**
  * An aging-shelf row (§4.4): the standard card, prefaced by an idle-duration
- * label and a "Keep on desk" affordance that clears the shelf flag server-side
+ * label and a t("decisionShelf.keepOnDesk") affordance that clears the shelf flag server-side
  * (P1 retention `keep`). Shared by the desk and the per-queue page.
  */
 export function AgingItemRow({
@@ -78,11 +78,11 @@ export function AgingItemRow({
     mutationFn: () => decisionQueuesApi.setKeep(companyId, item.sourceKind, item.subject.id, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.attention(companyId) });
-      pushToast({ title: "Kept on desk", body: item.subject.title ?? undefined, tone: "success" });
+      pushToast({ title: t("decisionShelf.keptOnDesk"), body: item.subject.title ?? undefined, tone: "success" });
     },
     onError: (error) =>
       pushToast({
-        title: "Could not keep this decision",
+        title: t("decisionShelf.couldNotKeepThisDecision"),
         body: error instanceof Error ? error.message : t("common.pleaseTryAgain"),
         tone: "error",
       }),
@@ -104,7 +104,7 @@ export function AgingItemRow({
         >
           {keep.isPending && <Loader2 className="h-3 w-3 animate-spin" />}
           <Sun className="h-3.5 w-3.5" />
-          {item.keep ? "Kept" : "Keep on desk"}
+          {item.keep ? t("decisionShelf.kept") : t("decisionShelf.keepOnDesk")}
         </Button>
       </div>
       <AttentionQueueRow

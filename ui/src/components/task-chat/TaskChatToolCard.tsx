@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useTaskChatExpansion } from "./expansion-state";
 import { cn } from "@/lib/utils";
 import {
@@ -98,7 +99,7 @@ export function TaskChatToolCard({ item }: { item: TaskChatToolItem }) {
           />
           {item.status === "interrupted" ? (
             <span className="text-(length:--text-micro) text-muted-foreground">
-              Interrupted
+              {t("taskChatToolCard.interrupted")}
             </span>
           ) : null}
         </span>
@@ -122,7 +123,7 @@ export function TaskChatToolCard({ item }: { item: TaskChatToolItem }) {
           data-testid="task-chat-tool-change-summary"
         >
           <div className="flex min-w-0 items-center gap-2 text-(length:--text-micro) text-muted-foreground">
-            <span className="shrink-0">Changed</span>
+            <span className="shrink-0">{t("taskChatToolCard.changed")}</span>
             {item.diff.path ? (
               <span className="min-w-0 truncate font-mono text-foreground">
                 {item.diff.path}

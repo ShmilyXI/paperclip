@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { createVoiceSessionController, type VoiceSessionDependencies } from "@/lib/voice-session-controller";
 import { VoiceControls } from "./VoiceControls";
@@ -31,7 +32,7 @@ export function VoiceConversationPanel({ agentName, dependencies, notification, 
   return (
     <div className="flex min-w-0 flex-col gap-4">
       <VoiceControls {...snapshot} agentName={agentName} onStart={() => { void controller.start(); }} onMute={() => { void controller.mute(); }} onEnd={() => { void controller.stop(); }} onResumeAudio={() => { void controller.resumeAudio(); }} onRepeat={() => { void controller.repeat(); }} />
-      <div className="max-h-64 overflow-y-auto" role="region" aria-label="Voice transcript history" tabIndex={snapshot.transcript.length ? 0 : undefined}><VoiceTranscript entries={snapshot.transcript} agentName={agentName} /></div>
+      <div className="max-h-64 overflow-y-auto" role="region" aria-label={t("voiceConversationPanel.voiceTranscriptHistory")} tabIndex={snapshot.transcript.length ? 0 : undefined}><VoiceTranscript entries={snapshot.transcript} agentName={agentName} /></div>
     </div>
   );
 }

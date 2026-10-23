@@ -15,10 +15,10 @@ import { ToggleField } from "@/components/agent-config-primitives";
 
 type HeaderDraft = { id: number; originalName: string | null; name: string; value: string };
 const captureLabels: Array<{ key: keyof AgentObservabilityCapture; label: string }> = [
-  { key: "userPrompts", label: "User prompts" },
-  { key: "assistantResponses", label: "Assistant responses" },
-  { key: "toolContent", label: "Tool output and content" },
-  { key: "toolDetails", label: "Additional tool details (Claude Code)" },
+  { key: "userPrompts", label: t("agentObservabilitySettings.userPrompts") },
+  { key: "assistantResponses", label: t("agentObservabilitySettings.assistantResponses") },
+  { key: "toolContent", label: t("agentObservabilitySettings.toolOutputAndContent") },
+  { key: "toolDetails", label: t("agentObservabilitySettings.additionalToolDetailsClaudeCode") },
 ];
 export interface AgentObservabilitySettingsViewProps {
   companyId: string;
@@ -88,74 +88,74 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
       : { ...common, destination: { provider, endpointBaseUrl: endpoint }, credentials: providerChanged || headersChanged || requireFreshHeaders
         ? { mode: "replace", headers: headers.map(row => ({ name: row.name, ...(row.value ? { value: row.value } : {}) })) } : { mode: "keep" } };
     const parsed = updateAgentObservabilitySchema.safeParse(input);
-    if (!parsed.success) { setValidation(parsed.error.issues[0]?.message ?? "Review the configuration."); return; }
+    if (!parsed.success) { setValidation(parsed.error.issues[0]?.message ?? t("agentObservabilitySettings.reviewTheConfiguration")); return; }
     setValidation(null); onSave(parsed.data);
   }
   const receipt = props.result?.revision === revision ? props.result : settings?.lastTest;
   return <section aria-labelledby="agent-observability-heading" className="max-w-2xl space-y-4">
     <div className="space-y-1">
-      <h2 id="agent-observability-heading" className="text-lg font-medium">Agent observability</h2>
-      <p className="text-sm text-muted-foreground">Send Codex and Claude Code logs and traces to your observability service.</p>
+      <h2 id="agent-observability-heading" className="text-lg font-medium">{t("agentObservabilitySettings.agentObservability")}</h2>
+      <p className="text-sm text-muted-foreground">{t("agentObservabilitySettings.sendCodexAndClaudeCode")}</p>
     </div>
-    {!canManage ? <p className="text-sm text-muted-foreground">Manage connections permission is required to configure agent observability.</p> : <>
+    {!canManage ? <p className="text-sm text-muted-foreground">{t("agentObservabilitySettings.manageConnectionsPermissionIsRequired")}</p> : <>
       <fieldset disabled={busy} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="agent-observability-provider">Destination</Label>
+          <Label htmlFor="agent-observability-provider">{t("agentObservabilitySettings.destination")}</Label>
           <select id="agent-observability-provider" className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm" value={provider}
             onChange={event => { setProvider(event.target.value as "braintrust" | "otlp"); setApiKey(""); setReplaceKey(false); setValidation(null); }}>
             <option value="braintrust">Braintrust</option><option value="otlp">Custom OTLP</option>
           </select>
         </div>
         {provider === "braintrust" ? <>
-          <div className="space-y-2"><Label htmlFor="agent-observability-project">Project ID</Label>
-            <Input id="agent-observability-project" value={projectId} onChange={event => setProjectId(event.target.value)} placeholder="Braintrust project UUID" autoComplete="off" />
+          <div className="space-y-2"><Label htmlFor="agent-observability-project">{t("agentObservabilitySettings.projectId")}</Label>
+            <Input id="agent-observability-project" value={projectId} onChange={event => setProjectId(event.target.value)} placeholder={t("agentObservabilitySettings.braintrustProjectUuid")} autoComplete="off" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="agent-observability-key">API key</Label>
+            <Label htmlFor="agent-observability-key">{t("agentObservabilitySettings.apiKey")}</Label>
             {!providerChanged && original?.credentialsConfigured && !replaceKey ? <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-muted-foreground">API key configured</span><Button type="button" variant="outline" size="sm" onClick={() => setReplaceKey(true)}>Replace API key</Button>
+              <span className="text-sm text-muted-foreground">{t("agentObservabilitySettings.apiKeyConfigured")}</span><Button type="button" variant="outline" size="sm" onClick={() => setReplaceKey(true)}>{t("agentObservabilitySettings.replaceApiKey")}</Button>
             </div> : <Input id="agent-observability-key" type="password" value={apiKey} onChange={event => setApiKey(event.target.value)} autoComplete="new-password" />}
           </div>
         </> : <>
-          <div className="space-y-2"><Label htmlFor="agent-observability-endpoint">OTLP base URL</Label>
+          <div className="space-y-2"><Label htmlFor="agent-observability-endpoint">{t("agentObservabilitySettings.otlpBaseUrl")}</Label>
             <Input id="agent-observability-endpoint" value={endpoint} onChange={event => setEndpoint(event.target.value)} placeholder="https://collector.example.com" autoComplete="off" />
-            <p className="text-xs text-muted-foreground">Use the base URL without /v1/logs or /v1/traces. It must be reachable from each agent environment.</p>
+            <p className="text-xs text-muted-foreground">{t("agentObservabilitySettings.useTheBaseUrlWithout")}</p>
           </div>
-          <div className="space-y-2"><div className="flex items-center justify-between gap-3"><Label>Headers</Label>
-            <Button type="button" variant="outline" size="sm" disabled={headers.length >= 16} onClick={() => setHeaders(rows => [...rows, { id: nextHeader.current++, originalName: null, name: "", value: "" }])}>Add header</Button></div>
-            {headers.length === 0 && <p className="text-sm text-muted-foreground">No authentication headers.</p>}
+          <div className="space-y-2"><div className="flex items-center justify-between gap-3"><Label>{t("agentObservabilitySettings.headers")}</Label>
+            <Button type="button" variant="outline" size="sm" disabled={headers.length >= 16} onClick={() => setHeaders(rows => [...rows, { id: nextHeader.current++, originalName: null, name: "", value: "" }])}>{t("agentObservabilitySettings.addHeader")}</Button></div>
+            {headers.length === 0 && <p className="text-sm text-muted-foreground">{t("agentObservabilitySettings.noAuthenticationHeaders")}</p>}
             {headers.map(row => <div key={row.id} className="flex flex-wrap items-center gap-2">
-              <Input className="min-w-0 flex-1" aria-label="Header name" value={row.name} onChange={event => setHeaders(rows => rows.map(item => item.id === row.id ? { ...item, name: event.target.value } : item))} autoComplete="off" />
-              <Input className="min-w-0 flex-1" aria-label={`Value for ${row.name || "header"}`} type="password" value={row.value} placeholder={row.originalName && !requireFreshHeaders ? "Keep saved value" : "Header value"}
+              <Input className="min-w-0 flex-1" aria-label={t("agentObservabilitySettings.headerName")} value={row.name} onChange={event => setHeaders(rows => rows.map(item => item.id === row.id ? { ...item, name: event.target.value } : item))} autoComplete="off" />
+              <Input className="min-w-0 flex-1" aria-label={`Value for ${row.name || "header"}`} type="password" value={row.value} placeholder={row.originalName && !requireFreshHeaders ? t("agentObservabilitySettings.keepSavedValue") : t("agentObservabilitySettings.headerValue")}
                 onChange={event => setHeaders(rows => rows.map(item => item.id === row.id ? { ...item, value: event.target.value } : item))} autoComplete="new-password" />
               <Button type="button" size="sm" variant="ghost" aria-label={`Remove ${row.name || "header"}`} onClick={() => setHeaders(rows => rows.filter(item => item.id !== row.id))}>{t("common.remove")}</Button>
             </div>)}
           </div>
         </>}
-        <p className="text-xs text-muted-foreground">The agent harness receives these credentials. Use a key limited to telemetry ingestion.</p>
-        <ToggleField label="Enable export" checked={enabled} onChange={setEnabled} hint="Applies to executions that start preparation after saving." />
-        <details><summary className="cursor-pointer text-sm font-medium">Content capture</summary>
+        <p className="text-xs text-muted-foreground">{t("agentObservabilitySettings.theAgentHarnessReceivesThese")}</p>
+        <ToggleField label={t("agentObservabilitySettings.enableExport")} checked={enabled} onChange={setEnabled} hint={t("agentObservabilitySettings.appliesToExecutionsThatStart")} />
+        <details><summary className="cursor-pointer text-sm font-medium">{t("agentObservabilitySettings.contentCapture")}</summary>
           <div className="space-y-3 pt-3">{captureLabels.map(row => <ToggleField key={row.key} label={row.label} checked={capture[row.key]} onChange={value => setCapture(current => ({ ...current, [row.key]: value }))} />)}
-            <p className="text-xs text-muted-foreground">Native limits apply. Exported records can contain task content, including prompts and tool output. A collector can forward records to multiple services.</p>
+            <p className="text-xs text-muted-foreground">{t("agentObservabilitySettings.nativeLimitsApplyExportedRecords")}</p>
           </div>
         </details>
       </fieldset>
-      {(validation || error || hasConflict) && <p role="alert" className="text-sm text-destructive">{validation || error || "Another administrator changed these settings. Reload the saved settings to continue."}</p>}
-      {hasConflict && <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => { reset(); onReload?.(); }}>Reload saved settings</Button>}
+      {(validation || error || hasConflict) && <p role="alert" className="text-sm text-destructive">{validation || error || t("agentObservabilitySettings.anotherAdministratorChangedTheseSettings")}</p>}
+      {hasConflict && <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => { reset(); onReload?.(); }}>{t("agentObservabilitySettings.reloadSavedSettings")}</Button>}
       {!dirty && receipt && <div role="status" className="space-y-1 text-sm">
-        <p className="font-medium">{receipt.status === "accepted" ? "Test payload accepted" : receipt.status === "partial" ? "Some test records were rejected" : "Test payload failed"}</p>
+        <p className="font-medium">{receipt.status === "accepted" ? t("agentObservabilitySettings.testPayloadAccepted") : receipt.status === "partial" ? t("agentObservabilitySettings.someTestRecordsWereRejected") : t("agentObservabilitySettings.testPayloadFailed")}</p>
         <p className="text-xs text-muted-foreground">{new Date(receipt.finishedAt).toLocaleString()} · Sent from the Paperclip server.</p>
-        {(["logs", "traces"] as const).map(signal => receipt.signals[signal].message && <p key={signal}>{signal === "logs" ? t("common.logs") : "Traces"}: {receipt.signals[signal].message}</p>)}
+        {(["logs", "traces"] as const).map(signal => receipt.signals[signal].message && <p key={signal}>{signal === "logs" ? t("common.logs") : t("agentObservabilitySettings.traces")}: {receipt.signals[signal].message}</p>)}
       </div>}
       <div className="flex items-center justify-between gap-3">
         <Button type="button" variant="ghost" disabled={busy || !dirty} onClick={reset}>{t("common.cancel")}</Button>
         <Button type="button" disabled={busy || !dirty || hasConflict} onClick={() => save()}>{saving ? t("common.saving2") : t("common.saveChanges")}</Button>
       </div>
-      {dirty && settings && <p className="text-xs text-muted-foreground">Save changes before testing.</p>}
+      {dirty && settings && <p className="text-xs text-muted-foreground">{t("agentObservabilitySettings.saveChangesBeforeTesting")}</p>}
       {settings && <div className="flex flex-wrap items-center gap-2">
-        <Button type="button" variant="outline" disabled={busy || dirty || hasConflict} onClick={onTest}>{testing ? "Testing…" : "Test saved settings"}</Button>
-        {settings.enabled && <Button type="button" size="sm" variant="ghost" disabled={busy || dirty || hasConflict} onClick={() => save(false)}>Disable export</Button>}
-        <Button type="button" size="sm" variant="ghost" disabled={busy || dirty || hasConflict} onClick={onRemove}>{removing ? "Removing…" : "Remove configuration"}</Button>
+        <Button type="button" variant="outline" disabled={busy || dirty || hasConflict} onClick={onTest}>{testing ? t("agentObservabilitySettings.testing") : t("agentObservabilitySettings.testSavedSettings")}</Button>
+        {settings.enabled && <Button type="button" size="sm" variant="ghost" disabled={busy || dirty || hasConflict} onClick={() => save(false)}>{t("agentObservabilitySettings.disableExport")}</Button>}
+        <Button type="button" size="sm" variant="ghost" disabled={busy || dirty || hasConflict} onClick={onRemove}>{removing ? t("agentObservabilitySettings.removing") : t("agentObservabilitySettings.removeConfiguration")}</Button>
       </div>}
     </>}
   </section>;
@@ -175,7 +175,7 @@ function AgentObservabilitySettingsContainer({ companyId }: { companyId: string 
   const reject = (cause: unknown) => {
     const stale = cause instanceof ApiError && cause.status === 409;
     setConflict(stale);
-    setError(stale ? "Another administrator changed these settings. Reload the saved settings to continue." : cause instanceof Error ? cause.message : "The observability settings could not be updated.");
+    setError(stale ? t("agentObservabilitySettings.anotherAdministratorChangedTheseSettings") : cause instanceof Error ? cause.message : t("agentObservabilitySettings.theObservabilitySettingsCouldNot"));
   };
   const save = useMutation({ gcTime: 0, mutationFn: (input: UpdateAgentObservabilityRequest) => agentObservabilityApi.update(companyId, input), onSuccess: accept, onError: reject, onSettled: () => queueMicrotask(() => save.reset()) });
   const remove = useMutation({ mutationFn: (revision: string) => agentObservabilityApi.remove(companyId, revision), onSuccess: accept, onError: reject });
@@ -184,10 +184,10 @@ function AgentObservabilitySettingsContainer({ companyId }: { companyId: string 
       ? { ...current, settings: { ...current.settings, lastTest: receipt } } : current);
   }, onError: reject });
   useEffect(() => { setError(null); setConflict(false); save.reset(); test.reset(); remove.reset(); }, [companyId]);
-  if (query.isPending) return <p className="text-sm text-muted-foreground">Loading agent observability…</p>;
-  if (!query.data) return <div role="alert" className="space-y-2 text-sm"><p>Agent observability settings could not be loaded.</p><Button variant="outline" size="sm" onClick={() => void query.refetch()}>{t("common.retry")}</Button></div>;
+  if (query.isPending) return <p className="text-sm text-muted-foreground">{t("agentObservabilitySettings.loadingAgentObservability")}</p>;
+  if (!query.data) return <div role="alert" className="space-y-2 text-sm"><p>{t("agentObservabilitySettings.agentObservabilitySettingsCouldNot")}</p><Button variant="outline" size="sm" onClick={() => void query.refetch()}>{t("common.retry")}</Button></div>;
   return <AgentObservabilitySettingsView key={companyId} companyId={companyId} settings={query.data.settings} canManage={query.data.canManage}
-    saving={save.isPending} removing={remove.isPending} testing={test.isPending} error={error ?? (query.isError ? "Saved settings could not be refreshed. Your draft is unchanged." : null)} conflict={conflict} resetKey={resetKey}
+    saving={save.isPending} removing={remove.isPending} testing={test.isPending} error={error ?? (query.isError ? t("agentObservabilitySettings.savedSettingsCouldNotBe") : null)} conflict={conflict} resetKey={resetKey}
     onSave={input => save.mutate(input)} onTest={() => { if (query.data.settings) test.mutate(query.data.settings.revision); }}
     onRemove={() => { if (query.data.settings) remove.mutate(query.data.settings.revision); }}
     onReload={() => { setConflict(false); setError(null); void query.refetch(); }} />;

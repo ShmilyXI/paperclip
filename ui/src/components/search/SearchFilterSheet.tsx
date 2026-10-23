@@ -132,8 +132,8 @@ export function SearchFilterSheet({
   const selectedAssignee = assigneeToken(draft, data.currentUserId);
   const applyLabel =
     previewTotal === null
-      ? "Show results"
-      : `Show ${previewTotal} ${previewTotal === 1 ? "result" : "results"}`;
+      ? t("searchFilterSheet.showResults")
+      : t("searchFilterSheet.showCount", { count: previewTotal });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -178,7 +178,7 @@ export function SearchFilterSheet({
             onToggle={(value) => toggleSingle("projectId", value)}
           />
           <ChipToggleGroup
-            title="Label"
+            title={t("searchFilterSheet.label")}
             options={options.label}
             selected={draft.labelId ? [draft.labelId] : []}
             onToggle={(value) => toggleSingle("labelId", value)}
@@ -190,7 +190,7 @@ export function SearchFilterSheet({
             onToggle={(value) => toggleSingle("updatedWithin", value)}
           />
           <div className="space-y-1.5">
-            <div className="text-xs font-medium text-muted-foreground">Sort by</div>
+            <div className="text-xs font-medium text-muted-foreground">{t("searchFilterSheet.sortBy")}</div>
             <div className="flex flex-wrap gap-1.5">
               {COMPANY_SEARCH_SORTS.map((value) => (
                 <button

@@ -53,63 +53,63 @@ type PublicationFeedback = {
 
 const publicationFeedback: Record<ChatPublicationState, PublicationFeedback> = {
   awaiting_consent: {
-    title: "Waiting for file consent",
-    body: "The recipient must accept the file card in Microsoft Teams. The file is not delivered yet; this send identity is kept while Paperclip waits.",
+    title: t("externallyConnectedTaskBanner.waitingForFileConsent"),
+    body: t("externallyConnectedTaskBanner.theRecipientMustAcceptThe"),
     tone: "info",
   },
   published: {
-    title: "Sent to channel",
-    body: "The board update was published to the connected conversation.",
+    title: t("externallyConnectedTaskBanner.sentToChannel"),
+    body: t("externallyConnectedTaskBanner.theBoardUpdateWasPublished"),
     tone: "success",
   },
   pending: {
-    title: "Queued for channel",
-    body: "Delivery is still pending. Your draft is kept until Paperclip confirms publication.",
+    title: t("externallyConnectedTaskBanner.queuedForChannel"),
+    body: t("externallyConnectedTaskBanner.deliveryIsStillPendingYour"),
     tone: "info",
   },
   streaming: {
-    title: "Publishing to channel",
-    body: "Delivery is still in progress. Your draft is kept until Paperclip confirms publication.",
+    title: t("externallyConnectedTaskBanner.publishingToChannel"),
+    body: t("externallyConnectedTaskBanner.deliveryIsStillInProgress"),
     tone: "info",
   },
   retry: {
-    title: "Delivery retry scheduled",
-    body: "Paperclip will retry this publication. Your draft and retry identity are kept.",
+    title: t("externallyConnectedTaskBanner.deliveryRetryScheduled"),
+    body: t("externallyConnectedTaskBanner.paperclipWillRetryThisPublication"),
     tone: "warn",
   },
   delivery_unknown: {
-    title: "Delivery not confirmed",
-    body: "The provider may have accepted this update. Resolve it in Activity before trying again to avoid a duplicate.",
+    title: t("externallyConnectedTaskBanner.deliveryNotConfirmed"),
+    body: t("externallyConnectedTaskBanner.theProviderMayHaveAccepted"),
     tone: "warn",
   },
   failed: {
-    title: "Channel delivery failed",
-    body: "Your draft is kept. Open Activity to retry this same publication safely.",
+    title: t("externallyConnectedTaskBanner.channelDeliveryFailed"),
+    body: t("externallyConnectedTaskBanner.yourDraftIsKeptOpen"),
     tone: "error",
   },
   cancelled: {
-    title: "Channel delivery cancelled",
-    body: "Your draft is kept. Some parts may already have been published; check Activity before starting a new send.",
+    title: t("externallyConnectedTaskBanner.channelDeliveryCancelled"),
+    body: t("externallyConnectedTaskBanner.yourDraftIsKeptSome"),
     tone: "info",
   },
 };
 
 const filePhaseLabels: Record<ChatFileTransferPhase, string> = {
-  consent_pending: "Consent card queued",
-  consent_sending: "Sending consent card",
-  consent_unknown: "Consent card delivery not confirmed",
-  awaiting_consent: "Awaiting consent",
-  upload_pending: "Upload queued",
-  uploading: "Uploading file",
-  upload_unknown: "File upload not confirmed",
-  file_info_pending: "File notification queued",
-  file_info_sending: "Sending file notification",
-  file_info_unknown: "File notification not confirmed",
-  delivered: "Delivered",
-  declined: "Declined",
-  expired: "Consent expired",
-  cancelled: "Cancelled; remote bytes may remain",
-  conflict: "File delivery needs review",
+  consent_pending: t("externallyConnectedTaskBanner.consentCardQueued"),
+  consent_sending: t("externallyConnectedTaskBanner.sendingConsentCard"),
+  consent_unknown: t("externallyConnectedTaskBanner.consentCardDeliveryNotConfirmed"),
+  awaiting_consent: t("externallyConnectedTaskBanner.awaitingConsent"),
+  upload_pending: t("externallyConnectedTaskBanner.uploadQueued"),
+  uploading: t("externallyConnectedTaskBanner.uploadingFile"),
+  upload_unknown: t("externallyConnectedTaskBanner.fileUploadNotConfirmed"),
+  file_info_pending: t("externallyConnectedTaskBanner.fileNotificationQueued"),
+  file_info_sending: t("externallyConnectedTaskBanner.sendingFileNotification"),
+  file_info_unknown: t("externallyConnectedTaskBanner.fileNotificationNotConfirmed"),
+  delivered: t("externallyConnectedTaskBanner.delivered"),
+  declined: t("externallyConnectedTaskBanner.declined"),
+  expired: t("externallyConnectedTaskBanner.consentExpired"),
+  cancelled: t("externallyConnectedTaskBanner.cancelledRemoteBytesMayRemain"),
+  conflict: t("externallyConnectedTaskBanner.fileDeliveryNeedsReview"),
 };
 
 export function useIssueChatBinding(companyId: string, issueId: string) {
@@ -338,7 +338,7 @@ function ConnectedTaskComposer({
       pushToast({
         ...feedback,
         action: {
-          label: "View activity",
+          label: t("externallyConnectedTaskBanner.viewActivity"),
           href: `/apps/chat/${binding!.endpointId}/activity`,
         },
       });
@@ -361,18 +361,18 @@ function ConnectedTaskComposer({
         setUnconfirmedRequest(false);
         invalidateTask();
         pushToast({
-          title: "Update was not sent",
-          body: "A selected file already belongs to another comment. Edit the rejected send to correct the selection.",
+          title: t("externallyConnectedTaskBanner.updateWasNotSent"),
+          body: t("externallyConnectedTaskBanner.aSelectedFileAlreadyBelongs"),
           tone: "error",
         });
         return;
       }
       pushToast({
-        title: "Couldn't confirm channel delivery",
+        title: t("externallyConnectedTaskBanner.couldnTConfirmChannelDelivery"),
         body:
           error instanceof Error
             ? `${error.message} Your draft is kept; retrying here reuses the same request identity.`
-            : "Your draft is kept; retrying here reuses the same request identity.",
+            : t("externallyConnectedTaskBanner.yourDraftIsKeptRetrying"),
         tone: "error",
       });
     },
@@ -406,7 +406,7 @@ function ConnectedTaskComposer({
     } catch (error) {
       if (mounted.current) {
         setUploadError(
-          `${error instanceof Error ? error.message : "Upload could not be confirmed."} No channel message was sent. Check task files before retrying the upload.`,
+          `${error instanceof Error ? error.message : t("externallyConnectedTaskBanner.uploadCouldNotBeConfirmed")} ${t("externallyConnectedTaskBanner.noChannelMessageWasSent")}`,
         );
       }
     } finally {
@@ -452,7 +452,7 @@ function ConnectedTaskComposer({
             ?.name ??
           taskAttachments.find((attachment) => attachment.id === id)
             ?.originalFilename ??
-          "Selected task file (details unavailable)",
+          t("externallyConnectedTaskBanner.selectedTaskFileDetailsUnavailable"),
       }))
     : taskAttachments.filter(
         (attachment) =>
@@ -469,15 +469,15 @@ function ConnectedTaskComposer({
     canDismissBoardSendBatch(batch) && batch!.published < batch!.total;
   const currentFeedback = mixedTerminal
     ? {
-        title: "Delivery settled with mixed outcomes",
-        body: "Not every part was confirmed delivered. Review the outcomes below; dismissing this receipt does not resend anything.",
+        title: t("externallyConnectedTaskBanner.deliverySettledWithMixedOutcomes"),
+        body: t("externallyConnectedTaskBanner.notEveryPartWasConfirmed"),
         tone: "info" as const,
       }
     : currentPublication?.state === "cancelled" &&
         (batch?.awaitingConsent ?? 0) > 0
       ? {
-          title: "Waiting for remaining file consent",
-          body: "Some parts have settled. The remaining file cards still need the recipient's response; this send stays locked until the whole batch is resolved.",
+          title: t("externallyConnectedTaskBanner.waitingForRemainingFileConsent"),
+          body: t("externallyConnectedTaskBanner.somePartsHaveSettledThe"),
           tone: "info" as const,
         }
       : currentPublication
@@ -486,7 +486,7 @@ function ConnectedTaskComposer({
   const activityPath = `/apps/chat/${binding.endpointId}/activity`;
   return (
     <section
-      aria-label="External conversation"
+      aria-label={t("externallyConnectedTaskBanner.externalConversation")}
       className={cn("task-context-notice space-y-3", className)}
     >
       <div className="flex flex-wrap items-center gap-3">
@@ -494,12 +494,12 @@ function ConnectedTaskComposer({
           <Radio className="h-4 w-4 shrink-0 text-muted-foreground" />
           <div className="min-w-0 flex-1">
             <p className="font-medium">
-              Connected to {providerNames[binding.provider]}
+              {t("externallyConnectedTaskBanner.connectedTo")} {providerNames[binding.provider]}
             </p>
             <p className="truncate text-xs text-muted-foreground">
               {binding.externalLabel} · {binding.provider === "slack"
-                ? "Messages you send here and agent replies are also posted to Slack."
-                : "Agent assignment is fixed for this external task."}
+                ? t("externallyConnectedTaskBanner.messagesYouSendHereAnd")
+                : t("externallyConnectedTaskBanner.agentAssignmentIsFixedFor")}
             </p>
           </div>
         </div>
@@ -516,7 +516,7 @@ function ConnectedTaskComposer({
             variant="outline"
             onClick={() => setComposing((value) => !value)}
           >
-            Send to channel
+            {t("externallyConnectedTaskBanner.sendToChannel")}
           </Button>
           <Button asChild size="sm" variant="ghost">
             <Link to={`/apps/chat/${binding.endpointId}/conversations`}>
@@ -531,7 +531,7 @@ function ConnectedTaskComposer({
             className="text-xs font-medium"
             htmlFor="external-board-update"
           >
-            Board update
+            {t("externallyConnectedTaskBanner.boardUpdate")}
           </label>
           <Textarea
             id="external-board-update"
@@ -549,11 +549,11 @@ function ConnectedTaskComposer({
               idempotencyKey.current = null;
               publish.reset();
             }}
-            placeholder="Write only what should be visible in the provider conversation."
+            placeholder={t("externallyConnectedTaskBanner.writeOnlyWhatShouldBe")}
           />
           {selectedAttachmentIds.length > 0 && !body.trim() && (
             <p className="text-xs text-muted-foreground">
-              Add a message to send with your files.
+              {t("externallyConnectedTaskBanner.addAMessageToSend")}
             </p>
           )}
           <div className="flex flex-wrap items-center gap-2">
@@ -561,7 +561,7 @@ function ConnectedTaskComposer({
               ref={fileInput}
               type="file"
               className="hidden"
-              aria-label="Attach file to channel update"
+              aria-label={t("externallyConnectedTaskBanner.attachFileToChannelUpdate")}
               disabled={uploadDisabled}
               onChange={(event) => {
                 const file = event.target.files?.[0];
@@ -577,10 +577,10 @@ function ConnectedTaskComposer({
               onClick={() => fileInput.current?.click()}
             >
               <Paperclip />
-              {uploading ? "Uploading…" : "Attach file"}
+              {uploading ? t("externallyConnectedTaskBanner.uploading") : t("externallyConnectedTaskBanner.attachFile")}
             </Button>
             <p className="text-xs text-muted-foreground">
-              Files stay on this task until you send them to the channel.
+              {t("externallyConnectedTaskBanner.filesStayOnThisTask")}
             </p>
           </div>
           {uploadError && (
@@ -590,9 +590,7 @@ function ConnectedTaskComposer({
           )}
           {selectionNotice && (
             <p role="status" className="text-xs text-muted-foreground">
-              A file already attached to another comment was removed from this
-              selection. Attach a new copy or share the task link; your message
-              is unchanged.
+              {t("externallyConnectedTaskBanner.selectionNoticeBody")}
             </p>
           )}
           {visibleAttachments.length > 0 && (
@@ -609,23 +607,23 @@ function ConnectedTaskComposer({
             >
               <legend className="px-1 text-xs font-medium">
                 {showingRetainedFiles
-                  ? "Files in this send"
-                  : "Include task files"}
+                  ? t("externallyConnectedTaskBanner.filesInThisSend")
+                  : t("externallyConnectedTaskBanner.includeTaskFiles")}
               </legend>
               <p className="text-xs text-muted-foreground">
                 {binding.provider === "github"
-                  ? "GitHub Apps cannot upload file bytes in comments. Checked files stay on the Paperclip task; GitHub receives an authenticated task link when this Board has a public URL, or a private-task notice otherwise."
+                  ? t("externallyConnectedTaskBanner.githubAppsCannotUploadFile")
                   : binding.provider === "microsoft-teams" &&
                       !showingRetainedFiles
-                    ? "In personal Teams chats, recipients accept each file before upload. Channels and group chats receive supported images directly; other files stay on the task, with a task link or private-task notice."
+                    ? t("externallyConnectedTaskBanner.inPersonalTeamsChatsRecipients")
                     : showingRetainedFiles
-                      ? "These are the files selected for this send. Selection is locked until delivery is resolved."
-                      : "Only checked files will be published to the external conversation."}
+                      ? t("externallyConnectedTaskBanner.theseAreTheFilesSelected")
+                      : t("externallyConnectedTaskBanner.onlyCheckedFilesWillBe")}
               </p>
               <div className="space-y-2">
                 {visibleAttachments.map((attachment) => {
                   const label =
-                    attachment.originalFilename ?? "Unnamed attachment";
+                    attachment.originalFilename ?? t("externallyConnectedTaskBanner.unnamedAttachment");
                   return (
                     <label
                       className="flex items-center gap-2 text-xs"
@@ -662,11 +660,9 @@ function ConnectedTaskComposer({
               role="alert"
               className="space-y-1 rounded-md border border-border bg-background p-3 text-xs"
             >
-              <p className="font-medium">Update was not sent</p>
+              <p className="font-medium">{t("externallyConnectedTaskBanner.updateWasNotSent")}</p>
               <p className="text-muted-foreground">
-                A selected file already belongs to another comment. This request
-                was rejected before any channel message was queued. Your exact
-                draft is kept.
+                {t("externallyConnectedTaskBanner.rejectionBody")}
               </p>
               <Button
                 size="sm"
@@ -678,7 +674,7 @@ function ConnectedTaskComposer({
                     clearBoardSendDraft(storageKey);
                   } catch {
                     setStorageError(
-                      "Saved rejection could not be cleared. Restore browser storage before editing this send.",
+                      t("externallyConnectedTaskBanner.savedRejectionCouldNotBe"),
                     );
                     return;
                   }
@@ -701,7 +697,7 @@ function ConnectedTaskComposer({
                   publish.reset();
                 }}
               >
-                Edit rejected send
+                {t("externallyConnectedTaskBanner.editRejectedSend")}
               </Button>
             </div>
           )}
@@ -713,17 +709,15 @@ function ConnectedTaskComposer({
                 role="alert"
                 className="space-y-1 rounded-md border border-border bg-background p-3 text-xs"
               >
-                <p className="font-medium">Delivery result not confirmed</p>
+                <p className="font-medium">{t("externallyConnectedTaskBanner.deliveryResultNotConfirmed")}</p>
                 <p className="text-muted-foreground">
-                  Your exact draft and request identity are kept. Retry safely
-                  to learn the authoritative publication state without creating
-                  a duplicate.
+                  {t("externallyConnectedTaskBanner.yourExactDraftAndRequest")}
                 </p>
                 <Link
                   className="inline-block font-medium underline underline-offset-4"
                   to={activityPath}
                 >
-                  Open Activity
+                  {t("externallyConnectedTaskBanner.openActivity")}
                 </Link>
               </div>
             )}
@@ -746,25 +740,25 @@ function ConnectedTaskComposer({
                   batch.cancelled !== undefined &&
                   batch.awaitingConsent !== undefined
                     ? [
-                        `${batch.published} published`,
+                        t("externallyConnectedTaskBanner.publishedPublished", { published: batch.published }),
                         ...(batch.awaitingConsent
-                          ? [`${batch.awaitingConsent} awaiting consent`]
+                          ? [t("externallyConnectedTaskBanner.awaitingconsentAwaitingConsent", { awaitingConsent: batch.awaitingConsent })]
                           : []),
                         ...(batch.declined
-                          ? [`${batch.declined} declined`]
+                          ? [t("externallyConnectedTaskBanner.declinedDeclined", { declined: batch.declined })]
                           : []),
-                        ...(batch.expired ? [`${batch.expired} expired`] : []),
+                        ...(batch.expired ? [t("externallyConnectedTaskBanner.expiredExpired", { expired: batch.expired })] : []),
                         ...(batch.cancelled
-                          ? [`${batch.cancelled} cancelled`]
+                          ? [t("externallyConnectedTaskBanner.cancelledCancelled", { cancelled: batch.cancelled })]
                           : []),
                       ].join(" · ")
-                    : `${batch.published} of ${batch.total} parts published.`}
+                    : t("externallyConnectedTaskBanner.publishedOfTotalPartsPublished", { published: batch.published, total: batch.total })}
                 </p>
               )}
               {batch?.parts?.some((part) => part.fileTransfer) && (
                 <ul
                   className="space-y-1 text-muted-foreground"
-                  aria-label="File delivery outcomes"
+                  aria-label={t("externallyConnectedTaskBanner.fileDeliveryOutcomes")}
                 >
                   {batch.parts
                     .filter((part) => part.fileTransfer)
@@ -778,20 +772,19 @@ function ConnectedTaskComposer({
               )}
               {publicationStatus.isError && (
                 <p role="alert" className="text-muted-foreground">
-                  Delivery status could not be refreshed. Your draft is kept;
-                  Paperclip will check again without sending another update.
+                  {t("externallyConnectedTaskBanner.deliveryStatusCouldNotBe")}
                 </p>
               )}
               {currentPublication.redactedError && (
                 <p className="text-muted-foreground">
-                  Provider detail: {currentPublication.redactedError}
+                  {t("externallyConnectedTaskBanner.providerDetail")} {currentPublication.redactedError}
                 </p>
               )}
               <Link
                 className="inline-block font-medium underline underline-offset-4"
                 to={activityPath}
               >
-                Open Activity
+                {t("externallyConnectedTaskBanner.openActivity")}
               </Link>
               {dismissible && (
                 <Button
@@ -804,7 +797,7 @@ function ConnectedTaskComposer({
                         clearBoardSendDraft(storageKey);
                       } catch {
                         setStorageError(
-                          "Saved delivery identity could not be cleared. Restore browser storage before starting another send.",
+                          t("externallyConnectedTaskBanner.savedDeliveryIdentityCouldNot"),
                         );
                         return;
                       }
@@ -821,7 +814,7 @@ function ConnectedTaskComposer({
                     publish.reset();
                   }}
                 >
-                  Dismiss delivery receipt
+                  {t("externallyConnectedTaskBanner.dismissDeliveryReceipt")}
                 </Button>
               )}
             </div>
@@ -829,8 +822,8 @@ function ConnectedTaskComposer({
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs text-muted-foreground">
               {binding.provider === "slack"
-                ? "Your message is posted to Slack with your name and starts the agent."
-                : "Ordinary board comments remain Paperclip-only."}
+                ? t("externallyConnectedTaskBanner.yourMessageIsPostedTo")
+                : t("externallyConnectedTaskBanner.ordinaryBoardCommentsRemainPaperclip")}
             </p>
             <Button
               size="sm"
@@ -858,7 +851,7 @@ function ConnectedTaskComposer({
                     id,
                     name:
                       taskAttachments.find((attachment) => attachment.id === id)
-                        ?.originalFilename ?? "Unnamed attachment",
+                        ?.originalFilename ?? t("externallyConnectedTaskBanner.unnamedAttachment"),
                   })),
                   body: body.trim(),
                   idempotencyKey: idempotencyKey.current,
@@ -869,7 +862,7 @@ function ConnectedTaskComposer({
                   writeBoardSendDraft(storageKey, input);
                 } catch {
                   setStorageError(
-                    "Browser storage could not preserve this delivery identity. No update was sent. Restore browser storage, then reload to try again.",
+                    t("externallyConnectedTaskBanner.browserStorageCouldNotPreserve"),
                   );
                   return;
                 }
@@ -883,10 +876,10 @@ function ConnectedTaskComposer({
               }}
             >
               {publish.isPending
-                ? "Sending…"
+                ? t("externallyConnectedTaskBanner.sending")
                 : !rejection && (publish.isError || unconfirmedRequest)
-                  ? "Retry safely"
-                  : "Send to channel"}
+                  ? t("externallyConnectedTaskBanner.retrySafely")
+                  : t("externallyConnectedTaskBanner.sendToChannel")}
             </Button>
           </div>
         </div>

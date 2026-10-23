@@ -120,7 +120,7 @@ export function ConfigureBuiltInAgentModal({
     models.some((candidate) => candidate.id === normalizedModel);
   const modelError = modelKnown
     ? null
-    : `Model “${normalizedModel}” is not available for ${adapterType}. Choose a known model.`;
+    : t("configureBuiltInAgentModal.modelNormalizedmodelIsNotAvailable", { normalizedModel, adapterType });
   const budgetMonthlyCents = parseBudgetMonthlyCents(budgetDollars);
   const budgetValid = !budgetDollars.trim() || budgetMonthlyCents !== undefined;
   const canSubmit =
@@ -128,8 +128,8 @@ export function ConfigureBuiltInAgentModal({
     modelKnown &&
     (setupSupportedInModal ? !modelRequired || normalizedModel.length > 0 : true);
   const submitLabel = setupSupportedInModal
-    ? `Configure & enable ${definition.displayName}`
-    : `Provision ${definition.displayName}`;
+    ? t("configureBuiltInAgentModal.configureEnableDisplayname", { displayName: definition.displayName })
+    : t("configureBuiltInAgentModal.provisionDisplayname", { displayName: definition.displayName });
 
   const provision = useMutation({
     mutationFn: async () => {
@@ -221,8 +221,7 @@ export function ConfigureBuiltInAgentModal({
 
           {!setupSupportedInModal && (
             <InlineBanner tone="warning" compact>
-              This adapter needs command or endpoint fields before it can run. Provision the
-              built-in row now, then finish those fields from the full agent configuration.
+              {t("configureBuiltInAgentModal.thisAdapterNeedsCommandOr")}
             </InlineBanner>
           )}
 
@@ -256,7 +255,7 @@ export function ConfigureBuiltInAgentModal({
             onClick={() => onOpenChange(false)}
             disabled={provision.isPending}
           >
-            Not now
+            {t("configureBuiltInAgentModal.notNow")}
           </Button>
           <Button
             onClick={() => {
@@ -265,7 +264,7 @@ export function ConfigureBuiltInAgentModal({
             }}
             disabled={!canSubmit || provision.isPending}
           >
-            {provision.isPending ? "Configuring…" : submitLabel}
+            {provision.isPending ? t("configureBuiltInAgentModal.configuring") : submitLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -20,7 +20,7 @@ export function ArtifactDropzone({ children, onUpload, enabled = true, target }:
     setDragging(false);
     if (!enabled || !element) return;
     let depth = 0;
-    const hasFiles = (event: DragEvent) => Array.from(event.dataTransfer?.types ?? []).includes(t("common.files"));
+    const hasFiles = (event: DragEvent) => Array.from(event.dataTransfer?.types ?? []).includes("Files");
     const enter = (event: DragEvent) => {
       if (!hasFiles(event)) return;
       event.preventDefault();
@@ -64,11 +64,11 @@ export function ArtifactDropzone({ children, onUpload, enabled = true, target }:
   const overlay = dragging ? (
     <div data-artifact-drop-overlay role="status" className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-primary bg-background/95 px-6 text-center">
       <Upload aria-hidden="true" className="size-6 text-primary" />
-      <p className="text-sm font-medium">Drop files to add them to this task</p>
+      <p className="text-sm font-medium">{t("artifactDropzone.dropFilesToAddThem")}</p>
     </div>
   ) : null;
   return (
-    <section ref={rootRef} aria-label={enabled ? "Artifact uploads" : undefined} className="relative h-full min-h-0">
+    <section ref={rootRef} aria-label={enabled ? t("artifactDropzone.artifactUploads") : undefined} className="relative h-full min-h-0">
       {children}
       {target && overlay ? createPortal(overlay, target) : overlay}
     </section>

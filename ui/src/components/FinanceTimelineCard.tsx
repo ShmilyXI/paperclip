@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { FinanceEvent } from "@paperclipai/shared";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,8 +22,8 @@ export function FinanceTimelineCard({
   return (
     <Card>
       <CardHeader className="px-4 pt-4 pb-1">
-        <CardTitle className="text-base">Recent financial events</CardTitle>
-        <CardDescription>Provider charges, subscriptions, fees, and credits. Reported separately from run-cost estimates.</CardDescription>
+        <CardTitle className="text-base">{t("financeTimelineCard.recentFinancialEvents")}</CardTitle>
+        <CardDescription>{t("financeTimelineCard.providerChargesSubscriptionsFeesAnd")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 px-4 pb-4 pt-3">
         {rows.length === 0 ? (
@@ -36,7 +37,7 @@ export function FinanceTimelineCard({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary">{row.metadataJson?.source === "provider_cost_report" ? "Provider cost report" : financeEventKindDisplayName(row.eventKind)}</Badge>
+                    <Badge variant="secondary">{row.metadataJson?.source === "provider_cost_report" ? t("financeTimelineCard.providerCostReport") : financeEventKindDisplayName(row.eventKind)}</Badge>
                     <Badge variant={row.direction === "credit" ? "outline" : "secondary"}>
                       {financeDirectionDisplayName(row.direction)}
                     </Badge>
@@ -59,7 +60,7 @@ export function FinanceTimelineCard({
                 <div className="text-right tabular-nums">
                   <div className="text-sm font-semibold">{formatCents(row.amountCents, row.currency)}</div>
                   <div className="text-xs text-muted-foreground">{row.currency}</div>
-                  {row.estimated ? <div className="text-(length:--text-micro) uppercase tracking-(--tracking-eyebrow) text-amber-600">estimated</div> : null}
+                  {row.estimated ? <div className="text-(length:--text-micro) uppercase tracking-(--tracking-eyebrow) text-amber-600">{t("financeTimelineCard.estimated")}</div> : null}
                 </div>
               </div>
             </div>

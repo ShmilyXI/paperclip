@@ -137,7 +137,7 @@ function VideoPreview({ artifact }: { artifact: PreviewArtifact }) {
 function TextPreview({ artifact }: { artifact: PreviewArtifact }) {
   const preview = artifact.previewText?.trim();
   if (!preview) {
-    return <PlaceholderPreview label={artifact.source === "document" ? t("common.document") : "Text"} />;
+    return <PlaceholderPreview label={artifact.source === "document" ? t("common.document") : t("artifactCard.text")} />;
   }
   return (
     <PreviewFrame className="bg-card">
@@ -215,12 +215,12 @@ export function ArtifactCard({ artifact }: ArtifactCardProps) {
           </h3>
           <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
             {artifact.openPath ? (
-              <SecondaryAction href={artifact.openPath} title="Open file in new tab">
+              <SecondaryAction href={artifact.openPath} title={t("artifactCard.openFileInNewTab")}>
                 <ExternalLink className="h-3.5 w-3.5" />
               </SecondaryAction>
             ) : null}
             {artifact.downloadPath ? (
-              <SecondaryAction href={artifact.downloadPath} download title="Download file">
+              <SecondaryAction href={artifact.downloadPath} download title={t("artifactCard.downloadFile")}>
                 <Download className="h-3.5 w-3.5" />
               </SecondaryAction>
             ) : null}

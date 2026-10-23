@@ -188,9 +188,9 @@ export function IssueFiltersPopover({
   const popover = (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={buttonVariant} size={iconOnly ? "icon" : "sm"} className={`text-xs ${iconOnly ? "relative h-8 w-8 shrink-0" : ""} ${activeFilterCount > 0 ? "text-blue-600 dark:text-blue-400" : ""}`} title={iconOnly ? (activeFilterCount > 0 ? `Filters: ${activeFilterCount}` : t("common.filter")) : undefined}>
+        <Button variant={buttonVariant} size={iconOnly ? "icon" : "sm"} className={`text-xs ${iconOnly ? "relative h-8 w-8 shrink-0" : ""} ${activeFilterCount > 0 ? "text-blue-600 dark:text-blue-400" : ""}`} title={iconOnly ? (activeFilterCount > 0 ? t("issueFiltersPopover.filtersActivefiltercount", { activeFilterCount }) : t("common.filter")) : undefined}>
           <Filter className={iconOnly ? "h-3.5 w-3.5" : "h-3.5 w-3.5 sm:h-3 sm:w-3 sm:mr-1"} />
-          {!iconOnly && <span className="hidden sm:inline">{activeFilterCount > 0 ? `Filters: ${activeFilterCount}` : t("common.filter")}</span>}
+          {!iconOnly && <span className="hidden sm:inline">{activeFilterCount > 0 ? t("issueFiltersPopover.filtersActivefiltercount", { activeFilterCount }) : t("common.filter")}</span>}
           {!iconOnly && activeFilterCount > 0 ? <span className="ml-0.5 text-(length:--text-nano) font-medium sm:hidden">{activeFilterCount}</span> : null}
           {iconOnly && activeFilterCount > 0 ? <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blue-600 text-(length:--text-nano) font-bold text-white">{activeFilterCount}</span> : null}
           {!iconOnly && activeFilterCount > 0 ? (
@@ -229,7 +229,7 @@ export function IssueFiltersPopover({
             <>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-1" data-filter-options="inbox-category">
-                  <span className="text-xs text-muted-foreground">Category</span>
+                  <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.category")}</span>
                   <div className="space-y-0.5">
                     {INBOX_CATEGORY_OPTIONS.map(([value, label]) => {
                       const selected = inboxScopeFilters.category === value;
@@ -256,7 +256,7 @@ export function IssueFiltersPopover({
 
                 {inboxScopeFilters.showApprovalStatus ? (
                   <div className="space-y-1" data-filter-options="inbox-approval-status">
-                    <span className="text-xs text-muted-foreground">Approval status</span>
+                    <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.approvalStatus")}</span>
                     <div className="space-y-0.5">
                       {INBOX_APPROVAL_STATUS_OPTIONS.map(([value, label]) => {
                         const selected = inboxScopeFilters.approvalStatus === value;
@@ -288,7 +288,7 @@ export function IssueFiltersPopover({
           ) : null}
 
           <div className="space-y-1.5">
-            <span className="text-xs text-muted-foreground">Quick filters</span>
+            <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.quickFilters")}</span>
             <div className="flex flex-wrap gap-1.5">
               {issueQuickFilterPresets.map((preset) => {
                 const isActive = issueFilterArraysEqual(state.statuses, preset.statuses);
@@ -352,9 +352,9 @@ export function IssueFiltersPopover({
 
             <div className="min-w-0 space-y-3">
               <div className="space-y-1">
-                <span className="text-xs text-muted-foreground">Responsible</span>
+                <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.responsible")}</span>
                 {streamlined && (agents?.length ?? 0) + (currentUserId ? 2 : 1) > SEARCHABLE_FILTER_THRESHOLD ? (
-                  <FilterOptionSearch value={assigneeSearch} onChange={setAssigneeSearch} label="Responsible" />
+                  <FilterOptionSearch value={assigneeSearch} onChange={setAssigneeSearch} label={t("issueFiltersPopover.responsible")} />
                 ) : null}
                 <div data-filter-options="responsible" className={streamlined ? "space-y-0.5" : "max-h-32 space-y-0.5 overflow-y-auto"}>
                   <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -362,7 +362,7 @@ export function IssueFiltersPopover({
                       checked={state.assignees.includes("__unassigned")}
                       onCheckedChange={() => onChange({ assignees: toggleIssueFilterValue(state.assignees, "__unassigned") })}
                     />
-                    <span className="text-sm">No responsible</span>
+                    <span className="text-sm">{t("issueFiltersPopover.noResponsible")}</span>
                   </label>
                   {currentUserId ? (
                     <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -371,7 +371,7 @@ export function IssueFiltersPopover({
                         onCheckedChange={() => onChange({ assignees: toggleIssueFilterValue(state.assignees, "__me") })}
                       />
                       <User className="h-3.5 w-3.5 text-muted-foreground" />
-                      <span className="text-sm">Me</span>
+                      <span className="text-sm">{t("issueFiltersPopover.me")}</span>
                     </label>
                   ) : null}
                   {(streamlined ? visibleAgents : agents ?? []).map((agent) => (
@@ -388,7 +388,7 @@ export function IssueFiltersPopover({
 
               {creatorOptions.length > 0 ? (
                 <div className="space-y-1">
-                  <span className="text-xs text-muted-foreground">Creator</span>
+                  <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.creator")}</span>
                   {selectedCreatorOptions.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
                       {selectedCreatorOptions.map((creator) => (
@@ -412,7 +412,7 @@ export function IssueFiltersPopover({
                     <Input
                       value={creatorSearch}
                       onChange={(event) => setCreatorSearch(event.target.value)}
-                      placeholder="Search creators..."
+                      placeholder={t("issueFiltersPopover.searchCreators")}
                       className="h-8 pl-7 text-xs"
                     />
                   </div>
@@ -434,7 +434,7 @@ export function IssueFiltersPopover({
                         </button>
                       );
                     }) : (
-                      <div className="px-2 py-1 text-xs text-muted-foreground">No creators match.</div>
+                      <div className="px-2 py-1 text-xs text-muted-foreground">{t("issueFiltersPopover.noCreatorsMatch")}</div>
                     )}
                   </div>
                 </div>
@@ -485,7 +485,7 @@ export function IssueFiltersPopover({
 
               {enableExternalObjectFilters ? (
                 <div className="space-y-1">
-                  <span className="text-xs text-muted-foreground">External object status</span>
+                  <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.externalObjectStatus")}</span>
                   <div className="space-y-0.5">
                     {externalObjectFilterOrder.map((value) => {
                       const iconCategory = value === "failed" ? "failed"
@@ -517,13 +517,13 @@ export function IssueFiltersPopover({
               ) : null}
 
               <div className="space-y-1">
-                <span className="text-xs text-muted-foreground">Visibility</span>
+                <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.visibility")}</span>
                 <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
                   <Checkbox
                     checked={state.liveOnly}
                     onCheckedChange={(checked) => onChange({ liveOnly: checked === true })}
                   />
-                  <span className="text-sm">Live runs only</span>
+                  <span className="text-sm">{t("issueFiltersPopover.liveRunsOnly")}</span>
                 </label>
                 {enableAgentCreatedVisibilityFilter ? (
                   <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -531,7 +531,7 @@ export function IssueFiltersPopover({
                       checked={state.showAgentCreatedTasks}
                       onCheckedChange={(checked) => onChange({ showAgentCreatedTasks: checked === true })}
                     />
-                    <span className="text-sm">show agent-created tasks</span>
+                    <span className="text-sm">{t("issueFiltersPopover.showAgentCreatedTasks")}</span>
                   </label>
                 ) : null}
               </div>

@@ -478,7 +478,7 @@ export function ProjectDetail() {
     },
     onError: (_, archived) => {
       pushToast({
-        title: archived ? "Failed to archive project" : "Failed to unarchive project",
+        title: archived ? t("projectDetail.failedToArchiveProject") : t("projectDetail.failedToUnarchiveProject"),
         tone: "error",
       });
     },
@@ -729,7 +729,7 @@ export function ProjectDetail() {
       {showLeftProjectNotice ? (
         <div className="flex items-center gap-3 border border-yellow-300/35 bg-yellow-300/10 px-3 py-2 text-sm text-yellow-900 dark:text-yellow-100">
           <p className="min-w-0 flex-1">
-            You left this project. It no longer appears in your sidebar.
+            {t("projectDetail.youLeftThisProjectIt")}
           </p>
           <MembershipAction
             compact
@@ -779,7 +779,7 @@ export function ProjectDetail() {
           {project.pauseReason === "budget" ? (
             <div className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-(length:--text-micro) font-medium uppercase tracking-(--tracking-caps) text-red-800 dark:text-red-200">
               <span className="h-2 w-2 rounded-full bg-red-400" />
-              Paused by budget hard stop
+              {t("projectDetail.pausedByBudgetHardStop")}
             </div>
           ) : null}
           {project.managedByPlugin ? (

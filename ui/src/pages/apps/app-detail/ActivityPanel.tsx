@@ -77,7 +77,7 @@ function RecentActivity({
   return (
     <section className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-foreground">Recent activity</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("appDetailActivityPanel.recentActivity")}</h2>
       </div>
       {loading ? (
         <div className="space-y-2 py-4">
@@ -85,7 +85,7 @@ function RecentActivity({
           <Skeleton className="h-4 w-2/3" />
         </div>
       ) : rows.length === 0 ? (
-        <p className="py-5 text-sm text-muted-foreground">No activity yet.</p>
+        <p className="py-5 text-sm text-muted-foreground">{t("appDetailActivityPanel.noActivityYet")}</p>
       ) : (
         <ul className="divide-y divide-border">
           {rows.map((row) => (
@@ -154,7 +154,7 @@ export function resolveActorLabel(
     if (label) return label;
     if (actorId === "local-board") return t("common.board");
   }
-  return "Someone";
+  return t("appDetailActivityPanel.someone");
 }
 
 export function humanizeEvent(
@@ -164,11 +164,11 @@ export function humanizeEvent(
   /** When set, this row is a Test-tab call run by the named user; prefix accordingly. */
   testRunnerLabel?: string | null,
 ): { primary: string } {
-  // For Test-tab calls, surface "<User> tested as <Agent>" so prosumer test runs are
+  // For Test-tab calls, surface "<User> {t("appDetailActivityPanel.testedAs")} <Agent>" so prosumer test runs are
   // distinguishable from real heartbeat agent activity in the audit trail (PAP-11415).
   const who = testRunnerLabel
     ? `${testRunnerLabel} tested as ${agentName ?? "an agent"}`
-    : agentName ?? "An agent";
+    : agentName ?? t("appDetailActivityPanel.anAgent");
   // The raw gateway tool name is prefixed (e.g. `mcp.app-gallery-link-…:kv-set`);
   // humanize it to "Kv Set" to match the cross-app Activity view (PAP-11105).
   const action = event.toolName ? humanizeConnectionDisplayName(event.toolName) : "an action";
@@ -185,7 +185,7 @@ export function humanizeEvent(
       return {
         primary: testRunnerLabel
           ? `${who} - ${action} is turned off`
-          : `Blocked ${action} - it isn't turned on`,
+          : t("appDetailActivityPanel.blockedActionItIsnT", { action }),
       };
     case "approval_requested":
       return { primary: `${who} asked before running ${action}` };
@@ -200,7 +200,7 @@ function humanizeApprovalResolved(
   action: string,
   actionRequest?: ActivityPanelProps["actionRequests"][string],
 ): string {
-  const resolver = actionRequest?.resolverDisplayName ?? "Someone";
+  const resolver = actionRequest?.resolverDisplayName ?? t("appDetailActivityPanel.someone");
   if (actionRequest?.status === "approved") return `${resolver} approved ${action}`;
   if (actionRequest?.status === "rejected") return `${resolver} said no to ${action}`;
   return `${resolver} reviewed ${action}`;
@@ -212,7 +212,7 @@ function humanizeLifecycleEvent(
   appName: string,
   agentName: string | null,
 ): string {
-  const who = event.actorDisplayName ?? agentName ?? "Someone";
+  const who = event.actorDisplayName ?? agentName ?? t("appDetailActivityPanel.someone");
   switch (event.type) {
     case "app_connected":
       return `${who} connected ${appName}`;
@@ -251,7 +251,7 @@ function humanizeAllowlistChange(who: string, details: Record<string, unknown> |
 }
 
 function lifecycleLinkLabel(event: ToolConnectionLifecycleEvent): string {
-  return event.type === "actions_quarantined" ? "Review permissions" : "View permissions";
+  return event.type === "actions_quarantined" ? t("appDetailActivityPanel.reviewPermissions") : t("appDetailActivityPanel.viewPermissions");
 }
 
 function numberFrom(value: unknown): number {

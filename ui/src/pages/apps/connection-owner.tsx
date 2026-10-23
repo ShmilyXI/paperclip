@@ -12,7 +12,7 @@ export function connectionOwnerProfile(
 ): ConnectionOwnerProfile | null {
   if (!connection.createdByUserId) return null;
   return profiles.get(connection.createdByUserId) ?? {
-    label: connection.createdByUserId === "local-board" ? t("common.board") : "Board member",
+    label: connection.createdByUserId === "local-board" ? t("common.board") : t("connectionOwner.boardMember"),
     image: null,
   };
 }

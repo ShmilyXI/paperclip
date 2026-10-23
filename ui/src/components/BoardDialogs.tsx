@@ -14,7 +14,7 @@ export function BoardDialogs() {
   return <>
     <DeferredOverlay requested={newIssueOpen} title={t("common.newTask2")} onClose={closeNewIssue}><NewIssueDialog /></DeferredOverlay>
     <DeferredOverlay requested={newProjectOpen} title={t("common.newProject")} onClose={closeNewProject}><NewProjectDialog /></DeferredOverlay>
-    <DeferredOverlay requested={newGoalOpen} title="New goal" onClose={closeNewGoal}><NewGoalDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newGoalOpen} title={t("boardDialogs.newGoal")} onClose={closeNewGoal}><NewGoalDialog /></DeferredOverlay>
     <DeferredOverlay requested={newAgentOpen} title={t("common.newAgent")} onClose={closeNewAgent}><NewAgentDialog /></DeferredOverlay>
   </>;
 }
