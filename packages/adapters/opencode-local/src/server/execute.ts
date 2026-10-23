@@ -63,8 +63,12 @@ import {
 import { removeMaintainerOnlySkillSymlinks } from "@paperclipai/adapter-utils/server-utils";
 import { apiKeyBillingType } from "@paperclipai/adapter-utils/api-billing-type";
 import { prepareOpenCodeRuntimeConfig, prepareManagedOpenCodeRemoteHomes } from "./runtime-config.js";
-import { SANDBOX_INSTALL_COMMAND } from "../index.js";
+import { SANDBOX_INSTALL_COMMAND, isValidOpenCodeModelId } from "../index.js";
 import { resolveOpenCodeSkillsHome } from "./skills.js";
+import {
+  classifyOpenCodeModelFailure,
+  describeOpenCodeModelFailureKind,
+} from "./model-failure.js";
 
 const __moduleDir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -241,6 +245,13 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
   );
   const command = asString(config.command, "opencode");
   const model = asString(config.model, "").trim();
+  const requestedFallbackModel = asString(config.fallbackModel, "").trim();
+  const fallbackModel =
+    requestedFallbackModel &&
+    requestedFallbackModel !== model &&
+    isValidOpenCodeModelId(requestedFallbackModel)
+      ? requestedFallbackModel
+      : "";
   const variant = asString(config.variant, "").trim();
 
   const workspaceContext = parseObject(context.paperclipWorkspace);
@@ -616,11 +627,11 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     const printLogs = isTruthyEnvFlag(
       env.PAPERCLIP_OPENCODE_PRINT_LOGS ?? process.env.PAPERCLIP_OPENCODE_PRINT_LOGS,
     );
-    const buildArgs = (resumeSessionId: string | null) => {
+    const buildArgs = (resumeSessionId: string | null, attemptModel: string = model) => {
       const args = ["run", "--format", "json"];
       if (printLogs) args.push("--print-logs");
       if (resumeSessionId) args.push("--session", resumeSessionId);
-      if (model) args.push("--model", model);
+      if (attemptModel) args.push("--model", attemptModel);
       if (variant) args.push("--variant", variant);
       // OpenCode prefers the inherited PWD over process.cwd(). Use the realized
       // workspace unless the operator already selected a directory explicitly.
@@ -635,14 +646,14 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
 
     // Remote targets receive only the prepared environment, never host keys.
     const accountingEnv = executionTargetIsRemote ? preparedRuntimeConfig.env : runtimeEnv;
-    const runAttempt = async (resumeSessionId: string | null) => {
+    const runAttempt = async (resumeSessionId: string | null, attemptModel: string = model) => {
       await hydrateFreshSessionHandoff(ctx, { resumedSession: Boolean(resumeSessionId) });
       const { basePrompt, promptMetrics } = buildPrompt(Boolean(resumeSessionId));
       const prompt = joinPromptSections([
         selectInitialCommunicationGuidance(context, { resumedSession: Boolean(resumeSessionId) }),
         basePrompt,
       ]);
-      const args = buildArgs(resumeSessionId);
+      const args = buildArgs(resumeSessionId, attemptModel);
       if (onMeta) {
         await onMeta({
           adapterType: "opencode_local",
@@ -662,10 +673,10 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       const accountingLog = createUsageCheckpointLog(onLog, ctx.onUsage ?? (async () => {}), stdout => {
         hasAccounting = true;
         const parsed = consumeAccounting(stdout);
-        const provider = parseModelProvider(model || null);
+        const provider = parseModelProvider(attemptModel || null);
         return { usage: parsed.usageReported ? parsed.usage : undefined, costUsd: parsed.costUsd,
           costStatus: parsed.usageComplete || parsed.costUsd != null ? undefined : "unpriced",
-          usageBasis: "per_run", provider, biller: resolveOpenCodeBiller(accountingEnv, provider), billingType: apiKeyBillingType(provider, accountingEnv), model, complete: false };
+          usageBasis: "per_run", provider, biller: resolveOpenCodeBiller(accountingEnv, provider), billingType: apiKeyBillingType(provider, accountingEnv), model: attemptModel, complete: false };
       });
       const proc = await runAdapterExecutionTargetProcess(runId, runtimeExecutionTarget, command, args, {
         onProcessStopped: providerStop.beginInvocation(),
@@ -700,7 +711,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         parsed.usageComplete = retained.usageComplete;
         parsed.costUsd = retained.costUsd;
       }
-      return { proc, rawStderr: proc.stderr, parsed };
+      return { proc, rawStderr: proc.stderr, parsed, model: attemptModel };
     };
 
     const toResult = (
@@ -708,9 +719,11 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         proc: { exitCode: number | null; signal: string | null; timedOut: boolean; stdout: string; stderr: string; errorCode?: string | null };
         rawStderr: string;
         parsed: ReturnType<typeof parseOpenCodeJsonl>;
+        model?: string;
       },
       clearSessionOnMissingSession = false,
     ): AdapterExecutionResult => {
+      const attemptModel = attempt.model ?? model;
       if (attempt.proc.timedOut) {
         return {
           exitCode: attempt.proc.exitCode,
@@ -719,10 +732,10 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
           usageComplete: false,
           usage: attempt.parsed.usageReported ? attempt.parsed.usage : undefined,
           usageBasis: "per_run",
-          provider: parseModelProvider(model || null),
-          biller: resolveOpenCodeBiller(accountingEnv, parseModelProvider(model || null)),
-          model,
-          billingType: apiKeyBillingType(parseModelProvider(model || null), accountingEnv),
+          provider: parseModelProvider(attemptModel || null),
+          biller: resolveOpenCodeBiller(accountingEnv, parseModelProvider(attemptModel || null)),
+          model: attemptModel,
+          billingType: apiKeyBillingType(parseModelProvider(attemptModel || null), accountingEnv),
           costUsd: attempt.parsed.costUsd,
           costStatus: attempt.parsed.usageComplete || attempt.parsed.costUsd != null ? undefined : "unpriced",
           // A provider or output-observation timeout can arrive before the
@@ -760,7 +773,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         parsedError ||
         stderrLine ||
         `OpenCode exited with code ${synthesizedExitCode ?? -1}`;
-      const modelId = model || null;
+      const modelId = attemptModel || null;
 
       return {
         exitCode: synthesizedExitCode,
@@ -794,6 +807,56 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       };
     };
 
+    // When the primary model's provider fails the run (network error, 429,
+    // quota exhaustion, 5xx) and the agent configured a valid
+    // `adapterConfig.fallbackModel`, retry once inside the same run with the
+    // fallback model. The retry reuses the session resume semantics of the
+    // original attempt. There is no persisted switch state: the next run again
+    // tries the primary model first, so a recovered primary is used again
+    // immediately.
+    const maybeModelFallback = async (
+      attempt: {
+        proc: { exitCode: number | null; signal: string | null; timedOut: boolean; stdout: string; stderr: string; errorCode?: string | null };
+        rawStderr: string;
+        parsed: ReturnType<typeof parseOpenCodeJsonl>;
+        model?: string;
+      },
+      resumeSessionId: string | null,
+      clearSessionOnMissingSession: boolean,
+    ): Promise<AdapterExecutionResult | null> => {
+      if (attempt.proc.timedOut) return null;
+      if ((attempt.proc.exitCode ?? 0) === 0 && !attempt.parsed.errorMessage) return null;
+      const attemptedModel = attempt.model ?? model;
+      const failureKind = classifyOpenCodeModelFailure(attempt.parsed.errorMessage, attempt.rawStderr);
+      if (!failureKind) return null;
+      if (!fallbackModel) {
+        if (requestedFallbackModel && attemptedModel === model) {
+          await onLog(
+            "stdout",
+            `[paperclip] Primary model "${attemptedModel}" failed (${describeOpenCodeModelFailureKind(failureKind)}), but adapterConfig.fallbackModel is not a usable fallback (invalid format or identical to the primary model); skipping model fallback.\n`,
+          );
+        }
+        return null;
+      }
+      await onLog(
+        "stdout",
+        `[paperclip] Primary model "${attemptedModel}" failed (${describeOpenCodeModelFailureKind(failureKind)}); retrying once with fallback model "${fallbackModel}".\n`,
+      );
+      const fallbackAttempt = await runAttempt(resumeSessionId, fallbackModel);
+      const result = toResult(fallbackAttempt, clearSessionOnMissingSession);
+      return {
+        ...result,
+        resultJson: {
+          ...(result.resultJson ?? {}),
+          modelFallback: {
+            from: attemptedModel,
+            to: fallbackModel,
+            reason: failureKind,
+          },
+        },
+      };
+    };
+
     try {
       const initial = await runAttempt(sessionId);
       const initialFailed =
@@ -808,8 +871,11 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
           `[paperclip] OpenCode session "${sessionId}" is unavailable; retrying with a fresh session.\n`,
         );
         const retry = await runAttempt(null);
-        return toResult(retry, true);
+        return (await maybeModelFallback(retry, null, true)) ?? toResult(retry, true);
       }
+
+      const fallbackResult = await maybeModelFallback(initial, sessionId, false);
+      if (fallbackResult) return fallbackResult;
 
       return toResult(initial);
     } finally {

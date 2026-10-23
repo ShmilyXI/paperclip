@@ -736,6 +736,8 @@ export interface CreateConfigValues {
   instructionsFilePath?: string;
   promptTemplate: string;
   model: string;
+  /** Optional backup model for adapters that support model fallback (e.g. opencode_local). */
+  fallbackModel?: string;
   thinkingEffort: string;
   chrome: boolean;
   dangerouslySkipPermissions: boolean;
