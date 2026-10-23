@@ -429,7 +429,7 @@ function RevisionList({
         <p className="text-xs font-medium uppercase tracking-(--tracking-caps) text-muted-foreground">
           {t("routineHistory.revisions")}
         </p>
-        <span className="text-(length:--text-micro) text-muted-foreground">{totalRevisions} total</span>
+        <span className="text-(length:--text-micro) text-muted-foreground">{t("routineHistory.totalCount", { count: totalRevisions })}</span>
       </header>
       {revisions.map((revision) => {
         const isSelected = revision.id === selectedRevisionId;
@@ -457,7 +457,7 @@ function RevisionList({
             data-testid={`revision-row-${revision.revisionNumber}`}
           >
             <div className="flex items-center gap-2 text-sm font-medium">
-              <span>rev {revision.revisionNumber}</span>
+              <span>{t("routineHistory.revNumber", { number: revision.revisionNumber })}</span>
               {isCurrent && (
                 <Badge variant="outline" className="border-border px-1.5 text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
                   {t("routineHistory.current")}
@@ -574,9 +574,9 @@ function RevisionPreview({
       <header className={`${cardWrapper} p-4 space-y-2`}>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1 min-w-0">
-            <p className="text-sm font-medium">rev {revision.revisionNumber}</p>
+            <p className="text-sm font-medium">{t("routineHistory.revNumber", { number: revision.revisionNumber })}</p>
             <p className="text-xs text-muted-foreground truncate">
-              Saved {relativeTime(revision.createdAt)} by {getActorLabel(revision)}
+              {t("routineHistory.savedBy", { time: relativeTime(revision.createdAt), actor: getActorLabel(revision) })}
               {revision.changeSummary ? ` · ${revision.changeSummary}` : ""}
             </p>
           </div>
@@ -749,7 +749,7 @@ function RestoreConfirmDialog({
         </ul>
         <div className="space-y-1.5">
           <Label htmlFor="restore-change-summary" className="text-xs">
-            Change summary (optional)
+            {t("routineHistory.changeSummaryOptional")}
           </Label>
           <Input
             id="restore-change-summary"
@@ -1077,7 +1077,7 @@ function computeFieldChanges(
   compareScalar("status", t("common.status"), oldRoutine.status, newRoutine.status);
   if (JSON.stringify(oldRoutine.variables) !== JSON.stringify(newRoutine.variables)) {
     changes.push({
-      field: "Variables",
+      field: t("routineHistory.variablesField"),
       oldValue: summarizeVariables(oldRoutine.variables),
       newValue: summarizeVariables(newRoutine.variables),
     });

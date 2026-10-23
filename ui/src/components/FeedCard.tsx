@@ -1,4 +1,5 @@
-import { actionFallbackLabel } from "@/lib/i18n-labels";
+import { Fragment, type ReactNode } from "react";
+import { actionFallbackLabel, priorityLabel, statusLabel } from "@/lib/i18n-labels";
 import { t } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { Link } from "@/lib/router";
@@ -36,99 +37,138 @@ function humanize(value: unknown): string {
   return typeof value === "string" ? value.replace(/_/g, " ") : String(value ?? "");
 }
 
+/** One rendered sentence. `verb` keeps the phrase in its own span — the plain
+ *  `{actor} {verb} {identifier} {title}` order reads correctly in both
+ *  languages. `sentence` carries a whole-sentence template instead, because a
+ *  verb that ends on a preposition ("wrote doc on") forces Chinese to front the
+ *  preposition and reorder the slots; translating the fragment alone produces a
+ *  broken sentence. */
+type FeedVerb =
+  | { kind: "verb"; text: string }
+  | { kind: "sentence"; pattern: string };
+
+function verbKey(key: string, values?: Record<string, string>): FeedVerb {
+  return { kind: "verb", text: t(key, values) };
+}
+
+/** Plain values (priority / status) are interpolated eagerly; the
+ *  {{actor}} / {{identifier}} / {{title}} slots stay intact for the renderer so
+ *  each locale can place them around its own prepositions. */
+function sentenceKey(key: string, values?: Record<string, string>): FeedVerb {
+  return { kind: "sentence", pattern: t(key, values) };
+}
+
 /** One verb per action. Pinned context (Tier 0) swaps a couple of verbs to
  *  emphasize that user action is needed. */
 function formatVerb(
   action: string,
   details: Record<string, unknown> | null | undefined,
   context: VerbContext = "chronological",
-): string {
+): FeedVerb {
   switch (action) {
     case "issue.created":
-      return "opened";
+      return verbKey("feedCard.opened");
     case "issue.updated": {
       const status = details?.status;
-      if (status === "in_review" && details?.externalConversationState === "waiting") return "moved to idle";
-      if (typeof status === "string") return `moved to ${humanize(status)}`;
+      if (status === "in_review" && details?.externalConversationState === "waiting") return verbKey("feedCard.movedToIdle");
+      if (typeof status === "string") return verbKey("feedCard.movedTo", { status: statusLabel(status) });
       const priority = details?.priority;
-      if (typeof priority === "string") return `set priority to ${humanize(priority)} on`;
-      return "updated";
+      if (typeof priority === "string") return sentenceKey("feedCard.setPriorityTo", { priority: priorityLabel(priority) });
+      return verbKey("feedCard.updated");
     }
     case "issue.document_created":
-      return "wrote doc on";
+      return sentenceKey("feedCard.wroteDocOn");
     case "issue.document_updated":
-      return "edited doc on";
+      return sentenceKey("feedCard.editedDocOn");
     case "issue.document_deleted":
-      return "deleted doc from";
+      return sentenceKey("feedCard.deletedDocFrom");
     case "issue.work_product_created":
-      return "delivered work on";
+      return sentenceKey("feedCard.deliveredWorkOn");
     case "issue.work_product_updated":
-      return "updated work on";
+      return sentenceKey("feedCard.updatedWorkOn");
     case "issue.work_product_deleted":
-      return "removed work from";
+      return sentenceKey("feedCard.removedWorkFrom");
     case "issue.checked_out":
-      return "picked up";
+      return verbKey("feedCard.pickedUp");
     case "issue.released":
-      return "released";
+      return verbKey("feedCard.released");
     case "issue.commented":
     case "issue.comment_added":
-      return "commented on";
+      return sentenceKey("feedCard.commentedOn");
     case "issue.attachment_added":
-      return "attached a file to";
+      return sentenceKey("feedCard.attachedFileTo");
     case "issue.attachment_removed":
-      return "removed attachment from";
+      return sentenceKey("feedCard.removedAttachmentFrom");
     case "issue.deleted":
-      return "deleted";
+      return verbKey("feedCard.deleted");
 
     case "approval.created":
-      return context === "pinned" ? "needs approval on" : "requested approval on";
+      return context === "pinned" ? sentenceKey("feedCard.needsApprovalOn") : sentenceKey("feedCard.requestedApprovalOn");
     case "approval.approved":
-      return "approved";
+      return verbKey("feedCard.approved");
     case "approval.rejected":
-      return "rejected";
+      return verbKey("feedCard.rejected");
     case "approval.revision_requested":
-      return "requested changes on";
+      return sentenceKey("feedCard.requestedChangesOn");
 
     case "agent.created":
-      return context === "pinned" ? "wants to hire" : "hired";
+      return context === "pinned" ? verbKey("feedCard.wantsToHire") : verbKey("feedCard.hired");
     case "agent.paused":
-      return "paused";
+      return verbKey("feedCard.paused");
     case "agent.resumed":
-      return "resumed";
+      return verbKey("feedCard.resumed");
     case "agent.updated":
-      return "updated";
+      return verbKey("feedCard.updated");
     case "agent.terminated":
-      return "terminated";
+      return verbKey("feedCard.terminated");
 
     case "heartbeat.invoked":
-      return "started a run on";
+      return sentenceKey("feedCard.startedRunOn");
     case "heartbeat.cancelled":
-      return "cancelled a run on";
+      return sentenceKey("feedCard.cancelledRunOn");
 
     case "project.created":
-      return "created project";
+      return verbKey("feedCard.createdProject");
     case "project.updated":
-      return "updated project";
+      return verbKey("feedCard.updatedProject");
     case "project.deleted":
-      return "deleted project";
+      return verbKey("feedCard.deletedProject");
     case "goal.created":
-      return "created goal";
+      return verbKey("feedCard.createdGoal");
     case "goal.updated":
-      return "updated goal";
+      return verbKey("feedCard.updatedGoal");
     case "goal.deleted":
-      return "deleted goal";
+      return verbKey("feedCard.deletedGoal");
     case "company.created":
-      return "created organization";
+      return verbKey("feedCard.createdOrganization");
     case "company.updated":
-      return "updated organization";
+      return verbKey("feedCard.updatedOrganization");
     case "company.archived":
-      return "archived organization";
+      return verbKey("feedCard.archivedOrganization");
     case "company.budget_updated":
-      return "updated organization budget";
+      return verbKey("feedCard.updatedOrganizationBudget");
 
     default:
-      return actionFallbackLabel(action);
+      return { kind: "verb", text: actionFallbackLabel(action) };
   }
+}
+
+type SentenceSlot = "actor" | "identifier" | "title";
+
+/** Split a sentence template into ordered text runs and slot markers. Text runs
+ *  are trimmed: the flex `gap-1` of the sentence container already spaces the
+ *  rendered pieces, so keeping template spaces would double every gap. */
+function sentenceParts(pattern: string): Array<{ text: string } | { slot: SentenceSlot }> {
+  const parts: Array<{ text: string } | { slot: SentenceSlot }> = [];
+  pattern.split(/\{\{(actor|identifier|title)\}\}/).forEach((chunk, index) => {
+    if (index % 2 === 1) {
+      parts.push({ slot: chunk as SentenceSlot });
+      return;
+    }
+    const text = chunk.trim();
+    if (text) parts.push({ text });
+  });
+  return parts;
 }
 
 /* ------------------------------------------------------------------ */
@@ -435,6 +475,32 @@ export function FeedCard({
   const mutedTextBase = isMuted ? "text-muted-foreground/70" : "text-(--hex-959596)";
   const mutedTextHover = isMuted ? "" : "group-hover:text-white";
 
+  // One definition per slot: verb-mode sentences and locale-ordered sentence
+  // templates both place these, so the spans (and their styling) stay identical.
+  const slots: Record<SentenceSlot, ReactNode> = {
+    actor: (
+      <span data-fc="actor" className={cn("font-medium", mutedTextBase, mutedTextHover)}>
+        {content.actorName}
+      </span>
+    ),
+    identifier: content.identifier ? (
+      <span
+        data-fc="id"
+        className={cn(content.identifierMono && "font-mono", mutedTextBase, mutedTextHover)}
+      >
+        {content.identifier}
+      </span>
+    ) : null,
+    title: content.title ? (
+      <span
+        data-fc="title"
+        className={cn("truncate", mutedTextBase, mutedTextHover)}
+      >
+        {content.title}
+      </span>
+    ) : null,
+  };
+
   const card = (
     <Card
       data-fc="card"
@@ -448,25 +514,19 @@ export function FeedCard({
       <EntityIcon spec={iconSpec} />
       <ActorGlyph content={content} />
       <span className="flex min-w-0 flex-1 items-baseline gap-1 truncate">
-        <span data-fc="actor" className={cn("font-medium", mutedTextBase, mutedTextHover)}>
-          {content.actorName}
-        </span>
-        <span data-fc="verb" className={mutedTextBase}>{verb}</span>
-        {content.identifier && (
-          <span
-            data-fc="id"
-            className={cn(content.identifierMono && "font-mono", mutedTextBase, mutedTextHover)}
-          >
-            {content.identifier}
-          </span>
-        )}
-        {content.title && (
-          <span
-            data-fc="title"
-            className={cn("truncate", mutedTextBase, mutedTextHover)}
-          >
-            {content.title}
-          </span>
+        {verb.kind === "verb" ? (
+          <>
+            {slots.actor}
+            <span data-fc="verb" className={mutedTextBase}>{verb.text}</span>
+            {slots.identifier}
+            {slots.title}
+          </>
+        ) : (
+          sentenceParts(verb.pattern).map((part, index) => (
+            <Fragment key={`${index}-${"slot" in part ? part.slot : "text"}`}>
+              {"slot" in part ? slots[part.slot] : <span className={mutedTextBase}>{part.text}</span>}
+            </Fragment>
+          ))
         )}
       </span>
       {isPinned && (

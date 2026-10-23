@@ -100,7 +100,7 @@ export function SearchableSelect<
   onValueChange,
   placeholder,
   searchPlaceholder = t("common.search"),
-  emptyMessage = "No options found.",
+  emptyMessage = t("searchableSelect.noOptionsFound"),
   loadingMessage = t("common.loading"),
   loading = false,
   disabled = false,

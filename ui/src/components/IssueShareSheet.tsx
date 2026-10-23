@@ -380,7 +380,7 @@ export function IssueShareSheet({
                         />
                       }
                       title={displayName}
-                      subtitle={implicitPrincipal ? `${implicitPrincipal.roleLabel} — access remains while this role applies` : grant.inherited ? t("issueShareSheet.inheritedAccessManagedAtIts") : `${granter} ${timeAgo(grant.createdAt)}`}
+                      subtitle={implicitPrincipal ? `${implicitPrincipal.roleLabel} — ${t("issueShareSheet.accessRemainsWhileThisRoleApplies")}` : grant.inherited ? t("issueShareSheet.inheritedAccessManagedAtIts") : `${granter} ${timeAgo(grant.createdAt)}`}
                       badge={<SourceBadge source={grant.source} />}
                       action={
                         revocable ? (

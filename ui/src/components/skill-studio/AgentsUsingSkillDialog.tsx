@@ -373,7 +373,7 @@ function AgentRow({
         )}
         {behindLatest > 0 ? (
           <span className="text-(length:--text-nano) text-amber-500">
-            {behindLatest} version{behindLatest === 1 ? "" : "s"} behind latest
+            {t("agentsUsingSkillDialog.versionsBehindLatest", { count: behindLatest })}
           </span>
         ) : null}
       </div>

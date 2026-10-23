@@ -150,7 +150,7 @@ export function TaskChatPlanPreviewCard({
       <a
         href={href}
         data-testid={testId}
-        aria-label={ariaLabel ?? `Open Plan${revision == null ? "" : ` revision ${revision}`}`}
+        aria-label={ariaLabel ?? (revision == null ? t("taskChatPlanPreviewCard.openPlan") : t("taskChatPlanPreviewCard.openPlanRevision", { revision }))}
         className={sharedClassName}
       >
         {body}

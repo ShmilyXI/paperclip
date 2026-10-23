@@ -242,7 +242,7 @@ function MarkdownWorkProductRow({
                 <button
                   type="button"
                   onClick={() => openTextAttachment(metadata.attachmentId, metadata.originalFilename ?? workProduct.title)}
-                  aria-label={`Open in tab: ${workProduct.title}`}
+                  aria-label={t("issuePropertiesArtifactsTab.openInTabNamed", { title: workProduct.title })}
                   title={t("issuePropertiesArtifactsTab.openInTab")}
                   className="shrink-0 px-1.5 py-1.5 text-muted-foreground hover:text-foreground"
                 >
@@ -253,7 +253,7 @@ function MarkdownWorkProductRow({
                 href={metadata.openPath}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`Open raw ${workProduct.title}`}
+                aria-label={t("issuePropertiesArtifactsTab.openRawNamed", { title: workProduct.title })}
                 title={t("issuePropertiesArtifactsTab.openRaw")}
                 className="shrink-0 px-1.5 py-1.5 text-muted-foreground hover:text-foreground"
               >
@@ -261,7 +261,7 @@ function MarkdownWorkProductRow({
               </a>
               <a
                 href={metadata.downloadPath}
-                aria-label={`Download ${workProduct.title}`}
+                aria-label={t("issuePropertiesArtifactsTab.downloadNamed", { title: workProduct.title })}
                 title={t("common.download")}
                 className="shrink-0 py-1.5 pr-2 pl-0.5 text-muted-foreground hover:text-foreground"
               >

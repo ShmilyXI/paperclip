@@ -479,7 +479,7 @@ function RailHeading({ label, onCreate }: { label: string; onCreate: () => void 
       <button
         type="button"
         onClick={onCreate}
-        title={`New ${label.toLowerCase()} folder`}
+        title={t("skillFolderTree.newFolder", { label: label.toLowerCase() })}
         className="opacity-0 transition-opacity group-hover/heading:opacity-100"
       >
         <Plus className="h-3 w-3 text-muted-foreground" />
@@ -632,7 +632,7 @@ function TreeBranch({
                 variant="ghost"
                 size="icon-sm"
                 className="h-6 w-6 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100"
-                aria-label={`Folder actions for ${label}`}
+                aria-label={t("skillFolderTree.folderActionsFor", { label })}
               >
                 <MoreHorizontal className="h-3.5 w-3.5" />
               </Button>

@@ -3325,10 +3325,9 @@ function OnboardingWizardInner({
                       {shouldSuggestUnsetAnthropicApiKey && (
                         <div className="rounded-md border border-amber-300/60 bg-amber-50/40 px-2.5 py-2 space-y-2">
                           <p className="text-(length:--text-micro) text-amber-900/90 leading-relaxed">
-                            Claude failed while{" "}
+                            {t("onboardingWizard.claudeFailedWhile")}{" "}
                             <span className="font-mono">ANTHROPIC_API_KEY</span>{" "}
-                            is set. You can clear it in this adapter config
-                            and retry the probe.
+                            {t("onboardingWizard.isSetClearItAndRetry")}
                           </p>
                           <Button
                             size="sm"
@@ -3411,7 +3410,7 @@ function OnboardingWizardInner({
                       <label className="text-xs text-muted-foreground mb-1 block">
                         {adapterType === "openclaw_gateway"
                           ? t("onboardingWizard.gatewayUrl")
-                          : "Webhook URL"}
+                          : t("onboardingWizard.webhookUrl")}
                       </label>
                       <input
                         className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm font-mono outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"

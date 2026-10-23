@@ -43,7 +43,7 @@ export function SidePanelMobileTabs({ tabs, activeTabId, onActiveTabChange, onCl
           <Button
             variant="ghost"
             className="h-(--sz-44px) min-w-0 flex-1 justify-start gap-2 px-2"
-            aria-label={`Switch tabs, ${tabs.length} open`}
+            aria-label={t("sidePanelMobileTabs.switchTabs", { count: tabs.length })}
             disabled={tabs.length === 0}
           >
             <span id={activeTab ? `side-panel-tab-${activeTab.id}` : undefined} className="min-w-0 flex-1 truncate text-left">{activeTab?.label ?? t("sidePanelMobileTabs.chooseATab")}</span>
@@ -63,7 +63,7 @@ export function SidePanelMobileTabs({ tabs, activeTabId, onActiveTabChange, onCl
           }}
           onCloseAutoFocus={(event) => {
             if (tabs.length !== 0) return;
-            const addButton = headerRef.current?.querySelector<HTMLButtonElement>('[aria-label="Open a new tab"]');
+            const addButton = headerRef.current?.querySelector<HTMLButtonElement>("[data-side-panel-add-tab]");
             if (addButton) { event.preventDefault(); addButton.focus(); }
           }}
         >
@@ -90,7 +90,7 @@ export function SidePanelMobileTabs({ tabs, activeTabId, onActiveTabChange, onCl
                     variant="ghost"
                     size="icon"
                     className="size-(--sz-44px) shrink-0"
-                    aria-label={`Close ${tab.label}`}
+                    aria-label={t("sidePanelMobileTabs.closeTab", { label: tab.label })}
                     disabled={tab.disabled}
                     onClick={() => {
                       // Focus the neighboring selector before removing the

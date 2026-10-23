@@ -66,7 +66,7 @@ export function CaseChildrenTree({
           onClick={() => setExpanded(true)}
         >
           <ChevronDown className="h-3.5 w-3.5" />
-          Show {hiddenCount} more
+          {t("caseChildrenTree.showMoreCount", { count: hiddenCount })}
         </Button>
       ) : null}
     </div>

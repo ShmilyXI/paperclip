@@ -345,8 +345,8 @@ export function AddConnectionDialog({
             <>
               {applicationMode === "new" ? (
                 <div className="rounded-md border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-                  <span className="font-medium text-foreground">{applicationName.trim()}</span> will be created as{" "}
-                  {inferredType}.
+                  <span className="font-medium text-foreground">{applicationName.trim()}</span>{" "}
+                  {t("connectionDialogs.willBeCreatedAs", { type: inferredType })}
                 </div>
               ) : null}
 
@@ -430,7 +430,7 @@ export function AddConnectionDialog({
                             type="button"
                             className="ml-auto text-muted-foreground hover:text-destructive"
                             onClick={() => setCreds((cs) => cs.filter((_, idx) => idx !== i))}
-                            aria-label={`Remove credential reference for ${secretName(c.secretId)}`}
+                            aria-label={t("connectionDialogs.removeCredentialReferenceFor", { secret: secretName(c.secretId) })}
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>

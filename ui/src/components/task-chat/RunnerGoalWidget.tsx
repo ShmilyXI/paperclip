@@ -237,11 +237,11 @@ export function RunnerGoalWidget({ control }: { control: RunnerGoalControl }) {
               <span>{formatDuration(goal.elapsedSeconds)}</span>
               {capability?.usageReporting ? (
                 <span>
-                  {formatTokens(goal.tokensUsed)} tokens
+                  {t("runnerGoalWidget.tokensUsed", { tokens: formatTokens(goal.tokensUsed) })}
                   {goal.tokenBudget ? ` / ${formatTokens(goal.tokenBudget)}` : ""}
                 </span>
               ) : null}
-              {goal.iterations > 0 ? <span>{goal.iterations} iterations</span> : null}
+              {goal.iterations > 0 ? <span>{t("runnerGoalWidget.iterationCount", { count: goal.iterations })}</span> : null}
               {goal.lastReason ? <span className="truncate">{goal.lastReason}</span> : null}
             </div>
           ) : null}

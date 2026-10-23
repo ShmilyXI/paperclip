@@ -257,7 +257,9 @@ export function formatJoinRequestInboxLabel(
   },
 ) {
   if (joinRequest.requestType !== "human") {
-    return `Agent join request${joinRequest.agentName ? `: ${joinRequest.agentName}` : ""}`;
+    return joinRequest.agentName
+      ? t("legacyInbox.agentJoinRequestNamed", { name: joinRequest.agentName })
+      : t("legacyInbox.agentJoinRequest");
   }
 
   const requesterName = nonEmptyLabel(joinRequest.requesterUser?.name);
@@ -513,8 +515,8 @@ function ApprovalInboxRow({
             </span>
             <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
               <span className="capitalize">{approvalStatusLabel(approval.status)}</span>
-              {requesterName ? <span>requested by {requesterName}</span> : null}
-              <span>updated {timeAgo(approval.updatedAt)}</span>
+              {requesterName ? <span>{t("legacyInbox.requestedBy", { name: requesterName })}</span> : null}
+              <span>{t("legacyInbox.updatedAgo", { time: timeAgo(approval.updatedAt) })}</span>
             </span>
           </span>
         </Link>
@@ -639,8 +641,8 @@ function JoinRequestInboxRow({
               {label}
             </span>
             <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-              <span>requested {timeAgo(joinRequest.createdAt)} from IP {joinRequest.requestIp}</span>
-              {joinRequest.adapterType && <span>adapter: {joinRequest.adapterType}</span>}
+              <span>{t("legacyInbox.requestedTimeFromIp", { time: timeAgo(joinRequest.createdAt), ip: joinRequest.requestIp })}</span>
+              {joinRequest.adapterType && <span>{t("legacyInbox.adapterName", { name: joinRequest.adapterType })}</span>}
             </span>
           </span>
         </div>
@@ -2517,7 +2519,7 @@ export function Inbox() {
                       <DialogHeader>
                         <DialogTitle>{t("legacyInbox.markAllAsRead")}</DialogTitle>
                         <DialogDescription>
-                          This will mark {unreadIssueIds.length} unread {unreadIssueIds.length === 1 ? "item" : "items"} as read.
+                          {t("legacyInbox.markUnreadAsRead", { count: unreadIssueIds.length })}
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
@@ -2844,8 +2846,8 @@ export function Inbox() {
                               variant="ghost"
                               size="icon-xs"
                               className="-mr-2 text-muted-foreground"
-                              title={`New task in ${group.label}`}
-                              aria-label={`New task in ${group.label}`}
+                              title={t("legacyInbox.newTaskInGroup", { group: group.label })}
+                              aria-label={t("legacyInbox.newTaskInGroup", { group: group.label })}
                               onClick={(event) => {
                                 event.stopPropagation();
                                 openCreateIssueForGroup(group);
@@ -3135,9 +3137,9 @@ export function Inbox() {
                   >
                     <AlertTriangle className="h-4 w-4 shrink-0 text-yellow-400" />
                     <span className="text-sm">
-                      Budget at{" "}
+                      {t("legacyInbox.budgetAt")}{" "}
                       <span className="font-medium">{dashboard!.costs.monthUtilizationPercent}%</span>{" "}
-                      utilization this month
+                      {t("legacyInbox.utilizationThisMonth")}
                     </span>
                   </Link>
                   <button

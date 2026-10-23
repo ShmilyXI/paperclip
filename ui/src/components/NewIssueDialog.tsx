@@ -404,8 +404,8 @@ export function NewIssueDialog() {
   const privateParentProject = privacyParent?.project?.visibility === "private" ? privacyParent.project : null;
   const inheritedPrivateProject = privateParentProject ?? (!isPrivate && currentProject?.visibility === "private" ? currentProject : null);
   const inheritedPrivacyReason = privacyParent?.visibility === "private"
-    ? `Subtask of private task ${privacyParent.title || newIssueDefaults.parentTitle || parentIssueLabel}`
-    : inheritedPrivateProject ? `In private project ${inheritedPrivateProject.name}` : undefined;
+    ? t("newIssue.subtaskOfPrivateTask", { title: privacyParent.title || newIssueDefaults.parentTitle || parentIssueLabel })
+    : inheritedPrivateProject ? t("newIssue.inPrivateProject", { project: inheritedPrivateProject.name }) : undefined;
   const effectivePrivate = isPrivate || inheritsPrivateAccess
     || orderedProjects.some(project => project.id === projectId && project.visibility === "private");
 
@@ -1363,8 +1363,7 @@ export function NewIssueDialog() {
                       >
                         <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-300" />
                         <span className="leading-snug">
-                          Low-trust review agent. It can only act inside its assigned review boundary; task, project, or
-                          run policy defines the concrete scope.
+                          {t("newIssue.lowTrustReviewAgentNote")}
                         </span>
                       </div>
                     ) : null}

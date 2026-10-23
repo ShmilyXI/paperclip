@@ -108,8 +108,9 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             <h1 className="text-lg font-semibold">{t("common.general")}</h1>
           </div>
           <p className="text-sm text-muted-foreground">
-            {t("instanceGeneralSettings.configureInstanceWidePreferences")}
-            {visibleTopics.length > 0 ? <> including {topicSummary}</> : null}.
+            {visibleTopics.length > 0
+              ? t("instanceGeneralSettings.configurePreferencesIncludingTopics", { topics: topicSummary })
+              : <>{t("instanceGeneralSettings.configureInstanceWidePreferences")}.</>}
           </p>
         </div>
       ) : null}

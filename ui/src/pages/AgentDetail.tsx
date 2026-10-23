@@ -696,7 +696,7 @@ function WorkspaceOperationsSection({
                 <WorkspaceOperationStatusBadge status={operation.status} />
                 <div className="text-(length:--text-micro) text-muted-foreground">
                   {relativeTime(operation.startedAt)}
-                  {operation.finishedAt && ` to ${relativeTime(operation.finishedAt)}`}
+                  {operation.finishedAt && ` ${t("agentDetail.to")} ${relativeTime(operation.finishedAt)}`}
                 </div>
               </div>
               {operation.command && (
@@ -1836,7 +1836,7 @@ export function AgentOverview({
           {skillNames.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {skillNames.slice(0, 8).map((skill) => <Badge key={skill} variant="secondary">{skill}</Badge>)}
-              {skillNames.length > 8 ? <Badge variant="outline">+{skillNames.length - 8} more</Badge> : null}
+              {skillNames.length > 8 ? <Badge variant="outline">{t("agentDetail.moreCount", { count: skillNames.length - 8 })}</Badge> : null}
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">{t("agentDetail.noSkillsEnabled")}</p>
@@ -1949,7 +1949,7 @@ export function AgentRevisionsTab({
     <div className="max-w-3xl space-y-3">
       <div className="flex items-baseline justify-between gap-3">
         <h3 className="text-sm font-medium">{t("agentDetail.configurationRevisions")}</h3>
-        <span className="text-xs text-muted-foreground">{configRevisions?.length ?? 0} total</span>
+        <span className="text-xs text-muted-foreground">{t("agentDetail.totalCount", { count: configRevisions?.length ?? 0 })}</span>
       </div>
       {(configRevisions ?? []).length === 0 ? (
         <p className="text-sm text-muted-foreground">{t("agentDetail.noConfigurationRevisionsYet")}</p>
@@ -3952,7 +3952,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
       {/* Issues touched by this run */}
       {touchedIssues && touchedIssues.length > 0 && (
         <div className="space-y-2">
-          <span className="text-xs font-medium text-muted-foreground">Tasks Touched ({touchedIssues.length})</span>
+          <span className="text-xs font-medium text-muted-foreground">{t("agentDetail.tasksTouched", { count: touchedIssues.length })}</span>
           <div className="border border-border rounded-lg divide-y divide-border">
             {touchedIssues.map((issue) => (
               <Link
@@ -4632,7 +4632,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
       {events.length > 0 && (
         <div>
-          <div className="mb-2 text-xs font-medium text-muted-foreground">Events ({events.length})</div>
+          <div className="mb-2 text-xs font-medium text-muted-foreground">{t("agentDetail.events", { count: events.length })}</div>
           <div className="bg-neutral-100 dark:bg-neutral-950 rounded-lg p-3 font-mono text-xs space-y-0.5">
             {events.map((evt) => {
               const color = evt.color

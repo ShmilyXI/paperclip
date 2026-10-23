@@ -361,8 +361,8 @@ export function OnboardingCardField({
   onSubmit,
   onPaste,
   disabled,
-  label = "Authorization code",
-  placeholder = "Paste authorization code here",
+  label = t("adapterLoginChrome.authorizationCode"),
+  placeholder = t("adapterLoginChrome.pasteAuthorizationCodeHere"),
   masked = false,
   autoFocus = false,
 }: {

@@ -23,9 +23,6 @@ import { IssueShareSheet, type ShareSheetImplicitPrincipal } from "./IssueShareS
 const MENU_ITEM_CLASS =
   "flex items-center gap-2 w-full px-2 py-1.5 text-xs rounded hover:bg-accent/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent";
 
-const NON_SETTER_TOOLTIP =
-  "Only the task owner or an admin can change who can see this task.";
-
 /**
  * Privacy actions for the task `⋯` menu. Renders the menu buttons plus the
  * two dialogs. The render prop keeps this component outside the menu's
@@ -101,7 +98,7 @@ export function IssuePrivacyActions({
         <TooltipTrigger asChild>
           <span className="block w-full" tabIndex={0}>{node}</span>
         </TooltipTrigger>
-        <TooltipContent className="max-w-xs text-xs">{canManage ? blockedReason : NON_SETTER_TOOLTIP}</TooltipContent>
+        <TooltipContent className="max-w-xs text-xs">{canManage ? blockedReason : t("issuePrivacyActions.onlyTheTaskOwnerOrAnAdminCan")}</TooltipContent>
       </Tooltip>
     );
   }
@@ -173,8 +170,7 @@ export function IssuePrivacyActions({
           <AlertDialogHeader>
             <AlertDialogTitle>{t("issuePrivacyActions.makeThisTaskPublic")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Everyone in the company will be able to read this task, its comments, documents, and
-              run history. Existing private subtasks keep their privacy.{" "}
+              {t("issuePrivacyActions.everyoneInTheCompanyWillBeAbleToRead")}{" "}
               {constraintsQuery.data?.leavesPersonalProject
                 ? t("issuePrivacyActions.thisTaskWillAlsoLeaveItsPersonal") : null}
               <span className="font-semibold text-foreground">{t("issuePrivacyActions.contentAlreadySeenByOthers")}</span>

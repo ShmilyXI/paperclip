@@ -275,13 +275,13 @@ function sourceMeta(sourceBadge: CompanySkillSourceBadge, sourceLabel: string | 
 
   switch (sourceBadge) {
     case "skills_sh":
-      return { icon: VercelMark, label: sourceLabel ?? "skills.sh", managedLabel: "skills.sh managed" };
+      return { icon: VercelMark, label: sourceLabel ?? "skills.sh", managedLabel: t("companySkills.skillsShManaged") };
     case "github":
       return isSkillsShManaged
-        ? { icon: VercelMark, label: sourceLabel ?? "skills.sh", managedLabel: "skills.sh managed" }
+        ? { icon: VercelMark, label: sourceLabel ?? "skills.sh", managedLabel: t("companySkills.skillsShManaged") }
         : { icon: GithubIcon, label: sourceLabel ?? "GitHub", managedLabel: t("companySkills.githubManaged") };
     case "url":
-      return { icon: Link2, label: sourceLabel ?? t("common.url"), managedLabel: "URL managed" };
+      return { icon: Link2, label: sourceLabel ?? t("common.url"), managedLabel: t("companySkills.urlManaged") };
     case "local":
       return { icon: Folder, label: sourceLabel ?? t("common.folder"), managedLabel: t("companySkills.folderManaged") };
     case "paperclip":
@@ -1409,7 +1409,7 @@ function NewSkillWizard({
   const [draft, setDraft] = useState<SkillCreateDraft>(initialDraft);
   const [slugDirty, setSlugDirty] = useState(initialDraft.slug.trim().length > 0);
   const categoryDraft = draft.categories.join(", ");
-  const steps = ["Basics", "Design", "Content", t("common.review")];
+  const steps = [t("companySkills.basics"), t("companySkills.design"), t("companySkills.content"), t("common.review")];
 
   useEffect(() => {
     setStep(0);
@@ -1510,7 +1510,7 @@ function NewSkillWizard({
             />
             <div className="min-w-0">
               <div className="truncate text-sm font-medium">{draft.name || "New Skill"}</div>
-              <div className="truncate text-xs text-muted-foreground">{draft.tagline || "No tagline yet."}</div>
+              <div className="truncate text-xs text-muted-foreground">{draft.tagline || t("skillStudio.noTaglineYet")}</div>
             </div>
           </div>
           <div>
@@ -1903,7 +1903,7 @@ function CatalogDetailPane({
           <span className="font-mono">{skill.contentHash.slice(0, 24)}…</span>
           <CopyText
             text={skill.contentHash}
-            copiedLabel="Copied hash"
+            copiedLabel={t("companySkills.copiedHash")}
             ariaLabel={t("skills.copyContentHash")}
             title={t("skills.copyContentHash")}
             className="inline-flex h-6 w-6 items-center justify-center rounded-sm border border-border text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -2010,9 +2010,9 @@ export function InstallPreviewDialog({
   let confirmLabel = t("skills.installSkill");
   let confirmVariant: "default" | "destructive" = "default";
   if (defaultAction === "update") {
-    confirmLabel = "Install update";
+    confirmLabel = t("companySkills.installUpdate");
   } else if (defaultAction === "replace") {
-    confirmLabel = "Replace existing skill";
+    confirmLabel = t("companySkills.replaceExistingSkillConfirm");
     confirmVariant = "destructive";
   }
   if (isPending) confirmLabel = "Installing…";
@@ -2206,7 +2206,7 @@ function AttachAgentsPopover({
       selectedAgentIds={attachedIds}
       onSave={(nextIds) => onSubmit(Array.from(nextIds), draftVersionId)}
       pending={pending}
-      triggerLabel="Add to agent"
+      triggerLabel={t("companySkills.addToAgent")}
       triggerIcon={<Plus className="mr-1.5 h-3.5 w-3.5" />}
       triggerVariant="default"
       triggerSize="sm"
@@ -2383,7 +2383,7 @@ function SkillList({
     if (sourceFilter !== "all" && skills.length > 0) {
       return (
         <div className="px-4 py-6 text-sm text-muted-foreground">
-          No {SOURCE_FILTER_LABELS[sourceFilter].toLowerCase()} skills installed.{" "}
+          {t("companySkills.noSkillsInstalledFor", { source: SOURCE_FILTER_LABELS[sourceFilter].toLowerCase() })}{" "}
           <button type="button" className="text-foreground underline" onClick={onClearFilters}>
             {t("skills.clearFilter")}
           </button>
@@ -3739,7 +3739,7 @@ function SkillPane({
                     </span>
                     <CopyText
                       text={detail.sourcePath}
-                      copiedLabel="Copied path"
+                      copiedLabel={t("companySkills.copiedPath")}
                       ariaLabel={t("skills.copySourcePath")}
                       title={t("skills.copySourcePath")}
                       className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
@@ -4326,7 +4326,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       setSource("");
     },
     onError: (error) => {
-      reportSkillError(error, "Skill import failed", "Failed to import skill source.", "Importing skills");
+      reportSkillError(error, t("companySkills.skillImportFailed"), t("companySkills.failedToImportSkillSource"), t("companySkills.actionImportingSkills"));
     },
   });
 
@@ -4341,7 +4341,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       );
     },
     onSuccess: async (result) => {
-      setScanStatusMessage("Refreshing skills list...");
+      setScanStatusMessage(t("companySkills.refreshingSkillsList"));
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: queryKeys.companySkills.list(selectedCompanyId!) }),
         queryClient.invalidateQueries({ queryKey: queryKeys.folders.list(selectedCompanyId!, "skill") }),
@@ -4369,7 +4369,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     },
     onError: (error) => {
       setScanStatusMessage(null);
-      reportSkillError(error, "Project skill scan failed", "Failed to scan project workspaces.", "Scanning projects for skills");
+      reportSkillError(error, t("companySkills.projectSkillScanFailed"), t("companySkills.failedToScanProjectWorkspaces"), t("companySkills.actionScanningProjectsForSkills"));
     },
   });
 
@@ -4389,7 +4389,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       const message = error instanceof Error ? error.message : t("skills.failedToCreateSkill");
       setCreateError(message);
-      reportSkillError(error, "Skill creation failed", t("skills.failedToCreateSkill"), "Creating a skill");
+      reportSkillError(error, t("companySkills.skillCreationFailed"), t("skills.failedToCreateSkill"), t("companySkills.actionCreatingSkill"));
     },
   });
 
@@ -4490,7 +4490,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       });
     },
     onError: (error) => {
-      reportSkillError(error, t("skills.updateFailed"), "Failed to install skill update.", "Updating this skill");
+      reportSkillError(error, t("skills.updateFailed"), t("companySkills.failedToInstallSkillUpdate"), t("companySkills.actionUpdatingSkill"));
     },
   });
 
@@ -4671,7 +4671,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       setInstallDialogState((current) => ({ ...current, error: message }));
       // Also surface explicit-policy / platform denials in the persistent banner
       // so the reason stays visible after the dialog closes.
-      policyDenial.capture(error, "Installing this skill");
+      policyDenial.capture(error, t("companySkills.actionInstallingSkill"));
     },
   });
   const createFolder = useMutation({
@@ -5035,7 +5035,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       });
     },
     onError: (error) => {
-      reportSkillError(error, "Remove failed", "Failed to remove skill.", "Removing this skill");
+      reportSkillError(error, t("companySkills.removeFailed"), t("companySkills.failedToRemoveSkill"), t("companySkills.actionRemovingSkill"));
     },
   });
 

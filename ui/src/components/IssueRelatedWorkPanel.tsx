@@ -120,7 +120,7 @@ function ExternalObjectsSection({
 
       {isError ? (
         <p className="text-xs text-muted-foreground">
-          Couldn't load external objects.{" "}
+          {t("issueRelatedWorkPanel.couldnTLoadExternalObjects")}{" "}
           {onRetry ? (
             <button
               type="button"

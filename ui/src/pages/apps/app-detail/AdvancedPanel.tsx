@@ -543,7 +543,7 @@ export function DangerZone({
                     onClick={onReconnectIdentity}
                   >
                     {identityActionPending ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : null}
-                    Reconnect
+                    {t("appDetailAdvancedPanel.reconnect")}
                   </Button>
                 ) : null}
               </div>

@@ -270,7 +270,7 @@ export function FileContentViewer({ content, highlightedLine, onLoaded, previewM
 
   useEffect(() => {
     if (!lines) return;
-    onLoaded?.(`File loaded, ${lines.length} ${lines.length === 1 ? "line" : "lines"}.`);
+    onLoaded?.(t("fileViewerSheet.fileLoaded", { count: lines.length }));
   }, [lines, onLoaded]);
 
   useEffect(() => {
@@ -321,7 +321,7 @@ export function FileContentViewer({ content, highlightedLine, onLoaded, previewM
           controls
           preload="metadata"
           playsInline
-          aria-label={`Video preview: ${resource.title}`}
+          aria-label={t("fileViewerSheet.videoPreview", { title: resource.title })}
           className="max-h-full max-w-full rounded border border-white/10 bg-black"
         />
       </div>
@@ -344,7 +344,7 @@ export function FileContentViewer({ content, highlightedLine, onLoaded, previewM
     <div
       ref={codeScrollRef}
       role="region"
-      aria-label={`${resource.title} source`}
+      aria-label={t("fileViewerSheet.source", { title: resource.title })}
       tabIndex={0}
       className="paperclip-file-viewer-code flex-1 overflow-auto bg-(--code-bg-resolved) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
     >
@@ -398,15 +398,15 @@ export function FileContentViewer({ content, highlightedLine, onLoaded, previewM
       {previewMode === undefined && <div className="absolute right-3 top-3 z-20">
         <div
           role="group"
-          aria-label={`${previewLabel} preview mode`}
+          aria-label={t("fileViewerSheet.previewMode", { label: previewLabel })}
           className="inline-flex rounded-md border border-border bg-background/95 p-0.5 shadow-sm backdrop-blur"
         >
           <Button
             type="button"
             variant={markdownMode === "rendered" ? "secondary" : "ghost"}
             size="icon-sm"
-            aria-label={`Show rendered ${previewLabel}`}
-            title={`Rendered ${previewLabel}`}
+            aria-label={t("fileViewerSheet.showRendered", { label: previewLabel })}
+            title={t("fileViewerSheet.rendered", { label: previewLabel })}
             aria-pressed={markdownMode === "rendered"}
             onClick={() => setMarkdownMode("rendered")}
             className={cn(
@@ -420,8 +420,8 @@ export function FileContentViewer({ content, highlightedLine, onLoaded, previewM
             type="button"
             variant={markdownMode === "raw" ? "secondary" : "ghost"}
             size="icon-sm"
-            aria-label={`Show raw ${previewLabel}`}
-            title={`Raw ${previewLabel}`}
+            aria-label={t("fileViewerSheet.showRaw", { label: previewLabel })}
+            title={t("fileViewerSheet.raw", { label: previewLabel })}
             aria-pressed={markdownMode === "raw"}
             onClick={() => setMarkdownMode("raw")}
             className={cn(
@@ -439,7 +439,7 @@ export function FileContentViewer({ content, highlightedLine, onLoaded, previewM
       ) : isCsv ? <CsvPreview text={content.content.data} title={resource.title} /> : (
         <div
           role="region"
-          aria-label={`${resource.title} rendered Markdown`}
+          aria-label={t("fileViewerSheet.renderedMarkdown", { title: resource.title })}
           tabIndex={0}
           className="flex-1 overflow-auto bg-background p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
         >

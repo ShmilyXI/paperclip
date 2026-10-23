@@ -300,7 +300,7 @@ export function QuarantinedActionsReview({
                 )}
               </div>
               <ToggleSwitch
-                aria-label={`${label} allowed`}
+                aria-label={t("appDetailSetupPanel.labelAllowed", { label })}
                 checked={enabled}
                 disabled={disabled}
                 onCheckedChange={(next) => {
@@ -318,7 +318,7 @@ export function QuarantinedActionsReview({
       </div>
       <div className="flex items-center justify-between gap-3">
         <span className="text-xs text-amber-700 dark:text-amber-300">
-          {selectedIds.length} of {count} will be on
+          {t("appDetailSetupPanel.selectedOfCountWillBeOn", { selected: selectedIds.length, count })}
         </span>
         <Button size="sm" disabled={disabled} onClick={() => onSubmit(selectedIds)}>
           {disabled ? t("common.saving2") : t("appDetailSetupPanel.saveChoices")}

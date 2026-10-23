@@ -40,8 +40,8 @@ function RevisionByline({ revision }: { revision: CaseDocumentRevision }) {
 }
 
 function getRevisionLabel(revision: CaseDocumentRevision) {
-  const actor = revision.actorAgentName ?? (revision.createdByAgentId ? "agent" : revision.createdByUserId ? "board" : "system");
-  return `rev ${revision.revisionNumber} - ${relativeTime(revision.createdAt)} - ${actor}`;
+  const actor = revision.actorAgentName ?? (revision.createdByAgentId ? t("caseRevisionRail.actorAgent") : revision.createdByUserId ? t("caseRevisionRail.actorBoard") : t("caseRevisionRail.actorSystem"));
+  return t("caseRevisionRail.revisionShort", { number: revision.revisionNumber, time: relativeTime(revision.createdAt), actor });
 }
 
 function CaseDocumentDiffModal({

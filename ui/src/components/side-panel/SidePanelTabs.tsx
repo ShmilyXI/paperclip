@@ -165,7 +165,7 @@ export function SidePanelTabs({
   onReorderTabs,
   onAddTab,
   addControl,
-  addLabel = "Open a new tab",
+  addLabel = t("sidePanelTabs.openANewTab"),
   appearance = "default",
   className,
 }: SidePanelTabsProps) {
@@ -408,6 +408,7 @@ export function SidePanelTabs({
           onClick={onAddTab}
           aria-label={addLabel}
           title={addLabel}
+          data-side-panel-add-tab=""
           className={cn(
             "shrink-0 text-muted-foreground hover:text-foreground focus-visible:text-foreground",
             appearance === "streamlined-task"

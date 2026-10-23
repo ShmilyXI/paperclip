@@ -17,6 +17,7 @@
  */
 
 import { ApiError } from "../api/client";
+import { t } from "@/i18n";
 
 /** Machine-readable error codes the server attaches to skill mutation failures. */
 export const SKILL_POLICY_DENIAL_CODE = "skill_policy_denied";
@@ -58,33 +59,31 @@ export interface SkillDenial {
   remediation: string;
 }
 
-const DEFAULT_POLICY_REMEDIATION =
-  "An organization administrator can change the skill policy to allow this.";
-const DEFAULT_ADMIN_REMEDIATION =
-  "This requires organization administration access. Ask an administrator to make this change.";
+const DEFAULT_POLICY_REMEDIATION_KEY = "skillPolicyDenial.defaultPolicyRemediation";
+const DEFAULT_ADMIN_REMEDIATION_KEY = "skillPolicyDenial.defaultAdminRemediation";
 
 /** Human-readable titles for the platform-invariant codes (State C). */
-const PLATFORM_TITLES: Record<string, string> = {
-  skill_authentication_required: "Sign in to manage skills.",
-  skill_company_boundary_denied: "This skill belongs to another organization.",
-  skill_workspace_boundary_denied: "This skill source is outside an allowed workspace.",
-  skill_source_validation_failed: "This skill source failed validation.",
-  skill_unsafe_content_blocked: "This skill contains unsafe content.",
-  skill_secret_handling_blocked: "This skill exposes a secret value.",
-  skill_actor_restricted: "This action isn't available for the current actor.",
+const PLATFORM_TITLE_KEYS: Record<string, string> = {
+  skill_authentication_required: "skillPolicyDenial.platformTitleAuthenticationRequired",
+  skill_company_boundary_denied: "skillPolicyDenial.platformTitleCompanyBoundaryDenied",
+  skill_workspace_boundary_denied: "skillPolicyDenial.platformTitleWorkspaceBoundaryDenied",
+  skill_source_validation_failed: "skillPolicyDenial.platformTitleSourceValidationFailed",
+  skill_unsafe_content_blocked: "skillPolicyDenial.platformTitleUnsafeContentBlocked",
+  skill_secret_handling_blocked: "skillPolicyDenial.platformTitleSecretHandlingBlocked",
+  skill_actor_restricted: "skillPolicyDenial.platformTitleActorRestricted",
 };
 
 /** Default remediation copy per platform-invariant code — framed as a fix, never a grant. */
-const PLATFORM_REMEDIATIONS: Record<string, string> = {
-  skill_authentication_required: "Sign in and try again.",
-  skill_company_boundary_denied: "Open the skill from the organization that owns it.",
+const PLATFORM_REMEDIATION_KEYS: Record<string, string> = {
+  skill_authentication_required: "skillPolicyDenial.platformRemediationAuthenticationRequired",
+  skill_company_boundary_denied: "skillPolicyDenial.platformRemediationCompanyBoundaryDenied",
   skill_workspace_boundary_denied:
-    "Import from a configured Paperclip workspace or the organization managed-skill directory.",
-  skill_source_validation_failed: "Fix the flagged source and retry.",
+    "skillPolicyDenial.platformRemediationWorkspaceBoundaryDenied",
+  skill_source_validation_failed: "skillPolicyDenial.platformRemediationSourceValidationFailed",
   skill_unsafe_content_blocked:
-    "Remove the fetch-and-execute or unsafe pattern before saving.",
-  skill_secret_handling_blocked: "Remove the secret value before saving.",
-  skill_actor_restricted: "Retry from an account with access to this action.",
+    "skillPolicyDenial.platformRemediationUnsafeContentBlocked",
+  skill_secret_handling_blocked: "skillPolicyDenial.platformRemediationSecretHandlingBlocked",
+  skill_actor_restricted: "skillPolicyDenial.platformRemediationActorRestricted",
 };
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -98,8 +97,9 @@ function asString(value: unknown): string | null {
 /**
  * Turn a caller-supplied error into a denial descriptor, or `null` when there
  * is nothing to render as a persistent notice (State A allowed / State D
- * transient). The `actionLabel` (e.g. "Installing external skills") lets the
- * caller phrase State B's title around the specific action.
+ * transient). The `actionLabel` lets the caller phrase State B's title around
+ * the specific action; the caller passes an already-translated action name
+ * (e.g. `t("companySkills.actionInstallingSkill")`), never a raw English string.
  */
 export function classifySkillDenial(
   error: unknown,
@@ -119,14 +119,14 @@ export function classifySkillDenial(
     || reason === "policy_default";
   if (isPolicyDenial) {
     const title = actionLabel
-      ? `${actionLabel} is restricted by your organization policy.`
-      : "This action is restricted by your organization policy.";
+      ? t("skillPolicyDenial.restrictedTitle", { action: actionLabel })
+      : t("skillPolicyDenial.restrictedTitleNoAction");
     return {
       state: "policy",
       code,
       reason,
       title,
-      remediation: remediation ?? DEFAULT_POLICY_REMEDIATION,
+      remediation: remediation ?? t(DEFAULT_POLICY_REMEDIATION_KEY),
     };
   }
 
@@ -136,8 +136,8 @@ export function classifySkillDenial(
       state: "platform_admin",
       code,
       reason,
-      title: "This change needs administration access.",
-      remediation: remediation ?? DEFAULT_ADMIN_REMEDIATION,
+      title: t("skillPolicyDenial.adminRequiredTitle"),
+      remediation: remediation ?? t(DEFAULT_ADMIN_REMEDIATION_KEY),
     };
   }
 
@@ -150,11 +150,11 @@ export function classifySkillDenial(
       state: "platform",
       code,
       reason,
-      title: (code && PLATFORM_TITLES[code]) ?? "This action is blocked by a platform safety rule.",
+      title: (code && t(PLATFORM_TITLE_KEYS[code])) ?? t("skillPolicyDenial.platformBlockedTitle"),
       remediation:
         remediation
-        ?? (code && PLATFORM_REMEDIATIONS[code])
-        ?? "Fix the flagged issue and try again.",
+        ?? (code && t(PLATFORM_REMEDIATION_KEYS[code]))
+        ?? t("skillPolicyDenial.fixFlaggedIssue"),
     };
   }
 

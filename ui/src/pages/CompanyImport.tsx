@@ -566,8 +566,8 @@ const IMPORT_ADAPTER_OPTIONS: { value: string; label: string }[] = [
     value: adapter.type,
     label: adapterLabels[adapter.type] ?? getAdapterLabel(adapter.type),
   })),
-  { value: "openai_dot", label: "OpenAI Dot (experimental)" },
-  { value: "muse", label: "Muse — Personal agent (experimental)" },
+  { value: "openai_dot", label: t("companyImport.openaiDotExperimental") },
+  { value: "muse", label: t("companyImport.musePersonalAgentExperimental") },
 ];
 
 // Dot is a picker choice backed by the shared Runner API adapter.
@@ -708,7 +708,7 @@ function AdapterPickerList({
                       </option>
                     ))}
                     {!adapterOptions.some((option) => option.value === selectedType) && (
-                      <option value={selectedType}>{agent.adapterChoice === "openai_dot" ? "OpenAI Dot (experimental)" : `${getAdapterLabel(selectedType)} (${agentHarnessType(agent.adapterType, agent.adapterConfig)})`}</option>
+                      <option value={selectedType}>{agent.adapterChoice === "openai_dot" ? t("companyImport.openaiDotExperimental") : `${getAdapterLabel(selectedType)} (${agentHarnessType(agent.adapterType, agent.adapterConfig)})`}</option>
                     )}
                   </select>
                   <button
@@ -728,7 +728,7 @@ function AdapterPickerList({
                 {agent.fallbackAdapterType && (
                   <div className="mx-4 mb-2.5 rounded-md border border-amber-500/30 bg-amber-500/5 px-3 py-2">
                     <p className="text-xs text-amber-500">
-                      {t("companyImport.sourceAdapter")} {agent.adapterChoice === "openai_dot" ? "OpenAI Dot" : agent.adapterChoice === "muse" ? "Muse — Personal agent" : agent.adapterType} {t("companyImport.isNotInstalledHereThisAgentWillUse")}{" "}
+                      {t("companyImport.sourceAdapter")} {agent.adapterChoice === "openai_dot" ? t("companyImport.openaiDot") : agent.adapterChoice === "muse" ? t("companyImport.musePersonalAgent") : agent.adapterType} {t("companyImport.isNotInstalledHereThisAgentWillUse")}{" "}
                       {adapterLabels[selectedType] ?? getAdapterLabel(selectedType)}
                     </p>
                   </div>
@@ -1060,7 +1060,7 @@ export function CompanyImport() {
           // preview/import resumes from them instead of starting over.
           throw lastError instanceof Error
             ? lastError
-            : new Error(`Part ${part.index + 1} of ${manifest.parts.length} failed to upload.`);
+            : new Error(t("companyImport.partFailedToUpload", { index: part.index + 1, total: manifest.parts.length }));
         }
         uploadedParts += 1;
         uploadedBytes += part.byteSize;
@@ -1885,7 +1885,7 @@ export function CompanyImport() {
                   <span className="min-w-0 flex-1 truncate">{skill.originalSlug}</span>
                   <span className="shrink-0 text-xs text-muted-foreground">{skill.action}</span>
                   {skill.slug !== skill.originalSlug && (
-                    <span className="shrink-0 text-xs text-muted-foreground">as {skill.slug}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{t("companyImport.asSlug", { slug: skill.slug })}</span>
                   )}
                 </div>
               ))}

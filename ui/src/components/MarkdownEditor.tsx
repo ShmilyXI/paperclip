@@ -250,7 +250,7 @@ function isSafeMarkdownLinkUrl(url: string): boolean {
 function richEditorErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   if (typeof error === "string") return error;
-  return "Rich editor failed to render";
+  return t("markdownEditor.richEditorFailedToRender");
 }
 
 /**
@@ -323,7 +323,7 @@ const MAX_AUTOCOMPLETE_OPTIONS = 50;
 const MENTION_MENU_CARET_GAP = 10;
 
 const CODE_BLOCK_LANGUAGES: Record<string, string> = {
-  txt: "Text",
+  txt: t("markdownEditor.plainText"),
   md: "Markdown",
   js: "JavaScript",
   jsx: "JavaScript (JSX)",

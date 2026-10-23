@@ -52,7 +52,7 @@ export function DesignPageShell({
           {rightSidebarHeader && <div className="design-page-aside-tabs">{rightSidebarHeader}</div>}
           {rightSidebarControls && <div className="design-page-aside-controls">{rightSidebarControls}</div>}
         </header>
-        <div id="design-page-aside-content" className="design-page-content scrollbar-while-scrolling" onScroll={handleAsideScroll} role="region" aria-label={`${rightSidebarTitle} content`} tabIndex={0}>{rightSidebar}</div>
+        <div id="design-page-aside-content" className="design-page-content scrollbar-while-scrolling" onScroll={handleAsideScroll} role="region" aria-label={t("designPageShell.asideContentRegion", { title: rightSidebarTitle })} tabIndex={0}>{rightSidebar}</div>
       </DesignPageAside>}
     </div></FlyoutAppearanceProvider>
   );

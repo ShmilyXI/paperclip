@@ -63,8 +63,8 @@ function BlockerRecoveryIndicator({
       role="status"
       aria-label={detail ? `${label} — ${detail}` : label}
       title={detail
-        ? `${label} — ${detail}. Open the source task to act.`
-        : `${label} — open the source task to act.`}
+        ? t("issueBlockedNotice.titleWithDetail", { label, detail })
+        : t("issueBlockedNotice.titleWithoutDetail", { label })}
       className={`[&>svg]:size-2.5 gap-0.5 px-1.5 text-(length:--text-nano) ${tone.className}`}
     >
       <Icon className="h-2.5 w-2.5" aria-hidden />
@@ -171,7 +171,7 @@ function WaitingChipLink({
       </span>
       {running ? (
         <span className="ml-0.5 rounded-full bg-blue-500/15 px-1.5 py-0.5 text-(length:--text-nano) font-medium uppercase tracking-wide text-blue-700 dark:bg-blue-400/20 dark:text-blue-200">
-          running
+          {t("issueBlockedNotice.running")}
         </span>
       ) : null}
     </IssueLinkQuicklook>
@@ -219,8 +219,7 @@ function SuccessfulRunHandoffInFlightNotice({
           <span className="h-2 w-2 animate-pulse rounded-full bg-blue-400" />
         </span>
         <p className="min-w-0 leading-5">
-          A correction run is in progress — the agent is working. This alert returns if the run
-          stops without choosing a next step.
+          {t("issueBlockedNotice.correctionRunInProgress")}
           {shortRunId ? (
             <>
               {" "}
@@ -229,10 +228,10 @@ function SuccessfulRunHandoffInFlightNotice({
                   to={`/agents/${assigneeAgentId}/runs/${liveRunId}`}
                   className="font-mono underline underline-offset-2 hover:text-foreground"
                 >
-                  run {shortRunId}
+                  {t("issueBlockedNotice.runShortId", { id: shortRunId })}
                 </Link>
               ) : (
-                <span className="font-mono">run {shortRunId}</span>
+                <span className="font-mono">{t("issueBlockedNotice.runShortId", { id: shortRunId })}</span>
               )}
             </>
           ) : null}

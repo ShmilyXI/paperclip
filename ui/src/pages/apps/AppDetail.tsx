@@ -594,7 +594,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
 
       {status.tone === "attention" && connection.requiresReauthorization === false && (
         <div role="status">
-          <p>{connection.healthMessage || "GitHub access could not be checked. Try again."}</p>
+          <p>{connection.healthMessage || t("appDetail.checkGitHubAccessFailed")}</p>
           <Button variant="outline" disabled={refreshGitHubAccess.isPending} onClick={() => refreshGitHubAccess.mutate()}>
             {t("connectors.retryAccess")}
           </Button>
@@ -826,7 +826,7 @@ export function AppDetailHeader({
             <StatusBadge status={status} />
             {connection.config?.provider !== "agentmail" && actionCount !== null && (
               <span className="text-xs text-muted-foreground">
-                {actionCount} {actionCount === 1 ? "action" : "actions"} available
+                {t("appDetail.actionsAvailable", { count: actionCount })}
               </span>
             )}
             {connectionDisplaySecondaryHint(connection) ? (

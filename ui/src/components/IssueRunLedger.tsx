@@ -294,11 +294,11 @@ function runSummary(
   agentMap: ReadonlyMap<string, Pick<Agent, "name">>,
 ) {
   const agentName = compactAgentName(run, agentMap);
-  if (run.status === "running") return `Running now by ${agentName}`;
-  if (run.status === "queued") return `Queued for ${agentName}`;
+  if (run.status === "running") return t("issueRunLedger.runningNowByAgent", { agent: agentName });
+  if (run.status === "queued") return t("issueRunLedger.queuedForAgent", { agent: agentName });
   if (run.status === "scheduled_retry")
-    return `Automatic retry scheduled for ${agentName}`;
-  return `${statusLabel(run.status)} by ${agentName}`;
+    return t("issueRunLedger.automaticRetryScheduledForAgent", { agent: agentName });
+  return t("issueRunLedger.summaryByAgent", { status: statusLabel(run.status), agent: agentName });
 }
 
 function livenessCopyForRun(run: LedgerRun) {
@@ -1019,7 +1019,7 @@ export function IssueRunLedgerContent({
           })}
           {feedItems.length > 20 ? (
             <div className="px-3 py-2 text-xs text-muted-foreground">
-              {feedItems.length - 20} older items not shown
+              {feedItems.length - 20} {t("issueRunLedger.olderItemsNotShown")}
             </div>
           ) : null}
         </div>

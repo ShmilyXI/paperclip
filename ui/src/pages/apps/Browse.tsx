@@ -493,10 +493,10 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         title: t("connectors.connectionRemoved"),
         body:
           target.pool ? t("browse.theConnectionsInThePool") : target.kind === "chat"
-            ? `${target.providerName} is disconnected. Existing Paperclip tasks remain available.`
+            ? t("browse.disconnectedTasksRemain", { provider: target.providerName })
             : target.remainingConnectionCount > 0
-            ? `${target.providerName} still has ${target.remainingConnectionCount} active ${target.remainingConnectionCount === 1 ? "connection" : "connections"} available to agents.`
-            : `${target.providerName} is no longer available to agents through this connection. Its saved credentials were deleted.`,
+            ? t("browse.stillHasActiveConnections", { provider: target.providerName, count: target.remainingConnectionCount })
+            : t("browse.noLongerAvailableToAgents", { provider: target.providerName }),
         tone: "success",
       });
       setConnectionToRemove(null);
@@ -1114,7 +1114,7 @@ export function ConnectorCard({
   const upstreamAccounts = (row.upstreamApps ?? []).flatMap(snapshot => {
     const connection = connectionById?.get(snapshot.connectionId);
     return connection ? snapshot.accounts.map((account, index) => ({ connection, account, snapshot,
-      name: account.alias || (snapshot.accounts.length > 1 ? `${row.name} account ${index + 1}` : `${row.name} account`) })) : [];
+      name: account.alias || (snapshot.accounts.length > 1 ? t("browse.upstreamAccountNameIndexed", { app: row.name, index: index + 1 }) : t("browse.upstreamAccountName", { app: row.name })) })) : [];
   });
   const listedUpstreamAccounts = row.upstreamCatalogApp ? upstreamAccounts : [];
   const connectionCount = row.connections.length + listedUpstreamAccounts.length + row.chatEndpoints.length;
@@ -1194,8 +1194,8 @@ export function ConnectorCard({
         {collapsible ? (
           <CollapsibleTrigger className="flex w-full items-center gap-2 border-t border-border px-4 py-3 text-left text-sm text-muted-foreground hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">
             <ChevronRight className={`h-4 w-4 shrink-0 transition-transform${expanded ? " rotate-90" : ""}`} aria-hidden="true" />
-            <span className="font-medium text-foreground">{connectionCount} connections</span>
-            {attentionCount > 0 ? <span className="text-destructive">· {attentionCount} {attentionCount === 1 ? "needs" : "need"} attention</span> : null}
+            <span className="font-medium text-foreground">{t("browse.connectionsCount", { count: connectionCount })}</span>
+            {attentionCount > 0 ? <span className="text-destructive">· {t("browse.needsAttention", { count: attentionCount })}</span> : null}
           </CollapsibleTrigger>
         ) : null}
         <CollapsibleContent>
@@ -1267,7 +1267,7 @@ export function ConnectorCard({
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-3">
                     <AgentAvatar agent={chatAgentById?.get(endpoint.assignedAgentId) ?? { id: endpoint.assignedAgentId, name: endpoint.assignedAgentName }}
-                      size={40} label={`${endpoint.assignedAgentName} avatar`} />
+                      size={40} label={t("browse.avatarLabel", { name: endpoint.assignedAgentName })} />
                     <div className="min-w-0">
                       <button
                         type="button"
@@ -1307,7 +1307,7 @@ export function ConnectorCard({
                           type="button"
                           variant="ghost"
                           size="icon-sm"
-                          aria-label={`Manage ${endpoint.assignedAgentName} ${row.name} connection`}
+                          aria-label={t("browse.manageChatConnection", { agent: endpoint.assignedAgentName, connection: row.name })}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
@@ -1381,7 +1381,7 @@ function ConnectionAccountRow({
 
   return (
     <ConnectionAccountRowLayout state={state} accountName={accountName} owner={owner} details={<>{details}{discovery?.discovery.message || discovery?.sync.status === "error" ? <p className="text-xs text-muted-foreground" role="status">{discovery.discovery.message ?? discovery.sync.error}</p> : null}</>}
-      openLabel={`Open ${accountName} permissions`} onOpen={() => onNavigate(`/apps/${connection.id}/permissions`)}>
+      openLabel={t("browse.openAccountPermissions", { account: accountName })} onOpen={() => onNavigate(`/apps/${connection.id}/permissions`)}>
         {setupEnabled && (state.kind === "attention" || state.kind === "draft") ? (
           <Button
             type="button"
@@ -1402,7 +1402,7 @@ function ConnectionAccountRow({
               type="button"
               variant="ghost"
               size="icon-sm"
-              aria-label={`Manage ${accountName} connection`}
+              aria-label={t("browse.manageAccountConnection", { account: accountName })}
             >
               <MoreHorizontal className="h-4 w-4" />
             </Button>

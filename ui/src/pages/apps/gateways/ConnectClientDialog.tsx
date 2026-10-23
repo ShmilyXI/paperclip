@@ -321,7 +321,7 @@ export function ConnectClientDialog({
                     variant="outline"
                     size="sm"
                     disabled={!copyConfigText}
-                    onClick={() => copyConfigText && void copyText(copyConfigText, `${activeSnippet.label} config`)}
+                    onClick={() => copyConfigText && void copyText(copyConfigText, t("connectClientDialog.configLabel", { label: activeSnippet.label }))}
                   >
                     <Copy className="mr-1 h-3.5 w-3.5" />
                     {t("common.copy")}

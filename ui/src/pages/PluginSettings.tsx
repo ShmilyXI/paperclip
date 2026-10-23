@@ -769,7 +769,7 @@ function PluginLocalFolderRow({ pluginId, companyId, declaration, status }: Plug
             ) : (
               <Save className="h-3.5 w-3.5" />
             )}
-            Save
+            {t("common.save")}
           </Button>
         </div>
       </div>
@@ -1127,7 +1127,7 @@ function PluginConfigForm({ pluginId, companyId, schema, initialValues, isLoadin
                 {t("pluginSettings.testing")}
               </>
             ) : (
-              "Test Configuration"
+              t("pluginSettings.testConfiguration")
             )}
           </Button>
         )}

@@ -1829,7 +1829,7 @@ export function Secrets() {
                     value: "proposals",
                     label: (
                       <span className="inline-flex items-center gap-1.5">
-                        Proposals
+                        {t("secrets.proposals")}
                         {pendingProposalCount > 0 ? (
                           <Badge
                             variant="outline"
@@ -1956,7 +1956,7 @@ export function Secrets() {
           <div>
             {secretsQuery.isError || userDefinitionsQuery.isError ? (
               <div className="text-sm text-destructive flex items-center gap-2 py-4">
-                <AlertCircle className="h-4 w-4" /> Failed to load secrets:{" "}
+                <AlertCircle className="h-4 w-4" /> {t("secrets.failedToLoadSecrets")}{" "}
                 {((secretsQuery.error ?? userDefinitionsQuery.error) as Error).message}
                 <Button
                   variant="ghost"
@@ -2390,7 +2390,7 @@ export function Secrets() {
                   </span>
                 </SheetTitle>
                 <SheetDescription className="sr-only">
-                  Each user secret definition {selectedDefinition.key}
+                  {t("secrets.eachUserSecretDefinition")} {selectedDefinition.key}
                 </SheetDescription>
                 <div className="flex min-w-0 items-center gap-2 rounded-md border border-border bg-muted/20 px-2 py-1.5">
                   <code className="min-w-0 flex-1 truncate font-mono text-xs text-foreground">
@@ -2532,9 +2532,7 @@ export function Secrets() {
             <DialogTitle>{t("secrets.secretReferences")}</DialogTitle>
             <DialogDescription>
               {usageDialogSecret
-                ? `${usageDialogSecret.name} is referenced by ${usageDialogSecret.referenceCount ?? 0} ${
-                    (usageDialogSecret.referenceCount ?? 0) === 1 ? "place" : "places"
-                  }.`
+                ? t("secrets.isReferencedBy", { name: usageDialogSecret.name, count: usageDialogSecret.referenceCount ?? 0 })
                 : null}
             </DialogDescription>
           </DialogHeader>
@@ -2685,7 +2683,7 @@ export function Secrets() {
               )}
               {createNamePrefix && !editingDefinition ? (
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Creating in {folderPath} — remove the chip to type a different path.
+                  {t("secrets.creatingInRemoveChip", { path: folderPath })}
                 </p>
               ) : null}
             </div>
@@ -2882,11 +2880,10 @@ export function Secrets() {
                 </div>
                 {createMode === "managed" ? (
                   <div className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-2 text-(length:--text-micro) text-emerald-700 dark:text-emerald-300">
-                    Paperclip-managed secrets are created in the selected provider and future rotations
-                    write a new provider version through Paperclip.
+                    {t("secrets.managedSecretsNote")}
                     {awsManagedPathPreview ? (
                       <div className="mt-1">
-                        AWS managed path:{" "}
+                        {t("secrets.awsManagedPath")}{" "}
                         <code className="break-all rounded bg-background/70 px-1 py-0.5">
                           {awsManagedPathPreview}
                         </code>
@@ -3190,7 +3187,7 @@ export function Secrets() {
               disabled={deleteMutation.isPending}
             >
               {deleteMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> : null}
-              Delete
+              {t("common.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -3217,7 +3214,7 @@ export function Secrets() {
               disabled={deleteDefinitionMutation.isPending}
             >
               {deleteDefinitionMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> : null}
-              Delete
+              {t("common.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -3253,7 +3250,7 @@ export function Secrets() {
               disabled={removeVaultMutation.isPending}
             >
               {removeVaultMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> : null}
-              Remove from Paperclip
+              {t("secrets.removeFromPaperclip")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -3553,7 +3550,7 @@ export function ProviderVaultsTab({
   if (error) {
     return (
       <div className="py-4 text-sm text-destructive flex items-center gap-2">
-        <AlertCircle className="h-4 w-4" /> Failed to load provider vaults: {(error as Error).message}
+        <AlertCircle className="h-4 w-4" /> {t("secrets.failedToLoadProviderVaults")} {(error as Error).message}
         <Button variant="ghost" size="sm" onClick={onRetry}>
           {t("common.retry")}
         </Button>
@@ -3698,7 +3695,7 @@ function ProviderVaultCard({
       <div className="mt-3 flex flex-wrap gap-2">
         <Button variant="outline" size="sm" onClick={onHealthCheck} disabled={pending}>
           {pending ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> : <RefreshCw className="h-3.5 w-3.5 mr-1" />}
-          Check health
+          {t("secrets.checkHealth")}
         </Button>
         {config.provider === "aws_secrets_manager" ? (
           <Button
@@ -3852,7 +3849,7 @@ function AwsProviderVaultDiscoveryPanel({
           ) : (
             <Search className="h-3.5 w-3.5 mr-1" />
           )}
-          Find existing AWS values
+          {t("secrets.findExistingAwsValues")}
         </Button>
       </div>
 
@@ -4299,7 +4296,7 @@ function UserSecretCoverageTab({
         </div>
       </div>
       <p className="text-xs text-muted-foreground">
-        Coverage is counts only across {total} member{total === 1 ? "" : "s"}. Secret values are never shown here.
+        {t("secrets.coverageCountsOnly", { count: total })} {t("secrets.secretValuesNeverShown")}
       </p>
     </div>
   );
@@ -4309,9 +4306,9 @@ function UserSecretUsageTab({ definition }: { definition: UserSecretDefinition }
   return (
     <div className="space-y-3 text-xs text-muted-foreground">
       <div className="rounded-md border border-border bg-muted/20 p-3">
-        Bind runtime environment variables to this user-provided secret by choosing{" "}
-        <span className="font-medium text-foreground">{t("secrets.userSecret")}</span> and selecting{" "}
-        <code className="font-mono">{definition.key}</code>.
+        {t("secrets.bindRuntimeEnvVarsPrefix")}{" "}
+        <span className="font-medium text-foreground">{t("secrets.userSecret")}</span> {t("secrets.bindRuntimeEnvVarsAndSelecting")}{" "}
+        <code className="font-mono">{definition.key}</code>{t("secrets.bindRuntimeEnvVarsSuffix")}
       </div>
       {definition.usageGuidance ? (
         <div>
@@ -4603,7 +4600,7 @@ function AgentAccessSection({
               ) : (
                 <Plus className="mr-1 h-3.5 w-3.5" />
               )}
-              Add
+              {t("common.add")}
             </Button>
           </div>
           {effectiveEnvKey && !envKeyValid ? (
@@ -4674,7 +4671,7 @@ function SecretDetailsTab({
               providers.find((provider) => provider.id === secret.provider)?.supportsExternalValueWrites,
           ),
         )}{" "}
-        Paperclip never re-displays stored values.
+        {t("secrets.paperclipNeverRedisplays")}
       </div>
     </dl>
   );

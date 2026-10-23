@@ -14,7 +14,7 @@ export function ModeBadge({
   const label =
     deploymentMode === "local_trusted"
       ? t("modeBadge.localTrusted")
-      : `Authenticated ${deploymentExposure ?? "private"}`;
+      : t("modeBadge.authenticated", { exposure: deploymentExposure ?? "private" });
 
   return <Badge variant="outline">{label}</Badge>;
 }

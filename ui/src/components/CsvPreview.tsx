@@ -19,16 +19,16 @@ export function CsvPreview({ text, title }: { text: string; title: string }) {
     <div className="flex min-h-0 flex-1 flex-col bg-background">
       <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2 text-xs text-muted-foreground" role="status">
         <span className="font-medium text-foreground">{t("csvPreview.csvPreview")}</span>
-        <span>{rows.length.toLocaleString()} {rows.length === 1 ? "row" : "rows"}</span>
-        <span>{columnCount.toLocaleString()} {columnCount === 1 ? "column" : "columns"}</span>
-        {(rows.length > MAX_VISIBLE_ROWS || columnCount > MAX_VISIBLE_COLUMNS) && <span>Showing the first {Math.min(rows.length, MAX_VISIBLE_ROWS)} rows and {columns.length} columns. Download for the complete file.</span>}
+        <span>{t("csvPreview.rowCount", { count: rows.length })}</span>
+        <span>{t("csvPreview.columnCount", { count: columnCount })}</span>
+        {(rows.length > MAX_VISIBLE_ROWS || columnCount > MAX_VISIBLE_COLUMNS) && <span>{t("csvPreview.showingTheFirstNRows", { rows: Math.min(rows.length, MAX_VISIBLE_ROWS), columns: columns.length })}</span>}
       </div>
-      <div className="min-h-0 flex-1 overflow-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset" role="region" aria-label={`${title} CSV table`} tabIndex={0}>
+      <div className="min-h-0 flex-1 overflow-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset" role="region" aria-label={t("csvPreview.csvTable", { title })} tabIndex={0}>
         <table className="w-full border-collapse text-sm">
-          <caption className="sr-only">{title} — first record used as column headers</caption>
+          <caption className="sr-only">{title}{" "}{t("csvPreview.firstRecordUsedAsColumnHeaders")}</caption>
           <thead className="sticky top-0 z-10 bg-muted">
             <tr><th scope="col" className="w-10 border-b border-border px-3 py-3 text-right font-mono text-xs text-muted-foreground"><span className="sr-only">{t("csvPreview.row")}</span>#</th>
-              {columns.map((column) => <th key={column} scope="col" className="whitespace-nowrap border-b border-border px-4 py-3 text-left font-medium">{header[column] || `Column ${column + 1}`}</th>)}
+              {columns.map((column) => <th key={column} scope="col" className="whitespace-nowrap border-b border-border px-4 py-3 text-left font-medium">{header[column] || t("csvPreview.columnN", { n: column + 1 })}</th>)}
             </tr>
           </thead>
           <tbody>{rows.slice(0, MAX_VISIBLE_ROWS).map((row, index) => <tr key={index} className="even:bg-muted/30 hover:bg-accent/50">

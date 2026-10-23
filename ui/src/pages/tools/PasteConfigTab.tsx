@@ -46,7 +46,7 @@ function draftSummary(draft: McpJsonImportDraft): string {
   const keyCount = draft.credentialFields.length || draft.credentialRefs.length;
   const where = draft.transport === "local_stdio" ? t("pasteConfigTab.runsInYourWorkspace") : t("pasteConfigTab.connectsOverTheWeb");
   if (keyCount === 0) return t("pasteConfigTab.whereNoKeysNeeded", { where });
-  return `${where}  ·  needs ${keyCount} ${keyCount === 1 ? "key" : "keys"}`;
+  return t("pasteConfigTab.whereNeedsKeys", { where, count: keyCount });
 }
 
 /**
@@ -265,7 +265,7 @@ export function PasteConfigTab({ companyId }: { companyId: string }) {
         <Link to="/apps" className="text-primary hover:underline">
           {t("pasteConfigTab.browsePlannedAppConnections")}
         </Link>{" "}
-        instead.
+        {t("pasteConfigTab.instead")}
       </p>
 
       <div className="space-y-2">

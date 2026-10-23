@@ -954,7 +954,7 @@ function ConfirmationCard({
             className="text-xs font-medium leading-4 text-foreground"
           >
             {interaction.payload.rejectReasonLabel ?? t("taskChatCompactInteractionCard.whatShouldChange")}
-            {interaction.payload.rejectRequiresReason ? "" : " (optional)"}
+            {interaction.payload.rejectRequiresReason ? "" : ` ${t("secrets.optional")}`}
           </p>
           {isPlanConfirmation ? (
             <TaskChatRichInput
@@ -1218,7 +1218,7 @@ function CheckboxConfirmationCard({
             className="text-xs font-medium text-foreground"
           >
             {interaction.payload.rejectReasonLabel ?? t("taskChatCompactInteractionCard.whatShouldChange")}
-            {interaction.payload.rejectRequiresReason ? "" : " (optional)"}
+            {interaction.payload.rejectRequiresReason ? "" : ` ${t("secrets.optional")}`}
           </label>
           <Textarea
             id={`${interaction.id}-reject-reason`}
@@ -1936,7 +1936,7 @@ export function TaskChatCompactInteractionCard({
         <ConnectionIntentInteractionBody
           interaction={interaction}
           currentUserId={currentUserId}
-          addresseeLabel={addresseeLabel ?? "the addressed user"}
+          addresseeLabel={addresseeLabel ?? t("taskChatCompactInteractionCard.theAddressedUser")}
           addresseeName={interaction.addresseeUserId ? userLabelMap?.get(interaction.addresseeUserId) : undefined}
         />
     );

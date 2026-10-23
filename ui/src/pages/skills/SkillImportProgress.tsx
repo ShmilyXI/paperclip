@@ -23,7 +23,7 @@ export function SkillImportProgress({ repository, progress, found = [], importin
     : phase === 'listing' ? t("skillImportProgress.findingSkills") : t("skillImportProgress.openingRepository");
   const detail = importing ? t("skillImportProgress.checkingPackageFilesAndSaving")
     : checking ? t("skillImportProgress.checkedOfTotal", { checked: progress?.checkedSkills ?? 0, total })
-    : phase === 'downloading' ? download ? `${download.percent}% ${download.stage === 'resolving' ? 'prepared' : 'received'}${download.receivedBytes ? ` · ${formatBytes(download.receivedBytes)}` : ''}` : t("skillImportProgress.receivingTheRepositoryFromGithub")
+    : phase === 'downloading' ? download ? `${download.percent}% ${download.stage === 'resolving' ? t("skillImportProgress.downloadPrepared") : t("skillImportProgress.downloadReceived")}${download.receivedBytes ? ` · ${formatBytes(download.receivedBytes)}` : ''}` : t("skillImportProgress.receivingTheRepositoryFromGithub")
     : phase === 'listing' ? t("skillImportProgress.searchingEveryFolderForSkill") : t("skillImportProgress.connectingToGithubAndResolving");
   const recent = found.slice(-5);
   return <section className="skill-import-enter flex min-w-0 flex-col gap-5" aria-label={importing ? t("skillImportProgress.importProgress") : t("skillImportProgress.repositoryScanProgress")}>
@@ -39,26 +39,26 @@ export function SkillImportProgress({ repository, progress, found = [], importin
           <p className="mt-0.5 text-xs text-muted-foreground">{detail}</p>
         </div>
       </div>
-      {!importing && download ? <progress className="skill-import-progress h-1 w-full" value={download.percent} max={100} aria-label={download.stage === 'resolving' ? t("skillImportProgress.preparingRepository") : 'Repository download'} /> : checking && total > 0
+      {!importing && download ? <progress className="skill-import-progress h-1 w-full" value={download.percent} max={100} aria-label={download.stage === 'resolving' ? t("skillImportProgress.preparingRepository") : t("skillImportProgress.repositoryDownload")} /> : checking && total > 0
         ? <progress className="skill-import-progress h-1 w-full" value={progress?.checkedSkills ?? 0} max={total} aria-label={t("skillImportProgress.skillsChecked")} />
-        : <div className="h-1 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label={importing ? 'Saving skill snapshots' : 'Scanning repository'}><div className="skill-import-sweep h-full rounded-full bg-foreground/30" /></div>}
+        : <div className="h-1 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label={importing ? t("skillImportProgress.savingSkillSnapshots") : t("skillImportProgress.scanningRepository")}><div className="skill-import-sweep h-full rounded-full bg-foreground/30" /></div>}
       {!importing && <ol className="flex items-center justify-between gap-2 text-xs text-muted-foreground" aria-label={t("skillImportProgress.scanStages")}>
-        {[t("common.download"), 'Find skills', 'Check files'].map((label, index) => <li key={label} className={`flex items-center gap-1.5 ${index === step ? 'text-foreground' : ''}`} aria-current={index === step ? 'step' : undefined}>
+        {[t("common.download"), t("skillImportProgress.findSkills"), t("skillImportProgress.checkFiles")].map((label, index) => <li key={label} className={`flex items-center gap-1.5 ${index === step ? 'text-foreground' : ''}`} aria-current={index === step ? 'step' : undefined}>
           {index < step ? <Check className="size-3" aria-hidden /> : <span className={`size-1.5 rounded-full ${index === step ? 'bg-foreground motion-safe:animate-pulse' : 'bg-muted-foreground/40'}`} />}{label}
         </li>)}
       </ol>}
     </div>
     <div className="overflow-hidden rounded-lg border border-border bg-muted/20">
       <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2 text-xs text-muted-foreground">
-        <span>{importing ? 'Selected skills' : 'Recently checked'}</span>
-        {recent.length > 0 && <span className="tabular-nums">{importing ? `${count} selected` : `${progress?.checkedSkills ?? found.length} checked`}</span>}
+        <span>{importing ? t("skillImportProgress.selectedSkills") : t("skillImportProgress.recentlyChecked")}</span>
+        {recent.length > 0 && <span className="tabular-nums">{importing ? t("skillImportProgress.selectedCount", { count }) : t("skillImportProgress.checkedCount", { count: progress?.checkedSkills ?? found.length })}</span>}
       </div>
-      {recent.length > 0 ? <ul className="divide-y divide-border" aria-label={importing ? 'Skills being imported' : 'Skills checked so far'}>
+      {recent.length > 0 ? <ul className="divide-y divide-border" aria-label={importing ? t("skillImportProgress.skillsBeingImported") : t("skillImportProgress.skillsCheckedSoFar")}>
         {recent.map(skill => <li key={skill.path} className="skill-import-enter flex min-w-0 items-center gap-2.5 px-3 py-2.5">
           {skill.error ? <AlertCircle className="size-4 shrink-0 text-destructive" aria-label={t("skillImportProgress.validationIssue")} />
             : importing ? <FileText className="size-4 shrink-0 text-muted-foreground" aria-hidden /> : <Check className="size-4 shrink-0 text-muted-foreground" aria-hidden />}
           <div className="min-w-0 flex-1">
-            <div className="flex min-w-0 items-baseline gap-2"><span className="truncate text-sm font-medium">{skill.name}</span><span className="shrink-0 text-xs text-muted-foreground">{skill.fileCount} {skill.fileCount === 1 ? 'file' : 'files'}</span></div>
+            <div className="flex min-w-0 items-baseline gap-2"><span className="truncate text-sm font-medium">{skill.name}</span><span className="shrink-0 text-xs text-muted-foreground">{t("skillImportProgress.fileCount", { count: skill.fileCount })}</span></div>
             <p className={`truncate text-xs ${skill.error ? 'text-destructive' : 'text-muted-foreground'}`} title={skill.error ?? skill.path}>{skill.error ?? skill.path}</p>
           </div>
         </li>)}
@@ -67,10 +67,10 @@ export function SkillImportProgress({ repository, progress, found = [], importin
       </div>}
       <div className="flex min-w-0 items-center gap-2 border-t border-border px-3 py-2 text-xs text-muted-foreground">
         <LoaderCircle className="size-3 shrink-0 motion-safe:animate-spin" aria-hidden />
-        <span className="min-w-0 flex-1 truncate" title={progress?.currentPath ?? undefined}>{importing ? 'Saving complete packages, including scripts and references' : progress?.currentPath ?? 'Waiting for repository contents…'}</span>
-        {checking && progress?.totalFiles != null && <span className="shrink-0 tabular-nums">{progress.checkedFiles}/{progress.totalFiles} files</span>}
+        <span className="min-w-0 flex-1 truncate" title={progress?.currentPath ?? undefined}>{importing ? t("skillImportProgress.savingCompletePackages") : progress?.currentPath ?? t("skillImportProgress.waitingForRepositoryContents")}</span>
+        {checking && progress?.totalFiles != null && <span className="shrink-0 tabular-nums">{t("skillImportProgress.filesProgress", { checked: progress.checkedFiles, total: progress.totalFiles })}</span>}
       </div>
     </div>
-    <p className="text-xs text-muted-foreground">{importing ? 'This may take a moment for larger packages.' : 'You’ll choose what to import after every package has been checked.'}</p>
+    <p className="text-xs text-muted-foreground">{importing ? t("skillImportProgress.thisMayTakeAMoment") : t("skillImportProgress.youllChooseWhatToImport")}</p>
   </section>;
 }

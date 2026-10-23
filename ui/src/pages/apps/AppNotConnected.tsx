@@ -76,7 +76,7 @@ export function AppNotConnected() {
     enabled: !!previousConnection && !!activeTab,
   });
 
-  const appName = application?.name ?? "App";
+  const appName = application?.name ?? t("appNotConnected.app");
   useEffect(() => {
     if (!activeTab) return;
     setBreadcrumbs([
@@ -260,7 +260,7 @@ function ConnectionCallout({
         ) : null}
       </div>
       {!previousConnection || canReconnect ? (
-        <Button onClick={onConnect}>{previousConnection ? "Reconnect" : t("common.connect")}</Button>
+        <Button onClick={onConnect}>{previousConnection ? t("common.reconnect") : t("common.connect")}</Button>
       ) : null}
     </section>
   );

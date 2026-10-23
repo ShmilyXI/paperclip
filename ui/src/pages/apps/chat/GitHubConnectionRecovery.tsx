@@ -88,7 +88,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, onConnect, onExit }: {
       </div>
       <div className="space-y-2">
         <CredentialLabel id="github-app-id" label="App ID" help={t("gitHubConnectionRecovery.theNumericAppIdOnTheGithubAppSSettingsPageThisIsDifferentFromItsClientIdOrInstallationId")} />
-        <p id="github-app-id-help" className="text-sm text-muted-foreground">{t("common.copy")} <strong>App ID</strong> from the App’s settings page. {reconnect && t("gitHubConnectionRecovery.theSavedIdIsFilledInWhenAvailable")}</p>
+        <p id="github-app-id-help" className="text-sm text-muted-foreground">{t("common.copy")} <strong>App ID</strong> {t("gitHubConnectionRecovery.fromTheAppSSettingsPage")} {reconnect && t("gitHubConnectionRecovery.theSavedIdIsFilledInWhenAvailable")}</p>
         <Input id="github-app-id" aria-describedby="github-app-id-help" inputMode="numeric" value={credentials.appId} disabled={pending} aria-invalid={appIdInvalid} onChange={event => setCredentials({ ...credentials, appId: event.target.value })} />
         {appIdInvalid && <p role="alert" className="text-sm text-destructive">{t("gitHubConnectionRecovery.useTheNumericAppId")}</p>}
       </div>

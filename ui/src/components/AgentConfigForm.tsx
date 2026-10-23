@@ -1642,7 +1642,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             >
               {kubernetesEnvironment ? (
                 <div className={cn(inputClass, "flex items-center text-muted-foreground")}>
-                  {kubernetesEnvironment.name} · Kubernetes sandbox
+                  {t("agentConfig.kubernetesSandboxNamed", { name: kubernetesEnvironment.name })}
                 </div>
               ) : (
                 <div className="rounded-md border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
@@ -1912,7 +1912,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 && currentDefaultEnvironment
                 && currentDefaultEnvironment.driver !== "local" && (
                 <p className="text-xs text-muted-foreground">
-                  Live OpenCode model discovery only runs for Local environments. Using the curated list and manual entry for {currentDefaultEnvironment.name}.
+                  {t("agentConfig.liveOpencodeDiscoveryOnlyLocal", { name: currentDefaultEnvironment.name })}
                 </p>
               )}
 
@@ -2494,7 +2494,7 @@ export function AdapterLoginPanel(props: AdapterLoginPanelProps) {
 
 class AdapterLoginConflictError extends Error {
   constructor(readonly sessionId: string) {
-    super("Another sign-in attempt is active. Finish or cancel that attempt before starting a new sign-in.");
+    super(t("agentConfig.anotherSignInAttemptIsActive"));
   }
 }
 
@@ -2690,7 +2690,7 @@ function DisplayedCodeLoginPanel({
       setStartError(null);
       await activeSessionQuery.refetch();
     },
-    onError: () => setStartError("Could not cancel the previous sign-in. Retry before starting a new one."),
+    onError: () => setStartError(t("agentConfig.couldNotCancelThePreviousSignIn")),
   });
   const startLoginRef = useRef(startLogin.mutate);
   startLoginRef.current = startLogin.mutate;

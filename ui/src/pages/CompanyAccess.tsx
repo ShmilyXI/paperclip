@@ -439,7 +439,7 @@ export function CompanyAccess() {
           <DialogHeader>
             <DialogTitle>{t("access.editMember")}</DialogTitle>
             <DialogDescription>
-              Update organization role and membership status for {editingMember?.user?.name || editingMember?.user?.email || editingMember?.principalId}.
+              {t("access.updateOrgRoleFor", { name: editingMember?.user?.name || editingMember?.user?.email || editingMember?.principalId })}
             </DialogDescription>
           </DialogHeader>
           {editingMember && (
@@ -505,7 +505,7 @@ export function CompanyAccess() {
           <DialogHeader>
             <DialogTitle>{t("access.removeMember")}</DialogTitle>
             <DialogDescription>
-              Archive {memberDisplayName(removingMember)} and move active assignments before hiding this user from assignment fields.
+              {t("access.archiveAndMoveAssignments", { name: memberDisplayName(removingMember) })}
             </DialogDescription>
           </DialogHeader>
           {removingMember && (

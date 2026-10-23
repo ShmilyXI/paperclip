@@ -283,7 +283,7 @@ export function UserProfile() {
   const metaParts = [
     data.user.membershipRole ?? "member",
     data.user.membershipStatus,
-    `joined ${formatDate(data.user.joinedAt)}`,
+    t("userProfile.joined", { date: formatDate(data.user.joinedAt) }),
   ];
 
   return (
@@ -317,9 +317,9 @@ export function UserProfile() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <HeroStat label={t("userProfile.allTimeTokens")} value={formatTokens(allTimeTokens)} hint={t("userProfile.amountSpent", { amount: formatCents(allTime?.costCents ?? 0) })} />
-          <HeroStat label={t("userProfile.completed")} value={formatNumber(allTime?.completedIssues ?? 0)} hint={allTime ? `${completionRate(allTime)} rate` : undefined} />
-          <HeroStat label={t("userProfile.openAssigned")} value={formatNumber(allTime?.assignedOpenIssues ?? 0)} hint={`${formatNumber(allTime?.createdIssues ?? 0)} created`} />
-          <HeroStat label={t("userProfile.n7DayActions")} value={formatNumber(last7?.activityCount ?? 0)} hint={`${formatNumber(last7?.commentCount ?? 0)} comments`} />
+          <HeroStat label={t("userProfile.completed")} value={formatNumber(allTime?.completedIssues ?? 0)} hint={allTime ? t("userProfile.completionRateHint", { rate: completionRate(allTime) }) : undefined} />
+          <HeroStat label={t("userProfile.openAssigned")} value={formatNumber(allTime?.assignedOpenIssues ?? 0)} hint={t("userProfile.tasksCreatedHint", { number: formatNumber(allTime?.createdIssues ?? 0) })} />
+          <HeroStat label={t("userProfile.n7DayActions")} value={formatNumber(last7?.activityCount ?? 0)} hint={t("userProfile.commentsHint", { number: formatNumber(last7?.commentCount ?? 0) })} />
         </div>
       </section>
 

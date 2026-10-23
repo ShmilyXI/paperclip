@@ -20,7 +20,7 @@ export function GoogleWorkspaceServiceFields({ value, onChange }: {
         <label htmlFor={`workspace-service-${group.id}`} className="text-sm font-medium">{group.name}</label>
         {"description" in group && <p className="text-xs text-muted-foreground">{group.description}</p>}
       </div>
-      <NativeSelect aria-label={`${group.name} access`} disabled={!value[group.id]} value={value[group.id] ?? "write"}
+      <NativeSelect aria-label={t("googleWorkspaceServices.serviceAccess", { name: group.name })} disabled={!value[group.id]} value={value[group.id] ?? "write"}
         className="w-auto shrink-0 disabled:opacity-50"
         onChange={event => onChange({ ...value, [group.id]: event.target.value as "read" | "write" })}>
         <option value="read">{t("googleWorkspaceServices.readOnly")}</option><option value="write">{t("googleWorkspaceServices.readWrite")}</option>

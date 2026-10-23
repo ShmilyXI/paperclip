@@ -59,7 +59,7 @@ export function AggregatorConnectDialog({ app, connections, initialProvider, onC
           <span className="text-xs text-muted-foreground">{t("aggregatorConnectDialog.continue")}</span>
         </button>;
       })}</div> : <div className="space-y-4">
-        {selected.provider !== "composio" ? <div className="space-y-2"><Label htmlFor="aggregator-account">{provider!.name} account</Label>
+        {selected.provider !== "composio" ? <div className="space-y-2"><Label htmlFor="aggregator-account">{t("aggregatorConnectDialog.providerAccount", { provider: provider!.name })}</Label>
           <select id="aggregator-account" value={account?.id ?? ""} onChange={event => setSelectedAccountId(event.target.value)} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
             {existing.map(connection => <option key={connection.id} value={connection.id}>{connection.name}</option>)}
           </select>

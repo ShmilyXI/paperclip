@@ -258,7 +258,7 @@ function AuditRow({
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             {showOnBehalf && responsibleLabel ? (
               <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5">
-                on behalf of {responsibleLabel}
+                {t("audit.onBehalfOf", { name: responsibleLabel })}
               </span>
             ) : null}
             {record.runId && record.agentId ? (
@@ -293,11 +293,9 @@ function AuditUpsell() {
         <div>
           <p className="text-sm font-medium text-foreground">{t("audit.agentAuditIsAPaperclip")}</p>
           <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-            The agent audit log gives you a searchable, exportable record of everything your agents
-            did — every comment, task change, approval, and run — with the responsible person for
-            each action. Ask an administrator to grant you the{" "}
+            {t("audit.auditLogExplainer")}{" "}
             <span className="font-mono text-(length:--text-micro)">audit:view_agent_actions</span>{" "}
-            permission to view it.
+            {t("audit.auditLogPermissionSuffix")}
           </p>
         </div>
       </CardContent>

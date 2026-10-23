@@ -393,7 +393,7 @@ export function FrontmatterPanel({
           {present && effectiveMode === "fields" && warningCount > 0 ? (
             <Badge variant="outline" className="gap-1 text-amber-500" data-testid="frontmatter-warning-chip">
               <AlertTriangle className="h-3.5 w-3.5" />
-              {warningCount} {warningCount === 1 ? "issue" : "issues"}
+              {t("frontmatterPanel.warningCountIssues", { count: warningCount })}
             </Badge>
           ) : null}
         </div>

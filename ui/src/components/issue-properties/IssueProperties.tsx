@@ -1174,7 +1174,7 @@ export function IssueProperties({
         </span>
       ) : null}
       {issue.watchdog.status === "disabled" ? (
-        <span className="shrink-0 text-xs text-muted-foreground">(disabled)</span>
+        <span className="shrink-0 text-xs text-muted-foreground">{t("issueProps.watchdogDisabled")}</span>
       ) : null}
     </span>
   ) : (
@@ -1227,7 +1227,7 @@ export function IssueProperties({
       </div>
       <div className="space-y-1.5">
         <div className="text-xs font-medium text-foreground">
-          {t("common.instructions")} <span className="font-normal text-muted-foreground">(optional)</span>
+          {t("common.instructions")} <span className="font-normal text-muted-foreground">{t("secrets.optional")}</span>
         </div>
         <Textarea
           value={watchdogInstructionsInput}
@@ -1239,7 +1239,7 @@ export function IssueProperties({
       </div>
       {watchdogIssueRef ? (
         <div className="text-xs text-muted-foreground">
-          Watchdog task:{" "}
+          {t("issueProps.watchdogTask")}{" "}
           <Link to={`/issues/${watchdogIssueRef.id}`} className="text-primary hover:underline">
             {watchdogIssueRef.identifier ?? t("issueProperties.viewTask")}
           </Link>
@@ -1647,7 +1647,7 @@ export function IssueProperties({
       ))}
       {selectedIssueLabels.length > 3 && (
         <Badge variant="outline" className="border-border text-muted-foreground">
-          +{selectedIssueLabels.length - 3} more
+          {t("common.moreCount", { count: selectedIssueLabels.length - 3 })}
         </Badge>
       )}
     </div>
@@ -2063,7 +2063,7 @@ export function IssueProperties({
       ))}
       {blockedByRelations.length > 2 ? (
         <Badge asChild variant="outline" className="border-border text-muted-foreground hover:bg-accent/50">
-          <button type="button" onClick={() => setBlockedByOpen(true)}>+{blockedByRelations.length - 2} more</button>
+          <button type="button" onClick={() => setBlockedByOpen(true)}>{t("common.moreCount", { count: blockedByRelations.length - 2 })}</button>
         </Badge>
       ) : null}
     </div>
@@ -2077,7 +2077,7 @@ export function IssueProperties({
       ))}
       {childIssues.length > 2 ? (
         <Badge asChild variant="outline" className="border-border text-muted-foreground hover:bg-accent/50">
-          <button type="button" onClick={() => setSubtasksOpen(true)}>+{childIssues.length - 2} more</button>
+          <button type="button" onClick={() => setSubtasksOpen(true)}>{t("common.moreCount", { count: childIssues.length - 2 })}</button>
         </Badge>
       ) : null}
     </div>
@@ -3177,7 +3177,7 @@ export function IssueProperties({
               <button
                 type="button"
                 className="absolute right-2.5 top-1/2 z-20 inline-flex size-5 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-(length:--rad-3) focus-visible:ring-ring group-hover/pane-tab:opacity-100 group-focus-within/pane-tab:opacity-100"
-                aria-label={`Close ${tab.label} tab`}
+                aria-label={t("issueProps.closeTab", { label: tab.label })}
                 onPointerDown={(event) => {
                   event.preventDefault();
                   event.stopPropagation();

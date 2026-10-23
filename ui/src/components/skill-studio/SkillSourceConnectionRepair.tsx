@@ -46,12 +46,12 @@ export function SkillSourceConnectionRepair({ companyId, source, onClose, onSave
       {query.isSuccess && connections.length === 0 && <p className="text-sm text-muted-foreground">{t("skillSourceConnectionRepair.connectGithubToContinue")}</p>}
       <Button asChild variant="link" className="justify-start p-0"><Link to="/apps">{t("skillSourceConnectionRepair.manageGithubConnections")}</Link></Button>
       {save.error && <p role="alert" className="text-sm text-destructive">{save.error instanceof ApiError && save.error.status === 409 && (save.error.body as { code?: string } | null)?.code === 'skill_source_settings_changed'
-        ? 'This source was updated. Your connection is still selected. Save again to apply it.' : save.error.message}</p>}
+        ? t("skillSourceConnectionRepair.sourceUpdatedSaveAgain") : save.error.message}</p>}
       {branchMissing && source.accessScope !== 'projects' && !source.projects?.some(project => project.active) && <Button variant="outline" disabled={!canSave || save.isPending} onClick={() => setChooseBranch(true)}>{t("skillSourceConnectionRepair.chooseANewBranch")}</Button>}
       </div>
       <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-border pt-4">
         <Button variant="ghost" disabled={save.isPending} onClick={onClose}>{t("common.cancel")}</Button>
-        <Button disabled={!canSave || save.isPending} onClick={() => save.mutate()}>{save.isPending ? t("common.saving2") : 'Save connection'}</Button>
+        <Button disabled={!canSave || save.isPending} onClick={() => save.mutate()}>{save.isPending ? t("common.saving2") : t("skillSourceConnectionRepair.saveConnection")}</Button>
       </footer>
     </DialogContent>
   </Dialog>;

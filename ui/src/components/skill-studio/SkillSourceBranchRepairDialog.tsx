@@ -24,7 +24,7 @@ export function SkillSourceBranchRepairDialog({ repository, currentBranch, branc
   async function save() {
     setPending(true); setError(null);
     try { await onSave(branch); onClose(); }
-    catch (problem) { setError(problem instanceof Error ? problem.message : 'Could not change the branch. Try again.'); }
+    catch (problem) { setError(problem instanceof Error ? problem.message : t("skillSourceBranchRepairDialog.couldNotChangeBranch")); }
     finally { setPending(false); }
   }
   return <Dialog open onOpenChange={open => { if (!open && !pending) onClose(); }}>
@@ -32,7 +32,7 @@ export function SkillSourceBranchRepairDialog({ repository, currentBranch, branc
       onCloseAutoFocus={event => { if (onReturnFocus) { event.preventDefault(); onReturnFocus(); } }}>
       <DialogHeader>
         <DialogTitle ref={title} tabIndex={-1} className="outline-none">{t("skillSourceBranchRepairDialog.chooseANewBranch")}</DialogTitle>
-        <DialogDescription className="break-words">{repository} · Currently tracking {currentBranch === 'HEAD' ? 'the default branch' : currentBranch}</DialogDescription>
+        <DialogDescription className="break-words">{repository} · {t("skillSourceBranchRepairDialog.currentlyTracking")} {currentBranch === 'HEAD' ? t("skillSourceBranchRepairDialog.theDefaultBranch") : currentBranch}</DialogDescription>
       </DialogHeader>
       <form className="flex min-w-0 flex-col gap-4" onSubmit={event => { event.preventDefault(); if (branch && !pending) void save(); }}>
         <RepositoryBranchSelect value={branch} branches={branches} loading={loading} error={loadError} disabled={pending}

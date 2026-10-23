@@ -395,7 +395,7 @@ function createRunCancelledStatusUpdateError(
 ): StopAndFinalizeRunError {
   const message =
     err instanceof Error
-      ? `Run was stopped, but updating the task failed: ${err.message}`
+      ? t("issueDetail.runWasStoppedButUpdatingDetail", { detail: err.message })
       : t("issueDetail.runWasStoppedButUpdating");
   const error = new Error(message) as StopAndFinalizeRunError;
   error.runCancelledBeforeStatusUpdateFailed = true;
@@ -1017,7 +1017,7 @@ function IssueDetailLoadingState({
                 <Badge
                   variant="outline"
                   className="border-violet-500/30 bg-violet-500/10 text-(length:--text-nano) text-violet-600 dark:text-violet-400"
-                  title={`Routine execution from routine ${headerSeed.originId}`}
+                  title={t("issueDetail.routineExecutionFromRoutineId", { originId: headerSeed.originId })}
                 >
                   <Repeat className="h-3 w-3" />
                   {t("common.routine")}
@@ -2912,8 +2912,8 @@ function IssueDetailActivityTab({
                   <span>
                     Tokens {formatTokens(issueCostSummary.totalTokens)}
                     {issueCostSummary.cached > 0
-                      ? ` (in ${formatTokens(issueCostSummary.input)}, out ${formatTokens(issueCostSummary.output)}, cached ${formatTokens(issueCostSummary.cached)})`
-                      : ` (in ${formatTokens(issueCostSummary.input)}, out ${formatTokens(issueCostSummary.output)})`}
+                      ? t("issueDetail.costBreakdownWithCache", { input: formatTokens(issueCostSummary.input), output: formatTokens(issueCostSummary.output), cached: formatTokens(issueCostSummary.cached) })
+                      : t("issueDetail.costBreakdown", { input: formatTokens(issueCostSummary.input), output: formatTokens(issueCostSummary.output) })}
                   </span>
                 ) : null}
                 {issueCostSummary.hasRuntime ? (
@@ -2945,8 +2945,8 @@ function IssueDetailActivityTab({
                   <span>
                     Tokens {formatTokens(issueTreeCostTokens)}
                     {issueTreeCostSummary.cachedInputTokens > 0
-                      ? ` (in ${formatTokens(issueTreeCostSummary.inputTokens)}, out ${formatTokens(issueTreeCostSummary.outputTokens)}, cached ${formatTokens(issueTreeCostSummary.cachedInputTokens)})`
-                      : ` (in ${formatTokens(issueTreeCostSummary.inputTokens)}, out ${formatTokens(issueTreeCostSummary.outputTokens)})`}
+                      ? t("issueDetail.costBreakdownWithCache", { input: formatTokens(issueTreeCostSummary.inputTokens), output: formatTokens(issueTreeCostSummary.outputTokens), cached: formatTokens(issueTreeCostSummary.cachedInputTokens) })
+                      : t("issueDetail.costBreakdown", { input: formatTokens(issueTreeCostSummary.inputTokens), output: formatTokens(issueTreeCostSummary.outputTokens) })}
                   </span>
                   {issueTreeCostSummary.runCount > 0 ? (
                     <span>
@@ -4493,7 +4493,10 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     onSuccess: (result) => {
       if (result.kind === "release" && result.hold.wakeFailures?.length) {
         setTreeControlWakeWarning(
-          `Pause released, but ${result.hold.wakeFailures.length} ${result.hold.wakeFailures.length === 1 ? "task" : "tasks"} could not start. ${result.hold.wakeFailures[0].message} Check the affected agents and try starting them again.`,
+          t("issueDetail.pauseReleasedButSomeTasksCouldNotStart", {
+            count: result.hold.wakeFailures.length,
+            message: result.hold.wakeFailures[0].message,
+          }),
         );
       }
       setTreeControlOpen(false);
@@ -6806,9 +6809,9 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       const descriptionLines = [
         t("issueDetail.reIssuedFromSourcelabelOn", { sourceLabel }),
         "",
-        `- Base ref (live branch): \`${request.baseRef}\``,
+        t("issueDetail.baseRefLiveBranch", { baseRef: request.baseRef }),
         ...(request.expectedBranch
-          ? [`- Recorded branch: \`${request.expectedBranch}\``]
+          ? [t("issueDetail.recordedBranch", { expectedBranch: request.expectedBranch })]
           : []),
         "",
         "---",
@@ -7321,7 +7324,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
           <Link
             to={`/routines/${issue.originId}`}
             className="inline-flex items-center gap-1 rounded-full bg-violet-500/10 border border-violet-500/30 px-2 py-0.5 text-(length:--text-nano) font-medium text-violet-600 dark:text-violet-400 shrink-0 hover:bg-violet-500/20 transition-colors"
-            title={`Routine execution from routine ${issue.originId}`}
+            title={t("issueDetail.routineExecutionFromRoutineId", { originId: issue.originId })}
           >
             <Repeat className="h-3 w-3" />
             {t("common.routine")}
@@ -7355,7 +7358,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                     "text-(length:--text-nano)",
                     workModeMeta.classes.badge,
                   )}
-                  title={`This task is in ${workModeMeta.label.toLowerCase()}.`}
+                  title={t("issueDetail.thisTaskIsInState", { state: workModeMeta.label.toLowerCase() })}
                 >
                   <WorkModeIcon className="h-3 w-3" aria-hidden />
                   {workModeMeta.label}

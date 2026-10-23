@@ -18,8 +18,8 @@ export function subscriptionMoney(cents: string, currency: string) {
 
 export function SubscriptionTokenUsage({ usage }: { usage: SubscriptionUsage }) {
   return <span className="font-mono text-xs text-muted-foreground">
-    {formatTokens(usage.inputTokens + usage.cachedInputTokens)} in · {formatTokens(usage.outputTokens)} out
-    {usage.cachedInputTokens > 0 && <span className="block">{formatTokens(usage.cachedInputTokens)} input cached</span>}
+    {t("subscriptionCostCard.tokensIn", { amount: formatTokens(usage.inputTokens + usage.cachedInputTokens) })} · {t("subscriptionCostCard.tokensOut", { amount: formatTokens(usage.outputTokens) })}
+    {usage.cachedInputTokens > 0 && <span className="block">{t("subscriptionCostCard.inputCached", { amount: formatTokens(usage.cachedInputTokens) })}</span>}
   </span>;
 }
 
@@ -99,7 +99,7 @@ export function SubscriptionCostCard({ companyId, report, error, onChanged }: {
           {report?.accounts.map(account => <div key={account.id} className="space-y-2 border-b border-border pb-4 last:border-0">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div><div className="font-medium">{account.name}</div><div className="text-xs text-muted-foreground">{account.shared ? t("subscriptionCostCard.shared") : account.ownerName ?? (account.ownerUserId ? t("subscriptionCostCard.accountOwner") : t("subscriptionCostCard.personalAccounts"))} · {providerDisplayName(account.provider)} · {account.price.plan}</div></div>
-              <div className="text-right"><div className="font-mono">{account.price.status !== "active" ? account.price.status === "ended" ? t("subscriptionCostCard.ended") : t("subscriptionCostCard.excluded") : account.price.monthlyCents == null ? t("subscriptionCostCard.priceUnknown") : `${subscriptionMoney(account.price.monthlyCents, account.price.currency)}/month`}</div><div className="text-xs text-muted-foreground">{account.price.source === "catalog" ? t("subscriptionCostCard.estimatedBeforeTax") : account.price.source === "user" ? t("subscriptionCostCard.userSupplied") : ""}{account.price.cadence === "year" ? t("subscriptionCostCard.annualPaymentDividedBy12") : ""}</div></div>
+              <div className="text-right"><div className="font-mono">{account.price.status !== "active" ? account.price.status === "ended" ? t("subscriptionCostCard.ended") : t("subscriptionCostCard.excluded") : account.price.monthlyCents == null ? t("subscriptionCostCard.priceUnknown") : t("subscriptionCostCard.perMonth", { amount: subscriptionMoney(account.price.monthlyCents, account.price.currency) })}</div><div className="text-xs text-muted-foreground">{account.price.source === "catalog" ? t("subscriptionCostCard.estimatedBeforeTax") : account.price.source === "user" ? t("subscriptionCostCard.userSupplied") : ""}{account.price.cadence === "year" ? t("subscriptionCostCard.annualPaymentDividedBy12") : ""}</div></div>
             </div>
             <SubscriptionTokenUsage usage={account.usage} />
             {Number(account.usage.costCents) > 0 && <div className="text-xs text-muted-foreground">{t("subscriptionCostCard.recordedUsageCharges", { amount: formatCents(Number(account.usage.costCents)) })}</div>}

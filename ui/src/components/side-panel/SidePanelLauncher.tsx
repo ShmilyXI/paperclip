@@ -38,7 +38,7 @@ function LauncherContent({
 }: Pick<SidePanelLauncherProps, "sections" | "onSelect" | "placeholder" | "emptyMessage"> & { panel: boolean }) {
   return (
     <Command className={cn(panel && "border border-border shadow-sm")}>
-      <CommandInput placeholder={placeholder} aria-label={placeholder} />
+      <CommandInput placeholder={placeholder} aria-label={placeholder} data-side-panel-search="" />
       <CommandList className={cn(panel && "max-h-none flex-1")}>
         <CommandEmpty>{emptyMessage}</CommandEmpty>
         {sections.map((section, sectionIndex) => (
@@ -94,10 +94,10 @@ export function SidePanelLauncher({
   trigger,
   open: controlledOpen,
   onOpenChange,
-  title = "Open a side panel tab",
-  description = "Choose a view or resource to open.",
-  placeholder = "Search tabs and resources…",
-  emptyMessage = "No matching tabs or resources.",
+  title = t("sidePanelLauncher.openASidePanelTab"),
+  description = t("sidePanelLauncher.chooseAViewOrResourceToOpen"),
+  placeholder = t("sidePanelLauncher.searchTabsAndResources"),
+  emptyMessage = t("sidePanelLauncher.noMatchingTabsOrResources"),
   className,
 }: SidePanelLauncherProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);

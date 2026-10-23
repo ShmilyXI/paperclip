@@ -634,7 +634,7 @@ export function ProjectWorkspaceDetail() {
               <details className="rounded-xl border border-dashed border-border/70 bg-background px-3 py-3">
                 <summary className="cursor-pointer text-sm font-medium">{t("projectWorkspace.advancedRuntimeJson")}</summary>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Paperclip derives Services and Jobs from this JSON. Prefer editing named commands first; use raw JSON for advanced lifecycle, port, readiness, or environment settings.
+                  {t("projectWorkspaceDetail.paperclipDerivesServicesAndJobs")}
                 </p>
                 <div className="mt-3">
                   <Field label={t("projectWorkspace.workspaceCommandsJson")} hint={t("projectWorkspaceDetail.executionWorkspacesInheritThisConfig")}>

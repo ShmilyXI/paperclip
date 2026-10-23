@@ -92,12 +92,12 @@ export function IssuePlanDecompositionsSection({
               <div className="flex flex-wrap items-center gap-2">
                 <StatusBadge status={record.status} />
                 <span className="text-xs text-muted-foreground">
-                  Plan {revisionLabel}
+                  {t("issuePlanDecompositionsSection.plan")}{" "}{revisionLabel}
                 </span>
                 <span className="text-xs text-muted-foreground/70">·</span>
                 <span className="inline-flex items-center gap-1 text-xs text-foreground">
                   <GitBranch className="h-3 w-3 text-muted-foreground" />
-                  {created} of {requested} child {requested === 1 ? "task" : "tasks"} created
+                  {t("issuePlanDecompositionsSection.createdOfRequested", { count: requested, created, requested })}
                 </span>
                 {record.status === "completed" && requested > 0 ? (
                   <span
@@ -111,14 +111,14 @@ export function IssuePlanDecompositionsSection({
               </div>
 
               <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-(length:--text-micro) text-muted-foreground">
-                {ownerName ? <span>Owner: {ownerName}</span> : null}
+                {ownerName ? <span>{t("issuePlanDecompositionsSection.owner")}{" "}{ownerName}</span> : null}
                 {startedAt ? (
-                  <span title={formatDateTime(startedAt)}>Started {relativeTime(startedAt)}</span>
+                  <span title={formatDateTime(startedAt)}>{t("common.started")}{" "}{relativeTime(startedAt)}</span>
                 ) : null}
                 {completedAt ? (
-                  <span title={formatDateTime(completedAt)}>Completed {relativeTime(completedAt)}</span>
+                  <span title={formatDateTime(completedAt)}>{t("issuePlanDecompositionsSection.completed")}{" "}{relativeTime(completedAt)}</span>
                 ) : updatedAt ? (
-                  <span title={formatDateTime(updatedAt)}>Updated {relativeTime(updatedAt)}</span>
+                  <span title={formatDateTime(updatedAt)}>{t("common.updated")}{" "}{relativeTime(updatedAt)}</span>
                 ) : null}
                 {issueIdentifier ? (
                   <Link

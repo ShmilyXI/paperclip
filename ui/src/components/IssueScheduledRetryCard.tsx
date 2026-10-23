@@ -116,7 +116,7 @@ export function IssueScheduledRetryCard({
           ) : null}
           {scheduledRetry.error ? (
             <div className="mt-1 text-xs text-muted-foreground">
-              Last attempt failed: {scheduledRetry.error}{/[.!?]$/.test(scheduledRetry.error.trim()) ? "" : "."} Paperclip will retry automatically.
+              {t("issueScheduledRetryCard.lastAttemptFailed")} {scheduledRetry.error}{/[.!?]$/.test(scheduledRetry.error.trim()) ? "" : "."} {t("issueScheduledRetryCard.paperclipWillRetry")}
             </div>
           ) : null}
           {isError ? (

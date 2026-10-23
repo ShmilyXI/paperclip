@@ -353,7 +353,7 @@ export function Connections() {
 
           <div className="flex flex-wrap items-center gap-2">
             <FilterChip active={filter === "all"} onClick={() => setFilter("all")}>
-              All ({rows.length})
+              {t("connections.allCount", { count: rows.length })}
             </FilterChip>
             <FilterChip
               active={filter === "attention"}
@@ -361,7 +361,7 @@ export function Connections() {
               disabled={rowsNeedingAttention.length === 0}
               onClick={() => setFilter("attention")}
             >
-              Needs attention ({rowsNeedingAttention.length})
+              {t("connections.needsAttentionCount", { count: rowsNeedingAttention.length })}
             </FilterChip>
           </div>
 
@@ -558,7 +558,7 @@ export function Connections() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Delete {connectionToDelete?.appName ?? "this"} connection?
+              {t("connections.deleteConnectionQuestion", { app: connectionToDelete?.appName ?? t("connections.thisApp") })}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {connectionToDelete && connectionToDelete.remainingConnectionCount > 0

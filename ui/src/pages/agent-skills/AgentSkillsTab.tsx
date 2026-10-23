@@ -401,7 +401,7 @@ export function AgentSkillsTab({ agent, companyId }: { agent: Agent; companyId?:
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-foreground">
-            {enabledRows.length} of {libraryRows.length} enabled
+            {t("agentSkillsTab.enabledOfTotal", { enabled: enabledRows.length, total: libraryRows.length })}
           </span>
           {applicationLabel ? (
             <Tooltip>
@@ -537,7 +537,7 @@ export function AgentSkillsTab({ agent, companyId }: { agent: Agent; companyId?:
           ) : null}
 
           <div className="text-xs text-muted-foreground">
-            Adapter: {adapterLabels[agent.adapterType] ?? agent.adapterType}
+            {t("agentSkillsTab.adapter")}{" "}{adapterLabels[agent.adapterType] ?? agent.adapterType}
           </div>
         </div>
       )}

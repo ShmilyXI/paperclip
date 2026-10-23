@@ -903,7 +903,9 @@
     "addADescription": "Add a description...",
     "select2": "Select…",
     "saveExit": "Save & exit",
-    "unexpectedError": "Unexpected error"
+    "unexpectedError": "Unexpected error",
+    "moreCount": "+{{count}} more",
+    "reconnect": "Reconnect"
   },
   "agents": {
     "builtIn": "Built-in",
@@ -923,7 +925,8 @@
     "agentView": "Agent view",
     "orgChartView": "Org chart view",
     "unknownEnvironmentId": "Unknown environment - {{environmentId}}",
-    "chat": "Chat"
+    "chat": "Chat",
+    "sandboxProvider": "{{provider}} sandbox provider"
   },
   "orgChart": {
     "orgChart": "Org Chart",
@@ -954,7 +957,9 @@
     "copyFailed": "Copy failed",
     "clipboardAccessIsUnavailable": "Clipboard access is unavailable.",
     "couldNotRefreshAgentLifecycle": "Could not refresh agent lifecycle status.",
-    "assignTask": "Assign Task"
+    "assignTask": "Assign Task",
+    "openActionsFor": "Open actions for {{name}}",
+    "duplicateAgent": "Duplicate Agent"
   },
   "agentProps": {
     "errorReason": "Error reason",
@@ -1225,7 +1230,12 @@
     "clearingSession": "clearing session...",
     "clearSessionForTheseTasks": "clear session for these tasks",
     "preservedEditsFor": "Preserved edits for {{file}}",
-    "copyPreservedEditsFor": "Copy preserved edits for {{file}}"
+    "copyPreservedEditsFor": "Copy preserved edits for {{file}}",
+    "to": "to",
+    "moreCount": "+{{count}} more",
+    "totalCount": "{{count}} total",
+    "tasksTouched": "Tasks Touched ({{count}})",
+    "events": "Events ({{count}})"
   },
   "agentNav": {
     "agent": "Agent",
@@ -1288,7 +1298,22 @@
     "showingUpToMatches": "Showing up to {{limit}} matches. Refine the search to narrow further.",
     "someBoardColumnsShowingUpTo": "Some board columns are showing up to {{limit}} tasks. Refine filters or search to reveal the rest.",
     "subTaskCount_one": "{{count}} sub-task",
-    "subTaskCount_other": "{{count}} sub-tasks"
+    "subTaskCount_other": "{{count}} sub-tasks",
+    "doneOfTotal": "{{done}}/{{total}} done",
+    "inProgressCount": "{{count}} in progress",
+    "blockedCount": "{{count}} blocked",
+    "runsCount_one": "{{count}} run",
+    "runsCount_other": "{{count}} runs",
+    "subTasksCount_one": "{{count}} sub-task",
+    "subTasksCount_other": "{{count}} sub-tasks",
+    "runsAcrossSubTasks": "{{runs}} across {{subTasks}}",
+    "tokensUsed": "{{tokens}} tokens",
+    "runtime": "{{duration}} runtime",
+    "perColumn": "{{count}} per column",
+    "newTaskInGroup": "New task in {{group}}",
+    "blockedBy": "blocked by {{label}}",
+    "stepSuffix": " · step {{step}}",
+    "andMoreCount": " ... and {{count}} more"
   },
   "newIssue": {
     "openIssueref": "Open {{issueRef}}",
@@ -1320,7 +1345,10 @@
     "isPausedAndWillNotStart": " is paused and will not start work on this task until it is resumed",
     "itArrivedPausedFromImport": " — it arrived paused from an organization import",
     "youCanResumeItFromTheTaskPage": ". You can resume it from the task page after creating the task.",
-    "thisSubTaskWillNoLongerUseParentWorkspace": "This sub-task will no longer use the parent task workspace{{workspace}}."
+    "thisSubTaskWillNoLongerUseParentWorkspace": "This sub-task will no longer use the parent task workspace{{workspace}}.",
+    "subtaskOfPrivateTask": "Subtask of private task {{title}}",
+    "inPrivateProject": "In private project {{project}}",
+    "lowTrustReviewAgentNote": "Low-trust review agent. It can only act inside its assigned review boundary; task, project, or run policy defines the concrete scope."
   },
   "issueRow": {
     "thinking": "Thinking",
@@ -1501,7 +1529,16 @@
     "theProjectIsPausedResume": "The project is paused. Resume it before retrying.",
     "reIssuedFromSourcelabelOn": "Re-issued from {{sourceLabel}} on an isolated git worktree after a workspace branch divergence.",
     "identifierWillRunOnA": "{{identifier}} will run on a fresh isolated workspace.",
-    "requestedChangesWithReason": "Requested changes\n\n{{reason}}"
+    "requestedChangesWithReason": "Requested changes\n\n{{reason}}",
+    "runWasStoppedButUpdatingDetail": "Run was stopped, but updating the task failed: {{detail}}",
+    "routineExecutionFromRoutineId": "Routine execution from routine {{originId}}",
+    "costBreakdownWithCache": " (in {{input}}, out {{output}}, cached {{cached}})",
+    "costBreakdown": " (in {{input}}, out {{output}})",
+    "pauseReleasedButSomeTasksCouldNotStart_one": "Pause released, but {{count}} task could not start. {{message}} Check the affected agents and try starting them again.",
+    "pauseReleasedButSomeTasksCouldNotStart_other": "Pause released, but {{count}} tasks could not start. {{message}} Check the affected agents and try starting them again.",
+    "thisTaskIsInState": "This task is in {{state}}.",
+    "baseRefLiveBranch": "- Base ref (live branch): `{{baseRef}}`",
+    "recordedBranch": "- Recorded branch: `{{expectedBranch}}`"
   },
   "comments": {
     "copyCommentAsMarkdown": "Copy comment as markdown",
@@ -1608,7 +1645,10 @@
     "boardUsers": "Board users",
     "archivedBy": "Archived by {{name}} · {{time}}",
     "attempt": "Attempt {{attempt}}",
-    "searchModels": "Search models..."
+    "searchModels": "Search models...",
+    "watchdogDisabled": "(disabled)",
+    "watchdogTask": "Watchdog task:",
+    "closeTab": "Close {{label}} tab"
   },
   "issueDocs": {
     "failedToDeleteDocument": "Failed to delete document",
@@ -1721,7 +1761,8 @@
     "failedToUnarchiveProject": "Failed to unarchive project",
     "youLeftThisProjectIt": "You left this project. It no longer appears in your sidebar.",
     "pausedByBudgetHardStop": "Paused by budget hard stop",
-    "managedByPlugin": "Managed by {{name}}"
+    "managedByPlugin": "Managed by {{name}}",
+    "selectColor": "Select color {{color}}"
   },
   "routines": {
     "customRoutines": "Custom routines",
@@ -1793,7 +1834,19 @@
     "noDefaultAgent": "No default agent",
     "noResponsible": "No responsible",
     "searchResponsible": "Search responsible...",
-    "searchProjects": "Search projects..."
+    "searchProjects": "Search projects...",
+    "count_one": "{{count}} routine",
+    "count_other": "{{count}} routines",
+    "selectRoutine": "Select {{title}}",
+    "badgeArchived": "archived",
+    "badgeDraft": "draft",
+    "badgePaused": "paused",
+    "disableRoutine": "Disable {{title}}",
+    "enableRoutine": "Enable {{title}}",
+    "on": "On",
+    "off": "Off",
+    "moreActionsFor": "More actions for {{title}}",
+    "restore": "Restore"
   },
   "routineDetail": {
     "selectAnOrganizationToCreate": "Select an organization to create secrets",
@@ -1899,7 +1952,14 @@
     "alerts": "Alerts",
     "humanJoinRequest": "Human join request",
     "agentHasErrors_one": "agent has errors",
-    "agentHasErrors_other": "agents have errors"
+    "agentHasErrors_other": "agents have errors",
+    "failedRun": "Failed run",
+    "requestedBy": "requested by {{name}}",
+    "updatedAt": "updated {{time}}",
+    "requestedFromIp": "requested {{time}} from IP {{ip}}",
+    "adapterLabel": "adapter: {{adapter}}",
+    "budgetAt": "Budget at",
+    "utilizationThisMonth": "utilization this month"
   },
   "approvals": {
     "failedToApprove": "Failed to approve",
@@ -2144,7 +2204,12 @@
     "restoreRevisionsStay": "Revisions {{from}}–{{to}} stay in history and are not modified.",
     "routineSecretsWillRevert": "Routine secrets will revert: {{summary}}.",
     "webhookTriggerRecreated": "The webhook trigger {{label}} will be recreated with a new URL and secret. Paperclip will show the secret once after restore — copy it before closing.",
-    "restoreRevAsNewRevision": "Restore rev {{revisionNumber}} as new revision"
+    "restoreRevAsNewRevision": "Restore rev {{revisionNumber}} as new revision",
+    "totalCount": "{{count}} total",
+    "revNumber": "rev {{number}}",
+    "savedBy": "Saved {{time}} by {{actor}}",
+    "changeSummaryOptional": "Change summary (optional)",
+    "variablesField": "Variables"
   },
   "triggers": {
     "couldnTSaveYourDraft": "Couldn’t save your draft in this browser. Keep this page open and try again.",
@@ -2210,7 +2275,9 @@
     "checkTheWebhookUrl": "Check the webhook URL",
     "thisIsNotAValid": "This is not a valid HTTP or HTTPS URL. Your sending app needs a complete address it can reach.",
     "youCanContinueForLocal": "You can continue for local or private-network use. For public senders, use a publicly reachable HTTPS URL.",
-    "learnHowToSetUp": "Learn how to set up HTTPS and public access"
+    "learnHowToSetUp": "Learn how to set up HTTPS and public access",
+    "thisTriggerIsNoLongerAvailable": "This trigger is no longer available.",
+    "thisTriggerIsReady": "This trigger is ready."
   },
   "skills": {
     "bundled": "Bundled",
@@ -2604,7 +2671,9 @@
     "access": "Access",
     "advancedPermissions": "Advanced Permissions",
     "openMembers": "Open Members",
-    "openInvites": "Open Invites"
+    "openInvites": "Open Invites",
+    "updateOrgRoleFor": "Update organization role and membership status for {{name}}.",
+    "archiveAndMoveAssignments": "Archive {{name}} and move active assignments before hiding this user from assignment fields."
   },
   "experimental": {
     "managedByPaperclipCloud": "Managed by Paperclip Cloud",
@@ -2846,7 +2915,8 @@
     "askToReviseThePlan": "Ask {{name}} to revise the plan...",
     "messageName": "Message {{name}}...",
     "isWakingUp": "{{name}} is waking up...",
-    "isComposingAMessage": "{{name}} is composing a message..."
+    "isComposingAMessage": "{{name}} is composing a message...",
+    "you": "You"
   },
   "agentConfig": {
     "minimal": "Minimal",
@@ -2972,7 +3042,11 @@
     "runHeartbeatEvery": "Run heartbeat every",
     "sec": "sec",
     "theLoginTimedOut": "The login timed out. Start the login again.",
-    "theLoginDidNotFinishStartLogin": "The login did not finish. Start the login again."
+    "theLoginDidNotFinishStartLogin": "The login did not finish. Start the login again.",
+    "anotherSignInAttemptIsActive": "Another sign-in attempt is active. Finish or cancel that attempt before starting a new sign-in.",
+    "couldNotCancelThePreviousSignIn": "Could not cancel the previous sign-in. Retry before starting a new one.",
+    "kubernetesSandboxNamed": "{{name}} · Kubernetes sandbox",
+    "liveOpencodeDiscoveryOnlyLocal": "Live OpenCode model discovery only runs for Local environments. Using the curated list and manual entry for {{name}}."
   },
   "newAgent": {
     "selectAnOrganizationToCreate": "Select an organization to create an agent.",
@@ -3128,7 +3202,10 @@
     "refreshingAuditAccess": "Refreshing audit access…",
     "failedToLoadTheAudit": "Failed to load the audit log.",
     "auditActivity": "Audit activity",
-    "recordedByPaperclipEntriesCan": "Recorded by Paperclip — entries can't be edited. Sensitive values are never stored."
+    "recordedByPaperclipEntriesCan": "Recorded by Paperclip — entries can't be edited. Sensitive values are never stored.",
+    "onBehalfOf": "on behalf of {{name}}",
+    "auditLogExplainer": "The agent audit log gives you a searchable, exportable record of everything your agents did — every comment, task change, approval, and run — with the responsible person for each action. Ask an administrator to grant you the",
+    "auditLogPermissionSuffix": "permission to view it."
   },
   "auth": {
     "authenticationFailed": "Authentication failed",
@@ -3181,7 +3258,11 @@
     "theRequestFailed": "The request failed.",
     "theServerReturnedStatus": "The server returned {{status}}.",
     "weCouldnTFindA": "We couldn’t find a match in",
-    "allScopes": "All scopes"
+    "allScopes": "All scopes",
+    "yourInputAndFiltersAreStillHere": "Your input and filters are still here, so you can retry or fall back to the Tasks filter.",
+    "noResultsForQuery": "No results for “{{query}}”",
+    "tryWideningTheScope": "Try widening the scope or rephrasing your query.",
+    "insertOperatorToken": "Insert operator {{token}}"
   },
   "skillsUi": {
     "mostAgents": "Most agents",
@@ -3298,7 +3379,10 @@
     "newRunsWillNotStartUntilResumed": "New runs will not start until the agent is resumed.",
     "toKeepThisVoteLocal": "to keep this vote and future votes local.",
     "anotherTabChangedTheSavedDraft": "Another tab changed the saved draft. This draft is kept separately in this tab.",
-    "legacyRecoveryTaskBody": "Legacy recovery task. Newer recovery actions live on the source task"
+    "legacyRecoveryTaskBody": "Legacy recovery task. Newer recovery actions live on the source task",
+    "requestedFollowUp": "requested follow-up",
+    "choose": "Choose",
+    "toShareThisVoteAndFuture": "to share this vote and future voted AI outputs."
   },
   "interaction": {
     "approvedAgentResumeFailed": "Approved — agent resume failed",
@@ -3620,7 +3704,26 @@
     "awsSecretCreationNeedsCreatesecretPermission": "AWS secret creation needs CreateSecret permission",
     "awsSecretCreationFailed": "AWS secret creation failed",
     "alreadyHasAnEnvVarNamed": "{{name}} already has an env var named {{key}}.",
-    "removeAccessFor": "Remove access for {{name}}"
+    "removeAccessFor": "Remove access for {{name}}",
+    "proposals": "Proposals",
+    "checkHealth": "Check health",
+    "removeFromPaperclip": "Remove from Paperclip",
+    "findExistingAwsValues": "Find existing AWS values",
+    "failedToLoadSecrets": "Failed to load secrets:",
+    "failedToLoadProviderVaults": "Failed to load provider vaults:",
+    "eachUserSecretDefinition": "Each user secret definition",
+    "isReferencedBy_one": "{{name}} is referenced by {{count}} place.",
+    "isReferencedBy_other": "{{name}} is referenced by {{count}} places.",
+    "creatingInRemoveChip": "Creating in {{path}} — remove the chip to type a different path.",
+    "managedSecretsNote": "Paperclip-managed secrets are created in the selected provider and future rotations write a new provider version through Paperclip.",
+    "awsManagedPath": "AWS managed path:",
+    "coverageCountsOnly_one": "Coverage is counts only across {{count}} member.",
+    "coverageCountsOnly_other": "Coverage is counts only across {{count}} members.",
+    "secretValuesNeverShown": "Secret values are never shown here.",
+    "bindRuntimeEnvVarsPrefix": "Bind runtime environment variables to this user-provided secret by choosing",
+    "bindRuntimeEnvVarsAndSelecting": "and selecting",
+    "bindRuntimeEnvVarsSuffix": ".",
+    "paperclipNeverRedisplays": "Paperclip never re-displays stored values."
   },
   "roles": {
     "cto": "CTO",
@@ -4760,7 +4863,8 @@
     "tryAgain": "Try again.",
     "enableLabel": "Enable {{label}}",
     "replayFailedKind": "Replay failed {{kind}}",
-    "interactivity": "Interactivity"
+    "interactivity": "Interactivity",
+    "eventsApi": "Events API"
   },
   "emailSetup": {
     "couldNotLoadProgress": "Could not load email setup progress.",
@@ -6479,7 +6583,12 @@
     "checkTheFieldFormatsAbove": "Check the field formats above — a value may be the wrong type or shape.",
     "openMoreOptionsToConfirm": "Open “More options” to confirm any advanced fields are filled in correctly.",
     "theAppIsRateLimitingCalls": "The app is rate-limiting calls right now — wait a moment and run it again.",
-    "checkTheInputsAboveAndTryAgain": "Check the inputs above and try again."
+    "checkTheInputsAboveAndTryAgain": "Check the inputs above and try again.",
+    "workedRowVerb": "Worked. Row {{verb}}.",
+    "ranAs": "Ran as {{agent}} · {{duration}} · {{time}}",
+    "triedAs": "Tried as {{agent}} · {{duration}} · {{time}}",
+    "whatAppSaid": "What {{app}} said",
+    "codeValue": "code: {{code}}"
   },
   "pluginSettings": {
     "pluginDetails": "Plugin Details",
@@ -6556,7 +6665,8 @@
     "missingFiles": "Missing files",
     "failedToSaveConfiguration": "Failed to save configuration.",
     "configurationTestFailed": "Configuration test failed.",
-    "saveConfiguration": "Save Configuration"
+    "saveConfiguration": "Save Configuration",
+    "testConfiguration": "Test Configuration"
   },
   "externalAgentInviteContent": {
     "yourDotInChatgpt": "Your Dot in ChatGPT",
@@ -6817,7 +6927,13 @@
     "localZipHelpText": "Upload a .zip exported directly from Paperclip. Re-zipped archives created by Finder, Explorer, or other zip tools may not import correctly.",
     "anInterruptedUploadResumes": "An interrupted upload resumes from the finished parts.",
     "uploadingAndAnalyzingYourPackage": "Uploading and analyzing your package",
-    "largePackagesCanTakeAFewMinutes": " — large packages can take a few minutes. Keep this page open."
+    "largePackagesCanTakeAFewMinutes": " — large packages can take a few minutes. Keep this page open.",
+    "openaiDotExperimental": "OpenAI Dot (experimental)",
+    "musePersonalAgentExperimental": "Muse — Personal agent (experimental)",
+    "openaiDot": "OpenAI Dot",
+    "musePersonalAgent": "Muse — Personal agent",
+    "asSlug": "as {{slug}}",
+    "partFailedToUpload": "Part {{index}} of {{total}} failed to upload."
   },
   "grokBotConnection": {
     "saveTheGrokBotAgent": "Save the Grok Bot agent before connecting it.",
@@ -6915,7 +7031,8 @@
     "theSavedIdIsFilledInWhenAvailable": "The saved ID is filled in when available.",
     "uploadThePemFileDownloadedFromThisGithubApp": "Upload the .pem file downloaded from this GitHub App, or paste its entire contents, including the BEGIN and END lines.",
     "couldNotReadThisFileTryAgainOrPasteTheKeyBelow": "Could not read this file. Try again or paste the key below.",
-    "theSecretConfiguredForThisAppSWebhookItMustMatchGithubExactly": "The secret configured for this App’s webhook. It must match GitHub exactly."
+    "theSecretConfiguredForThisAppSWebhookItMustMatchGithubExactly": "The secret configured for this App’s webhook. It must match GitHub exactly.",
+    "fromTheAppSSettingsPage": "from the App’s settings page."
   },
   "invitesSection": {
     "canViewOrganizationWorkAnd": "Can view organization work and follow along.",
@@ -7294,7 +7411,8 @@
     "searchPeopleAndAgents": "Search people and agents…",
     "loadingDirectory": "Loading directory…",
     "removeSavedGrantTitle": "Remove {{subject}}'s saved grant?",
-    "thisSubject": "this subject"
+    "thisSubject": "this subject",
+    "accessRemainsWhileThisRoleApplies": "access remains while this role applies"
   },
   "taskChatCompactInteractionCard": {
     "suggestedTasks": "Suggested tasks",
@@ -7350,7 +7468,8 @@
     "createSelected": "Create selected",
     "decidedCount": "{{count}} decided",
     "verdictFor": "Verdict for {{label}}",
-    "toolRiskBare": "{{risk}} risk"
+    "toolRiskBare": "{{risk}} risk",
+    "theAddressedUser": "the addressed user"
   },
   "issueBlockedNotice": {
     "retrying": "Retrying...",
@@ -7384,7 +7503,12 @@
     "aMessageWontRestart_other": "A message won’t restart this task yet — it stays blocked by {{blocker}} until they are done, then it reopens automatically. Comments still notify {{who}} for questions or triage in the meantime.",
     "blockedUntilDone_one": "Work on this task is blocked by {{blocker}} until it is complete. Comments still notify the assignee for questions or triage.",
     "blockedUntilDone_other": "Work on this task is blocked by {{blocker}} until they are complete. Comments still notify the assignee for questions or triage.",
-    "stillBlockedBy": "Still blocked by"
+    "stillBlockedBy": "Still blocked by",
+    "running": "running",
+    "titleWithDetail": "{{label}} — {{detail}}. Open the source task to act.",
+    "titleWithoutDetail": "{{label}} — open the source task to act.",
+    "correctionRunInProgress": "A correction run is in progress — the agent is working. This alert returns if the run stops without choosing a next step.",
+    "runShortId": "run {{id}}"
   },
   "agentCommentary": {
     "complaint": "Complaint",
@@ -7419,7 +7543,8 @@
     "nextPage": "Next page",
     "previousPage": "Previous page",
     "suggestionsAndComplaintsFromYour": "Suggestions and complaints from your agents.",
-    "readKindFromName": "Read {{kind}} from {{name}}"
+    "readKindFromName": "Read {{kind}} from {{name}}",
+    "pageRange": "{{start}}–{{end}} of {{total}} messages"
   },
   "trustPresetSection": {
     "rootIssue": "Root issue",
@@ -7500,7 +7625,17 @@
     "unableToLoadFile": "Unable to load file.",
     "unableToLoadFileContent": "Unable to load file content.",
     "copyFailed": "Copy failed",
-    "fileContentsUnavailable": "File contents unavailable"
+    "fileContentsUnavailable": "File contents unavailable",
+    "fileLoaded_one": "File loaded, {{count}} line.",
+    "fileLoaded_other": "File loaded, {{count}} lines.",
+    "videoPreview": "Video preview: {{title}}",
+    "previewMode": "{{label}} preview mode",
+    "showRendered": "Show rendered {{label}}",
+    "rendered": "Rendered {{label}}",
+    "showRaw": "Show raw {{label}}",
+    "raw": "Raw {{label}}",
+    "renderedMarkdown": "{{title}} rendered Markdown",
+    "source": "{{title}} source"
   },
   "subscriptionCostCard": {
     "plan": "Plan",
@@ -7556,7 +7691,11 @@
     "recordedUsageCharges": "{{amount}} recorded usage charges in selected period, separate from the subscription fee.",
     "usedBy": "Used by {{agents}}",
     "planChecked": "Plan checked {{time}}",
-    "latestCheckUnavailable": "· latest check unavailable"
+    "latestCheckUnavailable": "· latest check unavailable",
+    "perMonth": "{{amount}}/month",
+    "tokensIn": "{{amount}} in",
+    "tokensOut": "{{amount}} out",
+    "inputCached": "{{amount}} input cached"
   },
   "identitiesSection": {
     "weCouldnTLoadWho": "We couldn't load who this connection acts as. Reload the page to try again.",
@@ -7768,7 +7907,8 @@
     "giveThisMcpGatewayConfiguration": "Give this MCP gateway configuration to your tool. It does not give it access to Paperclip or skills; it only gateways calls between the client and the tools exposed here.",
     "issueTokenBeforeCopyingSnippet": "Issue a token before copying a snippet; the full ",
     "snippetTailNote": " header is required. Existing token secrets cannot be retrieved again, so only tokens issued in this page session can fill a snippet.",
-    "searchTokens": "Search tokens…"
+    "searchTokens": "Search tokens…",
+    "configLabel": "{{label}} config"
   },
   "projectProperties": {
     "saving": "Saving",
@@ -7941,7 +8081,10 @@
     "weFoundAppsInThatConfig_other": "We found {{count}} apps in that config",
     "checkActions": "Check actions",
     "reviewActionsFor": "Review actions for {{name}}",
-    "isActiveForAllAgents": "{{name}} is active for all agents."
+    "isActiveForAllAgents": "{{name}} is active for all agents.",
+    "whereNeedsKeys_one": "{{where}}  ·  needs {{count}} key",
+    "whereNeedsKeys_other": "{{where}}  ·  needs {{count}} keys",
+    "instead": "instead."
   },
   "slackToolSettings": {
     "readSearchAndActIn": "Read, search, and act in Slack. Some actions require approval.",
@@ -8173,7 +8316,9 @@
     "thisPaperclipCompany": "this Paperclip company",
     "thisInviteWillCreate": "This invite will create an approval request for a new agent in {{company}}.",
     "openOrganization": "Open organization",
-    "submitRequest": "Submit request"
+    "submitRequest": "Submit request",
+    "thisWillFinishSettingUpPaperclip": "This will finish setting up Paperclip.",
+    "thisWillGrantOrCompleteYourAccessTocompanydisplayname": "This will grant or complete your access to {{companyDisplayName}}."
   },
   "gatewayAdvancedPanel": {
     "gatewayArchived": "Gateway archived",
@@ -8231,7 +8376,8 @@
     "viewingHistoricalRevision": "Viewing historical revision",
     "autosaving": "Autosaving...",
     "couldNotSave": "Could not save",
-    "deleteThisDocumentThisCannot": "Delete this document? This cannot be undone."
+    "deleteThisDocumentThisCannot": "Delete this document? This cannot be undone.",
+    "viewingRevision": "Viewing revision {{number}}"
   },
   "agentObservabilitySettings": {
     "userPrompts": "User prompts",
@@ -8279,7 +8425,10 @@
     "savedSettingsCouldNotBe": "Saved settings could not be refreshed. Your draft is unchanged.",
     "reEnterEveryHeaderValue": "Re-enter every header value for the new endpoint, or remove the header.",
     "customOtlp": "Custom OTLP",
-    "sentFromTheServerAt": "{{time}} · Sent from the Paperclip server."
+    "sentFromTheServerAt": "{{time}} · Sent from the Paperclip server.",
+    "valueForHeader": "Value for {{name}}",
+    "removeHeader": "Remove {{name}}",
+    "headerFallback": "header"
   },
   "userProfile": {
     "touched": "Touched",
@@ -8306,7 +8455,11 @@
     "pointTooltip": "{{date}}: {{tokens}} tokens, {{completed}} completed",
     "amountSpent": "{{amount}} spent",
     "noIssueLinkedTokenUsage": "No issue-linked token usage yet.",
-    "noProviderUsageAttributed": "No provider usage attributed yet."
+    "noProviderUsageAttributed": "No provider usage attributed yet.",
+    "joined": "joined {{date}}",
+    "completionRateHint": "{{rate}} rate",
+    "tasksCreatedHint": "{{number}} created",
+    "commentsHint": "{{number}} comments"
   },
   "caseRevisionRail": {
     "via": "via",
@@ -8324,7 +8477,11 @@
     "revisions": "Revisions",
     "diff2": "Diff",
     "latest": "latest",
-    "thisRevisionHasNoBody": "This revision has no body."
+    "thisRevisionHasNoBody": "This revision has no body.",
+    "actorAgent": "agent",
+    "actorBoard": "board",
+    "actorSystem": "system",
+    "revisionShort": "rev {{number}} - {{time}} - {{actor}}"
   },
   "remoteMcpConnectionSetup": {
     "enterAValidMcpUrl": "Enter a valid MCP URL",
@@ -8440,7 +8597,9 @@
     "trackedOnly": "Tracked only",
     "cannotManageForCustomAcpCommands": "Paperclip cannot manage skills for custom ACP commands yet.",
     "cannotManageOpenclawSkillsHere": "Paperclip cannot manage OpenClaw skills here. Visit your OpenClaw instance to manage this agent's skills.",
-    "cannotManageSkillsForThisAdapter": "Paperclip cannot manage skills for this adapter yet. Manage them in the adapter directly."
+    "cannotManageSkillsForThisAdapter": "Paperclip cannot manage skills for this adapter yet. Manage them in the adapter directly.",
+    "enabledOfTotal": "{{enabled}} of {{total}} enabled",
+    "adapter": "Adapter:"
   },
   "taskSidePanel": {
     "subtasks": "Subtasks",
@@ -8458,7 +8617,8 @@
     "closeSidePanel": "Close side panel",
     "revisionLatestrevisionnumber": "Revision {{latestRevisionNumber}}",
     "browserBrowserindex": "Browser {{browserIndex}}",
-    "browserIndex": "Browser {{index}}"
+    "browserIndex": "Browser {{index}}",
+    "revisionLabel": "Revision {{number}}"
   },
   "profileWizard": {
     "chooseTools": "Choose tools",
@@ -8515,7 +8675,9 @@
     "rollbackOperationsAlsoFailed": "; {{operations}} rollback operation(s) also failed",
     "organizationDefault": "organization default",
     "alreadyHas": "already has: {{profiles}}",
-    "noProfilesYet": "no profiles yet"
+    "noProfilesYet": "no profiles yet",
+    "everyAgentWithoutProfile": "Every agent without its own profile uses this one.",
+    "replacesDefaultProfile": "Replaces “{{name}}”."
   },
   "resourceStatusChip": {
     "ready": "Ready",
@@ -8596,7 +8758,8 @@
     "exportingFiles_other": "Exporting {{selected}} of {{total}} files",
     "warningCount_one": "{{count}} warning",
     "warningCount_other": "{{count}} warnings",
-    "loadPreview": "Load preview"
+    "loadPreview": "Load preview",
+    "showMoreTasks": "Show more tasks ({{visible}} of {{total}})"
   },
   "spekoIncomingCalls": {
     "incomingConversation": "Incoming conversation",
@@ -8689,7 +8852,13 @@
     "connectANewAccount": "Connect a new account",
     "order": "Order",
     "removeNamePrompt": "Remove {{name}}?",
-    "usageUnavailable": "Usage unavailable."
+    "usageUnavailable": "Usage unavailable.",
+    "connection": "connection",
+    "moveUp": "Move {{name}} up",
+    "moveDown": "Move {{name}} down",
+    "removeNamed": "Remove {{name}}",
+    "modelForConnection": "Model for connection {{index}}",
+    "effortForConnection": "Effort for connection {{index}}"
   },
   "issueProperties": {
     "reuseExistingWorkspace": "Reuse existing workspace",
@@ -8840,7 +9009,9 @@
     "noRunsMatchTheseFilters": "No runs match these filters.",
     "noRunsYet": "No runs yet.",
     "recentRuns": "Recent runs",
-    "unknownAgent": "Unknown agent"
+    "unknownAgent": "Unknown agent",
+    "showingRecentRoutineRuns": "Showing the {{count}} most recent routine runs.",
+    "showingRecentRuns": "Showing the {{count}} most recent runs."
   },
   "workspaceServiceControlBar": {
     "provisioning": "Provisioning…",
@@ -8906,7 +9077,18 @@
     "humanJoinRequest": "Human join request",
     "agentHasErrors": "agent has errors",
     "agentsHaveErrors": "agents have errors",
-    "failedRun": "Failed run"
+    "failedRun": "Failed run",
+    "agentJoinRequest": "Agent join request",
+    "agentJoinRequestNamed": "Agent join request: {{name}}",
+    "newTaskInGroup": "New task in {{group}}",
+    "requestedBy": "requested by {{name}}",
+    "updatedAgo": "updated {{time}}",
+    "requestedTimeFromIp": "requested {{time}} from IP {{ip}}",
+    "adapterName": "adapter: {{name}}",
+    "markUnreadAsRead_one": "This will mark {{count}} unread item as read.",
+    "markUnreadAsRead_other": "This will mark {{count}} unread items as read.",
+    "budgetAt": "Budget at",
+    "utilizationThisMonth": "utilization this month"
   },
   "frontmatterPanel": {
     "skillMdNeedsAName": "SKILL.md needs a name.",
@@ -8934,7 +9116,9 @@
     "valueForKey": "Value for {{key}}",
     "fieldNumber": "field {{count}}",
     "removeForKey": "Remove {{key}}",
-    "removeValue": "Remove {{value}}"
+    "removeValue": "Remove {{value}}",
+    "warningCountIssues_one": "{{count}} issue",
+    "warningCountIssues_other": "{{count}} issues"
   },
   "aiConnectionCredentialStep": {
     "couldNotResolveTheSign": "Could not resolve the sign-in environment.",
@@ -8993,7 +9177,9 @@
     "saveExit": "Save & exit",
     "continueToMessageTest": "Continue to message test",
     "anotherPaperclipAccount": "another Paperclip account",
-    "linkedTo": "Linked to"
+    "linkedTo": "Linked to",
+    "linkLabelToMyPaperclipAccount": "Link {{label}} to my Paperclip account",
+    "thisIsMySlackAccount": "This is my Slack account"
   },
   "statusCardDetailDrawer": {
     "statusUpdate": "Status update",
@@ -9143,7 +9329,10 @@
     "someArtifactsCouldNotBe": "Some artifacts could not be loaded.",
     "loadingArtifacts": "Loading artifacts…",
     "noArtifactsYetWorkProducts": "No artifacts yet. Work products, documents, and agent-produced files will appear here.",
-    "runSlice": "Run {{slice}}"
+    "runSlice": "Run {{slice}}",
+    "openInTabNamed": "Open in tab: {{title}}",
+    "openRawNamed": "Open raw {{title}}",
+    "downloadNamed": "Download {{title}}"
   },
   "runtimeTestCard": {
     "testYourAgent": "Test your agent",
@@ -9297,7 +9486,9 @@
     "optionAriaLabel": "{{title}}: {{label}}",
     "matchesSortedAz": "{{count}} matches · sorted A–Z",
     "noActionsMatch": "No actions match “{{query}}”. Clear the search to see them all.",
-    "refreshActions": "Refresh actions"
+    "refreshActions": "Refresh actions",
+    "agentsSelected_one": "{{count}} agent selected",
+    "agentsSelected_other": "{{count}} agents selected"
   },
   "approvalDetail": {
     "reviewLinkedTasks": "Review linked tasks",
@@ -9310,7 +9501,8 @@
     "markResubmitted": "Mark resubmitted",
     "deleteDisapprovedAgent": "Delete disapproved agent",
     "postComment": "Post comment",
-    "posting": "Posting…"
+    "posting": "Posting…",
+    "commentsWithCount": "Comments ({{count}})"
   },
   "markdownEditor": {
     "richEditorFailedToLoad": "Rich editor failed to load content",
@@ -9319,7 +9511,9 @@
     "richEditorUnavailableForThis": "Rich editor unavailable for this markdown. Showing raw source instead.",
     "dropToUpload": "Drop {{kind}} to upload",
     "dropKindFile": "file",
-    "dropKindImage": "image"
+    "dropKindImage": "image",
+    "richEditorFailedToRender": "Rich editor failed to render",
+    "plainText": "Text"
   },
   "jsonSchemaForm": {
     "selectAnOption": "Select an option",
@@ -9346,7 +9540,14 @@
     "mustHaveAtMostMaxitems": "Must have at most {{maxItems}} items",
     "labelJson": "{{label}} JSON",
     "mustBeAValidNumber": "Must be a valid number",
-    "mustBeAWholeNumber": "Must be a whole number"
+    "mustBeAWholeNumber": "Must be a whole number",
+    "thisFieldIsRequired": "This field is required",
+    "invalidSecretReference": "Invalid secret reference",
+    "enterValidJsonObject": "Enter a valid JSON object",
+    "pickExistingOrgSecretOrPasteRaw": "Pick an existing organization secret, or paste a raw value (Paperclip will store it as a secret on save).",
+    "noActiveSecretsYet": "No active secrets yet. Create one or paste a raw value below.",
+    "advancedOptions": "Advanced options",
+    "moreOptions": "More options"
   },
   "runnerGoalWidget": {
     "selectAnAgentToUse": "Select an agent to use /goal.",
@@ -9375,7 +9576,10 @@
     "pausingAfterCurrentTurn": "Pausing after current turn",
     "resuming": "Resuming",
     "clearing": "Clearing",
-    "continuingInANewRun": "Continuing in a new run"
+    "continuingInANewRun": "Continuing in a new run",
+    "tokensUsed": "{{tokens}} tokens",
+    "iterationCount_one": "{{count}} iteration",
+    "iterationCount_other": "{{count}} iterations"
   },
   "repositoryEditor": {
     "privateRepository": "Private repository",
@@ -9662,7 +9866,9 @@
     "promotedRunStarting": "Promoted — run starting",
     "couldnTRetryNow": "Couldn't retry now",
     "dueNow": "due now",
-    "pendingSchedule": "pending schedule"
+    "pendingSchedule": "pending schedule",
+    "lastAttemptFailed": "Last attempt failed:",
+    "paperclipWillRetry": "Paperclip will retry automatically."
   },
   "cliAuth": {
     "invalidCliAuthUrl": "Invalid CLI auth URL.",
@@ -9709,7 +9915,9 @@
     "agentsHaveThisSkillInTheirDesiredSet_one": "{{count}} agent has this skill in their desired set.",
     "agentsHaveThisSkillInTheirDesiredSet_other": "{{count}} agents have this skill in their desired set.",
     "loadingAgents": "Loading agents...",
-    "searchAgents": "Search agents..."
+    "searchAgents": "Search agents...",
+    "versionsBehindLatest_one": "{{count}} version behind latest",
+    "versionsBehindLatest_other": "{{count}} versions behind latest"
   },
   "standaloneBrowserControls": {
     "linkCopied": "Link copied",
@@ -9891,7 +10099,9 @@
     "agentsAllowedToTidyMy": "Agents allowed to tidy my inbox",
     "selectAgents": "Select agents",
     "youDonTManageAny": "You don’t manage any agents yet.",
-    "failedToSaveInboxAgent": "Failed to save inbox agent policy."
+    "failedToSaveInboxAgent": "Failed to save inbox agent policy.",
+    "agentsSelected_one": "{{count}} agent selected",
+    "agentsSelected_other": "{{count}} agents selected"
   },
   "userSecretDefinitionsTab": {
     "definitionCreated": "Definition created",
@@ -10180,10 +10390,17 @@
     "previewUnavailable": "Preview unavailable.",
     "previewTruncatedByTheRunner": "Preview truncated by the runner.",
     "theProviderReportedANotice": "The provider reported a notice without a message.",
-    "providerUpdate": "Provider update"
+    "providerUpdate": "Provider update",
+    "resultCount_one": "{{count}} result",
+    "resultCount_other": "{{count}} results",
+    "showMoreResults_one": "Show {{count}} more result",
+    "showMoreResults_other": "Show {{count}} more results",
+    "moreFilesNotShown_one": "{{count}} more file not shown",
+    "moreFilesNotShown_other": "{{count}} more files not shown"
   },
   "designPageShell": {
-    "skipToMainContent": "Skip to main content"
+    "skipToMainContent": "Skip to main content",
+    "asideContentRegion": "{{title}} content"
   },
   "issuePullRequestLinks": {
     "reviewRequested": "Review requested",
@@ -10299,7 +10516,11 @@
     "manageSource": "Manage source"
   },
   "sidePanelLauncher": {
-    "alreadyOpen": "Already open"
+    "alreadyOpen": "Already open",
+    "openASidePanelTab": "Open a side panel tab",
+    "chooseAViewOrResourceToOpen": "Choose a view or resource to open.",
+    "searchTabsAndResources": "Search tabs and resources…",
+    "noMatchingTabsOrResources": "No matching tabs or resources."
   },
   "issueCreatedFromNote": {
     "createdFrom": "Created from"
@@ -10413,7 +10634,10 @@
     "requestingagentnameNeedsServicename": "{{requestingAgentName}} needs {{serviceName}}",
     "theaccountownerMustReconnectName": "{{theAccountOwner}} must reconnect {{name}}.",
     "grantNameAccessToService": "Grant {{agent}} access to “{{service}}”?",
-    "nameIsReady": "{{name}} is ready."
+    "nameIsReady": "{{name}} is ready.",
+    "waitingFor": "Waiting for {{name}}",
+    "useYourConnectionFor": "Use your {{provider}} connection for {{agent}}? This replaces the agent’s existing authentication with each responsible person’s own account. The model stays the same.",
+    "youCanContinueHereOnceRestored": "You can continue here once it is restored."
   },
   "secretBindingPicker": {
     "failedToCreateSecret": "Failed to create secret",
@@ -10542,7 +10766,21 @@
     "managedBy": "Managed by {{provider}}",
     "manageName": "Manage {{name}}",
     "manageConnection": "Manage {{name}} connection",
-    "openIn": "Open in {{provider}}"
+    "openIn": "Open in {{provider}}",
+    "disconnectedTasksRemain": "{{provider}} is disconnected. Existing Paperclip tasks remain available.",
+    "stillHasActiveConnections_one": "{{provider}} still has {{count}} active connection available to agents.",
+    "stillHasActiveConnections_other": "{{provider}} still has {{count}} active connections available to agents.",
+    "noLongerAvailableToAgents": "{{provider}} is no longer available to agents through this connection. Its saved credentials were deleted.",
+    "upstreamAccountName": "{{app}} account",
+    "upstreamAccountNameIndexed": "{{app}} account {{index}}",
+    "connectionsCount_one": "{{count}} connection",
+    "connectionsCount_other": "{{count}} connections",
+    "needsAttention_one": "{{count}} needs attention",
+    "needsAttention_other": "{{count}} need attention",
+    "avatarLabel": "{{name}} avatar",
+    "manageChatConnection": "Manage {{agent}} {{connection}} connection",
+    "openAccountPermissions": "Open {{account}} permissions",
+    "manageAccountConnection": "Manage {{account}} connection"
   },
   "deferredOverlay": {
     "closeThisWindowToKeep": "Close this window to keep working. Reload the page before trying again.",
@@ -10605,7 +10843,9 @@
     "responseMode": "Response mode",
     "idLabel": "ID: {{id}}",
     "reviewNewActions_one": "Review {{count}} new action",
-    "reviewNewActions_other": "Review {{count}} new actions"
+    "reviewNewActions_other": "Review {{count}} new actions",
+    "labelAllowed": "{{label}} allowed",
+    "selectedOfCountWillBeOn": "{{selected}} of {{count}} will be on"
   },
   "proposalsTab": {
     "noExpiry": "no expiry",
@@ -10643,7 +10883,8 @@
     "dataSharing": "data sharing",
     "topicListAnd": "{{list}}, and {{last}}",
     "andConjunction": " and ",
-    "configureInstanceWidePreferences": "Configure instance-wide preferences"
+    "configureInstanceWidePreferences": "Configure instance-wide preferences",
+    "configurePreferencesIncludingTopics": "Configure instance-wide preferences including {{topics}}."
   },
   "taskChatBlockerLinks": {
     "waiting": "Waiting",
@@ -10804,7 +11045,9 @@
   "sidePanelMobileTabs": {
     "chooseATab": "Choose a tab",
     "openTabs": "Open tabs",
-    "openANewTab": "Open a new tab"
+    "openANewTab": "Open a new tab",
+    "switchTabs": "Switch tabs, {{count}} open",
+    "closeTab": "Close {{label}}"
   },
   "companySettingsPluginPage": {
     "selectAnOrganizationToView": "Select an organization to view this page.",
@@ -10887,7 +11130,13 @@
     "alwaysAllowLetsThisAgent": "Always allow lets this agent use this action with different arguments on this connection, within the current project when present.",
     "couldnTSaveThat": "Couldn’t save that",
     "waitingForYourOk": "Waiting for your OK",
-    "thisAction": "This action"
+    "thisAction": "This action",
+    "allowOnce": "Allow once",
+    "alwaysAllow": "Always allow",
+    "decline": "Decline",
+    "canRunThisTime": "{{action}} can run this time.",
+    "wontAskAgain": "{{action}} won’t ask again.",
+    "wontRun": "{{action}} won’t run."
   },
   "legacyIssuesList": {
     "olderThanADay": "Older than a day",
@@ -11010,7 +11259,13 @@
     "budgetpctOfCompanyBudget": "{{budgetPct}}% of company budget",
     "weeklybudgetshareWk": "~{{weeklyBudgetShare}} / wk",
     "tokenpctOfProviderTokens": "{{tokenPct}}% of provider tokens",
-    "costpctOfProviderCost": "{{costPct}}% of provider cost"
+    "costpctOfProviderCost": "{{costPct}}% of provider cost",
+    "runs": "runs",
+    "total": "total",
+    "in": "in",
+    "out": "out",
+    "ofTokenUsageViaSubscription": "% of token usage via subscription",
+    "resets": "resets"
   },
   "triggerWizard": {
     "monday": "Monday",
@@ -11125,7 +11380,8 @@
     "handOffTo": "Hand off to",
     "whatThisAffects": "What this affects",
     "nothingLiveToPauseNo": "Nothing live to pause — no agent run is in flight or queued. This records a hold so new work won't start until you resume.",
-    "noTasksAreAffected": "No tasks are affected."
+    "noTasksAreAffected": "No tasks are affected.",
+    "nameYou": "{{name}} (you)"
   },
   "accountingModelCard": {
     "inferenceLedger": "Inference ledger",
@@ -11237,7 +11493,8 @@
     "connectSharedDms": "Connect shared DMs",
     "reconnectKeepsProject": "Reconnect keeps this project and {{allocation}}. Leave the secret blank to reuse the saved connection.",
     "sharedDmAllocation": "shared DM allocation",
-    "dedicatedNumber": "dedicated number"
+    "dedicatedNumber": "dedicated number",
+    "connectAgentToPhoton": "Connect {{agent}} to Photon Cloud. Pro supports direct messages through a shared line. Dedicated numbers also support individually enabled groups."
   },
   "dashboardLive": {
     "liveRuns": "Live runs",
@@ -11367,7 +11624,14 @@
     "hardStop": "Hard stop",
     "healthy": "Healthy",
     "enterAValidNonNegative": "Enter a valid non-negative dollar amount.",
-    "percentOfLimit": "% of limit"
+    "percentOfLimit": "% of limit",
+    "softAlertAt": "Soft alert at {{percent}}%",
+    "pauseSuffix": "pause",
+    "completedRunsAwaitAccounting_one": "{{count}} completed run awaits accounting.",
+    "completedRunsAwaitAccounting_other": "{{count}} completed runs await accounting.",
+    "unpricedEvents_one": "{{count}} usage event is unpriced. Known spend excludes their unknown cost.",
+    "unpricedEvents_other": "{{count}} usage events are unpriced. Known spend excludes their unknown cost.",
+    "budgetUtilization": "Budget utilization: {{percent}}% used"
   },
   "taskDocumentPanel": {
     "loadingDocument": "Loading document…",
@@ -11431,7 +11695,9 @@
   },
   "caseChildrenTree": {
     "noChildCases": "No child cases.",
-    "caseId": "case ID"
+    "caseId": "case ID",
+    "showMoreCount_one": "Show {{count}} more",
+    "showMoreCount_other": "Show {{count}} more"
   },
   "decisionQueueRail": {
     "decisionQueues": "Decision queues",
@@ -11522,7 +11788,8 @@
   },
   "summarizerAgentSelect": {
     "summarizerDefault": "Summarizer (default)",
-    "noAgentsFound": "No agents found."
+    "noAgentsFound": "No agents found.",
+    "searchAgents": "Search agents..."
   },
   "announcementCard": {
     "dismissAnnouncement": "Dismiss announcement"
@@ -11737,7 +12004,12 @@
     "needsHumanDecision": "This recovery needs a human decision. Review the recorded failure and choose the next step.",
     "heldBy": "Held by {{owner}}",
     "reissueOnIsolatedWorkspace": " — re-issue on an isolated workspace instead.",
-    "recoveryActionLabel": "Recovery action: {{state}}"
+    "recoveryActionLabel": "Recovery action: {{state}}",
+    "overridesSafetyCheck": "This overrides Paperclip's safety check and points the recorded workspace at the live branch",
+    "runChip": "run {{id}}",
+    "agentChip": "agent {{id}}",
+    "issueChip": "issue {{id}}",
+    "userChip": "user {{id}}"
   },
   "voiceControls": {
     "connecting": "Connecting…",
@@ -11859,7 +12131,33 @@
     "replaceExistingSkill": "replace the existing skill",
     "agentsAttached_one": "{{count}} agent attached",
     "agentsAttached_other": "{{count}} agents attached",
-    "manageHowNameIsGrouped": "Manage how {{name}} is grouped and shared."
+    "manageHowNameIsGrouped": "Manage how {{name}} is grouped and shared.",
+    "skillsShManaged": "skills.sh managed",
+    "urlManaged": "URL managed",
+    "copiedHash": "Copied hash",
+    "installUpdate": "Install update",
+    "replaceExistingSkillConfirm": "Replace existing skill",
+    "addToAgent": "Add to agent",
+    "copiedPath": "Copied path",
+    "skillImportFailed": "Skill import failed",
+    "failedToImportSkillSource": "Failed to import skill source.",
+    "refreshingSkillsList": "Refreshing skills list...",
+    "projectSkillScanFailed": "Project skill scan failed",
+    "failedToScanProjectWorkspaces": "Failed to scan project workspaces.",
+    "skillCreationFailed": "Skill creation failed",
+    "failedToInstallSkillUpdate": "Failed to install skill update.",
+    "removeFailed": "Remove failed",
+    "failedToRemoveSkill": "Failed to remove skill.",
+    "basics": "Basics",
+    "design": "Design",
+    "content": "Content",
+    "noSkillsInstalledFor": "No {{source}} skills installed.",
+    "actionImportingSkills": "Importing skills",
+    "actionScanningProjectsForSkills": "Scanning projects for skills",
+    "actionCreatingSkill": "Creating a skill",
+    "actionUpdatingSkill": "Updating this skill",
+    "actionInstallingSkill": "Installing this skill",
+    "actionRemovingSkill": "Removing this skill"
   },
   "agentMultiSelect": {
     "filterAgents": "Filter agents",
@@ -11927,7 +12225,8 @@
     "optionalIfAlreadyConfigured": "Optional if already configured",
     "finishSetup": "Finish setup",
     "couldNotRemoveUnusedSetupCredential": " Could not remove an unused setup credential. Remove it from Secrets before retrying.",
-    "useAProviderModelId": " Use a {{provider}}/model ID."
+    "useAProviderModelId": " Use a {{provider}}/model ID.",
+    "defaultEnvironment": "Default: {{environment}}"
   },
   "boardClaim": {
     "invalidBoardClaimUrl": "Invalid board claim URL.",
@@ -12109,7 +12408,8 @@
     "referencedTasks": "Referenced tasks",
     "mentionedIn": "Mentioned in",
     "noOtherTaskMentionsThis": "No other task mentions this task.",
-    "tasksThatMentionThisTask": "Tasks that mention this task"
+    "tasksThatMentionThisTask": "Tasks that mention this task",
+    "completedOfTotal": "{{completed}} of {{total}} complete"
   },
   "decisionQueuePage": {
     "decisions": "Decisions",
@@ -12226,7 +12526,9 @@
     "countColumns_one": "{{count}} column",
     "countColumns_other": "{{count}} columns",
     "viewImageTitle": "View image: {{title}}",
-    "openVideoTitle": "Open video: {{title}}"
+    "openVideoTitle": "Open video: {{title}}",
+    "openImage": "Open image",
+    "viewData": "View data"
   },
   "artifactsPanel": {
     "forReview": "For Review",
@@ -12440,7 +12742,9 @@
     "thisFileIsTooLarge2": "This file is too large or is not supported for text preview. Download it instead.",
     "downloadFile": "Download file",
     "htmlView": "HTML view",
-    "csvView": "CSV view"
+    "csvView": "CSV view",
+    "downloadNamed": "Download {{title}}",
+    "rawText": "{{title}} raw text"
   },
   "devRestartBanner": {
     "restartPaperclipNowThisMay": "Restart Paperclip now? This may interrupt {{activeRunLabel}}.",
@@ -12460,7 +12764,10 @@
     "backendFilesChangedAndMigrationsPending": "backend files changed and migrations are pending",
     "pendingMigrationsNeedAFreshBoot": "pending migrations need a fresh boot",
     "backendFilesChangedSinceServerBooted": "backend files changed since this server booted",
-    "pendingMigrations": "Pending migrations: {{list}}"
+    "pendingMigrations": "Pending migrations: {{list}}",
+    "updated": "updated {{time}}",
+    "moreCount": "+{{count}} more",
+    "changed": "Changed:"
   },
   "issueAttachmentsSection": {
     "unableToLoadAttachmentPreview": "Unable to load attachment preview ({{status}})",
@@ -12510,7 +12817,11 @@
     "loadingOrganizations": "Loading organizations...",
     "deleteOrganization": "Delete Organization",
     "unlimitedBudget": "Unlimited budget",
-    "deleteThisOrganizationAndAll": "Delete this organization and all its data? This cannot be undone."
+    "deleteThisOrganizationAndAll": "Delete this organization and all its data? This cannot be undone.",
+    "agentCount_one": "{{count}} agent",
+    "agentCount_other": "{{count}} agents",
+    "taskCount_one": "{{count}} task",
+    "taskCount_other": "{{count}} tasks"
   },
   "documentFrameHeader": {
     "collapseDocumentkeyDocument": "Collapse {{documentKey}} document",
@@ -12559,7 +12870,9 @@
     "youCanAddInstructionsAnd": "You can add instructions and pick an update policy while this runs.",
     "noSummaryYet": "No summary yet.",
     "refreshCard": "Refresh card",
-    "noSummaryYetInline": "no summary yet"
+    "noSummaryYetInline": "no summary yet",
+    "integrating_one": "Integrating {{count}} change…",
+    "integrating_other": "Integrating {{count}} changes…"
   },
   "secretPicker": {
     "upOneFolder": "Up one folder",
@@ -12618,7 +12931,11 @@
     "toGiveYourAgentsThe": "to give your agents the tools they need.",
     "credentialsDeletedMoreRemain_one": "This connection's saved credentials are deleted and agents lose access through it immediately. Agents can still use {{app}} through {{count}} other active connection.",
     "credentialsDeletedMoreRemain_other": "This connection's saved credentials are deleted and agents lose access through it immediately. Agents can still use {{app}} through {{count}} other active connections.",
-    "apps": "Apps"
+    "apps": "Apps",
+    "allCount": "All ({{count}})",
+    "needsAttentionCount": "Needs attention ({{count}})",
+    "deleteConnectionQuestion": "Delete {{app}} connection?",
+    "thisApp": "this"
   },
   "attentionInteractionResolver": {
     "loadingDecision": "Loading decision…",
@@ -12888,7 +13205,11 @@
     "idempotentClaim": "Idempotent claim",
     "planDocument": "Plan document",
     "acceptedPlanRevisions_one": "1 accepted plan revision",
-    "acceptedPlanRevisions_other": "{{count}} accepted plan revisions"
+    "acceptedPlanRevisions_other": "{{count}} accepted plan revisions",
+    "plan": "Plan",
+    "owner": "Owner:",
+    "createdOfRequested_one": "{{created}} of {{requested}} child task created",
+    "createdOfRequested_other": "{{created}} of {{requested}} child tasks created"
   },
   "aiConnectionSelect": {
     "chooseAConnection": "Choose a connection",
@@ -12916,7 +13237,8 @@
     "lastKnownAppsShown": " Last known apps are shown.",
     "tryRefreshingAgain": " Try refreshing again.",
     "refreshingApps": "Refreshing apps…",
-    "checkedOfTotal": " {{checked}} of {{total}}"
+    "checkedOfTotal": " {{checked}} of {{total}}",
+    "connectedAppsList": "Connected {{provider}} apps"
   },
   "stageSecretsPanel": {
     "secretsAreAvailableOnlyTo": "Secrets are available only to step automation. Pick an agent to run this step, then add the secrets it needs.",
@@ -12952,7 +13274,8 @@
     "service": "Service",
     "linkedTasks": "Linked tasks",
     "branchCopied": "Branch copied",
-    "pathCopied": "Path copied"
+    "pathCopied": "Path copied",
+    "servicesCount": "{{running}}/{{total}} services"
   },
   "taskChatComposer": {
     "editQueuedMessage": "Edit queued message…",
@@ -12991,7 +13314,9 @@
     "selectAssignee": "Select assignee",
     "noAssignee": "No assignee",
     "searchAssignees": "Search assignees…",
-    "theAgent": "the agent"
+    "theAgent": "the agent",
+    "pendingCount_one": "{{count}} pending",
+    "pendingCount_other": "{{count}} pending"
   },
   "issueContinuationHandoff": {
     "collapseContinuationHandoff": "Collapse continuation handoff",
@@ -13109,7 +13434,12 @@
     "statusNoConcreteAction": "No concrete action",
     "statusNoUsefulOutput": "No useful output",
     "statusNoneRecorded": "None recorded",
-    "continuationAttempt": "Continuation attempt {{attempt}}"
+    "continuationAttempt": "Continuation attempt {{attempt}}",
+    "runningNowByAgent": "Running now by {{agent}}",
+    "queuedForAgent": "Queued for {{agent}}",
+    "automaticRetryScheduledForAgent": "Automatic retry scheduled for {{agent}}",
+    "summaryByAgent": "{{status}} by {{agent}}",
+    "olderItemsNotShown": "older items not shown"
   },
   "issueChatThread": {
     "usingCurrenttoolname": "Using {{currentToolName}}",
@@ -13229,7 +13559,10 @@
     "restBlocked": " — everything else is blocked by default."
   },
   "skillSourceBranchRepairDialog": {
-    "chooseANewBranch": "Choose a new branch"
+    "chooseANewBranch": "Choose a new branch",
+    "couldNotChangeBranch": "Could not change the branch. Try again.",
+    "currentlyTracking": "Currently tracking",
+    "theDefaultBranch": "the default branch"
   },
   "voiceCallProvider": {
     "currentVoiceCall": "Current voice call",
@@ -13246,7 +13579,8 @@
     "setUpAConnection": "Set up a connection",
     "setupIncomplete": "Setup incomplete",
     "continue": "Continue →",
-    "connectANewAccount": "Connect a new account"
+    "connectANewAccount": "Connect a new account",
+    "providerAccount": "{{provider}} account"
   },
   "approvalCard": {
     "approving": "Approving...",
@@ -13408,7 +13742,9 @@
     "allReviews2": "All reviews",
     "commit": "Commit",
     "repositoryAccessRefreshedNewRepositories": "Repository access refreshed. New repositories stay disabled.",
-    "changesSaved": "Changes saved."
+    "changesSaved": "Changes saved.",
+    "repositoriesEnabledSummary": "{{enabled}} of {{total}} repositories enabled. Toggle all applies across the entire connection.",
+    "couldNotLoadBotConfiguration": "Could not load the bot configuration."
   },
   "importFromVaultDialog": {
     "skipped": "Skipped",
@@ -13622,7 +13958,12 @@
     "thisTaskNeedsANext": "This task needs a next step",
     "needsNextStep": "Needs next step",
     "live": "Live",
-    "taskBoardColumns": "Task board columns"
+    "taskBoardColumns": "Task board columns",
+    "showMore": "Show {{count}} more",
+    "showingOf": "Showing {{shown}} of {{total}}",
+    "subTasksRunningBelow_one": "{{count}} sub-task running below",
+    "subTasksRunningBelow_other": "{{count}} sub-tasks running below",
+    "liveBelow": "{{count}} live below"
   },
   "runTranscriptView": {
     "inspectNameInput": "Inspect {{name}} input",
@@ -13673,7 +14014,11 @@
     "logLine": "{{count}} log line",
     "logLines": "{{count}} log lines",
     "systemMessage": "{{count}} system message",
-    "systemMessages": "{{count}} system messages"
+    "systemMessages": "{{count}} system messages",
+    "fileReference": "file reference",
+    "terminal": "terminal",
+    "init": "init",
+    "result": "result"
   },
   "fastResponseSettings": {
     "fastResponse": "Fast response",
@@ -13835,7 +14180,9 @@
     "signedInClickConnect": "{{provider}} is signed in. Click Connect to use this account.",
     "checkAgain": "Check again",
     "startSignInAgain": "Start sign-in again",
-    "provideYourProvidernameApiKey": "Provide your {{providerName}} API key to connect"
+    "provideYourProvidernameApiKey": "Provide your {{providerName}} API key to connect",
+    "authorizationCode": "Authorization code",
+    "pasteAuthorizationCodeHere": "Paste authorization code here"
   },
   "bootstrapPendingPage": {
     "preferToFinishSetupFrom": "Prefer to finish setup from the host?",
@@ -13916,7 +14263,9 @@
     "githubConnection": "GitHub connection",
     "connectGithubToContinue": "Connect GitHub to continue.",
     "manageGithubConnections": "Manage GitHub connections",
-    "chooseANewBranch": "Choose a new branch"
+    "chooseANewBranch": "Choose a new branch",
+    "sourceUpdatedSaveAgain": "This source was updated. Your connection is still selected. Save again to apply it.",
+    "saveConnection": "Save connection"
   },
   "decisionsToolbar": {
     "decisionsControls": "Decisions controls",
@@ -13937,7 +14286,8 @@
     "referencedBy": "Referenced by",
     "otherTasksThatCurrentlyPoint": "Other tasks that currently point at this task.",
     "thisTaskDoesNotReference": "This task does not reference any other tasks yet.",
-    "noOtherTasksReferenceThis": "No other tasks reference this task yet."
+    "noOtherTasksReferenceThis": "No other tasks reference this task yet.",
+    "couldnTLoadExternalObjects": "Couldn't load external objects."
   },
   "managedSlackSetup": {
     "yourAppWasCreatedRetry": "Your app was created. Retry to finish its configuration.",
@@ -13955,14 +14305,16 @@
     "openSlackAppSettings": "Open Slack app settings",
     "iCheckedSlackAndNo": "I checked Slack and no app was created. Create a new app.",
     "continueInSlack": "Continue in Slack",
-    "reconnectSlack": "Reconnect Slack"
+    "reconnectSlack": "Reconnect Slack",
+    "to": "to"
   },
   "blockedInboxView": {
     "couldnTLoadTheBlocked": "Couldn't load the Blocked tab.",
     "trying": "Trying…",
     "noWorkIsStopped": "No work is stopped.",
     "tasksThatNeedADecision": "Tasks that need a decision, recovery, or external action will appear here.",
-    "noStoppedItemsMatchYour": "No stopped items match your search."
+    "noStoppedItemsMatchYour": "No stopped items match your search.",
+    "otherInboxTabsStillWork": "Other Inbox tabs still work."
   },
   "interactionGovernancePanel": {
     "suggestedTasks": "Suggested tasks",
@@ -14017,7 +14369,8 @@
     "loadingYourSavedServiceAccess": "Loading your saved service access…",
     "connectGoogleWorkspace": "Connect Google Workspace",
     "chooseTheGoogleServicesTo": "Choose the Google services to connect.",
-    "selectAtLeastOneService": "Select at least one service to continue."
+    "selectAtLeastOneService": "Select at least one service to continue.",
+    "serviceAccess": "{{name}} access"
   },
   "summarySlotCard": {
     "summaryGenerationCouldNotBe": "Summary generation could not be started.",
@@ -14045,7 +14398,9 @@
     "generateSummary": "Generate summary",
     "selectSummaryRevision": "Select summary revision",
     "summarizerAgentBody": "Summaries are generated by Paperclip's built-in Summarizer agent. Configure its adapter and model before requesting this summary.",
-    "revisionCount": "{{count}} revisions"
+    "revisionCount": "{{count}} revisions",
+    "revNumber": "Rev {{number}}",
+    "workingWith": "Working with {{tool}}"
   },
   "chatComposer": {
     "dropToAttach": "Drop to attach",
@@ -14059,7 +14414,15 @@
   "csvPreview": {
     "fileIsEmpty": "File is empty.",
     "csvPreview": "CSV preview",
-    "row": "Row"
+    "row": "Row",
+    "rowCount_one": "{{count}} row",
+    "rowCount_other": "{{count}} rows",
+    "columnCount_one": "{{count}} column",
+    "columnCount_other": "{{count}} columns",
+    "showingTheFirstNRows": "Showing the first {{rows}} rows and {{columns}} columns. Download for the complete file.",
+    "csvTable": "{{title}} CSV table",
+    "firstRecordUsedAsColumnHeaders": "— first record used as column headers",
+    "columnN": "Column {{n}}"
   },
   "decisionHistory": {
     "configureADecisionModel": "Configure a decision model",
@@ -14083,7 +14446,8 @@
     "couldNotLoadDecisionRequests": "Could not load decision requests.",
     "whenFeature": "When / feature",
     "responsible": "Responsible",
-    "tokensInOut": "Tokens in / out"
+    "tokensInOut": "Tokens in / out",
+    "toRunATest": "to run a test."
   },
   "artifacts": {
     "artifacts": "Artifacts",
@@ -14114,7 +14478,27 @@
     "receivingTheRepositoryFromGithub": "Receiving the repository from GitHub…",
     "importingSkills": "Importing {{count}} skills",
     "skillsFound": "{{count}} skills found",
-    "checkedOfTotal": "{{checked}} of {{total}} checked"
+    "checkedOfTotal": "{{checked}} of {{total}} checked",
+    "downloadPrepared": "prepared",
+    "downloadReceived": "received",
+    "repositoryDownload": "Repository download",
+    "savingSkillSnapshots": "Saving skill snapshots",
+    "scanningRepository": "Scanning repository",
+    "findSkills": "Find skills",
+    "checkFiles": "Check files",
+    "selectedSkills": "Selected skills",
+    "recentlyChecked": "Recently checked",
+    "selectedCount": "{{count}} selected",
+    "checkedCount": "{{count}} checked",
+    "skillsBeingImported": "Skills being imported",
+    "skillsCheckedSoFar": "Skills checked so far",
+    "fileCount_one": "{{count}} file",
+    "fileCount_other": "{{count}} files",
+    "savingCompletePackages": "Saving complete packages, including scripts and references",
+    "waitingForRepositoryContents": "Waiting for repository contents…",
+    "filesProgress": "{{checked}}/{{total}} files",
+    "thisMayTakeAMoment": "This may take a moment for larger packages.",
+    "youllChooseWhatToImport": "You’ll choose what to import after every package has been checked."
   },
   "whatNeedsMe": {
     "decisions": "Decisions",
@@ -14179,7 +14563,9 @@
     "thinking": "Thinking",
     "thought": "Thought",
     "activityHistory": "Activity history",
-    "permissionDecision": "Permission {{decision}}"
+    "permissionDecision": "Permission {{decision}}",
+    "activityCount_one": "{{count}} activity",
+    "activityCount_other": "{{count}} activities"
   },
   "myIssues": {
     "myTasks": "My Tasks",
@@ -14301,7 +14687,9 @@
     "reProbe": "Re-probe",
     "activate": "Activate",
     "activating": "Activating…",
-    "toolCatalog": "Tool catalog — {{name}}"
+    "toolCatalog": "Tool catalog — {{name}}",
+    "willBeCreatedAs": "will be created as {{type}}.",
+    "removeCredentialReferenceFor": "Remove credential reference for {{secret}}"
   },
   "projectWorkspaceDetail": {
     "workspaceCommandsJsonMustBe": "Workspace commands JSON must be a JSON object.",
@@ -14315,7 +14703,8 @@
     "noServicesHaveBeenStarted": "No services have been started for this workspace yet.",
     "noWorkspaceCommandConfigIs": "No workspace command config is defined for this workspace yet.",
     "loadingWorkspacePlugin": "Loading workspace plugin...",
-    "makePrimary": "Make primary"
+    "makePrimary": "Make primary",
+    "paperclipDerivesServicesAndJobs": "Paperclip derives Services and Jobs from this JSON. Prefer editing named commands first; use raw JSON for advanced lifecycle, port, readiness, or environment settings."
   },
   "designSidebar": {
     "globalSearch": "Global search",
@@ -14381,7 +14770,9 @@
     "openPreview": "Open preview",
     "openOnGithub": "Open on GitHub",
     "openDocument": "Open document",
-    "openService": "Open service"
+    "openService": "Open service",
+    "revNumber": "rev {{number}}",
+    "port": "port {{port}}"
   },
   "issuePrivacyActions": {
     "couldnTCheckTaskPrivacy": "Couldn't check task privacy. Retry before making this task public.",
@@ -14399,7 +14790,9 @@
     "contentAlreadySeenByOthers": "Content already seen by others cannot be taken back.",
     "keepPrivate": "Keep private",
     "makingPublic": "Making public…",
-    "thisTaskWillAlsoLeaveItsPersonal": "This task will also leave its personal project."
+    "thisTaskWillAlsoLeaveItsPersonal": "This task will also leave its personal project.",
+    "onlyTheTaskOwnerOrAnAdminCan": "Only the task owner or an admin can change who can see this task.",
+    "everyoneInTheCompanyWillBeAbleToRead": "Everyone in the company will be able to read this task, its comments, documents, and run history. Existing private subtasks keep their privacy."
   },
   "agentChannelsPanel": {
     "channels": "Channels",
@@ -14448,7 +14841,8 @@
     "searchTasks": "Search tasks…",
     "taskLayout": "Task layout",
     "collapseAllTasks": "Collapse all tasks",
-    "expandAllTasks": "Expand all tasks"
+    "expandAllTasks": "Expand all tasks",
+    "taskViewWithLabel": "Task view: {{label}}"
   },
   "voiceTranscript": {
     "theTranscriptIsUnavailableYour": "The transcript is unavailable. Your task history is still available.",
@@ -14505,7 +14899,46 @@
     "searchResponsible": "Search responsible..."
   },
   "feedCard": {
-    "review": "Review →"
+    "review": "Review →",
+    "opened": "opened",
+    "movedToIdle": "moved to idle",
+    "movedTo": "moved to {{status}}",
+    "updated": "updated",
+    "pickedUp": "picked up",
+    "released": "released",
+    "deleted": "deleted",
+    "approved": "approved",
+    "rejected": "rejected",
+    "wantsToHire": "wants to hire",
+    "hired": "hired",
+    "paused": "paused",
+    "resumed": "resumed",
+    "terminated": "terminated",
+    "createdProject": "created project",
+    "updatedProject": "updated project",
+    "deletedProject": "deleted project",
+    "createdGoal": "created goal",
+    "updatedGoal": "updated goal",
+    "deletedGoal": "deleted goal",
+    "createdOrganization": "created organization",
+    "updatedOrganization": "updated organization",
+    "archivedOrganization": "archived organization",
+    "updatedOrganizationBudget": "updated organization budget",
+    "setPriorityTo": "{{actor}} set priority to {{priority}} on {{identifier}} {{title}}",
+    "wroteDocOn": "{{actor}} wrote doc on {{identifier}} {{title}}",
+    "editedDocOn": "{{actor}} edited doc on {{identifier}} {{title}}",
+    "deletedDocFrom": "{{actor}} deleted doc from {{identifier}} {{title}}",
+    "deliveredWorkOn": "{{actor}} delivered work on {{identifier}} {{title}}",
+    "updatedWorkOn": "{{actor}} updated work on {{identifier}} {{title}}",
+    "removedWorkFrom": "{{actor}} removed work from {{identifier}} {{title}}",
+    "commentedOn": "{{actor}} commented on {{identifier}} {{title}}",
+    "attachedFileTo": "{{actor}} attached a file to {{identifier}} {{title}}",
+    "removedAttachmentFrom": "{{actor}} removed attachment from {{identifier}} {{title}}",
+    "needsApprovalOn": "{{actor}} needs approval on {{identifier}} {{title}}",
+    "requestedApprovalOn": "{{actor}} requested approval on {{identifier}} {{title}}",
+    "requestedChangesOn": "{{actor}} requested changes on {{identifier}} {{title}}",
+    "startedRunOn": "{{actor}} started a run on {{identifier}} {{title}}",
+    "cancelledRunOn": "{{actor}} cancelled a run on {{identifier}} {{title}}"
   },
   "searchSortMenu": {
     "sortResults": "Sort results",
@@ -14534,7 +14967,10 @@
     "countMembersCanUse_one": "{{count}} member can use this identity.",
     "countMembersCanUse_other": "{{count}} members can use this identity.",
     "countNewActionsNeedYourOk_one": "{{count}} new action needs your OK.",
-    "countNewActionsNeedYourOk_other": "{{count}} new actions need your OK."
+    "countNewActionsNeedYourOk_other": "{{count}} new actions need your OK.",
+    "checkGitHubAccessFailed": "GitHub access could not be checked. Try again.",
+    "actionsAvailable_one": "{{count}} action available",
+    "actionsAvailable_other": "{{count}} actions available"
   },
   "onboardingWizard": {
     "myManagedproviderSubscription": "My {{managedProvider}} subscription",
@@ -14547,7 +14983,10 @@
     "retrying": "Retrying...",
     "unsetAnthropicApiKey": "Unset ANTHROPIC_API_KEY",
     "gatewayUrl": "Gateway URL",
-    "warnings": "Warnings"
+    "warnings": "Warnings",
+    "webhookUrl": "Webhook URL",
+    "claudeFailedWhile": "Claude failed while",
+    "isSetClearItAndRetry": "is set. You can clear it in this adapter config and retry the probe."
   },
   "announcementWell": {
     "dismissedForThisVisit": "Dismissed for this visit",
@@ -14566,7 +15005,8 @@
     "viewInHoneycomb": "View in Honeycomb"
   },
   "searchableSelect": {
-    "closeSelector": "Close selector"
+    "closeSelector": "Close selector",
+    "noOptionsFound": "No options found."
   },
   "externalObjectRows": {
     "externalObjects": "External objects",
@@ -14655,7 +15095,8 @@
     "via": "Via",
     "composioPermissionsApplyToAll": "Composio permissions apply to all apps on this connection.",
     "checking": "Checking…",
-    "openInComposio": "Open in Composio"
+    "openInComposio": "Open in Composio",
+    "manageApp": "Manage {{app}}"
   },
   "issueThreadInteractionCard": {
     "changesRequested": "Changes requested",
@@ -14774,7 +15215,25 @@
     "proposedBy": "proposed by {{who}}",
     "createdOn": "Created {{date}}",
     "withdrawnBy": "Withdrawn by",
-    "question": "Question {{number}}"
+    "question": "Question {{number}}",
+    "includeTask": "Include {{task}}",
+    "followOnHidden_one": "{{count}} follow-on task hidden in preview",
+    "followOnHidden_other": "{{count}} follow-on tasks hidden in preview",
+    "questionCount_one": "{{count}} question",
+    "questionCount_other": "{{count}} questions",
+    "describeYourAnswerFor": "Describe your answer for {{prompt}}",
+    "otherAnswerFor": "Other answer for {{prompt}}",
+    "identityNeedsYou": "{{agent}} needs your {{provider}} identity for work running as you.",
+    "identityNeedsThem": "{{agent}} needs {{addressee}}'s {{provider}} identity for work running as them.",
+    "identityNeededThem": "{{agent}} needed {{addressee}}'s {{provider}} identity for work running as them.",
+    "waitingFor": "Waiting for {{addressee}}",
+    "onlyAddresseeCanConnect": "Only {{addressee}} can connect their own {{provider}} account.",
+    "removeShot": "Remove {{name}}",
+    "verdictThisItem": "{{verdict}} this item",
+    "draftVerdicts_one": "{{count}} draft verdict ready to apply",
+    "draftVerdicts_other": "{{count}} draft verdicts ready to apply",
+    "decidedOfTotal": "{{decided}} of {{total}} decided",
+    "resolvedOn": " on {{date}}"
   },
   "routineActivityRow": {
     "connectionWorkingNoRunOr": "Connection working · No run or task created",
@@ -14804,14 +15263,17 @@
     "plan": "Plan",
     "waitingForTheFirstPlan": "Waiting for the first plan step…",
     "openTheSynchronizedPlanTo": "Open the synchronized plan to review it.",
-    "streamingPlanPreview": "Streaming Plan preview"
+    "streamingPlanPreview": "Streaming Plan preview",
+    "openPlan": "Open Plan",
+    "openPlanRevision": "Open Plan revision {{revision}}"
   },
   "sidePanelTabs": {
     "tabClosed": "Tab closed.",
     "lastTabClosedChooseSomething": "Last tab closed. Choose something to open.",
     "movedTabToPositionTarget": "Moved {{tab}} to position {{target}} of {{length}}.",
     "movedTabToPositionTo": "Moved {{tab}} to position {{to}} of {{length}}.",
-    "tab": "tab"
+    "tab": "tab",
+    "openANewTab": "Open a new tab"
   },
   "appNotConnected": {
     "checkingWhoCanReconnectThis": "Checking who can reconnect this identity…",
@@ -14823,7 +15285,8 @@
     "signInToApplicationnameAgain": "Sign in to {{applicationName}} again to restore access.",
     "addAWorkingApplicationnameKey": "Add a working {{applicationName}} key to restore access.",
     "connectApplicationnameSoAgentsCan": "Connect {{applicationName}} so agents can use it.",
-    "needsAttention": "Needs attention"
+    "needsAttention": "Needs attention",
+    "app": "App"
   },
   "externalAgentInviteDialog": {
     "loadingAvailableAgents": "Loading available agents…",
@@ -15015,7 +15478,8 @@
   },
   "starToggle": {
     "unstarResource": "Unstar {{name}}",
-    "starResource": "Star {{name}}"
+    "starResource": "Star {{name}}",
+    "couldntSaveRetry": "Couldn't save — retry"
   },
   "externalObjectPill": {
     "pullRequestNumber": "PR {{number}}",
@@ -15048,7 +15512,8 @@
     "toolId": "tool ID"
   },
   "modeBadge": {
-    "localTrusted": "Local trusted"
+    "localTrusted": "Local trusted",
+    "authenticated": "Authenticated {{exposure}}"
   },
   "breadcrumbBar": {
     "hideProperties": "Hide properties",
@@ -15070,7 +15535,9 @@
     "succeeded": "succeeded: {{count}}",
     "recovered": "recovered: {{count}} (retry succeeded)",
     "failed": "failed: {{count}}",
-    "other": "other: {{count}}"
+    "other": "other: {{count}}",
+    "dayIssueCount_one": "{{date}}: {{count}} issue",
+    "dayIssueCount_other": "{{date}}: {{count}} issues"
   },
   "mediaArtifactCard": {
     "openGallery": "Open gallery: {{title}}",
@@ -15102,5 +15569,48 @@
     "lockedReason": "{{label}} — {{reason}}",
     "unavailableOrNoAccess": "unavailable or you don't have access",
     "privateNoAccess": "private, you don't have access"
+  },
+  "skillFolderTree": {
+    "newFolder": "New {{label}} folder",
+    "folderActionsFor": "Folder actions for {{label}}"
+  },
+  "propertyPicker": {
+    "edit": "Edit {{label}}"
+  },
+  "sidePanelTab": {
+    "closeTab": "Close {{label}}"
+  },
+  "searchFilterMenu": {
+    "filterByLabel": "Filter by {{label}}"
+  },
+  "remoteMcpDesignExample": {
+    "designExampleNotice": "Design example only. Review the interactive states in Storybook → Apps / Connections. No credentials are saved or sent."
+  },
+  "costAmount": {
+    "costsUnavailable_one": "{{count}} cost unavailable",
+    "costsUnavailable_other": "{{count}} costs unavailable"
+  },
+  "skillPolicyDenial": {
+    "restrictedTitle": "{{action}} is restricted by your organization policy.",
+    "restrictedTitleNoAction": "This action is restricted by your organization policy.",
+    "adminRequiredTitle": "This change needs administration access.",
+    "platformBlockedTitle": "This action is blocked by a platform safety rule.",
+    "platformTitleAuthenticationRequired": "Sign in to manage skills.",
+    "platformTitleCompanyBoundaryDenied": "This skill belongs to another organization.",
+    "platformTitleWorkspaceBoundaryDenied": "This skill source is outside an allowed workspace.",
+    "platformTitleSourceValidationFailed": "This skill source failed validation.",
+    "platformTitleUnsafeContentBlocked": "This skill contains unsafe content.",
+    "platformTitleSecretHandlingBlocked": "This skill exposes a secret value.",
+    "platformTitleActorRestricted": "This action isn't available for the current actor.",
+    "platformRemediationAuthenticationRequired": "Sign in and try again.",
+    "platformRemediationCompanyBoundaryDenied": "Open the skill from the organization that owns it.",
+    "platformRemediationWorkspaceBoundaryDenied": "Import from a configured Paperclip workspace or the organization managed-skill directory.",
+    "platformRemediationSourceValidationFailed": "Fix the flagged source and retry.",
+    "platformRemediationUnsafeContentBlocked": "Remove the fetch-and-execute or unsafe pattern before saving.",
+    "platformRemediationSecretHandlingBlocked": "Remove the secret value before saving.",
+    "platformRemediationActorRestricted": "Retry from an account with access to this action.",
+    "defaultPolicyRemediation": "An organization administrator can change the skill policy to allow this.",
+    "defaultAdminRemediation": "This requires organization administration access. Ask an administrator to make this change.",
+    "fixFlaggedIssue": "Fix the flagged issue and try again."
   }
 }

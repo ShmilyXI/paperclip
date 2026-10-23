@@ -165,7 +165,7 @@ export function BlockedInboxView({
           <div className="flex-1 space-y-1">
             <p className="text-sm font-medium">{t("blockedInboxView.couldnTLoadTheBlocked")}</p>
             <p className="text-xs opacity-80">
-              Other Inbox tabs still work. {message}
+              {t("blockedInboxView.otherInboxTabsStillWork")}{" "}{message}
             </p>
           </div>
           <Button

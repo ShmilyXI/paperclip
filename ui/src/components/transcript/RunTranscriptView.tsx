@@ -336,7 +336,7 @@ function isCommandTool(name: string, input: unknown): boolean {
 }
 
 function displayToolName(name: string, input: unknown): string {
-  if (isCommandTool(name, input)) return "Executing command";
+  if (isCommandTool(name, input)) return t("runTranscriptView.executingCommand");
   return humanizeLabel(name);
 }
 
@@ -613,7 +613,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
     }
 
     if (entry.kind === "workspace_file_reference") {
-      blocks.push({ type: "event", ts: entry.ts, label: "file reference", tone: "info", text: entry.displayName, detail: entry.path });
+      blocks.push({ type: "event", ts: entry.ts, label: t("runTranscriptView.fileReference"), tone: "info", text: entry.displayName, detail: entry.path });
       continue;
     }
 
@@ -628,7 +628,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
     }
 
     if (entry.kind === "run_terminal") {
-      blocks.push({ type: "event", ts: entry.ts, label: "terminal", tone: entry.runState === "failed" ? "error" : "info", text: `${entry.runState} · ${entry.disposition}`, detail: entry.stopReason });
+      blocks.push({ type: "event", ts: entry.ts, label: t("runTranscriptView.terminal"), tone: entry.runState === "failed" ? "error" : "info", text: `${entry.runState} · ${entry.disposition}`, detail: entry.stopReason });
       continue;
     }
 
@@ -690,7 +690,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
       blocks.push({
         type: "event",
         ts: entry.ts,
-        label: "init",
+        label: t("runTranscriptView.init"),
         tone: "info",
         text:
           t("runTranscriptView.modelLine", { model: entry.model }) +
@@ -703,7 +703,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
       blocks.push({
         type: "event",
         ts: entry.ts,
-        label: "result",
+        label: t("runTranscriptView.result"),
         tone: entry.isError ? "error" : "info",
         text: entry.text.trim() || entry.errors[0] || (entry.isError ? t("runTranscriptView.runFailed") : t("runTranscriptView.completed")),
         detail:
@@ -1490,7 +1490,7 @@ function TranscriptEventRow({
           <span className="mt-(--sz-7px) h-1.5 w-1.5 shrink-0 rounded-full bg-current/50" />
         )}
         <div className="min-w-0 flex-1">
-          {block.label === "result" && block.tone !== "error" ? (
+          {block.label === t("runTranscriptView.result") && block.tone !== "error" ? (
             <MarkdownBody
               className={cn(
                 "[&>*:first-child]:mt-0 [&>*:last-child]:mb-0 text-sky-700 dark:text-sky-300",

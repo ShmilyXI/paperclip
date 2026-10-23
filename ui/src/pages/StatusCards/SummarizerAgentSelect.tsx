@@ -61,7 +61,7 @@ export function SummarizerAgentSelect({
       options={agentOptions}
       placeholder={t("summarizerAgentSelect.summarizerDefault")}
       noneLabel={t("summarizerAgentSelect.summarizerDefault")}
-      searchPlaceholder="Search agents..."
+      searchPlaceholder={t("summarizerAgentSelect.searchAgents")}
       emptyMessage={t("summarizerAgentSelect.noAgentsFound")}
       onChange={(next) => onChange(next.startsWith("agent:") ? next.slice("agent:".length) : "")}
       className="h-8 text-sm"

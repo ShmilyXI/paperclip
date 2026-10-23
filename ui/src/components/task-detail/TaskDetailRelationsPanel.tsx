@@ -135,7 +135,7 @@ export function TaskDetailSubtasksPanel({
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
           <span>{t("taskDetailRelationsPanel.progress")}</span>
-          <span className="font-mono">{completed} of {items.length} complete</span>
+          <span className="font-mono">{t("taskDetailRelationsPanel.completedOfTotal", { completed, total: items.length })}</span>
         </div>
         <div
           className="h-1.5 overflow-hidden rounded-full bg-muted"

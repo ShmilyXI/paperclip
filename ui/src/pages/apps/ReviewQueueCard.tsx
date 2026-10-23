@@ -112,7 +112,7 @@ function ReviewRow({
     mutationFn: () => toolsApi.approveActionRequest(companyId, item.request.id),
     onMutate: () => setResolving("allow"),
     onSuccess: () => {
-      pushToast({ title: t("reviewQueueCard.allowedOnce"), body: `${actionLabel(item)} can run this time.`, tone: "success" });
+      pushToast({ title: t("reviewQueueCard.allowedOnce"), body: t("reviewQueueCard.canRunThisTime", { action: actionLabel(item) }), tone: "success" });
       invalidate();
     },
     onError: (error) => {
@@ -130,7 +130,7 @@ function ReviewRow({
     onSuccess: () => {
       pushToast({
         title: t("reviewQueueCard.alwaysAllowed"),
-        body: `${actionLabel(item)} won’t ask again.`,
+        body: t("reviewQueueCard.wontAskAgain", { action: actionLabel(item) }),
         tone: "success",
       });
       invalidate();
@@ -147,7 +147,7 @@ function ReviewRow({
     mutationFn: () => toolsApi.declineActionRequest(companyId, item.request.id),
     onMutate: () => setResolving("decline"),
     onSuccess: () => {
-      pushToast({ title: t("reviewQueueCard.declined"), body: `${actionLabel(item)} won’t run.`, tone: "info" });
+      pushToast({ title: t("reviewQueueCard.declined"), body: t("reviewQueueCard.wontRun", { action: actionLabel(item) }), tone: "info" });
       invalidate();
     },
     onError: (error) => {
@@ -198,15 +198,15 @@ function ReviewRow({
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Button size="sm" onClick={() => allowOnce.mutate()} disabled={busy}>
           {resolving === "allow" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Check className="mr-1.5 h-3.5 w-3.5" />}
-          Allow once
+          {t("reviewQueueCard.allowOnce")}
         </Button>
         {item.requestedByAgentId && item.connectionId && !item.request.approvalId ? <Button size="sm" variant="outline" onClick={() => alwaysAllow.mutate()} disabled={busy}>
           {resolving === "always" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : null}
-          Always allow
+          {t("reviewQueueCard.alwaysAllow")}
         </Button> : null}
         <Button size="sm" variant="ghost" onClick={() => decline.mutate()} disabled={busy}>
           {resolving === "decline" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <X className="mr-1.5 h-3.5 w-3.5" />}
-          Decline
+          {t("reviewQueueCard.decline")}
         </Button>
       </div>
     </div>

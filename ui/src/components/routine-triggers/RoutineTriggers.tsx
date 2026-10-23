@@ -105,7 +105,7 @@ export function RoutineTriggers() {
     if (setupId !== "new" && !trigger)
       return (
         <p role="alert">
-          This trigger is no longer available.{" "}
+          {t("triggers.thisTriggerIsNoLongerAvailable")}{" "}
           <Button variant="link" onClick={closeSetup}>
             {t("triggers.backToTriggers")}
           </Button>
@@ -114,7 +114,7 @@ export function RoutineTriggers() {
     if (trigger && !trigger.setupPending)
       return (
         <p>
-          This trigger is ready.{" "}
+          {t("triggers.thisTriggerIsReady")}{" "}
           <Button variant="link" onClick={closeSetup}>
             {t("triggers.backToTriggers")}
           </Button>

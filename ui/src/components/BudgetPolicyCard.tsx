@@ -106,7 +106,7 @@ export function BudgetPolicyCard({
           {summary.amount > 0 ? formatCents(summary.amount) : t("common.disabled")}
         </div>
         <div className="mt-1 text-xs text-muted-foreground">
-          Soft alert at {summary.warnPercent}%{summary.paused && summary.pauseReason ? ` · ${summary.pauseReason} pause` : ""}
+          {t("budgetPolicyCard.softAlertAt", { percent: summary.warnPercent })}{summary.paused && summary.pauseReason ? ` · ${summary.pauseReason} ${t("budgetPolicyCard.pauseSuffix")}` : ""}
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@ export function BudgetPolicyCard({
         <div className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">{t("budgetPolicyCard.observed")}</div>
         <div className="mt-2 text-xl font-semibold tabular-nums">{formatCents(summary.observedAmount)}</div>
         <div className="mt-1 text-xs text-muted-foreground">
-          {summary.amount > 0 ? `${summary.utilizationPercent}% of limit` : t("budgetPolicyCard.noCapConfigured")}
+          {summary.amount > 0 ? `${summary.utilizationPercent}${t("budgetPolicyCard.percentOfLimit")}` : t("budgetPolicyCard.noCapConfigured")}
         </div>
       </div>
       <div className="rounded-xl border border-border/70 bg-black/[0.18] px-4 py-3">
@@ -125,7 +125,7 @@ export function BudgetPolicyCard({
           {summary.amount > 0 ? formatCents(summary.amount) : t("common.disabled")}
         </div>
         <div className="mt-1 text-xs text-muted-foreground">
-          Soft alert at {summary.warnPercent}%{summary.paused && summary.pauseReason ? ` · ${summary.pauseReason} pause` : ""}
+          {t("budgetPolicyCard.softAlertAt", { percent: summary.warnPercent })}{summary.paused && summary.pauseReason ? ` · ${summary.pauseReason} ${t("budgetPolicyCard.pauseSuffix")}` : ""}
         </div>
       </div>
     </div>
@@ -133,9 +133,9 @@ export function BudgetPolicyCard({
 
   const progressSection = (
     <div className="space-y-2">
-      {summary.pendingRunCount > 0 && <p className="text-sm text-destructive">{summary.pendingRunCount} completed runs await accounting.</p>}
+      {summary.pendingRunCount > 0 && <p className="text-sm text-destructive">{t("budgetPolicyCard.completedRunsAwaitAccounting", { count: summary.pendingRunCount })}</p>}
       {summary.unpricedEventCount > 0 && (
-        <p className="text-sm text-destructive">{summary.unpricedEventCount} usage events are unpriced. Known spend excludes their unknown cost.</p>
+        <p className="text-sm text-destructive">{t("budgetPolicyCard.unpricedEvents", { count: summary.unpricedEventCount })}</p>
       )}
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>{t("common.remaining")}</span>
@@ -147,7 +147,7 @@ export function BudgetPolicyCard({
           aria-valuenow={Math.round(progress)}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label={`Budget utilization: ${Math.round(progress)}% used`}
+          aria-label={t("budgetPolicyCard.budgetUtilization", { percent: Math.round(progress) })}
           className={cn(
             "h-full rounded-full transition-(--tp-width-background-color) duration-200",
             summary.status === "hard_stop"

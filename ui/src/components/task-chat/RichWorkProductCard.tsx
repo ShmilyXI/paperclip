@@ -176,7 +176,7 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
     }
     case "document":
       Icon = FileText;
-      meta = [t("common.document"), stringMeta(metadata, "revision", "revisionNumber") ? `rev ${stringMeta(metadata, "revision", "revisionNumber")}` : null];
+      meta = [t("common.document"), stringMeta(metadata, "revision", "revisionNumber") ? t("richWorkProductCard.revNumber", { number: stringMeta(metadata, "revision", "revisionNumber") }) : null];
       action = t("richWorkProductCard.openDocument");
       break;
     case "preview_url":
@@ -186,7 +186,7 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
       break;
     case "runtime_service":
       Icon = Server;
-      meta = [stringMeta(metadata, "service", "serviceName") ?? workProduct.provider, stringMeta(metadata, "port") ? `port ${stringMeta(metadata, "port")}` : null];
+      meta = [stringMeta(metadata, "service", "serviceName") ?? workProduct.provider, stringMeta(metadata, "port") ? t("richWorkProductCard.port", { port: stringMeta(metadata, "port") }) : null];
       action = t("richWorkProductCard.openService");
       break;
   }

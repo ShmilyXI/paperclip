@@ -73,7 +73,7 @@ export function ManagedSlackSetup({ endpoint, disabled, saveDetails, onSaved, on
     {busy || choices.isPending || creating ? <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{busy ? needsAuthorization ? t("managedSlackSetup.openingSlack") : t("managedSlackSetup.connectingYourAgent") : creating ? t("managedSlackSetup.settingUpYourSlackApp") : t("managedSlackSetup.loadingSlack")}</p>
       : !choices.data?.managedAvailable ? <p className="text-sm">{t("managedSlackSetup.managedSlackSetupIsUnavailable")}</p>
       : <>
-        {workspaces.length === 1 && <p className="text-sm">{t("common.add")} <strong>{endpoint.assignedAgentName}</strong> to <strong>{workspaces[0]!.workspaceName}</strong>.</p>}
+        {workspaces.length === 1 && <p className="text-sm">{t("common.add")} <strong>{endpoint.assignedAgentName}</strong> {t("managedSlackSetup.to")} <strong>{workspaces[0]!.workspaceName}</strong>.</p>}
         {workspaces.length > 1 && <Select value={grantId ?? ""} onValueChange={setSelectedGrant} disabled={busy || started}>
           <SelectTrigger aria-label={t("managedSlackSetup.slackWorkspace")}><SelectValue placeholder={t("managedSlackSetup.chooseASlackWorkspace")} /></SelectTrigger>
           <SelectContent>{workspaces.map(workspace => <SelectItem key={workspace.grantId} value={workspace.grantId}>{workspace.workspaceName}</SelectItem>)}</SelectContent>

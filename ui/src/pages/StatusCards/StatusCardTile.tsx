@@ -192,7 +192,7 @@ export function StatusCardTile({
               <span className="min-w-0 flex-1 truncate" title={draftStream.statusLine ?? undefined}>
                 {draftStream.statusLine
                   ?? (card.pendingChangeCount > 0
-                    ? `Integrating ${card.pendingChangeCount} ${card.pendingChangeCount === 1 ? "change" : "changes"}…`
+                    ? t("statusCardTile.integrating", { count: card.pendingChangeCount })
                     : t("statusCardTile.updatingNow"))}
               </span>
               {card.generatingIssueId ? (

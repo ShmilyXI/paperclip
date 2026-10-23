@@ -831,9 +831,9 @@ export function InviteLandingPage() {
                       ? t("inviteLanding.grantingYourAccessToCompanydisplayname", { companyDisplayName })
                       : isCurrentMember
                       ? t("inviteLanding.thisAccountAlreadyBelongsTo2", { companyDisplayName })
-                      : `This will ${
-                          invite.inviteType === "bootstrap_ceo" ? "finish setting up Paperclip" : `grant or complete your access to ${companyDisplayName}`
-                        }.`}
+                      : invite.inviteType === "bootstrap_ceo"
+                      ? t("inviteLanding.thisWillFinishSettingUpPaperclip")
+                      : t("inviteLanding.thisWillGrantOrCompleteYourAccessTocompanydisplayname", { companyDisplayName })}
                   </p>
                 </div>
                 {error ? <p className="text-xs text-red-400">{error}</p> : null}

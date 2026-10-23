@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { t } from "@/i18n";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ChevronDown } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -47,7 +48,7 @@ export function PropertyPicker({
       <button
         type="button"
         className={cn(btnCn, "shrink-0")}
-        aria-label={`Edit ${label.toLowerCase()}`}
+        aria-label={t("propertyPicker.edit", { label: label.toLowerCase() })}
         aria-expanded={open}
         onClick={inline ? () => onOpenChange(!open) : undefined}
       >

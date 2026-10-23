@@ -124,7 +124,7 @@ export function GitHubRepositoryAccess({
         </Button>
       </div>
       {summary && <p className="text-xs text-muted-foreground">
-        {summary.enabledCount} of {summary.totalCount} repositories enabled. Toggle all applies across the entire connection.
+        {t("gitHubBotManagement.repositoriesEnabledSummary", { enabled: summary.enabledCount, total: summary.totalCount })}
       </p>}
       {list.isError && <p role="alert" className="text-sm text-destructive">
         {t("gitHubBotManagement.couldNotLoadRepositories")} <Button variant="link" size="sm" onClick={() => void list.refetch()}>{t("common.tryAgain")}</Button>
@@ -235,7 +235,7 @@ export function GitHubBotManagement({
   if (query.isError)
     return (
       <p role="alert" className="text-sm text-destructive">
-        Could not load the bot configuration.{" "}
+        {t("gitHubBotManagement.couldNotLoadBotConfiguration")}{" "}
         <Button
           variant="link"
           onClick={() => {

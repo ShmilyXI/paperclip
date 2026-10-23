@@ -70,7 +70,7 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
       {t("connectedAggregatorApps.refreshingApps")}{data?.sync.total ? t("connectedAggregatorApps.checkedOfTotal", { checked: data.sync.checked, total: data.sync.total }) : ""}
     </p> : refresh.isSuccess && !syncFailed && !unavailable ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.appsRefreshed")}</p> : null}
     {(!settled && !failed) || query.isLoading ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.loadingApps")}</p>
-      : apps.length ? <ul aria-label={`Connected ${providerName} apps`} tabIndex={0}
+      : apps.length ? <ul aria-label={t("connectedAggregatorApps.connectedAppsList", { provider: providerName })} tabIndex={0}
         className="max-h-80 overflow-y-auto rounded-lg border border-border divide-y divide-border">
         {apps.map(snapshots => {
           const app = snapshots[0];

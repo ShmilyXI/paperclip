@@ -156,7 +156,7 @@ export function InboxAgentPolicyControl({ companyId }: { companyId: string | nul
             triggerLabel={
               selectedAgentIds.size === 0
                 ? t("inboxAgentPolicyControl.selectAgents")
-                : `${selectedAgentIds.size} ${selectedAgentIds.size === 1 ? "agent" : "agents"} selected`
+                : t("inboxAgentPolicyControl.agentsSelected", { count: selectedAgentIds.size })
             }
             triggerFullWidth={false}
             showSelectionPreview={false}

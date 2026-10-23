@@ -344,7 +344,7 @@ function Markdown({ body }: { body: string }) {
                 rel="noreferrer"
                 className="underline underline-offset-4"
               >
-                {alt || "Open image"}
+                {alt || t("richArtifactCards.openImage")}
               </a>
             ) : (
               <span>{alt}</span>
@@ -499,7 +499,7 @@ export function DataCard(props: DataCardProps) {
             <Viewer
               title={props.title}
               description={props.filename}
-              action="View data"
+              action={t("richArtifactCards.viewData")}
             >
               <DataTable {...props} />
               <Button asChild variant="outline" size="sm" className="w-fit">

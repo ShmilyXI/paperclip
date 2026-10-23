@@ -1223,7 +1223,7 @@ export function TaskChatComposer({
             <div className="ml-auto flex shrink-0 items-center gap-1">
               {takeover.pendingCount > 1 ? (
                 <Button type="button" size="sm" variant="ghost" className="h-7 px-2" onClick={takeover.onShowNext}>
-                  {takeover.pendingCount} pending
+                  {t("taskChatComposer.pendingCount", { count: takeover.pendingCount })}
                 </Button>
               ) : null}
               <div ref={setTakeoverControlsSlot} className="flex shrink-0 items-center" data-testid="task-chat-composer-takeover-controls-slot" />
@@ -1337,7 +1337,7 @@ export function TaskChatComposer({
             {pendingTakeover?.label ?? takeover?.label ?? t("taskChatComposer.pendingInput")}
           </span>
           <span className="shrink-0 font-medium">
-            {pendingTakeover?.count ?? takeover?.pendingCount ?? 1} pending
+            {t("taskChatComposer.pendingCount", { count: pendingTakeover?.count ?? takeover?.pendingCount ?? 1 })}
           </span>
         </button>
       ) : null}

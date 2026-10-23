@@ -26,7 +26,7 @@ export function TaskListToolbar({ view, onViewChange, query, onQueryChange, sear
   return (
     <div data-canonical-toolbar="tasks" className="design-page-toolbar" role="toolbar" aria-label={t("taskListToolbar.taskListControls")}>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild><Button variant="outline" className="design-toolbar-button design-view-trigger" aria-label={`Task view: ${views.find(option => option.value === view)!.label}`}>{views.find(option => option.value === view)!.label}<ChevronDown aria-hidden /></Button></DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild><Button variant="outline" className="design-toolbar-button design-view-trigger" aria-label={t("taskListToolbar.taskViewWithLabel", { label: views.find(option => option.value === view)!.label })}>{views.find(option => option.value === view)!.label}<ChevronDown aria-hidden /></Button></DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="task-list-options" aria-label={t("taskListToolbar.taskViews")}>
           <DropdownMenuLabel asChild><FlyoutHeader className="task-list-options-heading">{t("taskListToolbar.views")}</FlyoutHeader></DropdownMenuLabel>
           <DropdownMenuRadioGroup asChild value={view} onValueChange={value => onViewChange(value as TaskListView)}><FlyoutOptions className="task-list-options-items">

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ReactNode } from "react";
 import type { CostByAgent } from "@paperclipai/shared";
 import { formatCents } from "../lib/utils";
@@ -25,7 +26,7 @@ export function CostAmount({
       </div>
       <CostEstimateLabel eventCount={eventCount} estimatedEventCount={estimatedEventCount} />
       {showUnavailableCount && !!unpricedEventCount && <Badge variant="outline" className="font-normal text-muted-foreground">
-        {unpricedEventCount} {unpricedEventCount === 1 ? "cost" : "costs"} unavailable
+        {t("costAmount.costsUnavailable", { count: unpricedEventCount })}
       </Badge>}
     </div>
   );

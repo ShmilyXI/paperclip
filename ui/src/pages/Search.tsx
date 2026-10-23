@@ -603,7 +603,7 @@ export function Search() {
                 <button
                   key={suggestion.token}
                   type="button"
-                  aria-label={`Insert operator ${suggestion.token}`}
+                  aria-label={t("search.insertOperatorToken", { token: suggestion.token })}
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => {
                     setDraftQuery(applySearchOperatorSuggestion(draftQuery, suggestion.token));
@@ -813,8 +813,8 @@ function SearchTabContent({
         <AlertTriangle className="h-10 w-10 text-destructive" aria-hidden />
         <div className="text-base font-semibold">{t("search.couldnTRunThatSearch")}</div>
         <p className="text-sm text-muted-foreground">
-          {status ? t("search.theServerReturnedStatus", { status }) : t("search.theRequestFailed")} Your input and filters are still here, so
-          you can retry or fall back to the Tasks filter.
+          {status ? t("search.theServerReturnedStatus", { status }) : t("search.theRequestFailed")}{" "}
+          {t("search.yourInputAndFiltersAreStillHere")}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
           <Button onClick={refetch} variant="default" size="sm">
@@ -859,10 +859,10 @@ function SearchTabContent({
     return (
       <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center gap-3 px-4 py-12 text-center">
         <FileQuestion className="h-10 w-10 text-muted-foreground" aria-hidden />
-        <div className="text-base font-semibold">No results for &ldquo;{trimmedQuery}&rdquo;</div>
+        <div className="text-base font-semibold">{t("search.noResultsForQuery", { query: trimmedQuery })}</div>
         <p className="text-sm text-muted-foreground">
-          {t("search.weCouldnTFindA")} {describeScope(scope).toLowerCase()}. Try widening the scope or rephrasing your
-          query.
+          {t("search.weCouldnTFindA")} {describeScope(scope).toLowerCase()}.{" "}
+          {t("search.tryWideningTheScope")}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {scope !== "all" ? (

@@ -327,7 +327,7 @@ export function TaskChatRunnerActivityGroup({
   const latest = activities.at(-1);
   const summary = completedActivitySummary(activities);
   const SummaryIcon = summary.icon;
-  const countLabel = `${activities.length} ${activities.length === 1 ? "activity" : "activities"}`;
+  const countLabel = t("taskChatRunnerActivityGroup.activityCount", { count: activities.length });
   return (
     <section
       className="flex min-w-0 flex-col gap-2"

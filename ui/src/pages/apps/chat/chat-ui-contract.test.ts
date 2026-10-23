@@ -59,7 +59,7 @@ describe("chat connector UI contract", () => {
   it("shows independent Slack callback surfaces and public URL drift", () => {
     const detail = source("./ChatEndpointDetail.tsx");
     expect(detail).toContain('t("chatDetail.slackCallbackHealth")');
-    expect(detail).toContain("Events API");
+    expect(detail).toContain('t("chatDetail.eventsApi")');
     expect(detail).toContain('t("chatDetail.interactivity")');
     expect(detail).toContain('t("chatDetail.slashCommand")');
     expect(detail).toContain("callbacksNeedUpdate");

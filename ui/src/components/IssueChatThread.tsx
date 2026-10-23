@@ -2926,9 +2926,10 @@ function IssueChatFeedbackButtons({
           <div className="space-y-3 text-sm text-muted-foreground">
             <p>{t("chatThread.thisVoteIsAlwaysSaved")}</p>
             <p>
-              Choose{" "}
+              {t("chatThread.choose")}{" "}
               <span className="font-medium text-foreground">{t("chatThread.alwaysAllow")}</span>{" "}
-              to share this vote and future voted AI outputs. Choose{" "}
+              {t("chatThread.toShareThisVoteAndFuture")}{" "}
+              {t("chatThread.choose")}{" "}
               <span className="font-medium text-foreground">{t("chatThread.donTAllow")}</span>{" "}
               {t("chatThread.toKeepThisVoteLocal")}
             </p>
@@ -3832,7 +3833,7 @@ function IssueChatSystemMessage({ message }: { message: ThreadMessage }) {
           <span className="font-medium text-foreground">{actorName}</span>
           <span className="text-muted-foreground">
             {custom.followUpRequested === true
-              ? "requested follow-up"
+              ? t("chatThread.requestedFollowUp")
               : t("chatThread.updatedThisTask")}
           </span>
           <a

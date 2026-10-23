@@ -169,7 +169,7 @@ function AgentAccessSection({
               disabled={disabled}
               triggerLabel={access.agentIds.size === 0
                 ? t("permissionsPanel.chooseAgents")
-                : `${access.agentIds.size} ${access.agentIds.size === 1 ? "agent" : "agents"} selected`}
+                : t("permissionsPanel.agentsSelected", { count: access.agentIds.size })}
               emptyMessage={t("permissionsPanel.youCannotEditAnyAgents")}
               isAgentDisabled={(agent) => requiredAgentIds.has(agent.id)}
               getDescription={(agent) => requiredAgentIds.has(agent.id) ? t("permissionsPanel.requiredByThisConnectionS") : agent.title}

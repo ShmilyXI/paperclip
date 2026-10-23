@@ -68,7 +68,7 @@ export function ProjectWorkspaceSummaryCard({
                 {workspaceKindLabel(summary.kind)}
               </Badge>
               <Badge variant="outline" className="border-border/70 bg-background px-2.5 py-1 text-muted-foreground">
-                Updated {timeAgo(summary.lastUpdatedAt)}
+                {t("common.updated")}{" "}{timeAgo(summary.lastUpdatedAt)}
               </Badge>
               {summary.serviceCount > 0 ? (
                 <Badge variant="outline"
@@ -85,7 +85,7 @@ export function ProjectWorkspaceSummaryCard({
                       hasRunningServices ? "bg-emerald-500" : "bg-muted-foreground/40",
                     )}
                   />
-                  {summary.runningServiceCount}/{summary.serviceCount} services
+                  {t("projectWorkspaceSummaryCard.servicesCount", { running: summary.runningServiceCount, total: summary.serviceCount })}
                 </Badge>
               ) : null}
               {summary.executionWorkspaceStatus ? (
@@ -248,7 +248,7 @@ export function ProjectWorkspaceSummaryCard({
                   to={workspaceHref}
                   className="inline-flex items-center rounded-full border border-border bg-background px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground hover:underline"
                 >
-                  +{hiddenIssueCount} more
+                  {t("common.moreCount", { count: hiddenIssueCount })}
                 </Link>
               ) : null}
             </div>

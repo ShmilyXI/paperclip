@@ -507,7 +507,7 @@ function DivergenceDiagnosis({
 function contentionLabel(contention: WorkspaceContention): string {
   return (
     contention.claimedByIssueIdentifier ??
-    (contention.claimedByIssueId ? `issue ${contention.claimedByIssueId.slice(0, 8)}` : t("issueRecoveryActionCard.anotherTask"))
+    (contention.claimedByIssueId ? t("issueRecoveryActionCard.issueChip", { id: contention.claimedByIssueId.slice(0, 8) }) : t("issueRecoveryActionCard.anotherTask"))
   );
 }
 
@@ -563,8 +563,7 @@ function BreakGlassOverride({
             {t("recovery.breakGlassReconciliation")}
           </div>
           <p className="text-xs leading-5 text-muted-foreground">
-            This overrides Paperclip&apos;s safety check and points the recorded workspace at the live
-            branch{" "}
+            {t("issueRecoveryActionCard.overridesSafetyCheck")}{" "}
             <span className="font-medium text-foreground/80">{t("issueRecoveryActionCard.withoutAnAncestryProof")}</span>{t("issueRecoveryActionCard.confirmTheDivergenceBelowAnd")}
           </p>
         </div>
@@ -836,7 +835,7 @@ function AgentLink({
     return fallback ? <span>{fallback}</span> : <MissingValue />;
   }
   const agent = agentMap?.get(agentId);
-  const label = agent?.name ?? `agent ${agentId.slice(0, 8)}`;
+  const label = agent?.name ?? t("issueRecoveryActionCard.agentChip", { id: agentId.slice(0, 8) });
   if (agent) {
     return (
       <Link
@@ -864,7 +863,7 @@ function RunChip({
   const inner = (
     <>
       <code className="rounded bg-background/80 px-1.5 py-0.5 font-mono text-(length:--text-micro) text-foreground/80">
-        run {short}
+        {t("issueRecoveryActionCard.runChip", { id: short })}
       </code>
       {status ? (
         <span className="font-sans text-(length:--text-micro) text-muted-foreground">{status}</span>
@@ -1202,7 +1201,7 @@ export function IssueRecoveryActionCard({
                     <span className="text-muted-foreground">{t("recovery.decidesTheNextStepOnly")}</span>
                   </>
                 ) : action.ownerType === "user" && action.ownerUserId ? (
-                  <span className="font-medium">user {action.ownerUserId.slice(0, 6)}</span>
+                  <span className="font-medium">{t("issueRecoveryActionCard.userChip", { id: action.ownerUserId.slice(0, 6) })}</span>
                 ) : (
                   <span className="text-muted-foreground">{t("recovery.unassignedPickOneToWake")}</span>
                 )}
@@ -1271,7 +1270,7 @@ export function IssueRecoveryActionCard({
             ) : action.ownerType === "board" ? (
               <span className="font-medium">{t("common.board")}</span>
             ) : action.ownerType === "user" && action.ownerUserId ? (
-              <span className="font-medium">user {action.ownerUserId.slice(0, 6)}</span>
+              <span className="font-medium">{t("issueRecoveryActionCard.userChip", { id: action.ownerUserId.slice(0, 6) })}</span>
             ) : action.ownerType === "system" ? (
               <span className="font-medium">{t("common.system")}</span>
             ) : (

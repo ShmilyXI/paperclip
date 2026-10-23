@@ -136,7 +136,7 @@ export function AgentCommentary({ companyId }: { companyId: string }) {
           <ul aria-label={t("agentCommentary.commentaryMessages")} className="divide-y divide-border">{messages.data.items.map((entry) => <CommentaryRow key={entry.id} entry={entry} onOpen={(trigger) => { triggerRef.current = trigger; selectEntry(entry.id); }} />)}</ul>
         </div>
         <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
-          <p role="status" className="font-mono text-xs text-muted-foreground">{offset + 1}–{offset + messages.data.items.length} of {messages.data.total} messages</p>
+          <p role="status" className="font-mono text-xs text-muted-foreground">{t("agentCommentary.pageRange", { start: offset + 1, end: offset + messages.data.items.length, total: messages.data.total })}</p>
           <div className="flex gap-2"><Button variant="outline" size="sm" aria-label={t("agentCommentary.previousPage")} disabled={offset === 0} onClick={() => updateFilters({ offset: String(Math.max(0, offset - PAGE_SIZE)) })}><ChevronLeft className="size-4" />{t("common.previous")}</Button><Button variant="outline" size="sm" aria-label={t("agentCommentary.nextPage")} disabled={offset + messages.data.items.length >= messages.data.total} onClick={() => updateFilters({ offset: String(offset + PAGE_SIZE) })}>{t("common.next")}<ChevronRight className="size-4" /></Button></div>
         </div>
       </> : null}

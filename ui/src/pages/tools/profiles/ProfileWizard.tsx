@@ -613,8 +613,8 @@ export function StepAssign({
         <span className="flex flex-col gap-0.5">
           <span className="text-sm font-medium text-foreground">{t("profileWizard.makeThisTheOrganizationDefault")}</span>
           <span className="text-xs text-muted-foreground">
-            Every agent without its own profile uses this one.
-            {defaultProfileName ? ` Replaces “${defaultProfileName}”.` : ""}
+            {t("profileWizard.everyAgentWithoutProfile")}
+            {defaultProfileName ? ` ${t("profileWizard.replacesDefaultProfile", { name: defaultProfileName })}` : ""}
           </span>
         </span>
       </label>

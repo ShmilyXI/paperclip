@@ -1030,7 +1030,7 @@ function Activity({
   const lifecycleAction = lifecycle.variables;
   const callbackSurfaceRows = endpoint.setup?.callbackSurfaces
     ? ([
-        ["Events API", endpoint.setup.callbackSurfaces.events],
+        [t("chatDetail.eventsApi"), endpoint.setup.callbackSurfaces.events],
         [t("chatDetail.interactivity"), endpoint.setup.callbackSurfaces.interactivity],
         [t("chatDetail.slashCommand"), endpoint.setup.callbackSurfaces.slashCommands],
       ] as const)

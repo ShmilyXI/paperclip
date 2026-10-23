@@ -46,7 +46,7 @@ function issueLabel(issue: SummarySlotIssueRef) {
 }
 
 function revisionLabel(revision: SummarySlotRevision) {
-  return `Rev ${revision.revisionNumber}`;
+  return t("summarySlotCard.revNumber", { number: revision.revisionNumber });
 }
 
 function formatRevisionTimestamp(date: Date | string) {
@@ -92,7 +92,7 @@ export function resolveGenerationStatusLine(status: LiveGenerationStatus | null)
   if (!status) return null;
   if (status.message) return status.message;
   if (status.lastAssistantSnippet) return status.lastAssistantSnippet;
-  if (status.currentToolName) return `Working with ${status.currentToolName}`;
+  if (status.currentToolName) return t("summarySlotCard.workingWith", { tool: status.currentToolName });
   return null;
 }
 
@@ -288,7 +288,7 @@ export function SummarySlotCard({
               disabled={!selector || generateMutation.isPending || Boolean(isGenerating)}
             >
               {generateMutation.isPending ? <Loader2 className="animate-spin" /> : <RefreshCw />}
-              Refresh
+              {t("common.refresh")}
             </Button>
           ) : null}
         </div>

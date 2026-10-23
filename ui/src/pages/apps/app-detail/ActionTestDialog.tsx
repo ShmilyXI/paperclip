@@ -538,7 +538,7 @@ function ActionTester({
           onChange={setValues}
           errors={errors}
           disabled={running}
-          advancedLabel="More options"
+          advancedLabel={t("jsonSchemaForm.moreOptions")}
         />
       ) : (
         <p className="text-xs text-muted-foreground">{t("appActionTestDialog.thisActionTakesNoInputs")}</p>
@@ -840,7 +840,7 @@ function writeVerb(entry: ToolCatalogEntry): string | null {
 
 function successHeadline(value: unknown, entry: ToolCatalogEntry, appName: string): string {
   const verb = writeVerb(entry);
-  if (!entry.isReadOnly && verb) return `Worked. Row ${verb}.`;
+  if (!entry.isReadOnly && verb) return t("appActionTestDialog.workedRowVerb", { verb });
   const rows = asRows(value);
   if (rows) return t("appActionTestDialog.workedRowsCameBack", { count: rows.length });
   if (isEmptyResult(value)) return t("appActionTestDialog.workedNoDataToShow");
@@ -868,7 +868,7 @@ function AllowedResult({
       </div>
       <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
         <Clock className="h-3 w-3" />
-        Ran as {outcome.agentName} · {seconds(outcome.durationMs)} · {relTime(outcome.ranAt)}
+        {t("appActionTestDialog.ranAs", { agent: outcome.agentName, duration: seconds(outcome.durationMs), time: relTime(outcome.ranAt) })}
       </p>
 
       {preview.items.some((item) => !isEmptyResult(item.value)) && (
@@ -1066,12 +1066,12 @@ function ErrorResult({
       </div>
       <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
         <Clock className="h-3 w-3" />
-        Tried as {outcome.agentName} · {seconds(outcome.durationMs)} · {relTime(outcome.ranAt)}
+        {t("appActionTestDialog.triedAs", { agent: outcome.agentName, duration: seconds(outcome.durationMs), time: relTime(outcome.ranAt) })}
       </p>
       <div className="mt-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">What {appName} said</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("appActionTestDialog.whatAppSaid", { app: appName })}</p>
         <p className="mt-1 break-words text-sm text-foreground">{error.message}</p>
-        {error.reasonCode && <p className="mt-0.5 text-xs text-muted-foreground">code: {error.reasonCode}</p>}
+        {error.reasonCode && <p className="mt-0.5 text-xs text-muted-foreground">{t("appActionTestDialog.codeValue", { code: error.reasonCode })}</p>}
       </div>
       <div className="mt-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("appActionTestDialog.whatToTry")}</p>

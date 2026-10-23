@@ -198,7 +198,7 @@ export function validateField(
 
   // Required check
   if (isRequired && (value === undefined || value === null || value === "")) {
-    return "This field is required";
+    return t("jsonSchemaForm.thisFieldIsRequired");
   }
 
   // Skip further validation if empty and not required
@@ -208,10 +208,10 @@ export function validateField(
     return null;
   }
   if (type === "secret-ref" && typeof value === "object") {
-    return "Invalid secret reference";
+    return t("jsonSchemaForm.invalidSecretReference");
   }
   if (type === "object" && (typeof value !== "object" || Array.isArray(value))) {
-    return "Enter a valid JSON object";
+    return t("jsonSchemaForm.enterValidJsonObject");
   }
 
   if (type === "string" || type === "secret-ref") {
@@ -734,7 +734,7 @@ const SecretField = React.memo(({
       label={label}
       description={
         description ||
-        "Pick an existing organization secret, or paste a raw value (Paperclip will store it as a secret on save)."
+        t("jsonSchemaForm.pickExistingOrgSecretOrPasteRaw")
       }
       required={isRequired}
       error={error}
@@ -747,7 +747,7 @@ const SecretField = React.memo(({
           label=""
           placeholder={t("jsonSchemaForm.selectAnExistingSecret")}
           allowVersionSelector={false}
-          emptyHint="No active secrets yet. Create one or paste a raw value below."
+          emptyHint={t("jsonSchemaForm.noActiveSecretsYet")}
           disabled={disabled}
         />
         {!isBoundToSecret ? (
@@ -1284,7 +1284,7 @@ export function JsonSchemaForm({
   errors = {},
   disabled,
   className,
-  advancedLabel = "Advanced options",
+  advancedLabel = t("jsonSchemaForm.advancedOptions"),
 }: JsonSchemaFormProps) {
   const type = resolveType(schema);
 
@@ -1330,7 +1330,7 @@ export function JsonSchemaForm({
     const groupOrder: string[] = [];
     const groups = new Map<string, Array<[string, JsonSchemaNode]>>();
     const advancedKeys = new Set<string>();
-    const DEFAULT_GROUP = "More options";
+    const DEFAULT_GROUP = t("jsonSchemaForm.moreOptions");
 
     for (const entry of Object.entries(properties)) {
       const [key, propSchema] = entry;

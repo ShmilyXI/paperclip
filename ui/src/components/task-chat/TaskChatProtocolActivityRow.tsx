@@ -85,7 +85,7 @@ function ResearchDetails({ item }: { item: TaskChatProviderActivityItem }) {
       {item.links.length > 0 ? (
         <div className="min-w-0">
           <p className="mb-1 text-(length:--text-nano) font-medium uppercase tracking-wide text-muted-foreground">
-            {item.links.length} {item.links.length === 1 ? "result" : "results"}
+            {t("taskChatProtocolActivityRow.resultCount", { count: item.links.length })}
           </p>
           <ol className="divide-y divide-border/60" aria-label={t("taskChatProtocolActivityRow.researchSources")}>
             {visibleLinks.map((link, index) => (
@@ -107,7 +107,7 @@ function ResearchDetails({ item }: { item: TaskChatProviderActivityItem }) {
               className="mt-1.5 text-muted-foreground hover:text-foreground"
               onClick={() => setShowAllResults(true)}
             >
-              Show {hiddenResultCount} more {hiddenResultCount === 1 ? "result" : "results"}
+              {t("taskChatProtocolActivityRow.showMoreResults", { count: hiddenResultCount })}
             </button>
           ) : showAllResults && item.links.length > COMPACT_RESEARCH_RESULT_LIMIT ? (
             <button
@@ -201,7 +201,7 @@ function WorkspaceChangeDetails({ item }: { item: TaskChatWorkspaceChangeItem })
           </li>
         ))}
       </ul>
-      {hiddenFileCount > 0 ? <p className="mt-1.5 text-muted-foreground">{hiddenFileCount} more {hiddenFileCount === 1 ? "file" : "files"} not shown</p> : null}
+      {hiddenFileCount > 0 ? <p className="mt-1.5 text-muted-foreground">{t("taskChatProtocolActivityRow.moreFilesNotShown", { count: hiddenFileCount })}</p> : null}
     </div>
   );
 }

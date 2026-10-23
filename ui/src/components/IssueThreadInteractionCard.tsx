@@ -617,7 +617,7 @@ function TaskTreeNode({
                 <Checkbox
                   checked={isSelected}
                   onCheckedChange={(checked) => onToggleSelection?.(node, checked === true)}
-                  aria-label={`Include ${node.task.title}`}
+                  aria-label={t("issueThreadInteractionCard.includeTask", { task: node.task.title })}
                   className="mt-0.5"
                 />
               ) : null}
@@ -684,9 +684,7 @@ function TaskTreeNode({
           <div className="mt-2 flex items-center gap-2 rounded-sm border border-amber-500/60 bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-100">
             <GitBranch className="h-3.5 w-3.5 shrink-0" />
             <span>
-              {hiddenChildCount === 1
-                ? "1 follow-on task hidden in preview"
-                : `${hiddenChildCount} follow-on tasks hidden in preview`}
+              {t("issueThreadInteractionCard.followOnHidden", { count: hiddenChildCount })}
             </span>
           </div>
         ) : null}
@@ -1192,9 +1190,7 @@ function AskUserQuestionsCard({
           {t("interaction.askUserQuestions")}
         </Badge>
         <span>
-          {questions.length === 1
-            ? "1 question"
-            : `${questions.length} questions`}
+          {t("issueThreadInteractionCard.questionCount", { count: questions.length })}
         </span>
       </div>
 
@@ -1296,7 +1292,7 @@ function AskUserQuestionsCard({
                         />
                         {isFreeText && optionSelected ? (
                           <Textarea
-                            aria-label={`Describe your answer for ${question.prompt}`}
+                            aria-label={t("issueThreadInteractionCard.describeYourAnswerFor", { prompt: question.prompt })}
                             value={draftOtherAnswers[question.id] ?? ""}
                             onChange={(event) =>
                               setDraftOtherAnswers((current) => ({
@@ -1337,7 +1333,7 @@ function AskUserQuestionsCard({
                     </button>
                     {otherActiveQuestions[question.id] ? (
                       <Textarea
-                        aria-label={`Other answer for ${question.prompt}`}
+                        aria-label={t("issueThreadInteractionCard.otherAnswerFor", { prompt: question.prompt })}
                         value={draftOtherAnswers[question.id] ?? ""}
                         onChange={(event) =>
                           setDraftOtherAnswers((current) => ({
@@ -2438,8 +2434,8 @@ function RequestConnectionAuthorizationCard({
   const agentLabel = requestingAgentLabel ?? t("issueThreadInteractionCard.anAgent");
   const lead = isAddressee
     ? interaction.summary?.trim()
-      || `${agentLabel} needs your ${providerName} identity for work running as you.`
-    : `${agentLabel} ${state === "connected" ? "needed" : "needs"} ${addresseeLabel}'s ${providerName} identity for work running as them.`;
+      || t("issueThreadInteractionCard.identityNeedsYou", { agent: agentLabel, provider: providerName })
+    : t(state === "connected" ? "issueThreadInteractionCard.identityNeededThem" : "issueThreadInteractionCard.identityNeedsThem", { agent: agentLabel, addressee: addresseeLabel, provider: providerName });
   // Only the actionable state needs the consent boundary spelled out; the other
   // states carry it in their own status line.
   const consentSentence = state === "actionable" ? t("issueThreadInteractionCard.noOneElseCanComplete") : null;
@@ -2499,8 +2495,8 @@ function RequestConnectionAuthorizationCard({
         <ConnectionAuthorizationStatusLine
           Icon={Clock}
           testId="connection-authorization-waiting"
-          headline={`Waiting for ${addresseeLabel}`}
-          detail={`Only ${addresseeLabel} can connect their own ${providerName} account.`}
+          headline={t("issueThreadInteractionCard.waitingFor", { addressee: addresseeLabel })}
+          detail={t("issueThreadInteractionCard.onlyAddresseeCanConnect", { addressee: addresseeLabel, provider: providerName })}
         />
       ) : state === "connected" ? (
         <ConnectionAuthorizationStatusLine
@@ -2718,7 +2714,7 @@ function RequestConfirmationCard({
                         />
                         <button
                           type="button"
-                          aria-label={`Remove ${shot.name}`}
+                          aria-label={t("issueThreadInteractionCard.removeShot", { name: shot.name })}
                           className="absolute right-0.5 top-0.5 rounded-full bg-background/90 p-0.5 text-foreground opacity-0 transition-opacity group-hover:opacity-100"
                           onClick={() =>
                             setShots((current) => current.filter((_, i) => i !== index))
@@ -3225,7 +3221,7 @@ function ItemVerdictSegmentedControl({
             variant={variant}
             disabled={disabled}
             aria-pressed={active}
-            aria-label={`${VERDICT_LABEL[verdict]} this item`}
+            aria-label={t("issueThreadInteractionCard.verdictThisItem", { verdict: VERDICT_LABEL[verdict] })}
             className="min-h-11 min-w-24"
             onClick={() => onSelect(verdict)}
             data-verdict={verdict}
@@ -3527,7 +3523,7 @@ function RequestItemVerdictsCard({
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3">
           <div className="text-xs text-muted-foreground">
             {draftCount > 0
-              ? `${draftCount} draft verdict${draftCount === 1 ? "" : "s"} ready to apply`
+              ? t("issueThreadInteractionCard.draftVerdicts", { count: draftCount })
               : t("issueThreadInteractionCard.markVerdictsThenApplyThem")}
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -3592,7 +3588,7 @@ function VerdictProgressBadge({
         aria-valuemin={0}
         aria-valuemax={progress.total}
         aria-valuenow={progress.decided}
-        aria-label={`${progress.decided} of ${progress.total} decided`}
+        aria-label={t("issueThreadInteractionCard.decidedOfTotal", { decided: progress.decided, total: progress.total })}
       >
         <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">
           <div
@@ -3601,7 +3597,7 @@ function VerdictProgressBadge({
           />
         </div>
         <span className="whitespace-nowrap text-xs font-medium text-muted-foreground">
-          {progress.decided} of {progress.total} decided
+          {t("issueThreadInteractionCard.decidedOfTotal", { decided: progress.decided, total: progress.total })}
         </span>
       </div>
     </div>
@@ -3980,7 +3976,7 @@ export function IssueThreadInteractionCard({
           >
             {t("interaction.resolvedBy")} <span className="font-medium text-foreground">{resolvedByLabel}</span>
             {resolvedByAgent ? <ResolvedByAgentChip /> : null}
-            {interaction.resolvedAt ? ` on ${formatShortDate(interaction.resolvedAt)}` : ""}
+            {interaction.resolvedAt ? t("issueThreadInteractionCard.resolvedOn", { date: formatShortDate(interaction.resolvedAt) }) : ""}
           </div>
         ) : null}
       </div>

@@ -18,7 +18,7 @@ export function ComposioAppManager({ app, connections, initialConnectionId, onCl
   const [connectionId, setConnectionId] = useState(initialConnectionId ?? connections[0]?.id ?? "");
   const connection = connections.find(candidate => candidate.id === connectionId);
   return <Dialog open onOpenChange={open => { if (!open) onClose(); }}><DialogContent>
-    <DialogHeader><DialogTitle>Manage {app.name}</DialogTitle><DialogDescription>{t("composioAppManager.accountsAndSignInAre")}</DialogDescription></DialogHeader>
+    <DialogHeader><DialogTitle>{t("composioAppManager.manageApp", { app: app.name })}</DialogTitle><DialogDescription>{t("composioAppManager.accountsAndSignInAre")}</DialogDescription></DialogHeader>
     {connections.length > 1 ? <div className="space-y-2"><Label htmlFor="composio-manage-gateway">{t("composioAppManager.composioAccount")}</Label>
       <select id="composio-manage-gateway" value={connectionId} onChange={event => setConnectionId(event.target.value)} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
         {connections.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name}</option>)}

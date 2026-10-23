@@ -126,9 +126,9 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
             {headers.length === 0 && <p className="text-sm text-muted-foreground">{t("agentObservabilitySettings.noAuthenticationHeaders")}</p>}
             {headers.map(row => <div key={row.id} className="flex flex-wrap items-center gap-2">
               <Input className="min-w-0 flex-1" aria-label={t("agentObservabilitySettings.headerName")} value={row.name} onChange={event => setHeaders(rows => rows.map(item => item.id === row.id ? { ...item, name: event.target.value } : item))} autoComplete="off" />
-              <Input className="min-w-0 flex-1" aria-label={`Value for ${row.name || "header"}`} type="password" value={row.value} placeholder={row.originalName && !requireFreshHeaders ? t("agentObservabilitySettings.keepSavedValue") : t("agentObservabilitySettings.headerValue")}
+              <Input className="min-w-0 flex-1" aria-label={t("agentObservabilitySettings.valueForHeader", { name: row.name || t("agentObservabilitySettings.headerFallback") })} type="password" value={row.value} placeholder={row.originalName && !requireFreshHeaders ? t("agentObservabilitySettings.keepSavedValue") : t("agentObservabilitySettings.headerValue")}
                 onChange={event => setHeaders(rows => rows.map(item => item.id === row.id ? { ...item, value: event.target.value } : item))} autoComplete="new-password" />
-              <Button type="button" size="sm" variant="ghost" aria-label={`Remove ${row.name || "header"}`} onClick={() => setHeaders(rows => rows.filter(item => item.id !== row.id))}>{t("common.remove")}</Button>
+              <Button type="button" size="sm" variant="ghost" aria-label={t("agentObservabilitySettings.removeHeader", { name: row.name || t("agentObservabilitySettings.headerFallback") })} onClick={() => setHeaders(rows => rows.filter(item => item.id !== row.id))}>{t("common.remove")}</Button>
             </div>)}
           </div>
         </>}

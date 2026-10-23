@@ -142,7 +142,7 @@ function describeEnvironment(
   const detail = isPlatformManagedEnvironment(environment)
     ? t("agents.managedByPaperclip")
     : environment.driver === "sandbox"
-      ? `${getSandboxProviderLabel(environment, capabilities)} sandbox provider`
+      ? t("agents.sandboxProvider", { provider: getSandboxProviderLabel(environment, capabilities) })
       : environment.driver === "local"
         ? t("agents.paperclipHost")
         : formatEnvironmentDriver(environment.driver);

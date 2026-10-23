@@ -314,7 +314,7 @@ export function ConnectionIntentInteractionBody({
           <Clock className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
           <div>
             <p className="font-medium text-foreground">
-              Waiting for {addresseeLabel}
+              {t("connectionIntentInteractionBody.waitingFor", { name: addresseeLabel })}
             </p>
             {!accessRequest ? <p className="mt-1 text-sm text-muted-foreground">
               {t("connectionIntentInteractionBody.onlyTheAddressedPersonCan")}
@@ -393,8 +393,7 @@ export function ConnectionIntentInteractionBody({
   const inlineContent = setupQuery.isLoading || setupQuery.isError ? setupContent
     : readyForAdoption ? <div className="space-y-3">
         <p className="text-sm">
-          Use your {aiProviderName} connection for {interaction.payload.requestingAgentName}? This replaces the agent’s existing authentication
-          with each responsible person’s own account. The model stays the same.
+          {t("connectionIntentInteractionBody.useYourConnectionFor", { provider: aiProviderName, agent: interaction.payload.requestingAgentName })}
         </p>
         <Button disabled={adoptMutation.isPending} onClick={() => adoptMutation.mutate(readyForAdoption)}>
           {adoptMutation.isPending ? t("connectionIntentInteractionBody.checkingConnection") : t("connectionIntentInteractionBody.useConnectionAndContinue")}
@@ -428,7 +427,7 @@ export function ConnectionIntentInteractionBody({
         onCancel={() => { closeSetup(); returnFocusToCard(); }}
       /> : <p role="status" className="text-sm text-muted-foreground">
         {repair.connection.ownership === "personal" ? t("connectionIntentInteractionBody.theaccountownerMustReconnectName", { theAccountOwner: repair.connection.ownerName ?? t("connectionIntentInteractionBody.theAccountOwner"), name: repair.connection.name }) : t("connectionIntentInteractionBody.theAccountOwnerMustReconnect", { name: repair.connection.name })}
-        {" "}You can continue here once it is restored.
+        {" "}{t("connectionIntentInteractionBody.youCanContinueHereOnceRestored")}
       </p>
     : aiConnection && aiConnection.mode !== "responsible_user"
       ? <p role="status" className="text-sm text-muted-foreground">{t("connectionIntentInteractionBody.theSelectedAccountIsNo")}</p>

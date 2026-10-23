@@ -81,19 +81,19 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
           </div>
           <p className="mt-1 text-sm">
             {describeReason(devServer)}
-            {changedAt ? ` · updated ${changedAt}` : ""}
+            {changedAt ? ` · ${t("devRestartBanner.updated", { time: changedAt })}` : ""}
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-amber-900/80 dark:text-amber-100/75">
             {sample.length > 0 ? (
               <span>
-                Changed: {sample.join(", ")}
-                {devServer.changedPathCount > sample.length ? ` +${devServer.changedPathCount - sample.length} more` : ""}
+                {t("devRestartBanner.changed")} {sample.join(", ")}
+                {devServer.changedPathCount > sample.length ? ` ${t("devRestartBanner.moreCount", { count: devServer.changedPathCount - sample.length })}` : ""}
               </span>
             ) : null}
             {devServer.pendingMigrations.length > 0 ? (
               <span>
                 {t("devRestartBanner.pendingMigrations", { list: devServer.pendingMigrations.slice(0, 2).join(", ") })}
-                {devServer.pendingMigrations.length > 2 ? ` +${devServer.pendingMigrations.length - 2} more` : ""}
+                {devServer.pendingMigrations.length > 2 ? ` ${t("devRestartBanner.moreCount", { count: devServer.pendingMigrations.length - 2 })}` : ""}
               </span>
             ) : null}
           </div>

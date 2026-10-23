@@ -58,7 +58,7 @@ export function TextAttachmentPreview({ title, text, markdown, html = false, csv
         <h2 className="min-w-0 flex-1 truncate text-sm font-medium" title={title}>{title}</h2>
         {markdown || html || csv ? <FilePreviewModeToggle mode={mode} onChange={setMode} label={html ? t("taskAttachmentPanel.htmlView") : csv ? t("taskAttachmentPanel.csvView") : t("taskAttachmentPanel.markdownView")} /> : null}
         <Button asChild variant="ghost" size="icon-sm">
-          <a href={downloadUrl} download aria-label={`Download ${title}`} title={`Download ${title}`}><Download aria-hidden /></a>
+          <a href={downloadUrl} download aria-label={t("taskAttachmentPanel.downloadNamed", { title })} title={t("taskAttachmentPanel.downloadNamed", { title })}><Download aria-hidden /></a>
         </Button>
       </header>
       <div className={renderHtml || renderCsv ? "flex min-h-0 flex-1 flex-col overflow-hidden" : "min-h-0 flex-1 overflow-auto p-4"}>
@@ -66,7 +66,7 @@ export function TextAttachmentPreview({ title, text, markdown, html = false, csv
           : renderCsv ? <CsvPreview text={text} title={title} />
           : renderHtml ? <HtmlArtifactPreview html={text} title={title} />
           : markdown && mode === "rendered" ? <MarkdownBody mediaMode="reference">{text}</MarkdownBody>
-          : <pre className="whitespace-pre-wrap break-words font-mono text-sm" aria-label={`${title} raw text`}>{text}</pre>}
+          : <pre className="whitespace-pre-wrap break-words font-mono text-sm" aria-label={t("taskAttachmentPanel.rawText", { title })}>{text}</pre>}
       </div>
     </div>
   );
