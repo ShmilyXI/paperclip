@@ -18,7 +18,7 @@ afterEach(() => {
 
 function renderOpenDropdown(
   models: AdapterModel[],
-  { groupByProvider = false, preserveOrder = false }: { groupByProvider?: boolean; preserveOrder?: boolean } = {},
+  { groupByProvider = false, preserveOrder = false, label, hint }: { groupByProvider?: boolean; preserveOrder?: boolean; label?: string; hint?: string } = {},
 ) {
   const container = document.createElement("div");
   document.body.appendChild(container);
@@ -37,6 +37,8 @@ function renderOpenDropdown(
           required
           groupByProvider={groupByProvider}
           preserveOrder={preserveOrder}
+          {...(label ? { label } : {})}
+          {...(hint ? { hint } : {})}
         />
       </TooltipProvider>,
     );
@@ -77,5 +79,15 @@ describe("ModelDropdown", () => {
     );
 
     expect(shownModelIds()).toEqual(["openai/gpt-6-astra", "openai/gpt-6-sol"]);
+  });
+
+  it("renders a custom label for fallback-model usage", () => {
+    renderOpenDropdown(curated, { label: "Fallback model" });
+
+    const label = Array.from(document.body.querySelectorAll("label")).find((node) =>
+      node.textContent?.includes("Fallback model"),
+    );
+    expect(label).toBeTruthy();
+    expect(Array.from(document.body.querySelectorAll("[aria-label]")).some((node) => node.getAttribute("aria-label") === "Fallback model")).toBe(true);
   });
 });

@@ -1062,6 +1062,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   );
   // Popover states
   const [modelOpen, setModelOpen] = useState(false);
+  const [fallbackModelOpen, setFallbackModelOpen] = useState(false);
   const [thinkingEffortOpen, setThinkingEffortOpen] = useState(false);
 
   function buildAdapterConfigForTest(adapterConfigPatch?: Record<string, unknown>): Record<string, unknown> {
@@ -1916,6 +1917,33 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 <p className="text-xs text-muted-foreground">
                   Live OpenCode model discovery only runs for Local environments. Using the curated list and manual entry for {currentDefaultEnvironment.name}.
                 </p>
+              )}
+
+              {adapterType === "opencode_local" && (
+                <ModelDropdown
+                  label="Fallback model"
+                  hint="Backup model used once per run when the primary model fails with a network error, 429, quota exhaustion, or a provider 5xx. Leave empty to disable."
+                  models={models.filter((m) => m.id !== currentModelId)}
+                  loadingModels={connectionModels?.isLoading ?? fetchingModels}
+                  value={
+                    isCreate
+                      ? val!.fallbackModel ?? ""
+                      : eff("adapterConfig", "fallbackModel", String(config.fallbackModel ?? ""))
+                  }
+                  onChange={(v) =>
+                    isCreate
+                      ? set!({ fallbackModel: v })
+                      : mark("adapterConfig", "fallbackModel", connectionModels?.resolveModel(v) || v || undefined)
+                  }
+                  open={fallbackModelOpen}
+                  onOpenChange={setFallbackModelOpen}
+                  allowDefault
+                  defaultLabel="No fallback"
+                  required={false}
+                  groupByProvider={!connectionModels}
+                  preserveOrder={Boolean(connectionModels) || adapterCuratesModelOrder(adapterType)}
+                  creatable
+                />
               )}
 
               {showThinkingEffort && (
@@ -3861,6 +3889,8 @@ export function ModelDropdown({
   emptyDetectHint,
   defaultLabel,
   presentation = "searchable",
+  label = "Model",
+  hint = help.model,
 }: {
   models: AdapterModel[];
   value: string;
@@ -3883,6 +3913,10 @@ export function ModelDropdown({
   emptyDetectHint?: string;
   defaultLabel?: string;
   presentation?: "searchable" | "native";
+  /** Field label; defaults to "Model". */
+  label?: string;
+  /** Field hint text; defaults to the shared model hint. */
+  hint?: string;
 }) {
   const [modelSearch, setModelSearch] = useState("");
   const [enteringCustomModel, setEnteringCustomModel] = useState(false);
@@ -3958,9 +3992,9 @@ export function ModelDropdown({
     const customOption = "__paperclip_custom_model__";
     const extraModels = [...new Set([value, ...promotedModelIds])].filter(id => id && (!models.some(model => model.id === id) || promotedModelIds.has(id)));
     return (
-      <Field label="Model" hint={help.model}>
+      <Field label={label} hint={hint}>
         <NativeSelect
-          aria-label="Model"
+          aria-label={label}
           aria-busy={loadingModels || refreshingModels}
           value={enteringCustomModel ? customOption : value}
           required={required && !enteringCustomModel}
@@ -3996,8 +4030,8 @@ export function ModelDropdown({
   }
 
   return (
-    <Field label="Model" hint={help.model}>
-      <SelectPopover aria-label="Model" value={value}
+    <Field label={label} hint={hint}>
+      <SelectPopover aria-label={label} value={value}
         displayValue={<span className={cn("truncate", !value && "text-muted-foreground")}>
           {selected?.label ?? (value || (allowDefault ? (defaultLabel ?? "Default") : required ? "Select model (required)" : "Select model"))}
         </span>}
@@ -4007,7 +4041,7 @@ export function ModelDropdown({
           if (!nextOpen) setModelSearch("");
         }}
       >
-        <div role="listbox" aria-label="Model">
+        <div role="listbox" aria-label={label}>
           <div className="relative mb-1">
             <input
               className="w-full px-2 py-1.5 pr-6 text-xs bg-transparent outline-none border-b border-border placeholder:text-muted-foreground/50"

@@ -93,6 +93,7 @@ Core fields:
 - cwd (string, optional): default absolute working directory fallback for the agent process (created if missing when possible)
 - instructionsFilePath (string, optional): absolute path to a markdown instructions file prepended to the run prompt
 - model (string, required): OpenCode model id in provider/model format (for example anthropic/claude-sonnet-4-5)
+- fallbackModel (string, optional): backup OpenCode model id in provider/model format. When the primary model's provider fails the run with a model-invocation error (network error, 429 rate limit, quota exhaustion, or a provider 5xx), the adapter retries once with this model in the same run. Empty or identical to \`model\` disables the fallback; the next run always tries the primary model first again.
 - variant (string, optional): provider-specific reasoning/profile variant passed as --variant (for example minimal|low|medium|high|xhigh|max)
 - dangerouslySkipPermissions (boolean, optional): inject a runtime OpenCode config with \`permission=allow\` for all tools and connections; defaults to true for unattended Paperclip runs
 - promptTemplate (string, optional): run prompt template
