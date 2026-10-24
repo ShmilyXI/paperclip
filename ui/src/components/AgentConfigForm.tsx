@@ -1063,6 +1063,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   );
   // Popover states
   const [modelOpen, setModelOpen] = useState(false);
+  const [fallbackModelOpen, setFallbackModelOpen] = useState(false);
   const [thinkingEffortOpen, setThinkingEffortOpen] = useState(false);
 
   function buildAdapterConfigForTest(adapterConfigPatch?: Record<string, unknown>): Record<string, unknown> {
@@ -1916,6 +1917,33 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 </p>
               )}
 
+              {adapterType === "opencode_local" && (
+                <ModelDropdown
+                  label={t("agentConfig.fallbackModel")}
+                  hint={t("agentConfig.fallbackModelHint")}
+                  models={models.filter((m) => m.id !== currentModelId)}
+                  loadingModels={connectionModels?.isLoading ?? fetchingModels}
+                  value={
+                    isCreate
+                      ? val!.fallbackModel ?? ""
+                      : eff("adapterConfig", "fallbackModel", String(config.fallbackModel ?? ""))
+                  }
+                  onChange={(v) =>
+                    isCreate
+                      ? set!({ fallbackModel: v })
+                      : mark("adapterConfig", "fallbackModel", connectionModels?.resolveModel(v) || v || undefined)
+                  }
+                  open={fallbackModelOpen}
+                  onOpenChange={setFallbackModelOpen}
+                  allowDefault
+                  defaultLabel={t("agentConfig.noFallback")}
+                  required={false}
+                  groupByProvider={!connectionModels}
+                  preserveOrder={Boolean(connectionModels) || adapterCuratesModelOrder(adapterType)}
+                  creatable
+                />
+              )}
+
               {showThinkingEffort && (
                 <>
                   <ThinkingEffortDropdown
@@ -2329,7 +2357,7 @@ function AdapterLoginCopyButton({ value, label }: { value: string; label: string
       type="button"
       variant="ghost"
       size="icon-xs"
-      aria-label={label}
+      aria-label={label ?? t("common.model")}
       title={label}
       className="text-muted-foreground hover:text-foreground"
       onClick={async () => {
@@ -3856,6 +3884,8 @@ export function ModelDropdown({
   emptyDetectHint,
   defaultLabel,
   presentation = "searchable",
+  label,
+  hint,
 }: {
   models: AdapterModel[];
   value: string;
@@ -3878,6 +3908,10 @@ export function ModelDropdown({
   emptyDetectHint?: string;
   defaultLabel?: string;
   presentation?: "searchable" | "native";
+  /** Field label; defaults to "Model". */
+  label?: string;
+  /** Field hint text; defaults to the shared model hint. */
+  hint?: string;
 }) {
   const [modelSearch, setModelSearch] = useState("");
   const [enteringCustomModel, setEnteringCustomModel] = useState(false);
@@ -3953,9 +3987,9 @@ export function ModelDropdown({
     const customOption = "__paperclip_custom_model__";
     const extraModels = [...new Set([value, ...promotedModelIds])].filter(id => id && (!models.some(model => model.id === id) || promotedModelIds.has(id)));
     return (
-      <Field label={t("common.model")} hint={help.model}>
+      <Field label={label ?? t("common.model")} hint={hint ?? help.model}>
         <NativeSelect
-          aria-label={t("common.model")}
+          aria-label={label ?? t("common.model")}
           aria-busy={loadingModels || refreshingModels}
           value={enteringCustomModel ? customOption : value}
           required={required && !enteringCustomModel}
@@ -3991,8 +4025,8 @@ export function ModelDropdown({
   }
 
   return (
-    <Field label={t("common.model")} hint={help.model}>
-      <SelectPopover aria-label={t("common.model")} value={value}
+    <Field label={label ?? t("common.model")} hint={hint ?? help.model}>
+      <SelectPopover aria-label={label ?? t("common.model")} value={value}
         displayValue={<span className={cn("truncate", !value && "text-muted-foreground")}>
           {selected?.label ?? (value || (allowDefault ? (defaultLabel ?? t("common.default")) : required ? t("agentConfig.selectModelRequired") : t("agentConfig.selectModel")))}
         </span>}
@@ -4002,7 +4036,7 @@ export function ModelDropdown({
           if (!nextOpen) setModelSearch("");
         }}
       >
-        <div role="listbox" aria-label={t("common.model")}>
+        <div role="listbox" aria-label={label ?? t("common.model")}>
           <div className="relative mb-1">
             <input
               className="w-full px-2 py-1.5 pr-6 text-xs bg-transparent outline-none border-b border-border placeholder:text-muted-foreground/50"
