@@ -39,6 +39,10 @@ describe("company routes", () => {
     );
   });
 
+  it("prefixes the coordination board route with the company", () => {
+    expect(applyCompanyPrefix("/board", "MOW")).toBe("/MOW/board");
+  });
+
   it("treats /search as a board route that needs a company prefix", () => {
     expect(isBoardPathWithoutPrefix("/search")).toBe(true);
     expect(extractCompanyPrefixFromPath("/search")).toBeNull();
