@@ -10,10 +10,11 @@ import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 export const BOARD_URL_STORAGE_KEY = "paperclip.board.url";
 
 /**
- * Default address of the local coordination board — a separate Node service
- * (not part of this UI). Overridable per browser via the settings row.
+ * Default address of the coordination board — a separate Node service (not part
+ * of this UI). Mowa runs it on the tx server behind this domain; it asks for the
+ * Paperclip login. Overridable per browser via the settings row.
  */
-export const DEFAULT_BOARD_URL = "http://localhost:3110";
+export const DEFAULT_BOARD_URL = "https://ai-opc-dashboard.mowalab.com";
 
 /**
  * How long a frame may stay unloaded before we announce the refusal. A frame

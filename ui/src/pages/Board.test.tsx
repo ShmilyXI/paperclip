@@ -88,12 +88,12 @@ describe("Board page", () => {
   });
 
   it("defaults to the local board service when nothing is stored", () => {
-    expect(DEFAULT_BOARD_URL).toBe("http://localhost:3110");
+    expect(DEFAULT_BOARD_URL).toBe("https://ai-opc-dashboard.mowalab.com");
     expect(readBoardUrl()).toBe(DEFAULT_BOARD_URL);
 
     renderBoard(container);
 
-    expect(frame(container).getAttribute("src")).toBe("http://localhost:3110");
+    expect(frame(container).getAttribute("src")).toBe("https://ai-opc-dashboard.mowalab.com");
   });
 
   it("uses the localStorage override, and falls back on blank or schemeless values", () => {
