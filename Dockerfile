@@ -55,7 +55,11 @@ COPY server/src/services/copilot-connection-probe.ts server/src/services/
 
 # CI owns repository lock updates. Resolve manifest changes in the image's
 # private build tree, then install from that exact generated lock.
-RUN pnpm install --resolution-only --ignore-scripts --no-frozen-lockfile && pnpm install --frozen-lockfile
+# The pnpm store lives in a BuildKit cache mount, so a manifest change only
+# downloads the packages that are actually new instead of the whole graph.
+RUN --mount=type=cache,id=paperclip-pnpm-store,target=/pnpm/store \
+  pnpm install --store-dir /pnpm/store --resolution-only --ignore-scripts --no-frozen-lockfile \
+  && pnpm install --store-dir /pnpm/store --frozen-lockfile
 
 FROM base AS rust-toolchain
 WORKDIR /app
@@ -160,8 +164,16 @@ RUN rm -rf packages/paperclip-runner/runner/target
 FROM build AS runner-provider-pack
 # Unstamped local builds remain usable, but cannot qualify a remote pack.
 # Never invent a source revision to make an unqualified pack look verified.
-RUN mkdir -p /provider-pack /provider-pack-transport \
-  && if [ -n "${PAPERCLIP_BUILD_COMMIT}" ]; then \
+# SKIP_PROVIDER_PACK=1 leaves the pack empty for self-hosted images that never
+# run remote OpenCode/ACPX sandboxes; building it re-resolves a full pnpm deploy
+# on every commit.
+ARG SKIP_PROVIDER_PACK=""
+RUN --mount=type=cache,id=paperclip-pnpm-store,target=/pnpm/store \
+  mkdir -p /provider-pack /provider-pack-transport \
+  && if [ -n "${SKIP_PROVIDER_PACK}" ]; then \
+    echo "Skipping remote provider pack: SKIP_PROVIDER_PACK is set"; \
+  elif [ -n "${PAPERCLIP_BUILD_COMMIT}" ]; then \
+    export npm_config_store_dir=/pnpm/store; \
     PAPERCLIP_RUNNER_SOURCE_REVISION="${PAPERCLIP_BUILD_COMMIT}" node packages/paperclip-runner/scripts/build-provider-pack.mjs /provider-pack \
       && node scripts/create-provider-pack-archive.mjs /provider-pack \
       && mv /provider-pack.archives /provider-pack.archive.json /provider-pack-transport/; \
@@ -188,6 +200,15 @@ RUN echo "cli-tools-epoch: ${CLI_TOOLS_CACHE_EPOCH}" \
   && rm -rf /var/lib/apt/lists/* \
   && mkdir -p /paperclip \
   && chown node:node /paperclip
+
+# Headless browser for agents (agent-browser drives the system Chromium; its
+# bundled Chrome for Testing has no linux/arm64 build), CJK and emoji fonts so
+# screenshots render, and python3-yaml for modelctl. Kept here, ahead of the
+# app copy, so it stays cached across commits instead of being reinstalled by
+# every downstream image built FROM this one.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends chromium fonts-noto-cjk fonts-noto-color-emoji python3-yaml \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY scripts/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
