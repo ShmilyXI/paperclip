@@ -15852,5 +15852,174 @@
   "taskChatLab": {
     "chosenSample": "Chosen · C · On bg",
     "streamingSpeed": "Streaming speed"
+  },
+  "sync20261028": {
+    "agents": {
+      "lastHeartbeat": "Last heartbeat",
+      "upgradeExplanation": "Keep your harness, model, account, and compatible settings. New sessions start fresh; past runs stay available.",
+      "upgradeVerification": "The upgrade will verify your computer first. This can take a few minutes.",
+      "saveComputerBeforeUpgrade": "Save your computer change before upgrading the runner.",
+      "upgradeEnvironmentUnknown": "Could not determine which environment to verify. Retry the upgrade.",
+      "upgradeSettingsChanged": "Agent settings changed during verification. Retry the upgrade with the current settings.",
+      "upgradeEnvironmentUnsupported": "This environment does not support Paperclip Runner. Your agent still uses Legacy runner.",
+      "testSettingsChanged": "Agent settings changed during the test. Run test again.",
+      "testComputerFailed": "Could not verify the saved computer. Run test again.",
+      "chooseSavedConnectionModel": "Choose a model for your saved connection",
+      "chooseGatewayModel": "Choose a model for this gateway connection before connecting your agent.",
+      "cloudConnectFailed": "Paperclip couldn't finish connecting this agent. Try connecting again.",
+      "gatewayLoadFailed": "Your saved gateway connection could not be loaded. Retry to choose a model and connect your agent.",
+      "retryConnection": "Retry loading connection",
+      "loadingGateway": "Loading your saved gateway connection…",
+      "gatewaySaved": "Gateway connection saved. Choose a model, then Connect to test it and finish setting up your agent.",
+      "useDifferentApiKey": "Use a different API key",
+      "eventsLoadFailed": "Could not load events. Try again.",
+      "retryEvents": "Retry events",
+      "loadMoreEvents": "Load more events"
+    },
+    "artifacts": {
+      "loadDocument": "load the document",
+      "loadSkill": "load the skill",
+      "loadWorkspaceFiles": "load workspace files",
+      "loadAttachmentDetails": "load attachment details",
+      "loadAgentTasks": "load this agent's tasks",
+      "loadAgentArtifacts": "load this agent's artifacts",
+      "loadWorkspace": "load this workspace"
+    },
+    "connections": {
+      "completeHumanSignIn": "Complete the human sign-in step in the saved setup. Your task continues when the connection is ready.",
+      "artifactsV1": "Artifacts V1",
+      "artifactsDescription": "Show artifacts the way the artifact directions lab settled: paper stacks and tiles on the Artifacts page, compact rows in the panel's Artifacts tab, and grouped rows in the task thread.",
+      "artifactsFootnote": "Presentation only. Turning this off restores the current cards; no data changes.",
+      "artifactsToggle": "Toggle artifacts V1 experimental setting",
+      "loadingSavedSignIn": "Loading saved sign-in…",
+      "signInUnavailable": "This sign-in is unavailable.",
+      "accountConnected": "This account is connected.",
+      "viewConnection": "View connection",
+      "rotationFailed": "Could not finish secret rotation",
+      "rotationRetry": "Use the newest secret in GitHub App settings, then retry reconnecting after GitHub verifies delivery.",
+      "requestedCredentials": "Enter the requested credentials below. Other saved credentials stay in place."
+    },
+    "tasks": {
+      "agentNeedsProjectAccess": "Agent needs project access",
+      "loadYourChats": "load your chats",
+      "loadThisCase": "load this case",
+      "loadRevisions": "load revisions",
+      "loadAccess": "load access",
+      "queuedMessagesSubmitted": "Queued messages submitted. Waiting for the agent.",
+      "couldNotSendQueuedMessage": "Couldn't send. Message is still queued.",
+      "deferredTheRequestOn": "deferred the request on",
+      "deferredTheRequest": "deferred the request"
+    },
+    "errors": {
+      "tenant_app_unavailable": {
+        "title": "Reconnecting to Paperclip",
+        "body": "Paperclip is restarting or updating. Please try again in a moment."
+      },
+      "tenant_app_starting": {
+        "title": "Paperclip is starting",
+        "body": "Paperclip is starting up. Please try again in a few seconds."
+      },
+      "WORKER_UNAVAILABLE": {
+        "title": "Plugin unavailable",
+        "body": "This plugin is restarting. Please try again in a moment."
+      },
+      "TIMEOUT": {
+        "title": "Request timed out",
+        "body": "This took too long to respond. Please try again in a moment."
+      },
+      "interaction_audience_denied": {
+        "title": "You can’t respond to this card",
+        "body": "You are not in this card's resolver audience."
+      },
+      "interaction_forbidden": {
+        "title": "You can’t respond to this card",
+        "body": "You do not have permission to respond to this card."
+      },
+      "interaction_settled": {
+        "title": "Already handled",
+        "body": "This request is no longer waiting for a decision."
+      },
+      "interaction_submit_failed": {
+        "title": "Couldn't submit",
+        "body": "Couldn't submit. Try again."
+      },
+      "transient": {
+        "title": "Connection interrupted",
+        "body": "Paperclip is temporarily unavailable. Please try again in a moment."
+      },
+      "auth": {
+        "title": "Signed out",
+        "body": "Your session has ended. Sign in again to continue."
+      },
+      "forbidden": {
+        "title": "Not allowed",
+        "body": "You don’t have permission to do that."
+      },
+      "not_found": {
+        "title": "Not found",
+        "body": "This item doesn’t exist or was moved."
+      },
+      "conflict": {
+        "title": "Out of date",
+        "body": "This changed since you loaded it. Refresh and try again."
+      },
+      "invalid": {
+        "title": "Check your input",
+        "body": "Some details aren’t valid. Review them and try again."
+      },
+      "aborted": {
+        "title": "Cancelled",
+        "body": "The request was cancelled."
+      },
+      "unknown": {
+        "title": "Something went wrong",
+        "body": "An unexpected error occurred. Please try again."
+      },
+      "actionFailed": "Couldn't {{action}}",
+      "actions": {
+        "loadTask": "load this task",
+        "loadAgent": "load this agent",
+        "loadAgentTasks": "load this agent's tasks",
+        "loadAgentArtifacts": "load this agent's artifacts",
+        "loadProject": "load this project",
+        "loadGoal": "load this goal",
+        "loadConversation": "load this conversation",
+        "loadThisSkill": "load this skill",
+        "loadSkill": "load the skill",
+        "loadDocument": "load the document",
+        "saveDocument": "save the document",
+        "saveComment": "save the comment",
+        "loadWorkspace": "load this workspace",
+        "openWorkspace": "open this workspace",
+        "loadWorkspaces": "load workspaces",
+        "loadWorkspaceFiles": "load workspace files",
+        "loadAttachmentDetails": "load attachment details",
+        "loadPlugins": "load plugins",
+        "loadBundledPlugins": "load bundled plugins",
+        "loadPluginExtensions": "load plugin extensions"
+      },
+      "retry": "Retry",
+      "retrying": "Retrying…",
+      "loading": "Loading",
+      "reconnecting": "Reconnecting",
+      "stale": "Updating paused while reconnecting…",
+      "backOnline": "Back online.",
+      "offline": "You’re offline. Reconnecting when your network is back…",
+      "reconnectingBanner": "Connection interrupted. Reconnecting automatically…",
+      "pendingWrite": "1 change will send when you’re back online.",
+      "pendingWrites": "{{count}} changes will send when you’re back online."
+    },
+    "v1": {
+      "daysAgo": "{{count}}D ago",
+      "artifactCount_one": "{{count}} Artifact",
+      "artifactCount_other": "{{count}} Artifacts",
+      "openStack": "Open {{identifier}} {{title}}, {{countLabel}}",
+      "allFiles": "All files",
+      "showArtifactsByTaskOrType": "Show artifacts by task or by type",
+      "code": "CODE",
+      "file": "FILE",
+      "image": "IMG",
+      "video": "VIDEO"
+    }
   }
 }

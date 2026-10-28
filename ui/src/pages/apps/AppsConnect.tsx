@@ -1,6 +1,7 @@
 import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { aiConnectionsApi } from "@/api/ai-connections";
+import { AiConnectionCredentialStep } from "@/components/ai-connections/AiConnectionCredentialStep";
 import { AiProviderSetup } from "@/components/ai-connections/AiProviderSetup";
 import { AiConnectionPoolConnector } from "@/components/ai-connections/AiConnectionPoolConnector";
 import { useEffect } from "react";
@@ -28,6 +29,9 @@ export function AppsConnect({ byoOnly = false, credentialSource = "paperclip_vau
   const { appKey } = useParams<{ appKey?: string }>();
   const source = searchParams.get("source") ?? appKey ?? searchParams.get("appKey");
   const reconnectId = searchParams.get("reconnect");
+  const aiLoginId = searchParams.get("aiLogin");
+  const login = useQuery({ queryKey: ["ai-login-setup", selectedCompanyId, aiLoginId],
+    queryFn: () => aiConnectionsApi.loginSetup(selectedCompanyId!, aiLoginId!), enabled: Boolean(selectedCompanyId && aiLoginId), retry: false });
   const preset = aiProviderSetupPreset(source);
   const aiReconnectRequested = Boolean(reconnectId && (preset || ["openai", "anthropic", "xai"].includes(source ?? "")));
   const aiAccounts = useQuery({ queryKey: ["ai-connections", selectedCompanyId], queryFn: () => aiConnectionsApi.list(selectedCompanyId!), enabled: Boolean(selectedCompanyId && aiReconnectRequested) });
@@ -55,6 +59,16 @@ export function AppsConnect({ byoOnly = false, credentialSource = "paperclip_vau
   function returnToSkills() {
     const path = selectedCompanyId && consumeSkillSourceReturn(selectedCompanyId);
     if (path) navigate(path);
+  }
+  if (aiLoginId && selectedCompanyId) {
+    if (login.isPending) return <p role="status">{t("sync20261028.connections.loadingSavedSignIn")}</p>;
+    if (!login.data) return <p role="alert">{login.error?.message ?? t("sync20261028.connections.signInUnavailable")}</p>;
+    const { intent, environmentId, connectionId, grantId } = login.data;
+    if (connectionId && grantId) return <div className="space-y-4"><p role="status">{t("sync20261028.connections.accountConnected")}</p><Button onClick={() => navigate(`/apps/${connectionId}/permissions`)}>{t("sync20261028.connections.viewConnection")}</Button></div>;
+    return <AiConnectionCredentialStep key={aiLoginId} companyId={selectedCompanyId} {...intent}
+      agentIds={intent.agentIds ?? []} allAgents={intent.allAgents ?? false} initialMethod={intent.method} fixedMethod
+      environmentId={environmentId} hideName onCancel={() => navigate("/apps")}
+      onComplete={binding => navigate(`/apps/${binding.connectionId}/permissions`)} />;
   }
   if (aiReconnectRequested && aiAccounts.isPending) return <p role="status">{t("connectors.loadingConnection")}</p>;
   if (aiReconnectRequested && aiAccounts.isError) return <p role="alert">{t("connectors.couldNotLoadThisConnection")}</p>;

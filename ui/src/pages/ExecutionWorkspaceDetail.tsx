@@ -5,6 +5,7 @@ import { Link, Navigate, useLocation, useNavigate, useParams } from "@/lib/route
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ExecutionWorkspace, Issue, Project, ProjectWorkspace, RoutineListItem, WorkspaceOperation } from "@paperclipai/shared";
 import { Copy, ExternalLink, Loader2, Play, Repeat } from "lucide-react";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -801,6 +802,7 @@ export function ExecutionWorkspaceDetail() {
     queryFn: () => executionWorkspacesApi.get(workspaceId!),
     enabled: Boolean(workspaceId),
   });
+  const workspaceView = useQueryView(workspaceQuery);
   const workspace = workspaceQuery.data ?? null;
 
   const projectQuery = useQuery({
@@ -980,12 +982,18 @@ export function ExecutionWorkspaceDetail() {
     },
   });
 
-  if (workspaceQuery.isLoading) return <p className="text-sm text-muted-foreground">{t("execWorkspace.loadingWorkspace")}</p>;
-  if (workspaceQuery.error) {
+  if (workspaceQuery.isLoading || workspaceView.kind === "reconnecting") {
+    return <p className="text-sm text-muted-foreground">{t("execWorkspace.loadingWorkspace")}</p>;
+  }
+  if (workspaceView.kind === "error") {
     return (
-      <p className="text-sm text-destructive">
-        {workspaceQuery.error instanceof Error ? workspaceQuery.error.message : t("execWorkspace.failedToLoadWorkspace")}
-      </p>
+      <QueryErrorState
+        size="page"
+        error={workspaceQuery.error}
+        action={t("sync20261028.artifacts.loadWorkspace")}
+        onRetry={workspaceView.retry}
+        retrying={workspaceView.isFetching}
+      />
     );
   }
   if (!workspace || !form || !initialState) return null;

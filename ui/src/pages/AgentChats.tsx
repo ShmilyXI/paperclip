@@ -3,6 +3,7 @@ import { usePrimaryAgentPresentation } from "@/components/primary-agent/PrimaryA
 import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { AgentAvatar } from "@/components/AgentAvatar";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { Button } from "@/components/ui/button";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 import { useAgentChatNavigation, useOpenAgentChat } from "@/hooks/useAgentChatNavigation";
@@ -25,7 +26,12 @@ function AgentChatsContent({ companyId, userId, enabled, loaded, agents, chats, 
   const recentIds = useRecentAgentChats(companyId ?? "", userId);
   const [openingId, setOpeningId] = useState<string | null>(null);
   const [openError, setOpenError] = useState<string | null>(null);
-  const blockingError = agents.error ?? session.error;
+  const agentsView = useQueryView(agents);
+  const sessionView = useQueryView(session);
+  const chatsView = useQueryView(chats);
+  // Only a real failure blocks the entry redirect; an outage waits it out below.
+  const blockingError = agentsView.kind === "error" ? agents.error : sessionView.kind === "error" ? session.error : null;
+  const reconnecting = agentsView.kind === "reconnecting" || sessionView.kind === "reconnecting" || chatsView.kind === "reconnecting";
   const firstId = recentIds[0];
   const firstAgent = agents.data?.find(agent => agent.id === firstId);
   // An empty chat with an active agent can reopen from the roster alone. A
@@ -55,15 +61,16 @@ function AgentChatsContent({ companyId, userId, enabled, loaded, agents, chats, 
   if (!loaded) return <p role="status" className="text-sm text-muted-foreground">{t("agentChats.loadingChat")}</p>;
   if (!enabled) return <p className="text-sm text-muted-foreground">{t("agentChats.agentChatIsDisabledEnable")}</p>;
   if (!companyId) return <p className="text-sm text-muted-foreground">{t("agentChats.selectACompanyToStart")}</p>;
+  if (reconnecting) return <p role="status" className="text-sm text-muted-foreground">{t("agentChats.loadingChat")}</p>;
   if (resolvingRecent || entryPath || primary?.loading) return <p role="status" className="text-sm text-muted-foreground">{t("agentChats.openingChat")}</p>;
-  const error = blockingError ?? (recentIds.length > 0 ? chats.error : null);
+  const error = blockingError ?? (recentIds.length > 0 && chatsView.kind === "error" ? chats.error : null);
   return <div className="mx-auto flex h-full max-w-xl flex-col justify-center gap-6 px-4 py-12">
     <div className="flex flex-col gap-3">
       <MessageCircle className="size-6 text-muted-foreground" />
       <h1 className="text-xl font-semibold">{t("agentChats.whoWouldYouLikeTo")}</h1>
       <p className="text-sm leading-relaxed text-muted-foreground">{t("agentChats.askAQuestionThinkThrough")}</p>
     </div>
-    {error ? <div role="alert" className="flex flex-col items-start gap-3"><p className="text-sm">{t("agentChats.couldnTLoadYourChats")}</p><Button variant="outline" onClick={() => { void agents.refetch(); void chats.refetch(); void session.refetch(); }}>{t("common.tryAgain")}</Button></div>
+    {error ? <QueryErrorState error={error} action={t("sync20261028.tasks.loadYourChats")} onRetry={() => { agentsView.retry(); chatsView.retry(); sessionView.retry(); }} />
       : agents.isPending || session.isPending ? <p role="status" className="text-sm text-muted-foreground">{t("agentChats.loadingAgents")}</p>
       : <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {(agents.data ?? []).slice(0, 6).map(agent => <button key={agent.id} type="button" disabled={openingId !== null}

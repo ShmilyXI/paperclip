@@ -15852,5 +15852,174 @@
   "taskChatLab": {
     "chosenSample": "已选 · C · 背景开启",
     "streamingSpeed": "流式速度"
+  },
+  "sync20261028": {
+    "agents": {
+      "lastHeartbeat": "上次心跳",
+      "upgradeExplanation": "保留你的执行框架、模型、账户和兼容设置。新会话将重新开始，历史运行仍可查看。",
+      "upgradeVerification": "升级前将先验证你的计算机，这可能需要几分钟。",
+      "saveComputerBeforeUpgrade": "请先保存计算机变更，再升级运行器。",
+      "upgradeEnvironmentUnknown": "无法确定需要验证的环境，请重试升级。",
+      "upgradeSettingsChanged": "验证期间智能体设置已变更，请使用当前设置重试升级。",
+      "upgradeEnvironmentUnsupported": "此环境不支持 Paperclip Runner，智能体仍使用旧版运行器。",
+      "testSettingsChanged": "测试期间智能体设置已变更，请重新测试。",
+      "testComputerFailed": "无法验证已保存的计算机，请重新测试。",
+      "chooseSavedConnectionModel": "为已保存的连接选择模型",
+      "chooseGatewayModel": "请先为此网关连接选择模型，再连接智能体。",
+      "cloudConnectFailed": "Paperclip 未能完成此智能体的连接，请重试。",
+      "gatewayLoadFailed": "无法加载已保存的网关连接，请重试后选择模型并连接智能体。",
+      "retryConnection": "重新加载连接",
+      "loadingGateway": "正在加载已保存的网关连接…",
+      "gatewaySaved": "网关连接已保存。选择模型后点击连接，即可测试并完成智能体设置。",
+      "useDifferentApiKey": "使用其他 API 密钥",
+      "eventsLoadFailed": "无法加载事件，请重试。",
+      "retryEvents": "重新加载事件",
+      "loadMoreEvents": "加载更多事件"
+    },
+    "artifacts": {
+      "loadDocument": "加载文档",
+      "loadSkill": "加载技能",
+      "loadWorkspaceFiles": "加载工作区文件",
+      "loadAttachmentDetails": "加载附件详情",
+      "loadAgentTasks": "加载此智能体的任务",
+      "loadAgentArtifacts": "加载此智能体的产物",
+      "loadWorkspace": "加载此工作区"
+    },
+    "connections": {
+      "completeHumanSignIn": "请在已保存的设置中完成登录。连接就绪后，任务会继续执行。",
+      "artifactsV1": "成果展示 V1",
+      "artifactsDescription": "在成果页使用叠放和网格展示，在侧栏成果标签页使用紧凑列表，在任务对话中分组展示成果。",
+      "artifactsFootnote": "仅改变展示方式。关闭后恢复原有卡片，不改变数据。",
+      "artifactsToggle": "切换成果展示 V1 实验设置",
+      "loadingSavedSignIn": "正在加载已保存的登录…",
+      "signInUnavailable": "此登录不可用。",
+      "accountConnected": "此账号已连接。",
+      "viewConnection": "查看连接",
+      "rotationFailed": "未能完成密钥轮换",
+      "rotationRetry": "请在 GitHub App 设置中使用最新密钥，待 GitHub 验证消息投递后重试连接。",
+      "requestedCredentials": "请填写下方要求的凭据。其他已保存的凭据保持不变。"
+    },
+    "tasks": {
+      "agentNeedsProjectAccess": "智能体需要项目访问权限",
+      "loadYourChats": "加载你的聊天",
+      "loadThisCase": "加载此案例",
+      "loadRevisions": "加载修订版本",
+      "loadAccess": "加载访问权限",
+      "queuedMessagesSubmitted": "排队消息已提交，正在等待智能体。",
+      "couldNotSendQueuedMessage": "发送失败，消息仍在队列中。",
+      "deferredTheRequestOn": "暂缓处理请求，位于",
+      "deferredTheRequest": "暂缓处理了请求"
+    },
+    "errors": {
+      "tenant_app_unavailable": {
+        "title": "正在重新连接 Paperclip",
+        "body": "Paperclip 正在重启或更新，请稍后重试。"
+      },
+      "tenant_app_starting": {
+        "title": "Paperclip 正在启动",
+        "body": "Paperclip 正在启动，请稍等几秒后重试。"
+      },
+      "WORKER_UNAVAILABLE": {
+        "title": "插件暂时不可用",
+        "body": "此插件正在重启，请稍后重试。"
+      },
+      "TIMEOUT": {
+        "title": "请求超时",
+        "body": "响应时间过长，请稍后重试。"
+      },
+      "interaction_audience_denied": {
+        "title": "无法回复此卡片",
+        "body": "你不在此卡片指定的处理人范围内。"
+      },
+      "interaction_forbidden": {
+        "title": "无法回复此卡片",
+        "body": "你没有回复此卡片的权限。"
+      },
+      "interaction_settled": {
+        "title": "已处理",
+        "body": "此请求已不再等待处理。"
+      },
+      "interaction_submit_failed": {
+        "title": "提交失败",
+        "body": "提交失败，请重试。"
+      },
+      "transient": {
+        "title": "连接中断",
+        "body": "Paperclip 暂时不可用，请稍后重试。"
+      },
+      "auth": {
+        "title": "登录已失效",
+        "body": "登录已失效，请重新登录后继续。"
+      },
+      "forbidden": {
+        "title": "没有操作权限",
+        "body": "你没有执行此操作的权限。"
+      },
+      "not_found": {
+        "title": "未找到",
+        "body": "此内容不存在或已被移动。"
+      },
+      "conflict": {
+        "title": "内容已更新",
+        "body": "内容在加载后发生了更改，请刷新后重试。"
+      },
+      "invalid": {
+        "title": "请检查输入",
+        "body": "部分内容无效，请检查后重试。"
+      },
+      "aborted": {
+        "title": "已取消",
+        "body": "请求已取消。"
+      },
+      "unknown": {
+        "title": "操作失败",
+        "body": "发生意外错误，请重试。"
+      },
+      "actionFailed": "无法{{action}}",
+      "actions": {
+        "loadTask": "加载此任务",
+        "loadAgent": "加载此智能体",
+        "loadAgentTasks": "加载此智能体的任务",
+        "loadAgentArtifacts": "加载此智能体的产物",
+        "loadProject": "加载此项目",
+        "loadGoal": "加载此目标",
+        "loadConversation": "加载此对话",
+        "loadThisSkill": "加载此技能",
+        "loadSkill": "加载技能",
+        "loadDocument": "加载文档",
+        "saveDocument": "保存文档",
+        "saveComment": "保存评论",
+        "loadWorkspace": "加载此工作区",
+        "openWorkspace": "打开此工作区",
+        "loadWorkspaces": "加载工作区",
+        "loadWorkspaceFiles": "加载工作区文件",
+        "loadAttachmentDetails": "加载附件详情",
+        "loadPlugins": "加载插件",
+        "loadBundledPlugins": "加载内置插件",
+        "loadPluginExtensions": "加载插件扩展"
+      },
+      "retry": "重试",
+      "retrying": "正在重试…",
+      "loading": "正在加载",
+      "reconnecting": "正在重新连接",
+      "stale": "正在重新连接，更新已暂停…",
+      "backOnline": "连接已恢复。",
+      "offline": "网络已断开，网络恢复后将重新连接…",
+      "reconnectingBanner": "连接中断，正在自动重新连接…",
+      "pendingWrite": "网络恢复后将发送 1 项更改。",
+      "pendingWrites": "网络恢复后将发送 {{count}} 项更改。"
+    },
+    "v1": {
+      "daysAgo": "{{count}}天前",
+      "artifactCount_one": "{{count}} 个产物",
+      "artifactCount_other": "{{count}} 个产物",
+      "openStack": "打开 {{identifier}} {{title}}，{{countLabel}}",
+      "allFiles": "全部文件",
+      "showArtifactsByTaskOrType": "按任务或类型查看产物",
+      "code": "代码",
+      "file": "文件",
+      "image": "图片",
+      "video": "视频"
+    }
   }
 }

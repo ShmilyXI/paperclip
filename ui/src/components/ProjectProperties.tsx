@@ -8,6 +8,7 @@ import { environmentDisplayLabel, filterManagedSandboxSelectableEnvironments } f
 import { Link } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Project, SharedWorkspaceConcurrency } from "@paperclipai/shared";
+import { ProjectGitAuthorization } from "./ProjectGitAuthorization";
 import { ProjectRepositories } from "./ProjectRepositories";
 import { cn, formatDate } from "../lib/utils";
 import { environmentsApi } from "../api/environments";
@@ -48,6 +49,7 @@ export type ProjectConfigFieldKey =
   | "visibility"
   | "goals"
   | "env"
+  | "workspace_storage_provider"
   | "execution_workspace_enabled"
   | "execution_workspace_default_mode"
   | "execution_workspace_shared_concurrency"
@@ -274,7 +276,9 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
   const codebase = project.codebase;
   const primaryCodebaseWorkspace = project.primaryWorkspace ?? null;
   const hasAdditionalLegacyWorkspaces = workspaces.some((workspace) => workspace.id !== primaryCodebaseWorkspace?.id && !workspace.metadata?.githubRepositoryId);
-  const executionWorkspacePolicy = project.executionWorkspacePolicy ?? null;
+  const storedExecutionWorkspacePolicy = project.executionWorkspacePolicy ?? null;
+  const providerConfiguration = project.workspaceProvider;
+  const executionWorkspacePolicy = providerConfiguration?.effectivePolicy ?? storedExecutionWorkspacePolicy;
   const executionWorkspacesEnabled = executionWorkspacePolicy?.enabled === true;
   const isolatedWorkspacesEnabled = experimentalSettings?.enableIsolatedWorkspaces === true;
   const executionWorkspaceDefaultMode =
@@ -353,9 +357,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
     return {
       executionWorkspacePolicy: {
         enabled: executionWorkspacesEnabled,
-        defaultMode: executionWorkspaceDefaultMode,
-        allowIssueOverride: executionWorkspacePolicy?.allowIssueOverride ?? true,
-        ...executionWorkspacePolicy,
+        ...storedExecutionWorkspacePolicy,
         ...patch,
       },
     };
@@ -508,6 +510,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
           </div>
         </PropertyRow>
         {repositories ?? <ProjectRepositories key={project.id} project={project} />}
+        <ProjectGitAuthorization key={`git-${project.id}`} project={project} />
         <PropertyRow
           label={<FieldLabel label={t("projectProps.env")} state={fieldState("env")} />}
           alignStart
@@ -727,6 +730,41 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
             <p className="text-xs text-destructive">{t("projectProps.failedToUpdateWorkspace")}</p>
           )}
         </div>}
+
+        {providerConfiguration ? (
+          <div className="py-1.5 space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium" htmlFor="workspace-storage-provider">
+              Workspace storage
+              <SaveIndicator state={fieldState("workspace_storage_provider")} />
+            </label>
+            <select
+              id="workspace-storage-provider"
+              aria-label="Workspace storage provider"
+              className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+              disabled={!onUpdate && !onFieldUpdate}
+              value={storedExecutionWorkspacePolicy?.storageProviderPluginId === null ? "core" : storedExecutionWorkspacePolicy?.storageProviderPluginId ?? "inherit"}
+              onChange={(event) => {
+                const policy = { enabled: true, ...storedExecutionWorkspacePolicy };
+                if (event.target.value === "inherit") delete policy.storageProviderPluginId;
+                else policy.storageProviderPluginId = event.target.value === "core" ? null : event.target.value;
+                commitField("workspace_storage_provider", { executionWorkspacePolicy: policy });
+              }}
+            >
+              <option value="inherit">Inherit installed default</option>
+              <option value="core">Core / local</option>
+              {providerConfiguration.providers.map(provider => (
+                <option key={provider.id} value={provider.id}>{provider.displayName}{provider.isDefault ? " (default)" : ""}</option>
+              ))}
+              {storedExecutionWorkspacePolicy?.storageProviderPluginId && !providerConfiguration.providers.some(provider => provider.id === storedExecutionWorkspacePolicy.storageProviderPluginId) ? (
+                <option value={storedExecutionWorkspacePolicy.storageProviderPluginId}>Unavailable provider</option>
+              ) : null}
+            </select>
+            <p className="text-xs text-muted-foreground">
+              {providerConfiguration.source === "default" ? `Inherited default: ${providerConfiguration.displayName}` : `Selected: ${providerConfiguration.displayName}`}
+            </p>
+            {providerConfiguration.error ? <p role="alert" className="text-xs text-destructive">{providerConfiguration.error}</p> : null}
+          </div>
+        ) : null}
 
         {isolatedWorkspacesEnabled && workspaceIsolationControlsVisible ? (
           <>

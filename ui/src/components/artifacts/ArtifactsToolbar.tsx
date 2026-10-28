@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import type { ReactNode } from "react";
 import { Check, Layers } from "lucide-react";
 import type { ArtifactGroupBy, ArtifactKindFilter } from "@/api/artifacts";
 import { TabFilters, type TabSize } from "@/components/TabBar";
@@ -38,10 +39,12 @@ export interface ArtifactsToolbarProps {
   onGroupByChange: (value: ArtifactGroupBy) => void;
   kind: ArtifactKindFilter;
   onKindChange: (value: ArtifactKindFilter) => void;
+  /** Replaces the kind filter row (Artifacts V1 shows its own view tabs). */
+  filters?: ReactNode;
 }
 
 /** Shared shipped Artifacts controls. Canonical proposal: Components / Toolbars / Artifacts. */
-export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQuery, groupBy, onGroupByChange: selectGroupBy, kind, onKindChange: selectKind }: ArtifactsToolbarProps) {
+export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQuery, groupBy, onGroupByChange: selectGroupBy, kind, onKindChange: selectKind, filters }: ArtifactsToolbarProps) {
   const grouping = groupBy !== "none";
   return (
     <div data-canonical-toolbar="artifacts" role="toolbar" aria-label={t("artifactsToolbar.artifactsControls")} className="flex flex-col items-start gap-4">
@@ -81,7 +84,7 @@ export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQue
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <ArtifactKindFilters kind={kind} onKindChange={selectKind} size="standard" />
+      {filters ?? <ArtifactKindFilters kind={kind} onKindChange={selectKind} size="standard" />}
     </div>
   );
 }

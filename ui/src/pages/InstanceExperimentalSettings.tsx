@@ -307,6 +307,18 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
+          title={t("sync20261028.connections.artifactsV1")}
+          description={t("sync20261028.connections.artifactsDescription")}
+          footnote={t("sync20261028.connections.artifactsFootnote")}
+          checked={experimentalQuery.data?.enableArtifactsV1 ?? false}
+          onCheckedChange={(checked) => toggleMutation.mutate({ enableArtifactsV1: checked })}
+          disabled={toggleMutation.isPending}
+          settingKey="enableArtifactsV1"
+          managed={managedKeys.enableArtifactsV1}
+          ariaLabel={t("sync20261028.connections.artifactsToggle")}
+        />
+
+        <ExperimentalToggleCard
           title={t("experimental.assistantConnectionsMcp")}
           description={t("experimental.connectCodexClaudeAndOther")}
           footnote={<>Requires an authenticated instance with a configured public URL. Takes effect immediately. Turning this off blocks assistant calls and event delivery; work already delegated continues.{experimentalQuery.data?.enablePublicMcp && <> <Link className="underline" to="/apps/assistant-connection">{t("experimental.setUpAnAssistantConnection")}</Link></>}</>}

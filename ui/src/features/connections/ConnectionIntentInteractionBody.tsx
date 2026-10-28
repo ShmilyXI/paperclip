@@ -65,6 +65,7 @@ export function ConnectionIntentInteractionBody({
   );
   const isPending = interaction.status === "pending";
   const isAi = interaction.payload.purpose === "ai";
+  const isChatHandoff = Boolean(interaction.payload.savedSetup);
   const provider = isAi ? aiProviderSchema.safeParse(interaction.payload.serviceSlug).data : undefined;
   const serviceName = provider ? AI_CONNECTION_CAPABILITIES[provider].name : interaction.payload.serviceName;
   const isEmail = interaction.payload.purpose === "channel" && interaction.payload.serviceSlug === "agentmail";
@@ -470,6 +471,7 @@ export function ConnectionIntentInteractionBody({
                 ? t("connectionIntentInteractionBody.requestingagentnameNeedsYourOwnAi", { requestingAgentName: interaction.payload.requestingAgentName })
                 : interaction.payload.purpose === "ai"
                 ? t("connectionIntentInteractionBody.thisTaskCanTRun")
+                : isChatHandoff ? t("sync20261028.connections.completeHumanSignIn")
                 : isEmail ? t("connectionIntentInteractionBody.connectAgentmailToCreateAn")
                 : t("connectionIntentInteractionBody.connectYourIdentityOrReuse")}
             </p>
@@ -483,7 +485,10 @@ export function ConnectionIntentInteractionBody({
           </p>
         ) : null}
 
-        {isEmail ? setupQuery.isLoading || setupQuery.isError ? <>
+        {isChatHandoff ? <div className="mt-4 flex items-center justify-between gap-2">
+          <Button type="button" variant="ghost" disabled={declineMutation.isPending} onClick={() => declineMutation.mutate()}>Not now</Button>
+          {setupQuery.data?.chatSetup ? <Button asChild><a href={setupQuery.data.chatSetup.path} target="_blank" rel="noopener noreferrer">Continue authentication</a></Button> : setupContent}
+        </div> : isEmail ? setupQuery.isLoading || setupQuery.isError ? <>
           {setupContent}
           <Button type="button" variant="ghost" disabled={declineMutation.isPending} onClick={() => declineMutation.mutate()}>{t("connectionIntentInteractionBody.notNow")}</Button>
         </> : <AgentMailIntentSetup

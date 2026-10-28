@@ -46,6 +46,7 @@ import { useSidebar } from "../context/SidebarContext";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 import { useCompanyPageMemory } from "../hooks/useCompanyPageMemory";
 import { useMobileNavVisibility } from "../hooks/useMobileNavVisibility";
+import { useMobileVisualViewport } from "../hooks/useMobileVisualViewport";
 import { healthApi } from "../api/health";
 import {
   resolveArchivedCompanyBounce,
@@ -179,6 +180,7 @@ export function Layout() {
   const scrollMemory = useRef(new NavigationScrollMemory());
   const activeScrollKey = useRef<string>(location.key);
   const mobileNavVisible = useMobileNavVisibility(isMobile, location.pathname);
+  const mobileViewportRef = useMobileVisualViewport(isMobile);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const matchedCompany = useMemo(() => {
     if (!companyPrefix) return null;
@@ -589,8 +591,10 @@ export function Layout() {
   return (
     <ChatSetupSidebarProvider>
       <div
+        ref={mobileViewportRef}
+        data-mobile={isMobile ? "true" : undefined}
         className={cn(
-          "bg-background text-foreground pt-(--sz-safe-top)",
+          "paperclip-app-shell bg-background text-foreground pt-(--sz-safe-top)",
           // overflow-x-clip on mobile keeps a stray wide descendant from making the
           // whole viewport scroll horizontally. clip (not hidden) leaves overflow-y
           // computed as visible, so native body scroll + the sticky breadcrumb keep
@@ -610,7 +614,7 @@ export function Layout() {
         <DevRestartBanner devServer={health?.devServer} />
         <div
           className={cn(
-            "min-h-0 flex-1",
+            "app-main-row min-h-0 flex-1",
             isMobile ? "w-full" : "flex overflow-clip",
           )}
         >
@@ -664,12 +668,13 @@ export function Layout() {
 
           <div
             className={cn(
-              "flex min-w-0 flex-col",
+              "app-content-column flex min-w-0 flex-col",
               isMobile ? "w-full" : "h-full flex-1",
             )}
           >
             <div
               className={cn(
+                "app-breadcrumb",
                 isMobile &&
                   "sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85",
               )}
@@ -682,7 +687,7 @@ export function Layout() {
                 </div>
               ) : null}
             </div>
-            <div className={cn(isMobile ? "block" : "flex flex-1 min-h-0")}>
+            <div className={cn("app-content-row", isMobile ? "block" : "flex flex-1 min-h-0")}>
               <main
                 id="main-content"
                 ref={mainContentRef}

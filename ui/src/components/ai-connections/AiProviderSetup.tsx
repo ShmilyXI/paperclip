@@ -74,6 +74,7 @@ export function AiProviderSetup({
   initialProtocol,
   providerLabel,
   advancedOnly = false,
+  submitLabel,
   reconnect,
   onCancel,
   onComplete,
@@ -85,6 +86,7 @@ export function AiProviderSetup({
   initialProtocol?: AiProviderRouting["protocol"];
   providerLabel?: string;
   advancedOnly?: boolean;
+  submitLabel?: string;
   reconnect?: AiManagedConnectionSummary;
   onCancel: () => void;
   onComplete: (
@@ -454,10 +456,10 @@ export function AiProviderSetup({
               }
             >
               {save.isPending
-                ? t("aiProviderSetup.connecting")
+                ? submitLabel ? t("common.saving2") : t("aiProviderSetup.connecting")
                 : reconnect
                   ? t("aiProviderSetup.reconnect")
-                  : t("common.connect")}
+                  : submitLabel ?? t("common.connect")}
             </Button>
           </div>
         </form>

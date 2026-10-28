@@ -7,6 +7,7 @@ import { ApiError } from "@/api/client";
 import { issuesApi } from "@/api/issues";
 import { DocumentAnnotationsCountChip, IssueDocumentAnnotations } from "@/components/IssueDocumentAnnotations";
 import { MarkdownBody } from "@/components/MarkdownBody";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { queryKeys } from "@/lib/queryKeys";
 import { documentDisplayTitle } from "@/lib/issue-artifacts";
 import { useLocation } from "@/lib/router";
@@ -35,7 +36,9 @@ export function TaskDocumentPanel({
     initialData: initialDocument,
   });
 
-  if (query.isLoading) {
+  const view = useQueryView(query);
+
+  if (query.isLoading || view.kind === "reconnecting") {
     return (
       <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground" role="status">
         <Loader2 className="size-4 animate-spin" aria-hidden />
@@ -43,10 +46,10 @@ export function TaskDocumentPanel({
       </div>
     );
   }
-  if (query.isError) {
+  if (view.kind === "error") {
     return (
-      <div className="py-8 text-sm text-muted-foreground" role="alert">
-        {t("taskDocumentPanel.theDocumentCouldNotBe")}
+      <div className="py-6">
+        <QueryErrorState error={query.error} action={t("sync20261028.artifacts.loadDocument")} onRetry={view.retry} retrying={view.isFetching} />
       </div>
     );
   }
