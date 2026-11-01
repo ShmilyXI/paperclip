@@ -2,6 +2,7 @@ import { t } from "@/i18n";
 import {
   Inbox,
   KanbanSquare,
+  PanelTop,
   ListChecks,
   CircleDot,
   Target,
@@ -155,6 +156,7 @@ export function Sidebar() {
           <SidebarNavItem to="/search" label={t("nav.search")} icon={Search} />
           <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
           <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
+          <SidebarNavItem to="/infinite-canvas" label={t("nav.infiniteCanvas")} icon={PanelTop} />
           <SidebarNavItem
             to="/inbox"
             label={t("nav.inbox")}

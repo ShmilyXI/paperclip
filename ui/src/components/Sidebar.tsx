@@ -23,6 +23,7 @@ import {
   GanttChartSquare,
   LayoutGrid,
   KanbanSquare,
+  PanelTop,
   Users,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -177,6 +178,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
           <SidebarNavItem to="/search" label={t("nav.search")} icon={Search} />
           <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
           <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
+          <SidebarNavItem to="/infinite-canvas" label={t("nav.infiniteCanvas")} icon={PanelTop} />
           {!combinedInboxTasks ? (
             <SidebarNavItem
               to="/inbox"

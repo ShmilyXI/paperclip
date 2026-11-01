@@ -25,6 +25,7 @@ const BOARD_ROUTE_ROOTS = new Set([
   "decisions",
   "inbox",
   "board",
+  "infinite-canvas",
   "board-chat",
   "artifacts",
   "u",

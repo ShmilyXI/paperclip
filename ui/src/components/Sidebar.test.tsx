@@ -521,6 +521,8 @@ describe("Sidebar", () => {
     expect(labels(orgSection)).toEqual(["Agents", "Skills", "Connectors", "Audit"]);
     const topLabels = [...container.querySelectorAll("nav a")].map((anchor) => anchor.textContent?.trim());
     expect(topLabels.indexOf("Board")).toBe(topLabels.indexOf("Dashboard") + 1);
+    expect(topLabels.indexOf("Infinite Canvas")).toBe(topLabels.indexOf("Board") + 1);
+    expect(container.querySelector('a[href="/infinite-canvas"]')?.textContent).toBe("Infinite Canvas");
     expect(sections.indexOf(workSection!)).toBeLessThan(sections.indexOf(orgSection!));
     expect(
       workSection?.querySelector('a[href="/issues"] svg')?.classList.contains("lucide-circle-check"),

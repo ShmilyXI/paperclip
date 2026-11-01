@@ -64,7 +64,8 @@
     "home": "Home",
     "mobileNavigation": "Mobile navigation",
     "openSidebar": "Open sidebar",
-    "board": "Board"
+    "board": "Board",
+    "infiniteCanvas": "Infinite Canvas"
   },
   "sidebar": {
     "top": "Top",
@@ -15651,6 +15652,10 @@
     "defaultPolicyRemediation": "An organization administrator can change the skill policy to allow this.",
     "defaultAdminRemediation": "This requires organization administration access. Ask an administrator to make this change.",
     "fixFlaggedIssue": "Fix the flagged issue and try again."
+  },
+  "infiniteCanvas": {
+    "reload": "Reload canvas",
+    "openInNewWindow": "Open in new window"
   },
   "board": {
     "settingsLabel": "Board display settings",

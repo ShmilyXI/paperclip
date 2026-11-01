@@ -588,6 +588,7 @@
      Desktop and the classic thread use the safe-area default. */
   --tc-composer-bottom: var(--sz-calc-8);
   --mobile-chat-viewport-height: 100dvh;
+  --infinite-canvas-mobile-height: calc(100dvh - var(--sz-60px) - var(--sz-calc-14) - var(--sz-safe-top));
   --tc-composer-editor-max-height: min(var(--sz-28dvh), calc(var(--mobile-chat-viewport-height) * 0.4));
   --tc-composer-visible-nav-offset: calc(4rem + var(--spacing) * 1.5 + var(--sz-safe-bottom));
   /* With the dock's pb-1, leave 12px below the card when the nav hides. */

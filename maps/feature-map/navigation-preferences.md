@@ -27,6 +27,12 @@ Agent access: [companion](../agent-access-map/navigation-preferences.md).
 
 Use starred/recent/sidebar links and direct company-prefixed URLs.
 
+The custom Infinite Canvas entry sits immediately below Board in both sidebar
+shells. `/:companyPrefix/infinite-canvas` embeds the independently deployed
+`https://canvas.culud.com/` application while preserving Paperclip navigation.
+Its toolbar reloads the frame or opens the application in a new window.
+Canvas authentication and stored content remain owned by that application.
+
 ### `profile-announcements`
 
 Use Settings → Profile, `/u/:userSlug`, and the announcement well when a publication is available.
@@ -42,6 +48,12 @@ Preconditions: follow the [baseline](./README.md#before-driving-a-journey). Use 
 ### `sidebar-deep-links`
 
 Automated: [sidebar](../../ui/src/components/Sidebar.test.tsx) and [sidebar preference routes](../../server/src/__tests__/sidebar-preferences-routes.test.ts) cover UI/server behavior.
+
+The [Infinite Canvas page tests](../../ui/src/pages/InfiniteCanvas.test.tsx) cover
+the two sidebar entries, route registration, embedded address, reload control,
+external link, mobile height contract, and translations. Browser acceptance
+must also follow the sidebar entry and check remote frame rendering on desktop
+and mobile; component tests do not prove the remote service is available.
 
 Manual: Star and reorder supported resources, collapse a section, navigate and reload. Switch company/user and inspect the intended preference scope. Open an unavailable resource and a legacy route; verify clear fallback or correct redirect without leaking another company’s state.
 

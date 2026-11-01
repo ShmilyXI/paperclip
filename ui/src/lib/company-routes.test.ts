@@ -43,6 +43,13 @@ describe("company routes", () => {
     expect(applyCompanyPrefix("/board", "MOW")).toBe("/MOW/board");
   });
 
+  it("keeps the infinite canvas entry inside the selected company", () => {
+    expect(isBoardPathWithoutPrefix("/infinite-canvas")).toBe(true);
+    expect(extractCompanyPrefixFromPath("/infinite-canvas")).toBeNull();
+    expect(applyCompanyPrefix("/infinite-canvas", "MOW")).toBe("/MOW/infinite-canvas");
+    expect(toCompanyRelativePath("/MOW/infinite-canvas")).toBe("/infinite-canvas");
+  });
+
   it("treats /search as a board route that needs a company prefix", () => {
     expect(isBoardPathWithoutPrefix("/search")).toBe(true);
     expect(extractCompanyPrefixFromPath("/search")).toBeNull();

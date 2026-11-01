@@ -64,7 +64,8 @@
     "home": "首页",
     "mobileNavigation": "移动端导航",
     "openSidebar": "打开侧边栏",
-    "board": "统筹看板"
+    "board": "统筹看板",
+    "infiniteCanvas": "无限画布"
   },
   "sidebar": {
     "top": "默认排序",
@@ -15651,6 +15652,10 @@
     "defaultPolicyRemediation": "组织管理员可以修改技能策略以允许此操作。",
     "defaultAdminRemediation": "此操作需要组织管理权限。请联系管理员进行此变更。",
     "fixFlaggedIssue": "修复被标记的问题后重试。"
+  },
+  "infiniteCanvas": {
+    "reload": "刷新画布",
+    "openInNewWindow": "在新窗口打开"
   },
   "board": {
     "settingsLabel": "看板显示设置",
