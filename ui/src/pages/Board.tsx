@@ -14,7 +14,7 @@ export const BOARD_URL_STORAGE_KEY = "paperclip.board.url";
  * of this UI). Mowa runs it on the tx server behind this domain; it asks for the
  * Paperclip login. Overridable per browser via the settings row.
  */
-export const DEFAULT_BOARD_URL = "https://ai-opc-dashboard.mowalab.com";
+export const DEFAULT_BOARD_URL = "https://ai-opc-dashboard.culud.com";
 
 /**
  * How long a frame may stay unloaded before we announce the refusal. A frame
