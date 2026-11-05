@@ -15,6 +15,7 @@ import { IssueGalleryContext } from "@/context/IssueGalleryContext";
 import { cn } from "@/lib/utils";
 import { useStreamlinedTaskChatPresentation } from "./presentation-mode";
 import { MarkdownBody } from "@/components/MarkdownBody";
+import { HomeAssetStrip } from "@/components/HomeAssetStrip";
 import {
   ImageGalleryModal,
   type GalleryMediaItem,
@@ -275,6 +276,8 @@ function TaskChatBubbleContent({
           </MarkdownBody>
         </div>
       ) : null}
+      {/* Bare `/paperclip/assets/...` deliverable paths preview as media. */}
+      <HomeAssetStrip text={bodyText} className="w-full px-1" />
       {!artifactsV1 && imageRefs.length > 0 ? (
         <div
           className="flex max-w-(--pct-85) flex-col gap-2"

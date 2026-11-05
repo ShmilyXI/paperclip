@@ -334,6 +334,21 @@ POST /api/companies/{companyId}/approvals
 
 `issueIds` links the approval into the issue thread. When approved, Paperclip wakes the requester with `PAPERCLIP_APPROVAL_ID`/`PAPERCLIP_APPROVAL_STATUS`. Keep the payload concise and decision-ready.
 
+**Media deliverables must be visible to the approver.** When the request approves visual output (publication cards, rendered videos, covers, artwork), add a `media` array with the exact `/paperclip/assets/...` container paths, and reference those paths (not shorthand like "card_1") in the summary:
+
+```json
+"payload": {
+  "title": "发布确认｜买 AI 会员前，先看懂 Token（小红书 MOWA AI）",
+  "summary": "拟发布 6 张卡片（封面 /paperclip/assets/内容与宣传/2026-11-03/token-ai-membership/card_1.png）。",
+  "media": [
+    "/paperclip/assets/内容与宣传/2026-11-03/token-ai-membership/card_1.png",
+    "/paperclip/assets/内容与宣传/2026-11-03/token-ai-membership/card_2.png"
+  ]
+}
+```
+
+The approval card and task messages render `media` paths (and any `/paperclip/assets/...` path in the text) as image thumbnails and inline video players, so the board approves what it can actually see.
+
 ## Issue-Thread Interactions
 
 Issue-thread interactions are first-class cards that render in the issue thread and capture a typed response from whoever picks them up — the board or another agent. Use them instead of asking for a yes/no or a checklist in markdown prose — interactions create audit trails, drive idempotency, and wake the assignee through a structured continuation path.

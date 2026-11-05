@@ -1,6 +1,8 @@
 import { t } from "@/i18n";
 import { UserPlus, Lightbulb, ShieldAlert, ShieldCheck } from "lucide-react";
 import { MarkdownBody } from "./MarkdownBody";
+import { HomeAssetStrip } from "./HomeAssetStrip";
+import { extractHomeAssetPaths } from "@/lib/home-asset-paths";
 import { formatCents } from "../lib/utils";
 
 export const typeLabel: Record<string, string> = {
@@ -171,6 +173,28 @@ function stripLeadingListMarker(value: string): string {
   return value.replace(/^(?:[-*•]|\d+[.)])\s+/, "");
 }
 
+/**
+ * Media referenced by a board approval: an explicit `media`/`attachments`
+ * payload array plus any `/paperclip/assets/...` paths mentioned in the text
+ * fields. The strip renders previews so the approver sees what they approve.
+ */
+function collectBoardApprovalMediaPaths(
+  payload: Record<string, unknown>,
+  texts: Array<string | undefined>,
+): string[] {
+  const paths: string[] = [];
+  for (const field of ["media", "attachments"]) {
+    const value = payload[field];
+    if (typeof value === "string") paths.push(value);
+    else if (Array.isArray(value)) {
+      for (const entry of value) {
+        if (typeof entry === "string") paths.push(entry);
+      }
+    }
+  }
+  return [...paths, ...texts.flatMap((text) => (text ? extractHomeAssetPaths(text) : []))];
+}
+
 function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unknown> }) {
   const risks = Array.isArray(payload.risks)
     ? payload.risks
@@ -183,6 +207,13 @@ function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unkn
   const recommendedAction = firstNonEmptyString(payload.recommendedAction);
   const nextActionOnApproval = firstNonEmptyString(payload.nextActionOnApproval);
   const proposedComment = firstNonEmptyString(payload.proposedComment);
+  const mediaPaths = collectBoardApprovalMediaPaths(payload, [
+    title,
+    summary,
+    recommendedAction,
+    nextActionOnApproval,
+    ...risks,
+  ]);
 
   return (
     <div className="mt-4 space-y-3.5 text-sm">
@@ -198,6 +229,9 @@ function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unkn
           <MarkdownBody className="leading-6 text-foreground/90">{summary}</MarkdownBody>
         </div>
       )}
+      {mediaPaths.length > 0 ? (
+        <HomeAssetStrip paths={mediaPaths} showLabel />
+      ) : null}
       {recommendedAction && (
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3.5 py-3">
           <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-amber-700 dark:text-amber-300">
