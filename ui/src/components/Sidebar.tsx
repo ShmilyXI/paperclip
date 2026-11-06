@@ -24,6 +24,7 @@ import {
   LayoutGrid,
   KanbanSquare,
   PanelTop,
+  Rocket,
   Users,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -179,6 +180,32 @@ export function Sidebar({ children }: { children?: ReactNode }) {
           <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
           <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
           <SidebarNavItem to="/infinite-canvas" label={t("nav.infiniteCanvas")} icon={PanelTop} />
+          {/* 部署控制台：本机独立服务（./opc console start，见 deploy-console/README.md），
+              不是 Paperclip 内部路由，新标签页打开。写法跟随上面 New Task 按钮的 rail/tooltip 分支。 */}
+          {(() => {
+            const deployConsoleLink = (
+              <a
+                href="http://localhost:3130"
+                target="_blank"
+                rel="noreferrer"
+                aria-label={rail ? t("nav.deployConsole") : undefined}
+                className={cn(
+                  "flex items-center gap-2.5 mx-2 rounded-lg px-2 py-1.5 pointer-coarse:py-1 text-(length:--text-compact) font-medium text-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                )}
+              >
+                <Rocket className="h-4 w-4 shrink-0" />
+                <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "truncate"}>{t("nav.deployConsole")}</span>
+              </a>
+            );
+            return rail ? (
+              <Tooltip>
+                <TooltipTrigger asChild>{deployConsoleLink}</TooltipTrigger>
+                <TooltipContent side="right">{t("nav.deployConsole")}</TooltipContent>
+              </Tooltip>
+            ) : (
+              deployConsoleLink
+            );
+          })()}
           {!combinedInboxTasks ? (
             <SidebarNavItem
               to="/inbox"

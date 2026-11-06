@@ -65,7 +65,8 @@
     "mobileNavigation": "Mobile navigation",
     "openSidebar": "Open sidebar",
     "board": "Board",
-    "infiniteCanvas": "Infinite Canvas"
+    "infiniteCanvas": "Infinite Canvas",
+    "deployConsole": "Deploy Console"
   },
   "sidebar": {
     "top": "Top",
