@@ -158,12 +158,12 @@ export function Sidebar() {
           <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
           <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
           <SidebarNavItem to="/infinite-canvas" label={t("nav.infiniteCanvas")} icon={PanelTop} />
-          {/* 部署控制台：本机独立服务（./opc console start，见 deploy-console/README.md），
-              不是 Paperclip 内部路由，新标签页打开。写法跟随上面 New Task 按钮的 rail/tooltip 分支。 */}
+          {/* 部署控制台：本机独立服务（./opc console start，见 deploy-console/README.md），经 frp 反代成
+              ai-opc-deploy.culud.com。不是 Paperclip 内部路由，新标签页打开。写法跟随 New Task 按钮的 rail/tooltip 分支。 */}
           {(() => {
             const deployConsoleLink = (
               <a
-                href="http://localhost:3130"
+                href="https://ai-opc-deploy.culud.com"
                 target="_blank"
                 rel="noreferrer"
                 aria-label={rail ? t("nav.deployConsole") : undefined}
