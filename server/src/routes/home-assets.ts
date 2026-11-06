@@ -143,8 +143,15 @@ export function homeAssetRoutes() {
     const disposition = isInlineAttachmentContentType(resolved.contentType)
       ? "inline"
       : "attachment";
-    const filename = path.basename(resolved.absolutePath).replaceAll('"', "");
-    res.setHeader("Content-Disposition", `${disposition}; filename="${filename}"`);
+    // Asset basenames carry Chinese; header values are latin-1 only, so the
+    // raw name goes into the RFC 5987 parameter and the fallback stays ASCII.
+    const rawName = path.basename(resolved.absolutePath);
+    const asciiName = rawName.replaceAll('"', "").replace(/[^\x20-\x7e]/g, "_");
+    const encodedName = encodeURIComponent(rawName);
+    res.setHeader(
+      "Content-Disposition",
+      `${disposition}; filename="${asciiName}"; filename*=UTF-8''${encodedName}`,
+    );
 
     const stream = createReadStream(
       resolved.absolutePath,

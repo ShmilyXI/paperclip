@@ -95,6 +95,20 @@ describe("GET /api/home-assets/assets/*filePath", () => {
     expect(res.body.toString()).toBe("mp4-b");
   });
 
+  it("streams a non-ASCII filename without header corruption", async () => {
+    await writeFile(path.join(homeDir, "assets", "AI的语言税-final.mp4"), Buffer.from("cjk-mp4"));
+    const app = await createApp(true);
+    const res = await request(app).get(
+      "/api/home-assets/assets/" + encodeURIComponent("AI的语言税-final.mp4"),
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers["content-type"]).toBe("video/mp4");
+    expect(res.headers["content-disposition"]).toBe(
+      'inline; filename="AI____-final.mp4"; filename*=UTF-8\'\'AI%E7%9A%84%E8%AF%AD%E8%A8%80%E7%A8%8E-final.mp4',
+    );
+    expect(res.body.toString()).toBe("cjk-mp4");
+  });
+
   it("rejects malformed ranges with 416", async () => {
     const app = await createApp(true);
     const res = await request(app)
