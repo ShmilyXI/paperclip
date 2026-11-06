@@ -66,7 +66,8 @@
     "openSidebar": "打开侧边栏",
     "board": "统筹看板",
     "infiniteCanvas": "无限画布",
-    "deployConsole": "部署控制台"
+    "deployConsole": "部署控制台",
+    "office": "办公室"
   },
   "sidebar": {
     "top": "默认排序",

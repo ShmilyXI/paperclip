@@ -25,6 +25,7 @@ import {
   KanbanSquare,
   PanelTop,
   Rocket,
+  Building2,
   Users,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -204,6 +205,31 @@ export function Sidebar({ children }: { children?: ReactNode }) {
               </Tooltip>
             ) : (
               deployConsoleLink
+            );
+          })()}
+          {/* 办公室：MOWA AI 工作室 3D 办公室（workspace/office，部署在 tx-cn），外部站点，新标签页打开。写法同部署控制台。 */}
+          {(() => {
+            const officeLink = (
+              <a
+                href="https://ai-opc-office.culud.com"
+                target="_blank"
+                rel="noreferrer"
+                aria-label={rail ? t("nav.office") : undefined}
+                className={cn(
+                  "flex items-center gap-2.5 mx-2 rounded-lg px-2 py-1.5 pointer-coarse:py-1 text-(length:--text-compact) font-medium text-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                )}
+              >
+                <Building2 className="h-4 w-4 shrink-0" />
+                <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "truncate"}>{t("nav.office")}</span>
+              </a>
+            );
+            return rail ? (
+              <Tooltip>
+                <TooltipTrigger asChild>{officeLink}</TooltipTrigger>
+                <TooltipContent side="right">{t("nav.office")}</TooltipContent>
+              </Tooltip>
+            ) : (
+              officeLink
             );
           })()}
           {!combinedInboxTasks ? (

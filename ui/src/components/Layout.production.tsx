@@ -147,6 +147,19 @@ export function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const navigationType = useNavigationType();
+
+  // `?newTask=1[&assignee=<agent uuid>]` opens the New Task dialog, then drops the params.
+  // Used by the MOWA office page (ai-opc-office.culud.com) for its 新建任务 / 给他派活 buttons.
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("newTask") !== "1") return;
+    const assignee = params.get("assignee");
+    openNewIssue(assignee && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(assignee) ? { assigneeAgentId: assignee } : {});
+    params.delete("newTask");
+    params.delete("assignee");
+    const rest = params.toString();
+    navigate({ pathname: location.pathname, search: rest ? `?${rest}` : "" }, { replace: true });
+  }, [location.pathname, location.search, navigate, openNewIssue]);
   const isTaskDetailRoute = classifyShellRoute(location.pathname, companyPrefix).isTaskDetail;
   const isCompanySettingsRoute = [
     "/company/settings",
