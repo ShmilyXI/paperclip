@@ -15660,6 +15660,10 @@
     "reload": "Reload canvas",
     "openInNewWindow": "Open in new window"
   },
+  "embeddedSite": {
+    "reload": "Reload page",
+    "openInNewWindow": "Open in new window"
+  },
   "board": {
     "settingsLabel": "Board display settings",
     "addressLabel": "Board address",

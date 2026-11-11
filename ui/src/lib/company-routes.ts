@@ -26,6 +26,8 @@ const BOARD_ROUTE_ROOTS = new Set([
   "inbox",
   "board",
   "infinite-canvas",
+  "office",
+  "deploy-console",
   "board-chat",
   "artifacts",
   "u",

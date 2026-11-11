@@ -15660,6 +15660,10 @@
     "reload": "刷新画布",
     "openInNewWindow": "在新窗口打开"
   },
+  "embeddedSite": {
+    "reload": "刷新页面",
+    "openInNewWindow": "在新窗口打开"
+  },
   "board": {
     "settingsLabel": "看板显示设置",
     "addressLabel": "看板地址",

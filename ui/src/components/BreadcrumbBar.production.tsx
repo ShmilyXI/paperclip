@@ -41,7 +41,7 @@ function GlobalToolbar({ context }: { context: GlobalToolbarContext }) {
 }
 
 export function BreadcrumbBar() {
-  const { breadcrumbs, mobileToolbar } = useBreadcrumbs();
+  const { breadcrumbs, breadcrumbToolbar, mobileToolbar } = useBreadcrumbs();
   const { toggleSidebar, isMobile } = useSidebar();
   const { selectedCompanyId, selectedCompany } = useCompany();
 
@@ -53,7 +53,14 @@ export function BreadcrumbBar() {
     [selectedCompanyId, selectedCompany?.issuePrefix],
   );
 
-  const globalToolbarSlots = <GlobalToolbar context={globalToolbarSlotContext} />;
+  // Pages that frame another site (board, canvas, office, deploy console) put their address + buttons here,
+  // beside the title, instead of a second row under it. Phones get that row inside the page.
+  const globalToolbarSlots = (
+    <>
+      {breadcrumbToolbar ? <div className="ml-auto hidden min-w-0 items-center pl-2 md:flex">{breadcrumbToolbar}</div> : null}
+      <GlobalToolbar context={globalToolbarSlotContext} />
+    </>
+  );
 
   if (isMobile && mobileToolbar) {
     return (

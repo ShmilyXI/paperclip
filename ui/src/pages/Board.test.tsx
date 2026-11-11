@@ -15,7 +15,7 @@ import {
   readBoardUrl,
 } from "./Board";
 
-const breadcrumbState = vi.hoisted(() => ({ setBreadcrumbs: vi.fn() }));
+const breadcrumbState = vi.hoisted(() => ({ setBreadcrumbs: vi.fn(), setBreadcrumbToolbar: vi.fn() }));
 
 vi.mock("@/context/BreadcrumbContext", () => ({
   useBreadcrumbs: () => breadcrumbState,

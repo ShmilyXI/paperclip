@@ -134,6 +134,8 @@ const JoinRequestQueue = lazy(() => import("./pages/JoinRequestQueue").then((mod
 const CompanyExport = lazy(() => import("./pages/CompanyExport").then((module) => ({ default: module.CompanyExport })));
 const CoordinationBoard = lazy(() => import("./pages/Board").then((module) => ({ default: module.Board })));
 const InfiniteCanvas = lazy(() => import("./pages/InfiniteCanvas").then((module) => ({ default: module.InfiniteCanvas })));
+const OfficePage = lazy(() => import("./pages/Office").then((module) => ({ default: module.Office })));
+const DeployConsolePage = lazy(() => import("./pages/DeployConsole").then((module) => ({ default: module.DeployConsole })));
 
 const ProductionAgents = lazy(() => import("./pages/Agents.production").then((module) => ({ default: module.Agents })));
 const ProductionRoutines = lazy(() => import("./pages/Routines.production").then((module) => ({ default: module.Routines })));
@@ -157,6 +159,8 @@ function boardRoutes(streamlinedUiEnabled: boolean, combinedInboxTasksEnabled: b
       {/* Coordination board: a frame onto the separately-run board service (not part of this UI). */}
       <Route path="board" element={<CoordinationBoard />} />
       <Route path="infinite-canvas" element={<InfiniteCanvas />} />
+      <Route path="office" element={<OfficePage />} />
+      <Route path="deploy-console" element={<DeployConsolePage />} />
       <Route
         path="timeline"
         element={streamlinedUiEnabled ? <AuditCompatibilityRedirect to="/activity/timeline" /> : <Timeline />}
@@ -811,6 +815,8 @@ export function App() {
           <Route path="instance/settings/*" element={<LegacySettingsRedirect />} />
           <Route path="companies" element={<UnprefixedBoardRedirect />} />
           <Route path="infinite-canvas" element={<UnprefixedBoardRedirect />} />
+          <Route path="office" element={<UnprefixedBoardRedirect />} />
+          <Route path="deploy-console" element={<UnprefixedBoardRedirect />} />
           <Route path="issues" element={<UnprefixedBoardRedirect />} />
           <Route path="tasks" element={<UnprefixedBoardRedirect />} />
           <Route path="issues/:issueId" element={<UnprefixedBoardRedirect />} />

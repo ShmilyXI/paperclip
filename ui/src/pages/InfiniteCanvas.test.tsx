@@ -9,7 +9,7 @@ import appSource from "../App.tsx?raw";
 import sidebarSource from "../components/Sidebar.tsx?raw";
 import productionSidebarSource from "../components/Sidebar.production.tsx?raw";
 
-const breadcrumbState = vi.hoisted(() => ({ setBreadcrumbs: vi.fn() }));
+const breadcrumbState = vi.hoisted(() => ({ setBreadcrumbs: vi.fn(), setBreadcrumbToolbar: vi.fn() }));
 
 vi.mock("@/context/BreadcrumbContext", () => ({
   useBreadcrumbs: () => breadcrumbState,

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { ExternalLink, Settings } from "lucide-react";
 
 import { t } from "@/i18n";
 import { Button } from "@/components/ui/button";
+import { EmbeddedPageHeader } from "@/components/EmbeddedPageHeader";
 import { Input } from "@/components/ui/input";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 
@@ -103,31 +103,14 @@ export function Board({ frameLoadTimeoutMs = DEFAULT_FRAME_TIMEOUT_MS }: BoardPr
 
   return (
     <div className="-m-4 flex h-full min-h-0 flex-col md:-m-6" data-page="board">
-      <div className="flex shrink-0 items-center gap-2 px-4 py-2 md:px-6">
-        <span className="shrink-0 text-sm font-medium text-foreground">{t("nav.board")}</span>
-        <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">{url}</span>
-        <Button asChild variant="ghost" size="icon-sm">
-          <a
-            href={url}
-            target="_blank"
-            rel="noreferrer noopener"
-            aria-label={t("board.openInNewWindow")}
-            data-testid="board-open-external"
-          >
-            <ExternalLink />
-          </a>
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label={t("board.settingsLabel")}
-          aria-expanded={settingsOpen}
-          onClick={toggleSettings}
-          data-testid="board-settings-toggle"
-        >
-          <Settings />
-        </Button>
-      </div>
+      <EmbeddedPageHeader
+        title={t("nav.board")}
+        url={url}
+        openLabel={t("board.openInNewWindow")}
+        openTestId="board-open-external"
+        settings={{ label: t("board.settingsLabel"), open: settingsOpen, onToggle: toggleSettings }}
+        settingsTestId="board-settings-toggle"
+      />
 
       {settingsOpen ? (
         <form
