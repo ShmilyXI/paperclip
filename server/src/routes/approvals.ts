@@ -239,8 +239,8 @@ export function approvalRoutes(
       ? rawIssueIds.filter((value: unknown): value is string => typeof value === "string")
       : [];
     const uniqueIssueIds = Array.from(new Set(issueIds));
-    const { issueIds: _issueIds, ...approvalInput } = req.body;
-    const normalizedPayload =
+    const { issueIds: _issueIds, media, attachments, ...approvalInput } = req.body;
+    const basePayload =
       approvalInput.type === "hire_agent"
         ? await secretsSvc.normalizeHireApprovalPayloadForPersistence(
             companyId,
@@ -248,6 +248,14 @@ export function approvalRoutes(
             { strictMode: strictSecretsMode },
           )
         : approvalInput.payload;
+    // `media`/`attachments` may arrive top-level (client shorthand) or already
+    // nested in `payload`. Merge the top-level form in so the approval UI's
+    // payload renderer always finds them at `payload.media` / `payload.attachments`.
+    const normalizedPayload = {
+      ...basePayload,
+      ...(media !== undefined ? { media } : {}),
+      ...(attachments !== undefined ? { attachments } : {}),
+    };
 
     const actor = getActorInfo(req);
     const approval = await svc.create(companyId, {
@@ -482,7 +490,8 @@ export function approvalRoutes(
       return;
     }
 
-    const normalizedPayload = req.body.payload
+    const { media, attachments } = req.body;
+    const basePayload = req.body.payload
       ? existing.type === "hire_agent"
         ? await secretsSvc.normalizeHireApprovalPayloadForPersistence(
             existing.companyId,
@@ -491,6 +500,13 @@ export function approvalRoutes(
           )
         : req.body.payload
       : undefined;
+    const normalizedPayload = basePayload === undefined && media === undefined && attachments === undefined
+      ? undefined
+      : {
+          ...(basePayload ?? {}),
+          ...(media !== undefined ? { media } : {}),
+          ...(attachments !== undefined ? { attachments } : {}),
+        };
     const approval = await svc.resubmit(id, normalizedPayload);
     const actor = getActorInfo(req);
     await logActivity(db, {
