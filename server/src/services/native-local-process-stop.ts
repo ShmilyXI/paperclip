@@ -1,5 +1,5 @@
 import { and, asc, desc, eq, gt, inArray, isNotNull, isNull, or, sql } from "drizzle-orm";
-import { environmentLeases, heartbeatRunEvents, heartbeatRuns, nativeRunFinalizations, type Db } from "@paperclipai/db";
+import { environmentLeases, heartbeatRunEvents, heartbeatRuns, nativeRunFinalizations, nativeRunResults, type Db } from "@paperclipai/db";
 import { appendHeartbeatRunEvent } from "./heartbeat-run-events.js";
 import { nativeSessionProviderEvidence } from "./native-runtime/native-session-resume.js";
 import { hasRemoteTerminationReceipt } from "./remote-execution-termination.js";
@@ -113,6 +113,48 @@ export async function hasHistoricalSuspendedNativeSession(db: Db, run: Pick<type
     providerBackendSessionId: typeof checkpoint?.providerSessionId === "string" ? checkpoint.providerSessionId : null,
     recoveryMode: "exact_checkpoint_resume", allowVerifiedBackup: false,
   });
+}
+
+/** Terminal rows with no process identity are candidates for the
+ * "never dispatched" proof. The dispatch gate writes no process identity when
+ * it cancels a run before the adapter claims, so a missing PID is meaningless
+ * for these rows — the opposite case from a crashed provider, whose stop must
+ * always be proven. The caller verifies terminal status, lease cleanup, and
+ * the run/controller locks; this helper certifies only that no execution
+ * claim ever existed. */
+export async function hasNeverDispatchedLocalExecution(db: Db, run: Pick<typeof heartbeatRuns.$inferSelect,
+  "id" | "companyId" | "runtimeMode" | "processPid" | "processGroupId" | "processStartedAt" |
+  "sessionIdAfter" | "nativeSessionId" | "runnerInstanceId">) {
+  // Terminal rows that ever bound a process identity are not candidates:
+  // their stop must be proven before any continuation. A resolved native
+  // session binding is likewise a claim on the environment, not an absence.
+  if (run.processPid || run.processGroupId || run.processStartedAt ||
+      run.sessionIdAfter || run.nativeSessionId || run.runnerInstanceId) return false;
+  const [processIdentity] = await db.select({ id: heartbeatRunEvents.id }).from(heartbeatRunEvents).where(and(
+    eq(heartbeatRunEvents.companyId, run.companyId), eq(heartbeatRunEvents.runId, run.id),
+    isNull(heartbeatRunEvents.sourceEventId),
+    inArray(heartbeatRunEvents.eventType, [PROCESS_START_REQUESTED, PROCESS_IDENTITY_RECORDED, LOCAL_PROCESS_STOPPED]),
+  )).limit(1);
+  if (processIdentity) return false;
+  const [claimed] = await db.select({ id: nativeRunFinalizations.runId }).from(nativeRunFinalizations).where(and(
+    eq(nativeRunFinalizations.companyId, run.companyId), eq(nativeRunFinalizations.runId, run.id),
+  )).limit(1);
+  if (claimed) return false;
+  const [result] = await db.select({ id: nativeRunResults.id }).from(nativeRunResults).where(and(
+    eq(nativeRunResults.companyId, run.companyId), eq(nativeRunResults.runId, run.id),
+  )).limit(1);
+  if (result) return false;
+  // Any adapter-level activity or provider event refutes the absence claim.
+  const [adapter] = await db.select({ id: heartbeatRunEvents.id }).from(heartbeatRunEvents).where(and(
+    eq(heartbeatRunEvents.companyId, run.companyId), eq(heartbeatRunEvents.runId, run.id),
+    or(
+      isNotNull(heartbeatRunEvents.sourceEventId),
+      inArray(heartbeatRunEvents.eventType, ["adapter.invoke", "harness.ready", "session.started",
+        "session.resumed", "session.updated", "turn.started", "provider.event",
+        "provider.rpc_result", "tool.execution.started"]),
+    ),
+  )).limit(1);
+  return !adapter;
 }
 
 export async function withReleasedNativeRunProcess<T extends {

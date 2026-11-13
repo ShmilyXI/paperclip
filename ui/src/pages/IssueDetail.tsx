@@ -8026,6 +8026,12 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
               canRetry={canResolveBoardRecoveryAction} onRetry={taskRetry.retry}
               optimistic={taskRetry.optimistic} takingLonger={taskRetry.takingLonger} error={taskRetry.error} />
           )}
+          {resolvedDetailTab === "chat" && issue.executionBlocker?.resolvedReplayBlocked && (
+            <div role="status"
+              className={cn("flex items-center justify-between gap-2 rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-muted-foreground", shellSectionClass)}>
+              <span>{issue.executionBlocker.nextAction}</span>
+            </div>
+          )}
 
           {issue.status === "in_review" && issue.externalConversationState === "waiting" && (
             <p role="status" className="text-sm text-muted-foreground">{t("issueDetail.replySentSendAMessage")}</p>

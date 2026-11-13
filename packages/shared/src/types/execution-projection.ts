@@ -18,6 +18,8 @@ export interface ExecutionBlocker {
   workspaceReconstructionPending?: boolean;
   workspaceRecoveryStatusVersion?: number;
   savedMessageCount?: number;
+  /** A settled no-replay hold still gates admission until reconciled. */
+  resolvedReplayBlocked?: boolean;
   workspaceRecovery?: {
     status: "queued" | "recovering" | "blocked" | "recovered";
     stage: "verifying_stop" | "restoring_files" | "saving_receipts";

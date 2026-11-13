@@ -2421,4 +2421,59 @@ const support = externalUrl ? { supported: true } : await getEmbeddedPostgresTes
     expect(await admit(f)).toMatchObject({ previousRunId: f.sourceRunId });
     expect(await getExecutionBlocker(db, f.companyId, f.issueId)).toBeNull();
   });
+  it("admits a saved message after a dispatch-gate cancellation that never claimed the provider", async () => {
+    const f = await seed();
+    // Production MOW-186 ran on a conversation adapter (opencode_local); the
+    // legacy-user-turn branch admits for conversation adapters directly.
+    await db.update(agents).set({ adapterType: "opencode_local" }).where(eq(agents.id, f.agentId));
+    // Mirror MOW-186's poisoned source: cancelled before dispatch, no process
+    // identity, released local lease, and a resolved no-replay hold whose
+    // classification should have been exempted by the never-dispatched proof.
+    const [source] = await db.update(heartbeatRuns).set({
+      status: "cancelled", errorCode: "legacy_disposition_repair_suppressed",
+      runtimeMode: "legacy", nativeIssueId: null, issueId: f.issueId,
+      processPid: null, processGroupId: null, processStartedAt: null,
+      sessionIdAfter: null, nativeSessionId: null, runnerInstanceId: null,
+      runnerProfileJson: { adapterDispatch: { adapterType: "opencode_local" } },
+      resultJson: { cancellation: { reason: "Disposition repair suppressed: recorded_disposition", source: "unknown", expected: false } },
+    }).where(eq(heartbeatRuns.id, f.sourceRunId)).returning();
+    // The dispatch gate never claimed the adapter, so no finalization row
+    // exists — same as the production run this mirrors.
+    await db.delete(nativeRunFinalizations).where(eq(nativeRunFinalizations.runId, f.sourceRunId));
+    await db.update(issueRecoveryActions).set({ status: "resolved", outcome: "blocked",
+      cause: "legacy_execution_requires_reconciliation",
+      evidence: { runId: source.id, automaticRecovery: { replay: "blocked", actionOutcome: "unknown" } } })
+      .where(eq(issueRecoveryActions.sourceIssueId, f.issueId));
+    // A released local lease is the same shape the dispatch gate left behind.
+    await db.insert(environmentLeases).values({ companyId: f.companyId, heartbeatRunId: source.id,
+      provider: "local", status: "expired", releasedAt: new Date(), leasePolicy: "ephemeral",
+      providerLeaseId: null });
+    const result = await admit(f, true);
+    expect(result).toMatchObject({ previousRunId: f.sourceRunId, commentId: f.commentId });
+  });
+  it("still blocks a dispatched legacy cancellation with no process identity", async () => {
+    const f = await seed();
+    await db.update(agents).set({ adapterType: "opencode_local" }).where(eq(agents.id, f.agentId));
+    await db.update(heartbeatRuns).set({
+      status: "cancelled", errorCode: "process_lost",
+      runtimeMode: "legacy", nativeIssueId: null, issueId: f.issueId,
+      processPid: null, processGroupId: null, processStartedAt: null,
+      sessionIdAfter: null, nativeSessionId: null, runnerInstanceId: null,
+      runnerProfileJson: { adapterDispatch: { adapterType: "opencode_local" } },
+    }).where(eq(heartbeatRuns.id, f.sourceRunId));
+    await db.update(issueRecoveryActions).set({ status: "resolved", outcome: "blocked",
+      cause: "legacy_execution_requires_reconciliation",
+      evidence: { runId: f.sourceRunId, automaticRecovery: { replay: "blocked", actionOutcome: "unknown" } } })
+      .where(eq(issueRecoveryActions.sourceIssueId, f.issueId));
+    // A dispatched run that lost its process still requires a stop record;
+    // the never-dispatched proof must not apply.
+    await db.insert(environmentLeases).values({ companyId: f.companyId, heartbeatRunId: f.sourceRunId,
+      provider: "local", status: "expired", releasedAt: new Date(), leasePolicy: "ephemeral",
+      providerLeaseId: null });
+    await appendHeartbeatRunEvent(db, { companyId: f.companyId, runId: f.sourceRunId, agentId: f.agentId,
+      eventType: "adapter.invoke", stream: "agent", level: "info", message: "provider started" });
+    const result = await admit(f, true);
+    expect(result).toBeNull();
+    expect(await getExecutionBlocker(db, f.companyId, f.issueId)).not.toBeNull();
+  });
 });

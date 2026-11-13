@@ -252,6 +252,11 @@ export async function getExecutionBlocker(db: Db, companyId: string, issueId: st
     canRetry: canRetry && !chatBinding,
     ...(restoreHold ? { workspaceRepairRequired, canRecordWorkspaceRepair: workspaceRepairRequired && hasRequiredWorkspaceRecovery(action.evidence) } : {}),
     savedMessageCount: saved.length,
+    // A settled no-replay hold gates admission even though the action is no
+    // longer active; the UI must show it instead of a silent blocked thread.
+    resolvedReplayBlocked: action.status === "resolved" &&
+      (action.evidence.automaticRecovery as { replay?: string } | undefined)?.replay === "blocked" &&
+      !action.evidence.executionReconciliation,
     ...(canReconstructWorkspace ? { canReconstructWorkspace, workspaceRecoveryStatusVersion: conversation!.statusVersion } : {}),
     ...(reconstructionPending ? { workspaceReconstructionPending: true } : {}),
   };

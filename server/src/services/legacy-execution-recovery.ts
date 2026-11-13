@@ -16,6 +16,7 @@ import { executionFailureRetryCount } from "./execution-recovery-attempt.js";
 import { logActivity } from "./activity-log.js";
 import { isSupersededConversationRun } from "./agent-conversations.js";
 import { issueService } from "./issues.js";
+import { hasNeverDispatchedLocalExecution } from "./native-local-process-stop.js";
 
 type Run = typeof heartbeatRuns.$inferSelect;
 export const LEGACY_RECOVERY_CAUSE = "legacy_execution_requires_reconciliation";
@@ -82,7 +83,11 @@ export function legacyExecutionNeedsReconciliation(
 export async function legacyExecutionNeedsReconciliationWithEvidence(db: Db, run: Run): Promise<boolean> {
   return await hasUnrestoredRemoteWorkspace(db, run) ||
     (legacyExecutionNeedsReconciliation(run) && !(await isPreDispatchReviewWaitVerified(db, run))
-      && !(await isPreDispatchExecutionWaitVerified(db, run)));
+      && !(await isPreDispatchExecutionWaitVerified(db, run))
+      // A dispatch-gate cancellation never claimed the adapter: there are no
+      // provider actions whose outcomes could be uncertain. The DB proof is
+      // mandatory here; the synchronous classifier stays fail-closed.
+      && !(await hasNeverDispatchedLocalExecution(db, run)));
 }
 
 /** Persist the failed legacy run, owned lock release and operator decision together. */
