@@ -4,6 +4,7 @@ import { t } from "@/i18n";
 import { useLocation, useNavigate } from "@/lib/router";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { EmbeddedPageHeader } from "@/components/EmbeddedPageHeader";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 import { Dashboard } from "./Dashboard";
 import { Board, DEFAULT_BOARD_URL } from "./Board";
@@ -30,6 +31,8 @@ export function normalizeTab(raw: string | null | undefined): BoardsTab {
 /** The workflow page fetches workflow-status.json relative to its own origin; it only loads when logged in there. */
 export function WorkflowTab({ url = WORKFLOW_BOARD_URL, timeoutMs = 6_000 }: { url?: string; timeoutMs?: number }) {
   const [frameStatus, setFrameStatus] = useState<"pending" | "ready" | "blocked">("pending");
+  const [revision, setRevision] = useState(0);
+  const reload = useCallback(() => setRevision((value) => value + 1), []);
   useEffect(() => {
     setFrameStatus("pending");
     const timer = setTimeout(() => setFrameStatus((current) => (current === "ready" ? current : "blocked")), timeoutMs);
@@ -37,6 +40,13 @@ export function WorkflowTab({ url = WORKFLOW_BOARD_URL, timeoutMs = 6_000 }: { u
   }, [url, timeoutMs]);
   return (
     <div className="flex min-h-0 flex-1 flex-col" data-testid="workflow-tab">
+      <EmbeddedPageHeader
+        title={t("boardsHub.tabWorkflow")}
+        url={url}
+        openLabel={t("embeddedSite.openInNewWindow")}
+        reloadLabel={t("embeddedSite.reload")}
+        onReload={reload}
+      />
       {frameStatus === "blocked" ? (
         <div role="status" className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border bg-muted px-4 py-2" data-testid="workflow-frame-blocked">
           <span className="text-sm font-medium text-foreground">{t("boardsHub.workflowBlockedTitle")}</span>
@@ -49,6 +59,7 @@ export function WorkflowTab({ url = WORKFLOW_BOARD_URL, timeoutMs = 6_000 }: { u
         </div>
       ) : null}
       <iframe
+        key={revision}
         src={url}
         title={t("boardsHub.tabWorkflow")}
         className="min-h-0 w-full flex-1 border-0 bg-background"
