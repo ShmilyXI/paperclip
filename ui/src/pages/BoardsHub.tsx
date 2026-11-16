@@ -13,8 +13,8 @@ import { ExternalLink, Rocket, PanelTop, Send } from "lucide-react";
 
 /** Mowa's Qianfan publish agent; its chat is the real operating surface (the MCP has no owner-side web UI). */
 export const PUBLISHER_CHAT_REF = "5f416d2d-f4fa-422e-bc11-3f6705ad5b41";
-/** Technical MCP endpoint (SSE, 401 without agent credentials); opens in a new tab for inspection only. */
-export const QIANFAN_SSE_URL = "https://ai-opc-qianfan.culud.com/sse";
+/** 千帆云递管理台：账号/素材/发布/历史/日历的完整网页（Vue SPA，登录态存 localStorage）。 */
+export const QIANFAN_URL = "https://ai-opc-qianfan.culud.com/";
 /** The workflow-run board is a static page served inside the coordination board site, so it inherits that login. */
 export const WORKFLOW_BOARD_URL = `${DEFAULT_BOARD_URL}/workflow-status.html`;
 
@@ -103,13 +103,13 @@ export function BoardsHub() {
         {tab === "overview" ? (
           <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border px-4 py-2 md:px-6" data-testid="entry-bar">
             <Button asChild variant="outline" size="sm" data-testid="entry-qianfan">
-              <a href={`/chats/${PUBLISHER_CHAT_REF}`}>
-                <Send /> {t("boardsHub.entryQianfan")}
+              <a href={QIANFAN_URL} target="_blank" rel="noreferrer noopener">
+                <ExternalLink /> {t("boardsHub.entryQianfan")}
               </a>
             </Button>
-            <Button asChild variant="outline" size="sm" data-testid="entry-qianfan-sse">
-              <a href={QIANFAN_SSE_URL} target="_blank" rel="noreferrer noopener">
-                <ExternalLink /> {t("boardsHub.entryQianfanSse")}
+            <Button asChild variant="outline" size="sm" data-testid="entry-qianfan-chat">
+              <a href={`/chats/${PUBLISHER_CHAT_REF}`}>
+                <Send /> {t("boardsHub.entryQianfanChat")}
               </a>
             </Button>
             <Button variant="outline" size="sm" onClick={() => navigate("/deploy-console")} data-testid="entry-deploy">

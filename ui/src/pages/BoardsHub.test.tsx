@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
-import { BoardsHub, WorkflowTab, normalizeTab, DEFAULT_TAB, PUBLISHER_CHAT_REF, QIANFAN_SSE_URL, WORKFLOW_BOARD_URL } from "./BoardsHub";
+import { BoardsHub, WorkflowTab, normalizeTab, DEFAULT_TAB, PUBLISHER_CHAT_REF, QIANFAN_URL, WORKFLOW_BOARD_URL } from "./BoardsHub";
 
 const breadcrumbState = vi.hoisted(() => ({ setBreadcrumbs: vi.fn(), setBreadcrumbToolbar: vi.fn() }));
 
@@ -156,15 +156,16 @@ describe("BoardsHub", () => {
     expect(container.querySelector('[data-testid="entry-bar"]')).toBeNull();
   });
 
-  it("links the qianfan entry to the publish agent chat and the MCP endpoint", () => {
+  it("links the qianfan entry to its console and the secondary entry to the publish agent chat", () => {
     const container = render();
 
-    const chat = container.querySelector<HTMLAnchorElement>('[data-testid="entry-qianfan"]');
-    expect(chat?.getAttribute("href")).toBe(`/chats/${PUBLISHER_CHAT_REF}`);
+    const consoleLink = container.querySelector<HTMLAnchorElement>('[data-testid="entry-qianfan"]');
+    expect(consoleLink?.getAttribute("href")).toBe(QIANFAN_URL);
+    expect(consoleLink?.target).toBe("_blank");
 
-    const sse = container.querySelector<HTMLAnchorElement>('[data-testid="entry-qianfan-sse"]');
-    expect(sse?.getAttribute("href")).toBe(QIANFAN_SSE_URL);
-    expect(sse?.target).toBe("_blank");
+    const chat = container.querySelector<HTMLAnchorElement>('[data-testid="entry-qianfan-chat"]');
+    expect(chat?.getAttribute("href")).toBe(`/chats/${PUBLISHER_CHAT_REF}`);
+    // 不带 target=_blank：对话走同页导航，保持 Paperclip 登录态。
   });
 
   it("opens deploy console and infinite canvas from the entry buttons", async () => {

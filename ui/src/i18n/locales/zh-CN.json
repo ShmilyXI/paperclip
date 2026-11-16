@@ -16040,7 +16040,7 @@
     "workflowBlockedTitle": "工作流看板没加载出来",
     "workflowBlockedDescription": "工作流运行看板放在统筹看板站点里，需要先登录一次。点右侧按钮在新窗口打开并登录，回来即可正常显示。",
     "openInNewWindow": "在新窗口打开",
-    "entryQianfan": "千帆 · 发布员",
-    "entryQianfanSse": "MCP 端点"
+    "entryQianfan": "千帆云递",
+    "entryQianfanChat": "千帆 · 发布员对话"
   }
 }
