@@ -1,8 +1,6 @@
 import { t } from "@/i18n";
 import {
   Inbox,
-  KanbanSquare,
-  PanelTop,
   ListChecks,
   CircleDot,
   Target,
@@ -24,7 +22,6 @@ import {
   GanttChartSquare,
   LayoutGrid,
   Rocket,
-  Building2,
 } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -156,11 +153,9 @@ export function Sidebar() {
               collapsed rail, where the old header icon was dropped entirely.
               Cmd/Ctrl+K remains the keyboard path (command palette). */}
           <SidebarNavItem to="/search" label={t("nav.search")} icon={Search} />
+          {/* 看板中心：统筹看板 / 工作流 / 办公室 / 无限画布都收进仪表盘的 tab（BoardsHub）。 */}
           <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
-          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
-          <SidebarNavItem to="/infinite-canvas" label={t("nav.infiniteCanvas")} icon={PanelTop} />
           <SidebarNavItem to="/deploy-console" label={t("nav.deployConsole")} icon={Rocket} />
-          <SidebarNavItem to="/office" label={t("nav.office")} icon={Building2} />
           <SidebarNavItem
             to="/inbox"
             label={t("nav.inbox")}

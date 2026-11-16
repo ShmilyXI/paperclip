@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { i18n } from "@/i18n";
 import appSource from "../App.tsx?raw";
+import hubSource from "./BoardsHub.tsx?raw";
 import sidebarSource from "../components/Sidebar.tsx?raw";
 import productionSidebarSource from "../components/Sidebar.production.tsx?raw";
 
@@ -41,12 +42,12 @@ describe("Infinite Canvas entry", () => {
     ));
   }
 
-  it("places the entry immediately after Board in both sidebar variants", () => {
+  it("lives in the dashboard BoardsHub tab, with the in-app route kept for deep links", () => {
     for (const source of [sidebarSource, productionSidebarSource]) {
-      expect(source).toMatch(
-        /<SidebarNavItem to="\/board"[^>]+\/>\s*<SidebarNavItem to="\/infinite-canvas" label=\{t\("nav.infiniteCanvas"\)\} icon=\{PanelTop\} \/>/,
-      );
+      expect(source).not.toContain('to="/infinite-canvas"');
     }
+    expect(hubSource).toContain('<TabsTrigger value="canvas"');
+    expect(hubSource).toContain("<InfiniteCanvas />");
     expect(appSource).toContain('<Route path="infinite-canvas" element={<InfiniteCanvas />} />');
     expect(appSource).toContain('<Route path="infinite-canvas" element={<UnprefixedBoardRedirect />} />');
   });

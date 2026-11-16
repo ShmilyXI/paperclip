@@ -70,7 +70,6 @@ const CrossIssueCollaborationUxLab = lazy(() => import("./pages/CrossIssueCollab
 const Agents = lazy(() => import("./pages/Agents").then((module) => ({ default: module.Agents })));
 const Cases = lazy(() => import("./pages/Cases").then((module) => ({ default: module.Cases })));
 const CaseDetail = lazy(() => import("./pages/CaseDetail").then((module) => ({ default: module.CaseDetail })));
-const Dashboard = lazy(() => import("./pages/Dashboard").then((module) => ({ default: module.Dashboard })));
 const DashboardLive = lazy(() => import("./pages/DashboardLive").then((module) => ({ default: module.DashboardLive })));
 const Timeline = lazy(() => import("./pages/Timeline").then((module) => ({ default: module.Timeline })));
 const Companies = lazy(() => import("./pages/Companies").then((module) => ({ default: module.Companies })));
@@ -132,6 +131,7 @@ const AssistantConnection = lazy(() => import("./pages/apps/AssistantConnection"
 const JoinRequestQueue = lazy(() => import("./pages/JoinRequestQueue").then((module) => ({ default: module.JoinRequestQueue })));
 
 const CompanyExport = lazy(() => import("./pages/CompanyExport").then((module) => ({ default: module.CompanyExport })));
+const BoardsHub = lazy(() => import("./pages/BoardsHub").then((module) => ({ default: module.BoardsHub })));
 const CoordinationBoard = lazy(() => import("./pages/Board").then((module) => ({ default: module.Board })));
 const InfiniteCanvas = lazy(() => import("./pages/InfiniteCanvas").then((module) => ({ default: module.InfiniteCanvas })));
 const OfficePage = lazy(() => import("./pages/Office").then((module) => ({ default: module.Office })));
@@ -154,7 +154,8 @@ function boardRoutes(streamlinedUiEnabled: boolean, combinedInboxTasksEnabled: b
   return (
     <>
       <Route index element={<Navigate to="dashboard" replace />} />
-      <Route path="dashboard" element={<Dashboard />} />
+      {/* Boards hub: 总览 + 统筹看板 + 工作流 + 办公室 + 无限画布，一个页面里 tab 切换。 */}
+      <Route path="dashboard" element={<BoardsHub />} />
       <Route path="dashboard/live" element={<DashboardLive />} />
       {/* Coordination board: a frame onto the separately-run board service (not part of this UI). */}
       <Route path="board" element={<CoordinationBoard />} />

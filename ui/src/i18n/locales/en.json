@@ -16033,5 +16033,14 @@
       "image": "IMG",
       "video": "VIDEO"
     }
+  },
+  "boardsHub": {
+    "tabOverview": "Overview",
+    "tabWorkflow": "Workflows",
+    "workflowBlockedTitle": "Could not load the workflow board",
+    "workflowBlockedDescription": "The workflow-run board lives inside the coordination board site and needs its login. Open it in a new window once to sign in, then come back.",
+    "openInNewWindow": "Open in new window",
+    "entryQianfan": "Qianfan publish agent",
+    "entryQianfanSse": "MCP endpoint"
   }
 }

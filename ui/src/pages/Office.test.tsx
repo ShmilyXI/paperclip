@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import appSource from "../App.tsx?raw";
 import sidebarSource from "../components/Sidebar.tsx?raw";
 import productionSidebarSource from "../components/Sidebar.production.tsx?raw";
+import hubSource from "./BoardsHub.tsx?raw";
 import { EmbeddedSite } from "./EmbeddedSite";
 import { OFFICE_URL, parseOfficeMessage } from "./Office";
 import { DEPLOY_CONSOLE_URL } from "./DeployConsole";
@@ -51,15 +52,17 @@ describe("parseOfficeMessage", () => {
 });
 
 describe("Office and Deploy Console entries", () => {
-  it("are in-app routes and sidebar items, not external links", () => {
+  it("are in-app routes, not external links; office is a hub tab, deploy-console stays in the sidebar", () => {
     expect(OFFICE_URL).toBe("https://ai-opc-office.culud.com");
     expect(DEPLOY_CONSOLE_URL).toBe("https://ai-opc-deploy.culud.com");
     for (const source of [sidebarSource, productionSidebarSource]) {
       expect(source).toContain('<SidebarNavItem to="/deploy-console" label={t("nav.deployConsole")}');
-      expect(source).toContain('<SidebarNavItem to="/office" label={t("nav.office")}');
+      expect(source).not.toContain('to="/office"');
       expect(source).not.toContain('href="https://ai-opc-office.culud.com"');
       expect(source).not.toContain('href="https://ai-opc-deploy.culud.com"');
     }
+    expect(hubSource).toContain('<TabsTrigger value="office"');
+    expect(hubSource).toContain("<Office />");
     expect(appSource).toContain('<Route path="office" element={<OfficePage />} />');
     expect(appSource).toContain('<Route path="deploy-console" element={<DeployConsolePage />} />');
   });

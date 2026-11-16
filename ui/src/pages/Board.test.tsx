@@ -7,6 +7,7 @@ import { MemoryRouter } from "react-router-dom";
 import appSource from "../App.tsx?raw";
 import sidebarSource from "../components/Sidebar.tsx?raw";
 import productionSidebarSource from "../components/Sidebar.production.tsx?raw";
+import hubSource from "./BoardsHub.tsx?raw";
 import {
   BOARD_URL_STORAGE_KEY,
   Board,
@@ -143,13 +144,15 @@ describe("Board page", () => {
     });
   });
 
-  it("is reachable from both app shells: one shared route, one entry per sidebar", () => {
+  it("is reachable from both app shells: one shared route, one hub tab", () => {
     // boardRoutes() is the company-prefix child route set for BOTH shells.
     expect(appSource).toContain('<Route path="board" element={<CoordinationBoard />} />');
     expect(appSource).toContain('element={streamlinedUiEnabled ? <Layout /> : <ProductionLayout />}');
-    const entry = '<SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />';
-    expect(sidebarSource).toContain(entry);
-    expect(productionSidebarSource).toContain(entry);
+    // The sidebar entry moved into the dashboard BoardsHub tabs; the board stays an in-app route for deep links.
+    expect(sidebarSource).not.toContain('to="/board"');
+    expect(productionSidebarSource).not.toContain('to="/board"');
+    expect(hubSource).toContain('<TabsTrigger value="board"');
+    expect(hubSource).toContain("<Board />");
   });
 
   it("clears the refusal notice once the frame reports a load", async () => {

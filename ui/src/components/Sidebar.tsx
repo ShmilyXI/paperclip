@@ -22,10 +22,7 @@ import {
   MessageCircle,
   GanttChartSquare,
   LayoutGrid,
-  KanbanSquare,
-  PanelTop,
   Rocket,
-  Building2,
   Users,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -178,11 +175,9 @@ export function Sidebar({ children }: { children?: ReactNode }) {
               collapsed rail, where the old header icon was dropped entirely.
               Cmd/Ctrl+K remains the keyboard path (command palette). */}
           <SidebarNavItem to="/search" label={t("nav.search")} icon={Search} />
+          {/* 看板中心：统筹看板 / 工作流 / 办公室 / 无限画布都收进仪表盘的 tab（BoardsHub）。 */}
           <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />
-          <SidebarNavItem to="/board" label={t("nav.board")} icon={KanbanSquare} />
-          <SidebarNavItem to="/infinite-canvas" label={t("nav.infiniteCanvas")} icon={PanelTop} />
           <SidebarNavItem to="/deploy-console" label={t("nav.deployConsole")} icon={Rocket} />
-          <SidebarNavItem to="/office" label={t("nav.office")} icon={Building2} />
           {!combinedInboxTasks ? (
             <SidebarNavItem
               to="/inbox"
