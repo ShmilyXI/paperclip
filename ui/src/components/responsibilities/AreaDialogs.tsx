@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type { ResponsibilityArea } from "@paperclipai/shared";
 import { describeError } from "@/api/errors";
 import { responsibilityAreasApi } from "@/api/responsibilities";
@@ -80,33 +81,32 @@ export function AddAreaDialog({
       <DialogContent>
         <form className="flex flex-col gap-5" onSubmit={submit}>
           <DialogHeader>
-            <DialogTitle>Add an area</DialogTitle>
+            <DialogTitle>{t("responsibilities.addAnArea")}</DialogTitle>
             <DialogDescription>
-              What do you care about? An area is broad, like Fundraising or Hiring. Nobody owns it and it has no
-              deadline; the responsibilities you own sit under it.
+              {t("responsibilities.addAnAreaDescription")}
             </DialogDescription>
           </DialogHeader>
           <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-foreground">Name</span>
+            <span className="font-medium text-foreground">{t("common.name")}</span>
             <Input
               autoFocus
               value={title}
               maxLength={200}
-              placeholder="e.g. Fundraising"
+              placeholder={t("addResponsibilityDialog.placeholderArea")}
               onChange={(event) => setTitle(event.target.value)}
             />
           </label>
           {create.error ? (
             <p role="alert" className="text-sm text-destructive">
-              Couldn’t add the area. {describeError(create.error).body}
+              {t("responsibilities.couldntAddTheArea")}{describeError(create.error).body}
             </p>
           ) : null}
           <DialogFooter className="items-center sm:justify-between">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={!title.trim() || create.isPending}>
-              {create.isPending ? "Adding…" : "Add area"}
+              {create.isPending ? t("issueShareSheet.adding") : t("responsibilities.addArea")}
             </Button>
           </DialogFooter>
         </form>
@@ -152,24 +152,24 @@ export function RenameAreaDialog({
       <DialogContent>
         <form className="flex flex-col gap-5" onSubmit={submit}>
           <DialogHeader>
-            <DialogTitle>Rename area</DialogTitle>
-            <DialogDescription>Everyone in the company sees the new name.</DialogDescription>
+            <DialogTitle>{t("responsibilities.renameArea")}</DialogTitle>
+            <DialogDescription>{t("responsibilities.renameAreaDescription")}</DialogDescription>
           </DialogHeader>
           <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-foreground">Name</span>
+            <span className="font-medium text-foreground">{t("common.name")}</span>
             <Input autoFocus value={title} maxLength={200} onChange={(event) => setTitle(event.target.value)} />
           </label>
           {rename.error ? (
             <p role="alert" className="text-sm text-destructive">
-              Couldn’t rename the area. {describeError(rename.error).body}
+              {t("responsibilities.couldntRenameTheArea")}{describeError(rename.error).body}
             </p>
           ) : null}
           <DialogFooter className="items-center sm:justify-between">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={!title.trim() || unchanged || rename.isPending}>
-              {rename.isPending ? "Saving…" : "Save name"}
+              {rename.isPending ? t("common.saving2") : t("responsibilities.saveName")}
             </Button>
           </DialogFooter>
         </form>
@@ -209,24 +209,22 @@ export function ArchiveAreaDialog({
     <AlertDialog open={area !== null} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Archive {area?.title}?</AlertDialogTitle>
+          <AlertDialogTitle>{t("responsibilities.archiveAreaQuestion", { title: area?.title })}</AlertDialogTitle>
           <AlertDialogDescription>
-            It is archived for everyone in the company, and nothing new can be filed under it.
             {ownedHere > 0
-              ? ` Your ${ownedHere === 1 ? "responsibility" : `${ownedHere} responsibilities`} in it stay${ownedHere === 1 ? "s" : ""} there until you move ${ownedHere === 1 ? "it" : "them"} to another area.`
-              : ""}{" "}
-            You can restore it later.
+              ? t("responsibilities.archiveAreaDescriptionWithCount", { count: ownedHere })
+              : t("responsibilities.archiveAreaDescription")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         {archive.error ? (
           <p role="alert" className="text-sm text-destructive">
-            Couldn’t archive the area. {describeError(archive.error).body}
+            {t("responsibilities.couldntArchiveTheArea")}{describeError(archive.error).body}
           </p>
         ) : null}
         <AlertDialogFooter className="items-center sm:justify-between">
-          <AlertDialogCancel>Keep it</AlertDialogCancel>
+          <AlertDialogCancel>{t("responsibilities.keepIt")}</AlertDialogCancel>
           <Button disabled={archive.isPending} onClick={() => archive.mutate()}>
-            {archive.isPending ? "Archiving…" : "Archive area"}
+            {archive.isPending ? t("gatewayAdvancedPanel.archiving") : t("responsibilities.archiveArea")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
