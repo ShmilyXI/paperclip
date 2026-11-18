@@ -174,7 +174,7 @@ export function EnvironmentVariableRow({
       version: "latest",
       textValue: "",
     });
-    onToast(`Secret ${created.name} created`);
+    onToast(t("environmentVariablesEditorRow.secretNameCreated", { name: created.name }));
     setSecretPopover(null);
   }
 
@@ -195,7 +195,7 @@ export function EnvironmentVariableRow({
   const isDirty = dirtyFields.name || dirtyFields.value;
 
   const versions = boundSecret ? Math.max(0, boundSecret.latestVersion) : 0;
-  const versionTagLabel = row.version === "latest" ? "latest" : `v${row.version}`;
+  const versionTagLabel = row.version === "latest" ? t("environmentVariablesEditorRow.latest") : `v${row.version}`;
   const versionPinned = row.version !== "latest";
 
   return (
@@ -303,7 +303,7 @@ export function EnvironmentVariableRow({
                   <input
                     ref={valueInputRef}
                     className={cn(valueTextInputClass, ANALYTICS_NO_CAPTURE_CLASS)}
-                    placeholder="value"
+                    placeholder={t("environmentVariablesEditorRow.valuePlaceholder")}
                     value={row.textValue}
                     type={sensitive ? "password" : "text"}
                     spellCheck={false}
@@ -439,7 +439,7 @@ export function EnvironmentVariableRow({
                     >
                       <option value="">{t("environmentVariablesEditorRow.selectUserSecret")}</option>
                       {row.userSecretKey && !userSecretDefinitions?.some((definition) => definition.key === row.userSecretKey) ? (
-                        <option value={row.userSecretKey}>Unknown ({row.userSecretKey})</option>
+                        <option value={row.userSecretKey}>{t("common.unknown")} ({row.userSecretKey})</option>
                       ) : null}
                       {(userSecretDefinitions ?? []).map((definition) => (
                         <option key={definition.id} value={definition.key}>
@@ -535,7 +535,7 @@ export function EnvironmentVariableRow({
         {/* 5s undo after Secret→Text */}
         {undoPrev ? (
           <p className="mt-0.5 inline-flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
-            Reverted to text —{" "}
+            {t("environmentVariablesEditorRow.revertedToText")}{" "}
             <button
               type="button"
               className="font-medium text-foreground underline underline-offset-2 hover:text-primary"
@@ -597,7 +597,7 @@ export function EnvironmentVariableRow({
           type="button"
           onClick={onRemove}
           disabled={disabled}
-          aria-label={`Remove ${row.name.trim() || "variable"}`}
+          aria-label={t("composerImageAttachments.removeName", { name: row.name.trim() || t("environmentVariablesEditorRow.variable") })}
           className="rounded p-1 text-muted-foreground opacity-100 hover:bg-destructive/10 hover:text-destructive @[40rem]/env:opacity-0 @[40rem]/env:group-hover/row:opacity-100 @[40rem]/env:group-focus-within/row:opacity-100"
         >
           <X className="size-4" />

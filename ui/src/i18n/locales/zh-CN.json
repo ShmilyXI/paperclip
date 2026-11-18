@@ -8776,7 +8776,10 @@
     "requirement": "必填要求",
     "storeAsSecret2": "存为密钥…",
     "keyPlaceholder": "键",
-    "valuePlaceholder": "值"
+    "valuePlaceholder": "值",
+    "secretNameCreated": "密钥 {{name}} 已创建",
+    "revertedToText": "已还原为文本 —",
+    "variable": "变量"
   },
   "connectClientDialog": {
     "availableThisSession": "本次会话可用",

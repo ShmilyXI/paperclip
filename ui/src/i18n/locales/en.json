@@ -8776,7 +8776,10 @@
     "requirement": "Requirement",
     "storeAsSecret2": "Store as secret…",
     "keyPlaceholder": "KEY",
-    "valuePlaceholder": "value"
+    "valuePlaceholder": "value",
+    "secretNameCreated": "Secret {{name}} created",
+    "revertedToText": "Reverted to text —",
+    "variable": "variable"
   },
   "connectClientDialog": {
     "availableThisSession": "Available this session",
