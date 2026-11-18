@@ -17193,5 +17193,16 @@
     "exitFullScreen": "退出全屏",
     "viewNoLongerAvailable": "此 {{app}} 视图不再可用。",
     "couldNotShowThisView": "{{app}} 无法显示此视图。工具结果仍在上方行中。"
+  },
+  "coordinatorReviewPanel": {
+    "loadingTheRequestedDocument": "正在加载所请求的文档…",
+    "requestedDocumentCouldNotBeLoaded": "无法加载所请求的文档。",
+    "openIn": "在{{place}}中打开",
+    "answerOnTheInboxCard": "在查看此工件时，请在收件箱卡片上作答。",
+    "loadingLabel": "正在加载{{label}}…",
+    "documentCouldNotBeLoaded": "无法加载此文档。请改在任务中打开。",
+    "loadingApproval": "正在加载审批…",
+    "approvalCouldNotBeLoaded": "无法加载此审批。请直接打开。",
+    "fileCannotBePreviewed": "此文件无法预览。请在下方打开原始文件。"
   }
 }

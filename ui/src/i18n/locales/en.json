@@ -17193,5 +17193,16 @@
     "exitFullScreen": "Exit full screen",
     "viewNoLongerAvailable": "This {{app}} view is no longer available.",
     "couldNotShowThisView": "{{app}} could not show this view. The tool result is still in the row above."
+  },
+  "coordinatorReviewPanel": {
+    "loadingTheRequestedDocument": "Loading the requested document…",
+    "requestedDocumentCouldNotBeLoaded": "The requested document could not be loaded.",
+    "openIn": "Open in {{place}}",
+    "answerOnTheInboxCard": "Answer on the inbox card while reviewing this artifact.",
+    "loadingLabel": "Loading {{label}}…",
+    "documentCouldNotBeLoaded": "This document couldn't be loaded. Open it in the task instead.",
+    "loadingApproval": "Loading approval…",
+    "approvalCouldNotBeLoaded": "This approval couldn't be loaded. Open it instead.",
+    "fileCannotBePreviewed": "This file cannot be previewed. Open the original file below."
   }
 }
