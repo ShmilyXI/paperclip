@@ -13711,7 +13711,17 @@
     "stopping": "正在停止…",
     "noRunOutputYet": "尚无运行输出。",
     "thisTaskConversationIsEmpty": "此任务对话还是空的。在下方发送一条消息开始。",
-    "takingLongerThanUsual": "耗时比平时更长…"
+    "takingLongerThanUsual": "耗时比平时更长…",
+    "itsComputerIsBeingPrepared": "它的电脑正在准备中。设置完成后将自动开始运行。",
+    "itsSetupIsntFinishedYet": "它的设置尚未完成。请完成设置后让其开始运行。",
+    "itWasPausedBecauseIts": "因其所属组织已归档而被暂停。",
+    "working": "正在工作",
+    "worked": "已完成",
+    "forDuration": "用时 {{duration}}",
+    "toolName": "工具：{{toolName}}",
+    "argsLabel": "参数：",
+    "resultLabel": "结果：",
+    "retryName": "重试 {{name}}"
   },
   "aiConnectionManagement": {
     "existingAuthenticationNotManagedBy": "现有认证 — 不由连接管理",

@@ -13711,7 +13711,17 @@
     "stopping": "Stopping…",
     "noRunOutputYet": "No run output yet.",
     "thisTaskConversationIsEmpty": "This task conversation is empty. Start with a message below.",
-    "takingLongerThanUsual": "Taking longer than usual…"
+    "takingLongerThanUsual": "Taking longer than usual…",
+    "itsComputerIsBeingPrepared": "Its computer is being prepared. Runs start automatically when setup finishes.",
+    "itsSetupIsntFinishedYet": "Its setup isn't finished yet. Finish setup to let it start runs.",
+    "itWasPausedBecauseIts": "It was paused because its company is archived.",
+    "working": "Working",
+    "worked": "Worked",
+    "forDuration": "for {{duration}}",
+    "toolName": "Tool: {{toolName}}",
+    "argsLabel": "Args:",
+    "resultLabel": "Result:",
+    "retryName": "Retry {{name}}"
   },
   "aiConnectionManagement": {
     "existingAuthenticationNotManagedBy": "Existing authentication — not managed by Connections",

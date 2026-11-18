@@ -862,8 +862,8 @@ export function IssueAssigneePausedNotice({
           }
         >
           {stillPreparing
-            ? "Its computer is being prepared. Runs start automatically when setup finishes."
-            : "Its setup isn't finished yet. Finish setup to let it start runs."}
+            ? t("issueChatThread.itsComputerIsBeingPrepared")
+            : t("issueChatThread.itsSetupIsntFinishedYet")}
         </InlineBanner>
       </div>
     );
@@ -875,11 +875,11 @@ export function IssueAssigneePausedNotice({
       : agent.pauseReason === "import"
         ? t("issueChatThread.itArrivedPausedFromAn")
         : agent.pauseReason === "system"
-          ? "It was paused by the system."
+          ? t("issueChatThread.itWasPausedByThe")
           : agent.pauseReason === "company_archived"
-            ? "It was paused because its company is archived."
+            ? t("issueChatThread.itWasPausedBecauseIts")
             : agent.pauseReason === "manual"
-              ? "It was paused manually."
+              ? t("issueChatThread.itWasPausedManually")
               : "";
   // Budget pauses clear on their own when the budget resets and archive pauses
   // clear when the company is restored; resuming by hand would fight either, so
@@ -936,10 +936,10 @@ function fallbackTextParts(message: ThreadMessage) {
       continue;
     }
     if (part.type === "tool-call") {
-      const lines = [`Tool: ${part.toolName}`];
-      if (part.argsText?.trim()) lines.push(`Args:\n${part.argsText}`);
+      const lines = [t("issueChatThread.toolName", { toolName: part.toolName })];
+      if (part.argsText?.trim()) lines.push(`${t("issueChatThread.argsLabel")}\n${part.argsText}`);
       if (typeof part.result === "string" && part.result.trim())
-        lines.push(`Result:\n${part.result}`);
+        lines.push(`${t("issueChatThread.resultLabel")}\n${part.result}`);
       contentLines.push(lines.join("\n\n"));
     }
   }
@@ -1341,15 +1341,15 @@ function IssueChatChainOfThought({
   let headerVerb: string;
   let headerSuffix: string | null = null;
   if (isActive) {
-    headerVerb = "Working";
-    if (liveElapsed) headerSuffix = `for ${liveElapsed}`;
+    headerVerb = t("issueChatThread.working");
+    if (liveElapsed) headerSuffix = t("issueChatThread.forDuration", { duration: liveElapsed });
   } else if (segmentTiming) {
     const durationMs = segmentTiming.endMs - segmentTiming.startMs;
     const durationText = formatDurationWords(durationMs);
-    headerVerb = "Worked";
-    if (durationText) headerSuffix = `for ${durationText}`;
+    headerVerb = t("issueChatThread.worked");
+    if (durationText) headerSuffix = t("issueChatThread.forDuration", { duration: durationText });
   } else {
-    headerVerb = "Worked";
+    headerVerb = t("issueChatThread.worked");
   }
 
   const toolSummary = toolCountSummary(toolParts);
@@ -5682,7 +5682,7 @@ const IssueChatComposer = forwardRef<
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={`Retry ${attachment.name}`}
+                    aria-label={t("issueChatThread.retryName", { name: attachment.name })}
                     disabled={!!uncertainSubmission}
                     onClick={() => retryUpload(attachment)}
                   >
