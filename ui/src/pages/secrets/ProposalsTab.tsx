@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId, useMemo, useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -33,11 +34,11 @@ const DECIDED_LIMIT = 10;
 function expiryLabel(expiresAt: string): { text: string; urgent: boolean } | null {
   const ms = new Date(expiresAt).getTime() - Date.now();
   if (Number.isNaN(ms)) return null;
-  if (ms <= 0) return { text: "Expired", urgent: true };
+  if (ms <= 0) return { text: t("proposalsTab.expiredTitle"), urgent: true };
   const hours = Math.floor(ms / 3_600_000);
-  if (hours < 24) return { text: `Expires in ${hours}h`, urgent: true };
+  if (hours < 24) return { text: t("proposalsTab.expiresInHours", { hours }), urgent: true };
   const days = Math.floor(hours / 24);
-  return { text: `Expires in ${days}d`, urgent: days <= 2 };
+  return { text: t("proposalsTab.expiresInDays", { days }), urgent: days <= 2 };
 }
 
 /** Trim a typed secret name and drop stray leading/trailing slashes. */
@@ -51,8 +52,8 @@ function RequestSentence({ proposal }: { proposal: SecretProposalView }) {
   if (proposal.kind === "secret") {
     return (
       <>
-        {proposer} wants to save a new secret,{" "}
-        <span className="break-all font-medium">{proposal.proposedName ?? "unnamed"}</span>
+        {proposer} {t("proposalsTab.wantsToSaveANewSecret")}{" "}
+        <span className="break-all font-medium">{proposal.proposedName ?? t("proposalsTab.unnamed")}</span>
       </>
     );
   }
@@ -60,13 +61,13 @@ function RequestSentence({ proposal }: { proposal: SecretProposalView }) {
   if (proposal.target && proposal.target.id !== proposal.proposedBy.id) {
     return (
       <>
-        {proposer} wants <span className="font-medium">{proposal.target.name}</span> to use {secret}
+        {proposer} {t("proposalsTab.wants")} <span className="font-medium">{proposal.target.name}</span> {t("proposalsTab.toUse")} {secret}
       </>
     );
   }
   return (
     <>
-      {proposer} wants to use {secret}
+      {proposer} {t("proposalsTab.wantsToUse")} {secret}
     </>
   );
 }
@@ -76,17 +77,17 @@ function DeliveryLine({ proposal }: { proposal: SecretProposalView }) {
   const mode = deliveryModeForConfigPath(proposal.configPath);
   const alias = bindingEnvKey(proposal);
   const code = <code className="font-mono text-foreground">{alias}</code>;
-  const agent = proposal.target?.name ?? "the agent";
+  const agent = proposal.target?.name ?? t("taskChatComposer.theAgent");
   return (
     <p className="text-xs text-muted-foreground">
       {mode === "env" ? (
-        <>It would be available in {agent}’s runs as the environment variable {code}.</>
+        <>{t("proposalsTab.itWouldBeAvailableIn")} {agent}{t("proposalsTab.sRunsAsTheEnvironmentVariable")} {code}.</>
       ) : mode === "api" ? (
-        <>{agent} could ask for it during a run as {code}. It is never written to the environment.</>
+        <>{agent} {t("proposalsTab.couldAskForItDuringARunAs")} {code}. {t("proposalsTab.itIsNeverWrittenToTheEnvironment")}</>
       ) : (
-        <>It would be provided through {agent}’s settings.</>
+        <>{t("proposalsTab.itWouldBeProvidedThrough")} {agent}{t("proposalsTab.sSettings")}</>
       )}{" "}
-      Access is granted with your permissions.
+      {t("proposalsTab.accessIsGrantedWithYour")}
     </p>
   );
 }
@@ -151,7 +152,7 @@ function PendingProposal({
           <p className="text-xs text-muted-foreground">
             {proposal.originIssue ? (
               <>
-                While working on{" "}
+                {t("proposalsTab.whileWorkingOn")}{" "}
                 <Link
                   to={`/issues/${proposal.originIssue.key}`}
                   className="hover:text-foreground hover:underline"
@@ -181,7 +182,7 @@ function PendingProposal({
               htmlFor={`${fieldId}-name`}
               className="flex min-w-48 flex-1 flex-col gap-1.5 text-sm font-medium"
             >
-              Name
+              {t("common.name")}
               <Input
                 id={`${fieldId}-name`}
                 value={name}
@@ -196,7 +197,7 @@ function PendingProposal({
                 htmlFor={`${fieldId}-vault`}
                 className="flex flex-col gap-1.5 text-sm font-medium"
               >
-                Stored in
+                {t("secrets.storedIn")}
                 <NativeSelect
                   id={`${fieldId}-vault`}
                   value={vaultId}
@@ -220,13 +221,13 @@ function PendingProposal({
               htmlFor={`${fieldId}-description`}
               className="flex flex-col gap-1.5 text-sm font-medium"
             >
-              Description
+              {t("common.description")}
               <Input
                 id={`${fieldId}-description`}
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 disabled={!canDecide || decision.isBusy}
-                placeholder="Optional"
+                placeholder={t("common.optional")}
                 className="font-normal"
               />
             </label>
@@ -238,14 +239,14 @@ function PendingProposal({
               className="h-auto self-start p-0 text-xs text-muted-foreground"
               onClick={() => setEditingDescription(true)}
             >
-              Add a description
+              {t("proposalsTab.addADescription")}
             </Button>
           ) : null}
 
           <p className="text-xs text-muted-foreground">
             {readAs.length > 0 ? (
               <>
-                Agents given access will read it as{" "}
+                {t("proposalsTab.agentsGivenAccessWillReadItAs")}{" "}
                 {readAs.map((key, index) => (
                   <span key={key}>
                     {index > 0 ? ", " : null}
@@ -255,8 +256,7 @@ function PendingProposal({
                 .{" "}
               </>
             ) : null}
-            The value stays hidden and is saved exactly as the agent recorded it. Its fingerprint
-            lets you confirm it with the agent:{" "}
+            {t("proposalsTab.theValueStaysHiddenAnd")}{" "}
             <FingerprintChip
               fingerprint={proposal.valueFingerprintSha256}
               length={proposal.valueLength}
@@ -273,12 +273,10 @@ function PendingProposal({
                 checked={alsoSaveSecret}
                 onCheckedChange={(checked) => setAlsoSaveSecret(checked === true)}
                 disabled={!canDecide || decision.isBusy}
-                aria-label="Also save the new secret"
+                aria-label={t("proposalsTab.alsoSaveTheNewSecret")}
               />
               <span>
-                <span className="font-medium text-foreground">{secretLabel}</span> is a new secret
-                that hasn’t been saved yet. Save it as part of this approval. Access can’t be
-                approved without it.
+                <span className="font-medium text-foreground">{secretLabel}</span> {t("proposalsTab.isANewSecretThatHasntBeenSaved")}
               </span>
             </label>
           ) : null}
@@ -294,8 +292,8 @@ function PendingProposal({
       {!canDecide ? (
         <p className="text-sm text-muted-foreground">
           {isSecret
-            ? "Only organization admins can approve or reject this."
-            : `Only people who can change ${proposal.target?.name ?? "this agent"}’s settings can approve or reject this.`}
+            ? t("proposalsTab.onlyOrganizationAdminsCanApprove")
+            : t("proposalsTab.onlyPeopleWhoCanChange", { name: proposal.target?.name ?? t("proposalsTab.thisAgent") })}
         </p>
       ) : rejecting ? (
         <form
@@ -309,11 +307,11 @@ function PendingProposal({
         >
           <div className="flex flex-wrap items-center gap-2">
             <Input
-              aria-label="Reason for rejecting"
+              aria-label={t("proposalsTab.reasonForRejecting")}
               autoFocus
               required
               className="min-w-48 flex-1"
-              placeholder="Tell the agent why"
+              placeholder={t("proposalsTab.tellTheAgentWhy")}
               value={reason}
               onChange={(event) => setReason(event.target.value)}
               disabled={decision.isBusy}
@@ -329,7 +327,7 @@ function PendingProposal({
                 decision.clearError();
               }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               type="submit"
@@ -337,12 +335,12 @@ function PendingProposal({
               size="sm"
               disabled={decision.isBusy || !reason.trim()}
             >
-              {decision.rejecting ? "Rejecting…" : "Reject"}
+              {decision.rejecting ? t("proposalsTab.rejecting") : t("common.reject")}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            A reason is required. It is sent to {proposal.proposedBy.name}.
-            {isSecret ? " Requests to use this secret are rejected too." : null}
+            {t("proposalsTab.aReasonIsRequired", { name: proposal.proposedBy.name })}
+            {isSecret ? t("proposalsTab.requestsToUseThisSecretAreRejectedToo") : null}
           </p>
         </form>
       ) : (
@@ -356,16 +354,16 @@ function PendingProposal({
               setRejecting(true);
             }}
           >
-            Reject
+            {t("common.reject")}
           </Button>
           <Button size="sm" disabled={decision.isBusy || (isSecret && !secretName)} onClick={approve}>
             {decision.approving
-              ? "Approving…"
+              ? t("proposalsTab.approving")
               : isSecret
-                ? "Approve and save secret"
+                ? t("proposalsTab.approveAndSaveSecret")
                 : alsoSaveSecret
-                  ? "Approve access and save secret"
-                  : "Approve access"}
+                  ? t("proposalsTab.approveAccessAndSaveSecret")
+                  : t("proposalsTab.approveAccess")}
           </Button>
         </div>
       )}
@@ -375,7 +373,7 @@ function PendingProposal({
 
 function decidedLabel(proposal: SecretProposalView): string {
   const outcome =
-    proposal.status === "approved" ? "Approved" : proposal.status === "rejected" ? "Rejected" : "Expired";
+    proposal.status === "approved" ? t("common.approved") : proposal.status === "rejected" ? t("labels.status.rejected") : t("interaction.expired");
   const at = proposal.resolvedAt ?? proposal.createdAt;
   return `${outcome} · ${relativeTime(at)}`;
 }
@@ -454,7 +452,7 @@ export function ProposalsTab({
   ) {
     return (
       <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground">
-        <Loader2 className="size-4 animate-spin" /> Loading requests…
+        <Loader2 className="size-4 animate-spin" /> {t("proposalsTab.loadingRequests")}
       </div>
     );
   }
@@ -463,18 +461,17 @@ export function ProposalsTab({
     return (
       <EmptyState
         icon={Inbox}
-        title="Nothing to review"
-        message="When an agent asks to save a secret or to use one, the request appears here."
+        title={t("proposalsTab.nothingToReview")}
+        message={t("proposalsTab.whenAnAgentAsksToSave")}
       />
     );
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <section aria-label="Waiting for a decision" className="flex flex-col gap-2">
+      <section aria-label={t("proposalsTab.waitingForADecision")} className="flex flex-col gap-2">
         <p className="max-w-xl text-sm text-muted-foreground">
-          Agents ask here before they save a secret or use one they don’t have. Nothing changes
-          until you approve.
+          {t("proposalsTab.agentsAskHereBeforeThey")}
         </p>
         {pending.length > 0 ? (
           <ul className="divide-y divide-border border-y border-border">
@@ -505,14 +502,14 @@ export function ProposalsTab({
           </ul>
         ) : (
           <p className="border-y border-border px-3 py-4 text-sm text-muted-foreground">
-            You’re caught up. No requests are waiting.
+            {t("proposalsTab.youreCaughtUpNoRequests")}
           </p>
         )}
       </section>
 
       {decided.length > 0 || decidedFailed ? (
-        <section aria-label="Recently decided" className="flex flex-col gap-2">
-          <h2 className="text-xs font-medium text-muted-foreground">Recently decided</h2>
+        <section aria-label={t("proposalsTab.recentlyDecided")} className="flex flex-col gap-2">
+          <h2 className="text-xs font-medium text-muted-foreground">{t("proposalsTab.recentlyDecided")}</h2>
           {decided.length > 0 ? (
             <ul className="divide-y divide-border border-y border-border">
               {decided.map((proposal) => (
@@ -532,7 +529,7 @@ export function ProposalsTab({
           ) : null}
           {decidedFailed ? (
             <p className="text-xs text-muted-foreground">
-              Some earlier decisions couldn’t be loaded. Reload the page to try again.
+              {t("proposalsTab.someEarlierDecisionsCouldntBeLoaded")}
             </p>
           ) : null}
         </section>
