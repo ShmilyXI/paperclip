@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type { ResponsibilityArea, ResponsibilityWithRollup } from "@paperclipai/shared";
 import { Plus } from "lucide-react";
 import { describeError } from "@/api/errors";
@@ -69,8 +70,8 @@ function ProvenanceLine({
   const name = provenance.agentId ? agentName(provenance.agentId) : undefined;
   return (
     <p className="text-xs text-muted-foreground">
-      {name ? `Drafted by ${name} during onboarding.` : "Drafted during onboarding."}
-      {provenance.confirmedAt ? ` Confirmed by you on ${formatShortDate(provenance.confirmedAt)}.` : null}
+      {name ? t("responsibilities.draftedByDuringOnboarding", { name }) : t("responsibilities.draftedDuringOnboarding")}
+      {provenance.confirmedAt ? t("responsibilities.confirmedByYouOn", { date: formatShortDate(provenance.confirmedAt) }) : null}
     </p>
   );
 }
@@ -103,7 +104,7 @@ export function Responsibilities() {
   useAgentlessOnboardingAutoOpen();
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Dashboard" }]);
+    setBreadcrumbs([{ label: t("common.dashboard") }]);
   }, [setBreadcrumbs]);
 
   const overviewQuery = useQuery({
@@ -167,8 +168,8 @@ export function Responsibilities() {
               <ToolbarSearch
                 query={search}
                 onQueryChange={setSearch}
-                label="Search your dashboard"
-                placeholder="Search"
+                label={t("responsibilities.searchYourDashboard")}
+                placeholder={t("common.search2")}
                 inputType="search"
               />
               <p className="text-sm text-muted-foreground" data-dashboard-counts="">{outlineV2CountsLabel(outlineCounts)}</p>
@@ -176,10 +177,10 @@ export function Responsibilities() {
           ) : null
         ) : (
           <div className="flex min-w-0 flex-col gap-1">
-            <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
+            <h1 className="text-2xl font-semibold text-foreground">{t("common.dashboard")}</h1>
             {view === "full" ? (
               <>
-                <p className="text-sm text-muted-foreground">What you own, whether each one is meeting its bar, and the work underneath.</p>
+                <p className="text-sm text-muted-foreground">{t("responsibilities.whatYouOwn")}</p>
                 {overview ? <ProvenanceLine responsibilities={overview.responsibilities} agentName={agentName} /> : null}
               </>
             ) : null}
@@ -188,26 +189,26 @@ export function Responsibilities() {
         <div className="flex flex-wrap items-center justify-end gap-2">
           {visiting ? (
             <Button variant="ghost" onClick={leave} data-dashboard-back="">
-              Back
+              {t("common.back")}
             </Button>
           ) : null}
           {view === "outline_v2" ? (
             // The page's one primary action, last in the row after search.
             <Button onClick={() => setAddingArea(true)}>
               <Plus aria-hidden="true" />
-              New area
+              {t("responsibilities.newArea")}
             </Button>
           ) : null}
           {view === "full" || view === "board" ? (
             <>
               <Button variant="outline" onClick={() => setAddingArea(true)}>
                 <Plus aria-hidden="true" />
-                Add area
+                {t("responsibilities.addArea")}
               </Button>
               {isEmpty ? null : (
                 <Button onClick={() => openAdd(null)}>
                   <Plus aria-hidden="true" />
-                  Add responsibility
+                  {t("addResponsibilityDialog.addResponsibility")}
                 </Button>
               )}
             </>
@@ -217,7 +218,7 @@ export function Responsibilities() {
 
       {restore.error ? (
         <p role="alert" className="text-sm text-destructive">
-          Couldn’t restore the area. {describeError(restore.error).body}
+          {t("responsibilities.couldNotRestoreTheArea")} {describeError(restore.error).body}
         </p>
       ) : null}
 
