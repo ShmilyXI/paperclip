@@ -17594,5 +17594,12 @@
     "itFinishes": "it finishes",
     "theyFinish": "they finish",
     "thisCannotBeUndone": "This cannot be undone."
+  },
+  "tailscaleDeviceSignIn": {
+    "signInExpired": "Sign-in expired. Cancel and connect again.",
+    "waitingForTailscaleAdmin": "Waiting for a Tailscale administrator to approve this device.",
+    "approveTheConnection": "Approve the connection in Tailscale. This page will update when you finish.",
+    "continueToTailscale": "Continue to Tailscale",
+    "openTailscaleDevices": "Open Tailscale devices"
   }
 }

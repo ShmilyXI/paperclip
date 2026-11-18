@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type { TailscaleConnection } from "@paperclipai/shared";
 import { tailscaleApi } from "@/api/tailscale";
 import { describeError } from "@/api/errors";
@@ -29,15 +30,15 @@ export function TailscaleDeviceSignIn({ connection, cancel, disabled }: {
     return () => window.clearTimeout(timer);
   }, [status.data?.expiresAt]);
   return <div className="space-y-3">
-    <p className="text-sm text-muted-foreground" role="status">{expired ? "Sign-in expired. Cancel and connect again."
-      : status.data?.needsApproval ? "Waiting for a Tailscale administrator to approve this device."
-        : "Approve the connection in Tailscale. This page will update when you finish."}</p>
+    <p className="text-sm text-muted-foreground" role="status">{expired ? t("tailscaleDeviceSignIn.signInExpired")
+      : status.data?.needsApproval ? t("tailscaleDeviceSignIn.waitingForTailscaleAdmin")
+        : t("tailscaleDeviceSignIn.approveTheConnection")}</p>
     {status.error && <p role="alert" className="text-sm text-destructive">{describeError(status.error, { action: "check Tailscale sign-in" }).body}</p>}
     <div className="flex flex-wrap items-center gap-3">
-      {!expired && status.data?.authorizationUrl && <Button variant="outline" asChild><a href={status.data.authorizationUrl} target="_blank" rel="noopener noreferrer">Continue to Tailscale</a></Button>}
-      {status.data?.needsApproval && !expired && <Button variant="outline" asChild><a href="https://login.tailscale.com/admin/machines" target="_blank" rel="noopener noreferrer">Open Tailscale devices</a></Button>}
-      {status.error && !expired && <Button variant="outline" onClick={() => void status.refetch()}>Check again</Button>}
-      <Button variant="ghost" disabled={disabled} onClick={cancel}>Cancel sign-in</Button>
+      {!expired && status.data?.authorizationUrl && <Button variant="outline" asChild><a href={status.data.authorizationUrl} target="_blank" rel="noopener noreferrer">{t("tailscaleDeviceSignIn.continueToTailscale")}</a></Button>}
+      {status.data?.needsApproval && !expired && <Button variant="outline" asChild><a href="https://login.tailscale.com/admin/machines" target="_blank" rel="noopener noreferrer">{t("tailscaleDeviceSignIn.openTailscaleDevices")}</a></Button>}
+      {status.error && !expired && <Button variant="outline" onClick={() => void status.refetch()}>{t("adapterLoginChrome.checkAgain")}</Button>}
+      <Button variant="ghost" disabled={disabled} onClick={cancel}>{t("remoteMcpConnectionSetup.cancelSignIn")}</Button>
     </div>
   </div>;
 }

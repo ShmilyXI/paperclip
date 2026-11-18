@@ -17594,5 +17594,12 @@
     "itFinishes": "它完成后",
     "theyFinish": "它们完成后",
     "thisCannotBeUndone": "此操作无法撤销。"
+  },
+  "tailscaleDeviceSignIn": {
+    "signInExpired": "登录已过期。请取消并重新连接。",
+    "waitingForTailscaleAdmin": "正在等待 Tailscale 管理员批准此设备。",
+    "approveTheConnection": "请在 Tailscale 中批准此连接。完成后本页会自动更新。",
+    "continueToTailscale": "继续前往 Tailscale",
+    "openTailscaleDevices": "打开 Tailscale 设备"
   }
 }
