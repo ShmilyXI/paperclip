@@ -11013,7 +11013,12 @@
     "taskDetailsCouldntLoad": "无法加载任务详情。",
     "loadingTasks": "正在加载任务…",
     "tasksLoaded": "已加载 {{loaded}} 个任务。加载更多以将其纳入筛选。",
-    "loadMoreTasks": "加载更多任务"
+    "loadMoreTasks": "加载更多任务",
+    "searchTasksNeedingAttention": "搜索需要注意的任务",
+    "searchTasksPlaceholder": "搜索任务…",
+    "couldntLoadTasksNeedingAttention": "无法加载需要注意的任务。",
+    "noTasksMatchSearch": "没有符合此搜索的任务。",
+    "pendingCount": "{{count}} 个待处理"
   },
   "designSandboxTasks": {
     "unknownAgent": "未知员工",

@@ -11013,7 +11013,12 @@
     "taskDetailsCouldntLoad": "Task details couldn't load.",
     "loadingTasks": "Loading tasks…",
     "tasksLoaded": "{{loaded}} tasks loaded. Load more to include them in filters.",
-    "loadMoreTasks": "Load more tasks"
+    "loadMoreTasks": "Load more tasks",
+    "searchTasksNeedingAttention": "Search tasks needing attention",
+    "searchTasksPlaceholder": "Search tasks…",
+    "couldntLoadTasksNeedingAttention": "Tasks needing attention could not be loaded.",
+    "noTasksMatchSearch": "No tasks match this search.",
+    "pendingCount": "{{count}} pending"
   },
   "designSandboxTasks": {
     "unknownAgent": "Unknown agent",
