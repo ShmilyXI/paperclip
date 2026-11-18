@@ -10215,7 +10215,9 @@
     "createAnAgentFromThe": "Create an agent from the Agents page to start chatting.",
     "newChat": "New chat",
     "openChat": "Open chat",
-    "awaitingApproval": "Awaiting approval"
+    "awaitingApproval": "Awaiting approval",
+    "unreadFrom_one": "{{count}} unread message from {{name}}",
+    "unreadFrom_other": "{{count}} unread messages from {{name}}"
   },
   "joinRequestQueue": {
     "joinRequests": "Join Requests",

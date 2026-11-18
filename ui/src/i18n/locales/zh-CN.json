@@ -10215,7 +10215,9 @@
     "createAnAgentFromThe": "先在「员工」页面创建一个员工，然后开始对话。",
     "newChat": "新建对话",
     "openChat": "打开对话",
-    "awaitingApproval": "待审批"
+    "awaitingApproval": "待审批",
+    "unreadFrom_one": "来自 {{name}} 的 {{count}} 条未读消息",
+    "unreadFrom_other": "来自 {{name}} 的 {{count}} 条未读消息"
   },
   "joinRequestQueue": {
     "joinRequests": "加入申请",

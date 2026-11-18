@@ -108,11 +108,11 @@ function AgentChatPickerResults({ agents, onSelect, onComplete, loading, error, 
                     <span className="truncate font-medium">{agent.name}</span>
                     <span className="truncate text-xs text-muted-foreground">{agent.title ?? agent.role}</span>
                   </span>
-                  {unreadCount > 0 && <Badge variant="ghost" aria-label={`${unreadCount} unread ${unreadCount === 1 ? "message" : "messages"} from ${agent.name}`} className="shrink-0 bg-primary font-mono tabular-nums text-primary-foreground">{unreadCount}</Badge>}
-                  {existingChatAgentIds && <span className="shrink-0 text-xs text-muted-foreground">{existingIds.has(agent.id) ? "Open chat" : "New chat"}</span>}
-                  {agent.status === "paused" && <span className="text-xs text-(--status-agent-paused)">Paused</span>}
-                  {agent.status === "terminated" && <span className="text-xs text-muted-foreground">Terminated</span>}
-                  {agent.status === "pending_approval" && <span className="text-xs text-muted-foreground">Awaiting approval</span>}
+                  {unreadCount > 0 && <Badge variant="ghost" aria-label={t("agentChatPicker.unreadFrom", { count: unreadCount, name: agent.name })} className="shrink-0 bg-primary font-mono tabular-nums text-primary-foreground">{unreadCount}</Badge>}
+                  {existingChatAgentIds && <span className="shrink-0 text-xs text-muted-foreground">{existingIds.has(agent.id) ? t("agentChatPicker.openChat") : t("agentChatPicker.newChat")}</span>}
+                  {agent.status === "paused" && <span className="text-xs text-(--status-agent-paused)">{t("common.paused")}</span>}
+                  {agent.status === "terminated" && <span className="text-xs text-muted-foreground">{t("common.terminated")}</span>}
+                  {agent.status === "pending_approval" && <span className="text-xs text-muted-foreground">{t("agentChatPicker.awaitingApproval")}</span>}
                 </CommandItem>
               );
             })}
