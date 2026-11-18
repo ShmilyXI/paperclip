@@ -15202,7 +15202,15 @@
     "startSignInAgain": "Start sign-in again",
     "provideYourProvidernameApiKey": "Provide your {{providerName}} API key to connect",
     "authorizationCode": "Authorization code",
-    "pasteAuthorizationCodeHere": "Paste authorization code here"
+    "pasteAuthorizationCodeHere": "Paste authorization code here",
+    "thisSignInExpired": "This sign-in expired",
+    "signInDidntFinish": "Sign-in didn’t finish",
+    "signInToProviderName": "Sign in to {{providerName}}",
+    "thenReturnHere": " then return here",
+    "retrySignInToGetAFreshCode": "Retry sign-in to get a fresh code. Your setup is saved.",
+    "retrySignIn": "Retry sign-in",
+    "finishingSignIn": "Finishing sign-in…",
+    "finishSigningInInTheGoogle": "Finish signing in in the Google browser window, then return here."
   },
   "bootstrapPendingPage": {
     "preferToFinishSetupFrom": "Prefer to finish setup from the host?",

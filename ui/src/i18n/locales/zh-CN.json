@@ -15202,7 +15202,15 @@
     "startSignInAgain": "重新开始登录",
     "provideYourProvidernameApiKey": "输入你的 {{providerName}} API 密钥以连接",
     "authorizationCode": "授权码",
-    "pasteAuthorizationCodeHere": "在此粘贴授权码"
+    "pasteAuthorizationCodeHere": "在此粘贴授权码",
+    "thisSignInExpired": "此登录已过期",
+    "signInDidntFinish": "登录未完成",
+    "signInToProviderName": "登录 {{providerName}}",
+    "thenReturnHere": "，然后返回这里",
+    "retrySignInToGetAFreshCode": "重试登录以获取新的验证码。你的设置已保存。",
+    "retrySignIn": "重试登录",
+    "finishingSignIn": "正在完成登录…",
+    "finishSigningInInTheGoogle": "请在 Google 浏览器窗口中完成登录，然后返回这里。"
   },
   "bootstrapPendingPage": {
     "preferToFinishSetupFrom": "想从主机完成设置？",
