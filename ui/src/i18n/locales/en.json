@@ -9101,6 +9101,8 @@
     "noAssistantConnections": "No assistant connections."
   },
   "decisionModelSettings": {
+    "loadingDecisionModel": "Loading decision model",
+    "loadDecisionSettings": "load decision settings",
     "chooseAndSaveAConnection": "Choose and save a connection first.",
     "enableAndSaveDecisionsBefore": "Enable and save decisions before running a test.",
     "theConnectionIsUnavailableReconnect": "The connection is unavailable. Reconnect it and try again.",
@@ -11636,6 +11638,13 @@
     "sharedAiConnectionIdentityAccount": "Shared AI connection identity, account selection, and existing authentication chrome. The full interactive state matrix lives in Storybook under AI Connections / Review. Example controls below do not connect accounts.",
     "providerListsAndAccountManagement": "Provider lists and account management use Browse and AppDetail from the Connectors interface. The picker below uses ConnectionChoiceList, also used by ConnectionSetupFlow.",
     "enterApiKeyHere": "Enter API key here"
+  },
+  "taskChatDiffView": {
+    "added": "Added: ",
+    "removed": "Removed: ",
+    "showMoreLines_one": "Show {{count}} more line",
+    "showMoreLines_other": "Show {{count}} more lines",
+    "diffShortenedForDisplay": "Diff shortened for display."
   },
   "taskChatRichInput": {
     "imageUploadsAreUnavailable": "Image uploads are unavailable.",

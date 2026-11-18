@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { hunkLabel } from "./diff-lines";
@@ -101,7 +102,7 @@ export function TaskChatDiffView({
                       line.kind === "context" ? "text-muted-foreground" : "text-foreground",
                     )}
                   >
-                    <span className="sr-only">{line.kind === "add" ? "Added: " : line.kind === "remove" ? "Removed: " : ""}</span>
+                    <span className="sr-only">{line.kind === "add" ? t("taskChatDiffView.added") : line.kind === "remove" ? t("taskChatDiffView.removed") : ""}</span>
                     {line.text || " "}
                   </td>
                 </tr>
@@ -118,10 +119,10 @@ export function TaskChatDiffView({
               className="text-foreground underline-offset-2 hover:underline"
               onClick={() => setShowAll(true)}
             >
-              Show {hidden} more {hidden === 1 ? "line" : "lines"}
+              {t("taskChatDiffView.showMoreLines", { count: hidden })}
             </button>
           ) : null}
-          {truncated && hidden === 0 ? <span>Diff shortened for display.</span> : null}
+          {truncated && hidden === 0 ? <span>{t("taskChatDiffView.diffShortenedForDisplay")}</span> : null}
         </div>
       ) : null}
     </div>

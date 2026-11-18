@@ -106,8 +106,8 @@ export function DecisionModelSettingsSection({ companyId }: { companyId: string 
   } });
   // Loaded settings stay on screen through an outage (`stale`); only a real
   // failure with nothing cached shows the error.
-  if (view.kind === "loading" || view.kind === "reconnecting") return <QueryPlaceholder size="inline" label="Loading decision model" />;
-  if (view.kind === "error") return <QueryErrorState size="panel" error={query.error} action="load decision settings" onRetry={view.retry} retrying={view.isFetching} />;
+  if (view.kind === "loading" || view.kind === "reconnecting") return <QueryPlaceholder size="inline" label={t("decisionModelSettings.loadingDecisionModel")} />;
+  if (view.kind === "error") return <QueryErrorState size="panel" error={query.error} action={t("decisionModelSettings.loadDecisionSettings")} onRetry={view.retry} retrying={view.isFetching} />;
   if (!query.data?.canManage || !query.data.settings) return null;
   const testError = test.variables === settingsRevision ? test.error : null;
   return <>

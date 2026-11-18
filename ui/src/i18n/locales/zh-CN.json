@@ -9101,6 +9101,8 @@
     "noAssistantConnections": "没有助手连接。"
   },
   "decisionModelSettings": {
+    "loadingDecisionModel": "正在加载决策模型",
+    "loadDecisionSettings": "加载决策设置",
     "chooseAndSaveAConnection": "请先选择并保存连接。",
     "enableAndSaveDecisionsBefore": "请先启用并保存决策，然后再运行测试。",
     "theConnectionIsUnavailableReconnect": "连接不可用。请重新连接后再试。",
@@ -11636,6 +11638,13 @@
     "sharedAiConnectionIdentityAccount": "共享的 AI 连接身份、账户选择以及现有认证界面框架。完整的交互状态矩阵位于 Storybook 的 AI Connections / Review 下。下面的示例控件不会连接账户。",
     "providerListsAndAccountManagement": "供应商列表和账户管理使用「连接器」界面中的 Browse 和 AppDetail。下方的选择器使用 ConnectionChoiceList，ConnectionSetupFlow 也在使用。",
     "enterApiKeyHere": "在此输入 API 密钥"
+  },
+  "taskChatDiffView": {
+    "added": "新增：",
+    "removed": "移除：",
+    "showMoreLines_one": "再显示 {{count}} 行",
+    "showMoreLines_other": "再显示 {{count}} 行",
+    "diffShortenedForDisplay": "差异内容已为显示而截断。"
   },
   "taskChatRichInput": {
     "imageUploadsAreUnavailable": "图片上传不可用。",
