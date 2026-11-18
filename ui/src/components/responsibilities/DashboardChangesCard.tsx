@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type { ProposeDashboardChangesInteraction, ResponsibilityDashboardChange } from "@paperclipai/shared";
 import { Check, Loader2, X } from "lucide-react";
 import { agentsApi } from "@/api/agents";
@@ -86,14 +87,14 @@ function ChangeRow({
         {words.after ? <p className={cn("break-words text-sm", !isDropped && "text-foreground")}>{words.after}</p> : null}
         {words.note ? <p className="text-xs text-muted-foreground">{words.note}</p> : null}
         {lettingGo.length > 0 ? (
-          <p className="text-xs text-muted-foreground">Also lets go of: {lettingGo.join("; ")}</p>
+          <p className="text-xs text-muted-foreground">{t("dashboardChangesCard.alsoLetsGoOf", { list: lettingGo.join("; ") })}</p>
         ) : null}
         {change.reason ? <p className="text-xs text-muted-foreground">{change.reason}</p> : null}
       </div>
       {isDropped ? (
         <div className="flex shrink-0 items-center gap-2">
-          {withArea ? <span className="text-xs text-muted-foreground">Goes with {withArea}</span> : null}
-          <Button type="button" size="xs" variant="ghost" disabled={busy} onClick={onToggle}>Keep</Button>
+          {withArea ? <span className="text-xs text-muted-foreground">{t("dashboardChangesCard.goesWith", { area: withArea })}</span> : null}
+          <Button type="button" size="xs" variant="ghost" disabled={busy} onClick={onToggle}>{t("responsibilities.keep")}</Button>
         </div>
       ) : (
         <Button
@@ -101,8 +102,8 @@ function ChangeRow({
           size="icon-xs"
           variant="ghost"
           className="shrink-0 text-muted-foreground"
-          aria-label="Drop this change"
-          title="Drop"
+          aria-label={t("dashboardChangesCard.dropThisChange")}
+          title={t("responsibilities.drop")}
           disabled={busy}
           onClick={onToggle}
           data-drop-change=""
@@ -153,30 +154,30 @@ export function DashboardChangesCard({
     return (
       <div id={`interaction-${interaction.id}`} data-testid="dashboard-changes-accepted" className="flex min-w-0 items-start gap-2 text-sm text-muted-foreground">
         <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
-        <span className="min-w-0">Dashboard changed{result?.summary ? `: ${result.summary}` : ""}.</span>
+        <span className="min-w-0">{result?.summary ? t("dashboardChangesCard.dashboardChangedWithSummary", { summary: result.summary }) : t("dashboardChangesCard.dashboardChanged")}</span>
       </div>
     );
   }
   if (interaction.status === "rejected" || result?.outcome === "replaced") {
     return (
       <p id={`interaction-${interaction.id}`} data-testid="dashboard-changes-closed" className="text-sm text-muted-foreground">
-        {result?.outcome === "replaced" ? "Proposed dashboard changes, replaced by newer ones." : "Not these dashboard changes."}
+        {result?.outcome === "replaced" ? t("dashboardChangesCard.proposedDashboardChangesReplaced") : t("dashboardChangesCard.notTheseDashboardChanges")}
       </p>
     );
   }
   if (interaction.status !== "pending") return null;
 
-  const agentName = knownAgentName ?? agentQuery.data?.name ?? "Your agent";
+  const agentName = knownAgentName ?? agentQuery.data?.name ?? t("responsibilities.yourAgent");
   const keptCount = changes.length - dropped.size;
   return (
     <article
       id={`interaction-${interaction.id}`}
       data-testid="dashboard-changes"
-      aria-label="Proposed dashboard changes"
+      aria-label={t("dashboardChangesCard.proposedDashboardChanges")}
       className="flex flex-col gap-4 rounded-md border border-border bg-card px-4 py-3"
     >
       <div className="flex min-w-0 flex-col gap-1">
-        <p className="text-xs text-muted-foreground">{agentName} proposes</p>
+        <p className="text-xs text-muted-foreground">{t("responsibilities.proposes", { name: agentName })}</p>
         {payload.message ? <p className="text-sm text-foreground">{payload.message}</p> : null}
       </div>
       <div className="flex flex-col gap-3">
@@ -205,18 +206,18 @@ export function DashboardChangesCard({
           sending={decline.isPending}
           onSend={(text) => decline.mutate(text, { onSuccess: () => setNotRight(false) })}
           onBack={() => setNotRight(false)}
-          defaultText="Those dashboard changes aren't right yet."
-          placeholder="e.g. Keep Hiring, and fewer responsibilities under Fundraising"
+          defaultText={t("dashboardChangesCard.thoseDashboardChangesArentRight")}
+          placeholder={t("dashboardChangesCard.egKeepHiring")}
         />
       ) : (
         <div className="flex flex-wrap items-center justify-end gap-2">
           {showConversationLink ? (
             <Button asChild type="button" variant="ghost" size="sm">
-              <Link to={`/issues/${interaction.issueId}`}>Open the conversation</Link>
+              <Link to={`/issues/${interaction.issueId}`}>{t("responsibilities.openTheConversation")}</Link>
             </Button>
           ) : null}
           <Button type="button" variant="ghost" size="sm" disabled={busy} onClick={() => setNotRight(true)}>
-            Not right
+            {t("responsibilities.notRight")}
           </Button>
           <Button
             type="button"
@@ -225,7 +226,7 @@ export function DashboardChangesCard({
             onClick={() => accept.mutate(keptDashboardChanges(changes, dropped))}
           >
             {accept.isPending ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-            Apply changes
+            {t("dashboardChangesCard.applyChanges")}
           </Button>
         </div>
       )}

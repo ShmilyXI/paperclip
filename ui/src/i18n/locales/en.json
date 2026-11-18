@@ -17645,5 +17645,18 @@
     "noneOfYourResponsibilitiesAre": "None of your responsibilities are {{label}}.",
     "nothingToShow": "Nothing to show.",
     "youHaveNotLetGo": "You have not let go of any responsibilities."
+  },
+  "dashboardChangesCard": {
+    "alsoLetsGoOf": "Also lets go of: {{list}}",
+    "goesWith": "Goes with {{area}}",
+    "dropThisChange": "Drop this change",
+    "dashboardChanged": "Dashboard changed.",
+    "dashboardChangedWithSummary": "Dashboard changed: {{summary}}.",
+    "proposedDashboardChangesReplaced": "Proposed dashboard changes, replaced by newer ones.",
+    "notTheseDashboardChanges": "Not these dashboard changes.",
+    "proposedDashboardChanges": "Proposed dashboard changes",
+    "applyChanges": "Apply changes",
+    "thoseDashboardChangesArentRight": "Those dashboard changes aren't right yet.",
+    "egKeepHiring": "e.g. Keep Hiring, and fewer responsibilities under Fundraising"
   }
 }
