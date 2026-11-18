@@ -10952,6 +10952,20 @@
     "switchAgent": "切换员工",
     "switchAgentCurrently": "切换员工。当前：{{name}}"
   },
+  "coordinatorTasks": {
+    "someTasksWithPendingDecisions": "部分有待处理决策的任务加载失败。",
+    "unknownAgent": "未知员工",
+    "noTasksMatchThisView": "没有任务符合此视图",
+    "noTasksNeedADecision": "没有任务需要决策。",
+    "noTasksInThisOrganization": "此组织中没有任务",
+    "clearFilters": "清除筛选",
+    "selectAnOrganizationToView": "选择组织以查看任务。",
+    "couldNotLoadTasks": "无法加载任务",
+    "taskDetailsCouldntLoad": "无法加载任务详情。",
+    "loadingTasks": "正在加载任务…",
+    "tasksLoaded": "已加载 {{loaded}} 个任务。加载更多以将其纳入筛选。",
+    "loadMoreTasks": "加载更多任务"
+  },
   "designSandboxTasks": {
     "unknownAgent": "未知员工",
     "unknownUser": "未知用户",

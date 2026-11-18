@@ -10952,6 +10952,20 @@
     "switchAgent": "Switch agent",
     "switchAgentCurrently": "Switch agent. Currently {{name}}"
   },
+  "coordinatorTasks": {
+    "someTasksWithPendingDecisions": "Some tasks with pending decisions couldn't load.",
+    "unknownAgent": "Unknown agent",
+    "noTasksMatchThisView": "No tasks match this view",
+    "noTasksNeedADecision": "No tasks need a decision.",
+    "noTasksInThisOrganization": "No tasks in this organization",
+    "clearFilters": "Clear filters",
+    "selectAnOrganizationToView": "Select an organization to view tasks.",
+    "couldNotLoadTasks": "Could not load tasks",
+    "taskDetailsCouldntLoad": "Task details couldn't load.",
+    "loadingTasks": "Loading tasks…",
+    "tasksLoaded": "{{loaded}} tasks loaded. Load more to include them in filters.",
+    "loadMoreTasks": "Load more tasks"
+  },
   "designSandboxTasks": {
     "unknownAgent": "Unknown agent",
     "unknownUser": "Unknown user",
