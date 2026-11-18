@@ -17119,7 +17119,8 @@
     "instructionsHint": "Optional stable Hermes instructions sent separately from the wake input."
   },
   "appsSidebar": {
-    "waitingForYourOk": "waiting for your OK"
+    "waitingForYourOk": "waiting for your OK",
+    "developerCaption": "Advanced setup for developers. Most teams never open this."
   },
   "smokeLabTab": {
     "servicesStarted": "Smoke services started",

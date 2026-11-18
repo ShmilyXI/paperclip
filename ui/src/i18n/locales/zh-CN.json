@@ -17119,7 +17119,8 @@
     "instructionsHint": "可选的稳定 Hermes 说明，与唤醒输入分开发送。"
   },
   "appsSidebar": {
-    "waitingForYourOk": "等待你的确认"
+    "waitingForYourOk": "等待你的确认",
+    "developerCaption": "面向开发者的高级设置。大多数团队无需打开。"
   },
   "smokeLabTab": {
     "servicesStarted": "冒烟服务已启动",
