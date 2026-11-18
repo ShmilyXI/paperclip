@@ -947,7 +947,9 @@
     "fitToScreen": "Fit to screen",
     "fitChartToScreen": "Fit chart to screen",
     "importOrganization": "Import organization",
-    "exportOrganization": "Export organization"
+    "exportOrganization": "Export organization",
+    "controls": "Org chart controls",
+    "chartCamera": "Chart camera"
   },
   "agentActions": {
     "clearErrorAndReturnAgent": "Clear error and return agent to idle",

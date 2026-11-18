@@ -947,7 +947,9 @@
     "fitToScreen": "适应屏幕",
     "fitChartToScreen": "将图表适应屏幕",
     "importOrganization": "导入组织",
-    "exportOrganization": "导出组织"
+    "exportOrganization": "导出组织",
+    "controls": "组织架构图控件",
+    "chartCamera": "图表镜头"
   },
   "agentActions": {
     "clearErrorAndReturnAgent": "清除错误并让员工回到空闲",
