@@ -15173,6 +15173,7 @@
     "reasonCode": "Reason code",
     "actorType": "Actor type",
     "runId": "Run ID",
+    "toolAuditFilters": "Tool audit filters",
     "transport": "Transport",
     "httpRequest": "HTTP request",
     "mcpMethod": "MCP method",

@@ -306,7 +306,7 @@ function ActivityRow({
                       const connectionName = detailString(connection, "name") ?? t("auditTab.unnamedConnection");
                       return connectionId ? (
                         <div key={connectionId} className="flex gap-2">
-                          <span className="shrink-0 text-muted-foreground">Not installed</span>
+                          <span className="shrink-0 text-muted-foreground">{t("auditTab.notInstalled")}</span>
                           <Link to={`/apps/${connectionId}/permissions`} className={cn("font-medium text-primary hover:underline", ANALYTICS_MASK_CLASS)}>
                             {connectionName}
                           </Link>
@@ -317,7 +317,7 @@ function ActivityRow({
                 ) : null}
                 {argumentsText ? (
                   <div className="space-y-1">
-                    <span className="text-muted-foreground">Parameters (redacted)</span>
+                    <span className="text-muted-foreground">{t("auditTab.parametersRedacted")}</span>
                     <pre className={cn("whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>
                       {argumentsText}
                     </pre>
@@ -411,7 +411,7 @@ export function AuditTab({ companyId }: { companyId: string }) {
         description={t("auditTab.whatYourAgentsActuallyDid")}
       />
 
-      <div data-canonical-toolbar="tool-audit" role="toolbar" aria-label="Tool audit filters" className="flex flex-wrap items-center gap-2">
+      <div data-canonical-toolbar="tool-audit" role="toolbar" aria-label={t("auditTab.toolAuditFilters")} className="flex flex-wrap items-center gap-2">
         <Select value={app} onValueChange={setApp}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder={t("auditTab.app")} />

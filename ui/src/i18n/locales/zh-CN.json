@@ -15173,6 +15173,7 @@
     "reasonCode": "原因代码",
     "actorType": "操作者类型",
     "runId": "运行 ID",
+    "toolAuditFilters": "工具审核筛选",
     "transport": "传输方式",
     "httpRequest": "HTTP 请求",
     "mcpMethod": "MCP 方法",
