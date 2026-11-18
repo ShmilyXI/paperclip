@@ -122,9 +122,9 @@ export function Companies() {
       </div>
 
       <div className="min-h-6">
-        {loading && <p className="text-sm text-muted-foreground">Loading organizations...</p>}
+        {loading && <p className="text-sm text-muted-foreground">{t("companies.loadingOrganizations")}</p>}
         {error ? (
-          <QueryErrorState size="inline" error={error} action="load organizations" onRetry={() => void retryCompanies()} />
+          <QueryErrorState size="inline" error={error} action={t("companies.loadOrganizations")} onRetry={() => void retryCompanies()} />
         ) : null}
       </div>
 
@@ -290,7 +290,7 @@ export function Companies() {
                 </div>
                 <div className="flex items-center gap-1.5 ml-auto">
                   <Calendar className="h-3.5 w-3.5" />
-                  <span>Created {relativeTime(company.createdAt)}</span>
+                  <span>{t("companies.createdSuffix", { time: relativeTime(company.createdAt) })}</span>
                 </div>
               </div>
 
