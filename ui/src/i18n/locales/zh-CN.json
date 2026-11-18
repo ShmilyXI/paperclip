@@ -2956,6 +2956,7 @@
     "unavailable": "不可用",
     "openTheConfirmationAgainBefore": "移除此连接池前请重新打开确认。",
     "connectionRemoved": "连接已移除",
+    "connectionRemovedDeletingData": "连接已移除。正在删除其已保存的数据。",
     "couldnTRemoveTheConnection": "无法移除连接",
     "thisConnectionPoolIsNo": "此连接池已不可用。",
     "couldnTOpenTheConnection": "无法打开连接池",
@@ -17346,7 +17347,10 @@
         "createTheTask": "创建任务",
         "loadPreview": "加载预览",
         "loadYourAccount": "加载你的账户",
-        "loadIdentityLink": "加载身份链接"
+        "loadIdentityLink": "加载身份链接",
+        "loadComposioAccounts": "加载 Composio 账户",
+        "loadEveryConnector": "加载所有连接器",
+        "loadAiAccountDefaults": "加载 AI 账户默认值"
       },
       "retry": "重试",
       "retrying": "正在重试…",

@@ -564,13 +564,13 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         queryKey: queryKeys.apps.attention(selectedCompanyId!),
       });
       const body =
-          target.pool ? "The connections in the pool are kept." : target.kind === "chat"
-            ? `${target.providerName} is disconnected. Existing Paperclip tasks remain available.`
+          target.pool ? t("browse.theConnectionsInThePool") : target.kind === "chat"
+            ? t("browse.disconnectedTasksRemain", { provider: target.providerName })
             : target.remainingConnectionCount > 0
-            ? `${target.providerName} still has ${target.remainingConnectionCount} active ${target.remainingConnectionCount === 1 ? "connection" : "connections"} available to agents.`
-            : `${target.providerName} is no longer available to agents through this connection. Its saved credentials were deleted.`;
+            ? t("browse.stillHasActiveConnections", { provider: target.providerName, count: target.remainingConnectionCount })
+            : t("browse.noLongerAvailableToAgents", { provider: target.providerName });
       pushToast(connectionRemovalToast({
-        title: deleteStoredContent && !target.pool && target.kind !== "chat" ? "Connection removed. Deleting its saved data." : "Connection removed",
+        title: deleteStoredContent && !target.pool && target.kind !== "chat" ? t("connectors.connectionRemovedDeletingData") : t("connectors.connectionRemoved"),
         body,
         providerAccess: removed?.removal?.providerAccess,
       }));
@@ -578,7 +578,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't remove the connection",
+        title: t("connectors.couldnTRemoveTheConnection"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -594,7 +594,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
       // it at submission time: concurrent edits must invalidate this consent.
       setConnectionToRemove({ ...target, accountName: pool.name, poolRevision: pool.revision });
     } catch (error) {
-      pushToast({ title: "Couldn't open the connection pool", body: describeError(error).body, tone: "error" });
+      pushToast({ title: t("connectors.couldnTOpenTheConnection"), body: describeError(error).body, tone: "error" });
     }
   }
 
@@ -650,7 +650,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     );
     const rowsBySlug = new Map<string, ConnectorRowModel>();
     if (tailscaleConnections.canManage) rowsBySlug.set("tailscale", { key: "network:tailscale", slug: "tailscale", name: "Tailscale",
-      description: "Connect your tailnet to use its machines in SSH environments.", brandKey: "tailscale", entry: null,
+      description: t("tailscale.connectTailnetDescription"), brandKey: "tailscale", entry: null,
       applications: [], connections: [], chatEndpoints: [], networkConnections: tailscaleConnections.data ?? [] });
     for (const entry of gallery) {
       const slug = appDefinitionSlug(entry);
@@ -1039,7 +1039,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         />
       ) : null}
 
-      {refreshAggregator.error ? <p role="alert" className="text-sm text-destructive">Couldn’t refresh the gateway. Last known accounts are shown.</p> : null}
+      {refreshAggregator.error ? <p role="alert" className="text-sm text-destructive">{t("connectors.couldnTRefreshTheGateway")}</p> : null}
       {aiDefaultsView.kind === "error" && <QueryErrorState size="inline" error={aiDefaultsView.error} action="load AI account defaults"
         onRetry={aiDefaultsView.retry} retrying={aiDefaultsView.isFetching} />}
       {aiDefaults.error && aiDefaults.failedProvider && <AiDefaultError provider={AI_PROVIDERS[aiDefaults.failedProvider].name}
@@ -1057,7 +1057,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
           <Button variant="outline" size="sm" onClick={() => changeQuery("")}>{t("connectors.clearSearch")}</Button>
         </div>
       ) : (
-        <div className={cn("space-y-3", ANALYTICS_MASK_CLASS)} role="list" aria-label="Connector list">
+        <div className={cn("space-y-3", ANALYTICS_MASK_CLASS)} role="list" aria-label={t("connectors.connectorList")}>
           {showAssistantConnection && <AssistantConnectionCard onNavigate={navigate} />}
           {paginatedRows.map((row) => (
             row.networkConnections ? <TailscaleConnectorCard key={row.key} onNavigate={navigate} /> : <ConnectorCard
@@ -1380,12 +1380,12 @@ export function ConnectorCard({
               const managementUrl = aggregatorManagementUrl(provider, account.managementUrl ?? (typeof connection.config?.managementUrl === "string" ? connection.config?.managementUrl : null));
               const manage = () => onManageAggregator?.(row.upstreamCatalogApp!, connection.id);
               return <ConnectionAccountRowLayout key={`${connection.id}:${snapshot.toolkit}:${account.id}`} state={state} accountName={name}
-                source={<><AppLogo name={providerName} brandKey={provider} size={16} compact /><span>Managed by {providerName} ·</span><button type="button" className={cn("max-w-full truncate hover:underline", ANALYTICS_MASK_CLASS)} onClick={() => onNavigate(`/apps/${connection.id}/permissions`)}>“{connection.name}”</button></>}
-                onOpen={manage} openLabel={`Manage ${name}`}>
-                <DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label={`Manage ${name} connection`}><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                source={<><AppLogo name={providerName} brandKey={provider} size={16} compact /><span>{t("browse.managedBy", { provider: providerName })} ·</span><button type="button" className={cn("max-w-full truncate hover:underline", ANALYTICS_MASK_CLASS)} onClick={() => onNavigate(`/apps/${connection.id}/permissions`)}>“{connection.name}”</button></>}
+                onOpen={manage} openLabel={t("browse.manageName", { name })}>
+                <DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label={t("browse.manageConnection", { name })}><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                   <DropdownMenuContent className={ANALYTICS_MASK_CLASS} align="end">
-                    {managementUrl ? <DropdownMenuItem asChild><a href={managementUrl} target="_blank" rel="noopener noreferrer">Open in {providerName}<ExternalLink className="size-4" /></a></DropdownMenuItem>
-                      : <DropdownMenuItem disabled title="Set the management URL on this gateway to open its console">Open in {providerName}<ExternalLink className="size-4" /></DropdownMenuItem>}
+                    {managementUrl ? <DropdownMenuItem asChild><a href={managementUrl} target="_blank" rel="noopener noreferrer">{t("browse.openIn", { provider: providerName })}<ExternalLink className="size-4" /></a></DropdownMenuItem>
+                      : <DropdownMenuItem disabled title={t("connectors.setTheManagementUrlOn")}>{t("browse.openIn", { provider: providerName })}<ExternalLink className="size-4" /></DropdownMenuItem>}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </ConnectionAccountRowLayout>;
@@ -1518,8 +1518,8 @@ function ConnectionAccountRow({
   return (
     <ConnectionAccountRowLayout state={state} accountName={accountName} owner={owner}
       afterName={account?.isDefault ? <AiDefaultCrown account={account} /> : undefined}
-      details={<>{details}{account?.isDefault && account.status !== "connected" && <p className="text-xs text-destructive">Default unavailable</p>}{discovery?.discovery.message || discovery?.sync.status === "error" ? <p className="text-xs text-muted-foreground" role="status">{discovery.discovery.message ?? discovery.sync.error}</p> : null}</>}
-      openLabel={`Open ${accountName} permissions`} onOpen={() => onNavigate(`/apps/${connection.id}/permissions`)}>
+      details={<>{details}{account?.isDefault && account.status !== "connected" && <p className="text-xs text-destructive">{t("aiConnectionAccountControls.defaultUnavailable")}</p>}{discovery?.discovery.message || discovery?.sync.status === "error" ? <p className="text-xs text-muted-foreground" role="status">{discovery.discovery.message ?? discovery.sync.error}</p> : null}</>}
+      openLabel={t("browse.openAccountPermissions", { account: accountName })} onOpen={() => onNavigate(`/apps/${connection.id}/permissions`)}>
         {setupEnabled && (state.kind === "attention" || state.kind === "draft") ? (
           <Button
             type="button"

@@ -2956,6 +2956,7 @@
     "unavailable": "Unavailable",
     "openTheConfirmationAgainBefore": "Open the confirmation again before removing this pool.",
     "connectionRemoved": "Connection removed",
+    "connectionRemovedDeletingData": "Connection removed. Deleting its saved data.",
     "couldnTRemoveTheConnection": "Couldn't remove the connection",
     "thisConnectionPoolIsNo": "This connection pool is no longer available.",
     "couldnTOpenTheConnection": "Couldn't open the connection pool",
@@ -17346,7 +17347,10 @@
         "createTheTask": "create the task",
         "loadPreview": "load the preview",
         "loadYourAccount": "load your account",
-        "loadIdentityLink": "load the identity link"
+        "loadIdentityLink": "load the identity link",
+        "loadComposioAccounts": "load Composio accounts",
+        "loadEveryConnector": "load every connector",
+        "loadAiAccountDefaults": "load AI account defaults"
       },
       "retry": "Retry",
       "retrying": "Retrying…",
