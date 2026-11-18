@@ -345,14 +345,14 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
     </header>
     {step < 2 && inboxesView.kind === "error" && <QueryErrorState error={inboxes.error} action="load email setup progress"
       onRetry={inboxesView.retry} retrying={inboxesView.isFetching} />}
-    {step < 2 && resumeId === requestId && inboxesLoaded && !pendingEndpoint && <p role="alert" className="text-sm text-destructive">This email setup could not be found. Return to Connectors and start a new connection.</p>}
-    {step < 2 && <ChatSetupNavigation labels={["Agent", "Email address"]} step={step}
+    {step < 2 && resumeId === requestId && inboxesLoaded && !pendingEndpoint && <p role="alert" className="text-sm text-destructive">{t("emailSetup.thisEmailSetupCouldNot")}</p>}
+    {step < 2 && <ChatSetupNavigation labels={[t("common.agent"), t("emailSetup.emailAddress")]} step={step}
       availableStep={step} disabled={busy} onSelect={index => { setup.reset(); setStep(index as 0 | 1); }} />}
     {step === 0 && <form className="space-y-6" onSubmit={event => { event.preventDefault(); if (canContinue) connect.mutate(); }}>
       <div className="space-y-2">
-        <Label htmlFor="email-agent">Agent</Label>
+        <Label htmlFor="email-agent">{t("common.agent")}</Label>
         <AgentSelect id="email-agent" value={agentId} disabled={busy || agents.isPending || !inboxesLoaded || !!pendingEndpoint}
-          placeholder="Choose an agent" emptyMessage="No agents found." triggerClassName="h-10"
+          placeholder={t("emailSetup.chooseAnAgent")} emptyMessage={t("emailSetup.noAgentsFound")} triggerClassName="h-10"
           agents={(agents.data ?? []).filter(a => !["terminated", "pending_approval"].includes(a.status))}
           onChange={id => { setAgentId(id); setUsername((agents.data?.find(a => a.id === id)?.name ?? "").toLowerCase().replace(/[^a-z0-9._-]+/g, "-").slice(0, 64)); }} />
       </div>
@@ -643,11 +643,11 @@ export function EmailEndpointSettings({
     },
   });
   if (removed)
-    return <p>Inbox disconnected. Email history remains in its tasks.</p>;
+    return <p>{t("emailSetup.inboxDisconnectedEmailHistoryRemains")}</p>;
   if (!inbox) {
     if (view.kind === "error")
       return <QueryErrorState error={query.error} action="load the email inbox" onRetry={view.retry} retrying={view.isFetching} />;
-    return <p role="status">Loading email inbox…</p>;
+    return <p role="status">{t("emailSetup.loadingEmailInbox")}</p>;
   }
   return (
     <div className="max-w-2xl space-y-8 pb-8">
