@@ -122,7 +122,7 @@ export function AiConnectionSelect({
         onValueChange={change}
         disabled={readOnly || loading || Boolean(error)}
       >
-        <SelectTrigger id={selectId} aria-label="Connection" title={selected ? aiConnectionDisplayLabel(selected) : undefined} className={cn("w-full", ANALYTICS_MASK_CLASS)}>
+        <SelectTrigger id={selectId} aria-label={t("common.connection")} title={selected ? aiConnectionDisplayLabel(selected) : undefined} className={cn("w-full", ANALYTICS_MASK_CLASS)}>
           <SelectValue
             placeholder={
               loading ? t("aiConnectionSelect.loadingConnections") : t("aiConnectionSelect.chooseAConnection")
@@ -138,7 +138,7 @@ export function AiConnectionSelect({
         <SelectContent className={ANALYTICS_MASK_CLASS}>
           {incompatible && selected && (
             <SelectItem value={selected.id} disabled>
-              <ConnectionLabel connection={selected} label={`${aiConnectionDisplayLabel(selected)} · Incompatible`} wrap />
+              <ConnectionLabel connection={selected} label={`${aiConnectionDisplayLabel(selected)} · ${t("aiConnectionSelect.incompatible")}`} wrap />
             </SelectItem>
           )}
           {compatible.map((c) => (
@@ -147,7 +147,7 @@ export function AiConnectionSelect({
               value={c.id}
               disabled={Boolean(aiConnectionProblem(c))}
             >
-              <ConnectionLabel connection={c} label={`${aiConnectionDisplayLabel(c)}${c.status !== "connected" ? " · Reconnect" : ""}`} wrap />
+              <ConnectionLabel connection={c} label={`${aiConnectionDisplayLabel(c)}${c.status !== "connected" ? ` · ${t("common.reconnect")}` : ""}`} wrap />
             </SelectItem>
           ))}
           {(canUseDefault || value?.mode === "responsible_user") && (

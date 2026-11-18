@@ -9258,11 +9258,18 @@
     "advancedProviders": "高级提供商",
     "chooseAnotherProviderOrGateway": "选择其他提供商或网关",
     "usePoolNameQuestion": "使用 {{poolName}}？",
+    "thisPool": "此账户池",
     "responsibleUserDefault": "由负责人的默认账户决定。对你而言：{{accountName}}。其他用户使用各自的默认账户。",
     "experimentalPool": " · 实验性资源池",
     "notConnected": "未连接",
     "myConnectionName": "我的 {{provider}} {{method}}",
     "subscription": "订阅"
+  },
+  "aiConnectionDefault": {
+    "yourDefaultFor": "你在 {{provider}} 的默认账户",
+    "reconnectBeforeDefault": "将此账户设为默认前，请先重新连接。",
+    "setAsDefaultFor": "设为 {{provider}} 的默认",
+    "couldntChangeDefault": "无法更改你的 {{provider}} 默认账户。"
   },
   "auditRuns": {
     "routineRun": "例行任务运行",
@@ -13537,7 +13544,8 @@
     "retryConnections": "重试连接",
     "youHaveNoDefaultAccount": "你没有此提供方的默认账号。请连接一个账号或选择其他连接。",
     "thisConnectionIsUnavailableChoose": "此连接不可用。请选择其他连接。",
-    "thisConnectionDoesNotSupport": "此连接不支持所选的 harness。请选择兼容的连接。"
+    "thisConnectionDoesNotSupport": "此连接不支持所选的 harness。请选择兼容的连接。",
+    "incompatible": "不兼容"
   },
   "connectedAggregatorApps": {
     "connectedApps": "已连接的应用",

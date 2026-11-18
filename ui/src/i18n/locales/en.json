@@ -9258,11 +9258,18 @@
     "advancedProviders": "Advanced providers",
     "chooseAnotherProviderOrGateway": "Choose another provider or gateway",
     "usePoolNameQuestion": "Use {{poolName}}?",
+    "thisPool": "this pool",
     "responsibleUserDefault": "Responsible user’s default. For you: {{accountName}}. Other users use their own default.",
     "experimentalPool": " · Experimental pool",
     "notConnected": "Not connected",
     "myConnectionName": "My {{provider}} {{method}}",
     "subscription": "subscription"
+  },
+  "aiConnectionDefault": {
+    "yourDefaultFor": "Your default for {{provider}}",
+    "reconnectBeforeDefault": "Reconnect this account before making it your default.",
+    "setAsDefaultFor": "Set as default for {{provider}}",
+    "couldntChangeDefault": "Couldn't change your {{provider}} default."
   },
   "auditRuns": {
     "routineRun": "Routine run",
@@ -13537,7 +13544,8 @@
     "retryConnections": "Retry connections",
     "youHaveNoDefaultAccount": "You have no default account for this provider. Connect an account or choose another connection.",
     "thisConnectionIsUnavailableChoose": "This connection is unavailable. Choose another connection.",
-    "thisConnectionDoesNotSupport": "This connection does not support the selected harness. Choose a compatible connection."
+    "thisConnectionDoesNotSupport": "This connection does not support the selected harness. Choose a compatible connection.",
+    "incompatible": "Incompatible"
   },
   "connectedAggregatorApps": {
     "connectedApps": "Connected apps",

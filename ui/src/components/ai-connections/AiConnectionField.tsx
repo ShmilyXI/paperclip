@@ -144,7 +144,7 @@ export function AiConnectionField({
         </p>
       )}
       {(compatiblePools.length > 0 || value?.mode === "router") && <label className="block space-y-1 text-sm">
-        AI connection
+        {t("aiConnectionField.aiConnection")}
         <select className={cn("block w-full rounded-md border bg-background px-3 py-2", ANALYTICS_MASK_CLASS)} disabled={readOnly} value={value?.mode === "router" ? value.connectionId : ""} onChange={event => {
           if (event.target.value) changeBinding({ mode: "router", connectionId: event.target.value });
           else changeBinding({ mode: "responsible_user", provider, method });
@@ -182,7 +182,7 @@ export function AiConnectionField({
       >
         <DialogContent className={cn("max-h-(--sz-85vh) overflow-y-auto sm:max-w-2xl", ANALYTICS_MASK_CLASS)} onCloseAutoFocus={restoreFocus}>
           <DialogHeader>
-            <DialogTitle className={ANALYTICS_MASK_CLASS}>{pendingAdoption?.mode === "router" ? `Use ${accounts.data?.pools?.find(pool => pool.id === pendingAdoption.connectionId)?.name ?? "this pool"}?` : `Adopt Connections for ${agentName}`}</DialogTitle>
+            <DialogTitle className={ANALYTICS_MASK_CLASS}>{pendingAdoption?.mode === "router" ? t("aiConnectionField.usePoolNameQuestion", { poolName: accounts.data?.pools?.find(pool => pool.id === pendingAdoption.connectionId)?.name ?? t("aiConnectionField.thisPool") }) : t("aiConnectionField.adoptConnectionsForAgentname", { agentName })}</DialogTitle>
             <DialogDescription>
               {pendingAdoption?.mode === "router" ? t("aiConnectionField.resetExistingSessionsThatUse") : t("aiConnectionField.savingValidatesAccessToThe")}
             </DialogDescription>
@@ -239,8 +239,8 @@ export function AiConnectionField({
           {savedAccount ? <div className="space-y-4">
             {selectDefault.error ? <>
               <p role="alert" className="text-sm text-destructive">{describeError(selectDefault.error).body}</p>
-              <Button onClick={() => selectDefault.mutate(savedAccount)}>Retry default selection</Button>
-            </> : <p role="status" className="text-sm text-muted-foreground">Selecting your default account…</p>}
+              <Button onClick={() => selectDefault.mutate(savedAccount)}>{t("aiConnectionField.retryDefaultSelection")}</Button>
+            </> : <p role="status" className="text-sm text-muted-foreground">{t("aiConnectionField.selectingYourDefaultAccount")}</p>}
           </div> :
           <AiConnectionCredentialStep
             companyId={companyId}
