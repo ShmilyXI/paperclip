@@ -17510,5 +17510,11 @@
     "providerAccount": "{{provider}} 账号",
     "chatGptWorkspace": "ChatGPT 工作区",
     "checkingAccountDetails": "正在检查账号详情…"
+  },
+  "taskDecisionRecord": {
+    "decisionRecord": "决策记录",
+    "couldNotLoadThisDecision": "无法加载此决策。",
+    "thisDecisionIsNotAvailable": "此决策在此任务中不可用。",
+    "recordedChoice": "已记录的选择"
   }
 }

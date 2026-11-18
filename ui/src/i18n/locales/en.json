@@ -17510,5 +17510,11 @@
     "providerAccount": "{{provider}} account",
     "chatGptWorkspace": "ChatGPT workspace",
     "checkingAccountDetails": "Checking account details…"
+  },
+  "taskDecisionRecord": {
+    "decisionRecord": "Decision record",
+    "couldNotLoadThisDecision": "Could not load this decision.",
+    "thisDecisionIsNotAvailable": "This decision is not available in this task.",
+    "recordedChoice": "Recorded choice"
   }
 }
