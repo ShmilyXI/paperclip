@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { memo, useCallback, useMemo, useState, type CSSProperties } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -70,9 +71,9 @@ const LEVEL_ICON: Record<ResponsibilityAutomationLevel, LucideIcon> = {
 
 /** The hint's trigger, hedged: it is a suggestion the agent refines. */
 const HINT_LABEL: Record<AutomationTrigger, string> = {
-  schedule: "Could run on a schedule",
-  webhook: "Could start from a webhook",
-  standing_check: "Could be a standing check",
+  schedule: t("dashboardAutomation.couldRunOnASchedule"),
+  webhook: t("dashboardAutomation.couldStartFromAWebhook"),
+  standing_check: t("dashboardAutomation.couldBeAStandingCheck"),
 };
 
 /** Points the shared `.status-chip` / `.status-fill` recipes at a level's hue. */
@@ -166,14 +167,14 @@ function AutomationSummary({
     <Card elevation="low" className="gap-4 px-5 py-4" aria-labelledby="responsibility-automation-heading" data-automation-summary="">
       <div className="flex items-baseline justify-between gap-3">
         <h3 id="responsibility-automation-heading" className="text-sm font-semibold text-foreground">
-          How much runs without you
+          {t("dashboardAutomation.howMuchRunsWithoutYou")}
         </h3>
         <p className="text-xs text-muted-foreground tabular-nums">
-          {total === 1 ? "1 responsibility" : `${total} responsibilities`}
+          {total === 1 ? t("dashboardAutomation.oneResponsibility") : t("dashboardAutomation.responsibilityCount", { count: total })}
         </p>
       </div>
       <LevelBar counts={counts} />
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label="Show responsibilities by how automated they are">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label={t("dashboardAutomation.showResponsibilitiesByAutomation")}>
         {RESPONSIBILITY_AUTOMATION_LEVELS.map((level) => {
           const pressed = filter.has(level);
           return (
@@ -202,13 +203,13 @@ function AutomationSummary({
         <p className="text-sm text-foreground" data-automation-sentence="">{sentence}</p>
         <p className="flex flex-wrap items-center gap-x-1 text-xs tabular-nums text-muted-foreground" data-automation-totals="">
           <span>
-            {automations === 1 ? "1 automation running" : `${automations} automations running`}
+            {automations === 1 ? t("dashboardAutomation.oneAutomationRunning") : t("dashboardAutomation.automationsRunning", { count: automations })}
             <span aria-hidden="true"> · </span>
-            {manualTasks === 1 ? "1 manual task" : `${manualTasks} manual tasks`} in the last {read.recentDays} days
+            {manualTasks === 1 ? t("dashboardAutomation.oneManualTask") : t("dashboardAutomation.manualTasks", { count: manualTasks })} {t("dashboardAutomation.inTheLastDays", { count: read.recentDays })}
           </span>
           {filter.size > 0 ? (
             <Button type="button" variant="link" size="xs" className="h-auto px-1 text-xs" onClick={onClear} data-automation-show-all="">
-              Show all
+              {t("dashboardAutomation.showAll")}
             </Button>
           ) : null}
         </p>
@@ -256,7 +257,7 @@ function CandidateRow({
   const offer = candidate.pendingOffer;
   const hint = candidate.hint;
   const reason = hint ? null : candidateReasonWords(candidate, agentName, now);
-  const who = candidate.responsibleAgentId ? agentName(candidate.responsibleAgentId) ?? "your agent" : null;
+  const who = candidate.responsibleAgentId ? agentName(candidate.responsibleAgentId) ?? t("agentSetup.yourAgent") : null;
   const talk = () => conversation.open({
     issueId: candidate.issueId,
     agentId: candidate.responsibleAgentId,
@@ -266,7 +267,7 @@ function CandidateRow({
   const accept = useMutation({
     mutationFn: () => routineSuggestionsApi.accept(candidate.issueId, offer!.interactionId, localTimeZone()),
     onSuccess: async (response) => {
-      actions.onMade(`“${response.routine.title}” is automated now: ${offer!.cadenceLabel}.`);
+      actions.onMade(t("dashboardAutomation.isAutomatedNow", { title: response.routine.title, cadenceLabel: offer!.cadenceLabel }));
       await refreshAutomation(queryClient);
     },
   });
@@ -296,7 +297,7 @@ function CandidateRow({
         {offer ? (
           <p className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground" data-candidate-offer="">
             <AutomationStartIcon kind="schedule" />
-            <span className="truncate">{agentName(offer.agentId ?? "") ?? "Your agent"} offered to repeat it: {offer.cadenceLabel}</span>
+            <span className="truncate">{t("dashboardAutomation.offeredToRepeatIt", { agentName: agentName(offer.agentId ?? "") ?? t("dashboardAutomation.yourAgentCapitalized"), cadenceLabel: offer.cadenceLabel })}</span>
           </p>
         ) : hint ? (
           <div className="flex min-w-0 flex-col gap-0.5" data-candidate-hint={hint.trigger}>
@@ -312,20 +313,20 @@ function CandidateRow({
         ) : (
           <p className="text-xs text-muted-foreground" data-candidate-why="">
             {reason ? `${reason}. ` : null}
-            {who ? `How it could run is unclear from the title; work it out with ${who}.` : "How it could run is unclear from the title."}
+            {who ? t("dashboardAutomation.unclearWithAgent", { name: who }) : t("dashboardAutomation.unclearFromTitle")}
           </p>
         )}
         {candidate.conversation ? (
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground" data-candidate-conversation={candidate.conversation.state}>
             <MessagesSquare aria-hidden="true" className="size-3 shrink-0" />
             {candidate.conversation.state === "proposal_waiting"
-              ? `${agentName(candidate.conversation.agentId ?? "") ?? "Your agent"} has proposed an automation`
-              : `Talking it through with ${agentName(candidate.conversation.agentId ?? "") ?? "your agent"}`}
+              ? t("dashboardAutomation.hasProposedAnAutomation", { agentName: agentName(candidate.conversation.agentId ?? "") ?? t("dashboardAutomation.yourAgentCapitalized") })
+              : t("dashboardAutomation.talkingItThroughWith", { name: agentName(candidate.conversation.agentId ?? "") ?? t("agentSetup.yourAgent") })}
           </p>
         ) : null}
         {error ? (
           <p role="alert" className="text-xs text-destructive">
-            {conversation.error ? "Couldn’t open the conversation." : "Couldn’t accept the offer."} {describeError(error).body}
+            {conversation.error ? t("dashboardAutomation.couldntOpenTheConversation") : t("dashboardAutomation.couldntAcceptTheOffer")} {describeError(error).body}
           </p>
         ) : null}
       </div>
@@ -334,10 +335,10 @@ function CandidateRow({
           <>
             <Button type="button" size="xs" disabled={accept.isPending} onClick={() => accept.mutate()}>
               <Repeat aria-hidden="true" />
-              {accept.isPending ? "Accepting…" : "Accept"}
+              {accept.isPending ? t("dashboardAutomation.accepting") : t("dashboardAutomation.accept")}
             </Button>
             <Button type="button" size="xs" variant="ghost" disabled={accept.isPending} onClick={() => actions.onSetUpByHand(candidate, responsibilityId)}>
-              Change
+              {t("dashboardAutomation.change")}
             </Button>
           </>
         ) : (
@@ -346,16 +347,16 @@ function CandidateRow({
               type="button"
               size="xs"
               disabled={conversation.isPending || (!candidate.conversation && !candidate.responsibleAgentId)}
-              title={!candidate.conversation && !candidate.responsibleAgentId ? "No agent can take this; set it up by hand" : undefined}
+              title={!candidate.conversation && !candidate.responsibleAgentId ? t("dashboardAutomation.noAgentCanTakeThis") : undefined}
               onClick={talk}
               data-automate-with-agent=""
             >
               <MessagesSquare aria-hidden="true" />
-              {conversation.isPending ? "Opening…" : conversationButtonLabel(candidate, agentName)}
+              {conversation.isPending ? t("dashboardAutomation.opening") : conversationButtonLabel(candidate, agentName)}
             </Button>
             <Button type="button" size="xs" variant="ghost" className="text-muted-foreground" onClick={() => actions.onSetUpByHand(candidate, responsibilityId)} data-set-up-by-hand="">
               <Wrench aria-hidden="true" />
-              Set up by hand
+              {t("dashboardAutomation.setUpByHand")}
             </Button>
           </>
         )}
@@ -364,8 +365,8 @@ function CandidateRow({
           size="icon-xs"
           variant="ghost"
           className="text-muted-foreground"
-          aria-label={offer ? `No thanks to repeating ${candidate.title}` : `${candidate.title} doesn't repeat`}
-          title={offer ? "No thanks" : "Doesn't repeat"}
+          aria-label={offer ? t("dashboardAutomation.noThanksToRepeating", { title: candidate.title }) : t("dashboardAutomation.doesntRepeat", { title: candidate.title })}
+          title={offer ? t("dashboardAutomation.noThanks") : t("dashboardAutomation.doesntRepeatShort")}
           onClick={dismiss}
         >
           <X aria-hidden="true" />
@@ -390,8 +391,8 @@ function StandingCheckActions({ routineId, title, paused }: { routineId: string;
         variant="ghost"
         className="text-muted-foreground"
         disabled={change.isPending}
-        aria-label={paused ? `Resume ${title}` : `Pause ${title}`}
-        title={paused ? "Resume" : "Pause"}
+        aria-label={paused ? t("dashboardAutomation.resumeTitle", { title }) : t("dashboardAutomation.pauseTitle", { title })}
+        title={paused ? t("dashboardAutomation.resume") : t("dashboardAutomation.pause")}
         onClick={() => change.mutate(paused ? "active" : "paused")}
       >
         {paused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
@@ -402,13 +403,13 @@ function StandingCheckActions({ routineId, title, paused }: { routineId: string;
         variant="ghost"
         className="text-muted-foreground"
         disabled={change.isPending}
-        aria-label={`Remove ${title}`}
-        title="Remove"
+        aria-label={t("dashboardAutomation.removeTitle", { title })}
+        title={t("dashboardAutomation.remove")}
         onClick={() => change.mutate("archived")}
       >
         <Trash2 aria-hidden="true" />
       </Button>
-      {change.error ? <span role="alert" className="sr-only">Couldn’t change it. {describeError(change.error).body}</span> : null}
+      {change.error ? <span role="alert" className="sr-only">{t("dashboardAutomation.couldntChangeIt")} {describeError(change.error).body}</span> : null}
     </span>
   );
 }
@@ -416,7 +417,7 @@ function StandingCheckActions({ routineId, title, paused }: { routineId: string;
 /** One running automation: how it starts (icon and words), what it is, who runs it, and what happened last. */
 function AutomationEntry({ item, agentName, now }: { item: ResponsibilityAutomationItem; agentName: (id: string) => string | undefined; now: Date }) {
   const words = automationStartWords(item, now);
-  const who = agentName(item.assigneeAgentId) ?? "An agent";
+  const who = agentName(item.assigneeAgentId) ?? t("whatNeedsMe.anAgent");
   return (
     <li className="flex min-w-0 items-start gap-2" data-automation-id={item.id} data-automation-start={item.start.kind}>
       <AutomationStartIcon kind={item.start.kind} className="mt-0.5" />
@@ -435,7 +436,7 @@ function AutomationEntry({ item, agentName, now }: { item: ResponsibilityAutomat
           {words.label}
           {words.detail ? ` · ${words.detail}` : null}
           {` · ${who}`}
-          {item.otherStarts > 0 ? ` · +${item.otherStarts} more ${item.otherStarts === 1 ? "way" : "ways"} to start` : null}
+          {item.otherStarts > 0 ? ` · ${item.otherStarts === 1 ? t("dashboardAutomation.oneMoreWayToStart") : t("dashboardAutomation.moreWaysToStart", { count: item.otherStarts })}` : null}
         </span>
         {words.status ? (
           <span className="text-xs text-muted-foreground" data-automation-status="">
@@ -534,26 +535,26 @@ const AutomationRow = memo(function AutomationRow({
             {percent ? <div className="status-fill h-full rounded-full" style={{ ...levelStyle(level), width: `${percent}%` }} /> : null}
           </div>
           <p className="text-xs tabular-nums text-muted-foreground" data-automation-counts="">
-            {automation ? automationCountsLine(automation) : "Not counted yet."}
+            {automation ? automationCountsLine(automation) : t("dashboardAutomation.notCountedYet")}
           </p>
         </div>
 
-        <section className="flex min-w-0 flex-col gap-2" aria-label="Runs without you" data-automation-running="">
-          <h3 className="text-xs font-semibold text-muted-foreground">Runs without you</h3>
+        <section className="flex min-w-0 flex-col gap-2" aria-label={t("dashboardAutomation.runsWithoutYou")} data-automation-running="">
+          <h3 className="text-xs font-semibold text-muted-foreground">{t("dashboardAutomation.runsWithoutYou")}</h3>
           {running.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {running.map((item) => <AutomationEntry key={item.id} item={item} agentName={agentName} now={now} />)}
               {moreRunning > 0 ? (
                 <li className="pl-5.5 text-xs text-muted-foreground">
-                  <Link to={path} className="hover:underline">and {moreRunning} more {moreRunning === 1 ? "automation" : "automations"}</Link>
+                  <Link to={path} className="hover:underline">{moreRunning === 1 ? t("dashboardAutomation.andOneMoreAutomation") : t("dashboardAutomation.andMoreAutomations", { count: moreRunning })}</Link>
                 </li>
               ) : null}
             </ul>
           ) : (
-            <p className="text-xs text-muted-foreground" data-automation-none-running="">Nothing runs on its own yet.</p>
+            <p className="text-xs text-muted-foreground" data-automation-none-running="">{t("dashboardAutomation.nothingRunsOnItsOwnYet")}</p>
           )}
           {stalled.length > 0 ? (
-            <ul className="flex flex-col gap-1.5" aria-label="Not running">
+            <ul className="flex flex-col gap-1.5" aria-label={t("dashboardAutomation.notRunning")}>
               {stalled.map((item) => <StalledEntry key={item.id} item={item} agentName={agentName} />)}
             </ul>
           ) : null}
@@ -562,8 +563,8 @@ const AutomationRow = memo(function AutomationRow({
         {/* Its own container: a task's actions sit beside its text only when this
             column, not the page, is wide enough; otherwise they go underneath
             so the title and the suggestion keep the full width. */}
-        <section className="@container flex min-w-0 flex-col gap-2" aria-label="Manual tasks that could be automated" data-automation-manual="">
-          <h3 className="text-xs font-semibold text-muted-foreground">Manual tasks that could be automated</h3>
+        <section className="@container flex min-w-0 flex-col gap-2" aria-label={t("dashboardAutomation.manualTasksThatCouldBeAutomated")} data-automation-manual="">
+          <h3 className="text-xs font-semibold text-muted-foreground">{t("dashboardAutomation.manualTasksThatCouldBeAutomated")}</h3>
           {listed.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {listed.map((candidate) => (
@@ -583,17 +584,17 @@ const AutomationRow = memo(function AutomationRow({
           {tasks.more > 0 && !expanded ? (
             tasks.others.length > 0 ? (
               <Button type="button" variant="link" size="xs" className="h-auto self-start px-0 text-xs text-muted-foreground" onClick={() => setExpanded(true)} data-automation-more="">
-                and {tasks.more} more manual {tasks.more === 1 ? "task" : "tasks"}
+                {tasks.more === 1 ? t("dashboardAutomation.andOneMoreManualTask") : t("dashboardAutomation.andMoreManualTasks", { count: tasks.more })}
               </Button>
             ) : (
               <Link to={path} className="text-xs text-muted-foreground hover:underline" data-automation-more="">
-                and {tasks.more} more manual {tasks.more === 1 ? "task" : "tasks"}
+                {tasks.more === 1 ? t("dashboardAutomation.andOneMoreManualTask") : t("dashboardAutomation.andMoreManualTasks", { count: tasks.more })}
               </Link>
             )
           ) : null}
           {expanded && tasks.unlisted > 0 ? (
             <Link to={path} className="text-xs text-muted-foreground hover:underline" data-automation-more="">
-              and {tasks.unlisted} more on the responsibility’s page
+              {t("dashboardAutomation.andMoreOnTheResponsibilitysPage", { count: tasks.unlisted })}
             </Link>
           ) : null}
         </section>
@@ -623,7 +624,7 @@ function AutomationAreaSection({
     <section aria-labelledby={headingId} data-board-area={areaKey} className="flex flex-col gap-3 border-t border-border pt-4">
       <BoardAreaHeader
         headingId={headingId}
-        title={group.area?.title ?? "Not in an area"}
+        title={group.area?.title ?? t("responsibilities.notInAnArea")}
         archived={group.area?.status === "archived"}
         ownedLabel={group.ownedLabel}
         shareLabel={group.automationShare}
@@ -647,7 +648,7 @@ function AutomationAreaSection({
 
 function AutomationSkeleton() {
   return (
-    <div className="flex flex-col gap-6" aria-busy="true" aria-label="Loading how automated your responsibilities are">
+    <div className="flex flex-col gap-6" aria-busy="true" aria-label={t("dashboardAutomation.loadingHowAutomated")}>
       <Skeleton className="h-44 w-full rounded-xl" />
       <div className="flex flex-col gap-3">
         {Array.from({ length: 3 }, (_, index) => (
@@ -718,7 +719,7 @@ export function DashboardAutomation({ companyId, overview, agents, agentsById, n
             <Repeat aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
             {made}
           </p>
-          <Button type="button" size="icon-xs" variant="ghost" aria-label="Dismiss" onClick={() => setMade(null)}>
+          <Button type="button" size="icon-xs" variant="ghost" aria-label={t("common.dismiss")} onClick={() => setMade(null)}>
             <X aria-hidden="true" />
           </Button>
         </div>
@@ -747,7 +748,7 @@ export function DashboardAutomation({ companyId, overview, agents, agentsById, n
         task={making?.task ?? null}
         agents={agents}
         filedUnder={making?.filedUnder ?? []}
-        onCreated={(result) => setMade(`“${result.routine.title}” is automated now: ${result.cadenceLabel}.`)}
+        onCreated={(result) => setMade(t("dashboardAutomation.isAutomatedNow", { title: result.routine.title, cadenceLabel: result.cadenceLabel }))}
       />
     </div>
   );
