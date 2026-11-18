@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { memo, useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -93,7 +94,7 @@ export function AgentStatusChip({ kind, label, quiet, outOfDate, className }: {
       <HealthDot health={AGENT_STATUS_HEALTH[kind]} className="size-2" />
       {label}
       {outOfDate ? <Clock aria-hidden="true" className="size-3 shrink-0" /> : null}
-      {outOfDate ? <span className="sr-only"> (out of date)</span> : null}
+      {outOfDate ? <span className="sr-only"> ({t("responsibilities.outOfDate")})</span> : null}
     </span>
   );
 }
@@ -119,9 +120,9 @@ function Tile({ tile }: { tile: AgentStatusTile }) {
 function AgentStack({ agentIds, agentsById }: { agentIds: readonly string[]; agentsById: ReadonlyMap<string, Agent> }) {
   if (agentIds.length === 0) return null;
   const shown = agentIds.slice(0, AVATAR_LIMIT);
-  const names = agentIds.map((id) => agentsById.get(id)?.name ?? "An agent");
+  const names = agentIds.map((id) => agentsById.get(id)?.name ?? t("whatNeedsMe.anAgent"));
   return (
-    <span className="flex shrink-0 items-center gap-1" aria-label={`Reporting here: ${names.join(", ")}`} role="img">
+    <span className="flex shrink-0 items-center gap-1" aria-label={t("responsibilities.reportingHere", { names: names.join(", ") })} role="img">
       <span className="flex -space-x-1">
         {shown.map((id) => (
           <AgentAvatar key={id} agent={agentsById.get(id) ?? { id }} name={agentsById.get(id)?.name} size={20} />
@@ -138,7 +139,7 @@ function AgentStack({ agentIds, agentsById }: { agentIds: readonly string[]; age
 function ReporterCell({ row, actions }: { row: AgentStatusRow; actions: RowActions }) {
   const author = agentStatusAuthor(row, actions.agentName, actions.viewerUserId);
   const reporter = row.reporterAgentId ? actions.agentsById.get(row.reporterAgentId) : undefined;
-  const reporterName = row.reporterAgentId ? actions.agentName(row.reporterAgentId) ?? "An agent" : null;
+  const reporterName = row.reporterAgentId ? actions.agentName(row.reporterAgentId) ?? t("whatNeedsMe.anAgent") : null;
   if (author && row.writtenAt) {
     const agent = row.authorAgentId ? actions.agentsById.get(row.authorAgentId) : undefined;
     return (
@@ -152,7 +153,7 @@ function ReporterCell({ row, actions }: { row: AgentStatusRow; actions: RowActio
           <span className="truncate">{author}</span>
         </span>
         <span className={cn("text-xs", row.outOfDate ? "text-(--status-task-icon-todo)" : "text-muted-foreground")}>
-          {row.outOfDate ? `Out of date · written ${writtenAgo(row.writtenAt, actions.now)}` : `Written ${writtenAgo(row.writtenAt, actions.now)}`}
+          {row.outOfDate ? t("responsibilities.outOfDateWritten", { age: writtenAgo(row.writtenAt, actions.now) }) : t("responsibilities.writtenAge", { age: writtenAgo(row.writtenAt, actions.now) })}
         </span>
       </div>
     );
@@ -166,7 +167,7 @@ function ReporterCell({ row, actions }: { row: AgentStatusRow; actions: RowActio
         </span>
       ) : null}
       <span className="text-xs text-muted-foreground">
-        {!reporterName ? "No agent can report yet" : row.updateRequested ? "Asked for an update" : "No report yet"}
+        {!reporterName ? t("responsibilities.noAgentCanReportYet") : row.updateRequested ? t("responsibilities.askedForAnUpdate") : t("responsibilities.noReportYet")}
       </span>
     </div>
   );
@@ -176,7 +177,7 @@ const AgentStatusRowItem = memo(function AgentStatusRowItem({ row, actions }: { 
   const { responsibility } = row;
   const standard = responsibility.standard?.trim();
   const metric = agentStatusMetricCell(responsibility.rollup.metric);
-  const reporterName = row.reporterAgentId ? actions.agentName(row.reporterAgentId) ?? "the agent" : null;
+  const reporterName = row.reporterAgentId ? actions.agentName(row.reporterAgentId) ?? t("responsibilities.theAgent") : null;
   const asking = actions.asking === responsibility.id;
   return (
     <li
@@ -195,7 +196,7 @@ const AgentStatusRowItem = memo(function AgentStatusRowItem({ row, actions }: { 
         </Link>
         <p className="text-xs text-muted-foreground" data-status-message="">
           {row.message}
-          {row.source === "number" ? <span className="text-muted-foreground"> · From the number, not from an agent</span> : null}
+          {row.source === "number" ? <span className="text-muted-foreground"> · {t("responsibilities.fromTheNumberNotFromAnAgent")}</span> : null}
         </p>
       </div>
       <div className="flex min-w-0 flex-col gap-0.5 @4xl:w-40 @4xl:shrink-0" data-status-metric="">
@@ -208,12 +209,12 @@ const AgentStatusRowItem = memo(function AgentStatusRowItem({ row, actions }: { 
             </span>
           </>
         ) : (
-          <span className="text-xs text-muted-foreground">No metric yet</span>
+          <span className="text-xs text-muted-foreground">{t("responsibilities.noMetricYet")}</span>
         )}
       </div>
       <div className="@4xl:w-32 @4xl:shrink-0">
         <AgentStatusChip kind={row.kind} label={row.label} quiet={row.source === "number" || row.outOfDate} outOfDate={row.outOfDate} />
-        {row.source === "number" ? <span className="sr-only"> (from the number)</span> : null}
+        {row.source === "number" ? <span className="sr-only"> ({t("responsibilities.fromTheNumberSuffix")})</span> : null}
       </div>
       <div className="relative z-10 flex flex-col items-start gap-2 @4xl:w-48 @4xl:shrink-0">
         <ReporterCell row={row} actions={actions} />
@@ -225,10 +226,10 @@ const AgentStatusRowItem = memo(function AgentStatusRowItem({ row, actions }: { 
             className="text-muted-foreground"
             disabled={!reporterName || row.updateRequested || asking}
             data-ask-update=""
-            aria-label={reporterName && !row.updateRequested ? `Ask ${reporterName} for an update on ${responsibility.title}` : undefined}
+            aria-label={reporterName && !row.updateRequested ? t("responsibilities.askAgentForUpdateAria", { name: reporterName, title: responsibility.title }) : undefined}
             onClick={() => actions.onAsk(row)}
           >
-            {!reporterName ? "No agent to ask" : row.updateRequested ? `Waiting for ${reporterName}` : asking ? "Asking…" : "Ask for an update"}
+            {!reporterName ? t("responsibilities.noAgentToAsk") : row.updateRequested ? t("responsibilities.waitingForName", { name: reporterName }) : asking ? t("responsibilities.asking") : t("responsibilities.askForAnUpdate")}
           </Button>
           <Button
             type="button"
@@ -236,10 +237,10 @@ const AgentStatusRowItem = memo(function AgentStatusRowItem({ row, actions }: { 
             variant="ghost"
             className="text-muted-foreground"
             data-edit-status=""
-            aria-label={`Edit the status of ${responsibility.title}`}
+            aria-label={t("responsibilities.editTheStatusOfAria", { title: responsibility.title })}
             onClick={() => actions.onEdit(row)}
           >
-            Edit
+            {t("common.edit")}
           </Button>
         </div>
       </div>
@@ -276,13 +277,13 @@ function AreaTable({
           >
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="truncate text-base font-semibold text-foreground">
-                {group.area?.title ?? "Not in an area"}
-                {group.area?.status === "archived" ? <span className="font-normal text-muted-foreground"> · Archived</span> : null}
+                {group.area?.title ?? t("responsibilities.notInAnArea")}
+                {group.area?.status === "archived" ? <span className="font-normal text-muted-foreground"> · {t("common.archived")}</span> : null}
               </span>
               <span className="line-clamp-2 text-sm font-normal text-muted-foreground" data-area-headline="">
                 {headline
-                  ? `${headline.text}${headline.by ? ` (${headline.by})` : headline.fromNumber ? " (from the number)" : ""}`
-                  : "Nothing you own is filed here yet."}
+                  ? `${headline.text}${headline.by ? ` (${headline.by})` : headline.fromNumber ? ` (${t("responsibilities.fromTheNumberSuffix")})` : ""}`
+                  : t("responsibilities.nothingYouOwnIsFiledHere")}
               </span>
             </span>
             <span className="flex flex-wrap items-center gap-4 @3xl:flex-nowrap">
@@ -314,7 +315,7 @@ function AreaTable({
         <div className="flex justify-end">
           <Button size="xs" variant="ghost" className="text-muted-foreground" onClick={() => onAddResponsibility(group.area?.id ?? null)}>
             <Plus aria-hidden="true" />
-            New responsibility
+            {t("responsibilities.newResponsibility")}
           </Button>
         </div>
       )}
@@ -374,27 +375,27 @@ export function StatusReportDialog({
       <DialogContent>
         <form className="flex flex-col gap-5" onSubmit={submit}>
           <DialogHeader>
-            <DialogTitle>Edit the status</DialogTitle>
+            <DialogTitle>{t("responsibilities.editTheStatus")}</DialogTitle>
             <DialogDescription>
-              {row ? `${row.responsibility.title}: ` : ""}say where it stands and why. It shows as written by you until an agent writes a newer one.
+              {row ? `${row.responsibility.title}: ` : ""}{t("responsibilities.sayWhereItStands")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-foreground">Status</span>
-            <ViewSwitcher label="Status" options={STATUS_OPTIONS} value={status} onChange={setStatus} className="self-start" />
+            <span className="font-medium text-foreground">{t("common.status")}</span>
+            <ViewSwitcher label={t("common.status")} options={STATUS_OPTIONS} value={status} onChange={setStatus} className="self-start" />
           </div>
           <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-foreground">Why, in one line</span>
+            <span className="font-medium text-foreground">{t("responsibilities.whyInOneLine")}</span>
             <Input
               autoFocus
               value={message}
               maxLength={RESPONSIBILITY_STATUS_REPORT_MESSAGE_MAX}
-              placeholder="e.g. Holding at 1.3 MB with the font cleanup still to land."
+              placeholder={t("responsibilities.whyInOneLinePlaceholder")}
               onChange={(event) => setMessage(event.target.value.replace(/[\r\n]+/g, " "))}
             />
           </label>
           <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-foreground">More detail <span className="font-normal text-muted-foreground">(optional)</span></span>
+            <span className="font-medium text-foreground">{t("responsibilities.moreDetail")} <span className="font-normal text-muted-foreground">{t("secrets.optional")}</span></span>
             <Textarea
               value={detail}
               rows={3}
@@ -404,15 +405,15 @@ export function StatusReportDialog({
           </label>
           {save.error ? (
             <p role="alert" className="text-sm text-destructive">
-              Couldn’t save the status. {describeError(save.error).body}
+              {t("responsibilities.couldntSaveTheStatus")} {describeError(save.error).body}
             </p>
           ) : null}
           <DialogFooter className="items-center sm:justify-between">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={!message.trim() || save.isPending}>
-              {save.isPending ? "Saving…" : "Save status"}
+              {save.isPending ? t("common.saving2") : t("responsibilities.saveStatus")}
             </Button>
           </DialogFooter>
         </form>
@@ -486,7 +487,7 @@ function AgentStatusBody({
   return (
     <>
       <section aria-labelledby="agent-status-counts-heading" className="flex flex-col gap-3">
-        <h2 id="agent-status-counts-heading" className="sr-only">Where your responsibilities stand</h2>
+        <h2 id="agent-status-counts-heading" className="sr-only">{t("responsibilities.whereYourResponsibilitiesStand")}</h2>
         <div className="grid grid-cols-2 gap-3 @3xl:grid-cols-4" data-agent-status-tiles="">
           {tiles.tiles.map((tile) => <Tile key={tile.kind} tile={tile} />)}
         </div>
@@ -495,8 +496,8 @@ function AgentStatusBody({
 
       <Card elevation="low" className="gap-3 px-5 py-4" data-agent-status-summary="">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="text-sm font-semibold text-foreground">Summary</h2>
-          <span className="text-xs text-muted-foreground">Composed from what agents wrote</span>
+          <h2 className="text-sm font-semibold text-foreground">{t("common.summary")}</h2>
+          <span className="text-xs text-muted-foreground">{t("responsibilities.composedFromWhatAgentsWrote")}</span>
         </div>
         <p className="text-sm text-foreground">{summary.lead}</p>
         {summary.lines.length > 0 ? (
@@ -513,7 +514,7 @@ function AgentStatusBody({
         ) : null}
         {summary.waiting ? (
           <p className="text-sm">
-            <span className="text-muted-foreground">Waiting on: </span>
+            <span className="text-muted-foreground">{t("responsibilities.waitingOn")} </span>
             <span className="text-foreground">{summary.waiting}</span>
           </p>
         ) : null}
@@ -521,19 +522,19 @@ function AgentStatusBody({
 
       {ask.error ? (
         <p role="alert" className="text-sm text-destructive">
-          Couldn’t ask for an update. {describeError(ask.error).body}
+          {t("responsibilities.couldntAskForAnUpdate")} {describeError(ask.error).body}
         </p>
       ) : null}
 
       <section aria-labelledby="agent-status-areas-heading" className="flex flex-col gap-5">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div className="flex flex-col gap-1">
-            <h2 id="agent-status-areas-heading" className="text-lg font-semibold text-foreground">Areas</h2>
-            <p className="text-sm text-muted-foreground">Each status as the agent closest to the work wrote it.</p>
+            <h2 id="agent-status-areas-heading" className="text-lg font-semibold text-foreground">{t("responsibilities.areas")}</h2>
+            <p className="text-sm text-muted-foreground">{t("responsibilities.eachStatusAsTheAgentClosest")}</p>
           </div>
           <Button size="sm" onClick={onAddArea}>
             <Plus aria-hidden="true" />
-            New area
+            {t("responsibilities.newArea")}
           </Button>
         </div>
         {groups.length > 0 ? (
@@ -553,7 +554,7 @@ function AgentStatusBody({
             })}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">Nothing you own yet. Review what was proposed for you, or add a new responsibility.</p>
+          <p className="text-sm text-muted-foreground">{t("responsibilities.nothingYouOwnYet")}</p>
         )}
       </section>
 
