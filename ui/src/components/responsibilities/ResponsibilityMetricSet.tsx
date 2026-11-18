@@ -1,5 +1,6 @@
 import { useId, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type {
   Agent,
   ResponsibilityMetricSet as MetricSet,
@@ -29,7 +30,7 @@ import { MetricMeter } from "./MetricGlance";
 import { StaleFlag } from "./ResponsibilityHealthBadge";
 
 /** The label over a set nobody chose yet. */
-export const STARTER_METRICS_LABEL = "Starter metrics from your work so far";
+export const STARTER_METRICS_LABEL = t("responsibilities.starterMetricsFromYourWork");
 
 /** A responsibility's metric set; loads beside the page, never in front of it. */
 export function useResponsibilityMetrics(responsibilityId: string, enabled = true) {
@@ -43,10 +44,10 @@ export function useResponsibilityMetrics(responsibilityId: string, enabled = tru
 
 /** When the newest reading was taken, in words. */
 export function describeMetricReadLine(metric: Pick<ResponsibilityMetricView, "starter" | "latest" | "period">, now: Date): string {
-  if (metric.starter === "tasks_finished") return "Counted from the work, week by week";
-  if (metric.starter && metric.starter !== "bar_metric") return "Counted from the work just now";
-  if (!metric.latest) return "No readings yet";
-  return `Read ${describeReadingAge(metric.latest.recordedAt, now)}`;
+  if (metric.starter === "tasks_finished") return t("responsibilities.countedFromTheWorkWeekByWeek");
+  if (metric.starter && metric.starter !== "bar_metric") return t("responsibilities.countedFromTheWorkJustNow");
+  if (!metric.latest) return t("responsibilities.noReadingsYet");
+  return t("responsibilities.readAge", { age: describeReadingAge(metric.latest.recordedAt, now) });
 }
 
 /** The big value and what it aims for. The primary reads through the bar's own words ("9 of 20"). */
@@ -57,7 +58,7 @@ function Headline({ metric, primary }: { metric: ResponsibilityMetricView; prima
   return (
     <p className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 tabular-nums" data-metric-value="">
       <span className={cn("font-semibold text-foreground", value ? "text-2xl" : "text-sm text-muted-foreground")}>
-        {value ?? "No reading yet"}
+        {value ?? t("responsibilities.noReadingYet")}
       </span>
       {target ? <span className="text-sm text-muted-foreground">{target}</span> : null}
       {metric.note ? <span className="text-xs text-muted-foreground">· {metric.note}</span> : null}
@@ -77,7 +78,7 @@ function MetricForm({ metric, primary }: { metric: ResponsibilityMetricView; pri
       // A number shows the bar's own meter toward its target; a percent shows its ring beside the value.
       if (metric.role !== "primary" || !primary || metric.display === "percent") return null;
       const reading = describeMetricReading(primary);
-      return <MetricMeter reading={reading} health={metric.health ?? "not_measured"} label={`${metric.title}, toward its bar`} />;
+      return <MetricMeter reading={reading} health={metric.health ?? "not_measured"} label={t("responsibilities.towardItsBar", { name: metric.title })} />;
     }
   }
 }
@@ -188,8 +189,8 @@ export function MetricTile({
               className="text-muted-foreground"
               aria-expanded={explained}
               aria-controls={descriptionId}
-              aria-label={`How “${metric.title}” is measured`}
-              title="How it is measured"
+              aria-label={t("responsibilities.howTitleIsMeasured", { title: metric.title })}
+              title={t("responsibilities.howItIsMeasured")}
               onClick={() => setExplained((value) => !value)}
             >
               <Info aria-hidden="true" />
@@ -201,8 +202,8 @@ export function MetricTile({
               size="icon-xs"
               variant="ghost"
               className="text-muted-foreground"
-              aria-label={`Remove “${metric.title}”`}
-              title="Remove this metric"
+              aria-label={t("responsibilities.removeTitleAria", { title: metric.title })}
+              title={t("responsibilities.removeThisMetric")}
               onClick={onRemove}
             >
               <X aria-hidden="true" />
@@ -227,8 +228,8 @@ export function MetricTile({
 /** "Chosen with Ada" or "Set by hand": who picked a chosen set. */
 function chosenByLine(set: MetricSet, agentsById: ReadonlyMap<string, Agent>): string | null {
   if (set.source !== "chosen" || !set.chosenBy) return null;
-  if (set.chosenBy.agentId) return `Chosen with ${agentsById.get(set.chosenBy.agentId)?.name ?? "an agent"}`;
-  if (set.chosenBy.userId) return "Set by hand";
+  if (set.chosenBy.agentId) return t("responsibilities.chosenWithAgent", { name: agentsById.get(set.chosenBy.agentId)?.name ?? t("responsibilities.anAgent") });
+  if (set.chosenBy.userId) return t("responsibilities.setByHandNoPeriod");
   return null;
 }
 
@@ -259,10 +260,10 @@ export function ResponsibilityMetricSetView({
 }) {
   const label = set.source === "starter" ? STARTER_METRICS_LABEL : chosenByLine(set, agentsById);
   return (
-    <section aria-label="Metrics" className="flex flex-col gap-3" data-metric-set={set.source}>
+    <section aria-label={t("responsibilities.metrics")} className="flex flex-col gap-3" data-metric-set={set.source}>
       {label ? <p className="text-xs text-muted-foreground" data-metric-set-label="">{label}</p> : null}
       {set.metrics.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No metrics yet.</p>
+        <p className="text-sm text-muted-foreground">{t("responsibilities.noMetricsYet")}</p>
       ) : (
         <div
           className={cn(
@@ -340,19 +341,18 @@ export function ResponsibilityMetrics({
       <AlertDialog open={removing !== null} onOpenChange={(open) => { if (!open) setRemoving(null); }}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove “{removing?.title}”?</AlertDialogTitle>
+            <AlertDialogTitle>{t("responsibilities.removeMetricTitle", { title: removing?.title })}</AlertDialogTitle>
             <AlertDialogDescription>
-              It stops showing on this responsibility, and agents stop recording it. Its readings are kept. To choose other
-              metrics, talk the bar through with an agent.
+              {t("responsibilities.metricRemovalDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           {remove.error ? (
-            <p role="alert" className="text-sm text-destructive">Couldn’t remove it. {describeError(remove.error).body}</p>
+            <p role="alert" className="text-sm text-destructive">{t("responsibilities.couldNotRemoveIt")} {describeError(remove.error).body}</p>
           ) : null}
           <AlertDialogFooter className="items-center sm:justify-between">
-            <AlertDialogCancel>Keep it</AlertDialogCancel>
+            <AlertDialogCancel>{t("responsibilities.keepIt")}</AlertDialogCancel>
             <Button variant="destructive" disabled={remove.isPending || !removing} onClick={() => removing && remove.mutate(removing)}>
-              {remove.isPending ? "Removing…" : "Remove metric"}
+              {remove.isPending ? t("responsibilities.removing") : t("responsibilities.removeMetric")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
