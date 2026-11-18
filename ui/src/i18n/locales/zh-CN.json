@@ -10981,7 +10981,18 @@
     "pasteYourTokenOrCredential": "粘贴你的令牌或凭据",
     "storedEncryptedNeverShownBack": "加密存储。任何人（包括管理员）都无法再次查看。",
     "saveValue": "保存值",
-    "updateValue": "更新值"
+    "updateValue": "更新值",
+    "valueWasReplaced": "你的值已替换",
+    "valueWasSaved": "你的值已保存",
+    "replaceYourValue": "替换你的值",
+    "forDefinition": "（{{name}}）",
+    "onlyYouProvideThisValue": "只有你提供此值。员工在为你工作时会使用它。",
+    "whereYourValueIsStored": "你的值存储在哪里",
+    "referenceOrArn": "引用或 ARN",
+    "pointsToYourOwnSecret": "指向你在组织保险库中的自有密钥。Paperclip 只保存引用，不保存值。",
+    "pasteYourTokenOrKey": "粘贴你的令牌或密钥",
+    "encryptedWhenSaved": "保存时加密。之后只能替换，无法查看。",
+    "replaceValue": "替换值"
   },
   "taskBrowserPanel": {
     "theLiveViewDisconnectedUse": "实时视图已断开。请在浏览器选项中使用「重新连接视图」重试。",

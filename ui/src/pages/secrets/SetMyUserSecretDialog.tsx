@@ -80,7 +80,7 @@ export function SetMyUserSecretDialog({
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.myUserSecrets(companyId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.userDefinitions(companyId) });
       pushToast({
-        title: existingSecret ? "Your value was replaced" : "Your value was saved",
+        title: existingSecret ? t("setMyUserSecretDialog.valueWasReplaced") : t("setMyUserSecretDialog.valueWasSaved"),
         body: definition?.name,
         tone: "success",
       });
@@ -101,11 +101,11 @@ export function SetMyUserSecretDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {existingSecret ? "Replace your value" : "Set your value"}
-            {definition ? ` for ${definition.name}` : ""}
+            {existingSecret ? t("setMyUserSecretDialog.replaceYourValue") : t("setMyUserSecretDialog.setYourValue")}
+            {definition ? t("setMyUserSecretDialog.forDefinition", { name: definition.name }) : ""}
           </DialogTitle>
           <DialogDescription>
-            Only you provide this value. Agents use it when they work for you.
+            {t("setMyUserSecretDialog.onlyYouProvideThisValue")}
           </DialogDescription>
         </DialogHeader>
 
@@ -121,34 +121,33 @@ export function SetMyUserSecretDialog({
             {isExternal ? (
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-foreground" htmlFor={fieldId}>
-                  Where your value is stored
+                  {t("setMyUserSecretDialog.whereYourValueIsStored")}
                 </label>
                 <Input
                   id={fieldId}
                   value={externalRef}
                   onChange={(event) => setExternalRef(event.target.value)}
-                  placeholder="Reference or ARN"
+                  placeholder={t("setMyUserSecretDialog.referenceOrArn")}
                   className="font-mono text-sm"
                   autoComplete="off"
                   spellCheck={false}
                   autoFocus
                 />
                 <p className="text-xs text-muted-foreground">
-                  Points to your own secret in your organization's vault. Paperclip saves the
-                  reference, not the value.
+                  {t("setMyUserSecretDialog.pointsToYourOwnSecret")}
                 </p>
               </div>
             ) : (
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-foreground" htmlFor={fieldId}>
-                  Your value
+                  {t("setMyUserSecretDialog.yourValue")}
                 </label>
                 <div className="relative">
                   <Textarea
                     id={fieldId}
                     value={value}
                     onChange={(event) => setValue(event.target.value)}
-                    placeholder="Paste your token or key"
+                    placeholder={t("setMyUserSecretDialog.pasteYourTokenOrKey")}
                     className={`min-h-(--sz-80px) pr-11 font-mono text-sm${showValue ? "" : " secret-value-masked"}`}
                     autoComplete="off"
                     spellCheck={false}
@@ -159,7 +158,7 @@ export function SetMyUserSecretDialog({
                     variant="ghost"
                     size="icon-xs"
                     className="absolute right-2 top-2"
-                    aria-label={showValue ? "Hide value" : "Show value"}
+                    aria-label={showValue ? t("secrets.hideValue") : t("secrets.showValue")}
                     aria-pressed={showValue}
                     onClick={() => setShowValue((current) => !current)}
                   >
@@ -167,7 +166,7 @@ export function SetMyUserSecretDialog({
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Encrypted when saved. After that it can be replaced, never viewed.
+                  {t("setMyUserSecretDialog.encryptedWhenSaved")}
                 </p>
               </div>
             )}
@@ -185,7 +184,7 @@ export function SetMyUserSecretDialog({
             {t("common.cancel")}
           </Button>
           <Button onClick={() => save.mutate()} disabled={!canSave || save.isPending}>
-            {save.isPending ? "Saving…" : existingSecret ? "Replace value" : "Save value"}
+            {save.isPending ? t("common.saving2") : existingSecret ? t("setMyUserSecretDialog.replaceValue") : t("setMyUserSecretDialog.saveValue")}
           </Button>
         </DialogFooter>
       </DialogContent>

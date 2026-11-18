@@ -10981,7 +10981,18 @@
     "pasteYourTokenOrCredential": "Paste your token or credential",
     "storedEncryptedNeverShownBack": "Stored encrypted. Never shown back to anyone, including admins.",
     "saveValue": "Save value",
-    "updateValue": "Update value"
+    "updateValue": "Update value",
+    "valueWasReplaced": "Your value was replaced",
+    "valueWasSaved": "Your value was saved",
+    "replaceYourValue": "Replace your value",
+    "forDefinition": " for {{name}}",
+    "onlyYouProvideThisValue": "Only you provide this value. Agents use it when they work for you.",
+    "whereYourValueIsStored": "Where your value is stored",
+    "referenceOrArn": "Reference or ARN",
+    "pointsToYourOwnSecret": "Points to your own secret in your organization's vault. Paperclip saves the reference, not the value.",
+    "pasteYourTokenOrKey": "Paste your token or key",
+    "encryptedWhenSaved": "Encrypted when saved. After that it can be replaced, never viewed.",
+    "replaceValue": "Replace value"
   },
   "taskBrowserPanel": {
     "theLiveViewDisconnectedUse": "The live view disconnected. Use Reconnect view in Browser options to try again.",
