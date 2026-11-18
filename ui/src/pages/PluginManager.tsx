@@ -199,7 +199,7 @@ export function PluginManager() {
       <QueryErrorState
         size="page"
         error={error}
-        action="load plugins"
+        action={t("sync20261028.errors.actions.loadPlugins")}
         onRetry={pluginsView.retry}
         retrying={pluginsView.isFetching}
       />
@@ -282,7 +282,7 @@ export function PluginManager() {
         ) : bundledView.kind === "error" ? (
           <QueryErrorState
             error={bundledQuery.error}
-            action="load bundled plugins"
+            action={t("sync20261028.errors.actions.loadBundledPlugins")}
             onRetry={bundledView.retry}
             retrying={bundledView.isFetching}
           />
@@ -576,9 +576,9 @@ export function PluginManager() {
               </div>
             </div>
             <div className="space-y-2">
-              <p className="text-sm font-medium">Full error output</p>
+              <p className="text-sm font-medium">{t("pluginManager.fullErrorOutput")}</p>
               <pre className={cn("max-h-(--sz-50vh) overflow-auto rounded-md border bg-muted/40 p-3 text-xs leading-5 whitespace-pre-wrap break-words", ANALYTICS_MASK_CLASS)}>
-                {errorDetailsPlugin?.lastError ?? "No stored error message."}
+                {errorDetailsPlugin?.lastError ?? t("pluginManager.noStoredErrorMessage")}
               </pre>
             </div>
           </div>
