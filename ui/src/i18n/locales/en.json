@@ -10788,7 +10788,8 @@
     "models": "Models",
     "providerSettings": "Provider settings",
     "couldNotLoadActiveRuns": "Could not load active runs. Retry before revoking.",
-    "stopRun": "Stop run"
+    "stopRun": "Stop run",
+    "enterAModelId": "Enter a model ID on the agent"
   },
   "chatCommunicationInstructions": {
     "couldnTSaveInstructionsTry": "Couldn’t save instructions. Try again.",

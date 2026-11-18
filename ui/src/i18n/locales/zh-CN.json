@@ -10788,7 +10788,8 @@
     "models": "模型",
     "providerSettings": "服务商设置",
     "couldNotLoadActiveRuns": "无法加载进行中的运行。吊销前请重试。",
-    "stopRun": "停止运行"
+    "stopRun": "停止运行",
+    "enterAModelId": "在员工上输入模型 ID"
   },
   "chatCommunicationInstructions": {
     "couldnTSaveInstructionsTry": "无法保存说明，请重试。",
