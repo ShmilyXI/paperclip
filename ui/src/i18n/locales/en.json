@@ -12144,10 +12144,18 @@
     "makeDefault": "Make default",
     "notDefault": "Not default",
     "subscription": "Subscription",
+    "defaultForProvider": "Default for {{provider}}",
+    "yourProviderDefault": "Your {{provider}} default",
     "reconnect": "Reconnect",
     "revokeIdentity": "Revoke identity",
     "newRunsUsingThisAccount": "New runs using this account will be blocked. Existing runs may retain credentials already issued to them. No other account will be selected automatically.",
     "couldNotRevokeThisAccount": "Could not revoke this account. Retry."
+  },
+  "toolActionAuditHashCopy": {
+    "couldntCopy": "Couldn't copy",
+    "copyAuditHash": "Copy audit hash",
+    "copyTheHashTitle": "Copy the hash that identifies these exact arguments",
+    "auditHash": "Audit hash"
   },
   "agentSecretAccessEditor": {
     "proposedAccess": "Proposed access",
@@ -12756,7 +12764,22 @@
     "usageNotObserved": "Usage not observed.",
     "unavailableForThisSignIn": "Unavailable for this sign-in method.",
     "usageNotReported": "Usage not reported.",
-    "overage": "Overage"
+    "overage": "Overage",
+    "cap": "{{value}} cap",
+    "usedOfLimit": "{{used}} / {{limit}} used",
+    "percentUsed": "{{percent}}% used",
+    "amountUsed": "{{value}} used",
+    "percentLeft": "{{percent}}% left",
+    "amountLeft": "{{value}} left",
+    "limitReached": "Limit reached",
+    "usageAllowed": "Usage allowed",
+    "resets": "Resets {{time}}",
+    "signInAgainToCheckUsage": "Sign in again to check usage.",
+    "usageAccessDenied": "Usage access denied.",
+    "tooManyChecks": "Too many checks. Try again later.",
+    "providerUnavailable": "Provider unavailable. Try again.",
+    "couldntReadUsage": "Couldn't read usage. Try again.",
+    "reconnectToCheckUsage": "Reconnect to check usage."
   },
   "gitHubConnectionComplete": {
     "githubConnected": "GitHub connected",

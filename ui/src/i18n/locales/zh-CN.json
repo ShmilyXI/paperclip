@@ -12144,10 +12144,18 @@
     "makeDefault": "设为默认",
     "notDefault": "非默认",
     "subscription": "订阅",
+    "defaultForProvider": "{{provider}} 的默认账户",
+    "yourProviderDefault": "你的 {{provider}} 默认账户",
     "reconnect": "重新连接",
     "revokeIdentity": "撤销身份授权",
     "newRunsUsingThisAccount": "使用此账号的新运行将被阻止。已有运行可能仍持有已发放的凭证。系统不会自动选择其他账号。",
     "couldNotRevokeThisAccount": "无法撤销此账号。请重试。"
+  },
+  "toolActionAuditHashCopy": {
+    "couldntCopy": "无法复制",
+    "copyAuditHash": "复制审计哈希",
+    "copyTheHashTitle": "复制标识这些确切参数的哈希",
+    "auditHash": "审计哈希"
   },
   "agentSecretAccessEditor": {
     "proposedAccess": "申请的访问权限",
@@ -12756,7 +12764,22 @@
     "usageNotObserved": "未观察到用量。",
     "unavailableForThisSignIn": "此登录方式不支持。",
     "usageNotReported": "未上报用量。",
-    "overage": "超额"
+    "overage": "超额",
+    "cap": "{{value}} 上限",
+    "usedOfLimit": "已用 {{used}} / {{limit}}",
+    "percentUsed": "已用 {{percent}}%",
+    "amountUsed": "已用 {{value}}",
+    "percentLeft": "剩余 {{percent}}%",
+    "amountLeft": "剩余 {{value}}",
+    "limitReached": "已达上限",
+    "usageAllowed": "允许使用",
+    "resets": "于 {{time}} 重置",
+    "signInAgainToCheckUsage": "请重新登录以检查用量。",
+    "usageAccessDenied": "用量访问被拒绝。",
+    "tooManyChecks": "检查过于频繁，请稍后再试。",
+    "providerUnavailable": "供应商不可用，请重试。",
+    "couldntReadUsage": "无法读取用量，请重试。",
+    "reconnectToCheckUsage": "请重新连接以检查用量。"
   },
   "gitHubConnectionComplete": {
     "githubConnected": "GitHub 已连接",

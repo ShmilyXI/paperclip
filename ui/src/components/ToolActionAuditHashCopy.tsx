@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { t } from "@/i18n";
 import { Check, Copy, X } from "lucide-react";
 import { useCopyAction } from "@/lib/use-copy-action";
 import { Button } from "./ui/button";
@@ -13,7 +14,7 @@ import { Button } from "./ui/button";
 export function ToolActionAuditHashCopy({ hash }: { hash: string }) {
   const { status, copy } = useCopyAction();
   const [copyFailed, setCopyFailed] = useState(false);
-  const label = status === "copied" ? "Copied" : status === "failed" ? "Couldn’t copy" : "Copy audit hash";
+  const label = status === "copied" ? t("common.copied") : status === "failed" ? t("toolActionAuditHashCopy.couldntCopy") : t("toolActionAuditHashCopy.copyAuditHash");
   const Icon = status === "copied" ? Check : status === "failed" ? X : Copy;
   return (
     <div className="mt-1 space-y-1">
@@ -22,7 +23,7 @@ export function ToolActionAuditHashCopy({ hash }: { hash: string }) {
         size="xs"
         variant="ghost"
         className="text-muted-foreground"
-        title="Copy the hash that identifies these exact arguments"
+        title={t("toolActionAuditHashCopy.copyTheHashTitle")}
         onClick={() => {
           void copy(hash).then(result => {
             if (result === "failed") setCopyFailed(true);
@@ -33,7 +34,7 @@ export function ToolActionAuditHashCopy({ hash }: { hash: string }) {
         {label}
       </Button>
       {copyFailed ? (
-        <p className="select-all break-all font-mono text-xs text-muted-foreground" aria-label="Audit hash">
+        <p className="select-all break-all font-mono text-xs text-muted-foreground" aria-label={t("toolActionAuditHashCopy.auditHash")}>
           {hash}
         </p>
       ) : null}

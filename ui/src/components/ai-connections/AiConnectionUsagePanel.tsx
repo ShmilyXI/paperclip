@@ -24,25 +24,25 @@ function limitLabel(window: AiConnectionUsageLimit) {
 }
 
 function limitValue(window: AiConnectionUsageLimit) {
-  if (window.used === 0 && window.limit === 0) return `${amount(window.limit, window.unit)} cap`;
-  if (window.used != null && window.limit != null) return `${amount(window.used, window.unit)} / ${amount(window.limit, window.unit)} used`;
-  if (window.usedPercent != null) return `${usageNumber(window.usedPercent)}% used`;
-  if (window.used != null) return `${amount(window.used, window.unit)} used`;
-  if (window.remainingPercent != null) return `${usageNumber(window.remainingPercent)}% left`;
+  if (window.used === 0 && window.limit === 0) return t("aiConnectionUsagePanel.cap", { value: amount(window.limit, window.unit) });
+  if (window.used != null && window.limit != null) return t("aiConnectionUsagePanel.usedOfLimit", { used: amount(window.used, window.unit), limit: amount(window.limit, window.unit) });
+  if (window.usedPercent != null) return t("aiConnectionUsagePanel.percentUsed", { percent: usageNumber(window.usedPercent) });
+  if (window.used != null) return t("aiConnectionUsagePanel.amountUsed", { value: amount(window.used, window.unit) });
+  if (window.remainingPercent != null) return t("aiConnectionUsagePanel.percentLeft", { percent: usageNumber(window.remainingPercent) });
   return t("aiConnectionUsagePanel.notReported");
 }
 
 function limitDetails(window: AiConnectionUsageLimit) {
   const details: string[] = [];
   if (window.allowed === false) details.push(t("common.blocked"));
-  else if (window.limitReached === true) details.push("Limit reached");
-  if (window.allowed === true && (window.limitReached === true || window.usedPercent == null)) details.push("Usage allowed");
+  else if (window.limitReached === true) details.push(t("aiConnectionUsagePanel.limitReached"));
+  if (window.allowed === true && (window.limitReached === true || window.usedPercent == null)) details.push(t("aiConnectionUsagePanel.usageAllowed"));
   if (window.used == null || window.limit == null) {
-    if (window.remaining != null) details.push(`${amount(window.remaining, window.unit)} left`);
-    if (window.limit != null) details.push(`${amount(window.limit, window.unit)} cap`);
+    if (window.remaining != null) details.push(t("aiConnectionUsagePanel.amountLeft", { value: amount(window.remaining, window.unit) }));
+    if (window.limit != null) details.push(t("aiConnectionUsagePanel.cap", { value: amount(window.limit, window.unit) }));
   }
-  if (window.resetsAt) details.push(`Resets ${formatDateTime(window.resetsAt, { includeYear: false })}`);
-  else if (window.resetInterval) details.push(`Resets ${window.resetInterval}`);
+  if (window.resetsAt) details.push(t("aiConnectionUsagePanel.resets", { time: formatDateTime(window.resetsAt, { includeYear: false }) }));
+  else if (window.resetInterval) details.push(t("aiConnectionUsagePanel.resets", { time: window.resetInterval }));
   return details.join(" · ");
 }
 
@@ -56,19 +56,19 @@ function overageSummary(usage: AiConnectionUsage) {
   else if (overage.balance != null && (overage.balance !== 0 || overage.enabled !== false)) details.push(amount(overage.balance, overage.unit));
   if (overage.remaining != null && (overage.remaining !== 0 || overage.enabled !== false)
     && !usage.limits.some((window) => window.scope === "overage" && window.remaining === overage.remaining && window.unit === overage.unit)) {
-    details.push(`${amount(overage.remaining, overage.unit)} left`);
+    details.push(t("aiConnectionUsagePanel.amountLeft", { value: amount(overage.remaining, overage.unit) }));
   }
   return details.join(" · ");
 }
 
 function usageError(usage: AiConnectionUsage) {
   switch (usage.errorCode) {
-    case "authentication_required": return "Sign in again to check usage.";
-    case "permission_denied": return "Usage access denied.";
-    case "rate_limited": return "Too many checks. Try again later.";
-    case "provider_unavailable": return "Provider unavailable. Try again.";
-    case "invalid_response": return "Couldn’t read usage. Try again.";
-    case "connection_unavailable": return "Reconnect to check usage.";
+    case "authentication_required": return t("aiConnectionUsagePanel.signInAgainToCheckUsage");
+    case "permission_denied": return t("aiConnectionUsagePanel.usageAccessDenied");
+    case "rate_limited": return t("aiConnectionUsagePanel.tooManyChecks");
+    case "provider_unavailable": return t("aiConnectionUsagePanel.providerUnavailable");
+    case "invalid_response": return t("aiConnectionUsagePanel.couldntReadUsage");
+    case "connection_unavailable": return t("aiConnectionUsagePanel.reconnectToCheckUsage");
     case "unsupported": return t("aiConnectionUsagePanel.usageUnavailable");
     default: return usage.message ?? t("aiConnectionUsagePanel.usageUnavailable");
   }
@@ -88,8 +88,8 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
           {probe.isPending ? t("aiConnectionUsagePanel.checking") : usage?.status === "ok" ? t("common.refresh") : t("aiConnectionUsagePanel.checkUsage")}
         </Button>}
       </div>
-      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">Usage not observed.</p>}
-      {!supported && <p className="text-xs text-muted-foreground">Unavailable for this sign-in method.</p>}
+      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">{t("aiConnectionUsagePanel.usageNotObserved")}</p>}
+      {!supported && <p className="text-xs text-muted-foreground">{t("aiConnectionUsagePanel.unavailableForThisSignIn")}</p>}
       {probe.error && <p role="alert" className="text-sm text-destructive">{describeError(probe.error).body}</p>}
       {usage && usage.status !== "ok" && <p role={usage.status === "unsupported" ? "status" : "alert"} className="text-sm text-muted-foreground">{usageError(usage)}</p>}
       {usage?.status === "ok" && (
