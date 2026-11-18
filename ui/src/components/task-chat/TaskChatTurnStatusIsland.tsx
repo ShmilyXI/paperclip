@@ -155,10 +155,10 @@ function isProblem(step: TaskChatProtocolStep | undefined): boolean {
 
 export function taskChatTurnPlanHeadline(plan: TaskChatTurnPlanSegment): string {
   const step = plan.steps[plan.currentStepIndex];
-  if (plan.complete) return plan.steps.length === 1 ? "Step done" : `All ${plan.steps.length} steps done`;
-  if (!step) return "Plan";
-  if (isProblem(step)) return `Blocked: ${step.label}`;
-  if (step.status === "pending") return `Up next: ${step.label}`;
+  if (plan.complete) return plan.steps.length === 1 ? t("taskChatTurnStatusIsland.stepDone") : t("taskChatTurnStatusIsland.allStepsDone", { count: plan.steps.length });
+  if (!step) return t("taskChatTurnStatusIsland.plan");
+  if (isProblem(step)) return t("taskChatTurnStatusIsland.blockedLabel", { label: step.label });
+  if (step.status === "pending") return t("taskChatTurnStatusIsland.upNextLabel", { label: step.label });
   return step.label;
 }
 
@@ -186,11 +186,11 @@ function checklistIcon(step: TaskChatProtocolStep) {
 }
 
 const STEP_STATUS_LABEL: Record<TaskChatProtocolStep["status"], string> = {
-  completed: "done",
-  in_progress: "in progress",
-  pending: "not started",
-  blocked: "blocked",
-  failed: "failed",
+  completed: t("taskChatTurnStatusIsland.stepStatusDone"),
+  in_progress: t("taskChatTurnStatusIsland.stepStatusInProgress"),
+  pending: t("taskChatTurnStatusIsland.stepStatusNotStarted"),
+  blocked: t("taskChatTurnStatusIsland.stepStatusBlocked"),
+  failed: t("taskChatTurnStatusIsland.stepStatusFailed"),
 };
 
 function fileCountLabel(files: number): string {
@@ -229,7 +229,9 @@ function PlanRow({ row, onShowAll }: { row: TaskChatTurnPlanRow; onShowAll: () =
           {row.allCompleted
             ? <CheckCircle2 className="size-4 shrink-0 text-(--status-task-icon-done)" aria-hidden />
             : <Circle className="size-4 shrink-0" aria-hidden />}
-          <span>{row.count} earlier {row.count === 1 ? "step" : "steps"}{row.allCompleted ? " done" : ""}</span>
+          <span>{row.allCompleted
+            ? t("taskChatTurnStatusIsland.earlierStepsDone", { count: row.count })
+            : t("taskChatTurnStatusIsland.earlierSteps", { count: row.count })}</span>
         </button>
       </li>
     );
@@ -239,7 +241,7 @@ function PlanRow({ row, onShowAll }: { row: TaskChatTurnPlanRow; onShowAll: () =
       <li>
         <button type="button" className={ROW_BUTTON_CLASS_NAME} onClick={onShowAll} data-testid="task-chat-turn-plan-more">
           <Circle className="size-4 shrink-0 opacity-0" aria-hidden />
-          <span>+{row.count} more {row.count === 1 ? "step" : "steps"}</span>
+          <span>{t("taskChatTurnStatusIsland.moreSteps", { count: row.count })}</span>
         </button>
       </li>
     );
@@ -305,14 +307,14 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
         data-testid="task-chat-turn-plan-progress"
       >
         <span aria-hidden>{completed}/{total}</span>
-        <span className="sr-only">{completed} of {total} steps done</span>
+        <span className="sr-only">{t("taskChatTurnStatusIsland.stepsDoneOf", { completed, total })}</span>
       </span>
     </>
   );
 
   return (
     <section
-      aria-label="Agent plan"
+      aria-label={t("taskChatTurnStatusIsland.agentPlan")}
       className="mx-auto w-full max-w-(--sz-turn-status-island) overflow-hidden rounded-xl border border-border bg-popover/95 text-foreground shadow-sm backdrop-blur"
       data-testid="task-chat-turn-status-island"
       data-plan-state={plan.complete ? "complete" : problem ? "blocked" : "active"}
@@ -344,7 +346,7 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
       <div
         className="h-0.5 w-full bg-muted"
         role="progressbar"
-        aria-label="Plan progress"
+        aria-label={t("taskChatTurnStatusIsland.planProgress")}
         aria-valuemin={0}
         aria-valuemax={total}
         aria-valuenow={completed}
@@ -360,7 +362,7 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
       {expanded ? (
         <ol
           id={listId}
-          aria-label="Within-turn checklist"
+          aria-label={t("taskChatTurnStatusIsland.withinTurnChecklist")}
           className="flex max-h-(--sz-turn-plan-list-max-h) flex-col gap-0.5 overflow-y-auto p-1.5"
         >
           {rows.map((row) => (
@@ -374,7 +376,7 @@ export function TaskChatTurnPlan({ plan, workspace = null, defaultCollapsed = fa
             <li>
               <button type="button" className={ROW_BUTTON_CLASS_NAME} onClick={() => setShowAll(false)}>
                 <Circle className="size-4 shrink-0 opacity-0" aria-hidden />
-                <span>Show fewer</span>
+                <span>{t("taskChatTurnStatusIsland.showFewer")}</span>
               </button>
             </li>
           ) : null}
