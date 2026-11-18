@@ -199,7 +199,7 @@ function AwaitingJoinApprovalPanel({
         </div>
         {claimSecret && claimApiKeyPath ? (
           <div className="mt-4 space-y-1 border border-zinc-800 p-3 text-xs text-zinc-400">
-            <div className="text-zinc-200">Claim secret</div>
+            <div className="text-zinc-200">{t("inviteLanding.claimSecret")}</div>
             <div className={cn("font-mono break-all", ANALYTICS_NO_CAPTURE_CLASS)}>{claimSecret}</div>
             <div className="font-mono break-all">POST {claimApiKeyPath}</div>
           </div>
