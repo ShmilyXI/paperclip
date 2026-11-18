@@ -13603,7 +13603,19 @@
     "useColor": "Use {{color}}",
     "newVersion": "New",
     "browseCatalog": "Browse catalog",
-    "loadingSelectedVersions": "Loading selected versions…"
+    "loadingSelectedVersions": "Loading selected versions…",
+    "saveFailed": "Save failed",
+    "starFailed": "Star failed",
+    "skillSettingsUpdateFailed": "Skill settings update failed",
+    "folderCreatedMoveFailed": "Folder created, move failed",
+    "folderSaveFailed": "Folder save failed",
+    "folderMoveFailed": "Folder move failed",
+    "folderDeleteFailed": "Folder delete failed",
+    "moveFailed": "Move failed",
+    "failedToMoveSkills": "Failed to move skills",
+    "couldntOpenMySkills": "Couldn't open My Skills",
+    "folderCreateFailed": "Folder create failed",
+    "updateFailed": "Update failed"
   },
   "agentMultiSelect": {
     "filterAgents": "Filter agents",

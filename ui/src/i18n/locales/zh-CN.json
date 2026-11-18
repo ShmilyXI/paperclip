@@ -13603,7 +13603,19 @@
     "useColor": "使用 {{color}}",
     "newVersion": "新",
     "browseCatalog": "浏览目录",
-    "loadingSelectedVersions": "正在加载所选版本…"
+    "loadingSelectedVersions": "正在加载所选版本…",
+    "saveFailed": "保存失败",
+    "starFailed": "收藏失败",
+    "skillSettingsUpdateFailed": "技能设置更新失败",
+    "folderCreatedMoveFailed": "文件夹已创建，移动失败",
+    "folderSaveFailed": "文件夹保存失败",
+    "folderMoveFailed": "文件夹移动失败",
+    "folderDeleteFailed": "文件夹删除失败",
+    "moveFailed": "移动失败",
+    "failedToMoveSkills": "移动技能失败",
+    "couldntOpenMySkills": "无法打开我的技能",
+    "folderCreateFailed": "创建文件夹失败",
+    "updateFailed": "更新失败"
   },
   "agentMultiSelect": {
     "filterAgents": "筛选员工",

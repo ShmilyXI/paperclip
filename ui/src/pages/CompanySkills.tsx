@@ -4445,7 +4445,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Save failed",
+        title: t("companySkills.saveFailed"),
         body: describeError(error).body,
       });
     },
@@ -4468,7 +4468,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Star failed",
+        title: t("companySkills.starFailed"),
         body: describeError(error).body,
       });
     },
@@ -4495,7 +4495,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Skill settings update failed",
+        title: t("companySkills.skillSettingsUpdateFailed"),
         body: describeError(error).body,
       });
     },
@@ -4727,7 +4727,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
         } catch (moveError) {
           pushToast({
             tone: "error",
-            title: "Folder created, move failed",
+            title: t("companySkills.folderCreatedMoveFailed"),
             body: describeError(moveError).body,
           });
           return;
@@ -4740,7 +4740,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder save failed",
+        title: t("companySkills.folderSaveFailed"),
         body: describeError(error).body,
       });
     },
@@ -4756,7 +4756,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder save failed",
+        title: t("companySkills.folderSaveFailed"),
         body: describeError(error).body,
       });
     },
@@ -4776,7 +4776,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder move failed",
+        title: t("companySkills.folderMoveFailed"),
         body: describeError(error).body,
       });
     },
@@ -4795,7 +4795,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Folder delete failed",
+        title: t("companySkills.folderDeleteFailed"),
         body: describeError(error).body,
       });
     },
@@ -4812,7 +4812,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Move failed",
+        title: t("companySkills.moveFailed"),
         body: describeError(error).body,
       });
     },
@@ -4833,7 +4833,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     } catch (moveError) {
       pushToast({
         tone: "error",
-        title: "Failed to move skills",
+        title: t("companySkills.failedToMoveSkills"),
         body: describeError(moveError).body,
       });
     }
@@ -4849,7 +4849,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: "Couldn't open My Skills",
+        title: t("companySkills.couldntOpenMySkills"),
         body: describeError(error).body,
       });
     },
@@ -4908,7 +4908,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     } catch (error) {
       pushToast({
         tone: "error",
-        title: "Folder create failed",
+        title: t("companySkills.folderCreateFailed"),
         body: describeError(error).body,
       });
       return null;
@@ -4941,7 +4941,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
     } catch (moveError) {
       pushToast({
         tone: "error",
-        title: "Move failed",
+        title: t("companySkills.moveFailed"),
         body: describeError(moveError).body,
       });
     }
@@ -5011,7 +5011,7 @@ export function CompanySkills({ collectionView }: { collectionView?: "authored" 
       }
       pushToast({ tone: "success", title: t("skills.agentsUpdated"), body: t("companySkills.lengthAgentSAttached", { length: nextAgentIds.length }) });
     } catch (error) {
-      pushToast({ tone: "error", title: "Update failed", body: describeError(error).body });
+      pushToast({ tone: "error", title: t("companySkills.updateFailed"), body: describeError(error).body });
     }
   }
 
