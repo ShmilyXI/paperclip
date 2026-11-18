@@ -122,7 +122,7 @@ export function GitHubRepositoryAccess({
             value={search} maxLength={200} onChange={(event) => setSearch(event.target.value)} />
         </div>
         <Button variant="outline" size="sm" disabled={pending || list.isFetching || !summary || !summary.totalCount || (!disableAll && !summary.availableCount)}
-          aria-label={`${disableAll ? t("common.disable") : t("common.enable")} all repositories`}
+          aria-label={disableAll ? t("gitHubBotManagement.disableAllRepositories") : t("gitHubBotManagement.enableAllRepositories")}
           onClick={() => onToggleAll(!disableAll)}>
           {disableAll ? t("gitHubBotManagement.disableAll") : t("gitHubBotManagement.enableAll")}
         </Button>
@@ -133,7 +133,7 @@ export function GitHubRepositoryAccess({
       {listView.kind === "error" && (
         <QueryErrorState error={list.error} action="load repositories" onRetry={listView.retry} retrying={listView.isFetching} />
       )}
-      <div ref={scroller} role="region" aria-label="Repositories" tabIndex={0}
+      <div ref={scroller} role="region" aria-label={t("gitHubBotManagement.repositories")} tabIndex={0}
         className="max-h-96 overflow-y-auto overscroll-contain border-y border-border">
         <div className="divide-y divide-border">
         {rows.map((resource) => (
@@ -170,7 +170,7 @@ export function GitHubRepositoryAccess({
           </div>
         ))}
         </div>
-        {list.isPending || listView.kind === "reconnecting" ? <p role="status" className="py-4 text-sm text-muted-foreground">Loading repositories…</p> : (listView.kind === "ready" || listView.kind === "stale") && rows.length === 0 && (
+        {list.isPending || listView.kind === "reconnecting" ? <p role="status" className="py-4 text-sm text-muted-foreground">{t("gitHubBotManagement.loadingRepositories")}</p> : (listView.kind === "ready" || listView.kind === "stale") && rows.length === 0 && (
           <p className="py-4 text-sm text-muted-foreground">
             {search ? t("gitHubBotManagement.noRepositoriesMatchYourSearch") : t("gitHubBotManagement.noRepositoriesAvailableAddRepository")}
           </p>
@@ -496,8 +496,9 @@ function ReviewResult({ review }: { review: GitHubTaskReview }) {
               )}
               <h3 className="font-medium">{t("gitHubBotManagement.coverage")}</h3>
               <p className="text-xs text-muted-foreground">
-                {review.assessment.coverage.reviewedPaths.length} files reviewed
-                · {review.assessment.coverage.omittedPaths.length} omitted
+                {t("gitHubBotManagement.filesReviewed", { count: review.assessment.coverage.reviewedPaths.length })}
+                {" · "}
+                {t("gitHubBotManagement.omittedCount", { count: review.assessment.coverage.omittedPaths.length })}
               </p>
               {review.assessment.coverage.limitations.map((limit, index) => (
                 <p key={index} className="text-xs text-muted-foreground">
@@ -540,7 +541,7 @@ export function GitHubReviewList({
           >
             <div className="min-w-0 flex-1 basis-48 space-y-1">
               <p className="break-words font-medium">
-                {review.event.title || `Pull request #${review.pullNumber}`}
+                {review.event.title || t("gitHubBotManagement.pullRequestNumber", { number: review.pullNumber })}
               </p>
               <p className="break-all text-xs text-muted-foreground">
                 {review.repository} #{review.pullNumber} ·{" "}
@@ -580,7 +581,7 @@ export function GitHubReviewDetail({
       </Link>
       <header className="space-y-2">
         <h2 className="text-lg font-semibold">
-          {review.event.title || `Pull request #${review.pullNumber}`}
+          {review.event.title || t("gitHubBotManagement.pullRequestNumber", { number: review.pullNumber })}
         </h2>
         <a
           className="break-all text-sm text-muted-foreground hover:underline"
@@ -612,13 +613,13 @@ export function GitHubReviews({
   const missingReview = (
     <div className="space-y-3">
       <p role="alert" className="text-sm text-muted-foreground">
-        This review was not found in this connection.
+        {t("gitHubBotManagement.thisReviewWasNotFound")}
       </p>
       <Link
         to={`/apps/chat/${endpointId}/reviews`}
         className="text-sm underline"
       >
-        All reviews
+        {t("gitHubBotManagement.allReviews2")}
       </Link>
     </div>
   );

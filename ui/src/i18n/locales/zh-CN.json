@@ -15039,7 +15039,12 @@
     "repositoryAccessRefreshedNewRepositories": "仓库访问权限已刷新。新的仓库默认仍为禁用。",
     "changesSaved": "更改已保存。",
     "repositoriesEnabledSummary": "已启用 {{total}} 个仓库中的 {{enabled}} 个。「全部切换」会影响整个连接。",
-    "couldNotLoadBotConfiguration": "无法加载机器人配置。"
+    "couldNotLoadBotConfiguration": "无法加载机器人配置。",
+    "enableAllRepositories": "启用所有仓库",
+    "disableAllRepositories": "禁用所有仓库",
+    "filesReviewed": "已审查 {{count}} 个文件",
+    "omittedCount": "省略 {{count}} 个",
+    "pullRequestNumber": "拉取请求 #{{number}}"
   },
   "importFromVaultDialog": {
     "skipped": "已跳过",

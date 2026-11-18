@@ -15039,7 +15039,12 @@
     "repositoryAccessRefreshedNewRepositories": "Repository access refreshed. New repositories stay disabled.",
     "changesSaved": "Changes saved.",
     "repositoriesEnabledSummary": "{{enabled}} of {{total}} repositories enabled. Toggle all applies across the entire connection.",
-    "couldNotLoadBotConfiguration": "Could not load the bot configuration."
+    "couldNotLoadBotConfiguration": "Could not load the bot configuration.",
+    "enableAllRepositories": "Enable all repositories",
+    "disableAllRepositories": "Disable all repositories",
+    "filesReviewed": "{{count}} files reviewed",
+    "omittedCount": "{{count}} omitted",
+    "pullRequestNumber": "Pull request #{{number}}"
   },
   "importFromVaultDialog": {
     "skipped": "Skipped",
