@@ -5887,7 +5887,12 @@
     "affectedPrefix": "受影响：",
     "destroyAndDeleteOne": "销毁 1 个沙箱并删除",
     "destroyAndDeleteMany": "销毁 {{count}} 个沙箱并删除",
-    "relinkThisImageAnyway": "仍要重新关联此镜像吗？"
+    "relinkThisImageAnyway": "仍要重新关联此镜像吗？",
+    "cannotDeleteThisEnvironmentWhileItKeepsAFailedRunsWorkspace": "无法删除此环境：它仍保留着一次失败运行的工作区副本（一个为文件恢复而保留的已停止沙箱）。经同意删除该环境会销毁该沙箱及仅其持有的文件。",
+    "cannotDeleteThisEnvironmentWhileItHasAReusableSandboxLease": "无法删除此环境：它仍持有可复用的沙箱租约。请移除关联的执行工作区或任务，让 Paperclip 销毁该沙箱，然后重试。",
+    "loadingEnvironments": "正在加载环境",
+    "useAuthenticationConfiguredOnTheRemoteMachine": "使用远程机器上配置的认证",
+    "useTheRemoteUsersProviderLogin": "使用远程用户的提供商登录，而不是员工的 Paperclip AI 账号。"
   },
   "importSkills": {
     "noFilesCopied": "未复制任何文件。",

@@ -5887,7 +5887,12 @@
     "affectedPrefix": "Affected: ",
     "destroyAndDeleteOne": "Destroy 1 sandbox and delete",
     "destroyAndDeleteMany": "Destroy {{count}} sandboxes and delete",
-    "relinkThisImageAnyway": "Relink this image anyway?"
+    "relinkThisImageAnyway": "Relink this image anyway?",
+    "cannotDeleteThisEnvironmentWhileItKeepsAFailedRunsWorkspace": "Cannot delete this environment while it keeps a failed run's workspace copy (a stopped sandbox kept for file recovery). Deleting the environment with consent destroys that sandbox and the files only it holds.",
+    "cannotDeleteThisEnvironmentWhileItHasAReusableSandboxLease": "Cannot delete this environment while it has a reusable sandbox lease. Remove the associated execution workspace or issue so Paperclip can destroy the sandbox, then retry.",
+    "loadingEnvironments": "Loading environments",
+    "useAuthenticationConfiguredOnTheRemoteMachine": "Use authentication configured on the remote machine",
+    "useTheRemoteUsersProviderLogin": "Use the remote user's provider login instead of the agent's Paperclip AI account."
   },
   "importSkills": {
     "noFilesCopied": "No files were copied.",

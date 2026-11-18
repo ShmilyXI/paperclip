@@ -120,9 +120,9 @@ function environmentDeleteBlockMessage(impact: EnvironmentDeleteBlastRadius): st
   }
   if (impact.reusableSandboxLeaseCount > 0) {
     if (impact.reusableSandboxLeaseHolders.some(holder => holder.leasePolicy === "retain_on_failure")) {
-      return "Cannot delete this environment while it keeps a failed run's workspace copy (a stopped sandbox kept for file recovery). Deleting the environment with consent destroys that sandbox and the files only it holds.";
+      return t("environments.cannotDeleteThisEnvironmentWhileItKeepsAFailedRunsWorkspace");
     }
-    return "Cannot delete this environment while it has a reusable sandbox lease. Remove the associated execution workspace or issue so Paperclip can destroy the sandbox, then retry.";
+    return t("environments.cannotDeleteThisEnvironmentWhileItHasAReusableSandboxLease");
   }
   return null;
 }
@@ -955,7 +955,7 @@ function EnvironmentImageTemplatePanel({
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to start setup",
+        title: t("environments.failedToStartSetup"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -980,7 +980,7 @@ function EnvironmentImageTemplatePanel({
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to capture template",
+        title: t("environments.failedToCaptureTemplate"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1006,7 +1006,7 @@ function EnvironmentImageTemplatePanel({
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to cancel setup",
+        title: t("environments.failedToCancelSetup"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1030,7 +1030,7 @@ function EnvironmentImageTemplatePanel({
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to roll back template",
+        title: t("environments.failedToRollBackTemplate"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1074,7 +1074,7 @@ function EnvironmentImageTemplatePanel({
     onError: (error) => {
       if (error instanceof RelinkConfirmationDeclined) return;
       pushToast({
-        title: "Failed to relink template",
+        title: t("environments.failedToRelinkTemplate"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1098,7 +1098,7 @@ function EnvironmentImageTemplatePanel({
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to disable template",
+        title: t("environments.failedToDisableTemplate"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1491,7 +1491,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to save environment variables",
+        title: t("environments.failedToSaveEnvironmentVariables"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1548,7 +1548,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to save environment",
+        title: t("environments.failedToSaveEnvironment"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1568,7 +1568,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to update default environment",
+        title: t("environments.failedToUpdateDefaultEnvironment"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1632,7 +1632,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
         queryKey: ["environment-delete-blast-radius", input.environment.id],
       });
       pushToast({
-        title: "Failed to delete environment",
+        title: t("environments.failedToDeleteEnvironment"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1670,7 +1670,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
         },
       }));
       pushToast({
-        title: "Environment probe failed",
+        title: t("environments.environmentProbeFailed"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -1692,7 +1692,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
     },
     onError: (error) => {
       pushToast({
-        title: "Draft probe failed",
+        title: t("environments.draftProbeFailed"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -2055,7 +2055,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
         </div>
 
         {environmentsQuery.isLoading || environmentsView.kind === "reconnecting" ? (
-          <QueryPlaceholder label="Loading environments" />
+          <QueryPlaceholder label={t("environments.loadingEnvironments")} />
         ) : environmentsView.kind === "error" ? (
           <QueryErrorState
             error={environmentsQuery.error}
@@ -2445,8 +2445,8 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
                     <summary className="cursor-pointer text-sm font-medium">Advanced</summary>
                     <div className="pt-3">
                       <ToggleField
-                        label="Use authentication configured on the remote machine"
-                        hint="Use the remote user's provider login instead of the agent's Paperclip AI account."
+                        label={t("environments.useAuthenticationConfiguredOnTheRemoteMachine")}
+                        hint={t("environments.useTheRemoteUsersProviderLogin")}
                         checked={environmentForm.sshUseHostAuth}
                         onChange={(checked) => setEnvironmentForm((current) => ({ ...current, sshUseHostAuth: checked }))}
                       />
