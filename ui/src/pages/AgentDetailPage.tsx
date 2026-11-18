@@ -35,8 +35,8 @@ function AgentPluginDetail() {
       { label: slot?.displayName ?? t("agentDetailPage.pluginView") },
     ]);
   }, [setBreadcrumbs, agent?.name, agentId, slot?.displayName]);
-  if (error) return <p role="alert">Agent unavailable</p>;
-  if (!agent || isLoading || slotsLoading || environmentLoading) return <p role="status">Loading agent view…</p>;
+  if (error) return <p role="alert">{t("agentDetailPage.agentUnavailable")}</p>;
+  if (!agent || isLoading || slotsLoading || environmentLoading) return <p role="status">{t("agentDetailPage.loadingAgentView")}</p>;
   return <div className="mx-auto max-w-5xl space-y-4">
     <Link to={`/agents/${encodeURIComponent(agentId)}/overview`} className="text-sm text-muted-foreground">{agent.name}</Link>
     {slot ? <PluginSlotMount slot={slot} context={{ companyId: agent.companyId, companyPrefix: companyPrefix ?? null, entityId: agent.id, entityType: "agent" }} missingBehavior="placeholder" />

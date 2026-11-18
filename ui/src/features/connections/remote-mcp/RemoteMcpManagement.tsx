@@ -22,7 +22,7 @@ export function RemoteMcpManagement({ providerName, connected = true, canReconne
       <Button variant="outline" disabled={!canReconnect || busy} onClick={onReconnect}>{t("remoteMcpManagement.reconnect")}</Button>
       <Button variant="outline" onClick={onManage}>{t("remoteMcpManagement.manageIn", { provider: providerName })}</Button>
       {connected && canDisconnect && <AlertDialog open={confirming} onOpenChange={(open) => { if (!busy) setConfirming(open); }}>
-        <AlertDialogTrigger asChild><Button variant="ghost" className="text-destructive">Disconnect</Button></AlertDialogTrigger>
+        <AlertDialogTrigger asChild><Button variant="ghost" className="text-destructive">{t("common.disconnect")}</Button></AlertDialogTrigger>
         <AlertDialogContent className={ANALYTICS_MASK_CLASS}>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("remoteMcpManagement.disconnectProvider", { provider: providerName })}</AlertDialogTitle>
