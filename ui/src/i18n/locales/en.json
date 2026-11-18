@@ -17228,5 +17228,22 @@
     "loadingEditor": "Loading editor…",
     "updatedCountHarness_one": "Updated {{count}} {{harness}} agent.",
     "updatedCountHarness_other": "Updated {{count}} {{harness}} agents."
+  },
+  "contextUsageMeter": {
+    "compacting": "Compacting…",
+    "compactNow": "Compact now",
+    "agentIsSummarizing": "The agent is summarizing its conversation. This usually takes under a minute.",
+    "summarizesTheConversation": "Summarizes the conversation so far so the agent has room to keep working.",
+    "contextWindow": "Context window",
+    "usedOfWindowTokens": "{{used}} of {{window}} tokens",
+    "updatedTime": "· updated {{time}}",
+    "compactsAutomaticallyNear": "Compacts automatically near {{tokens}}.",
+    "closeToFull": "Close to full. The agent will compact its context soon.",
+    "cachedBreakdown": "{{input}} · {{cached}} cached",
+    "lastRequest": "Last request",
+    "inOut": "{{input}} in · {{output}} out",
+    "compactions": "Compactions",
+    "contextWindowAria": "Context window: {{percent}}% of {{window}} tokens used",
+    "ofWindow": " of {{window}}"
   }
 }

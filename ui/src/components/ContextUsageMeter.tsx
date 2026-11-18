@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useRef, useState } from "react";
 import { FoldVertical, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -102,14 +103,14 @@ function CompactAction({ compact, level }: { compact: ContextCompactState; level
         {compact.status === "pending"
           ? <Loader2 className="size-3.5 animate-spin" aria-hidden />
           : <FoldVertical className="size-3.5" aria-hidden />}
-        {compact.status === "pending" ? "Compacting…" : "Compact now"}
+        {compact.status === "pending" ? t("contextUsageMeter.compacting") : t("contextUsageMeter.compactNow")}
       </Button>
       <p className="text-muted-foreground" role={compact.status === "unavailable" ? "note" : undefined}>
         {compact.status === "unavailable"
           ? compact.reason
           : compact.status === "pending"
-            ? "The agent is summarizing its conversation. This usually takes under a minute."
-            : "Summarizes the conversation so far so the agent has room to keep working."}
+            ? t("contextUsageMeter.agentIsSummarizing")
+            : t("contextUsageMeter.summarizesTheConversation")}
       </p>
     </div>
   );
@@ -123,44 +124,44 @@ export function ContextUsageCard({ usage, compact }: { usage: ContextUsage; comp
   return (
     <div className="flex flex-col">
       <div className="flex items-baseline justify-between gap-2">
-        <span className="font-medium text-foreground">Context window</span>
+        <span className="font-medium text-foreground">{t("contextUsageMeter.contextWindow")}</span>
         <span className={cn("font-medium tabular-nums", LEVEL_TEXT[level])}>{percent}%</span>
       </div>
       <p className="mt-0.5 text-muted-foreground tabular-nums">
-        {formatContextTokens(usage.usedTokens)} of {formatContextTokens(usage.contextWindow)} tokens
-        {usage.observedAt ? <> · updated {timeAgo(usage.observedAt)}</> : null}
+        {t("contextUsageMeter.usedOfWindowTokens", { used: formatContextTokens(usage.usedTokens), window: formatContextTokens(usage.contextWindow) })}
+        {usage.observedAt ? <> {t("contextUsageMeter.updatedTime", { time: timeAgo(usage.observedAt) })}</> : null}
       </p>
       <Bar percent={percent} level={level} className="mt-2 w-full" />
       {level !== "normal" ? (
         <p className={cn("mt-2", LEVEL_TEXT[level])}>
           {usage.autoCompactTokens
-            ? `Compacts automatically near ${formatContextTokens(usage.autoCompactTokens)}.`
-            : "Close to full. The agent will compact its context soon."}
+            ? t("contextUsageMeter.compactsAutomaticallyNear", { tokens: formatContextTokens(usage.autoCompactTokens) })
+            : t("contextUsageMeter.closeToFull")}
         </p>
       ) : null}
       {totals || usage.lastTurn || usage.costUsd != null || usage.compactions ? (
         <dl className="mt-3 flex flex-col gap-1 border-t border-border pt-2">
           {totals?.inputTokens != null ? (
             <Row
-              label="Input"
+              label={t("agentDetail.input")}
               value={totals.cachedInputTokens
-                ? `${formatContextTokens(totals.inputTokens)} · ${formatContextTokens(totals.cachedInputTokens)} cached`
+                ? t("contextUsageMeter.cachedBreakdown", { input: formatContextTokens(totals.inputTokens), cached: formatContextTokens(totals.cachedInputTokens) })
                 : formatContextTokens(totals.inputTokens)}
             />
           ) : null}
-          {totals?.outputTokens != null ? <Row label="Output" value={formatContextTokens(totals.outputTokens)} /> : null}
+          {totals?.outputTokens != null ? <Row label={t("common.output")} value={formatContextTokens(totals.outputTokens)} /> : null}
           {totals?.reasoningOutputTokens ? (
-            <Row label="Reasoning" value={formatContextTokens(totals.reasoningOutputTokens)} muted />
+            <Row label={t("taskChatThinking.reasoning")} value={formatContextTokens(totals.reasoningOutputTokens)} muted />
           ) : null}
           {usage.lastTurn ? (
             <Row
-              label="Last request"
-              value={`${formatContextTokens(usage.lastTurn.inputTokens ?? 0)} in · ${formatContextTokens(usage.lastTurn.outputTokens ?? 0)} out`}
+              label={t("contextUsageMeter.lastRequest")}
+              value={t("contextUsageMeter.inOut", { input: formatContextTokens(usage.lastTurn.inputTokens ?? 0), output: formatContextTokens(usage.lastTurn.outputTokens ?? 0) })}
               muted
             />
           ) : null}
-          {usage.costUsd != null ? <Row label="Cost" value={`$${usage.costUsd.toFixed(2)}`} /> : null}
-          {usage.compactions ? <Row label="Compactions" value={String(usage.compactions)} muted /> : null}
+          {usage.costUsd != null ? <Row label={t("common.cost")} value={`$${usage.costUsd.toFixed(2)}`} /> : null}
+          {usage.compactions ? <Row label={t("contextUsageMeter.compactions")} value={String(usage.compactions)} muted /> : null}
         </dl>
       ) : null}
       {compact ? <CompactAction compact={compact} level={level} /> : null}
@@ -201,7 +202,7 @@ export function ContextUsageMeter({
       <PopoverTrigger asChild>
         <button
           type="button"
-          aria-label={`Context window: ${percent}% of ${windowLabel} tokens used`}
+          aria-label={t("contextUsageMeter.contextWindowAria", { percent, window: windowLabel })}
           data-testid="context-usage-meter"
           data-level={level}
           onMouseEnter={show}
@@ -211,7 +212,7 @@ export function ContextUsageMeter({
           <Bar percent={percent} level={level} className="w-12 shrink-0" />
           <span className={cn("truncate tabular-nums", level === "normal" ? "text-foreground" : LEVEL_TEXT[level])}>
             {percent}%
-            <span className="text-muted-foreground"> of {windowLabel}</span>
+            <span className="text-muted-foreground">{t("contextUsageMeter.ofWindow", { window: windowLabel })}</span>
           </span>
         </button>
       </PopoverTrigger>

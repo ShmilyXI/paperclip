@@ -17228,5 +17228,22 @@
     "loadingEditor": "正在加载编辑器…",
     "updatedCountHarness_one": "已更新 {{count}} 个{{harness}}员工。",
     "updatedCountHarness_other": "已更新 {{count}} 个{{harness}}员工。"
+  },
+  "contextUsageMeter": {
+    "compacting": "正在压缩…",
+    "compactNow": "立即压缩",
+    "agentIsSummarizing": "员工正在总结其对话，通常不到一分钟。",
+    "summarizesTheConversation": "总结到目前为止的对话，为员工腾出继续工作的空间。",
+    "contextWindow": "上下文窗口",
+    "usedOfWindowTokens": "{{window}} 个 token 中已用 {{used}}",
+    "updatedTime": "· 更新于 {{time}}",
+    "compactsAutomaticallyNear": "接近 {{tokens}} 时会自动压缩。",
+    "closeToFull": "接近已满。员工很快会压缩其上下文。",
+    "cachedBreakdown": "{{input}} · {{cached}} 已缓存",
+    "lastRequest": "最近请求",
+    "inOut": "输入 {{input}} · 输出 {{output}}",
+    "compactions": "压缩次数",
+    "contextWindowAria": "上下文窗口：已使用 {{window}} 个 token 中的 {{percent}}%",
+    "ofWindow": "，共 {{window}}"
   }
 }
