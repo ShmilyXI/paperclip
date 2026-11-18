@@ -1,4 +1,4 @@
-import { t } from "@/i18n";
+import { t, dateLocale } from "@/i18n";
 import { describeError } from "../api/errors";
 import { useSelectedHeartbeatRun } from "../hooks/useSelectedHeartbeatRun";
 import { grokBotApi } from "@/api/grokBot";

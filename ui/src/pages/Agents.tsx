@@ -1,3 +1,4 @@
+import { localizedRoleLabels } from "@/lib/role-labels";
 import { t } from "@/i18n";
 import { PrimaryAgentIndicator } from "@/components/primary-agent/PrimaryAgentPresentation";
 import { AgentBulkRoster } from "@/components/agents/AgentBulkRoster";
