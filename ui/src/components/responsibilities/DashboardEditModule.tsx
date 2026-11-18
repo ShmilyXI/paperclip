@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -88,14 +89,14 @@ function LatestChange({
       <p className="min-w-0 flex-1 text-sm text-muted-foreground">{dashboardChangeLine(change)}</p>
       <Button type="button" size="xs" variant="outline" disabled={busy} onClick={onUndo} data-dashboard-undo="">
         {busy ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-        Undo
+        {t("common.undo")}
       </Button>
       <Button
         type="button"
         size="icon-xs"
         variant="ghost"
         className="text-muted-foreground"
-        aria-label="Dismiss"
+        aria-label={t("common.dismiss")}
         onClick={() => {
           writeDismissedUndo(change.id);
           setDismissed(change.id);
@@ -119,7 +120,7 @@ export function DashboardVersionList({
   restoringId: string | null;
   onRestore: (versionId: string) => void;
 }) {
-  if (list.versions.length === 0) return <p className="text-sm text-muted-foreground">No versions yet.</p>;
+  if (list.versions.length === 0) return <p className="text-sm text-muted-foreground">{t("responsibilities.noVersionsYet")}</p>;
   const agentName = (id: string) => agentsById.get(id)?.name;
   return (
     <ul className="flex flex-col divide-y divide-border" data-dashboard-versions="">
@@ -132,7 +133,7 @@ export function DashboardVersionList({
             </p>
           </div>
           {position === 0 ? (
-            <span className="shrink-0 text-xs text-muted-foreground">Now</span>
+            <span className="shrink-0 text-xs text-muted-foreground">{t("timeline.now")}</span>
           ) : (
             <Button
               type="button"
@@ -142,7 +143,7 @@ export function DashboardVersionList({
               onClick={() => onRestore(version.id)}
             >
               {restoringId === version.id ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-              Restore
+              {t("agentDetail.restore")}
             </Button>
           )}
         </li>
@@ -178,8 +179,8 @@ function VersionsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Previous versions</DialogTitle>
-          <DialogDescription className="sr-only">Saved versions of your dashboard, newest first.</DialogDescription>
+          <DialogTitle>{t("responsibilities.previousVersions")}</DialogTitle>
+          <DialogDescription className="sr-only">{t("responsibilities.savedVersionsOfYourDashboard")}</DialogDescription>
         </DialogHeader>
         {versions.kind === "error" ? (
           <QueryErrorState error={versions.error} size="inline" action="load the versions" onRetry={versions.retry} retrying={versions.isFetching} />
@@ -191,10 +192,10 @@ function VersionsDialog({
             onRestore={(versionId) => restore.mutate(versionId)}
           />
         ) : (
-          <Loader2 aria-label="Loading" className="size-4 animate-spin text-muted-foreground" />
+          <Loader2 aria-label={t("responsibilities.loading")} className="size-4 animate-spin text-muted-foreground" />
         )}
         {restore.error ? (
-          <p role="alert" className="text-sm text-destructive">Couldn’t restore it. {describeError(restore.error).body}</p>
+          <p role="alert" className="text-sm text-destructive">{t("responsibilities.couldntRestoreIt")}{describeError(restore.error).body}</p>
         ) : null}
       </DialogContent>
     </Dialog>
@@ -232,18 +233,18 @@ export function DashboardEditModuleView({
   const talking = !proposal && state?.state === "discussing" && state.conversation ? state.conversation : null;
   const loaded = state !== null;
   const noAgent = loaded && !talking && !proposal && state.defaultAgentId === null;
-  const agentName = nameOf(state?.defaultAgentId) ?? "an agent";
-  const talkingWith = nameOf(talking?.agentId) ?? "an agent";
+  const agentName = nameOf(state?.defaultAgentId) ?? t("decisionCard.anAgent");
+  const talkingWith = nameOf(talking?.agentId) ?? t("decisionCard.anAgent");
   const latest = state?.latestChange ?? null;
   const conversationLink = talking ? (
     <Link to={`/issues/${talking.identifier ?? talking.issueId}`} className="font-medium text-foreground underline-offset-4 hover:underline">
-      Open the conversation
+      {t("responsibilities.openTheConversation")}
     </Link>
   ) : null;
   const error = startError ? (
-    <p role="alert" className="text-sm text-destructive">Couldn’t start it. {describeError(startError).body}</p>
+    <p role="alert" className="text-sm text-destructive">{t("responsibilities.couldntStartIt")}{describeError(startError).body}</p>
   ) : undoError ? (
-    <p role="alert" className="text-sm text-destructive">Couldn’t undo it. {describeError(undoError).body}</p>
+    <p role="alert" className="text-sm text-destructive">{t("responsibilities.couldntUndoIt")}{describeError(undoError).body}</p>
   ) : null;
   const undo = latest?.previousVersionId ? (
     <LatestChange change={latest} busy={undoing} onUndo={() => onUndo(latest.previousVersionId!)} />
@@ -256,25 +257,25 @@ export function DashboardEditModuleView({
     return (
       <Card elevation="low" className="gap-4 px-5 py-5" data-dashboard-module="create">
         <div className="flex flex-col gap-1">
-          <h2 className="text-lg font-semibold text-foreground">Create your custom dashboard</h2>
+          <h2 className="text-lg font-semibold text-foreground">{t("responsibilities.createYourCustomDashboard")}</h2>
           <p className="text-sm text-muted-foreground">
-            Have an agent research and interview you to generate a custom dashboard of areas and responsibilities that matter to you.
+            {t("responsibilities.haveAnAgentResearchAndInterview")}
           </p>
         </div>
         {card}
         {talking ? (
           <p className="text-sm text-muted-foreground" data-dashboard-talking="">
-            Talking it through with {talkingWith}. {conversationLink}
+            {t("responsibilities.talkingItThroughWith", { name: talkingWith })} {conversationLink}
           </p>
         ) : null}
         {!card && !talking ? (
           noAgent ? (
-            <p className="text-sm text-muted-foreground">No agent is free to do this. Add your areas yourself.</p>
+            <p className="text-sm text-muted-foreground">{t("responsibilities.noAgentIsFreeToDoThis")}</p>
           ) : (
             <div>
               <Button disabled={!loaded || starting} onClick={onStart} data-dashboard-start="">
                 {starting ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-                Start with {agentName}
+                {t("responsibilities.startWith", { name: agentName })}
               </Button>
             </div>
           )
@@ -289,7 +290,7 @@ export function DashboardEditModuleView({
             onClick={onAddArea}
             data-dashboard-add-area=""
           >
-            Add an area yourself
+            {t("responsibilities.addAnAreaYourself")}
           </Button>
         </div>
       </Card>
@@ -304,10 +305,10 @@ export function DashboardEditModuleView({
       <div className="flex min-h-11 items-center gap-2 rounded-lg border border-dashed border-border pl-2 pr-2">
         {talking ? (
           <p className="min-w-0 flex-1 px-3 text-sm text-muted-foreground" data-dashboard-talking="">
-            Editing it with {talkingWith}. {conversationLink}
+            {t("responsibilities.editingItWith", { name: talkingWith })} {conversationLink}
           </p>
         ) : noAgent ? (
-          <p className="min-w-0 flex-1 px-3 text-sm text-muted-foreground">No agent is free to edit your dashboard.</p>
+          <p className="min-w-0 flex-1 px-3 text-sm text-muted-foreground">{t("responsibilities.noAgentIsFreeToEdit")}</p>
         ) : (
           <Button
             variant="ghost"
@@ -317,11 +318,11 @@ export function DashboardEditModuleView({
             data-dashboard-edit=""
           >
             {starting ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-            Edit your dashboard
+            {t("responsibilities.editYourDashboard")}
           </Button>
         )}
         <Button size="xs" variant="ghost" className="shrink-0 text-muted-foreground" onClick={onOpenVersions} data-dashboard-versions-open="">
-          Versions
+          {t("responsibilities.versions")}
         </Button>
       </div>
     </div>
