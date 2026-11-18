@@ -17423,5 +17423,21 @@
     "resolvingAccess": "正在解析访问权限…",
     "couldntLoadThisAgentsConnectors": "无法加载此员工的连接器。",
     "noConnectorsAreAllowedYet": "尚未允许任何连接器。"
+  },
+  "agentAdvancedTab": {
+    "invalidYaml": "无效的 YAML",
+    "omittedSettingsStayUnchanged": "未列出的设置保持不变。指令文件内容、继承的访问权限和历史记录可在各自的设置标签页中查看。",
+    "createdCredentials": "已创建的凭证",
+    "copyThisKeyNow": "请立即复制此密钥。离开此页面后它将不再显示。",
+    "labelToken": "{{label}} 令牌",
+    "changeToApply_one": "要应用的 {{count}} 项更改",
+    "changeToApply_other": "要应用的 {{count}} 项更改",
+    "changesSaveInThisOrder": "更改按此顺序保存。如果其中一项失败，之前的更改仍会保留。",
+    "reloadSaved": "重新加载已保存内容",
+    "savingProgress": "正在保存：{{progress}}…",
+    "configuration": "配置",
+    "noConfigurationChanges": "没有配置更改",
+    "noUnsavedChanges": "没有未保存的更改",
+    "agentYamlConfiguration": "员工 YAML 配置"
   }
 }

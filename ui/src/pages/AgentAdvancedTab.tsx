@@ -1,4 +1,5 @@
 import { describeError } from "@/api/errors";
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { basicSetup } from "codemirror";
@@ -46,9 +47,9 @@ export function AgentAdvancedTab(props: AgentAdvancedTabProps) {
   if (!initial) {
     if (query.error) return <div role="alert" className="space-y-3 text-sm">
       <p>{describeError(query.error).body}</p>
-      <Button variant="outline" onClick={() => query.refetch()}>Retry</Button>
+      <Button variant="outline" onClick={() => query.refetch()}>{t("common.retry")}</Button>
     </div>;
-    return <p role="status" className="text-sm text-muted-foreground">Loading configuration…</p>;
+    return <p role="status" className="text-sm text-muted-foreground">{t("gitHubBotManagement.loadingConfiguration")}</p>;
   }
   return <ConfigurationEditor key={props.agent.id} {...props} initial={initial} />;
 }
@@ -71,7 +72,7 @@ function ConfigurationEditor({ agent, initial, onDirtyChange, onSaved, onSavingC
     try {
       const document = parseAgentConfigurationYaml(source);
       return { document, changes: planAgentConfiguration(saved, document).map(step => step.label), error: null };
-    } catch (cause) { return { document: null, changes: [], error: cause instanceof Error ? cause.message : "Invalid YAML" }; }
+    } catch (cause) { return { document: null, changes: [], error: cause instanceof Error ? cause.message : t("agentAdvancedTab.invalidYaml") }; }
   }, [source, saved]);
   useEffect(() => { onDirtyChange(dirty || reloadRequired); }, [dirty, reloadRequired, onDirtyChange]);
   useEffect(() => () => onDirtyChange(false), [onDirtyChange]);
@@ -97,7 +98,7 @@ function ConfigurationEditor({ agent, initial, onDirtyChange, onSaved, onSavingC
       setReloadRequired(false);
       onSaved(configuration.agent);
       const warnings = configuration.agent.configurationWarnings;
-      pushToast({ title: "Agent saved", tone: warnings?.length ? "warn" : "success", body: warnings?.map(warning => warning.message).join("\n") });
+      pushToast({ title: t("agentDetail.agentSaved"), tone: warnings?.length ? "warn" : "success", body: warnings?.map(warning => warning.message).join("\n") });
     },
     onSettled: () => {
       operationPending.current = false;
@@ -125,31 +126,31 @@ function ConfigurationEditor({ agent, initial, onDirtyChange, onSaved, onSavingC
   useEffect(() => { onSavingChange?.(busy); }, [busy, onSavingChange]);
   useEffect(() => () => onSavingChange?.(false), [onSavingChange]);
   return <div className="space-y-4">
-    <p className="text-sm text-muted-foreground">Omitted settings stay unchanged. Instruction file contents, inherited access, and history are available in their settings tabs.</p>
-    {receipts.length > 0 && <div className="space-y-3 rounded-md border border-border p-4" aria-label="Created credentials">
+    <p className="text-sm text-muted-foreground">{t("agentAdvancedTab.omittedSettingsStayUnchanged")}</p>
+    {receipts.length > 0 && <div className="space-y-3 rounded-md border border-border p-4" aria-label={t("agentAdvancedTab.createdCredentials")}>
       {receipts.map((receipt, index) => <div key={`${receipt.id}-${index}`} className="space-y-2 text-sm">
         <p className="font-medium">{receipt.label}</p>
         {receipt.token ? <>
-          <p className="text-muted-foreground">Copy this key now. It won’t be shown again after leaving this page.</p>
-          <input readOnly aria-label={`${receipt.label} token`} value={receipt.token} className="w-full rounded-md border border-border bg-muted p-2 font-mono text-sm" />
+          <p className="text-muted-foreground">{t("agentAdvancedTab.copyThisKeyNow")}</p>
+          <input readOnly aria-label={t("agentAdvancedTab.labelToken", { label: receipt.label })} value={receipt.token} className="w-full rounded-md border border-border bg-muted p-2 font-mono text-sm" />
         </> : <p className="font-mono text-muted-foreground">{receipt.id}</p>}
       </div>)}
     </div>}
     <AgentYamlEditor value={source} onChange={value => { setSource(value); if (!reloadRequired) setError(null); }} readOnly={busy} />
     {dirty && validation.changes.length > 0 && <details className="rounded-md border border-border p-3 text-sm">
-      <summary className="cursor-pointer font-medium">{validation.changes.length} {validation.changes.length === 1 ? "change" : "changes"} to apply</summary>
+      <summary className="cursor-pointer font-medium">{t("agentAdvancedTab.changeToApply", { count: validation.changes.length })}</summary>
       <ul className="mt-2 list-inside list-disc space-y-1">{validation.changes.map((label, index) => <li key={index}>{label}</li>)}</ul>
-      <p className="mt-2 text-muted-foreground">Changes save in this order. If one fails, earlier changes remain saved.</p>
+      <p className="mt-2 text-muted-foreground">{t("agentAdvancedTab.changesSaveInThisOrder")}</p>
     </details>}
     {(validation.error || error) && <p role="alert" className="whitespace-pre-wrap text-sm text-destructive">{validation.error || error}</p>}
     <footer className="sticky bottom-0 z-10 flex items-center justify-between gap-3 border-t border-border bg-background py-4">
-      <Button variant="ghost" disabled={busy} onClick={() => { if (!operationPending.current) { operationPending.current = true; reload.mutate(); } }}>Reload saved</Button>
+      <Button variant="ghost" disabled={busy} onClick={() => { if (!operationPending.current) { operationPending.current = true; reload.mutate(); } }}>{t("agentAdvancedTab.reloadSaved")}</Button>
       <div className="flex items-center gap-3">
         <span role="status" className="flex items-center gap-2 text-xs text-muted-foreground">
           {!save.isPending && !reload.isPending && dirty ? <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-(--agent-detail-dot-unsaved)" /> : null}
-          {save.isPending ? `Saving: ${progress || "configuration"}…` : reload.isPending ? "Loading configuration…" : dirty ? validation.document && !validation.changes.length ? "No configuration changes" : "Unsaved changes" : "No unsaved changes"}
+          {save.isPending ? t("agentAdvancedTab.savingProgress", { progress: progress || t("agentAdvancedTab.configuration") }) : reload.isPending ? t("gitHubBotManagement.loadingConfiguration") : dirty ? validation.document && !validation.changes.length ? t("agentAdvancedTab.noConfigurationChanges") : t("common.unsavedChanges") : t("agentAdvancedTab.noUnsavedChanges")}
         </span>
-        <Button disabled={!dirty || busy || reloadRequired || !validation.document || !validation.changes.length} onClick={() => { if (!operationPending.current) { operationPending.current = true; save.mutate(); } }}>{save.isPending ? "Saving…" : "Save changes"}</Button>
+        <Button disabled={!dirty || busy || reloadRequired || !validation.document || !validation.changes.length} onClick={() => { if (!operationPending.current) { operationPending.current = true; save.mutate(); } }}>{save.isPending ? t("common.saving2") : t("common.saveChanges")}</Button>
       </div>
     </footer>
   </div>;
@@ -170,7 +171,7 @@ function AgentYamlEditor({ value, onChange, readOnly }: { value: string; onChang
       state: EditorState.create({ doc: current.current, extensions: [
         basicSetup, yaml(),
         syntaxHighlighting(yamlHighlightStyle),
-        EditorView.contentAttributes.of({ "aria-label": "Agent YAML configuration", spellcheck: "false" }),
+        EditorView.contentAttributes.of({ "aria-label": t("agentAdvancedTab.agentYamlConfiguration"), spellcheck: "false" }),
         editability.current.of([EditorState.readOnly.of(readOnly), EditorView.editable.of(!readOnly)]),
         EditorView.updateListener.of(update => { if (update.docChanged) change.current(update.state.doc.toString()); }),
       ] }),
