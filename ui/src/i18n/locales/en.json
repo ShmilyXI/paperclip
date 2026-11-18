@@ -10605,7 +10605,17 @@
     "reorderQueuedMessageBody": "Reorder queued message: {{body}}",
     "discardQueuedMessageBody": "Discard queued message: {{body}}",
     "queuedMessageActionsBody": "Queued message actions: {{body}}",
-    "movedQueuedMessageToPosition": "Moved queued message to position {{to}} of {{length}}."
+    "movedQueuedMessageToPosition": "Moved queued message to position {{to}} of {{length}}.",
+    "savedResponse": "Saved response",
+    "queuedImages": "Queued images",
+    "sendingInS": "Sending in {{seconds}}s",
+    "editBeforeItIsSent": "Edit before it is sent",
+    "keepThisMessageInTheQueue": "Keep this message in the queue",
+    "sendQueuedMessages": "Send queued messages",
+    "steer": "Steer",
+    "messagesAreStillQueued": "Messages are still queued. They will send when the task is ready.",
+    "queuedMessageWillBeSentInto": "Queued message will be sent into the active turn in a few seconds. Edit or Cancel to keep it.",
+    "messagesAreStillQueuedShort": "Messages are still queued."
   },
   "composioAppSetup": {
     "nameIsConnectedThroughComposio": "{{name}} is connected through Composio.",

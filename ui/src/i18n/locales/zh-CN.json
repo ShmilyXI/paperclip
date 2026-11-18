@@ -10605,7 +10605,17 @@
     "reorderQueuedMessageBody": "调整排队消息顺序：{{body}}",
     "discardQueuedMessageBody": "丢弃排队消息：{{body}}",
     "queuedMessageActionsBody": "排队消息操作：{{body}}",
-    "movedQueuedMessageToPosition": "已将排队消息移动到第 {{to}} 位（共 {{length}} 个）。"
+    "movedQueuedMessageToPosition": "已将排队消息移动到第 {{to}} 位（共 {{length}} 个）。",
+    "savedResponse": "已保存的回复",
+    "queuedImages": "排队的图片",
+    "sendingInS": "{{seconds}} 秒后发送",
+    "editBeforeItIsSent": "在发送前编辑",
+    "keepThisMessageInTheQueue": "保留此消息在队列中",
+    "sendQueuedMessages": "发送排队消息",
+    "steer": "插入",
+    "messagesAreStillQueued": "消息仍在排队中，任务就绪后会发送。",
+    "queuedMessageWillBeSentInto": "排队消息将在几秒后发送到当前轮次。编辑或取消可保留它。",
+    "messagesAreStillQueuedShort": "消息仍在排队中。"
   },
   "composioAppSetup": {
     "nameIsConnectedThroughComposio": "{{name}} 已通过 Composio 连接。",
