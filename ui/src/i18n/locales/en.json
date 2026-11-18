@@ -8081,7 +8081,8 @@
     "previousPage": "Previous page",
     "suggestionsAndComplaintsFromYour": "Suggestions and complaints from your agents.",
     "readKindFromName": "Read {{kind}} from {{name}}",
-    "pageRange": "{{start}}–{{end}} of {{total}} messages"
+    "pageRange": "{{start}}–{{end}} of {{total}} messages",
+    "commentaryFilters": "Commentary filters"
   },
   "trustPresetSection": {
     "rootIssue": "Root issue",

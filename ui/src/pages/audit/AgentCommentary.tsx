@@ -62,8 +62,8 @@ function CommentaryDetail({ companyId, id, onClose, triggerRef }: { companyId: s
           <DialogTitle>{entry?.kind === "complaint" ? t("agentCommentary.complaint") : entry ? t("agentCommentary.suggestion") : t("agentCommentary.commentary")}</DialogTitle>
           <DialogDescription>{entry ? t("agentCommentary.submittedTolocalestring", { toLocaleString: new Date(entry.createdAt).toLocaleString() }) : t("agentCommentary.messageDetailsAndSourceContext")}</DialogDescription>
         </DialogHeader>
-        {detail.isPending ? <p role="status" className="text-sm text-muted-foreground">Loading message…</p> : detail.error ? (
-          <div role="alert" className="flex flex-col items-start gap-3"><p className="text-sm text-destructive">{describeError(detail.error).body}</p><Button variant="outline" size="sm" onClick={() => void detail.refetch()}>Try again</Button></div>
+        {detail.isPending ? <p role="status" className="text-sm text-muted-foreground">{t("agentCommentary.loadingMessage")}</p> : detail.error ? (
+          <div role="alert" className="flex flex-col items-start gap-3"><p className="text-sm text-destructive">{describeError(detail.error).body}</p><Button variant="outline" size="sm" onClick={() => void detail.refetch()}>{t("common.tryAgain")}</Button></div>
         ) : entry ? <>
           <div className="flex shrink-0 flex-wrap items-center gap-3"><Link to={`/agents/${entry.agent.id}`}><AgentIdentity agent={entry.agent} size="sm" /></Link><MessageKind kind={entry.kind} /></div>
           <div className="min-h-0 overflow-y-auto overscroll-contain break-words pr-2"><MarkdownBody>{entry.body}</MarkdownBody></div>
@@ -118,17 +118,17 @@ export function AgentCommentary({ companyId }: { companyId: string }) {
   const clearFilters = () => updateFilters({ q: "", agentId: "", kind: "" });
 
   return (
-    <section className="flex flex-col gap-5" aria-label="Commentary">
-      <div className="flex flex-col gap-1"><h2 className="text-lg font-semibold">Commentary</h2><p className="text-sm text-muted-foreground">Suggestions and complaints from your agents.</p></div>
-      <div data-canonical-toolbar="audit-commentary" role="toolbar" aria-label="Commentary filters" className="flex flex-wrap items-center gap-2">
-        <div className="relative min-w-48 flex-1 sm:max-w-sm"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input aria-label="Search commentary" placeholder="Search messages…" maxLength={200} value={search} onChange={(event) => setSearch(event.target.value)} className="pl-9" /></div>
-        <Select value={agentId} onValueChange={(value) => updateFilters({ agentId: value })}><SelectTrigger aria-label="Filter by agent" className="min-w-40"><SelectValue placeholder="All agents" /></SelectTrigger><SelectContent><SelectItem value={ALL}>All agents</SelectItem>{agents.data?.map((agent) => <SelectItem key={agent.id} value={agent.id}><AgentIdentity agent={agent} size="xs" /></SelectItem>)}</SelectContent></Select>
-        <Select value={kind ?? ALL} onValueChange={(value) => updateFilters({ kind: value })}><SelectTrigger aria-label="Filter by message type" className="min-w-36"><SelectValue /></SelectTrigger><SelectContent><SelectItem value={ALL}>All types</SelectItem><SelectItem value="suggestion">Suggestions</SelectItem><SelectItem value="complaint">Complaints</SelectItem></SelectContent></Select>
-        {hasFilters && <Button variant="ghost" size="sm" onClick={clearFilters}>Clear filters</Button>}
+    <section className="flex flex-col gap-5" aria-label={t("agentCommentary.commentary")}>
+      <div className="flex flex-col gap-1"><h2 className="text-lg font-semibold">{t("agentCommentary.commentary")}</h2><p className="text-sm text-muted-foreground">{t("agentCommentary.suggestionsAndComplaintsFromYour")}</p></div>
+      <div data-canonical-toolbar="audit-commentary" role="toolbar" aria-label={t("agentCommentary.commentaryFilters")} className="flex flex-wrap items-center gap-2">
+        <div className="relative min-w-48 flex-1 sm:max-w-sm"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input aria-label={t("agentCommentary.searchCommentary")} placeholder={t("agentCommentary.searchMessages")} maxLength={200} value={search} onChange={(event) => setSearch(event.target.value)} className="pl-9" /></div>
+        <Select value={agentId} onValueChange={(value) => updateFilters({ agentId: value })}><SelectTrigger aria-label={t("agentCommentary.filterByAgent")} className="min-w-40"><SelectValue placeholder={t("agentCommentary.allAgents")} /></SelectTrigger><SelectContent><SelectItem value={ALL}>{t("agentCommentary.allAgents")}</SelectItem>{agents.data?.map((agent) => <SelectItem key={agent.id} value={agent.id}><AgentIdentity agent={agent} size="xs" /></SelectItem>)}</SelectContent></Select>
+        <Select value={kind ?? ALL} onValueChange={(value) => updateFilters({ kind: value })}><SelectTrigger aria-label={t("agentCommentary.filterByMessageType")} className="min-w-36"><SelectValue /></SelectTrigger><SelectContent><SelectItem value={ALL}>{t("agentCommentary.allTypes")}</SelectItem><SelectItem value="suggestion">{t("agentCommentary.suggestions")}</SelectItem><SelectItem value="complaint">{t("agentCommentary.complaints")}</SelectItem></SelectContent></Select>
+        {hasFilters && <Button variant="ghost" size="sm" onClick={clearFilters}>{t("agentCommentary.clearFilters")}</Button>}
       </div>
-      {agents.error && <p role="alert" className="text-sm text-destructive">Could not load agent filters. <button type="button" className="underline" onClick={() => void agents.refetch()}>Try again</button></p>}
-      {messages.isPending ? <p role="status" className="py-12 text-center text-sm text-muted-foreground">Loading commentary…</p> : messages.error ? (
-        <div role="alert" className="flex flex-col items-center gap-3 py-12"><p className="text-sm text-destructive">{describeError(messages.error).body}</p><Button variant="outline" size="sm" onClick={() => void messages.refetch()}>Try again</Button></div>
+      {agents.error && <p role="alert" className="text-sm text-destructive">{t("agentCommentary.couldNotLoadAgentFilters")} <button type="button" className="underline" onClick={() => void agents.refetch()}>{t("common.tryAgain")}</button></p>}
+      {messages.isPending ? <p role="status" className="py-12 text-center text-sm text-muted-foreground">{t("agentCommentary.loadingCommentary")}</p> : messages.error ? (
+        <div role="alert" className="flex flex-col items-center gap-3 py-12"><p className="text-sm text-destructive">{describeError(messages.error).body}</p><Button variant="outline" size="sm" onClick={() => void messages.refetch()}>{t("common.tryAgain")}</Button></div>
       ) : messages.data?.items.length === 0 ? (
         <EmptyState icon={Lightbulb} message={offset > 0 ? t("agentCommentary.noMessagesOnThisPage") : hasFilters ? t("agentCommentary.noMessagesMatchTheseFilters") : t("agentCommentary.noAgentCommentaryYet")} description={offset > 0 ? t("agentCommentary.returnToTheNewestMessages") : hasFilters ? t("agentCommentary.tryAnotherAgentMessageType") : t("agentCommentary.suggestionsAndComplaintsWillAppear")} action={offset > 0 ? t("agentCommentary.backToLatest") : hasFilters ? t("agentCommentary.clearFilters") : undefined} onAction={offset > 0 ? () => updateFilters({ offset: "" }) : hasFilters ? clearFilters : undefined} hideActionIcon />
       ) : messages.data ? <>
