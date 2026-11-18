@@ -668,7 +668,7 @@ export function AgentDetail() {
       crumbs.push({ label: agentName, href: agentDetailHref(canonicalAgentRef) });
       if (urlRunId) {
         crumbs.push({ label: "Runs", href: agentDetailHref(canonicalAgentRef, "runs") });
-        crumbs.push({ label: `Run ${urlRunId.slice(0, 8)}` });
+        crumbs.push({ label: t("agentDetail.runSlice", { slice: urlRunId.slice(0, 8) }) });
       } else {
         crumbs.push({ label: agentDetailViewLabel(activeView === "run-detail" ? "overview" : activeView) });
       }
@@ -871,7 +871,7 @@ export function AgentDetail() {
               as="h1"
               value={agent.name}
               fitContent
-              placeholder="Agent name"
+              placeholder={t("agentConfig.agentName")}
               className="min-w-0 truncate text-2xl font-semibold leading-8 text-foreground"
               onSave={(name) => saveHeaderField({ name })}
             />
@@ -880,7 +880,7 @@ export function AgentDetail() {
           <div className="mt-1 flex min-w-0 items-center gap-2 text-sm leading-5 text-muted-foreground">
             <Link
               to={agentDetailHref(canonicalAgentRef, "runtime")}
-              aria-label={`Open ${getAdapterDisplay(agentDisplayAdapterType(agent)).label} harness settings`}
+              aria-label={t("agentDetail.openHarnessSettings", { label: getAdapterDisplay(agentDisplayAdapterType(agent)).label })}
               className="flex shrink-0 items-center gap-1 rounded-sm no-underline transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               {agent.adapterType === "claude_local" || agent.adapterType === "codex_local"
@@ -903,7 +903,7 @@ export function AgentDetail() {
         <AgentActionButtons
           agent={currentAgent}
           companyId={resolvedCompanyId}
-          assignLabel="New task"
+          assignLabel={t("common.newTask2")}
           size="default"
           assignIcon={Paperclip}
           showChat
@@ -912,7 +912,7 @@ export function AgentDetail() {
           menuItems={[{ label: "Agent history", icon: HistoryIcon, onSelect: () => setHistoryOpen(true) }]}
           actionsDisabled={agentAction.isPending || (activeView === "advanced" && configSaving)}
           workActionsDisabled={hasInvalidOrgChain}
-          workActionsDisabledReason="Repair this agent's reporting chain before assigning tasks or starting runs"
+          workActionsDisabledReason={t("agentDetail.repairReportingChainBeforeAssigning")}
           hasPendingNavigationChanges={configDirty}
           onBeforeNavigate={prepareAgentNavigation}
           onActionError={setActionError}
@@ -921,7 +921,7 @@ export function AgentDetail() {
           pauseConfirm={
             builtInState
               ? {
-                  title: `Pause the ${builtInState.definition.displayName}?`,
+                  title: t("agentDetail.pauseTheDisplayname", { displayName: builtInState.definition.displayName }),
                   description: (
                     <>
                       {builtInFeatureLabel} depends on this agent. While paused,{" "}
@@ -1408,9 +1408,9 @@ export function AgentOverview({
   const agentRef = agentRouteRef(agent);
   const { openNewIssue } = useDialogActions();
   const taskSuggestions = [
-    "Research a topic and summarize the key findings",
-    "Create a step-by-step plan for a project",
-    "Review a document and suggest improvements",
+    t("agentDetail.suggestedTaskResearch"),
+    t("agentDetail.suggestedTaskPlan"),
+    t("agentDetail.suggestedTaskReview"),
   ];
   const hasHumanCreator = Boolean(humanAgentCreatorUserId(agent.createdByUserId));
   const userDirectory = useQuery({
@@ -1439,34 +1439,34 @@ export function AgentOverview({
         <AgentMetricTile
           icon={ActivityIcon}
           value={activity.isLoading ? "–" : formatWindowCount(activityThisWeek)}
-          label="Activity"
-          description="Events this week"
+          label={t("common.activity")}
+          description={t("agentDetail.eventsThisWeek")}
           to={agentDetailHref(agentRef, "activity")}
         />
         <AgentMetricTile
           icon={PlayCircle}
           value={formatWindowCount(runsThisWeek)}
-          label="Runs"
-          description={`${formatWindowCount(recentFailures)} failed in the last 2 days`}
+          label={t("common.runs")}
+          description={t("agentDetail.failedInLast2Days", { value: formatWindowCount(recentFailures) })}
           to={agentDetailHref(agentRef, "runs")}
         />
         <AgentMetricTile
           icon={ReceiptText}
           value={formatCents(spent)}
-          label="Costs"
-          description="Month to date"
+          label={t("common.costs")}
+          description={t("agentDetail.monthToDate")}
           to={agentDetailHref(agentRef, "costs")}
         />
         <AgentMetricTile
           icon={Gauge}
           value={budgetPercent === null ? "–" : `${budgetPercent}%`}
-          label="Budget used"
-          description={budgetPercent === null ? "No monthly budget set" : `of ${formatCents(budget)} this month`}
+          label={t("agentDetail.budgetUsed")}
+          description={budgetPercent === null ? t("agentDetail.noMonthlyBudgetSet") : t("agentDetail.ofThisMonth", { amount: formatCents(budget) })}
           to={agentDetailHref(agentRef, "budgets")}
         />
-        <AgentPanel title="Profile" className="min-h-(--agent-detail-tile-min-h) sm:col-span-2" aria-label="Profile"
+        <AgentPanel title={t("common.profile")} className="min-h-(--agent-detail-tile-min-h) sm:col-span-2" aria-label={t("common.profile")}
           meta={<span className={creatorFailed ? "text-destructive" : undefined}>
-            {creatorFailed ? "Could not load creator" : creatorLabel ? `Created by ${creatorLabel} · ${formatDate(agent.createdAt)}` : `Created ${formatDate(agent.createdAt)}`}
+            {creatorFailed ? t("agentDetail.couldNotLoadCreator") : creatorLabel ? t("agentDetail.createdByCreatorDate", { creator: creatorLabel, date: formatDate(agent.createdAt) }) : t("agentDetail.createdDate", { date: formatDate(agent.createdAt) })}
           </span>}>
           <div className="flex flex-col pb-3">
             <AgentReportingManager key={agent.id} agent={agent} />
@@ -1478,10 +1478,10 @@ export function AgentOverview({
           </div>
         </AgentPanel>
         <AgentPanel
-          title="Skills"
-          meta={<span>{skillNames.length} enabled</span>}
+          title={t("common.skills")}
+          meta={<span>{t("agentDetail.enabledCount", { count: skillNames.length })}</span>}
           className="min-h-(--agent-detail-tile-min-h) sm:col-span-2"
-          aria-label="Skills"
+          aria-label={t("common.skills")}
         >
           <div className="flex flex-wrap gap-1.5 px-(--agent-detail-module-inset) pt-1 pb-(--agent-detail-module-inset)">
             {skillNames.map((name) => <AgentChip key={name} className="h-7 px-2">{name}</AgentChip>)}
@@ -1492,9 +1492,9 @@ export function AgentOverview({
         </AgentPanel>
       </div>
 
-      <section className="flex flex-col gap-3" aria-label="Recent tasks">
+      <section className="flex flex-col gap-3" aria-label={t("agentDetail.recentTasks")}>
         <AgentSectionHeading
-          title="Recent tasks"
+          title={t("agentDetail.recentTasks")}
           action={
             <Link to={`/issues?participantAgentId=${agent.id}`} className="text-xs text-muted-foreground no-underline transition-colors hover:text-foreground">
               See all tasks
@@ -1504,7 +1504,7 @@ export function AgentOverview({
         {assignedIssues.length === 0 ? (
           <div className="flex flex-col gap-3">
             <p className="text-sm text-muted-foreground">Start with a suggested task</p>
-            <ul className="overflow-hidden rounded-lg border border-border bg-(--agent-detail-tile) divide-y divide-dashed divide-border" aria-label="Suggested tasks">
+            <ul className="overflow-hidden rounded-lg border border-border bg-(--agent-detail-tile) divide-y divide-dashed divide-border" aria-label={t("issueThreadInteractionCard.suggestedTasks")}>
               {taskSuggestions.map((title) => (
                 <li key={title}>
                   <button
@@ -1774,7 +1774,7 @@ export function ConfigurationTab({
         }
       /> : null}
 
-      {content === "permissions" ? <AgentPanel title="Capabilities" aria-label="Capabilities">
+      {content === "permissions" ? <AgentPanel title={t("common.capabilities")} aria-label={t("common.capabilities")}>
         <div className="flex flex-col pb-3">
           <div className="flex min-h-11 items-center justify-between gap-4 px-(--agent-detail-module-inset) py-2 text-sm">
             <div className="space-y-1">
@@ -2241,7 +2241,7 @@ export function PromptsTab({
       if (fileSaveLock.current) return;
       const save = async () => {
         if (fileNameInvalid) {
-          setFileNameError(nameConflict ? "A file with this name already exists." : "Use letters, numbers, hyphens or underscores.");
+          setFileNameError(nameConflict ? t("agentDetail.aFileWithThisNameExists") : t("agentDetail.useLettersNumbersHyphens"));
           setEditingFileName(true);
           return;
         }
@@ -2263,7 +2263,7 @@ export function PromptsTab({
           setFileSaveInProgress(true);
           const latest = await agentsApi.instructionsBundle(agent.id, companyId);
           const sourceHash = draftBaseHashRef.current ?? selectedFileDetail?.contentHash;
-          if (selectedFileExists && !sourceHash) throw new Error("Reload this file before renaming; your draft is retained.");
+          if (selectedFileExists && !sourceHash) throw new Error(t("agentDetail.reloadThisFileBeforeRenaming"));
           const copied = selectedFileExists || selectedOrEntryFile === currentEntryFile
             ? await agentsApi.renameInstructionsFile(agent.id, {
                 path: selectedOrEntryFile, renameTo: renamedFilePath, content: displayValue, baseHash: selectedFileExists ? sourceHash! : null,
@@ -2424,14 +2424,14 @@ export function PromptsTab({
           isMobile && !showFilePanel && "hidden",
         )}>
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-foreground">Files</h4>
+            <h4 className="text-sm font-semibold text-foreground">{t("common.files")}</h4>
             <div className="flex items-center gap-1">
               {(
                 <Button
                   type="button"
                   size="icon-xs"
                   variant="ghost"
-                  aria-label="Add agent file"
+                  aria-label={t("agentDetail.addAgentFile")}
                   disabled={isSaving}
                   onClick={() => {
                     if (isDirty && !window.confirm(DISCARD_AGENT_CONFIG_CHANGES_MESSAGE)) return;
@@ -2548,7 +2548,7 @@ export function PromptsTab({
                 <div className="agent-identity-file-heading flex min-w-0 items-center gap-2">
                   {editingFileName ? (
                     <div className="agent-identity-preview-title flex min-w-0 items-baseline font-mono text-(length:--agent-identity-preview-title-size)">
-                      <input ref={fileNameInputRef} aria-label="Markdown file name" autoFocus
+                      <input ref={fileNameInputRef} aria-label={t("agentDetail.markdownFileName")} autoFocus
                         value={fileNameDraft === null && pendingFiles.includes(selectedOrEntryFile) ? "" : namingPrefix}
                         placeholder={selectedOrEntryFile.replace(/\.md$/i, "")}
                         aria-invalid={fileNameInvalid || undefined}
@@ -2570,21 +2570,21 @@ export function PromptsTab({
                       {displayedFilePath}
                     </button>
                   )}
-                  <AgentChip>{currentMode === "external" ? "Managed externally" : "Managed by you"}</AgentChip>
+                  <AgentChip>{currentMode === "external" ? t("agentDetail.managedExternally") : t("agentDetail.managedByYou")}</AgentChip>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   {selectedFileExists
                     ? selectedFileSummary?.deprecated
-                      ? "Deprecated virtual file"
+                      ? t("agentDetail.deprecatedVirtualFile")
                       : instructionFileDateLabel(selectedFileDetail ?? selectedFileSummary)
-                    : "New file in this bundle"}
+                    : t("agentDetail.newFileInThisBundle")}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <span role="status" aria-hidden={!copyVisible} className={cn("agent-file-copy-notice flex items-center gap-1.5 whitespace-nowrap text-xs text-muted-foreground", !copyVisible && "opacity-0", copyNotice === "error" && "text-destructive")}>
                 {copyNotice === "copied" && <CheckCircle2 className="size-3.5" aria-hidden />}
-                {copyNotice === "copied" ? "File copied" : copyNotice === "error" ? "Copy failed" : null}
+                {copyNotice === "copied" ? t("agentDetail.fileCopied") : copyNotice === "error" ? t("agentDetail.copyFailed") : null}
               </span>
               <Button
                 type="button"
@@ -2601,7 +2601,7 @@ export function PromptsTab({
               </Button>
               {!fileLoading && (
                 <Button type="button" variant="ghost" size="icon-xs" className="size-8"
-                  aria-label="Copy instructions file as markdown" title="Copy as markdown"
+                  aria-label={t("agentDetail.copyInstructionsFileAsMarkdown")} title={t("agentDetail.copyAsMarkdown")}
                   onClick={async () => {
                     clearTimeout(copyTimer.current);
                     setCopyVisible(true);
@@ -2615,11 +2615,11 @@ export function PromptsTab({
               {selectedOrEntryFile === currentEntryFile && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span tabIndex={0} aria-label="This file is required" className="inline-flex">
-                      <Button type="button" variant="ghost" size="icon-xs" className="size-8" aria-label={`Delete ${selectedOrEntryFile}`} disabled><Trash2 className="size-4" /></Button>
+                    <span tabIndex={0} aria-label={t("agentDetail.thisFileIsRequired")} className="inline-flex">
+                      <Button type="button" variant="ghost" size="icon-xs" className="size-8" aria-label={t("environments.deleteName", { name: selectedOrEntryFile })} disabled><Trash2 className="size-4" /></Button>
                     </span>
                   </TooltipTrigger>
-                  <TooltipContent>This file is required</TooltipContent>
+                  <TooltipContent>{t("agentDetail.thisFileIsRequired")}</TooltipContent>
                 </Tooltip>
               )}
               {selectedFileExists && !selectedFileSummary?.deprecated && selectedOrEntryFile !== currentEntryFile && (
@@ -2628,8 +2628,8 @@ export function PromptsTab({
                   size="icon-xs"
                   variant="ghost"
                   className="size-8"
-                  aria-label={`Delete ${selectedOrEntryFile}`}
-                  title="Delete file"
+                  aria-label={t("environments.deleteName", { name: selectedOrEntryFile })}
+                  title={t("skillStudio.deleteFile")}
                   onClick={() => {
                     if (confirm(t("agentDetail.deleteSelectedorentryfile", { selectedOrEntryFile }))) {
                       deleteFile.mutate(selectedOrEntryFile, {
@@ -2719,7 +2719,7 @@ export function PromptsTab({
             </div>
           ) : instructionMode === "edit" ? (
             <textarea
-              aria-label="Instruction file editor"
+              aria-label={t("agentDetail.instructionFileEditor")}
               autoFocus={!editingFileName}
               value={displayValue}
               spellCheck={false}
@@ -2729,7 +2729,7 @@ export function PromptsTab({
                 setDraft(event.target.value);
               }}
               className="block min-h-(--sz-420px) w-full field-sizing-content resize-none bg-transparent p-(--agent-identity-panel-gap) font-mono text-xs leading-5 whitespace-pre-wrap text-foreground outline-none"
-              placeholder="File contents"
+              placeholder={t("agentDetail.fileContents")}
             />
           ) : (
             <div role="button" tabIndex={0} aria-label={`Edit ${selectedOrEntryFile} contents`}
@@ -3329,7 +3329,7 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
             )}
             {cancelRun.error && (
               <div className="text-xs text-destructive" role="alert">
-                {cancelRun.error instanceof Error ? cancelRun.error.message : "Failed to stop run"}
+                {cancelRun.error instanceof Error ? cancelRun.error.message : t("agentDetail.failedToStopRun")}
               </div>
             )}
             {resumeRun.isError && ( // query-error-ok: mutation result, not a query
