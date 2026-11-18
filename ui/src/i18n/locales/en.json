@@ -17321,5 +17321,15 @@
     "tasksCouldntLoad": "Tasks couldn’t load.",
     "noLoadedTasksMatchTheseFilters": "No loaded tasks match these filters.",
     "tasksCreatedFromThisConversationWillAppearHere": "Tasks created from this conversation will appear here."
+  },
+  "agentRosterFilters": {
+    "allModels": "All models",
+    "allHarnesses": "All harnesses",
+    "allConnections": "All connections",
+    "agentFilters": "Agent filters",
+    "agentFilterChoices": "Agent filter choices",
+    "filtersCount": "Filters: {{count}}",
+    "previouslySelected": "Previously selected {{label}}",
+    "connectionNamesCouldntBeLoaded": "Connection names couldn’t be loaded."
   }
 }

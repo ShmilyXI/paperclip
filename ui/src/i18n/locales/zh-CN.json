@@ -17321,5 +17321,15 @@
     "tasksCouldntLoad": "任务加载失败。",
     "noLoadedTasksMatchTheseFilters": "没有符合这些筛选条件的已加载任务。",
     "tasksCreatedFromThisConversationWillAppearHere": "由该对话创建的任务会显示在这里。"
+  },
+  "agentRosterFilters": {
+    "allModels": "所有模型",
+    "allHarnesses": "所有运行框架",
+    "allConnections": "所有连接",
+    "agentFilters": "员工筛选",
+    "agentFilterChoices": "员工筛选选项",
+    "filtersCount": "筛选：{{count}}",
+    "previouslySelected": "之前选择的 {{label}}",
+    "connectionNamesCouldntBeLoaded": "无法加载连接名称。"
   }
 }

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Filter } from "lucide-react";
@@ -10,8 +11,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { NativeSelect } from "@/components/ui/select";
 
 const emptyAgents: Agent[] = [];
-const labels: Record<AgentRosterFilterField, string> = { model: "Model", status: "Status", harness: "Harness", connection: "Connection" };
-const allLabels: Record<AgentRosterFilterField, string> = { model: "All models", status: "All statuses", harness: "All harnesses", connection: "All connections" };
+const labels: Record<AgentRosterFilterField, string> = { model: t("common.model"), status: t("common.status"), harness: t("agentConfig.harness"), connection: t("common.connection") };
+const allLabels: Record<AgentRosterFilterField, string> = { model: t("agentRosterFilters.allModels"), status: t("cases.allStatuses"), harness: t("agentRosterFilters.allHarnesses"), connection: t("agentRosterFilters.allConnections") };
 
 /** Page-owned state keeps filters when switching views and isolates them by company. */
 export function useAgentRosterFilters(companyId: string | null, agents: Agent[] = emptyAgents) {
@@ -40,32 +41,32 @@ export function AgentRosterFilters({ filters, options, onChange, activeCount, co
   connectionError?: unknown;
   retryConnections: () => void;
 }) {
-  return <div data-canonical-toolbar="agent-filters" role="toolbar" aria-label="Agent filters" className={cn("flex flex-wrap items-center gap-3", !compact && "justify-between")}>
+  return <div data-canonical-toolbar="agent-filters" role="toolbar" aria-label={t("agentRosterFilters.agentFilters")} className={cn("flex flex-wrap items-center gap-3", !compact && "justify-between")}>
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={compact ? "outline" : "ghost"} size="icon" aria-label="Filter agents" title={activeCount ? `Filters: ${activeCount}` : "Filter agents"}
+        <Button variant={compact ? "outline" : "ghost"} size="icon" aria-label={t("agentMultiSelect.filterAgents")} title={activeCount ? t("agentRosterFilters.filtersCount", { count: activeCount }) : t("agentMultiSelect.filterAgents")}
           className={cn("relative shrink-0", compact && "design-toolbar-icon", activeCount > 0 && "text-blue-600 dark:text-blue-400")}>
           <Filter className="size-3.5" aria-hidden />
           {activeCount > 0 && <span aria-hidden className="absolute -right-1 -top-1 flex size-3.5 items-center justify-center rounded-full bg-blue-600 text-(length:--text-nano) font-bold text-white">{activeCount}</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent aria-label="Agent filter choices" align="start" className="max-h-96 w-72 space-y-3 overflow-y-auto p-3">
+      <PopoverContent aria-label={t("agentRosterFilters.agentFilterChoices")} align="start" className="max-h-96 w-72 space-y-3 overflow-y-auto p-3">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Filters</span>
-          {activeCount > 0 && <Button variant="ghost" size="sm" onClick={() => onChange(emptyAgentRosterFilters)}>Clear filters</Button>}
+          <span className="text-sm font-medium">{t("common.filters")}</span>
+          {activeCount > 0 && <Button variant="ghost" size="sm" onClick={() => onChange(emptyAgentRosterFilters)}>{t("cases.clearFilters")}</Button>}
         </div>
         {agentRosterFilterFields.map(field => <label key={field} className="block space-y-1 text-xs font-medium text-muted-foreground">
           <span>{labels[field]}</span>
           <NativeSelect aria-label={labels[field]} value={filters[field]} onChange={event => onChange({ ...filters, [field]: event.target.value })}
             className="h-11 text-base md:text-sm">
             <option value="">{allLabels[field]}</option>
-            {filters[field] && !options[field].some(option => option.value === filters[field]) && <option value={filters[field]}>Previously selected {labels[field].toLowerCase()}</option>}
+            {filters[field] && !options[field].some(option => option.value === filters[field]) && <option value={filters[field]}>{t("agentRosterFilters.previouslySelected", { label: labels[field].toLowerCase() })}</option>}
             {options[field].map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
           </NativeSelect>
         </label>)}
       </PopoverContent>
     </Popover>
-    {!compact && <span className="text-xs text-muted-foreground">{count} {count === 1 ? "agent" : "agents"}</span>}
-    {!!connectionError && <p role="alert" className="basis-full text-xs text-destructive">Connection names couldn’t be loaded. <Button variant="link" size="sm" onClick={retryConnections}>Retry</Button></p>}
+    {!compact && <span className="text-xs text-muted-foreground">{t("teamCatalog.cardAgents", { count })}</span>}
+    {!!connectionError && <p role="alert" className="basis-full text-xs text-destructive">{t("agentRosterFilters.connectionNamesCouldntBeLoaded")} <Button variant="link" size="sm" onClick={retryConnections}>{t("common.retry")}</Button></p>}
   </div>;
 }
