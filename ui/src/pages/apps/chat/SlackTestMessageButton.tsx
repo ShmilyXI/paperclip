@@ -60,9 +60,9 @@ export function SlackTestMessageButton({ endpointId }: { endpointId: string }) {
         {send.isPending ? <Loader2 className="size-4 animate-spin" /> : sent ? <Check className="size-4" /> : <Send className="size-4" />}
         {send.isPending ? t("slackTestMessageButton.sending") : sent ? t("slackTestMessageButton.testMessageSent") : invitationExpired ? t("slackTestMessageButton.requestANewInvitation") : pendingConnection ? t("slackTestMessageButton.waitingForSlackConnection") : t("slackTestMessageButton.sendMeATestMessage")}
       </Button>
-    {pendingConnection && <p role="status" className="text-sm text-muted-foreground">{invitationExpired ? "The Slack invitation expired." : "Open the invitation in Slack to connect your account."}</p>}
+    {pendingConnection && <p role="status" className="text-sm text-muted-foreground">{invitationExpired ? t("slackTestMessageButton.theSlackInvitationExpired") : t("slackTestMessageButton.openTheInvitationInSlack")}</p>}
     {send.error && <div role="alert" className="max-w-sm text-sm text-destructive">
-      {describeError(send.error).body} <button className="underline" onClick={reset}>Dismiss</button>
+      {describeError(send.error).body} <button className="underline" onClick={reset}>{t("common.dismiss")}</button>
     </div>}
     <Dialog open={accounts !== null} onOpenChange={(open) => { if (!open && !send.isPending) setAccounts(null); }}>
       <DialogContent className={ANALYTICS_MASK_CLASS}>
@@ -79,7 +79,7 @@ export function SlackTestMessageButton({ endpointId }: { endpointId: string }) {
             </label>)}
           {accounts?.length === 0 && <p className="text-sm text-muted-foreground">{t("slackTestMessageButton.noAvailableAccountsFoundIn")}</p>}
         </div>
-        {nextCursor && <Button variant="ghost" disabled={send.isPending} onClick={() => send.mutate({ accountCursor: nextCursor })}>Load more Slack accounts</Button>}
+        {nextCursor && <Button variant="ghost" disabled={send.isPending} onClick={() => send.mutate({ accountCursor: nextCursor })}>{t("slackTestMessageButton.loadMoreSlackAccounts")}</Button>}
         {send.error && <p role="alert" className="text-sm text-destructive">{describeError(send.error).body}</p>}
         <div className="flex items-center justify-between gap-3">
           <Button variant="ghost" disabled={send.isPending} onClick={() => setAccounts(null)}>{t("common.cancel")}</Button>
