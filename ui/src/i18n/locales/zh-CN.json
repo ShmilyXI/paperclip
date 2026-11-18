@@ -17238,7 +17238,9 @@
         "loadAttachmentDetails": "加载附件详情",
         "loadPlugins": "加载插件",
         "loadBundledPlugins": "加载内置插件",
-        "loadPluginExtensions": "加载插件扩展"
+        "loadPluginExtensions": "加载插件扩展",
+        "loadRunnerInspection": "加载运行检查",
+        "deleteRawTrace": "删除原始轨迹"
       },
       "retry": "重试",
       "retrying": "正在重试…",

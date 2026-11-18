@@ -165,6 +165,8 @@ const ACTION_KEYS = new Map([
   ["load plugins", "loadPlugins"],
   ["load bundled plugins", "loadBundledPlugins"],
   ["load plugin extensions", "loadPluginExtensions"],
+  ["load the runner inspection", "loadRunnerInspection"],
+  ["delete the raw trace", "deleteRawTrace"],
 ]);
 
 function actionErrorTitle(action: string, fallback: string): string {

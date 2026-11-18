@@ -17238,7 +17238,9 @@
         "loadAttachmentDetails": "load attachment details",
         "loadPlugins": "load plugins",
         "loadBundledPlugins": "load bundled plugins",
-        "loadPluginExtensions": "load plugin extensions"
+        "loadPluginExtensions": "load plugin extensions",
+        "loadRunnerInspection": "load the runner inspection",
+        "deleteRawTrace": "delete the raw trace"
       },
       "retry": "Retry",
       "retrying": "Retrying…",
