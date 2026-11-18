@@ -1147,9 +1147,9 @@ export function WorkspaceFileBrowser({
       />
 
       {data?.state === "available" && data.workspace?.source ? (
-        <p aria-label="Workspace file source" className="text-(length:--text-micro) text-muted-foreground">
-          {data.workspace.source.kind === "live" ? "Live workspace" : (
-            <>Saved copy{data.workspace.source.savedAt ? <> from <time dateTime={data.workspace.source.savedAt}>{formatDateTime(data.workspace.source.savedAt)}</time></> : null}</>
+        <p aria-label={t("workspaceFileBrowser.workspaceFileSource")} className="text-(length:--text-micro) text-muted-foreground">
+          {data.workspace.source.kind === "live" ? t("workspaceFileBrowser.liveWorkspace") : (
+            <>{t("workspaceFileBrowser.savedCopy")}{data.workspace.source.savedAt ? <> {t("workspaceFileBrowser.from")} <time dateTime={data.workspace.source.savedAt}>{formatDateTime(data.workspace.source.savedAt)}</time></> : null}</>
           )}
         </p>
       ) : null}

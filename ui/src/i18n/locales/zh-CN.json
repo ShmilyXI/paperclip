@@ -10097,7 +10097,11 @@
     "noMatchingFiles": "没有匹配的文件。",
     "itemFound": "找到 {{count}} 个条目。",
     "itemsFound": "找到 {{count}} 个条目。",
-    "showingFirstNarrow": "仅显示前 {{count}} 个 — 请细化搜索条件。"
+    "showingFirstNarrow": "仅显示前 {{count}} 个 — 请细化搜索条件。",
+    "workspaceFileSource": "工作区文件来源",
+    "liveWorkspace": "实时工作区",
+    "savedCopy": "已保存副本",
+    "from": "来自"
   },
   "routineSaveBar": {
     "routineChangedElsewhereReloadTo": "例行任务已在别处更改。请重新加载以合并。",
@@ -11226,7 +11230,8 @@
     "application": "应用",
     "catalog": "目录",
     "payload": "载荷",
-    "policyNumber": "策略 #{{number}}"
+    "policyNumber": "策略 #{{number}}",
+    "noExpirySet": "未设置过期时间"
   },
   "gatewaysList": {
     "gateways": "网关",

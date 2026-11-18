@@ -131,7 +131,7 @@ export function InvitesSection() {
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to create invite",
+        title: t("invitesSection.failedToCreateInvite"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -146,7 +146,7 @@ export function InvitesSection() {
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to revoke invite",
+        title: t("invitesSection.failedToRevokeInvite"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -158,12 +158,12 @@ export function InvitesSection() {
   }
 
   if (invitesQuery.isLoading || invitesView.kind === "reconnecting") {
-    return <div className="text-sm text-muted-foreground">Loading invites…</div>;
+    return <div className="text-sm text-muted-foreground">{t("invitesSection.loadingInvites")}</div>;
   }
 
   if (invitesView.kind === "error") {
     if (invitesView.errorKind === "forbidden") {
-      return <div className="text-sm text-destructive">You do not have permission to manage organization invites.</div>;
+      return <div className="text-sm text-destructive">{t("invitesSection.youDoNotHavePermission")}</div>;
     }
     return (
       <QueryErrorState

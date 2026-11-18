@@ -10097,7 +10097,11 @@
     "noMatchingFiles": "No matching files.",
     "itemFound": "{{count}} item found.",
     "itemsFound": "{{count}} items found.",
-    "showingFirstNarrow": "Showing first {{count}} — refine the search to narrow."
+    "showingFirstNarrow": "Showing first {{count}} — refine the search to narrow.",
+    "workspaceFileSource": "Workspace file source",
+    "liveWorkspace": "Live workspace",
+    "savedCopy": "Saved copy",
+    "from": "from"
   },
   "routineSaveBar": {
     "routineChangedElsewhereReloadTo": "Routine changed elsewhere. Reload to merge.",
@@ -11226,7 +11230,8 @@
     "application": "Application",
     "catalog": "Catalog",
     "payload": "Payload",
-    "policyNumber": "Policy #{{number}}"
+    "policyNumber": "Policy #{{number}}",
+    "noExpirySet": "no expiry set"
   },
   "gatewaysList": {
     "gateways": "Gateways",

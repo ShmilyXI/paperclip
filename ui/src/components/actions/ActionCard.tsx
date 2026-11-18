@@ -268,7 +268,7 @@ export function ActionCard({
 
         {/* JSON input */}
         <div className="space-y-1">
-          <p className="text-xs font-medium uppercase tracking-normal text-muted-foreground">Input</p>
+          <p className="text-xs font-medium uppercase tracking-normal text-muted-foreground">{t("actionCard.input")}</p>
           <pre className={cn("overflow-x-auto rounded-md border border-border bg-muted/40 p-3 font-mono text-xs leading-relaxed text-foreground", ANALYTICS_MASK_CLASS)}>
             {json}
           </pre>
@@ -276,7 +276,7 @@ export function ActionCard({
 
         {/* Why I'm asking */}
         <div className="space-y-1">
-          <p className="text-xs font-medium uppercase tracking-normal text-muted-foreground">Why I&apos;m asking</p>
+          <p className="text-xs font-medium uppercase tracking-normal text-muted-foreground">{t("actionCard.whyIMAsking")}</p>
           <p className={cn("text-sm text-muted-foreground", ANALYTICS_MASK_CLASS)}>
             {reason}
             {policyNumber != null ? (
@@ -298,7 +298,7 @@ export function ActionCard({
       >
         <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <Clock className="h-3.5 w-3.5 shrink-0" />
-          {expiresInLabel ?? "no expiry set"}
+          {expiresInLabel ?? t("actionCard.noExpirySet")}
         </span>
         {mobile ? (
           <div className="flex flex-col gap-2">
