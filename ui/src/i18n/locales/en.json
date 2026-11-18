@@ -17204,5 +17204,26 @@
     "loadingApproval": "Loading approval…",
     "approvalCouldNotBeLoaded": "This approval couldn't be loaded. Open it instead.",
     "fileCannotBePreviewed": "This file cannot be previewed. Open the original file below."
+  },
+  "agentBulkRoster": {
+    "selectedAgentsChanged": "The selected agents changed. Refresh the roster and select them again.",
+    "bulkActions": "Bulk actions",
+    "selectedCount_one": "{{count}} selected",
+    "selectedCount_other": "{{count}} selected",
+    "hiddenByFilters": "{{count}} hidden by filters",
+    "chooseAHarnessToEdit": "Choose a harness to edit",
+    "editConnectionModel": "Edit connection & model",
+    "editCountHarness_one": "Edit {{count}} {{harness}}",
+    "editCountHarness_other": "Edit {{count}} {{harness}}",
+    "loadingCurrentAgentSettings": "Loading current agent settings…",
+    "agentRoster": "Agent roster",
+    "selectAllVisibleEditableAgents": "Select all visible editable agents",
+    "agentCount_one": "{{count}} agent",
+    "agentCount_other": "{{count}} agents",
+    "selectAgent": "Select {{name}}",
+    "noAgentsMatchTheseFilters": "No agents match these filters.",
+    "loadingEditor": "Loading editor…",
+    "updatedCountHarness_one": "Updated {{count}} {{harness}} agent.",
+    "updatedCountHarness_other": "Updated {{count}} {{harness}} agents."
   }
 }

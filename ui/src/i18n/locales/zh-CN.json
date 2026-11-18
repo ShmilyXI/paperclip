@@ -17204,5 +17204,26 @@
     "loadingApproval": "正在加载审批…",
     "approvalCouldNotBeLoaded": "无法加载此审批。请直接打开。",
     "fileCannotBePreviewed": "此文件无法预览。请在下方打开原始文件。"
+  },
+  "agentBulkRoster": {
+    "selectedAgentsChanged": "所选的员工已更改。请刷新名册后重新选择。",
+    "bulkActions": "批量操作",
+    "selectedCount_one": "已选择 {{count}} 个",
+    "selectedCount_other": "已选择 {{count}} 个",
+    "hiddenByFilters": "{{count}} 个被筛选隐藏",
+    "chooseAHarnessToEdit": "选择要编辑的运行框架",
+    "editConnectionModel": "编辑连接和模型",
+    "editCountHarness_one": "编辑 {{count}} 个{{harness}}",
+    "editCountHarness_other": "编辑 {{count}} 个{{harness}}",
+    "loadingCurrentAgentSettings": "正在加载当前员工设置…",
+    "agentRoster": "员工名册",
+    "selectAllVisibleEditableAgents": "全选所有可见且可编辑的员工",
+    "agentCount_one": "{{count}} 个员工",
+    "agentCount_other": "{{count}} 个员工",
+    "selectAgent": "选择 {{name}}",
+    "noAgentsMatchTheseFilters": "没有符合这些筛选条件的员工。",
+    "loadingEditor": "正在加载编辑器…",
+    "updatedCountHarness_one": "已更新 {{count}} 个{{harness}}员工。",
+    "updatedCountHarness_other": "已更新 {{count}} 个{{harness}}员工。"
   }
 }
