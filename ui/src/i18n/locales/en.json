@@ -12745,7 +12745,9 @@
     "rawTracingOn": "Raw tracing on",
     "pauseAnyway": "Pause anyway",
     "copyAgentId": "Copy Agent ID",
-    "resetSessions": "Reset Sessions"
+    "resetSessions": "Reset Sessions",
+    "chatWithThisAgent": "Chat with this agent",
+    "chatWithName": "Chat with {{name}}"
   },
   "pluginAppShellOverlays": {
     "applicationExtensions": "Application extensions"

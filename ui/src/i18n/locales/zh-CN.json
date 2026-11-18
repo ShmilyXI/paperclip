@@ -12745,7 +12745,9 @@
     "rawTracingOn": "原始追踪已开启",
     "pauseAnyway": "仍然暂停",
     "copyAgentId": "复制员工 ID",
-    "resetSessions": "重置会话"
+    "resetSessions": "重置会话",
+    "chatWithThisAgent": "与这位员工聊天",
+    "chatWithName": "与 {{name}} 聊天"
   },
   "pluginAppShellOverlays": {
     "applicationExtensions": "应用扩展"

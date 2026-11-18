@@ -162,11 +162,11 @@ export function AgentActionButtons({
   agent,
   companyId,
   size = "sm",
-  assignLabel = "Assign Task",
+  assignLabel = t("agentActions.assignTask"),
   showAssignIcon = true,
   assignIcon: AssignIcon = Plus,
   showChat = false,
-  runLabel = "Run now",
+  runLabel = t("common.runNow"),
   showStatus = true,
   showRun = true,
   actionsDisabled = false,
@@ -394,9 +394,9 @@ export function AgentActionButtons({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
           <AlertDialogAction onClick={() => agentAction.mutate("pause")}>
-            Pause anyway
+            {t("agentActionButtons.pauseAnyway")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -415,16 +415,16 @@ export function AgentActionButtons({
         {persistentProviderTrace ? (
           <span
             className="hidden items-center gap-1 rounded-md border border-primary/30 bg-primary/10 px-2 py-1 text-xs font-medium text-primary lg:inline-flex"
-            title="Exact provider traffic will be captured for future runs and retained for up to 24 hours."
+            title={t("agentActions.exactProviderTrafficWillBe")}
           >
             <Bug className="h-3.5 w-3.5" />
-            Raw tracing on
+            {t("agentActionButtons.rawTracingOn")}
           </span>
         ) : null}
         {children}
         <Popover open={moreOpen} onOpenChange={setMoreOpen}>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label={`Open actions for ${agent.name}`}>
+            <Button variant="ghost" size="icon" aria-label={t("agentActions.openActionsFor", { name: agent.name })}>
               <MoreHorizontal className="size-4" />
             </Button>
           </PopoverTrigger>
@@ -460,16 +460,16 @@ export function AgentActionButtons({
                 type="button"
                 className={cn(item, "text-destructive")}
                 disabled={clearErrorDisabled}
-                aria-label="Clear error and return agent to idle"
+                aria-label={t("agentActions.clearErrorAndReturnAgent")}
                 onClick={select(() => agentAction.mutate("clear_error"))}
               >
                 <CheckCircle2 className={cn(icon, "text-destructive")} />
-                Clear error
+                {t("agentActions.clearError")}
               </button>
             ) : isPaused ? (
               <button type="button" className={item} disabled={pauseResumeDisabled} onClick={select(() => agentAction.mutate("resume"))}>
                 <Play className={icon} />
-                Resume
+                {t("common.resume")}
               </button>
             ) : (
               <button
@@ -479,7 +479,7 @@ export function AgentActionButtons({
                 onClick={select(() => (pauseConfirm ? setPauseConfirmOpen(true) : agentAction.mutate("pause")))}
               >
                 <Pause className={icon} />
-                Pause
+                {t("common.pause")}
               </button>
             )}
             <div role="separator" className="-mx-1 my-1 h-px bg-border" />
@@ -491,23 +491,23 @@ export function AgentActionButtons({
             ))}
             <button type="button" className={item} disabled={duplicateAgent.isPending} onClick={handleDuplicateAgent}>
               {duplicateAgent.isPending ? <Loader2 className={cn(icon, "animate-spin")} /> : <Copy className={icon} />}
-              Duplicate agent
+              {t("agentActions.duplicateAgent")}
             </button>
             <button
               type="button"
               className={item}
               onClick={select(() => {
                 void copyTextToClipboard(agent.id).catch(() => {
-                  pushToast({ title: "Copy failed", body: "Clipboard access is unavailable.", tone: "error" });
+                  pushToast({ title: t("agentActions.copyFailed"), body: t("agentActions.clipboardAccessIsUnavailable"), tone: "error" });
                 });
               })}
             >
               <Copy className={icon} />
-              Copy agent ID
+              {t("agentActionButtons.copyAgentId")}
             </button>
             <button type="button" className={item} onClick={select(() => resetTaskSession.mutate())}>
               <RotateCcw className={icon} />
-              Reset sessions
+              {t("agentActionButtons.resetSessions")}
             </button>
             {hideTerminate ? null : (
               <>
@@ -521,21 +521,21 @@ export function AgentActionButtons({
                   })}
                 >
                   <Trash2 className={cn(icon, "text-destructive")} />
-                  Terminate
+                  {t("common.terminate")}
                 </button>
               </>
             )}
           </PopoverContent>
         </Popover>
-        {showChat && <Button variant="outline" size={size} aria-label={`Chat with ${agent.name}`} title="Chat with this agent"
+        {showChat && <Button variant="outline" size={size} aria-label={t("agentActionButtons.chatWithName", { name: agent.name })} title={t("agentActionButtons.chatWithThisAgent")}
           disabled={disabled} onClick={() => { if (!onBeforeNavigate || onBeforeNavigate()) navigate(`/chats/${canonicalAgentRef}`); }}>
           <MessagesSquare className="size-4" />
-          Chat
+          {t("agentConversationSidebar.chat")}
         </Button>}
         {needsSetup ? (
           <Button size={size} disabled={disabled} onClick={finishSetup}>
             <Play className="size-4" />
-            Finish setup
+            {t("agentActions.finishSetup")}
           </Button>
         ) : (
           <Button
@@ -583,7 +583,7 @@ export function AgentActionButtons({
             ...(agent.adapterType === "paperclip_runner" ? { runner: "paperclip" } : ["codex_local", "claude_local", "opencode_local", "pi_local"].includes(agent.adapterType) ? { runner: "legacy" } : {}),
             ...pendingAgentSetupChoice(agent),
           })}`);
-        }}>Finish setup</Button>
+        }}>{t("agentActions.finishSetup")}</Button>
       ) : showRun && <RunButton
         onClick={() => {
           if (navigateToRunOnInvoke && !confirmNavigationStart(agentActionStartedDirtyRef)) return;
