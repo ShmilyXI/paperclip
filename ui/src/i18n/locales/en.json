@@ -17177,5 +17177,21 @@
     "continuingWillRestore": "Continuing will restore {{name}}’s identity and configuration to the version saved on {{date}}. Anything changed since then will be replaced. The current version stays in Agent history.",
     "dateBy": "{{date}} · By: {{author}}",
     "restoreVersion": "Restore version"
+  },
+  "mcpAppView": {
+    "unsupportedBrowserMessage": "This browser can't show this app's widget safely. The tool result is still in the activity.",
+    "wantsToSendAMessage": "{{app}} wants to send a message",
+    "wantsToSend": "{{app}} wants to send:",
+    "messageCouldNotBeSent": "The message could not be sent.",
+    "viewCouldNotBeShown": "This app's view could not be shown.",
+    "frameTitle": "{{app}}: {{name}}",
+    "loadingView": "Loading {{app}} view",
+    "appFallback": "app",
+    "showingFullScreen": "Showing full screen",
+    "backToChat": "Back to chat",
+    "widgetFrom": "Widget from {{app}}",
+    "exitFullScreen": "Exit full screen",
+    "viewNoLongerAvailable": "This {{app}} view is no longer available.",
+    "couldNotShowThisView": "{{app}} could not show this view. The tool result is still in the row above."
   }
 }

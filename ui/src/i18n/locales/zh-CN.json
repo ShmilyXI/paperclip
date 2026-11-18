@@ -17177,5 +17177,21 @@
     "continuingWillRestore": "继续操作会把 {{name}} 的身份和配置恢复到 {{date}} 保存的版本。此后所做的任何更改都会被替换。当前版本会保留在员工历史记录中。",
     "dateBy": "{{date}} · 由：{{author}}",
     "restoreVersion": "恢复此版本"
+  },
+  "mcpAppView": {
+    "unsupportedBrowserMessage": "此浏览器无法安全地显示此应用的组件。工具结果仍在活动中。",
+    "wantsToSendAMessage": "{{app}} 想发送一条消息",
+    "wantsToSend": "{{app}} 想发送：",
+    "messageCouldNotBeSent": "消息无法发送。",
+    "viewCouldNotBeShown": "无法显示此应用的视图。",
+    "frameTitle": "{{app}}：{{name}}",
+    "loadingView": "正在加载 {{app}} 视图",
+    "appFallback": "应用",
+    "showingFullScreen": "正在全屏显示",
+    "backToChat": "返回聊天",
+    "widgetFrom": "来自 {{app}} 的组件",
+    "exitFullScreen": "退出全屏",
+    "viewNoLongerAvailable": "此 {{app}} 视图不再可用。",
+    "couldNotShowThisView": "{{app}} 无法显示此视图。工具结果仍在上方行中。"
   }
 }
