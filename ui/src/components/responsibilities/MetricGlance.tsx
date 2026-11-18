@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ResponsibilityHealth, ResponsibilityMetricSummary } from "@paperclipai/shared";
 import { describeMetricReading, describeStale, type MetricReading } from "@/lib/responsibilities";
 import { cn } from "@/lib/utils";
@@ -94,7 +95,7 @@ export function MetricGlance({
   className?: string;
 }) {
   if (!metric) {
-    return <p className={cn("text-sm text-muted-foreground", className)}>No number to track yet</p>;
+    return <p className={cn("text-sm text-muted-foreground", className)}>{t("responsibilities.noNumberToTrackYet")}</p>;
   }
   const reading = describeMetricReading(metric);
   const hero = size === "hero";
@@ -102,11 +103,11 @@ export function MetricGlance({
     <div className={cn("flex min-w-0 flex-col", hero ? "gap-2" : "gap-1", className)}>
       <p className="flex flex-wrap items-baseline gap-x-1.5 tabular-nums" aria-label={reading.summary}>
         <span className={cn("font-semibold text-foreground", hero ? "text-2xl" : "text-sm")}>
-          {reading.current ?? "No reading yet"}
+          {reading.current ?? t("responsibilities.noReadingYetShort")}
         </span>
         <span className={cn("text-muted-foreground", hero ? "text-sm" : "text-xs")}>{reading.targetLabel}</span>
       </p>
-      <MetricMeter reading={reading} health={health} label={`${metric.name}, toward its bar`} />
+      <MetricMeter reading={reading} health={health} label={t("responsibilities.towardItsBar", { name: metric.name })} />
       <p className={cn("flex min-w-0 flex-wrap items-center gap-x-2 text-muted-foreground", hero ? "text-sm" : "text-xs")}>
         <span className={cn(!hero && "truncate")}>{metric.name}</span>
         {metric.stale && metric.updatedAt ? <StaleFlag label={describeStale(metric.updatedAt, now)} /> : null}

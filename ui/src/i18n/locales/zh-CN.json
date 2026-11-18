@@ -2161,6 +2161,7 @@
     "behind": "落后",
     "atRisk": "有风险",
     "onTrack": "进展正常",
+    "needsALook": "需要关注",
     "notMeasured": "未衡量",
     "couldNotChangeTheStatus": "无法更改状态。",
     "howIsSuccessMeasuredFor": "如何衡量 {{title}} 的成功？状态会根据所选衡量类型随读数而定。",
@@ -11105,6 +11106,18 @@
     "loadingEarlierDecisions": "正在加载更早的决策…",
     "agentNeedsYourInputOn": "{{agent}} 需要你对 {{task}} 提供意见",
     "thisTask": "该任务"
+  },
+  "giveToAgent": {
+    "giveLabelToAnAgent": "把 {{label}} 交给员工",
+    "giveToAnAgent": "交给员工",
+    "whoLeadsThisProject": "谁负责这个项目",
+    "whoTakesThisNoun": "谁来接手这个{{noun}}",
+    "noAgentsYetAddAnAgentFirst": "还没有员工。请先添加员工。",
+    "nounRoutine": "例行任务",
+    "nounTask": "任务",
+    "leadsItNow": "{{name}} 现在负责它。",
+    "hasItNow": "{{name}} 现在接手它。",
+    "couldntGiveItTo": "无法把它交给 {{name}}。"
   },
   "dashboardPersonaSwitcher": {
     "whoseDashboard": "谁的仪表盘"

@@ -2161,6 +2161,7 @@
     "behind": "Behind",
     "atRisk": "At risk",
     "onTrack": "On track",
+    "needsALook": "Needs a look",
     "notMeasured": "Not measured",
     "couldNotChangeTheStatus": "Couldn’t change the status.",
     "howIsSuccessMeasuredFor": "How is success measured for {{title}}? The status follows from the reading, by the kind of measure you choose.",
@@ -11105,6 +11106,18 @@
     "loadingEarlierDecisions": "Loading earlier decisions…",
     "agentNeedsYourInputOn": "{{agent}} needs your input on {{task}}",
     "thisTask": "this task"
+  },
+  "giveToAgent": {
+    "giveLabelToAnAgent": "Give {{label}} to an agent",
+    "giveToAnAgent": "Give to an agent",
+    "whoLeadsThisProject": "Who leads this project",
+    "whoTakesThisNoun": "Who takes this {{noun}}",
+    "noAgentsYetAddAnAgentFirst": "No agents yet. Add an agent first.",
+    "nounRoutine": "routine",
+    "nounTask": "task",
+    "leadsItNow": "{{name}} leads it now.",
+    "hasItNow": "{{name}} has it now.",
+    "couldntGiveItTo": "Couldn't give it to {{name}}."
   },
   "dashboardPersonaSwitcher": {
     "whoseDashboard": "Whose dashboard"

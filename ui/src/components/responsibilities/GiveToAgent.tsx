@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Agent } from "@paperclipai/shared";
@@ -74,7 +75,6 @@ export function GiveToAgentMenu({
     () => agents.filter((agent) => agent.status !== "terminated").slice().sort((a, b) => a.name.localeCompare(b.name)),
     [agents],
   );
-  const noun = item.kind === "project" ? "project" : item.kind === "routine" ? "routine" : "task";
   return (
     <span className="inline-flex shrink-0 items-center gap-1">
       {result ? (
@@ -89,29 +89,29 @@ export function GiveToAgentMenu({
             variant={variant}
             className={variant === "ghost" ? "text-muted-foreground" : undefined}
             disabled={give.isPending}
-            aria-label={`Give ${item.label} to an agent`}
-            title={size === "icon-xs" ? "Give to an agent" : undefined}
+            aria-label={t("giveToAgent.giveLabelToAnAgent", { label: item.label })}
+            title={size === "icon-xs" ? t("giveToAgent.giveToAnAgent") : undefined}
           >
             <Bot aria-hidden="true" />
-            {size === "xs" ? "Give to an agent" : null}
+            {size === "xs" ? t("giveToAgent.giveToAnAgent") : null}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="max-h-(--sz-50vh) overflow-y-auto">
           <DropdownMenuLabel>
-            {item.kind === "project" ? "Who leads this project" : `Who takes this ${noun}`}
+            {item.kind === "project" ? t("giveToAgent.whoLeadsThisProject") : t("giveToAgent.whoTakesThisNoun", { noun: item.kind === "routine" ? t("giveToAgent.nounRoutine") : t("giveToAgent.nounTask") })}
           </DropdownMenuLabel>
           {choices.length === 0 ? (
-            <p className="px-2 py-1.5 text-sm text-muted-foreground">No agents yet. Add an agent first.</p>
+            <p className="px-2 py-1.5 text-sm text-muted-foreground">{t("giveToAgent.noAgentsYetAddAnAgentFirst")}</p>
           ) : (
             <DropdownMenuRadioGroup
               value={item.currentAgentId ?? ""}
               onValueChange={(agentId) => {
                 if (!agentId || agentId === item.currentAgentId) return;
-                const name = choices.find((agent) => agent.id === agentId)?.name ?? "the agent";
+                const name = choices.find((agent) => agent.id === agentId)?.name ?? t("responsibilities.theAgent");
                 setResult(null);
                 give.mutate({ item, agentId }, {
-                  onSuccess: () => setResult({ ok: true, text: item.kind === "project" ? `${name} leads it now.` : `${name} has it now.` }),
-                  onError: (error) => setResult({ ok: false, text: `Couldn’t give it to ${name}. ${describeError(error).body}` }),
+                  onSuccess: () => setResult({ ok: true, text: item.kind === "project" ? t("giveToAgent.leadsItNow", { name }) : t("giveToAgent.hasItNow", { name }) }),
+                  onError: (error) => setResult({ ok: false, text: `${t("giveToAgent.couldntGiveItTo", { name })} ${describeError(error).body}` }),
                 });
               }}
             >

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Fragment, useMemo } from "react";
 import type { ResponsibilityArea } from "@paperclipai/shared";
 import { Card } from "@/components/ui/card";
@@ -69,7 +70,7 @@ export function DashboardExceptions({ companyId, overview, onAddResponsibility, 
       {exceptions.length > 0 ? (
         <section aria-labelledby="exceptions-needs-a-look-heading" className="flex flex-col gap-2">
           <h2 id="exceptions-needs-a-look-heading" className="text-sm font-semibold text-foreground">
-            Needs a look <span className="font-normal tabular-nums text-muted-foreground">{exceptions.length}</span>
+            {t("responsibilities.needsALook")} <span className="font-normal tabular-nums text-muted-foreground">{exceptions.length}</span>
           </h2>
           <Card elevation="low" className="gap-0 py-0">
             <ul className="flex flex-col divide-y divide-border">
@@ -87,7 +88,7 @@ export function DashboardExceptions({ companyId, overview, onAddResponsibility, 
 
       {onTrack.length > 0 ? (
         <section aria-labelledby="exceptions-on-track-heading" className="flex flex-col gap-2">
-          <h2 id="exceptions-on-track-heading" className="sr-only">On track</h2>
+          <h2 id="exceptions-on-track-heading" className="sr-only">{t("responsibilities.onTrack")}</h2>
           <ul className="flex flex-col gap-1.5">
             {onTrack.map((line) => (
               <li key={line.areaId ?? "__no_area__"} className="flex items-start gap-2 text-sm" data-on-track-area={line.areaId ?? "none"}>
