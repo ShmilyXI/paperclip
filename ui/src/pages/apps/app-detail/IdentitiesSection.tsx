@@ -181,7 +181,7 @@ export function IdentitiesSection({
         <h2 className="text-sm font-semibold text-foreground">{t("identitiesSection.githubIdentity")}</h2>
         <p className="text-sm text-muted-foreground">{t("identitiesSection.thisAgentUsesThisGithub")}</p>
         <IdentityRow
-          title={github ? <span className={ANALYTICS_MASK_CLASS}>@{github.login}</span> : "Dedicated GitHub account"}
+          title={github ? <span className={ANALYTICS_MASK_CLASS}>@{github.login}</span> : t("identitiesSection.dedicatedGithubAccount")}
           status={agentGrant?.status ?? null}
           detail={dedicatedAgent ? (
             <Link
@@ -313,7 +313,7 @@ function GitHubConnectionSummary({
   return (
     <div className="divide-y divide-border border-y border-border">
       <div className="py-3">
-        <div className="text-sm font-medium text-foreground">GitHub account</div>
+        <div className="text-sm font-medium text-foreground">{t("identitiesSection.githubAccount")}</div>
         <a className={cn("text-sm text-muted-foreground hover:underline", ANALYTICS_MASK_CLASS)} href={`https://github.com/${encodeURIComponent(github.login)}`} target="_blank" rel="noreferrer">
           @{github.login}
         </a>
@@ -356,7 +356,7 @@ function GitHubConnectionSummary({
           </div>
         </div>
         {github.repositories ? (
-          github.repositories.length ? <ul aria-label="Accessible GitHub repositories" tabIndex={0} className={cn("max-h-(--sz-github-repository-list) space-y-2 overflow-y-auto text-sm", ANALYTICS_MASK_CLASS)}>
+          github.repositories.length ? <ul aria-label={t("identitiesSection.accessibleGithubRepositories")} tabIndex={0} className={cn("max-h-(--sz-github-repository-list) space-y-2 overflow-y-auto text-sm", ANALYTICS_MASK_CLASS)}>
             {github.repositories.map((repository) => (
               <li key={repository.id}>
                 <a className="flex items-center gap-2 text-muted-foreground hover:underline" href={`https://github.com/${repository.fullName.split("/").map(encodeURIComponent).join("/")}`} target="_blank" rel="noreferrer">
@@ -512,7 +512,7 @@ export function AudienceDialog({
     <Dialog open onOpenChange={(open) => { if (!open) onCancel(); }}>
       <DialogContent className={ANALYTICS_MASK_CLASS}>
         <DialogHeader>
-          <DialogTitle>Who can use this identity</DialogTitle>
+          <DialogTitle>{t("identitiesSection.whoCanUseThisIdentity")}</DialogTitle>
           <DialogDescription className={ANALYTICS_MASK_CLASS}>
             {grantAccountLabel(grant)} · {appName}
           </DialogDescription>
