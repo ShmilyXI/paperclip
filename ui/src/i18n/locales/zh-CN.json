@@ -9646,6 +9646,7 @@
     "taskDocuments": "任务文档",
     "recentWorkspaceFiles": "最近的工作区文件",
     "recentFilesAreTemporarilyUnavailable": "最近的文件暂时无法获取。",
+    "conversationDocuments": "对话文档",
     "openANewTab": "打开新标签页",
     "closeSidePanel": "关闭侧边面板",
     "revisionLatestrevisionnumber": "版本 {{latestRevisionNumber}}",

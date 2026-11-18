@@ -702,7 +702,7 @@ function TaskSidePanelForScope({
         label: t("taskSidePanel.recentWorkspaceFiles"),
         items: recentItems,
         loading: recentFilesQuery.isLoading,
-        error: recentFilesView.kind === "error" ? "Recent files are temporarily unavailable." : null,
+        error: recentFilesView.kind === "error" ? t("taskSidePanel.recentFilesAreTemporarilyUnavailable") : null,
       });
     }
     return sections;
@@ -845,7 +845,7 @@ function TaskSidePanelForScope({
   } else if (activeTab.payload.kind === "artifacts" && conversationAgentId) {
     content = (
       <div className="space-y-4">
-        <section aria-label="Conversation documents">
+        <section aria-label={t("taskSidePanel.conversationDocuments")}>
           <TaskGeneralDocuments issue={issue} documentEditor={documentEditor ?? {}} />
         </section>
         <AgentArtifactsPanel companyId={issue.companyId} agentId={conversationAgentId} />

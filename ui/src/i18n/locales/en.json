@@ -9646,6 +9646,7 @@
     "taskDocuments": "Task documents",
     "recentWorkspaceFiles": "Recent workspace files",
     "recentFilesAreTemporarilyUnavailable": "Recent files are temporarily unavailable.",
+    "conversationDocuments": "Conversation documents",
     "openANewTab": "Open a new tab",
     "closeSidePanel": "Close side panel",
     "revisionLatestrevisionnumber": "Revision {{latestRevisionNumber}}",
