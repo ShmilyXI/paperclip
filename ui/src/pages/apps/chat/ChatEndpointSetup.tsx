@@ -328,7 +328,7 @@ function ChatSdkEndpointSetup() {
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't start setup",
+        title: t("chatSetup.couldnTStartSetup"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -458,7 +458,7 @@ function ChatSdkEndpointSetup() {
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't generate webhook secret",
+        title: t("chatSetup.couldnTGenerateWebhookSecret"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -471,7 +471,7 @@ function ChatSdkEndpointSetup() {
     },
     onError: (error) =>
       pushToast({
-        title: provider === "slack" ? "Couldn't finish setup" : "Test not complete",
+        title: provider === "slack" ? t("chatSetup.couldnTFinishSetup") : t("chatSetup.testNotComplete"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -573,7 +573,7 @@ function ChatSdkEndpointSetup() {
               <SlackAppDetails value={slackDetails} readOnly={!slackDetailsEditable || agentStepBusy}
                 onChange={app => setSlackDraft({ agentId, app })}
                 onBlur={() => void persistSlackDetails().catch(() => {})} />
-              {saveSlackDetails.error && <p role="alert" className="text-sm text-destructive">Couldn&apos;t save the Slack app details. Try again before continuing.</p>}
+              {saveSlackDetails.error && <p role="alert" className="text-sm text-destructive">{t("chatSetup.couldnTSaveTheSlack")}</p>}
               {slackChoices.data?.defaultMethod === "managed" && (!endpoint || endpoint.setup?.slackSetupMethod === "managed") && !endpoint?.setup?.slackRegistration && <Button
                 variant="link" className="h-auto p-0 text-muted-foreground"
                 disabled={agentStepBusy || !slackDetailsValidation.success}
@@ -581,8 +581,8 @@ function ChatSdkEndpointSetup() {
               >{t("chatSetup.useYourOwnApp")}</Button>}
             </SlackSetupAdvanced>}
             {isSlack && !endpoint && !slackChoices.data && ((slackChoicesView.kind === "error")
-              ? <div role="alert" className="text-sm text-destructive">Couldn&apos;t load Slack setup. <Button variant="link" disabled={slackChoices.isFetching} onClick={() => void slackChoices.refetch()}>Retry</Button></div>
-              : <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Loading Slack…</p>)}
+              ? <div role="alert" className="text-sm text-destructive">{t("chatSetup.couldnTLoadSlackSetup")} <Button variant="link" disabled={slackChoices.isFetching} onClick={() => void slackChoices.refetch()}>{t("common.retry")}</Button></div>
+              : <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("chatSetup.loadingSlack")}</p>)}
             {provider === "github" && <GitHubAgentTrustWarning agent={selectedAgent} />}
             <SetupWizardFooter disabled={agentStepBusy || isSlack && !endpoint && Boolean(agentId) && !slackChoices.data} onSaveExit={() => void continueFromAgent(true)}>
               <Button
@@ -677,10 +677,10 @@ function ChatSdkEndpointSetup() {
                 <span>{t("chatSetup.youCanNowTalkToInSlack", { name: selectedAgent?.name ?? endpoint.assignedAgentName })}</span>
                 <img src="/brands/apps/slack.svg" alt="" aria-hidden="true" className="size-6" />
               </p>
-              <Button asChild variant="link"><a href={slackConversationUrl(endpoint, identitySettled ? userId : null)} target="_blank" rel="noopener noreferrer">Open Slack <ExternalLink className="size-4" /></a></Button>
+              <Button asChild variant="link"><a href={slackConversationUrl(endpoint, identitySettled ? userId : null)} target="_blank" rel="noopener noreferrer">{t("chatSetup.openSlack")} <ExternalLink className="size-4" /></a></Button>
             </div>
             <Button disabled={testConnection.isPending} onClick={finishSetup}>
-              {testConnection.isPending && <Loader2 className="size-4 animate-spin" />}Done
+              {testConnection.isPending && <Loader2 className="size-4 animate-spin" />}{t("common.done")}
             </Button>
           </div> : <TryStep
             endpointId={endpoint.id}
