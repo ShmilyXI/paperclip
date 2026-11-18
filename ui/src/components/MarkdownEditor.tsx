@@ -1765,7 +1765,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
                 )}
                 {option.kind === "skill" && (
                   <span className="ml-auto shrink-0 text-(length:--text-nano) uppercase tracking-wide text-popover-foreground/70">
-                    Skill
+                    {t("common.skill")}
                   </span>
                 )}
                 {option.kind === "routine" && (
