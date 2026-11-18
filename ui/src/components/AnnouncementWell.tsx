@@ -75,7 +75,7 @@ export function AnnouncementWell({ health, placement = "floating" }: { health?: 
   if (!announcement || modalOpen || (toasts?.length ?? 0) > 0) return null;
   return (
     <aside
-      aria-label="Paperclip announcements"
+      aria-label={t("announcementWell.paperclipAnnouncements")}
       data-placement={placement}
       className={cn(
         "announcement-well",

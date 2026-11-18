@@ -42,9 +42,9 @@ export function AgentChatSidebar({
           type="button"
           variant="ghost"
           size="icon-xs"
-          aria-label={`${pinned ? "Unstar" : "Star"} ${agent.name}`}
+          aria-label={`${pinned ? t("common.unstar") : t("common.star")} ${agent.name}`}
           aria-pressed={pinned}
-          title={pinned ? "Unstar agent" : "Star agent to pin"}
+          title={pinned ? t("agentChatSidebar.unstarAgent") : t("agentChatSidebar.starAgentToPin")}
           onClick={(event) => {
             event.stopPropagation();
             onToggleStar(agent.id);
@@ -62,7 +62,7 @@ export function AgentChatSidebar({
   return (
     <section aria-label={t("agentChatSidebar.chats")} className="group/chats flex flex-col gap-0.5">
       <div className="relative flex min-h-9 items-center px-4 py-1.5">
-        <span className="font-mono text-(length:--text-nano) font-medium uppercase tracking-widest text-muted-foreground/60">Chats</span>
+        <span className="font-mono text-(length:--text-nano) font-medium uppercase tracking-widest text-muted-foreground/60">{t("agentChatSidebar.chats")}</span>
         <Button
           type="button"
           variant="ghost"
