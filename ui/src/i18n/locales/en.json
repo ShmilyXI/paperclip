@@ -12568,7 +12568,10 @@
     "taskStatus": "Task status",
     "thePrimaryTaskIsUnavailable": "The primary task is unavailable.",
     "noTaskLinked": "No task linked",
-    "next": "Next:"
+    "next": "Next:",
+    "thePreviousAgent": "the previous agent",
+    "theReceivingAgent": "the receiving agent",
+    "toIsPaused": "{{to}} is paused."
   },
   "caseChildrenTree": {
     "noChildCases": "No child cases.",

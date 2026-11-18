@@ -21,23 +21,23 @@ export function CaseWorkSummary({ caseData, pendingHandoff, agents }: {
     id: task.assigneeAgentId,
     name: task.assigneeAgentName ?? t("common.agent"),
   } : null;
-  const from = pending?.fromAgentId ? agents?.get(pending.fromAgentId)?.name ?? pending.fromAgentName ?? "the previous agent" : "the previous agent";
-  const to = pending ? (pending.toAgentId ? agents?.get(pending.toAgentId)?.name : null) ?? pending.toAgentName ?? "the receiving agent" : null;
+  const from = pending?.fromAgentId ? agents?.get(pending.fromAgentId)?.name ?? pending.fromAgentName ?? t("caseWorkSummary.thePreviousAgent") : t("caseWorkSummary.thePreviousAgent");
+  const to = pending ? (pending.toAgentId ? agents?.get(pending.toAgentId)?.name : null) ?? pending.toAgentName ?? t("caseWorkSummary.theReceivingAgent") : null;
   const destination = pending?.toAgentId ? agents?.get(pending.toAgentId) : null;
   const waiting = pending?.destinationKind === "done" ? t("caseWorkSummary.caseWillCloseWhenThe") : pending?.lastError
     ?? (pending?.state === "awaiting_release" ? t("caseWorkSummary.waitingForFromToFinish", { from })
-      : destination?.status === "paused" ? `${to} is paused.` : t("caseWorkSummary.waitingForToToStart", { to }));
+      : destination?.status === "paused" ? t("caseWorkSummary.toIsPaused", { to }) : t("caseWorkSummary.waitingForToToStart", { to }));
 
   return <section className="space-y-3" aria-label={t("caseWorkSummary.caseWork")}>
     <h2 className="text-sm font-semibold">{t("caseWorkSummary.work")}</h2>
     {caseData.workIssueId ? <div className="space-y-3">
       {task ? <div>
-        <PropertyRow label="Task"><IssueReferencePill issue={task} className="min-h-11 md:min-h-0" /></PropertyRow>
-        <PropertyRow label="Workflow"><span className="text-sm">{caseData.workflow?.name ?? "Case instructions"}</span></PropertyRow>
-        {caseData.phase && <PropertyRow label="Phase"><span className="text-sm">{caseData.phase}</span></PropertyRow>}
-        <PropertyRow label="Agent">{assignee ? <AgentIdentity agent={assignee} size="xs" /> : <span className="text-sm text-muted-foreground">Unassigned</span>}</PropertyRow>
-        <PropertyRow label="Task status"><IssueStatusBadge {...taskStatusIconProps(task)} /></PropertyRow>
-      </div> : <p className="text-sm text-muted-foreground">The primary task is unavailable.</p>}
+        <PropertyRow label={t("common.task")}><IssueReferencePill issue={task} className="min-h-11 md:min-h-0" /></PropertyRow>
+        <PropertyRow label={t("caseWorkSummary.workflow")}><span className="text-sm">{caseData.workflow?.name ?? t("caseWorkSummary.caseInstructions")}</span></PropertyRow>
+        {caseData.phase && <PropertyRow label={t("caseWorkSummary.phase")}><span className="text-sm">{caseData.phase}</span></PropertyRow>}
+        <PropertyRow label={t("common.agent")}>{assignee ? <AgentIdentity agent={assignee} size="xs" /> : <span className="text-sm text-muted-foreground">{t("common.unassigned")}</span>}</PropertyRow>
+        <PropertyRow label={t("caseWorkSummary.taskStatus")}><IssueStatusBadge {...taskStatusIconProps(task)} /></PropertyRow>
+      </div> : <p className="text-sm text-muted-foreground">{t("caseWorkSummary.thePrimaryTaskIsUnavailable")}</p>}
       {pending && pending.state !== "delivered" && pending.state !== "completed" && pending.state !== "cancelled" && <div className="flex items-start gap-2 text-sm">
         <Clock3 aria-hidden className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
         <div className="min-w-0 space-y-1">

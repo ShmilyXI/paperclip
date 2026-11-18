@@ -12568,7 +12568,10 @@
     "taskStatus": "任务状态",
     "thePrimaryTaskIsUnavailable": "主任务不可用。",
     "noTaskLinked": "未关联任务",
-    "next": "下一步："
+    "next": "下一步：",
+    "thePreviousAgent": "上一位员工",
+    "theReceivingAgent": "接手员工",
+    "toIsPaused": "{{to}} 已暂停。"
   },
   "caseChildrenTree": {
     "noChildCases": "没有子案例。",
