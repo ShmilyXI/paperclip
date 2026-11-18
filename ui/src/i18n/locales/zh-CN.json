@@ -11154,7 +11154,18 @@
     "somethingWentWrongTryAgain": "出了点问题，请重试。",
     "noFingerprint": "无指纹",
     "byteCount_one": "{{count}} 字节",
-    "byteCount_other": "{{count}} 字节"
+    "byteCount_other": "{{count}} 字节",
+    "copyFullDigest": "复制完整摘要 — {{full}}",
+    "accessApproved": "访问已批准",
+    "accessFallback": "访问",
+    "approveAndSaveSecret": "批准并保存密钥",
+    "approveAccess": "批准访问",
+    "approveAccessAndSaveSecret": "批准访问并保存密钥",
+    "valueSavedExactly": "该值将按员工记录的内容原样保存。你可以先重命名或移动到其他文件夹。",
+    "giveAgentAccess": "授予员工访问此密钥的权限。访问将以你的权限授予。",
+    "savedAs": "保存为",
+    "storedIn": "存储于",
+    "defaultVault": "默认保管库"
   },
   "caseDetail": {
     "case": "案例",

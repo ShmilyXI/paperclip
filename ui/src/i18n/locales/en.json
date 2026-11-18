@@ -11154,7 +11154,18 @@
     "somethingWentWrongTryAgain": "Something went wrong. Try again.",
     "noFingerprint": "no fingerprint",
     "byteCount_one": "{{count}} byte",
-    "byteCount_other": "{{count}} bytes"
+    "byteCount_other": "{{count}} bytes",
+    "copyFullDigest": "Copy full digest — {{full}}",
+    "accessApproved": "Access approved",
+    "accessFallback": "access",
+    "approveAndSaveSecret": "Approve and save secret",
+    "approveAccess": "Approve access",
+    "approveAccessAndSaveSecret": "Approve access and save secret",
+    "valueSavedExactly": "The value is saved exactly as the agent recorded it. You can rename it or move it to another folder first.",
+    "giveAgentAccess": "Give the agent access to this secret. Access is granted with your permissions.",
+    "savedAs": "Saved as",
+    "storedIn": "Stored in",
+    "defaultVault": "Default vault"
   },
   "caseDetail": {
     "case": "Case",

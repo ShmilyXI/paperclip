@@ -81,7 +81,7 @@ export function FingerprintChip({
           .then(() => pushToast({ title: t("proposalReview.fingerprintCopied"), tone: "success" }))
           .catch(() => pushToast({ title: t("proposalReview.couldnTCopyFingerprint"), tone: "error" }));
       }}
-      title={`Copy full digest — ${full}`}
+      title={t("proposalReview.copyFullDigest", { full })}
       className={cn(
         "inline-flex items-center gap-1 font-mono hover:text-foreground",
         className,
@@ -275,11 +275,11 @@ export function useProposalDecision(
       secretsApi.approveProposal(companyId!, proposal.id, input),
     onSuccess: (result) => {
       pushToast({
-        title: result.kind === "secret" ? "Secret approved" : "Access approved",
+        title: result.kind === "secret" ? t("proposalReview.secretApproved") : t("proposalReview.accessApproved"),
         body:
           result.kind === "secret"
-            ? (result.proposedName ?? "Secret created")
-            : `${result.target?.name ?? "Agent"} · ${bindingEnvKey(result) || "access"}`,
+            ? (result.proposedName ?? t("proposalReview.secretCreated"))
+            : `${result.target?.name ?? t("common.agent")} · ${bindingEnvKey(result) || t("proposalReview.accessFallback")}`,
         tone: "success",
       });
       setError(null);
@@ -471,12 +471,12 @@ function ApproveDialog({
           <>
             <DialogHeader>
               <DialogTitle>
-                {isSecret ? "Approve and save secret" : "Approve access"}
+                {isSecret ? t("proposalReview.approveAndSaveSecret") : t("proposalReview.approveAccess")}
               </DialogTitle>
               <DialogDescription>
                 {isSecret
-                  ? "The value is saved exactly as the agent recorded it. You can rename it or move it to another folder first."
-                  : "Give the agent access to this secret. Access is granted with your permissions."}
+                  ? t("proposalReview.valueSavedExactly")
+                  : t("proposalReview.giveAgentAccess")}
               </DialogDescription>
             </DialogHeader>
 
@@ -516,7 +516,7 @@ function ApproveDialog({
                   </div>
                 </div>
                 <p className="text-(length:--text-micro) text-muted-foreground">
-                  Saved as{" "}
+                  {t("proposalReview.savedAs")}{" "}
                   {previewName ? (
                     <SecretPathName name={previewName} className="font-mono" />
                   ) : (
@@ -536,7 +536,7 @@ function ApproveDialog({
 
                 {localConfigs.length > 0 ? (
                   <div className="space-y-1">
-                    <Label htmlFor="approve-provider-config">Stored in</Label>
+                    <Label htmlFor="approve-provider-config">{t("proposalReview.storedIn")}</Label>
                     <select
                       id="approve-provider-config"
                       value={draft.providerConfigId}
@@ -545,7 +545,7 @@ function ApproveDialog({
                       }
                       className="h-9 w-full rounded-md border border-input bg-transparent px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                     >
-                      <option value="">Default vault</option>
+                      <option value="">{t("proposalReview.defaultVault")}</option>
                       {localConfigs.map((config) => (
                         <option key={config.id} value={config.id}>
                           {config.displayName}
@@ -580,10 +580,10 @@ function ApproveDialog({
                 {pending
                   ? t("proposalReview.approving")
                   : isSecret
-                    ? "Approve and save secret"
+                    ? t("proposalReview.approveAndSaveSecret")
                     : draft.cascade
-                      ? "Approve access and save secret"
-                      : "Approve access"}
+                      ? t("proposalReview.approveAccessAndSaveSecret")
+                      : t("proposalReview.approveAccess")}
               </Button>
             </DialogFooter>
           </>
