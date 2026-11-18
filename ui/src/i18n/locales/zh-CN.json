@@ -5969,6 +5969,8 @@
     "remote": "远程",
     "importedReferencesToast": "已从 {{project}} 以引用方式导入 {{count}} 个技能。",
     "importCount": "导入 {{count}} 个技能",
+    "noRepositoriesAddedYet": "还没有添加仓库。导入你的技能，让它们可在 {{companyName}} 中使用。",
+    "thisCompany": "该公司",
     "workspaceCount": "{{count}} 个工作区",
     "scannableCount": "{{count}} 个可扫描",
     "importedCount": "已导入 {{count}} 个",

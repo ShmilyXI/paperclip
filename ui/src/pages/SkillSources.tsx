@@ -104,12 +104,12 @@ export function SkillSources() {
       </div>
     </header>
     <SkillsPageNavigation activeView="sources" />
-    {(view.kind === 'loading' || view.kind === 'reconnecting') && <p role="status" className="text-sm text-muted-foreground">Loading sources…</p>}
+    {(view.kind === 'loading' || view.kind === 'reconnecting') && <p role="status" className="text-sm text-muted-foreground">{t("skillSources.loadingSources")}</p>}
     {view.kind === 'error' && <QueryErrorState error={query.error} action="load skill sources" onRetry={view.retry} retrying={view.isFetching} />}
-    {query.data?.length === 0 && availableProjects.length === 0 && <div className="flex flex-col items-start gap-3 py-8"><p className="text-sm text-muted-foreground">No repositories added yet. Import your skills to make them available in {selectedCompany?.name ?? 'this company'}.</p><Button variant="outline" onClick={() => navigate('/skills/sources/new')}>Import from GitHub</Button></div>}
-    {projectsView.kind === 'error' && <p role="alert" className="text-sm text-destructive">{describeError(projectRepositories.error).body} <Button variant="ghost" size="sm" onClick={() => void projectRepositories.refetch()}>Try again</Button></p>}
+    {query.data?.length === 0 && availableProjects.length === 0 && <div className="flex flex-col items-start gap-3 py-8"><p className="text-sm text-muted-foreground">{t("skillSources.noRepositoriesAddedYet", { companyName: selectedCompany?.name ?? t("skillSources.thisCompany") })}</p><Button variant="outline" onClick={() => navigate('/skills/sources/new')}>{t("skillSources.importFromGithub")}</Button></div>}
+    {projectsView.kind === 'error' && <p role="alert" className="text-sm text-destructive">{describeError(projectRepositories.error).body} <Button variant="ghost" size="sm" onClick={() => void projectRepositories.refetch()}>{t("common.tryAgain")}</Button></p>}
     {adopt.error && <p role="alert" className="text-sm text-destructive">{describeError(adopt.error).body}</p>}
-    {uninstalledProjects.length > 0 && <div className="divide-y divide-border" aria-label="Project repositories">
+    {uninstalledProjects.length > 0 && <div className="divide-y divide-border" aria-label={t("skillSources.projectRepositories")}>
       {uninstalledProjects.map(group => <ProjectSkillRepositoryRow key={group.key} repository={group.repository} backgroundPending={group.hasPending} disabled={adopt.isPending}
         pending={adopt.isPending && adopt.variables?.key === group.key} onImport={() => adopt.mutate(group)} />)}
     </div>}
@@ -332,9 +332,9 @@ function SourceDialog({ companyId, source, onClose, onSaved }: {
             </div>
             <Button asChild variant="outline" size="sm"><Link onClick={rememberReturn} to={connectHref}><Plus className="size-4" />{t("skillSources.addRepos")}</Link></Button>
           </div>}
-          {repositoriesLoading && <p role="status" className="text-sm text-muted-foreground">Loading your GitHub repositories…</p>}
-          {availableRepositories.length > 0 && <Command className="h-auto border border-border" label="Source repositories">
-              <CommandInput placeholder="Search repositories…" aria-label="Search repositories" disabled={busy} />
+          {repositoriesLoading && <p role="status" className="text-sm text-muted-foreground">{t("skillSources.loadingYourGithubRepositories")}</p>}
+          {availableRepositories.length > 0 && <Command className="h-auto border border-border" label={t("skillSources.sourceRepositories")}>
+              <CommandInput placeholder={t("skillSources.searchRepositories")} aria-label={t("skillSources.searchRepositories2")} disabled={busy} />
               <CommandList className="max-h-48">
                 <CommandEmpty>{t("skillSources.noMatchingRepositories")}</CommandEmpty>
                 <CommandGroup>
@@ -351,12 +351,12 @@ function SourceDialog({ companyId, source, onClose, onSaved }: {
               </CommandList>
           </Command>}
           {(repositoriesView.kind === 'error' || Boolean(repositories.data?.failedConnectionCount)) && <p role="alert" className="text-xs text-destructive">
-            {availableRepositories.length ? 'Some GitHub connections could not load repositories.' : 'Could not load GitHub repositories.'}{' '}
-            <Button variant="ghost" size="sm" disabled={repositories.isFetching} onClick={() => void repositories.refetch()}>Try again</Button>
-            <Link to="/apps" className="underline">Manage connections</Link>
+            {availableRepositories.length ? t("skillSources.someGithubConnectionsCouldNot") : t("skillSources.couldNotLoadGithubRepositories")}{' '}
+            <Button variant="ghost" size="sm" disabled={repositories.isFetching} onClick={() => void repositories.refetch()}>{t("common.tryAgain")}</Button>
+            <Link to="/apps" className="underline">{t("skillSources.manageConnections")}</Link>
           </p>}
           {!repositoriesLoading && availableRepositories.length === 0 && <Button asChild variant="outline" className="h-28 w-full flex-col gap-3 whitespace-normal text-center">
-            <Link onClick={rememberReturn} to={connectHref}><GithubIcon className="size-6" />Connect GitHub to see your repos</Link>
+            <Link onClick={rememberReturn} to={connectHref}><GithubIcon className="size-6" />{t("skillSources.connectGithubToSeeYour")}</Link>
           </Button>}
           <Button type="button" variant="link" size="sm" className="h-auto self-end p-0 text-xs font-normal text-muted-foreground underline" disabled={busy} aria-expanded={showRepositoryUrl} aria-controls="source-repository-url" onClick={() => setShowRepositoryUrl(true)}>{t("skillSources.orAddPublicRepoBy")}</Button>
         </div>
@@ -375,7 +375,7 @@ function SourceDialog({ companyId, source, onClose, onSaved }: {
         {selectionTree}
         <SkillImportWarnings warnings={warnings} />
       </div>}
-      {error && <p role="alert" className="text-sm text-destructive">{describeError(error).body}{' '}<Link onClick={rememberReturn} to={connectHref} className="underline">Connect a GitHub account</Link></p>}
+      {error && <p role="alert" className="text-sm text-destructive">{describeError(error).body}{' '}<Link onClick={rememberReturn} to={connectHref} className="underline">{t("skillSources.connectAGithubAccount")}</Link></p>}
       {scan.isPending && <SkillImportProgress repository={parsedRepository?.fullName ?? repositoryUrl} progress={progress} found={found} />}
       {save.isPending && <SkillImportProgress importing repository={source?.fullName ?? discovery!.fullName} count={selectedCount}
         found={candidates.filter(candidate => selected.has(candidate.path) && !candidate.error).map(candidate => ({ ...candidate, fileCount: candidate.inspection?.files.length ?? 1 }))} />}

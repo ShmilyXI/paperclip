@@ -5969,6 +5969,8 @@
     "remote": "remote",
     "importedReferencesToast": "{{count}} skills imported as references from {{project}}.",
     "importCount": "Import {{count}} skills",
+    "noRepositoriesAddedYet": "No repositories added yet. Import your skills to make them available in {{companyName}}.",
+    "thisCompany": "this company",
     "workspaceCount": "{{count}} workspaces",
     "scannableCount": "{{count}} scannable",
     "importedCount": "{{count}} imported",
