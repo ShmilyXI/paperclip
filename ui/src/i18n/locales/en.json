@@ -17340,7 +17340,9 @@
         "loadRunnerInspection": "load the runner inspection",
         "deleteRawTrace": "delete the raw trace",
         "createTheTask": "create the task",
-        "loadPreview": "load the preview"
+        "loadPreview": "load the preview",
+        "loadYourAccount": "load your account",
+        "loadIdentityLink": "load the identity link"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

@@ -17340,7 +17340,9 @@
         "loadRunnerInspection": "加载运行检查",
         "deleteRawTrace": "删除原始轨迹",
         "createTheTask": "创建任务",
-        "loadPreview": "加载预览"
+        "loadPreview": "加载预览",
+        "loadYourAccount": "加载你的账户",
+        "loadIdentityLink": "加载身份链接"
       },
       "retry": "重试",
       "retrying": "正在重试…",

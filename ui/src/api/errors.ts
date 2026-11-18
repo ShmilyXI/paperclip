@@ -169,6 +169,8 @@ const ACTION_KEYS = new Map([
   ["delete the raw trace", "deleteRawTrace"],
   ["create the task", "createTheTask"],
   ["load the preview", "loadPreview"],
+  ["load your account", "loadYourAccount"],
+  ["load the identity link", "loadIdentityLink"],
 ]);
 
 function actionErrorTitle(action: string, fallback: string): string {

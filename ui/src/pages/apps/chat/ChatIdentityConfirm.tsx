@@ -102,10 +102,12 @@ export function ChatIdentityConfirm() {
       <main className="mx-auto max-w-lg space-y-5 px-6 py-12">
         <CheckCircle2 className="h-8 w-8" />
         <div>
-          <h1 className="text-xl font-bold">Identity linked</h1>
+          <h1 className="text-xl font-bold">{t("chatIdentityConfirm.identityLinked")}</h1>
           <p className={cn("mt-1 text-sm text-muted-foreground", ANALYTICS_MASK_CLASS)}>
-            Future messages from {identity.externalLabel} use your current
-            Paperclip permissions in {identity.companyName}.
+            {t("chatIdentityConfirm.futureMessagesUseYourPermissions", {
+              label: identity.externalLabel,
+              company: identity.companyName,
+            })}
           </p>
         </div>
         {identity.provider === "slack" && <Button asChild><a href="https://app.slack.com/" target="_blank" rel="noopener noreferrer">{t("chatIdentityConfirm.returnToSlack")}</a></Button>}
@@ -126,7 +128,7 @@ export function ChatIdentityConfirm() {
           </dd>
         </div>
         <div className="flex items-center justify-between gap-4 py-3">
-          <dt className="text-sm text-muted-foreground">External identity</dt>
+          <dt className="text-sm text-muted-foreground">{t("chatIdentityConfirm.externalIdentity")}</dt>
           <dd className={cn("text-right text-sm font-medium", ANALYTICS_MASK_CLASS)}>
             {identity.externalLabel}
             {identity.externalDetail ? ` · ${identity.externalDetail}` : ""}
@@ -155,10 +157,10 @@ export function ChatIdentityConfirm() {
       ) : null}
       {identity.canConfirm === false ? (
         <div className="space-y-3">
-          <p className="text-sm">You need membership in {identity.companyName} before linking this account.</p>
-          {requestAccess.isSuccess ? <p role="status" className="text-sm">Access requested. An admin can approve it in Paperclip. After approval, return here to confirm; if this link expires, send the connect command in Slack again.</p>
-            : <Button disabled={requestAccess.isPending || !identity.selfService} onClick={() => requestAccess.mutate()}>Request access</Button>}
-          {requestAccess.error ? <p role="alert" className="text-sm text-destructive">Couldn&apos;t request access. The link may have expired. Send the connect command again and retry.</p> : null}
+          <p className="text-sm">{t("chatIdentityConfirm.needMembership", { company: identity.companyName })}</p>
+          {requestAccess.isSuccess ? <p role="status" className="text-sm">{t("chatIdentityConfirm.accessRequestedAnAdminCan")}</p>
+            : <Button disabled={requestAccess.isPending || !identity.selfService} onClick={() => requestAccess.mutate()}>{t("chatIdentityConfirm.requestAccess")}</Button>}
+          {requestAccess.error ? <p role="alert" className="text-sm text-destructive">{t("chatIdentityConfirm.couldNotRequestAccess")}</p> : null}
         </div>
       ) : <Button disabled={confirm.isPending} onClick={() => confirm.mutate()}>
         {confirm.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
