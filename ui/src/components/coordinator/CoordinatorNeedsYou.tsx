@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { useCallback, useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -40,7 +41,7 @@ import { CoordinatorDecisionReceipt as Receipt } from "./CoordinatorDecisionRece
 import { CoordinatorTaskMotion } from "./CoordinatorTaskCommitment";
 import { CoordinatorReviewPanel, needsYouArtifact, needsYouArtifactLabel, needsYouMentionedArtifact, type NeedsYouArtifact } from "./CoordinatorReviewPanel";
 import { BlockedTaskCardBody, RecoveryCardBody, ReviewTaskCardBody } from "./NeedsYouCardBodies";
-import { NEEDS_YOU_SECTIONS, NeedsYouPanelRow, needsYouSection, type NeedsYouSection } from "./NeedsYouCardKit";
+import { NeedsYouPanelRow, needsYouSection, type NeedsYouSection } from "./NeedsYouCardKit";
 import { NeedsYouAudience, NeedsYouReceiptCard, NeedsYouRequester, NeedsYouTaskLink, NeedsYouTypeLabel, needsYouTaskRef } from "./NeedsYouCardParts";
 import { CoordinatorNeedsYouSidePanel, needsYouReviewTab, needsYouReviewTabId, needsYouTabArtifact, type NeedsYouReviewPayload } from "./CoordinatorNeedsYouSidePanel";
 import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
@@ -50,7 +51,7 @@ type Group = "type" | "none" | "task" | "agent" | "project";
 
 /** Rule 7: a card that cannot answer inline links to the exact control, named by its verb. */
 function openLabel(item: AttentionItem) {
-  return (item.decisionVerbs ?? []).find((verb) => verb.id === "open_recovery" || verb.id === "inspect")?.label ?? "Open to review";
+  return (item.decisionVerbs ?? []).find((verb) => verb.id === "open_recovery" || verb.id === "inspect")?.label ?? t("needsYou.openToReview");
 }
 
 /** Say each thing once (IA4): a quoted excerpt of the title is not a second line. */
@@ -68,11 +69,17 @@ function documentKeyLabel(key: string) {
 }
 
 const EMPTY_VIEW_TEXT: Record<AttentionPersonalView, string> = {
-  mine: "You're caught up.",
-  unassigned: "No cards need an owner.",
-  company: "No company alerts right now.",
-  archived: "Nothing archived. Cards you archive or snooze for yourself show here.",
-  all: "No open cards for anyone.",
+  mine: t("needsYou.youReCaughtUp"),
+  unassigned: t("needsYou.noCardsNeedAnOwner"),
+  company: t("needsYou.noCompanyAlertsRightNow"),
+  archived: t("needsYou.nothingArchived"),
+  all: t("needsYou.noOpenCardsForAnyone"),
+};
+
+const SECTION_TITLE: Record<NeedsYouSection, string> = {
+  decisions: t("needsYou.decisions"),
+  problems: t("needsYou.problems"),
+  updates: t("needsYou.updates"),
 };
 
 export function CoordinatorNeedsYou() {
@@ -191,8 +198,8 @@ export function CoordinatorNeedsYou() {
   const groups = useMemo(() => {
     const result = new Map<string, AttentionItem[]>();
     for (const item of currentItems.slice(0, renderLimit)) {
-      const label = groupBy === "type" ? needsYouSection(item) : groupBy === "task" ? item.relatedIssue?.identifier ?? item.relatedIssue?.title ?? "Other decisions"
-        : groupBy === "agent" ? item.originAgentName ?? "Other agents" : groupBy === "project" ? item.project?.name ?? "No project" : "";
+      const label = groupBy === "type" ? needsYouSection(item) : groupBy === "task" ? item.relatedIssue?.identifier ?? item.relatedIssue?.title ?? t("needsYou.otherDecisions")
+        : groupBy === "agent" ? item.originAgentName ?? t("needsYou.otherAgents") : groupBy === "project" ? item.project?.name ?? t("newIssue.noProject") : "";
       result.set(label, [...(result.get(label) ?? []), item]);
     }
     // By type, decisions come before problems (Paper "A · Compact cards").
@@ -219,16 +226,16 @@ export function CoordinatorNeedsYou() {
   }, [deepLinkDecisionId, selectedCompanyId, pendingItems, currentItems, staleItems, feedWaiting, everyone, view, query, agentFilter, projectFilter, forUserId, setView, renderLimit, reducedMotion, setSearchParams]);
   const projects = useMemo(() => [...new Map([
     ...pendingItems.flatMap((item) => item.project ? [[item.project.id, item.project.name] as const] : []),
-    ...recentItems.flatMap((item) => item.projectId ? [[item.projectId, item.projectName ?? "Unnamed project"] as const] : []),
+    ...recentItems.flatMap((item) => item.projectId ? [[item.projectId, item.projectName ?? t("needsYou.unnamedProject")] as const] : []),
   ]).entries()], [pendingItems, recentItems]);
   // Assigned to you, everyone the viewer may see, one person, no owner yet, or company alerts.
   const assigneeOptions = useMemo(() => {
     const people = [...userLabelMap].filter(([id]) => id !== userId).sort(([, a], [, b]) => a.localeCompare(b));
     return [
-      { value: "me" as CoordinatorAssignee, label: "Assigned to you" },
-      ...(everyone ? [{ value: "all" as CoordinatorAssignee, label: "All assignees" }, ...people.map(([id, name]) => ({ value: `user:${id}` as CoordinatorAssignee, label: name }))] : []),
-      { value: "unassigned" as CoordinatorAssignee, label: "No owner yet" },
-      { value: "company" as CoordinatorAssignee, label: "Company alerts" },
+      { value: "me" as CoordinatorAssignee, label: t("needsYou.assignedToYou") },
+      ...(everyone ? [{ value: "all" as CoordinatorAssignee, label: t("needsYou.allAssignees") }, ...people.map(([id, name]) => ({ value: `user:${id}` as CoordinatorAssignee, label: name }))] : []),
+      { value: "unassigned" as CoordinatorAssignee, label: t("needsYou.noOwnerYet") },
+      { value: "company" as CoordinatorAssignee, label: t("needsYou.companyAlerts") },
     ];
   }, [userLabelMap, userId, everyone]);
   const chooseAssignee = (value: CoordinatorAssignee) => { const target = coordinatorAssigneeTarget(value, userId); setView(target.view, target.forUserId); };
@@ -249,7 +256,7 @@ export function CoordinatorNeedsYou() {
     const open = new Set(pendingItems.map(item => item.id));
     for (const tab of reviewTabs.tabs) if (!open.has(tab.payload.itemId)) closeReviewTab(tab.id);
   }, [pendingItems, reviewTabs.tabs, closeReviewTab]);
-  useEffect(() => { setBreadcrumbs([{ label: "Needs You" }]); }, [setBreadcrumbs]);
+  useEffect(() => { setBreadcrumbs([{ label: t("needsYou.needsYou") }]); }, [setBreadcrumbs]);
   useEffect(() => {
     setSettling([]); setHistoryOpen(false); setReviewPanelOpen(false); resetReviewTabs({ tabs: [], activeTabId: null }); setNow(Date.now()); closePanel();
     return closePanel;
@@ -304,9 +311,9 @@ export function CoordinatorNeedsYou() {
     // The artifact opens beside the card from the first row of its context panel (IA5).
     const artifactRow = artifact && artifact.kind !== "approval" ? <NeedsYouPanelRow
       icon={artifact.kind === "images" ? <ImageIcon /> : <FileText />}
-      title={artifact.kind === "document" && !artifact.title ? (artifact.key === "plan" ? "Plan" : documentKeyLabel(artifact.key)) : needsYouArtifactLabel(artifact)}
-      meta={reviewingOwn ? "Open in sidebar · Showing" : "Open in sidebar"}
-      label={`${reviewingOwn ? "Close" : "Open"} ${needsYouArtifactLabel(artifact)} in the sidebar`}
+      title={artifact.kind === "document" && !artifact.title ? (artifact.key === "plan" ? t("issueDetail.plan") : documentKeyLabel(artifact.key)) : needsYouArtifactLabel(artifact)}
+      meta={reviewingOwn ? t("needsYou.openInSidebarShowing") : t("needsYou.openInSidebar")}
+      label={reviewingOwn ? t("needsYou.closeArtifactInSidebar", { artifact: needsYouArtifactLabel(artifact) }) : t("needsYou.openArtifactInSidebar", { artifact: needsYouArtifactLabel(artifact) })}
       onOpen={() => reviewingOwn ? closeReviewTab(needsYouReviewTabId(item)) : showReview(item)} /> : null;
     // A plan, document, approval or attachment the card links to opens as a
     // side-panel tab beside the card, not a page change (PAP-775, IA5).
@@ -357,7 +364,7 @@ export function CoordinatorNeedsYou() {
         onResolved(item);
       }} />
         : decision ? <DecisionResolver companyId={selectedCompanyId!} decisionId={item.subject.id} originIssue={item.relatedIssue} agentMap={agentMap} leading={taskLink} onResolved={() => onResolved(item)} />
-        : stalledReview ? <><div className="space-y-1.5"><h2>Choose how this task continues</h2><p className="text-sm text-muted-foreground">This task is still in review with no active reviewer or continuation. Return it to work, request changes, or mark the task done.</p></div><BlockedTaskCardBody item={item} companyId={selectedCompanyId!} agentMap={agentMap} userLabelMap={userLabelMap} leading={taskLink} footerContext={footerContext} onOpen={navigate} onResolved={refetchAll} /></>
+        : stalledReview ? <><div className="space-y-1.5"><h2>{t("needsYou.chooseHowThisTaskContinues")}</h2><p className="text-sm text-muted-foreground">{t("needsYou.thisTaskIsStillInReview")}</p></div><BlockedTaskCardBody item={item} companyId={selectedCompanyId!} agentMap={agentMap} userLabelMap={userLabelMap} leading={taskLink} footerContext={footerContext} onOpen={navigate} onResolved={refetchAll} /></>
         : failedRun ? <>{heading}<FailedRunActions item={item} companyId={selectedCompanyId!} leading={taskLink} footerContext={footerContext} presentation="card" onResolved={refetchAll} /></>
         : budget ? <>{heading}<BudgetAlertActions item={item} companyId={selectedCompanyId!} leading={taskLink} footerContext={footerContext} presentation="card" onResolved={refetchAll} /></>
         : approval ? <>{heading}<ApprovalResolver item={item} companyId={selectedCompanyId!} toggle={taskLink} footerContext={footerContext} presentation="card" onViewDetails={isMobile ? undefined : () => showReview(item)} shareDraft onResolved={() => onResolved(item)} /></>
@@ -371,12 +378,12 @@ export function CoordinatorNeedsYou() {
     </CoordinatorTaskMotion>
     </motion.div>;
   };
-  if (!selectedCompanyId) return <p className="text-sm text-muted-foreground">Choose a company to see its decisions.</p>;
+  if (!selectedCompanyId) return <p className="text-sm text-muted-foreground">{t("needsYou.chooseACompanyToSeeIts")}</p>;
   // Decision history is a view of the main pane (PAP-770), not a side panel
   // that repeats Recent Decisions beside them.
-  if (historyOpen) return <section className="coordinator-needs-you mx-auto w-full max-w-4xl space-y-6" aria-label="Decision history" data-coordinator-decision-history>
-    <Button variant="ghost" size="sm" onClick={closeHistory}><ArrowLeft className="size-4" />Needs You</Button>
-    <DecisionHistoryPanel companyId={selectedCompanyId} agents={agentQuery.data ?? []} userLabelMap={userLabelMap} header={<h1 className="text-2xl font-medium">Decision history</h1>} />
+  if (historyOpen) return <section className="coordinator-needs-you mx-auto w-full max-w-4xl space-y-6" aria-label={t("needsYou.decisionHistory")} data-coordinator-decision-history>
+    <Button variant="ghost" size="sm" onClick={closeHistory}><ArrowLeft className="size-4" />{t("needsYou.needsYou")}</Button>
+    <DecisionHistoryPanel companyId={selectedCompanyId} agents={agentQuery.data ?? []} userLabelMap={userLabelMap} header={<h1 className="text-2xl font-medium">{t("needsYou.decisionHistory")}</h1>} />
   </section>;
   const receipts = view === "mine" ? feed.data?.receipts ?? [] : [];
   const counts = { decisions: 0, problems: 0, updates: receipts.length };
@@ -384,44 +391,48 @@ export function CoordinatorNeedsYou() {
   const summarySections = (Object.keys(counts) as NeedsYouSection[]).filter(section => counts[section] > 0);
   if (!summarySections.length) summarySections.push("decisions");
   const sectionHeading = (section: NeedsYouSection) => <h2 className="text-base font-medium" data-needs-you-section={section}>
-    {NEEDS_YOU_SECTIONS[section].title}
+    {SECTION_TITLE[section]}
   </h2>;
-  return <LayoutGroup id="coordinator-decisions"><section className="coordinator-needs-you mx-auto w-full max-w-4xl space-y-6" aria-label="Needs You">
-    {archivedView ? <div className="flex items-center gap-2"><Button variant="ghost" size="icon-sm" aria-label="Back to Needs You" onClick={() => setView("mine")}><ArrowLeft className="size-4" /></Button><h1 className="text-2xl font-medium">Archived</h1></div> : null}
+  return <LayoutGroup id="coordinator-decisions"><section className="coordinator-needs-you mx-auto w-full max-w-4xl space-y-6" aria-label={t("needsYou.needsYou")}>
+    {archivedView ? <div className="flex items-center gap-2"><Button variant="ghost" size="icon-sm" aria-label={t("needsYou.backToNeedsYou")} onClick={() => setView("mine")}><ArrowLeft className="size-4" /></Button><h1 className="text-2xl font-medium">{t("common.archived")}</h1></div> : null}
     {/* Assigned to you by default (PAP-775); the assignee filter widens to all
         assignees, one person, no owner yet or company alerts. Archived and
         Decision history sit in View. */}
-    <div role="toolbar" aria-label="Decisions controls" className="flex flex-wrap items-center gap-2">
-      <div className="min-w-44 flex-1"><ToolbarSearch query={query} onQueryChange={setQuery} label="Search decisions" placeholder="Search…" /></div>
-      <NativeSelect aria-label="Filter decisions by agent" value={agentFilter} onChange={(event) => setAgentFilter(event.target.value)} className="w-auto"><option value="">All agents</option>{(agentQuery.data ?? []).map((agent) => <option key={agent.id} value={agent.id}>{agent.name}</option>)}</NativeSelect>
-      <NativeSelect aria-label="Filter decisions by project" value={projectFilter} onChange={(event) => setProjectFilter(event.target.value)} className="w-auto"><option value="">All projects</option>{projects.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</NativeSelect>
-      {assignee ? <NativeSelect aria-label="Filter decisions by assignee" data-attention-assignee={assignee} value={assignee} onChange={(event) => chooseAssignee(event.target.value as CoordinatorAssignee)} className="w-auto">
+    <div role="toolbar" aria-label={t("decisionsToolbar.decisionsControls")} className="flex flex-wrap items-center gap-2">
+      <div className="min-w-44 flex-1"><ToolbarSearch query={query} onQueryChange={setQuery} label={t("decisionsToolbar.searchDecisions")} placeholder={t("common.search3")} /></div>
+      <NativeSelect aria-label={t("needsYou.filterDecisionsByAgent")} value={agentFilter} onChange={(event) => setAgentFilter(event.target.value)} className="w-auto"><option value="">{t("audit.allAgents")}</option>{(agentQuery.data ?? []).map((agent) => <option key={agent.id} value={agent.id}>{agent.name}</option>)}</NativeSelect>
+      <NativeSelect aria-label={t("needsYou.filterDecisionsByProject")} value={projectFilter} onChange={(event) => setProjectFilter(event.target.value)} className="w-auto"><option value="">{t("cases.allProjects")}</option>{projects.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</NativeSelect>
+      {assignee ? <NativeSelect aria-label={t("needsYou.filterDecisionsByAssignee")} data-attention-assignee={assignee} value={assignee} onChange={(event) => chooseAssignee(event.target.value as CoordinatorAssignee)} className="w-auto">
         {assigneeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
-        {assignee.startsWith("user:") && !assigneeOptions.some(option => option.value === assignee) ? <option value={assignee}>Someone else</option> : null}
+        {assignee.startsWith("user:") && !assigneeOptions.some(option => option.value === assignee) ? <option value={assignee}>{t("needsYou.someoneElse")}</option> : null}
       </NativeSelect> : null}
-      <NativeSelect aria-label="Group decisions" value={groupBy} onChange={(event) => setGroupBy(event.target.value as Group)} className="w-auto"><option value="type">By type</option><option value="task">By task</option><option value="agent">By agent</option><option value="project">By project</option><option value="none">No grouping</option></NativeSelect>
+      <NativeSelect aria-label={t("needsYou.groupDecisions")} value={groupBy} onChange={(event) => setGroupBy(event.target.value as Group)} className="w-auto"><option value="type">{t("needsYou.byType")}</option><option value="task">{t("needsYou.byTask")}</option><option value="agent">{t("costs.byAgent")}</option><option value="project">{t("costs.byProject")}</option><option value="none">{t("needsYou.noGrouping")}</option></NativeSelect>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" data-attention-view-menu>View<ChevronDown className="size-4" /></Button></DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" data-attention-view-menu>{t("common.view")}<ChevronDown className="size-4" /></Button></DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={() => setView("archived")}>Archived{viewCounts.archived ? ` · ${viewCounts.archived}` : ""}</DropdownMenuItem>
-          <DropdownMenuItem onSelect={showHistory}>Decision history</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setView("archived")}>{t("common.archived")}{viewCounts.archived ? ` · ${viewCounts.archived}` : ""}</DropdownMenuItem>
+          <DropdownMenuItem onSelect={showHistory}>{t("needsYou.decisionHistory")}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
     {feed.data ? <p className="text-sm text-muted-foreground" data-needs-you-summary>
       {summarySections.map((section, index) => {
-        const label = NEEDS_YOU_SECTIONS[section].title.toLocaleLowerCase();
-        return <span key={section}>{index ? " · " : ""}{counts[section]} {counts[section] === 1 ? label.slice(0, -1) : label}</span>;
+        const label = section === "decisions"
+          ? (counts[section] === 1 ? t("needsYou.summaryDecision") : t("needsYou.summaryDecisions"))
+          : section === "problems"
+            ? (counts[section] === 1 ? t("needsYou.summaryProblem") : t("needsYou.summaryProblems"))
+            : (counts[section] === 1 ? t("needsYou.summaryUpdate") : t("needsYou.summaryUpdates"));
+        return <span key={section}>{index ? " · " : ""}{counts[section]} {label}</span>;
       })}
     </p> : null}
-    {feedWaiting ? <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Loading decisions…</p> : null}
+    {feedWaiting ? <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("needsYou.loadingDecisions")}</p> : null}
     {feedView.kind === "error" ? <QueryErrorState error={feedView.error} onRetry={feedView.retry} /> : null}
-    {!feedWaiting && feedView.kind !== "error" && currentItems.length === 0 && !receipts.length ? <div className="space-y-3 py-8 text-center"><p className="text-sm text-muted-foreground">{staleItems.length ? "No current cards. Stale cards are below." : snoozedItems.length ? "No archived cards. Snoozed cards are below." : pendingItems.length ? "No open decisions match these filters." : EMPTY_VIEW_TEXT[view]}</p></div> : null}
-    {groups.map(([label, items], index) => <div key={label} className="space-y-3" role={groupBy === "type" ? "group" : undefined} aria-label={groupBy === "type" ? NEEDS_YOU_SECTIONS[label as NeedsYouSection].title : undefined}>
+    {!feedWaiting && feedView.kind !== "error" && currentItems.length === 0 && !receipts.length ? <div className="space-y-3 py-8 text-center"><p className="text-sm text-muted-foreground">{staleItems.length ? t("needsYou.noCurrentCardsStaleBelow") : snoozedItems.length ? t("needsYou.noArchivedCardsSnoozedBelow") : pendingItems.length ? t("needsYou.noOpenDecisionsMatchThese") : EMPTY_VIEW_TEXT[view]}</p></div> : null}
+    {groups.map(([label, items], index) => <div key={label} className="space-y-3" role={groupBy === "type" ? "group" : undefined} aria-label={groupBy === "type" ? SECTION_TITLE[label as NeedsYouSection] : undefined}>
       {groupBy === "type" ? index > 0 ? sectionHeading(label as NeedsYouSection) : null : label ? <h2 className="text-sm font-medium text-muted-foreground">{label}</h2> : null}
       {items.map(renderCard)}
     </div>)}
-    {currentItems.length > renderLimit ? <Button variant="outline" onClick={() => setRenderLimit((value) => value + 40)}>Show more decisions</Button> : null}
+    {currentItems.length > renderLimit ? <Button variant="outline" onClick={() => setRenderLimit((value) => value + 40)}>{t("needsYou.showMoreDecisions")}</Button> : null}
     <AttentionStaleGroup items={staleItems} open={staleOpen} onToggle={() => setStaleOpen(open => !open)} onWithdrawAll={closeActions.withdrawAll}
       busy={closeActions.bulkPending} currentUserId={userId} userLabelMap={userLabelMap} titleOf={coordinatorCardTitle}>
       {staleItems.map(renderCard)}
@@ -431,7 +442,7 @@ export function CoordinatorNeedsYou() {
       {snoozedItems.map(renderCard)}
     </AttentionSnoozedGroup>
     {/* What other people did with your requests (PAP-749 plan §6): not in the badge. */}
-    {receipts.length ? <div className="space-y-3" aria-label="Updates">
+    {receipts.length ? <div className="space-y-3" aria-label={t("needsYou.updates")}>
       {currentItems.length || staleItems.length || snoozedItems.length ? sectionHeading("updates") : null}
       {receipts.map(entry => <NeedsYouReceiptCard key={entry.id} receipt={entry} userLabelMap={userLabelMap} onOpen={navigate}
         onDismiss={receiptActions.dismiss} dismissing={receiptActions.dismissingId === entry.id} />)}
