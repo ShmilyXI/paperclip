@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -95,7 +96,7 @@ function ProposalPreview({ interaction, agentsById }: { interaction: ProposeResp
   const [dropped, setDropped] = useState<ReadonlySet<number>>(new Set());
   const [notRight, setNotRight] = useState(false);
   const { accept, decline, busy, error } = useBarProposalActions(interaction);
-  const agentName = (interaction.createdByAgentId ? agentsById.get(interaction.createdByAgentId)?.name : null) ?? "Your agent";
+  const agentName = (interaction.createdByAgentId ? agentsById.get(interaction.createdByAgentId)?.name : null) ?? t("agentSetup.yourAgent");
   const supporting = preview.metrics.length - 1;
   const toggle = (index: number) => setDropped((current) => {
     const next = new Set(current);
@@ -106,7 +107,7 @@ function ProposalPreview({ interaction, agentsById }: { interaction: ProposeResp
   return (
     <div className="flex flex-col gap-4" data-bar-proposal="" data-testid="bar-proposal">
       <div className="flex flex-col gap-1">
-        <p className="text-xs text-muted-foreground">{agentName} proposes</p>
+        <p className="text-xs text-muted-foreground">{t("responsibilities.proposes", { name: agentName })}</p>
         <p className="text-sm text-foreground">{interaction.payload.bar.standard}</p>
       </div>
       <div className={tileGrid(preview.metrics.length)}>
@@ -121,7 +122,7 @@ function ProposalPreview({ interaction, agentsById }: { interaction: ProposeResp
                 data-dropped=""
               >
                 <span className="truncate text-sm text-muted-foreground line-through">{metric.title}</span>
-                <Button type="button" size="xs" variant="ghost" disabled={busy} onClick={() => toggle(index)}>Keep</Button>
+                <Button type="button" size="xs" variant="ghost" disabled={busy} onClick={() => toggle(index)}>{t("responsibilities.keep")}</Button>
               </div>
             );
           }
@@ -135,15 +136,15 @@ function ProposalPreview({ interaction, agentsById }: { interaction: ProposeResp
               showReadLine={false}
               className="rounded-md border border-border px-3 py-2.5"
               menu={metric.role === "primary"
-                ? supporting > 0 ? <span className="pr-1.5 pt-1 text-xs text-muted-foreground" data-always-kept="">Always kept</span> : null
+                ? supporting > 0 ? <span className="pr-1.5 pt-1 text-xs text-muted-foreground" data-always-kept="">{t("responsibilities.alwaysKept")}</span> : null
                 : (
                   <Button
                     type="button"
                     size="icon-xs"
                     variant="ghost"
                     className="text-muted-foreground"
-                    aria-label={`Drop “${metric.title}”`}
-                    title="Drop"
+                    aria-label={t("responsibilities.dropMetricAria", { title: metric.title })}
+                    title={t("responsibilities.drop")}
                     disabled={busy}
                     onClick={() => toggle(index)}
                     data-drop-metric=""
@@ -166,11 +167,11 @@ function ProposalPreview({ interaction, agentsById }: { interaction: ProposeResp
       ) : (
         <div className="flex flex-wrap items-center justify-end gap-2">
           <Button type="button" variant="ghost" size="sm" disabled={busy} onClick={() => setNotRight(true)}>
-            Not right
+            {t("responsibilities.notRight")}
           </Button>
           <Button type="button" size="sm" disabled={busy} onClick={() => accept.mutate(keptMetricIndexes(supporting, dropped))}>
             {accept.isPending ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-            Use this bar
+            {t("responsibilities.useThisBar")}
           </Button>
         </div>
       )}
@@ -197,14 +198,14 @@ function VisualizationMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button type="button" size="icon-xs" variant="ghost" className="text-muted-foreground" aria-label={`Options for “${metric.title}”`} disabled={busy}>
+        <Button type="button" size="icon-xs" variant="ghost" className="text-muted-foreground" aria-label={t("responsibilities.optionsForAria", { title: metric.title })} disabled={busy}>
           <MoreHorizontal aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {forms.length > 1 ? (
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Show as</DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger>{t("responsibilities.showAs")}</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuRadioGroup
                 value={current}
@@ -219,7 +220,7 @@ function VisualizationMenu({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
         ) : null}
-        {onRemove ? <DropdownMenuItem variant="destructive" onSelect={onRemove}>Remove</DropdownMenuItem> : null}
+        {onRemove ? <DropdownMenuItem variant="destructive" onSelect={onRemove}>{t("common.remove")}</DropdownMenuItem> : null}
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -307,25 +308,25 @@ function SetVisualizations({
         ))}
       </div>
       {showAs.error ? (
-        <p role="alert" className="text-xs text-destructive">Couldn’t change how it is shown. {describeError(showAs.error).body}</p>
+        <p role="alert" className="text-xs text-destructive">{t("responsibilities.couldNotChangeHowItIsShown")} {describeError(showAs.error).body}</p>
       ) : null}
       <AlertDialog open={removing !== null} onOpenChange={(open) => { if (!open) setRemoving(null); }}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove “{removing?.title}”?</AlertDialogTitle>
-            <AlertDialogDescription>Its readings are kept.</AlertDialogDescription>
+            <AlertDialogTitle>{t("responsibilities.removeTitleQuestion", { title: removing?.title })}</AlertDialogTitle>
+            <AlertDialogDescription>{t("responsibilities.itsReadingsAreKept")}</AlertDialogDescription>
           </AlertDialogHeader>
           {remove.error ? (
-            <p role="alert" className="text-sm text-destructive">Couldn’t remove it. {describeError(remove.error).body}</p>
+            <p role="alert" className="text-sm text-destructive">{t("responsibilities.couldNotRemoveIt")} {describeError(remove.error).body}</p>
           ) : null}
           <AlertDialogFooter className="items-center sm:justify-between">
-            <AlertDialogCancel>Keep it</AlertDialogCancel>
+            <AlertDialogCancel>{t("responsibilities.keepIt")}</AlertDialogCancel>
             <Button
               variant="destructive"
               disabled={remove.isPending || !removing}
               onClick={() => removing && remove.mutate(removing, { onSuccess: () => setRemoving(null) })}
             >
-              {remove.isPending ? "Removing…" : "Remove"}
+              {remove.isPending ? t("skillSources.removing") : t("common.remove")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -353,8 +354,8 @@ export function BarModule({
   const hasMetric = !!responsibility.rollup.metric;
   const state = conversation.state;
   const nameOf = (agentId: string | null | undefined) => (agentId ? agentsById.get(agentId)?.name : undefined);
-  const talkingWith = nameOf(state?.conversation?.agentId) ?? "an agent";
-  const defaultAgent = nameOf(state?.defaultAgentId) ?? "your agent";
+  const talkingWith = nameOf(state?.conversation?.agentId) ?? t("decisionCard.anAgent");
+  const defaultAgent = nameOf(state?.defaultAgentId) ?? t("agentSetup.yourAgent");
   const proposal = editable ? state?.proposal ?? null : null;
   const talking = editable && !proposal && state?.state === "discussing" && state.conversation ? state.conversation : null;
   const loaded = !!state;
@@ -367,20 +368,20 @@ export function BarModule({
   const menu = editable && !byHandIsPrimary ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon-xs" variant="ghost" className="text-muted-foreground" aria-label="More for the bar">
+        <Button size="icon-xs" variant="ghost" className="text-muted-foreground" aria-label={t("responsibilities.moreForTheBar")}>
           <MoreHorizontal aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onSelect={() => setEditing(true)}>{hasMetric ? "Edit by hand" : "Set it by hand"}</DropdownMenuItem>
-        {hasMetric ? <DropdownMenuItem onSelect={() => setRecording(true)}>Record a reading</DropdownMenuItem> : null}
+        <DropdownMenuItem onSelect={() => setEditing(true)}>{hasMetric ? t("responsibilities.editByHand") : t("responsibilities.setItByHand")}</DropdownMenuItem>
+        {hasMetric ? <DropdownMenuItem onSelect={() => setRecording(true)}>{t("responsibilities.recordAReading")}</DropdownMenuItem> : null}
       </DropdownMenuContent>
     </DropdownMenu>
   ) : null;
   const changeButton = editable && hasMetric && !proposal && !talking && conversation.canTalk ? (
     <Button size="xs" variant="ghost" disabled={starting} onClick={startTalking} data-bar-edit-primary="">
       {starting ? <Loader2 aria-hidden="true" className="animate-spin" /> : <MessageSquare aria-hidden="true" />}
-      Change it with {defaultAgent}
+      {t("responsibilities.changeItWith", { name: defaultAgent })}
     </Button>
   ) : null;
 
@@ -389,19 +390,19 @@ export function BarModule({
     body = <ProposalPreview interaction={proposal} agentsById={agentsById} />;
   } else if (!hasMetric) {
     body = !editable ? (
-      <p className="text-sm text-muted-foreground">No bar.</p>
+      <p className="text-sm text-muted-foreground">{t("responsibilities.noBar")}</p>
     ) : talking ? null : (
       <div className="flex flex-col items-start gap-3" data-bar-empty="">
-        <p className="text-sm text-muted-foreground">How will you know this is going well?</p>
+        <p className="text-sm text-muted-foreground">{t("responsibilities.howWillYouKnowThisIsGoingWell")}</p>
         {byHandIsPrimary ? (
           <>
-            <Button size="sm" onClick={() => setEditing(true)} data-bar-edit-primary="">Set it by hand</Button>
-            {noAgent ? <p className="text-xs text-muted-foreground">No agent is free to talk it through.</p> : null}
+            <Button size="sm" onClick={() => setEditing(true)} data-bar-edit-primary="">{t("responsibilities.setItByHand")}</Button>
+            {noAgent ? <p className="text-xs text-muted-foreground">{t("responsibilities.noAgentIsFreeToTalkItThrough")}</p> : null}
           </>
         ) : (
           <Button size="sm" disabled={!loaded || starting} onClick={startTalking} data-bar-edit-primary="">
             {starting ? <Loader2 aria-hidden="true" className="animate-spin" /> : <MessageSquare aria-hidden="true" />}
-            {loaded ? `Set it with ${defaultAgent}` : "Set it with an agent"}
+            {loaded ? t("responsibilities.setItWithName", { name: defaultAgent }) : t("responsibilities.setItWithAnAgent")}
           </Button>
         )}
       </div>
@@ -413,7 +414,7 @@ export function BarModule({
   return (
     <Card id="responsibility-bar" elevation="low" className="gap-4 px-5 py-4" aria-labelledby={headingId} data-bar-module="">
       <div className="flex min-h-6 items-center justify-between gap-2">
-        <h2 id={headingId} className="text-sm font-semibold text-foreground">The bar</h2>
+        <h2 id={headingId} className="text-sm font-semibold text-foreground">{t("responsibilities.theBar")}</h2>
         <div className="flex items-center gap-1">
           {changeButton}
           {menu}
@@ -421,14 +422,14 @@ export function BarModule({
       </div>
       {talking ? (
         <p className="text-sm text-muted-foreground" data-bar-talking="">
-          Talking it through with {talkingWith}.{" "}
+          {t("responsibilities.talkingItThroughWith", { name: talkingWith })}{" "}
           <Link to={`/issues/${talking.identifier ?? talking.issueId}`} className="font-medium text-foreground underline-offset-4 hover:underline">
-            Open the conversation
+            {t("responsibilities.openTheConversation")}
           </Link>
         </p>
       ) : null}
       {conversation.start.error ? (
-        <p role="alert" className="text-sm text-destructive">Couldn’t start the conversation. {describeError(conversation.start.error).body}</p>
+        <p role="alert" className="text-sm text-destructive">{t("responsibilities.couldNotStartTheConversation")} {describeError(conversation.start.error).body}</p>
       ) : null}
       {conversation.loadError ? (
         <QueryErrorState error={conversation.loadError} size="inline" action="load the bar conversation"
@@ -440,7 +441,7 @@ export function BarModule({
         <Dialog open={recording} onOpenChange={setRecording}>
           <DialogContent className="sm:max-w-sm">
             <DialogHeader>
-              <DialogTitle>Record a reading</DialogTitle>
+              <DialogTitle>{t("responsibilities.recordAReading")}</DialogTitle>
               <DialogDescription className="sr-only">{responsibility.rollup.metric?.name}</DialogDescription>
             </DialogHeader>
             <RecordReading responsibility={responsibility} />
