@@ -94,7 +94,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, credentialFields, requi
       }
       setRotationSecret("");
       setRotationGeneration(null);
-      setError("The webhook secret changed, but this page did not receive it. Generate another secret and update GitHub.");
+      setError(t("gitHubConnectionRecovery.theWebhookSecretChanged"));
     } catch {
       // A failed status read cannot establish that the earlier secret is current.
     }
@@ -111,7 +111,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, credentialFields, requi
       setRotationGeneration(result.credentialRotationId ?? null);
       setRotationUncertain(false);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Could not generate the webhook secret. Try again.");
+      setError(cause instanceof Error ? cause.message : t("gitHubConnectionRecovery.couldNotGenerateTheWebhookSecret"));
       setRotationUncertain(true);
       await checkSavedRotation(previousGeneration);
     }
@@ -122,21 +122,21 @@ export function GitHubAppRecovery({ endpoint, reconnect, credentialFields, requi
       <p className="text-sm">{t("gitHubConnectionRecovery.restore")} <strong>{appName}</strong> {t("gitHubConnectionRecovery.usingItsSavedCredentialsPaperclip")}</p>
       <p className="text-sm text-muted-foreground">{t("gitHubConnectionRecovery.yourAgentRepositoryChoicesReview")}</p>
     </div>}
-    {rotateWebhookSecret && <section aria-label="Rotate webhook secret" className="space-y-3">
-      <h2 className="text-base font-semibold">Rotate the webhook secret</h2>
-      <p className="text-sm">{rotationAlreadyCommitted ? "The rotated secret is saved. Reconnect using that value; Paperclip will check GitHub’s signed delivery." : <>Generate a new secret, then replace the webhook secret in <a href={gitHubAppSettingsUrl(endpoint)} target="_blank" rel="noreferrer" className="underline">GitHub App settings</a>. GitHub must verify the new secret before you reconnect.</>}</p>
-      <p className="text-sm text-muted-foreground">Generating immediately invalidates the previous secret. This value is shown only here; keep this page open until you have copied it.</p>
-      <Button type="button" variant="outline" disabled={pending} onClick={() => void generateSecret()}>{rotationSecret || rotationAlreadyCommitted ? "Generate another secret" : "Generate webhook secret"}</Button>
-      {rotationUncertain && <p role="status" className="text-sm">The active secret is not confirmed. Check its saved status before using an earlier value.</p>}
+    {rotateWebhookSecret && <section aria-label={t("gitHubConnectionRecovery.rotateWebhookSecret")} className="space-y-3">
+      <h2 className="text-base font-semibold">{t("gitHubConnectionRecovery.rotateTheWebhookSecret")}</h2>
+      <p className="text-sm">{rotationAlreadyCommitted ? t("gitHubConnectionRecovery.rotatedSecretIsSaved") : <>{t("gitHubConnectionRecovery.generateANewSecretThenReplaceTheWebhookSecretIn")} <a href={gitHubAppSettingsUrl(endpoint)} target="_blank" rel="noreferrer" className="underline">{t("gitHubConnectionRecovery.githubAppSettings")}</a>{t("gitHubConnectionRecovery.githubMustVerifyTheNewSecretBeforeYouReconnect")}</>}</p>
+      <p className="text-sm text-muted-foreground">{t("gitHubConnectionRecovery.generatingImmediatelyInvalidates")}</p>
+      <Button type="button" variant="outline" disabled={pending} onClick={() => void generateSecret()}>{rotationSecret || rotationAlreadyCommitted ? t("gitHubConnectionRecovery.generateAnotherSecret") : t("gitHubConnectionRecovery.generateWebhookSecret")}</Button>
+      {rotationUncertain && <p role="status" className="text-sm">{t("gitHubConnectionRecovery.activeSecretIsNotConfirmed")}</p>}
       {rotationUncertain && rotationSecret && <Button type="button" variant="outline" disabled={pending} onClick={async () => {
         setPending(true);
         try { if (await checkSavedRotation(rotationGeneration ?? undefined)) setError(""); }
         finally { setPending(false); }
-      }}>Check saved secret status</Button>}
+      }}>{t("gitHubConnectionRecovery.checkSavedSecretStatus")}</Button>}
       {rotationSecret && !rotationUncertain && <div className="space-y-2">
-        <Label htmlFor="github-rotation-secret">New webhook secret</Label>
+        <Label htmlFor="github-rotation-secret">{t("gitHubConnectionRecovery.newWebhookSecret")}</Label>
         <Input id="github-rotation-secret" type="password" autoComplete="off" disabled={pending} readOnly value={rotationSecret} />
-        {!pending && <CopyText text={rotationSecret} ariaLabel="Copy webhook secret" className="text-sm underline">Copy webhook secret</CopyText>}
+        {!pending && <CopyText text={rotationSecret} ariaLabel={t("chatSetup.copyWebhookSecret")} className="text-sm underline">{t("chatSetup.copyWebhookSecret")}</CopyText>}
       </div>}
     </section>}
     {error && <div role="alert" className="space-y-2 rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-sm">
@@ -191,7 +191,7 @@ export function GitHubAppRecovery({ endpoint, reconnect, credentialFields, requi
         <Input id="github-webhook-secret" type="password" autoComplete="off" disabled={pending} value={credentials.webhookSecret} onChange={event => setCredentials({ ...credentials, webhookSecret: event.target.value })} />
       </div>}
       {credentialFields?.includes("clientSecret") && <div className="space-y-2">
-        <CredentialLabel id="github-client-secret" label="Client secret" help="The client secret for this GitHub App’s user authentication. Leave the saved private key in place." />
+        <CredentialLabel id="github-client-secret" label={t("connectionSetup.clientSecret")} help={t("gitHubConnectionRecovery.clientSecretHelp")} />
         <Input id="github-client-secret" type="password" autoComplete="off" disabled={pending} value={credentials.clientSecret ?? ""} onChange={event => setCredentials({ ...credentials, clientSecret: event.target.value })} />
       </div>}
     </div>}

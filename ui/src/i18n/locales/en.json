@@ -7554,7 +7554,22 @@
     "uploadThePemFileDownloadedFromThisGithubApp": "Upload the .pem file downloaded from this GitHub App, or paste its entire contents, including the BEGIN and END lines.",
     "couldNotReadThisFileTryAgainOrPasteTheKeyBelow": "Could not read this file. Try again or paste the key below.",
     "theSecretConfiguredForThisAppSWebhookItMustMatchGithubExactly": "The secret configured for this App’s webhook. It must match GitHub exactly.",
-    "fromTheAppSSettingsPage": "from the App’s settings page."
+    "fromTheAppSSettingsPage": "from the App’s settings page.",
+    "theWebhookSecretChanged": "The webhook secret changed, but this page did not receive it. Generate another secret and update GitHub.",
+    "couldNotGenerateTheWebhookSecret": "Could not generate the webhook secret. Try again.",
+    "rotateWebhookSecret": "Rotate webhook secret",
+    "rotateTheWebhookSecret": "Rotate the webhook secret",
+    "rotatedSecretIsSaved": "The rotated secret is saved. Reconnect using that value; Paperclip will check GitHub’s signed delivery.",
+    "generateANewSecretThenReplaceTheWebhookSecretIn": "Generate a new secret, then replace the webhook secret in",
+    "githubAppSettings": "GitHub App settings",
+    "githubMustVerifyTheNewSecretBeforeYouReconnect": ". GitHub must verify the new secret before you reconnect.",
+    "generatingImmediatelyInvalidates": "Generating immediately invalidates the previous secret. This value is shown only here; keep this page open until you have copied it.",
+    "generateAnotherSecret": "Generate another secret",
+    "generateWebhookSecret": "Generate webhook secret",
+    "activeSecretIsNotConfirmed": "The active secret is not confirmed. Check its saved status before using an earlier value.",
+    "checkSavedSecretStatus": "Check saved secret status",
+    "newWebhookSecret": "New webhook secret",
+    "clientSecretHelp": "The client secret for this GitHub App’s user authentication. Leave the saved private key in place."
   },
   "invitesSection": {
     "canViewOrganizationWorkAnd": "Can view organization work and follow along.",

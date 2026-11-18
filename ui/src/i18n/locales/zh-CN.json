@@ -7554,7 +7554,22 @@
     "uploadThePemFileDownloadedFromThisGithubApp": "上传从该 GitHub App 下载的 .pem 文件，或粘贴其完整内容（包括 BEGIN 和 END 行）。",
     "couldNotReadThisFileTryAgainOrPasteTheKeyBelow": "无法读取该文件。请重试，或在下方粘贴密钥。",
     "theSecretConfiguredForThisAppSWebhookItMustMatchGithubExactly": "为该 App 的 webhook 配置的密钥，必须与 GitHub 上完全一致。",
-    "fromTheAppSSettingsPage": "可在 App 设置页面找到。"
+    "fromTheAppSSettingsPage": "可在 App 设置页面找到。",
+    "theWebhookSecretChanged": "Webhook 密钥已更改，但此页面没有收到。请再生成一个密钥并更新 GitHub。",
+    "couldNotGenerateTheWebhookSecret": "无法生成 Webhook 密钥。请重试。",
+    "rotateWebhookSecret": "轮换 Webhook 密钥",
+    "rotateTheWebhookSecret": "轮换 Webhook 密钥",
+    "rotatedSecretIsSaved": "轮换后的密钥已保存。请使用该值重新连接；Paperclip 会校验 GitHub 的签名投递。",
+    "generateANewSecretThenReplaceTheWebhookSecretIn": "生成一个新密钥，然后在",
+    "githubAppSettings": "GitHub App 设置",
+    "githubMustVerifyTheNewSecretBeforeYouReconnect": "中替换 Webhook 密钥。GitHub 必须先验证新密钥，你才能重新连接。",
+    "generatingImmediatelyInvalidates": "生成后旧的密钥立即失效。该值只在这里显示；请保持此页面打开，直到你复制完它。",
+    "generateAnotherSecret": "再生成一个密钥",
+    "generateWebhookSecret": "生成 Webhook 密钥",
+    "activeSecretIsNotConfirmed": "当前生效的密钥尚未确认。使用之前的值前，请先检查它的保存状态。",
+    "checkSavedSecretStatus": "检查已保存的密钥状态",
+    "newWebhookSecret": "新的 Webhook 密钥",
+    "clientSecretHelp": "该 GitHub App 用户认证所用的客户端密钥。保留已保存的私钥即可。"
   },
   "invitesSection": {
     "canViewOrganizationWorkAnd": "可以查看组织内的工作并跟进进展。",
