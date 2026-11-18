@@ -2179,7 +2179,14 @@
     "holderAndMore": "{{holder}} 及其他 {{count}} 人",
     "skillDotHolder": "技能 · {{holder}}",
     "artifactDotIdentifier": "产出物 · {{identifier}}",
-    "fromIdentifier": "来自 {{identifier}}"
+    "fromIdentifier": "来自 {{identifier}}",
+    "noReadingYetShort": "暂无读数",
+    "towardItsBar": "{{name}}，对照其衡量标准",
+    "noNumberToTrackYet": "还没有可追踪的数字",
+    "theWork": "工作内容",
+    "noneYetShort": "还没有",
+    "andMore": " 还有 {{count}} 个",
+    "newest": "最新："
   },
   "routineDetail": {
     "selectAnOrganizationToCreate": "请选择组织以创建密钥",

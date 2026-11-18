@@ -2179,7 +2179,14 @@
     "holderAndMore": "{{holder}} and {{count}} more",
     "skillDotHolder": "Skill · {{holder}}",
     "artifactDotIdentifier": "Artifact · {{identifier}}",
-    "fromIdentifier": "From {{identifier}}"
+    "fromIdentifier": "From {{identifier}}",
+    "noReadingYetShort": "No reading yet",
+    "towardItsBar": "{{name}}, toward its bar",
+    "noNumberToTrackYet": "No number to track yet",
+    "theWork": "The work",
+    "noneYetShort": "None yet",
+    "andMore": " and {{count}} more",
+    "newest": "Newest:"
   },
   "routineDetail": {
     "selectAnOrganizationToCreate": "Select an organization to create secrets",

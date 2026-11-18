@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Fragment, useMemo, type ReactNode } from "react";
 import type { ResponsibilityDetail } from "@paperclipai/shared";
 import { RESPONSIBILITY_ARTIFACT_COUNT_LIMIT } from "@paperclipai/shared";
@@ -30,15 +31,15 @@ export function ScoreHero({ responsibility, now, className }: { responsibility: 
               </>
             ) : (
               <>
-                <span className="text-2xl font-semibold text-muted-foreground">No reading yet</span>
+                <span className="text-2xl font-semibold text-muted-foreground">{t("responsibilities.noReadingYetShort")}</span>
                 <span className="text-lg text-muted-foreground">{reading.targetLabel}</span>
               </>
             )}
           </p>
-          <MetricMeter reading={reading} health={rollup.health} label={`${metric.name}, toward its bar`} className="h-2" />
+          <MetricMeter reading={reading} health={rollup.health} label={t("responsibilities.towardItsBar", { name: metric.name })} className="h-2" />
         </div>
       ) : (
-        <p className="text-2xl font-semibold text-muted-foreground">No number to track yet</p>
+        <p className="text-2xl font-semibold text-muted-foreground">{t("responsibilities.noNumberToTrackYet")}</p>
       )}
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center gap-2">
@@ -90,36 +91,36 @@ export function ResponsibilityScorecard({ responsibility, now, notices, onReview
         <ScoreHero responsibility={responsibility} now={now} />
 
         <Card elevation="low" className="gap-0 py-0">
-          <dl className="grid grid-cols-1 divide-y divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0" aria-label="The work">
-            <CountCell label="Routines" count={counts.routines} />
-            <CountCell label="Projects" count={counts.projects} />
-            <CountCell label="Tasks" count={counts.tasks} />
+          <dl className="grid grid-cols-1 divide-y divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0" aria-label={t("responsibilities.theWork")}>
+            <CountCell label={t("common.routines")} count={counts.routines} />
+            <CountCell label={t("common.projects")} count={counts.projects} />
+            <CountCell label={t("common.tasks")} count={counts.tasks} />
           </dl>
         </Card>
 
         <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <CompactCount label="Skills" value={String(skills.length)}>
+          <CompactCount label={t("common.skills")} value={String(skills.length)}>
             {skills.length === 0
-              ? "None yet"
+              ? t("responsibilities.noneYetShort")
               : skills.slice(0, 3).map((skill, index) => (
                   <Fragment key={skill.id}>
                     {index > 0 ? ", " : null}
                     <Link to={skillRoute(skill)} className="underline-offset-4 hover:text-foreground hover:underline">{skill.name}</Link>
                   </Fragment>
                 ))}
-            {skills.length > 3 ? ` and ${skills.length - 3} more` : null}
+            {skills.length > 3 ? t("responsibilities.andMore", { count: skills.length - 3 }) : null}
           </CompactCount>
           <CompactCount
-            label="Artifacts"
+            label={t("nav.artifacts")}
             value={artifactsTotal >= RESPONSIBILITY_ARTIFACT_COUNT_LIMIT ? `${RESPONSIBILITY_ARTIFACT_COUNT_LIMIT.toLocaleString("en-US")}+` : artifactsTotal.toLocaleString("en-US")}
           >
             {newest ? (
               <>
-                Newest:{" "}
+                {t("responsibilities.newest")}{" "}
                 <Link to={newest.href} className="underline-offset-4 hover:text-foreground hover:underline">{newest.title}</Link>
               </>
             ) : (
-              "None yet"
+              t("responsibilities.noneYetShort")
             )}
           </CompactCount>
         </dl>
