@@ -2126,7 +2126,11 @@
     "areas": "Areas",
     "eachStatusAsTheAgentClosest": "Each status as the agent closest to the work wrote it.",
     "newArea": "New area",
-    "nothingYouOwnYet": "Nothing you own yet. Review what was proposed for you, or add a new responsibility."
+    "nothingYouOwnYet": "Nothing you own yet. Review what was proposed for you, or add a new responsibility.",
+    "you": "You",
+    "responsibilities": "Responsibilities",
+    "aSnapshotOfYourWork": "A snapshot of your work",
+    "whatDoYouCareAbout": "What do you care about?"
   },
   "routineDetail": {
     "selectAnOrganizationToCreate": "Select an organization to create secrets",

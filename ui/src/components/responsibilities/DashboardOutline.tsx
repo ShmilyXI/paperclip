@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { ResponsibilityWithRollup } from "@paperclipai/shared";
@@ -49,7 +50,7 @@ export function PersonHeading() {
       </div>
     );
   }
-  const name = user?.name?.trim() || user?.email?.trim() || "You";
+  const name = user?.name?.trim() || user?.email?.trim() || t("responsibilities.you");
   return (
     <div className="flex min-w-0 items-center gap-3">
       <Avatar size="lg">
@@ -126,8 +127,8 @@ function OutlineArea({ group, onAddResponsibility }: { group: OutlineAreaGroup; 
         <div className="flex items-start justify-between gap-4 px-5 py-4">
           <div className="flex min-w-0 flex-col gap-0.5">
             <h3 id={headingId} className="truncate text-base font-semibold text-foreground">
-              {group.area?.title ?? "Not in an area"}
-              {group.area?.status === "archived" ? <span className="font-normal text-muted-foreground"> · Archived</span> : null}
+              {group.area?.title ?? t("responsibilities.notInAnArea")}
+              {group.area?.status === "archived" ? <span className="font-normal text-muted-foreground"> · {t("common.archived")}</span> : null}
             </h3>
             <p className="text-sm text-muted-foreground">{group.ownedLabel}</p>
           </div>
@@ -140,14 +141,14 @@ function OutlineArea({ group, onAddResponsibility }: { group: OutlineAreaGroup; 
             ))}
           </ul>
         ) : (
-          <p className="border-t border-border py-3 pl-10 pr-5 text-sm text-muted-foreground">Nothing you own is filed here yet.</p>
+          <p className="border-t border-border py-3 pl-10 pr-5 text-sm text-muted-foreground">{t("responsibilities.nothingYouOwnIsFiledHere")}</p>
         )}
       </Card>
       {group.area?.status === "archived" ? null : (
         <div className="flex justify-end">
           <Button size="xs" variant="ghost" className="text-muted-foreground" onClick={() => onAddResponsibility(group.area?.id ?? null)}>
             <Plus aria-hidden="true" />
-            New responsibility
+            {t("responsibilities.newResponsibility")}
           </Button>
         </div>
       )}
@@ -192,26 +193,26 @@ export function DashboardOutline({
 
       <section aria-labelledby="outline-overview-heading" className="flex flex-col gap-5">
         <div className="flex flex-col gap-1">
-          <h2 id="outline-overview-heading" className="text-lg font-semibold text-foreground">Overview</h2>
-          <p className="text-sm text-muted-foreground">A snapshot of your work</p>
+          <h2 id="outline-overview-heading" className="text-lg font-semibold text-foreground">{t("common.overview")}</h2>
+          <p className="text-sm text-muted-foreground">{t("responsibilities.aSnapshotOfYourWork")}</p>
         </div>
         <dl className="grid grid-cols-2 gap-6 md:grid-cols-4">
-          <Figure label="Areas" figure={snapshot.areas} />
-          <Figure label="Responsibilities" figure={snapshot.responsibilities} />
-          <Figure label="Projects" figure={snapshot.projects} />
-          <Figure label="Tasks" figure={snapshot.tasks} />
+          <Figure label={t("responsibilities.areas")} figure={snapshot.areas} />
+          <Figure label={t("responsibilities.responsibilities")} figure={snapshot.responsibilities} />
+          <Figure label={t("common.projects")} figure={snapshot.projects} />
+          <Figure label={t("common.tasks")} figure={snapshot.tasks} />
         </dl>
       </section>
 
       <section aria-labelledby="outline-areas-heading" className="flex flex-col gap-5">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div className="flex flex-col gap-1">
-            <h2 id="outline-areas-heading" className="text-lg font-semibold text-foreground">Areas</h2>
-            <p className="text-sm text-muted-foreground">What do you care about?</p>
+            <h2 id="outline-areas-heading" className="text-lg font-semibold text-foreground">{t("responsibilities.areas")}</h2>
+            <p className="text-sm text-muted-foreground">{t("responsibilities.whatDoYouCareAbout")}</p>
           </div>
           <Button size="sm" onClick={onAddArea}>
             <Plus aria-hidden="true" />
-            New area
+            {t("responsibilities.newArea")}
           </Button>
         </div>
         {groups.length > 0 ? (
@@ -221,7 +222,7 @@ export function DashboardOutline({
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">Nothing you own yet. Review what was proposed for you, or add a new responsibility.</p>
+          <p className="text-sm text-muted-foreground">{t("responsibilities.nothingYouOwnYet")}</p>
         )}
       </section>
     </div>

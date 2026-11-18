@@ -2126,7 +2126,11 @@
     "areas": "区域",
     "eachStatusAsTheAgentClosest": "每个状态都按最接近该工作的员工所写的内容呈现。",
     "newArea": "新建区域",
-    "nothingYouOwnYet": "你还没有任何职责。请查看为你提议的内容，或新建一个职责。"
+    "nothingYouOwnYet": "你还没有任何职责。请查看为你提议的内容，或新建一个职责。",
+    "you": "你",
+    "responsibilities": "职责",
+    "aSnapshotOfYourWork": "你的工作概览",
+    "whatDoYouCareAbout": "你关心什么？"
   },
   "routineDetail": {
     "selectAnOrganizationToCreate": "请选择组织以创建密钥",
