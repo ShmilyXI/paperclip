@@ -958,7 +958,17 @@
     "importOrganization": "导入组织",
     "exportOrganization": "导出组织",
     "controls": "组织架构图控件",
-    "chartCamera": "图表镜头"
+    "chartCamera": "图表镜头",
+    "taskUpdatesPaused": "任务更新在重连期间暂停…",
+    "loadingRunningTasks": "正在加载运行中的任务…",
+    "runningTaskCount_one": "{{count}} 个运行中的任务",
+    "runningTaskCount_other": "{{count}} 个运行中的任务",
+    "showingFirst100Runs": " · 仅显示前 100 个运行",
+    "noRunningTasks": "没有运行中的任务",
+    "simulatedRunningTasks_one": "{{count}} 个模拟运行中的任务 · 仅预览",
+    "simulatedRunningTasks_other": "{{count}} 个模拟运行中的任务 · 仅预览",
+    "simulatedTask": "模拟任务",
+    "working": "工作中"
   },
   "agentActions": {
     "clearErrorAndReturnAgent": "清除错误并让员工回到空闲",
@@ -17876,7 +17886,9 @@
         "loadNewTools": "加载新工具",
         "checkAgentAccess": "检查此员工的访问权限",
         "loadProfiles": "加载配置档",
-        "loadGateways": "加载网关"
+        "loadGateways": "加载网关",
+        "loadRunningTasks": "加载运行中的任务",
+        "loadTaskTitles": "加载任务标题"
       },
       "retry": "重试",
       "retrying": "正在重试…",

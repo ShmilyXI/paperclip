@@ -694,11 +694,11 @@ export function OrgChart({ orgTree: providedOrgTree, agents: providedAgents, mat
           </svg>
           <div className="org-task-band absolute inset-x-0" style={{ top: toolbarHeight }}>
             <div className="org-task-legend text-xs text-muted-foreground" role="status">
-              {simulateTasks ? `${tasks.length} simulated running tasks · preview only`
+              {simulateTasks ? t("orgChart.simulatedRunningTasks", { count: tasks.length })
                 : taskRunsView.kind === "error" ? <QueryErrorState size="inline" error={taskRunsView.error} action="load running tasks" onRetry={taskRunsView.retry} />
                 : taskTitlesView.kind === "error" && taskIds.length ? <QueryErrorState size="inline" error={taskTitlesView.error} action="load task titles" onRetry={taskTitlesView.retry} />
-                : taskRunsView.kind === "stale" ? "Task updates paused while reconnecting…"
-                : taskRunsQuery.isPending || taskRunsView.kind === "reconnecting" ? "Loading running tasks…" : tasks.length ? `${tasks.length} running ${tasks.length === 1 ? "task" : "tasks"}${(taskRunsQuery.data?.length ?? 0) >= 100 ? " · showing first 100 runs" : ""}` : "No running tasks"}
+                : taskRunsView.kind === "stale" ? t("orgChart.taskUpdatesPaused")
+                : taskRunsQuery.isPending || taskRunsView.kind === "reconnecting" ? t("orgChart.loadingRunningTasks") : tasks.length ? `${t("orgChart.runningTaskCount", { count: tasks.length })}${(taskRunsQuery.data?.length ?? 0) >= 100 ? t("orgChart.showingFirst100Runs") : ""}` : t("orgChart.noRunningTasks")}
             </div>
             <div className="org-task-strip" onScroll={event => setTaskScroll(event.currentTarget.scrollLeft)} onWheel={event => event.stopPropagation()} onMouseDown={event => event.stopPropagation()}
               onTouchStart={event => { event.stopPropagation(); taskTouchX.current = event.touches[0]?.clientX ?? null; }}
@@ -714,7 +714,7 @@ export function OrgChart({ orgTree: providedOrgTree, agents: providedAgents, mat
                 {tasks.map((task, index) => {
                   const labelProps = {
                     "data-org-task": true,
-                    title: `${simulateTasks ? "Simulated task" : task.identifier ?? "Task"} · ${task.title} · Working: ${task.agentIds.map(id => agentMap.get(id)?.name ?? "Agent").join(", ")}`,
+                    title: `${simulateTasks ? t("orgChart.simulatedTask") : task.identifier ?? t("common.task")} · ${task.title} · ${t("orgChart.working")}: ${task.agentIds.map(id => agentMap.get(id)?.name ?? t("common.agent")).join(", ")}`,
                     className: "org-task-label absolute flex items-center gap-1.5 rounded px-2 text-xs text-muted-foreground no-underline hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
                     style: { left: taskStartX + index * (taskWidth + taskGap), width: taskWidth, height: geometry.taskHeight },
                     children: <><Paperclip className="size-3 shrink-0" /><span className="truncate">{task.title}</span></>,

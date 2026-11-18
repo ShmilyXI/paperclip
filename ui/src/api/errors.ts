@@ -183,6 +183,8 @@ const ACTION_KEYS = new Map([
   ["check this agent's access", "checkAgentAccess"],
   ["load profiles", "loadProfiles"],
   ["load gateways", "loadGateways"],
+  ["load running tasks", "loadRunningTasks"],
+  ["load task titles", "loadTaskTitles"],
 ]);
 
 function actionErrorTitle(action: string, fallback: string): string {
