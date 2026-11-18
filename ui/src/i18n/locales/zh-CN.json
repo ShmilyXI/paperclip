@@ -3367,7 +3367,9 @@
     "anotherSignInAttemptIsActive": "另一个登录尝试正在进行。请先完成或取消该尝试，再开始新的登录。",
     "couldNotCancelThePreviousSignIn": "无法取消上一次登录。请重试后再开始新的登录。",
     "kubernetesSandboxNamed": "{{name}} · Kubernetes 沙箱",
-    "liveOpencodeDiscoveryOnlyLocal": "OpenCode 模型实时探测仅在本地环境运行。当前使用为 {{name}} 精选的列表和手动录入。"
+    "liveOpencodeDiscoveryOnlyLocal": "OpenCode 模型实时探测仅在本地环境运行。当前使用为 {{name}} 精选的列表和手动录入。",
+    "paperclipSandbox": "Paperclip 沙箱",
+    "anotherSignInAttemptActiveOriginalAccount": "另一个登录尝试正在进行。请先在它原来的账号设置中完成或取消，再开始这一个。"
   },
   "newAgent": {
     "selectAnOrganizationToCreate": "请选择组织以创建员工。",

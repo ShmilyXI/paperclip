@@ -3367,7 +3367,9 @@
     "anotherSignInAttemptIsActive": "Another sign-in attempt is active. Finish or cancel that attempt before starting a new sign-in.",
     "couldNotCancelThePreviousSignIn": "Could not cancel the previous sign-in. Retry before starting a new one.",
     "kubernetesSandboxNamed": "{{name}} · Kubernetes sandbox",
-    "liveOpencodeDiscoveryOnlyLocal": "Live OpenCode model discovery only runs for Local environments. Using the curated list and manual entry for {{name}}."
+    "liveOpencodeDiscoveryOnlyLocal": "Live OpenCode model discovery only runs for Local environments. Using the curated list and manual entry for {{name}}.",
+    "paperclipSandbox": "Paperclip Sandbox",
+    "anotherSignInAttemptActiveOriginalAccount": "Another sign-in attempt is active. Finish or cancel it in its original account setup before starting this one."
   },
   "newAgent": {
     "selectAnOrganizationToCreate": "Select an organization to create an agent.",
