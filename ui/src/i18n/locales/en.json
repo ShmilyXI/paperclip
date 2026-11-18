@@ -17305,5 +17305,18 @@
     "nameTheNewArea": "Name the new area",
     "couldntAddTheResponsibility": "Couldn’t add the responsibility.",
     "addResponsibility": "Add responsibility"
+  },
+  "coordinatorConversationTasksPanel": {
+    "tasksFromThisConversation": "Tasks from this conversation",
+    "createdFromThisConversation": "Created from this conversation.",
+    "searchConversationTasks": "Search conversation tasks",
+    "searchTasksOrIds": "Search tasks or IDs…",
+    "filterConversationTasksByStatus": "Filter conversation tasks by status",
+    "readyToStart": "Ready to start",
+    "needsReview": "Needs review",
+    "sortConversationTasks": "Sort conversation tasks",
+    "tasksCouldntLoad": "Tasks couldn’t load.",
+    "noLoadedTasksMatchTheseFilters": "No loaded tasks match these filters.",
+    "tasksCreatedFromThisConversationWillAppearHere": "Tasks created from this conversation will appear here."
   }
 }

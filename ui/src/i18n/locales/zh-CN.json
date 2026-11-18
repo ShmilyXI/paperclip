@@ -17305,5 +17305,18 @@
     "nameTheNewArea": "为新区域命名",
     "couldntAddTheResponsibility": "无法添加该职责。",
     "addResponsibility": "添加职责"
+  },
+  "coordinatorConversationTasksPanel": {
+    "tasksFromThisConversation": "该对话产生的任务",
+    "createdFromThisConversation": "由该对话创建。",
+    "searchConversationTasks": "搜索对话任务",
+    "searchTasksOrIds": "搜索任务或 ID…",
+    "filterConversationTasksByStatus": "按状态筛选对话任务",
+    "readyToStart": "可开始",
+    "needsReview": "待评审",
+    "sortConversationTasks": "排序对话任务",
+    "tasksCouldntLoad": "任务加载失败。",
+    "noLoadedTasksMatchTheseFilters": "没有符合这些筛选条件的已加载任务。",
+    "tasksCreatedFromThisConversationWillAppearHere": "由该对话创建的任务会显示在这里。"
   }
 }
