@@ -16631,5 +16631,20 @@
     "openInNewWindow": "Open in new window",
     "entryQianfan": "Qianfan console",
     "entryQianfanChat": "Qianfan publish agent"
+  },
+  "tailscale": {
+    "connectTailnetDescription": "Connect your tailnet to use its machines in SSH environments.",
+    "selectAnOrganization": "Select an organization to connect Tailscale.",
+    "checkingManagementAccess": "Checking Tailscale management access…",
+    "askInstanceAdministrator": "Ask an instance administrator to connect or manage Tailscale networks.",
+    "authorizationCanceled": "Tailscale authorization was canceled. Try again to connect your network.",
+    "authorizationFailed": "Tailscale authorization could not be completed. Try again.",
+    "pageDescription": "Give Paperclip access to your tailnet, then choose one of its machines when creating an SSH environment. Agents can use any harness supported by that environment.",
+    "loadingTailnetConnections": "Loading tailnet connections…",
+    "createSshEnvironment": "Create SSH environment",
+    "connectTailscaleNetwork": "Connect Tailscale Network",
+    "signInExpired": "Sign-in expired",
+    "authorizationNotCompleted": "Authorization not completed",
+    "refreshConnections": "Refresh connections"
   }
 }

@@ -16631,5 +16631,20 @@
     "openInNewWindow": "在新窗口打开",
     "entryQianfan": "千帆云递",
     "entryQianfanChat": "千帆 · 发布员对话"
+  },
+  "tailscale": {
+    "connectTailnetDescription": "连接你的 tailnet，即可在 SSH 环境中使用其中的机器。",
+    "selectAnOrganization": "请选择一个组织以连接 Tailscale。",
+    "checkingManagementAccess": "正在检查 Tailscale 管理访问权限…",
+    "askInstanceAdministrator": "请让实例管理员来连接或管理 Tailscale 网络。",
+    "authorizationCanceled": "Tailscale 授权已取消。请重试以连接你的网络。",
+    "authorizationFailed": "Tailscale 授权未能完成。请重试。",
+    "pageDescription": "授予 Paperclip 访问你 tailnet 的权限，然后在创建 SSH 环境时选择其中一台机器。员工可以使用该环境支持的任何运行框架。",
+    "loadingTailnetConnections": "正在加载 tailnet 连接…",
+    "createSshEnvironment": "创建 SSH 环境",
+    "connectTailscaleNetwork": "连接 Tailscale 网络",
+    "signInExpired": "登录已过期",
+    "authorizationNotCompleted": "授权未完成",
+    "refreshConnections": "刷新连接"
   }
 }
