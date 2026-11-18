@@ -138,7 +138,7 @@ export function CompanyAccess() {
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to update member",
+        title: t("access.failedToUpdateMember"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -156,7 +156,7 @@ export function CompanyAccess() {
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to approve join request",
+        title: t("access.failedToApproveJoinRequest"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -174,7 +174,7 @@ export function CompanyAccess() {
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to reject join request",
+        title: t("access.failedToRejectJoinRequest"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -223,14 +223,14 @@ export function CompanyAccess() {
         title: t("access.memberRemoved"),
         body:
           result.reassignedIssueCount > 0
-            ? `${result.reassignedIssueCount} assigned task${result.reassignedIssueCount === 1 ? "" : "s"} cleaned up.`
+            ? t("companyAccess.assignedTasksCleanedUp", { count: result.reassignedIssueCount })
             : undefined,
         tone: "success",
       });
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to remove member",
+        title: t("access.failedToRemoveMember"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -253,18 +253,18 @@ export function CompanyAccess() {
   }
 
   if (membersQuery.isLoading || membersView.kind === "reconnecting") {
-    return <div className="text-sm text-muted-foreground">Loading organization access…</div>;
+    return <div className="text-sm text-muted-foreground">{t("access.loadingOrganizationAccess")}</div>;
   }
 
   if (membersView.kind === "error") {
     if (membersView.errorKind === "forbidden") {
-      return <div className="text-sm text-destructive">You do not have permission to manage organization members.</div>;
+      return <div className="text-sm text-destructive">{t("companyAccess.youDoNotHavePermission")}</div>;
     }
     return (
       <QueryErrorState
         size="page"
         error={membersQuery.error}
-        action="load organization members"
+        action={t("companyAccess.loadOrganizationMembers")}
         onRetry={membersView.retry}
         retrying={membersView.isFetching}
       />
@@ -330,7 +330,7 @@ export function CompanyAccess() {
                   {t("access.reviewPendingJoinRequestsBefore")}
                 </p>
               </div>
-              <Badge variant="outline">{pendingHumanJoinRequests.length} pending</Badge>
+              <Badge variant="outline">{t("companyAccess.pendingCount", { count: pendingHumanJoinRequests.length })}</Badge>
             </div>
             <div className="space-y-3">
               {pendingHumanJoinRequests.map((request) => (
@@ -350,7 +350,7 @@ export function CompanyAccess() {
                   }
                   context={
                     request.invite
-                      ? `${request.invite.allowedJoinTypes} join invite${request.invite.humanRole ? ` • default role ${request.invite.humanRole}` : ""}`
+                      ? `${request.invite.allowedJoinTypes} ${t("joinRequestQueue.joinInvite")}${request.invite.humanRole ? ` • ${t("companyAccess.defaultRole")} ${request.invite.humanRole}` : ""}`
                       : t("companyAccess.inviteMetadataUnavailable")
                   }
                   detail={t("companyAccess.submittedAt", { date: new Date(request.createdAt).toLocaleString() })}
@@ -523,7 +523,7 @@ export function CompanyAccess() {
                 <div className="mt-2 text-sm text-muted-foreground">
                   {assignedIssuesQuery.isLoading
                     ? t("companyAccess.checkingAssignedTasks")
-                    : `${assignedIssues.length} open assigned task${assignedIssues.length === 1 ? "" : "s"}`}
+                    : t("companyAccess.openAssignedTasks", { count: assignedIssues.length })}
                 </div>
               </div>
 
@@ -564,7 +564,7 @@ export function CompanyAccess() {
                     ))}
                     {assignedIssues.length > 6 ? (
                       <div className="px-3 py-2 text-sm text-muted-foreground">
-                        {assignedIssues.length - 6} more task{assignedIssues.length - 6 === 1 ? "" : "s"}
+                        {t("companyAccess.moreTasks", { count: assignedIssues.length - 6 })}
                       </div>
                     ) : null}
                   </div>
@@ -647,7 +647,7 @@ export function CompanyAccessLegacyRoute() {
             {t("companyAccess.corePaperclipKeepsEnforcingOrganization")}
           </p>
           {errorMessage ? (
-            <p className="text-sm text-destructive">Plugin extensions unavailable: {errorMessage}</p>
+            <p className="text-sm text-destructive">{t("companyAccess.pluginExtensionsUnavailable", { message: errorMessage })}</p>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">

@@ -11766,7 +11766,17 @@
     "approveHuman": "Approve human",
     "rejectHuman": "Reject human",
     "thisMember": "this member",
-    "submittedAt": "Submitted {{date}}"
+    "submittedAt": "Submitted {{date}}",
+    "loadOrganizationMembers": "load organization members",
+    "pendingCount": "{{count}} pending",
+    "assignedTasksCleanedUp_one": "{{count}} assigned task cleaned up.",
+    "assignedTasksCleanedUp_other": "{{count}} assigned tasks cleaned up.",
+    "openAssignedTasks_one": "{{count}} open assigned task",
+    "openAssignedTasks_other": "{{count}} open assigned tasks",
+    "moreTasks_one": "{{count}} more task",
+    "moreTasks_other": "{{count}} more tasks",
+    "defaultRole": "default role",
+    "pluginExtensionsUnavailable": "Plugin extensions unavailable: {{message}}"
   },
   "emailSafetyNotice": {
     "anyoneCanEmailAnUnrestricted": "Anyone can email an unrestricted inbox",

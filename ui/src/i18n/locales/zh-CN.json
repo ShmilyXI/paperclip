@@ -11766,7 +11766,17 @@
     "approveHuman": "批准人工申请",
     "rejectHuman": "拒绝人工申请",
     "thisMember": "该成员",
-    "submittedAt": "提交于 {{date}}"
+    "submittedAt": "提交于 {{date}}",
+    "loadOrganizationMembers": "加载组织成员",
+    "pendingCount": "{{count}} 个待处理",
+    "assignedTasksCleanedUp_one": "已清理 {{count}} 个已分配任务。",
+    "assignedTasksCleanedUp_other": "已清理 {{count}} 个已分配任务。",
+    "openAssignedTasks_one": "{{count}} 个未完成的已分配任务",
+    "openAssignedTasks_other": "{{count}} 个未完成的已分配任务",
+    "moreTasks_one": "还有 {{count}} 个任务",
+    "moreTasks_other": "还有 {{count}} 个任务",
+    "defaultRole": "默认角色",
+    "pluginExtensionsUnavailable": "插件扩展不可用：{{message}}"
   },
   "emailSafetyNotice": {
     "anyoneCanEmailAnUnrestricted": "任何人都可以给未设限制的收件箱发邮件",
