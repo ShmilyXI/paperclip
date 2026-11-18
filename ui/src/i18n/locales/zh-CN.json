@@ -15948,7 +15948,12 @@
     "from": "· 来自",
     "noDecidedDecisions": "没有已决决策。",
     "idlePastDays": "已闲置超过 {{days}} 天 — 已移出案头。仍想保留的可以留下。",
-    "pendingCount": "· {{count}} 项待处理"
+    "pendingCount": "· {{count}} 项待处理",
+    "nothingArchived": "没有归档的卡片。",
+    "everyOpenCardHasAnOwner": "每张未处理的卡片都已有负责人。",
+    "noFailedRunsAgentErrors": "没有运行失败、员工错误、预算暂停或加入请求。",
+    "cardsYouArchiveOrSnooze": "你为自己归档或稍后提醒的卡片会显示在这里。恢复任意一张即可再次查看。",
+    "nobodyHasACardWaiting": "目前没有人有待处理的卡片。"
   },
   "financeKindCard": {
     "financialEventMix": "财务事件构成",

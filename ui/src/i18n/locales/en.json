@@ -15948,7 +15948,12 @@
     "from": "· from",
     "noDecidedDecisions": "No decided decisions.",
     "idlePastDays": "Idle past {{days}} days — kept off the desk. Keep any you still want surfaced.",
-    "pendingCount": "· {{count}} pending"
+    "pendingCount": "· {{count}} pending",
+    "nothingArchived": "Nothing archived.",
+    "everyOpenCardHasAnOwner": "Every open card has an owner.",
+    "noFailedRunsAgentErrors": "No failed runs, agent errors, budget stops or join requests.",
+    "cardsYouArchiveOrSnooze": "Cards you archive or snooze for yourself show here. Restore one to see it again.",
+    "nobodyHasACardWaiting": "Nobody has a card waiting right now."
   },
   "financeKindCard": {
     "financialEventMix": "Financial event mix",

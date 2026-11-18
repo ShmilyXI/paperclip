@@ -606,7 +606,7 @@ function ClassicWhatNeedsMe() {
       <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
         <SheetContent side="right" className="w-full gap-0 overflow-y-auto sm:max-w-md" data-classic-decision-history>
           <SheetHeader>
-            <SheetTitle>Decision history</SheetTitle>
+            <SheetTitle>{t("needsYou.decisionHistory")}</SheetTitle>
           </SheetHeader>
           <div className="p-4">
             {historyOpen && <DecisionHistoryPanel companyId={selectedCompanyId} agents={agents ?? []} userLabelMap={userLabelMap} />}
@@ -615,10 +615,10 @@ function ClassicWhatNeedsMe() {
       </Sheet>
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-xl font-bold">Decisions</h1>
+          <h1 className="text-xl font-bold">{t("whatNeedsMe.decisions")}</h1>
           <Button variant="ghost" size="sm" onClick={() => setHistoryOpen(true)}>
             <History className="h-4 w-4" />
-            Decision history
+            {t("needsYou.decisionHistory")}
           </Button>
         </div>
         <AttentionViewSwitch value={view} counts={viewCounts} onChange={setView} everyone={everyone} />
@@ -931,11 +931,11 @@ export function DecisionBundleHeader({
 }
 
 const CAUGHT_UP_TEXT: Record<AttentionPersonalView, string> = {
-  mine: "You're all caught up.",
-  unassigned: "No cards need an owner.",
-  company: "No company alerts right now.",
-  archived: "Nothing archived.",
-  all: "No open cards for anyone.",
+  mine: t("whatNeedsMe.youReAllCaughtUp"),
+  unassigned: t("needsYou.noCardsNeedAnOwner"),
+  company: t("needsYou.noCompanyAlertsRightNow"),
+  archived: t("whatNeedsMe.nothingArchived"),
+  all: t("needsYou.noOpenCardsForAnyone"),
 };
 
 function CaughtUpNote({ filtered, view, snoozedBelow = false }: { filtered: boolean; view: AttentionPersonalView; snoozedBelow?: boolean }) {
@@ -943,8 +943,8 @@ function CaughtUpNote({ filtered, view, snoozedBelow = false }: { filtered: bool
     <div className="rounded-xl border border-dashed border-border py-10 text-center">
       <p className="text-sm font-medium text-foreground">
         {filtered
-          ? "No decisions match your search or filters."
-          : snoozedBelow ? "No archived cards. Snoozed cards are below." : CAUGHT_UP_TEXT[view]}
+          ? t("whatNeedsMe.noDecisionsMatchYourSearch")
+          : snoozedBelow ? t("needsYou.noArchivedCardsSnoozedBelow") : CAUGHT_UP_TEXT[view]}
       </p>
       {filtered && (
         <p className="mt-1 text-xs text-muted-foreground">{t("whatNeedsMe.adjustOrClearYourSearch")}</p>
@@ -954,11 +954,11 @@ function CaughtUpNote({ filtered, view, snoozedBelow = false }: { filtered: bool
 }
 
 const ZERO_STATE_DETAIL: Record<AttentionPersonalView, string> = {
-  mine: "Nothing needs a decision from you right now.",
-  unassigned: "Every open card has an owner.",
-  company: "No failed runs, agent errors, budget stops or join requests.",
-  archived: "Cards you archive or snooze for yourself show here. Restore one to see it again.",
-  all: "Nobody has a card waiting right now.",
+  mine: t("whatNeedsMe.nothingNeedsADecisionFrom"),
+  unassigned: t("whatNeedsMe.everyOpenCardHasAnOwner"),
+  company: t("whatNeedsMe.noFailedRunsAgentErrors"),
+  archived: t("whatNeedsMe.cardsYouArchiveOrSnooze"),
+  all: t("whatNeedsMe.nobodyHasACardWaiting"),
 };
 
 function ZeroState({ view }: { view: AttentionPersonalView }) {
@@ -967,7 +967,7 @@ function ZeroState({ view }: { view: AttentionPersonalView }) {
       <div className="mb-4 rounded-full bg-green-500/10 p-4">
         <CheckCircle2 className="h-10 w-10 text-green-500" />
       </div>
-      <p className="text-lg font-semibold text-foreground">{view === "mine" ? "You're all caught up" : CAUGHT_UP_TEXT[view]}</p>
+      <p className="text-lg font-semibold text-foreground">{view === "mine" ? t("whatNeedsMe.youReAllCaughtUp2") : CAUGHT_UP_TEXT[view]}</p>
       <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
         <Inbox className="h-4 w-4" />
         {ZERO_STATE_DETAIL[view]}
