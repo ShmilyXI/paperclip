@@ -2488,7 +2488,13 @@
     "requestedFromIp": "requested {{time}} from IP {{ip}}",
     "adapterLabel": "adapter: {{adapter}}",
     "budgetAt": "Budget at",
-    "utilizationThisMonth": "utilization this month"
+    "utilizationThisMonth": "utilization this month",
+    "agentNeedsProjectAccess": "Agent needs project access",
+    "confirmPreviousServerStopped": "Confirm the previous server stopped",
+    "confirmPreviousRunStopped": "Confirm the previous run stopped",
+    "accountChangedRefreshInbox": "Your account changed. Refresh the inbox.",
+    "someInboxItemsCouldntLoad": "Some inbox items couldn’t load. Showing available items.",
+    "retryMissingItems": "Retry missing items"
   },
   "approvals": {
     "failedToApprove": "Failed to approve",

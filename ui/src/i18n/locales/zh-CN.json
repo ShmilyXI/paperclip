@@ -2488,7 +2488,13 @@
     "requestedFromIp": "{{time}}发起，来源 IP {{ip}}",
     "adapterLabel": "适配器：{{adapter}}",
     "budgetAt": "本月已用",
-    "utilizationThisMonth": "预算额度"
+    "utilizationThisMonth": "预算额度",
+    "agentNeedsProjectAccess": "员工需要项目访问权限",
+    "confirmPreviousServerStopped": "请确认之前的服务器已停止",
+    "confirmPreviousRunStopped": "请确认之前的运行已停止",
+    "accountChangedRefreshInbox": "你的账号已变更，请刷新收件箱。",
+    "someInboxItemsCouldntLoad": "部分收件箱条目加载失败，仅显示可用条目。",
+    "retryMissingItems": "重试缺失条目"
   },
   "approvals": {
     "failedToApprove": "批准失败",

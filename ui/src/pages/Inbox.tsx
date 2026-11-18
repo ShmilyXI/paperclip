@@ -407,17 +407,17 @@ export function FailedRunInboxRow({
   const interruption = issue?.interruption;
   useSecondTick(interruption?.state === "retry_scheduled");
   const retrySeconds = Math.max(0, Math.ceil((Date.parse(interruption?.nextRetryAt ?? "") - Date.now()) / 1000));
-  const displayError = isRetrying ? "Thinking"
+  const displayError = isRetrying ? t("inbox.thinking")
     : interruption?.retryWait ? interruption.retryWait.message
-    : interruption?.state === "working" ? "Thinking"
-    : interruption?.state === "retry_scheduled" ? `Trying again in ${retrySeconds}s…`
-      : interruption?.state === "failed" ? "Couldn’t finish this attempt. Your message is saved."
+    : interruption?.state === "working" ? t("inbox.thinking")
+    : interruption?.state === "retry_scheduled" ? t("inbox.tryingAgainInRetrysecondsS", { retrySeconds })
+      : interruption?.state === "failed" ? t("inbox.couldnTFinishThisAttempt")
         : interruption?.state === "waiting_for_user" ? ({
-          approval: "Approval required", reconnect: "Reconnect account", assign_agent: "Assign an agent", choose_model: "Choose a supported model",
-          resume: "Work is paused", budget: "Budget limit reached",
-          project_access: "Agent needs project access",
-          confirm_owner_stop: "Confirm the previous server stopped",
-          confirm_run_stopped: "Confirm the previous run stopped",
+          approval: t("inbox.approvalRequired"), reconnect: t("inbox.reconnectAccount"), assign_agent: t("inbox.assignAnAgent"), choose_model: t("inbox.chooseASupportedModel"),
+          resume: t("inbox.workIsPaused"), budget: t("inbox.budgetLimitReached"),
+          project_access: t("inbox.agentNeedsProjectAccess"),
+          confirm_owner_stop: t("inbox.confirmPreviousServerStopped"),
+          confirm_run_stopped: t("inbox.confirmPreviousRunStopped"),
         }[interruption.userAction ?? "resume"]) : runFailureMessage(run);
   const retryAvailable = !interruption || (interruption.canRetry && interruption.retryAction !== "move_forward");
   const showUnreadSlot = unreadState !== null;
@@ -1067,7 +1067,7 @@ function StreamlinedInbox({
       const snapshot = await issuesApi.inboxMine(selectedCompanyId!, { signal });
       if (snapshot.userId !== currentUserId) {
         void queryClient.invalidateQueries({ queryKey: queryKeys.auth.session });
-        throw new ApiError("Your account changed. Refresh the inbox.", 409, { error: "account_changed" });
+        throw new ApiError(t("inbox.accountChangedRefreshInbox"), 409, { error: "account_changed" });
       }
       queryClient.setQueryData(mineContextQueryKey, snapshot);
       return snapshot.issues as Issue[];
@@ -2738,8 +2738,8 @@ function StreamlinedInbox({
     <div className="space-y-6">
       <IssueRowDetailsNotice
         error={optionalSourceError ?? rowDetailsError}
-        message={optionalSourceError ? "Some inbox items couldn’t load. Showing available items." : undefined}
-        retryLabel={optionalSourceError ? "Retry missing items" : undefined}
+        message={optionalSourceError ? t("inbox.someInboxItemsCouldntLoad") : undefined}
+        retryLabel={optionalSourceError ? t("inbox.retryMissingItems") : undefined}
         onRetry={optionalSourceError ? retryFailedSources : () => void retryRowDetails()}
       />
       <InboxCollectionToolbar
