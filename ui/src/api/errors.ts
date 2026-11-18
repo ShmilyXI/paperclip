@@ -176,6 +176,8 @@ const ACTION_KEYS = new Map([
   ["load every connector", "loadEveryConnector"],
   ["load AI account defaults", "loadAiAccountDefaults"],
   ["load the Dot connection", "loadTheDotConnection"],
+  ["load this plugin", "loadThisPlugin"],
+  ["load local folder settings", "loadLocalFolderSettings"],
 ]);
 
 function actionErrorTitle(action: string, fallback: string): string {

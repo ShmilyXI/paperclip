@@ -7441,6 +7441,7 @@
     "pendingRpcs": "Pending RPCs",
     "crashes": "Crashes",
     "lastCrash": "Last Crash",
+    "crashCountSummary": "{{consecutive}} consecutive / {{total}} total",
     "noWorkerProcessRegistered": "No worker process registered.",
     "recentJobRuns": "Recent Job Runs",
     "noJobRunsRecordedYet": "No job runs recorded yet.",
@@ -7496,6 +7497,7 @@
     "lastLogEntries_one": "Last {{count}} log entry",
     "lastLogEntries_other": "Last {{count}} log entries",
     "failedToLoadLocalFolderSettings": "Failed to load local folder settings.",
+    "missingCount": "{{count}} missing",
     "missingDirectories": "Missing directories",
     "missingFiles": "Missing files",
     "failedToSaveConfiguration": "Failed to save configuration.",
@@ -17862,7 +17864,9 @@
         "loadComposioAccounts": "load Composio accounts",
         "loadEveryConnector": "load every connector",
         "loadAiAccountDefaults": "load AI account defaults",
-        "loadTheDotConnection": "load the Dot connection"
+        "loadTheDotConnection": "load the Dot connection",
+        "loadThisPlugin": "load this plugin",
+        "loadLocalFolderSettings": "load local folder settings"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

@@ -140,7 +140,7 @@ export function PluginSettings() {
   }, [pluginId]);
 
   if (pluginView.kind === "loading" || pluginView.kind === "reconnecting") {
-    return <QueryPlaceholder size="page" label="Loading plugin details" className="p-4" />;
+    return <QueryPlaceholder size="page" label={t("pluginSettings.loadingPluginDetails")} className="p-4" />;
   }
 
   // A failed load must not bounce the operator back to the plugin list: a
@@ -356,7 +356,10 @@ export function PluginSettings() {
                                     {t("pluginSettings.crashes")}
                                   </span>
                                   <span className="text-xs">
-                                    {dashboardData.worker.consecutiveCrashes} consecutive / {dashboardData.worker.totalCrashes} total
+                                    {t("pluginSettings.crashCountSummary", {
+                                      consecutive: dashboardData.worker.consecutiveCrashes,
+                                      total: dashboardData.worker.totalCrashes,
+                                    })}
                                   </span>
                                 </div>
                                 {dashboardData.worker.lastCrashAt && (
@@ -650,7 +653,7 @@ function PluginLocalFoldersSettings({ pluginId, companyId, declarations }: Plugi
         />
       ) : null}
       {foldersView.kind === "loading" || foldersView.kind === "reconnecting" ? (
-        <QueryPlaceholder size="panel" label="Loading local folders" className="py-3" />
+        <QueryPlaceholder size="panel" label={t("pluginSettings.loadingLocalFolders")} className="py-3" />
       ) : (
         <div className="space-y-3">
           {declarations.map((declaration) => (
@@ -904,7 +907,7 @@ function RequirementList({
           </Badge>
         ) : missingItems.length > 0 ? (
           <Badge variant="destructive" className="text-(length:--text-nano)">
-            {missingItems.length} missing
+            {t("pluginSettings.missingCount", { count: missingItems.length })}
           </Badge>
         ) : (
           <Badge variant="outline" className="text-(length:--text-nano)">{t("pluginSettings.present")}</Badge>
@@ -1015,7 +1018,7 @@ function PluginConfigForm({ pluginId, companyId, schema, initialValues, needsIni
   // Save mutation
   const saveMutation = useMutation({
     mutationFn: ({ pluginId, companyId, configJson }: { pluginId: string; companyId: string | null; configJson: Record<string, unknown> }) => {
-      if (!companyId) throw new Error("Select an organization before saving plugin configuration.");
+      if (!companyId) throw new Error(t("pluginSettings.selectAnOrganizationBeforeSaving"));
       return pluginsApi.saveConfig(pluginId, companyId, configJson);
     },
     onSuccess: (savedConfig, { pluginId, companyId }) => {

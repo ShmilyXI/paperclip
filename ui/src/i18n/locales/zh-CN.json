@@ -7441,6 +7441,7 @@
     "pendingRpcs": "待处理的 RPC",
     "crashes": "崩溃",
     "lastCrash": "最近一次崩溃",
+    "crashCountSummary": "连续 {{consecutive}} 次 / 共 {{total}} 次",
     "noWorkerProcessRegistered": "未注册工作进程。",
     "recentJobRuns": "最近的作业运行",
     "noJobRunsRecordedYet": "尚无作业运行记录。",
@@ -7496,6 +7497,7 @@
     "lastLogEntries_one": "最近 {{count}} 条日志",
     "lastLogEntries_other": "最近 {{count}} 条日志",
     "failedToLoadLocalFolderSettings": "加载本地文件夹设置失败。",
+    "missingCount": "缺少 {{count}} 项",
     "missingDirectories": "缺少目录",
     "missingFiles": "缺少文件",
     "failedToSaveConfiguration": "保存配置失败。",
@@ -17862,7 +17864,9 @@
         "loadComposioAccounts": "加载 Composio 账户",
         "loadEveryConnector": "加载所有连接器",
         "loadAiAccountDefaults": "加载 AI 账户默认值",
-        "loadTheDotConnection": "加载 Dot 连接"
+        "loadTheDotConnection": "加载 Dot 连接",
+        "loadThisPlugin": "加载此插件",
+        "loadLocalFolderSettings": "加载本地文件夹设置"
       },
       "retry": "重试",
       "retrying": "正在重试…",
