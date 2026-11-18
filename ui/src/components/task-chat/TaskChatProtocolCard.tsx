@@ -522,7 +522,7 @@ function WorkspaceChangeCard({ item }: { item: TaskChatWorkspaceChangeItem }) {
               )
             }
           >
-            {openPaths.size > 0 ? "Collapse all" : "Expand all"}
+            {openPaths.size > 0 ? t("common.collapseAll") : t("common.expandAll")}
           </button>
         ) : null}
       </div>
@@ -544,13 +544,13 @@ function WorkspaceChangeCard({ item }: { item: TaskChatWorkspaceChangeItem }) {
           className="mt-1"
           onClick={() => setExpanded((value) => !value)}
         >
-          {expanded ? "Show fewer files" : `Show ${item.files.length - 5} more files`}
+          {expanded ? t("taskChatProtocolCard.showFewerFiles") : t("taskChatProtocolCard.showLengthMoreFiles", { length: item.files.length - 5 })}
         </Button>
       ) : null}
       {fileCount > item.files.length ? (
         <p className="mt-1 px-2 text-xs text-muted-foreground" data-testid="task-chat-workspace-change-omitted">
-          {fileCount - item.files.length} more {fileCount - item.files.length === 1 ? "file" : "files"} changed.
-          This change set is too large to list them here.
+          {t("taskChatProtocolCard.moreFilesChanged", { count: fileCount - item.files.length })}{" "}
+          {t("taskChatProtocolCard.changeSetTooLarge")}
         </p>
       ) : null}
     </CardShell>

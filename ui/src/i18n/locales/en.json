@@ -10608,7 +10608,10 @@
     "binaryLabel": "binary",
     "lineNumber": "· line {{count}}",
     "blockedReasonCode": "Blocked: {{reason}}",
-    "blocksCompletion": "blocks completion"
+    "blocksCompletion": "blocks completion",
+    "moreFilesChanged_one": "{{count}} more file changed.",
+    "moreFilesChanged_other": "{{count}} more files changed.",
+    "changeSetTooLarge": "This change set is too large to list them here."
   },
   "taskBrowserFooter": {
     "fitToPane": "Fit to pane",

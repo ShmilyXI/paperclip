@@ -10608,7 +10608,10 @@
     "binaryLabel": "二进制",
     "lineNumber": "· 第 {{count}} 行",
     "blockedReasonCode": "已阻塞：{{reason}}",
-    "blocksCompletion": "阻塞完成"
+    "blocksCompletion": "阻塞完成",
+    "moreFilesChanged_one": "另有 {{count}} 个文件已更改。",
+    "moreFilesChanged_other": "另有 {{count}} 个文件已更改。",
+    "changeSetTooLarge": "此变更集太大，无法在此列出。"
   },
   "taskBrowserFooter": {
     "fitToPane": "适应面板",
