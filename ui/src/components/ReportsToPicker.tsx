@@ -17,8 +17,8 @@ export function ReportsToPicker({
   onChange,
   disabled = false,
   excludeAgentIds = [],
-  disabledEmptyLabel = "Reports to: N/A (CEO)",
-  chooseLabel = "Reports to...",
+  disabledEmptyLabel = t("reportsToPicker.reportsToNotApplicableCeo"),
+  chooseLabel = t("reportsToPicker.reportsTo"),
   trigger,
   disabledAgentIds = [],
 }: {
@@ -67,7 +67,7 @@ export function ReportsToPicker({
                   terminatedManager && "text-amber-900 dark:text-amber-200",
                 )}
               >
-                {`Reports to ${current.name}${terminatedManager ? " (terminated)" : ""}`}
+                {t("reportsToPicker.reportsToName", { name: current.name })}{terminatedManager ? t("reportsToPicker.terminatedSuffix") : ""}
               </span>
             </>
           ) : (
@@ -80,8 +80,8 @@ export function ReportsToPicker({
           )}
         </button>}
       </PopoverTrigger>
-      <PopoverContent className="w-64" align="start" aria-label="Choose manager">
-        <FlyoutHeader>Reports to</FlyoutHeader>
+      <PopoverContent className="w-64" align="start" aria-label={t("reportsToPicker.chooseManagerAria")}>
+        <FlyoutHeader>{t("reportsToPicker.reportsToHeader")}</FlyoutHeader>
         <FlyoutOptions className="max-h-80 overflow-y-auto">
         <button
           type="button"
@@ -96,7 +96,7 @@ export function ReportsToPicker({
           }}
         >
           <User className="size-5 shrink-0" aria-hidden />
-          <span className="min-w-0 flex-1 text-left">No manager</span>
+          <span className="min-w-0 flex-1 text-left">{t("reportsToPicker.noManager")}</span>
           {value === null && <Check className="size-4 shrink-0" aria-hidden />}
         </button>
         {terminatedManager && (
@@ -118,7 +118,7 @@ export function ReportsToPicker({
             key={a.id}
             aria-pressed={a.id === value}
             disabled={disabledAgentIds.includes(a.id)}
-            title={disabledAgentIds.includes(a.id) ? "Would create a reporting loop" : undefined}
+            title={disabledAgentIds.includes(a.id) ? t("reportsToPicker.wouldCreateReportingLoop") : undefined}
             className={cn(
               "flex items-center gap-2 w-full min-w-0 px-2 py-1.5 text-xs rounded hover:bg-accent/50 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed",
               a.id === value && "bg-accent",

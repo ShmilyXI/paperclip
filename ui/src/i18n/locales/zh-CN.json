@@ -14767,7 +14767,12 @@
     "savedManagerIsMissingFrom": "已保存的管理者不在此组织中。请选择新的管理者或清除。",
     "reportsToNotApplicableCeo": "汇报对象：无（CEO）",
     "reportsTo": "汇报对象…",
-    "currentTerminated": "当前：{{name}}（已终止）"
+    "currentTerminated": "当前：{{name}}（已终止）",
+    "reportsToName": "汇报对象：{{name}}",
+    "terminatedSuffix": "（已终止）",
+    "chooseManagerAria": "选择管理者",
+    "reportsToHeader": "汇报对象",
+    "wouldCreateReportingLoop": "会造成汇报循环"
   },
   "artifactCard": {
     "text": "文本",

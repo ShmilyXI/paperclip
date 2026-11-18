@@ -14767,7 +14767,12 @@
     "savedManagerIsMissingFrom": "Saved manager is missing from this organization. Choose a new manager or clear.",
     "reportsToNotApplicableCeo": "Reports to: N/A (CEO)",
     "reportsTo": "Reports to...",
-    "currentTerminated": "Current: {{name}} (terminated)"
+    "currentTerminated": "Current: {{name}} (terminated)",
+    "reportsToName": "Reports to {{name}}",
+    "terminatedSuffix": " (terminated)",
+    "chooseManagerAria": "Choose manager",
+    "reportsToHeader": "Reports to",
+    "wouldCreateReportingLoop": "Would create a reporting loop"
   },
   "artifactCard": {
     "text": "Text",
