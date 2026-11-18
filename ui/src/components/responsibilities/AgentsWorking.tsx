@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { Agent } from "@paperclipai/shared";
 import { agentsApi } from "@/api/agents";
@@ -36,11 +37,11 @@ export function AgentsWorkingLabel({
   className?: string;
 }) {
   if (agentIds.length === 0) {
-    return <span className={cn("text-xs text-muted-foreground", className)}>No agents on this yet</span>;
+    return <span className={cn("text-xs text-muted-foreground", className)}>{t("responsibilities.noAgentsOnThisYet")}</span>;
   }
-  const names = agentIds.map((id) => agentsById.get(id)?.name ?? "An agent");
+  const names = agentIds.map((id) => agentsById.get(id)?.name ?? t("whatNeedsMe.anAgent"));
   return (
-    <span className={cn("inline-flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground", className)} aria-label={`Agents on this: ${names.join(", ")}`}>
+    <span className={cn("inline-flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground", className)} aria-label={t("responsibilities.agentsOnThis", { names: names.join(", ") })}>
       <span className="flex shrink-0 -space-x-1" aria-hidden="true">
         {agentIds.slice(0, 3).map((id) => (
           <AgentAvatar key={id} agent={agentsById.get(id) ?? { id }} name={agentsById.get(id)?.name} size={16} />
@@ -60,7 +61,7 @@ export function AgentsAtWorkList({
   agentsById: ReadonlyMap<string, Agent>;
 }) {
   if (agents.length === 0) {
-    return <span className="text-sm text-muted-foreground">No agent is working on this yet. Give one a task, a routine or a project below.</span>;
+    return <span className="text-sm text-muted-foreground">{t("responsibilities.noAgentIsWorkingOnThisYet")}</span>;
   }
   return (
     <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
@@ -69,7 +70,7 @@ export function AgentsAtWorkList({
         return (
           <li key={work.agentId} className="flex items-center gap-1.5 text-sm">
             <AgentAvatar agent={agent ?? { id: work.agentId }} name={agent?.name} size={20} />
-            <span className="text-foreground">{agent?.name ?? "An agent"}</span>
+            <span className="text-foreground">{agent?.name ?? t("whatNeedsMe.anAgent")}</span>
             <span className="text-xs text-muted-foreground">{describeAgentWork(work)}</span>
           </li>
         );

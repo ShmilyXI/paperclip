@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { Agent, CompanyArtifact, ResponsibilitySkillSummary } from "@paperclipai/shared";
 import { RESPONSIBILITY_ARTIFACT_COUNT_LIMIT } from "@paperclipai/shared";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -24,9 +25,9 @@ function SectionHeading({ id, title, count, question }: { id: string; title: str
 /** The agents that hold a skill, by avatar and name. */
 function Holders({ agentIds, agentsById }: { agentIds: readonly string[]; agentsById: ReadonlyMap<string, Agent> }) {
   if (agentIds.length === 0) return null;
-  const names = agentIds.map((id) => agentsById.get(id)?.name ?? "An agent");
+  const names = agentIds.map((id) => agentsById.get(id)?.name ?? t("whatNeedsMe.anAgent"));
   return (
-    <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground" aria-label={`Held by ${names.join(", ")}`}>
+    <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground" aria-label={t("responsibilities.heldBy", { names: names.join(", ") })}>
       <span className="flex shrink-0 -space-x-1" aria-hidden="true">
         {agentIds.slice(0, 3).map((id) => (
           <AgentAvatar key={id} agent={agentsById.get(id) ?? { id }} name={agentsById.get(id)?.name} size={16} />
@@ -53,9 +54,9 @@ export function ResponsibilitySkills({
     <section aria-labelledby="responsibility-skills-heading" className="flex flex-col gap-2">
       <SectionHeading
         id="responsibility-skills-heading"
-        title="Skills"
+        title={t("common.skills")}
         count={skills.length}
-        question="What can the agents working on this do?"
+        question={t("responsibilities.whatCanTheAgentsWorkingOnThisDo")}
       />
       {skills.length > 0 ? (
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-testid="responsibility-skills">
@@ -81,8 +82,7 @@ export function ResponsibilitySkills({
         </ul>
       ) : (
         <p className="text-sm text-muted-foreground">
-          No skills yet. They appear here from the agents doing the work: the ones assigned its tasks and
-          routines, and the leads of its projects.
+          {t("responsibilities.noSkillsYetTheyAppearHere")}
         </p>
       )}
     </section>
@@ -92,9 +92,9 @@ export function ResponsibilitySkills({
 /** "Showing the newest 50 of 312", or "of 1,000 or more" once the count stops. */
 export function artifactsTruncationNote(shown: number, total: number): string {
   const of = total >= RESPONSIBILITY_ARTIFACT_COUNT_LIMIT
-    ? `${RESPONSIBILITY_ARTIFACT_COUNT_LIMIT.toLocaleString("en-US")} or more`
+    ? t("responsibilities.countOrMore", { count: RESPONSIBILITY_ARTIFACT_COUNT_LIMIT.toLocaleString("en-US") })
     : total.toLocaleString("en-US");
-  return `Showing the newest ${shown} of ${of}.`;
+  return t("responsibilities.showingTheNewestOf", { shown, of });
 }
 
 /**
@@ -115,13 +115,13 @@ export function ResponsibilityArtifacts({
     <section aria-labelledby="responsibility-artifacts-heading" className="flex flex-col gap-3">
       <SectionHeading
         id="responsibility-artifacts-heading"
-        title="Artifacts"
+        title={t("nav.artifacts")}
         count={total}
-        question="What has the work produced? Newest first; each opens in the task that made it."
+        question={t("responsibilities.whatHasTheWorkProduced")}
       />
       {artifacts.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Nothing produced yet. Documents, files and other output from the tasks under this responsibility collect here.
+          {t("responsibilities.nothingProducedYetDocumentsFiles")}
         </p>
       ) : v1 ? (
         <ArtifactTileGrid testId="responsibility-artifacts">

@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { t } from "@/i18n";
 import type { Agent, ResponsibilityArea, ResponsibilityWithRollup } from "@paperclipai/shared";
 import { MoreHorizontal } from "lucide-react";
 import { describeError } from "@/api/errors";
@@ -59,14 +60,14 @@ export const ResponsibilityRow = memo(function ResponsibilityRow({
             {responsibility.title}
           </Link>
           <ResponsibilityHealthBadge health={rollup.health} overridden={rollup.healthOverridden} />
-          {letGo ? <span className="text-xs text-muted-foreground">Let go</span> : null}
+          {letGo ? <span className="text-xs text-muted-foreground">{t("responsibilities.letGo")}</span> : null}
         </div>
         <p className="text-sm text-muted-foreground">{rollup.statusSentence}</p>
         {signals.length > 0 ? (
           <WorkSignalList signals={signals} size="xs" responsibilityHref={responsibilityPath} className="pt-1" />
         ) : null}
         {move.error ? (
-          <p role="alert" className="text-xs text-destructive">Couldn’t move it. {describeError(move.error).body}</p>
+          <p role="alert" className="text-xs text-destructive">{t("responsibilities.couldntMoveIt")} {describeError(move.error).body}</p>
         ) : null}
       </div>
       <MetricGlance metric={rollup.metric} health={rollup.health} now={now} className="md:w-48 md:shrink-0" />
@@ -74,13 +75,13 @@ export const ResponsibilityRow = memo(function ResponsibilityRow({
         <AgentsWorkingLabel agentIds={agentIdsFromSignals(rollup)} agentsById={agentsById} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon-xs" variant="ghost" aria-label={`More for ${responsibility.title}`}>
+            <Button size="icon-xs" variant="ghost" aria-label={t("responsibilities.moreForTitle", { title: responsibility.title })}>
               <MoreHorizontal aria-hidden="true" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger disabled={move.isPending}>Move to area</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger disabled={move.isPending}>{t("responsibilities.moveToArea")}</DropdownMenuSubTrigger>
               <DropdownMenuSubContent className="max-h-(--sz-50vh) overflow-y-auto">
                 <AreaRadioItems
                   areas={areas}
