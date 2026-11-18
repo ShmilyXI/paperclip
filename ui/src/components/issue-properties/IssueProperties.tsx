@@ -1353,16 +1353,16 @@ export function IssueProperties({
   const monitorIsDueNow = monitorRelative === "due now";
   const monitorIsOverdue = Boolean(monitorRelative?.startsWith("overdue by "));
   const monitorPrimary = monitorNextCheckAt
-    ? monitorPaused ? "Automatic checks paused" : formatMonitorEtaLabel(monitorNextCheckAt, monitorNow)
+    ? monitorPaused ? t("issueProps.automaticChecksPaused") : formatMonitorEtaLabel(monitorNextCheckAt, monitorNow)
     : monitorState?.status === "cleared"
       ? t("issueProperties.cleared")
       : t("common.none");
   const monitorSecondary = monitorNextCheckAt
     ? monitorPaused
-      ? canCheckMonitorNow ? "Check now to request a manual check" : "Resume this task to continue checking"
+      ? canCheckMonitorNow ? t("issueProps.checkNowToRequestAManualCheck") : t("issueProps.resumeThisTaskToContinueChecking")
       : monitorIsDueNow
-      ? "checking momentarily…"
-      : `${formatMonitorAbsolute(monitorNextCheckAt, {}, monitorNow)}${monitorIsOverdue ? " · fires on next tick" : monitorAttemptCount > 0 ? ` · Attempt ${monitorAttemptCount}` : ""}`
+      ? t("issueProps.checkingMomentarily")
+      : `${formatMonitorAbsolute(monitorNextCheckAt, {}, monitorNow)}${monitorIsOverdue ? t("issueProps.firesOnNextTick") : monitorAttemptCount > 0 ? t("issueProps.attemptSuffix", { attempt: monitorAttemptCount }) : ""}`
     : monitorState?.status === "cleared"
       ? [
           monitorLastTriggeredAt ? t("issueProps.lastChecked", { time: timeAgo(monitorLastTriggeredAt) }) : null,
@@ -2422,9 +2422,9 @@ export function IssueProperties({
         ) : null}
 
         {assigneeRuntimeStateLoading || (assigneeRateLimits && summarizeProviderRateLimits(assigneeRateLimits, Date.now())) ? (
-          <PropertyRow label="Usage limit">
+          <PropertyRow label={t("issueProps.usageLimit")}>
             {assigneeRuntimeStateLoading ? (
-              <Skeleton className="h-4 w-32" role="status" aria-label="Loading usage limit" />
+              <Skeleton className="h-4 w-32" role="status" aria-label={t("issueProps.loadingUsageLimit")} />
             ) : (
               <AgentRateLimitPropertyValue
                 snapshot={assigneeRateLimits}
