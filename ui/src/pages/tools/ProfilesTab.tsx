@@ -24,7 +24,6 @@ import {
   type ToolProfileEntryInput,
   type UpdateToolProfileInput,
 } from "@/api/tools";
-import { ApiError } from "@/api/client";
 import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -51,14 +50,15 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/context/ToastContext";
 import { EmptyState } from "@/components/EmptyState";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import {
   CapabilityBadges,
-  ErrorState,
   LoadingState,
   RelativeTime,
   RiskBadge,
   ToolsPageHeader,
 } from "./shared";
+import { describeError } from "@/api/errors";
 
 const SELECTOR_TYPES: Array<{ value: ToolProfileEntrySelectorType; label: string }> = [
   { value: "tool_name", label: t("toolsProfiles.toolName") },
@@ -481,6 +481,7 @@ export function EffectiveAgentPanel({ companyId, agentOptions }: { companyId: st
     queryFn: () => toolsApi.getEffectiveProfilesForAgent(companyId, agentId),
     enabled: Boolean(agentId),
   });
+  const effectiveView = useQueryView(effective);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
@@ -492,10 +493,15 @@ export function EffectiveAgentPanel({ companyId, agentOptions }: { companyId: st
         <div className="rounded-lg border border-dashed border-border px-4 py-8 text-sm text-muted-foreground">
           {t("toolsProfiles.pickAnAgentToSee")}
         </div>
-      ) : effective.isLoading ? (
-        <LoadingState label={t("toolsProfiles.checkingAccess")} />
-      ) : effective.error ? (
-        <ErrorState error={effective.error} onRetry={() => effective.refetch()} />
+      ) : effective.isLoading || effectiveView.kind === "reconnecting" ? (
+        <LoadingState label="Checking access..." />
+      ) : effectiveView.kind === "error" ? (
+        <QueryErrorState
+          error={effective.error}
+          action="check this agent's access"
+          onRetry={effectiveView.retry}
+          retrying={effectiveView.isFetching}
+        />
       ) : (
         <div className="min-h-0 space-y-5 overflow-y-auto pr-1">
           <div className="space-y-2">
@@ -671,6 +677,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
     queryKey: queryKeys.tools.profiles(companyId),
     queryFn: () => toolsApi.listProfiles(companyId),
   });
+  const profilesView = useQueryView(profiles);
 
   const connectionList = lookups.connections.data?.connections ?? [];
   // Company-wide catalog, assembled per connection (there is no aggregate
@@ -730,8 +737,8 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.profileCreated"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: t("toolsProfiles.couldNotCreateProfile"),
-      body: error instanceof ApiError ? error.message : String(error),
+      title: "Could not create profile",
+      body: describeError(error).body,
       tone: "error",
     }),
   });
@@ -746,8 +753,8 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.profileUpdated"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: t("toolsProfiles.couldNotUpdateProfile"),
-      body: error instanceof ApiError ? error.message : String(error),
+      title: "Could not update profile",
+      body: describeError(error).body,
       tone: "error",
     }),
   });
@@ -762,8 +769,8 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.entryAdded"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: t("toolsProfiles.couldNotAddEntry"),
-      body: error instanceof ApiError ? error.message : String(error),
+      title: "Could not add entry",
+      body: describeError(error).body,
       tone: "error",
     }),
   });
@@ -775,8 +782,8 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.entryRemoved"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: t("toolsProfiles.couldNotRemoveEntry"),
-      body: error instanceof ApiError ? error.message : String(error),
+      title: "Could not remove entry",
+      body: describeError(error).body,
       tone: "error",
     }),
   });
@@ -792,8 +799,8 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.profileBound"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: t("toolsProfiles.couldNotBindProfile"),
-      body: error instanceof ApiError ? error.message : String(error),
+      title: "Could not bind profile",
+      body: describeError(error).body,
       tone: "error",
     }),
   });
@@ -809,14 +816,23 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.bindingRemoved"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: t("toolsProfiles.couldNotRemoveBinding"),
-      body: error instanceof ApiError ? error.message : String(error),
+      title: "Could not remove binding",
+      body: describeError(error).body,
       tone: "error",
     }),
   });
 
-  if (profiles.isLoading) return <LoadingState />;
-  if (profiles.error) return <ErrorState error={profiles.error} onRetry={() => profiles.refetch()} />;
+  if (profiles.isLoading || profilesView.kind === "reconnecting") return <LoadingState />;
+  if (profilesView.kind === "error") {
+    return (
+      <QueryErrorState
+        error={profiles.error}
+        action="load profiles"
+        onRetry={profilesView.retry}
+        retrying={profilesView.isFetching}
+      />
+    );
+  }
 
   const list = profiles.data?.profiles ?? [];
   const selected = list.find((p) => p.id === selectedId) ?? list[0] ?? null;

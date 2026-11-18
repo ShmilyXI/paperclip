@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, Copy } from "lucide-react";
 import { accessApi } from "@/api/access";
-import { ApiError } from "@/api/client";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { Button } from "@/components/ui/button";
 import { useCompany } from "@/context/CompanyContext";
 import { useToast } from "@/context/ToastContext";
@@ -11,6 +11,7 @@ import { Link } from "@/lib/router";
 import { queryKeys } from "@/lib/queryKeys";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { Badge } from "@/components/ui/badge";
+import { describeError } from "@/api/errors";
 
 const inviteRoleOptions = [
   {
@@ -100,6 +101,7 @@ export function InvitesSection() {
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
   });
+  const invitesView = useQueryView(invitesQuery);
   const inviteHistory = useMemo(
     () =>
       invitesQuery.data?.pages.flatMap((page) =>
@@ -129,8 +131,8 @@ export function InvitesSection() {
     },
     onError: (error) => {
       pushToast({
-        title: t("invitesSection.failedToCreateInvite"),
-        body: error instanceof Error ? error.message : t("invitesSection.unknownError"),
+        title: "Failed to create invite",
+        body: describeError(error).body,
         tone: "error",
       });
     },
@@ -144,8 +146,8 @@ export function InvitesSection() {
     },
     onError: (error) => {
       pushToast({
-        title: t("invitesSection.failedToRevokeInvite"),
-        body: error instanceof Error ? error.message : t("invitesSection.unknownError"),
+        title: "Failed to revoke invite",
+        body: describeError(error).body,
         tone: "error",
       });
     },
@@ -155,18 +157,23 @@ export function InvitesSection() {
     return <div className="text-sm text-muted-foreground">{t("invitesSection.selectAnOrganizationToManage")}</div>;
   }
 
-  if (invitesQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("invitesSection.loadingInvites")}</div>;
+  if (invitesQuery.isLoading || invitesView.kind === "reconnecting") {
+    return <div className="text-sm text-muted-foreground">Loading invites…</div>;
   }
 
-  if (invitesQuery.error) {
-    const message =
-      invitesQuery.error instanceof ApiError && invitesQuery.error.status === 403
-        ? t("invitesSection.youDoNotHavePermission")
-        : invitesQuery.error instanceof Error
-          ? invitesQuery.error.message
-          : t("invitesSection.failedToLoadInvites");
-    return <div className="text-sm text-destructive">{message}</div>;
+  if (invitesView.kind === "error") {
+    if (invitesView.errorKind === "forbidden") {
+      return <div className="text-sm text-destructive">You do not have permission to manage organization invites.</div>;
+    }
+    return (
+      <QueryErrorState
+        size="page"
+        error={invitesQuery.error}
+        action="load invites"
+        onRetry={invitesView.retry}
+        retrying={invitesView.isFetching}
+      />
+    );
   }
 
   return (

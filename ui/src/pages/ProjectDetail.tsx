@@ -222,11 +222,13 @@ function ProjectIssuesList({ projectId, companyId }: { projectId: string; compan
     enabled: !!companyId,
   });
 
-  const { data: issues, isLoading, error } = useQuery({
+  const issuesQuery = useQuery({
     queryKey: [...queryKeys.issues.listByProject(companyId, projectId), showAgentCreatedTasks],
     queryFn: () => issuesApi.listAll(companyId, { projectId, includeRoutineExecutions: true, includeAgentCreatedTasks: showAgentCreatedTasks }),
     enabled: !!companyId,
   });
+  const { data: issues } = issuesQuery;
+  const issuesView = useQueryView(issuesQuery);
   const liveIssueIds = useMemo(() => collectLiveIssueIds(liveRuns, issues), [issues, liveRuns]);
 
   const updateIssue = useUpdateIssueMutation({
@@ -234,11 +236,12 @@ function ProjectIssuesList({ projectId, companyId }: { projectId: string; compan
     invalidateKeys: [queryKeys.issues.listByProject(companyId, projectId), queryKeys.issues.list(companyId)],
   });
 
+  if (issuesView.kind === "error") return <QueryErrorState error={issuesView.error} action="load project tasks" onRetry={issuesView.retry} retrying={issuesView.isFetching} />;
+
   return (
     <IssuesList
       issues={issues ?? []}
-      isLoading={isLoading}
-      error={error as Error | null}
+      isLoading={issuesView.kind === "loading" || issuesView.kind === "reconnecting"}
       agents={agents}
       projects={projects}
       liveIssueIds={liveIssueIds}
@@ -289,11 +292,13 @@ function ProjectPluginOperationsList({
     refetchInterval: sharedLiveRuns.refetchInterval,
   });
   usePublishSharedQueryData(sharedLiveRuns, liveRuns, liveRunsUpdatedAt);
-  const { data: issues, isLoading, error } = useQuery({
+  const issuesQuery = useQuery({
     queryKey: queryKeys.issues.listPluginOperationsByProject(companyId, projectId, originKindPrefix),
     queryFn: () => issuesApi.list(companyId, { projectId, originKindPrefix }),
     enabled: !!companyId && !!projectId,
   });
+  const { data: issues } = issuesQuery;
+  const issuesView = useQueryView(issuesQuery);
   const liveIssueIds = useMemo(() => collectLiveIssueIds(liveRuns, issues), [issues, liveRuns]);
 
   const updateIssue = useUpdateIssueMutation({
@@ -305,11 +310,12 @@ function ProjectPluginOperationsList({
     ],
   });
 
+  if (issuesView.kind === "error") return <QueryErrorState error={issuesView.error} action="load project tasks" onRetry={issuesView.retry} retrying={issuesView.isFetching} />;
+
   return (
     <IssuesList
       issues={issues ?? []}
-      isLoading={isLoading}
-      error={error as Error | null}
+      isLoading={issuesView.kind === "loading" || issuesView.kind === "reconnecting"}
       agents={agents}
       projects={projects}
       liveIssueIds={liveIssueIds}

@@ -5,6 +5,7 @@ import { defaultStatusCardRefreshPolicy } from "@paperclipai/shared";
 import { Loader2 } from "lucide-react";
 
 import { statusCardsApi } from "@/api/statusCards";
+import { describeError } from "@/api/errors";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -68,7 +69,7 @@ export function CreateStatusCardDialog({
       ]);
       close();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("createStatusCardDialog.couldNotCreateTheCard")),
+    onError: (err) => setError(describeError(err, { action: "create the card" }).body),
   });
 
   return (

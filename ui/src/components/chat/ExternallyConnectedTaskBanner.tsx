@@ -28,6 +28,8 @@ import { classifySendFailure, type SendOutcome } from "@/lib/pending-send";
 import { useAutoResend } from "@/hooks/useDurableSubmit";
 import { useDraftOwner, useDraftOwnerReader } from "@/hooks/useDraftOwner";
 import { useAccountBoundMutation } from "@/hooks/useAccountBoundMutation";
+import { retryTransientOnly } from "@/lib/query-client";
+import { useQueryView } from "@/components/QueryView";
 import {
   boardSendDraftKey,
   clearBoardSendDraft,
@@ -302,8 +304,12 @@ function ConnectedTaskComposer({
     staleTime: 0,
     refetchInterval: 2_000,
     refetchIntervalInBackground: false,
-    retry: false,
+    retry: retryTransientOnly(0),
   });
+  // Read publication status through the shared view: the receipt render uses
+  // the cached batch during transient refetch failures,and a no-data failure
+  // drops into readable copy.
+  const publicationStatusView = useQueryView(publicationStatus);
   useEffect(() => {
     const batch = publicationStatus.data;
     if (
@@ -463,7 +469,7 @@ function ConnectedTaskComposer({
     } catch (error) {
       if (mounted.current) {
         setUploadError(
-          `${error instanceof Error ? error.message : t("externallyConnectedTaskBanner.uploadCouldNotBeConfirmed")} ${t("externallyConnectedTaskBanner.noChannelMessageWasSent")}`,
+          `${describeError(error).body} No channel message was sent. Check task files before retrying the upload.`,
         );
       }
     } finally {
@@ -519,7 +525,7 @@ function ConnectedTaskComposer({
   const currentPublication = publicationStatus.data?.publication ?? publication;
   const batch = publicationStatus.data;
   const dismissible =
-    !publicationStatus.isError &&
+    Boolean(publicationStatus.data) &&
     !publicationStatus.isFetching &&
     canDismissBoardSendBatch(batch);
   const mixedTerminal =
@@ -850,7 +856,7 @@ function ConnectedTaskComposer({
                     ))}
                 </ul>
               )}
-              {publicationStatus.isError && (
+              {publicationStatusView.kind === "error" && (
                 <p role="alert" className="text-muted-foreground">
                   {t("externallyConnectedTaskBanner.deliveryStatusCouldNotBe")}
                 </p>

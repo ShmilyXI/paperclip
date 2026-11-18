@@ -29,6 +29,8 @@ import {
   getDefaultValues,
   type JsonSchemaNode,
 } from "@/components/JsonSchemaForm";
+import { describeError } from "@/api/errors";
+import { QueryErrorState, QueryPlaceholder, useQueryView } from "@/components/QueryView";
 
 /**
  * PluginSettings page component.
@@ -68,11 +70,13 @@ export function PluginSettings() {
   const { hideHostPaths } = useManagedSandboxOnly();
   const [activeTab, setActiveTab] = useState<"configuration" | "status">("configuration");
 
-  const { data: plugin, isLoading: pluginLoading } = useQuery({
+  const pluginQuery = useQuery({
     queryKey: queryKeys.plugins.detail(pluginId!),
     queryFn: () => pluginsApi.get(pluginId!),
     enabled: !!pluginId,
   });
+  const plugin = pluginQuery.data;
+  const pluginView = useQueryView(pluginQuery);
 
   const { data: healthData, isLoading: healthLoading } = useQuery({
     queryKey: queryKeys.plugins.health(pluginId!),
@@ -134,8 +138,24 @@ export function PluginSettings() {
     setActiveTab("configuration");
   }, [pluginId]);
 
-  if (pluginLoading) {
-    return <div className="p-4 text-sm text-muted-foreground">{t("pluginSettings.loadingPluginDetails")}</div>;
+  if (pluginView.kind === "loading" || pluginView.kind === "reconnecting") {
+    return <QueryPlaceholder size="page" label="Loading plugin details" className="p-4" />;
+  }
+
+  // A failed load must not bounce the operator back to the plugin list: a
+  // cached plugin keeps the page up through an outage, and a real failure
+  // shows readable copy with Retry.
+  if (pluginView.kind === "error") {
+    return (
+      <QueryErrorState
+        size="page"
+        className="p-4"
+        error={pluginQuery.error}
+        action="load this plugin"
+        onRetry={pluginView.retry}
+        retrying={pluginView.isFetching}
+      />
+    );
   }
 
   if (!plugin) {
@@ -592,15 +612,17 @@ interface PluginLocalFoldersSettingsProps {
 }
 
 function PluginLocalFoldersSettings({ pluginId, companyId, declarations }: PluginLocalFoldersSettingsProps) {
-  const { data, isLoading, error } = useQuery({
+  const foldersQuery = useQuery({
     queryKey: companyId
       ? queryKeys.plugins.localFolders(pluginId, companyId)
       : ["plugins", pluginId, "companies", "none", "local-folders"],
     queryFn: () => pluginsApi.listLocalFolders(pluginId, companyId!),
     enabled: !!companyId,
   });
+  const foldersView = useQueryView(foldersQuery);
 
-  const statusByKey = new Map((data?.folders ?? []).map((folder) => [folder.folderKey, folder]));
+  // Loaded folder statuses stay on the rows through an outage.
+  const statusByKey = new Map((foldersQuery.data?.folders ?? []).map((folder) => [folder.folderKey, folder]));
 
   if (!companyId) {
     return (
@@ -616,16 +638,17 @@ function PluginLocalFoldersSettings({ pluginId, companyId, declarations }: Plugi
         <FolderOpen className="h-4 w-4 text-muted-foreground" />
         <h3 className="text-sm font-medium">{t("pluginSettings.localFolders")}</h3>
       </div>
-      {error ? (
-        <div className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {(error as Error).message || t("pluginSettings.failedToLoadLocalFolderSettings")}
-        </div>
+      {foldersView.kind === "error" ? (
+        <QueryErrorState
+          size="panel"
+          error={foldersQuery.error}
+          action="load local folder settings"
+          onRetry={foldersView.retry}
+          retrying={foldersView.isFetching}
+        />
       ) : null}
-      {isLoading ? (
-        <div className="flex items-center gap-2 py-3 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          {t("pluginSettings.loadingLocalFolders")}
-        </div>
+      {foldersView.kind === "loading" || foldersView.kind === "reconnecting" ? (
+        <QueryPlaceholder size="panel" label="Loading local folders" className="py-3" />
       ) : (
         <div className="space-y-3">
           {declarations.map((declaration) => (
@@ -679,7 +702,7 @@ function PluginLocalFolderRow({ pluginId, companyId, declaration, status }: Plug
       queryClient.invalidateQueries({ queryKey: queryKeys.plugins.localFolders(pluginId, companyId) });
     },
     onError: (err: Error) => {
-      setMessage({ type: "error", text: err.message || t("pluginSettings.failedToSaveLocalFolder") });
+      setMessage({ type: "error", text: describeError(err).body });
     },
   });
 
@@ -1002,7 +1025,7 @@ function PluginConfigForm({ pluginId, companyId, schema, initialValues, isLoadin
       setTimeout(() => setSaveMessage(null), 3000);
     },
     onError: (err: Error) => {
-      setSaveMessage({ type: "error", text: err.message || t("pluginSettings.failedToSaveConfiguration") });
+      setSaveMessage({ type: "error", text: describeError(err).body });
     },
   });
 
@@ -1020,7 +1043,7 @@ function PluginConfigForm({ pluginId, companyId, schema, initialValues, isLoadin
       }
     },
     onError: (err: Error) => {
-      setTestResult({ type: "error", text: err.message || t("pluginSettings.configurationTestFailed") });
+      setTestResult({ type: "error", text: describeError(err).body });
     },
   });
 

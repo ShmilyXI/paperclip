@@ -21,6 +21,7 @@ import {
   OnboardingLoginCard,
 } from "../AdapterLoginChrome";
 import { ModelSourceTiles, type ModelConnectionMode } from "../onboarding/ModelSourceTiles";
+import { useQueryView } from "../QueryView";
 import { CredentialModeLink } from "../onboarding/CredentialModeLink";
 import { FooterNav } from "../onboarding/FooterNav";
 import { MAKE_ROOM, CARD_ENTER } from "../onboarding/onboarding-motion";
@@ -71,6 +72,10 @@ export function AgentProviderConnection({
   };
 }) {
   const health = useQuery({ queryKey: queryKeys.health, queryFn: healthApi.get, enabled: localEnvironment });
+  // Read health through the shared view: a transient failure keeps the saved
+  // local-login path usable,anda no-data failure shows readable copy.
+
+  const healthView = useQueryView(health);
   const canUseLocalLogin = localEnvironment && (health.data?.localAiLoginSupported ?? health.data?.deploymentMode === "local_trusted");
   const epoch = useRef(0);
   useEffect(
@@ -123,6 +128,10 @@ export function AgentProviderConnection({
   const storedLogin = managedAccount
     ? { ...savedKeys.storedLogin, data: undefined, isPending: false, isError: false }
     : savedKeys.storedLogin;
+  // Read the saved-login status through the shared view: cached results stay
+  // visible during a transient refetch failure,and a no-data failure shows copy.
+
+  const storedLoginView = useQueryView(storedLogin);
   const savedManagedAccount = useRef<{ connectionId: string; grantId: string } | null>(null);
   const method = methodChoice ?? (
     (savedKeys.subscriptions.length > 0 || (adapterType === "claude_local" && !savedSubscription && storedLogin.data))
@@ -158,7 +167,6 @@ export function AgentProviderConnection({
         adapterType,
         environmentId ?? undefined,
       ),
-    retry: false,
     enabled: !managedAccount && !advanced && adapterType !== "antigravity_runtime",
   });
   async function connect() {
@@ -413,7 +421,7 @@ export function AgentProviderConnection({
           </div>
         )}
       </motion.div>
-      {method === "subscription" && storedLogin.isError && (
+      {!managedAccount && method === "subscription" && storedLoginView.kind === "error" && (
         <p role="alert" className="mt-4 text-sm text-destructive">
           {t("agentProviderConnection.couldNotCheckYourSaved")}
         </p>
@@ -423,8 +431,8 @@ export function AgentProviderConnection({
           {testError ?? error}
         </p>
       )}
-      {localEnvironment && health.isError && (
-        <p role="alert" className="mt-4 text-sm text-destructive">{t("agentProviderConnection.couldNotPrepareSignIn")}</p>
+      {localEnvironment && healthView.kind === "error" && (
+        <p role="alert" className="mt-4 text-sm text-destructive">Could not prepare sign-in. Reload this page to try again.</p>
       )}
       <FooterNav
         onBack={() => {

@@ -72,6 +72,7 @@ import {
   writeStoredImportJob,
 } from "../lib/import-job-watch";
 import { Badge } from "@/components/ui/badge";
+import { describeError } from "@/api/errors";
 
 // ── Import-specific helpers ───────────────────────────────────────────
 
@@ -1103,7 +1104,6 @@ export function CompanyImport() {
   const { data: experimentalSettings } = useQuery({
     queryKey: queryKeys.instance.experimentalSettings,
     queryFn: () => instanceSettingsApi.getExperimental(),
-    retry: false,
   });
   const runnerInstalled = availableAdapterTypes?.has("paperclip_runner") === true;
   const nativeRunnerAvailable = runnerInstalled && experimentalSettings?.enableNativeRunner === true;
@@ -1245,8 +1245,8 @@ export function CompanyImport() {
       if (generation !== previewGenerationRef.current) return;
       pushToast({
         tone: "error",
-        title: t("companyImport.previewFailed"),
-        body: err instanceof Error ? err.message : t("companyImport.failedToPreviewImport"),
+        title: "Preview failed",
+        body: describeError(err).body,
       });
     },
   });
@@ -1399,8 +1399,8 @@ export function CompanyImport() {
       setResumedWatchJobId(null);
       pushToast({
         tone: "error",
-        title: t("companyImport.importFailed"),
-        body: err instanceof Error ? err.message : t("companyImport.failedToApplyImport"),
+        title: "Import failed",
+        body: describeError(err).body,
       });
     },
   });
@@ -1453,8 +1453,8 @@ export function CompanyImport() {
     } catch (err) {
       pushToast({
         tone: "error",
-        title: t("companyImport.packageReadFailed"),
-        body: err instanceof Error ? err.message : t("companyImport.failedToReadFolder"),
+        title: "Package read failed",
+        body: describeError(err).body,
       });
     }
   }
@@ -1663,7 +1663,7 @@ export function CompanyImport() {
         }
         nextActivated.add(item.key);
       } catch (err) {
-        nextFailures[item.key] = err instanceof Error ? err.message : t("companyImport.activationFailed");
+        nextFailures[item.key] = describeError(err).body;
       }
     }
     setActivatedKeys(nextActivated);
@@ -2180,16 +2180,14 @@ export function CompanyImport() {
             </p>
           </div>
         )}
-        {previewMutation.isError &&
+        {previewMutation.isError && // query-error-ok: mutation outcome for the upload the user just started, not a read
           !previewMutation.isPending &&
           previewMutation.variables === previewGenerationRef.current && (
           <div className="mt-3 rounded-md border border-destructive/40 bg-destructive/5 px-3 py-2.5">
             <p className="text-xs text-destructive">
-              {t("companyImport.previewErrorLabel")}{" "}
-              {previewMutation.error instanceof Error
-                ? previewMutation.error.message
-                : t("companyImport.theRequestDidNotComplete")}{" "}
-              {t("companyImport.previewErrorRetry")}
+              Preview failed:{" "}
+              {describeError(previewMutation.error).body}{" "}
+              Retry, or re-export the package without large attachments to shrink it.
             </p>
           </div>
         )}
@@ -2278,14 +2276,13 @@ export function CompanyImport() {
               </p>
             </div>
           )}
-          {importMutation.isError && !importMutation.isPending && (
+          {importMutation.isError && !importMutation.isPending && ( // query-error-ok: mutation outcome for the import the user just started, not a read
             <div className="mx-5 mt-3 rounded-md border border-destructive/40 bg-destructive/5 px-3 py-2.5">
               <p className="text-xs text-destructive">
-                {t("companyImport.importFailed")}:{" "}
-                {importMutation.error instanceof Error
-                  ? importMutation.error.message
-                  : t("companyImport.theRequestDidNotComplete")}{" "}
-                {t("companyImport.nothingMayHaveBeenCreatedOrThe")}
+                Import failed:{" "}
+                {describeError(importMutation.error).body}{" "}
+                Nothing may have been created, or the import stopped partway — check the target company
+                before retrying.
               </p>
             </div>
           )}

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/context/ToastContext";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { gatewaysQueryKey } from "../NewGatewayDialog";
+import { describeError } from "@/api/errors";
 
 /**
  * Advanced tab — raw protocol/transport details, config JSON and the archive
@@ -58,8 +59,8 @@ export function GatewayAdvancedPanel({
     },
     onError: (error) =>
       pushToast({
-        title: t("gatewayAdvancedPanel.couldnTArchiveTheGateway"),
-        body: error instanceof Error ? error.message : String(error),
+        title: "Couldn't archive the gateway",
+        body: describeError(error).body,
         tone: "error",
       }),
   });

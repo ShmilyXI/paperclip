@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { useQueryView } from "@/components/QueryView";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
@@ -24,6 +25,7 @@ export function CaseDocumentPreview({ caseIdentifier, document: documentRef }: {
     queryFn: () => taskRef ? issuesApi.getDocument(taskRef.taskId, taskRef.key) : casesApi.getDocument(caseIdentifier, documentRef.key),
     enabled: open,
   });
+  const currentView = useQueryView(current);
   const document = current.data;
   const title = document?.title ?? documentRef.document.title ?? documentRef.key;
   return <Dialog open={open} onOpenChange={setOpen}>
@@ -42,7 +44,7 @@ export function CaseDocumentPreview({ caseIdentifier, document: documentRef }: {
           {document?.latestRevisionNumber != null ? t("caseDocumentPreview.revisionSuffix", { number: document.latestRevisionNumber }) : ""}
         </DialogDescription>
       </DialogHeader>
-      {current.isLoading ? <p className="text-sm text-muted-foreground">{t("caseDocumentPreview.loadingDocument")}</p> : current.isError ? <p role="alert" className="text-sm text-destructive">{t("caseDocumentPreview.thisDocumentCouldnTBe")}</p> : document ? <div className="space-y-6">
+      {current.isLoading ? <p className="text-sm text-muted-foreground">Loading document…</p> : (currentView.kind === "error") ? <p role="alert" className="text-sm text-destructive">This document couldn’t be loaded.</p> : document ? <div className="space-y-6">
         <SourceTrustBadge sourceTrust={document.sourceTrust} artifactLabel="document" />
         {document.body ? <MarkdownBody linkIssueReferences linkCaseReferences>{document.body}</MarkdownBody> : <p className="text-sm text-muted-foreground">{t("caseDocumentPreview.thisDocumentIsEmpty")}</p>}
         <details open={historyOpen} onToggle={event => setHistoryOpen(event.currentTarget.open)} className="space-y-3">

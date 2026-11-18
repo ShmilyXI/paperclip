@@ -12,8 +12,10 @@ import { ProjectTile } from "../components/ProjectTile";
 import { StatusBadge } from "../components/StatusBadge";
 import { MembershipAction } from "../components/MembershipAction";
 import { StarToggle } from "../components/StarToggle";
+import { ArtifactEmptyGraphic } from "@/components/artifacts/v1/ArtifactEmptyGraphic";
 import { EmptyState } from "../components/EmptyState";
 import { PageSkeleton } from "../components/PageSkeleton";
+import { QueryErrorState, useQueryView } from "../components/QueryView";
 import { formatDate, formatNumber, formatProjectBudget, projectUrl } from "../lib/utils";
 import {
   isStarred,
@@ -79,11 +81,13 @@ export function Projects() {
     setBreadcrumbs([{ label: t("common.projects") }]);
   }, [setBreadcrumbs]);
 
-  const { data: allProjects, isLoading, error } = useQuery({
+  const projectsQuery = useQuery({
     queryKey: queryKeys.projects.list(selectedCompanyId!),
     queryFn: () => projectsApi.list(selectedCompanyId!),
     enabled: !!selectedCompanyId,
   });
+  const { data: allProjects, isLoading } = projectsQuery;
+  const projectsView = useQueryView(projectsQuery);
   const membershipsQuery = useResourceMemberships(selectedCompanyId);
   const membershipMutation = useResourceMembershipMutation(selectedCompanyId);
   const projects = useMemo(
@@ -120,8 +124,21 @@ export function Projects() {
     return <EmptyState icon={Hexagon} message={t("projects.selectAnOrganizationToView")} />;
   }
 
-  if (isLoading) {
+  // Keep a loaded list on screen through a failed refetch; only a real
+  // failure, or an outage before the first load, replaces the page.
+  if (isLoading || projectsView.kind === "reconnecting") {
     return <PageSkeleton variant="list" />;
+  }
+  if (projectsView.kind === "error") {
+    return (
+      <QueryErrorState
+        size="page"
+        error={projectsView.error}
+        action="load projects"
+        onRetry={projectsView.retry}
+        retrying={projectsView.isFetching}
+      />
+    );
   }
 
   return (
@@ -129,13 +146,13 @@ export function Projects() {
       <ProjectsToolbar query={query} onQueryChange={setQuery} sortField={sortField} sortDir={sortDir}
         onSortChange={(field, direction) => { setSortField(field); setSortDir(direction); }} onNewProject={openNewProject} />
 
-      {error && <p className="text-sm text-destructive">{error.message}</p>}
-
       {!isLoading && projects.length === 0 && (
         <EmptyState
           icon={Hexagon}
-          message={t("projects.noProjectsYet")}
-          action={t("projects.addProject")}
+          graphic={<ArtifactEmptyGraphic stack />}
+          message="No projects yet."
+          action="Create project"
+          hideActionIcon
           onAction={openNewProject}
         />
       )}

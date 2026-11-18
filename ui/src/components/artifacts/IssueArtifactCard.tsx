@@ -27,6 +27,7 @@ import {
   CSV_PREVIEW_MAX_BYTES,
   loadArtifactCsv,
 } from "@/lib/artifact-card-data";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import {
   CommitCard,
   DataCard,
@@ -84,9 +85,13 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
     queryKey: ["artifact-csv", props.id, props.contentPath, props.updatedAt],
     queryFn: ({ signal }) => loadArtifactCsv(props.contentPath, signal),
     enabled: localCsv && !tooLarge && csvRequested,
-    retry: false,
     staleTime: Infinity,
   });
+  // Read the CSV preview through the shared view: a loaded preview stays
+  // visible during a transient refetch failure,and a no-data failure shows
+  // readable copy with Retry.
+
+  const dataView = useQueryView(data);
   const contentPath = artifactUrl(props.contentPath);
   const downloadPath = artifactUrl(props.downloadPath);
   const onOpen = () => {
@@ -164,7 +169,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
         actions={
           <>
             {openTextAction}
-            {localCsv && !tooLarge && !data.isError ? (
+            {localCsv && !tooLarge && dataView.kind !== "error" ? (
               <Button
                 variant="outline"
                 size="sm"
@@ -177,22 +182,13 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
           </>
         }
       />
-      {csv && (tooLarge || data.isError || !localCsv) && (
+      {csv && (tooLarge || dataView.kind === "error" || !localCsv) && (
         <div className="px-2 text-xs text-muted-foreground" role="status">
           {tooLarge
-            ? t("issueArtifactCard.csvTooLargeToPreview")
-            : data.isError
-              ? data.error.message
-              : t("issueArtifactCard.csvPreviewIsUnavailableDownload")}
-          {data.isError && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => void data.refetch()}
-            >
-              {t("issueArtifactCard.retryPreview")}
-            </Button>
-          )}
+            ? "CSV is too large to preview. Download the file to view it."
+            : dataView.kind === "error"
+              ? <QueryErrorState size="inline" error={dataView.error} action="load the CSV preview" onRetry={dataView.retry} retrying={dataView.isFetching} />
+              : "CSV preview is unavailable. Download the file to view it."}
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, ExternalLink, Loader2, MoreHorizontal, Plus, Search
 import { aiConnectionRouterAppDefinition, type AiConnectionPool, type AiConnectionPoolConfig, type AiConnectionPoolMember, type AiManagedConnectionSummary, type ToolConnection } from "@paperclipai/shared";
 import { aiConnectionsApi } from "@/api/ai-connections";
 import { aiConnectionPoolsApi, type PoolInspection } from "@/api/ai-connection-pools";
+import { describeError } from "@/api/errors";
 import { toolsApi } from "@/api/tools";
 import { agentsApi } from "@/api/agents";
 import { useCompany } from "@/context/CompanyContext";
@@ -16,6 +17,7 @@ import { AppLogo } from "@/pages/apps/AppLogo";
 import { AppDetailHeader } from "@/pages/apps/AppDetail";
 import { StepHeader } from "@/features/connections/ConnectionSetupHeader";
 import { Button } from "@/components/ui/button";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -48,6 +50,9 @@ function PoolConnector({ companyId, pluginKey, connection }: { companyId: string
   const accountsQuery = useQuery({ queryKey: ["pool-accounts", companyId], queryFn: () => aiConnectionsApi.list(companyId) });
   const poolsQuery = useQuery({ queryKey: ["ai-connection-pools", companyId], queryFn: () => aiConnectionPoolsApi.list(companyId), enabled: accountsQuery.data?.canManageConnections === true });
   const galleryQuery = useQuery({ queryKey: queryKeys.apps.gallery(companyId), queryFn: () => toolsApi.listGallery(companyId) });
+  const accountsView = useQueryView(accountsQuery);
+  const poolsView = useQueryView(poolsQuery);
+  const galleryView = useQueryView(galleryQuery);
   const [editing, setEditing] = useState<AiConnectionPool>();
   const [draft, setDraft] = useState(emptyConfig);
   const [step, setStep] = useState(0);
@@ -66,6 +71,7 @@ function PoolConnector({ companyId, pluginKey, connection }: { companyId: string
   const canManage = Boolean(accountsQuery.data?.canManageConnections);
   const disabled = busy || !canManage || unavailable;
   const agentsQuery = useQuery({ queryKey: queryKeys.agents.list(companyId), queryFn: () => agentsApi.list(companyId), enabled: Boolean(connection) && canManage });
+  const agentsView = useQueryView(agentsQuery);
   const usingAgents = (agentsQuery.data ?? []).filter(agent => agent.status !== "terminated" && agent.runtimeConfig?.aiConnection?.mode === "router" && agent.runtimeConfig.aiConnection.connectionId === connection?.id).sort((a, b) => a.name.localeCompare(b.name));
   useEffect(() => {
     if (connection && !editing && canManage) {
@@ -99,27 +105,29 @@ function PoolConnector({ companyId, pluginKey, connection }: { companyId: string
       await invalidate();
       pushToast({ title: connection ? t("aiConnectionPoolConnector.connectionPoolSaved") : t("aiConnectionPoolConnector.connectionPoolCreated"), tone: "success" });
       if (!connection) navigate(`/apps/${saved.id}/permissions`);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : String(cause)); }
+    } catch (cause) { setError(describeError(cause).body); }
     finally { setBusy(false); }
   }
   async function remove() {
     if (!editing) return;
     setBusy(true); setError("");
     try { await aiConnectionPoolsApi.remove(companyId, editing.id, editing.revision); await invalidate(); navigate("/apps"); }
-    catch (cause) { setError(cause instanceof Error ? cause.message : String(cause)); }
+    catch (cause) { setError(describeError(cause).body); }
     finally { setBusy(false); }
   }
   function move(index: number, offset: number) {
     setDraft(value => { const members = [...value.members]; [members[index], members[index + offset]] = [members[index + offset]!, members[index]!]; return { ...value, members }; });
   }
-  const loadError = accountsQuery.error ?? poolsQuery.error ?? galleryQuery.error;
-  if (accountsQuery.isSuccess && !canManage) return <p role="alert" className="text-sm text-muted-foreground">{t("aiConnectionPoolConnector.aConnectionManagerCanView")}</p>;
-  if (loadError) return <div className="space-y-4"><p role="alert" className="text-sm text-destructive">{loadError.message}</p><Button variant="outline" onClick={() => { void accountsQuery.refetch(); void poolsQuery.refetch(); void galleryQuery.refetch(); }}>{t("common.tryAgain")}</Button></div>;
-  if (accountsQuery.isPending || poolsQuery.isPending || galleryQuery.isPending || (connection && !editing && poolsQuery.data?.some(pool => pool.id === connection.id))) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("aiConnectionPoolConnector.loadingConnections")}</p>;
-  if (connection && !editing) return <p role="alert">{t("aiConnectionPoolConnector.thisConnectionPoolIsNo")}</p>;
-  const name = entry?.name ?? t("aiConnectionPoolConnector.aiConnectionPool");
-  const logoEntry = entry ?? aiConnectionRouterAppDefinition(pluginKey, { name, description: t("aiConnectionPoolConnector.useExistingAiConnections") });
-  const orderedMembers = <ol aria-label={t("aiConnectionPoolConnector.connectionOrder")} className="divide-y divide-border rounded-lg border border-border">
+  // Loaded data stays on screen through a transient refetch failure; only a real failure replaces the pool.
+  const failedViews = [accountsView, poolsView, galleryView].filter(view => view.kind === "error");
+  const reconnecting = [accountsView, poolsView, galleryView].some(view => view.kind === "reconnecting");
+  if (accountsQuery.data && !canManage) return <p role="alert" className="text-sm text-muted-foreground">A connection manager can view and edit connection pools.</p>;
+  if (failedViews.length > 0) return <QueryErrorState error={failedViews[0]!.error} action="load connections" onRetry={() => failedViews.forEach(view => view.retry())} retrying={failedViews.some(view => view.isFetching)} />;
+  if (accountsQuery.isPending || poolsQuery.isPending || galleryQuery.isPending || reconnecting || (connection && !editing && poolsQuery.data?.some(pool => pool.id === connection.id))) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Loading connections…</p>;
+  if (connection && !editing) return <p role="alert">This connection pool is no longer available.</p>;
+  const name = entry?.name ?? "AI connection pool";
+  const logoEntry = entry ?? aiConnectionRouterAppDefinition(pluginKey, { name, description: "Use existing AI connections." });
+  const orderedMembers = <ol aria-label="Connection order" className="divide-y divide-border rounded-lg border border-border">
     {draft.members.map((member, index) => {
       const account = accounts.find(account => account.id === member.binding.connectionId && account.grantId === member.binding.grantId);
       const provider = AI_PROVIDERS[member.binding.provider];
@@ -156,9 +164,9 @@ function PoolConnector({ companyId, pluginKey, connection }: { companyId: string
           {draft.members.map((member, index) => <div key={member.id} className="space-y-2"><p className="text-sm font-medium">{accounts.find(account => account.id === member.binding.connectionId)?.name ?? t("aiConnectionPoolConnector.connectionUnavailable")}</p><div className="grid gap-3 sm:grid-cols-2"><label className="space-y-1 text-xs text-muted-foreground">{t("common.model")}<Input aria-label={t("aiConnectionPoolConnector.modelForConnection", { index: index + 1 })} value={member.profile.model} onChange={event => setDraft({ ...draft, members: draft.members.map(row => row.id === member.id ? { ...row, profile: { ...row.profile, model: event.target.value } } : row) })} /></label><label className="space-y-1 text-xs text-muted-foreground">{t("aiConnectionPoolConnector.effortOptional")}<Input aria-label={t("aiConnectionPoolConnector.effortForConnection", { index: index + 1 })} value={member.profile.effort ?? ""} onChange={event => { const { effort: _old, ...profile } = member.profile; setDraft({ ...draft, members: draft.members.map(row => row.id === member.id ? { ...row, profile: { ...profile, ...(event.target.value.trim() ? { effort: event.target.value.trim() } : {}) } } : row) }); }} /></label></div></div>)}
         </fieldset></details>
         <section aria-labelledby="pool-used-by" className="space-y-3">
-          <h2 id="pool-used-by" className="text-sm font-semibold">{t("aiConnectionPoolConnector.usedBy")}</h2>
-          {agentsQuery.isPending ? <p role="status" className="text-sm text-muted-foreground">{t("aiConnectionPoolConnector.loadingAgents")}</p>
-            : agentsQuery.isError ? <div className="flex items-center gap-2"><p role="alert" className="text-sm text-muted-foreground">{t("aiConnectionPoolConnector.couldnTLoadAgents")}</p><Button variant="ghost" size="sm" onClick={() => void agentsQuery.refetch()}>{t("common.retry")}</Button></div>
+          <h2 id="pool-used-by" className="text-sm font-semibold">Used by</h2>
+          {agentsQuery.isPending || agentsView.kind === "reconnecting" ? <p role="status" className="text-sm text-muted-foreground">Loading agents…</p>
+            : agentsView.kind === "error" ? <QueryErrorState size="inline" error={agentsQuery.error} action="load agents" onRetry={agentsView.retry} retrying={agentsView.isFetching} />
             : usingAgents.length ? <ul className="flex flex-wrap gap-x-6 gap-y-3">{usingAgents.map(agent => <li key={agent.id} className="min-w-0 max-w-full"><Link to={`/agents/${agent.id}`} className="inline-flex max-w-full rounded-sm hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><AgentIdentity agent={agent} /></Link></li>)}</ul>
             : <p className="text-sm text-muted-foreground">{t("aiConnectionPoolConnector.noAgentsYet")}</p>}
         </section>

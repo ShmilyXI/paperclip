@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Activity } from "lucide-react";
 import { routinesApi } from "@/api/routines";
 import { EmptyState } from "@/components/EmptyState";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { RoutineActivityRow } from "@/components/RoutineActivityRow";
-import { Button } from "@/components/ui/button";
 import { queryKeys } from "@/lib/queryKeys";
 
 export function RoutineAuditActivity({
@@ -27,8 +27,11 @@ export function RoutineAuditActivity({
       });
     },
   });
+  const activityView = useQueryView(activity);
 
-  if (activity.isLoading) {
+  // A loaded feed stays on screen through a failed refetch; an outage before
+  // the first load reads as loading, and only a real failure shows copy.
+  if (activityView.kind === "loading" || activityView.kind === "reconnecting") {
     return (
       <div className="border-y border-border py-14 text-center text-sm text-muted-foreground">
         {t("routineAuditActivity.loadingRoutineActivity")}
@@ -36,20 +39,18 @@ export function RoutineAuditActivity({
     );
   }
 
-  if (activity.error) {
+  if (activityView.kind === "error") {
     return (
-      <div className="flex flex-col items-center gap-3 border-y border-border py-14 text-center">
-        <p className="text-sm text-muted-foreground">
-          {activity.error instanceof Error ? activity.error.message : t("routineAuditActivity.failedToLoadRoutineActivity")}
-        </p>
-        <Button variant="outline" size="sm" onClick={() => activity.refetch()}>
-          {t("common.tryAgain")}
-        </Button>
-      </div>
+      <QueryErrorState
+        error={activityView.error}
+        action="load routine activity"
+        onRetry={activityView.retry}
+        retrying={activityView.isFetching}
+      />
     );
   }
 
-  const events = activity.data ?? [];
+  const events = activityView.data ?? [];
   if (events.length === 0) {
     return <EmptyState icon={Activity} message={t("routineAuditActivity.noRoutineActivityYet")} />;
   }

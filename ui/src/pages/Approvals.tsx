@@ -14,6 +14,7 @@ import { Tabs } from "@/components/ui/tabs";
 import { ShieldCheck } from "lucide-react";
 import { ApprovalCard } from "../components/ApprovalCard";
 import { PageSkeleton } from "../components/PageSkeleton";
+import { QueryErrorState, useQueryView } from "../components/QueryView";
 import { Badge } from "@/components/ui/badge";
 
 type StatusFilter = "pending" | "all";
@@ -32,11 +33,13 @@ export function Approvals() {
     setBreadcrumbs([{ label: t("common.approvals") }]);
   }, [setBreadcrumbs]);
 
-  const { data, isLoading, error } = useQuery({
+  const approvalsQuery = useQuery({
     queryKey: queryKeys.approvals.list(selectedCompanyId!),
     queryFn: () => approvalsApi.list(selectedCompanyId!),
     enabled: !!selectedCompanyId,
   });
+  const { data, isLoading } = approvalsQuery;
+  const approvalsView = useQueryView(approvalsQuery);
 
   const { data: agents } = useQuery({
     queryKey: queryKeys.agents.list(selectedCompanyId!),
@@ -81,8 +84,21 @@ export function Approvals() {
     return <p className="text-sm text-muted-foreground">{t("approvals.selectAnOrganizationFirst")}</p>;
   }
 
-  if (isLoading) {
+  // Keep loaded approvals on screen through a failed refetch; only a real
+  // failure, or an outage before the first load, replaces the page.
+  if (isLoading || approvalsView.kind === "reconnecting") {
     return <PageSkeleton variant="approvals" />;
+  }
+  if (approvalsView.kind === "error") {
+    return (
+      <QueryErrorState
+        size="page"
+        error={approvalsView.error}
+        action="load approvals"
+        onRetry={approvalsView.retry}
+        retrying={approvalsView.isFetching}
+      />
+    );
   }
 
   return (
@@ -103,8 +119,7 @@ export function Approvals() {
         </Tabs>
       </div>
 
-      {error && <p className="text-sm text-destructive">{error.message}</p>}
-      {actionError && <p className="text-sm text-destructive">{actionError}</p>}
+      {actionError && <p role="alert" className="text-sm text-destructive">{actionError}</p>}
 
       {filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">

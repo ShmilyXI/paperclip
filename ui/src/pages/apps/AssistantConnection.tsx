@@ -4,7 +4,7 @@ import { assistantClientNames, mcpAuthorizationHandoffInstructions, mcpInvitatio
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Copy, ExternalLink, Globe, Paperclip, Plug, Terminal } from "lucide-react";
 import { publicMcpApi } from "@/api/publicMcp";
-import { ApiError } from "@/api/client";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { useCompany } from "@/context/CompanyContext";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 import { Link } from "@/lib/router";
@@ -32,18 +32,25 @@ function AssistantIcon({ assistant }: { assistant: Assistant }) {
 export function useAssistantConnections(poll = false) {
   const { selectedCompanyId } = useCompany();
   const query = useQuery({
-    queryKey: connectionsKey, queryFn: publicMcpApi.connections, retry: false,
+    queryKey: connectionsKey, queryFn: publicMcpApi.connections,
     enabled: Boolean(selectedCompanyId), refetchInterval: poll ? 5000 : false,
   });
-  return { ...query, rows: (query.data ?? []).filter(row => row.companyId === selectedCompanyId && !row.revokedAt && !row.scopes.includes("paperclip:agent")) };
+  const view = useQueryView(query);
+  return {
+    ...query,
+    view,
+    /** Loaded rows are shown through a transient refetch failure (`stale`) as well as `ready`. */
+    loaded: view.kind === "ready" || view.kind === "stale",
+    rows: (query.data ?? []).filter(row => row.companyId === selectedCompanyId && !row.revokedAt && !row.scopes.includes("paperclip:agent")),
+  };
 }
 
 /** Inbound assistant access belongs beside the existing outbound connectors. */
 export function AssistantConnectionCard({ onNavigate }: { onNavigate: (href: string) => void }) {
   const connections = useAssistantConnections();
   const active = connections.rows;
-  const action = !connections.isSuccess ? t("common.open") : active.length ? t("assistantConnection.manage") : t("assistantConnection.setUp");
-  return <div role="listitem" data-app-slug="assistant-connection" data-connected={connections.isSuccess ? String(active.length > 0) : undefined} className="overflow-hidden rounded-xl border border-border">
+  const action = !connections.loaded ? "Open" : active.length ? "Manage" : "Set up";
+  return <div role="listitem" data-app-slug="assistant-connection" data-connected={connections.loaded ? String(active.length > 0) : undefined} className="overflow-hidden rounded-xl border border-border">
     <div className="flex flex-wrap items-center gap-3 px-4 py-4">
       <Paperclip className="size-9 shrink-0 p-1 text-foreground" aria-hidden="true" />
       <div className="min-w-0 flex-1">
@@ -52,13 +59,12 @@ export function AssistantConnectionCard({ onNavigate }: { onNavigate: (href: str
       </div>
       <Button type="button" size="sm" variant="outline" onClick={() => onNavigate(ASSISTANT_CONNECTION_PATH)} aria-label={t("assistantConnection.actionAssistantConnectionMcp", { action })}>{action}</Button>
     </div>
-    {connections.isPending && <p className="border-t border-border px-4 py-3 text-xs text-muted-foreground">{t("assistantConnection.checkingYourConnectionStatus")}</p>}
-    {connections.isError && <div role="alert" className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3">
-      <p className="text-xs text-destructive">{t("assistantConnection.couldnTLoadYourConnection")}</p>
-      <Button size="sm" variant="ghost" disabled={connections.isFetching} onClick={() => void connections.refetch()}>{t("common.tryAgain")}</Button>
+    {(connections.isPending || connections.view.kind === "reconnecting") && <p className="border-t border-border px-4 py-3 text-xs text-muted-foreground">Checking your connection status…</p>}
+    {connections.view.kind === "error" && <div className="border-t border-border px-4 py-3">
+      <QueryErrorState error={connections.error} action="load your connection status" onRetry={connections.view.retry} retrying={connections.view.isFetching} />
     </div>}
-    {connections.isSuccess && active.length > 0 && <div className="flex flex-wrap items-center gap-2 border-t border-border px-4 py-3 text-sm">
-      {active.map(row => <Identity key={row.id} name={assistantConnectionDisplayName(row)} avatarUrl={row.user?.image} initials={deriveInitials(row.user?.name ?? t("assistantConnection.you"))} size="sm" />)}
+    {connections.loaded && active.length > 0 && <div className="flex flex-wrap items-center gap-2 border-t border-border px-4 py-3 text-sm">
+      {active.map(row => <Identity key={row.id} name={assistantConnectionDisplayName(row)} avatarUrl={row.user?.image} initials={deriveInitials(row.user?.name ?? "You")} size="sm" />)}
     </div>}
   </div>;
 }
@@ -80,10 +86,10 @@ function CopyValue({ value, label }: { value: string; label: string }) {
   </div>;
 }
 
-function setupError(error: Error): string {
-  if (error instanceof ApiError && error.status === 401) return "Sign in to connect an assistant. This requires a Paperclip instance with authenticated user accounts.";
-  if (error instanceof ApiError && error.status === 404) return "Assistant connections need an authenticated instance with a public HTTPS URL. Ask your instance administrator to configure the public URL, then try again.";
-  return "Couldn’t load assistant setup. Try again in a moment.";
+/** Setup copy that depends on the instance, not on the request: signed out, or no public URL configured. */
+function setupUnavailableCopy(errorKind: "auth" | "not_found"): string {
+  if (errorKind === "auth") return "Sign in to connect an assistant. This requires a Paperclip instance with authenticated user accounts.";
+  return "Assistant connections need an authenticated instance with a public HTTPS URL. Ask your instance administrator to configure the public URL, then try again.";
 }
 
 export function AssistantConnection({ initialAssistant = "codex" }: { initialAssistant?: Assistant } = {}) {
@@ -91,7 +97,8 @@ export function AssistantConnection({ initialAssistant = "codex" }: { initialAss
   const { setBreadcrumbs } = useBreadcrumbs();
   const client = useQueryClient();
   const [assistant, setAssistant] = useState<Assistant>(initialAssistant);
-  const setup = useQuery({ queryKey: ["mcp-setup"], queryFn: publicMcpApi.setup, retry: false, refetchOnWindowFocus: "always", refetchOnMount: "always" });
+  const setup = useQuery({ queryKey: ["mcp-setup"], queryFn: publicMcpApi.setup, refetchOnWindowFocus: "always", refetchOnMount: "always" });
+  const setupView = useQueryView(setup);
   const connections = useAssistantConnections(setup.data?.enabled === true);
   const revoke = useMutation({ mutationFn: publicMcpApi.revoke, onSuccess: (_, id) => {
     client.setQueryData<McpConnection[]>(connectionsKey, rows => rows?.filter(row => row.id !== id));
@@ -112,8 +119,10 @@ export function AssistantConnection({ initialAssistant = "codex" }: { initialAss
         <div className="space-y-1"><p className="font-medium">{selectedCompany.name}</p><p className="text-sm text-muted-foreground">{t("assistantConnection.connectYourAssistantToPaperclip")}</p></div>
       </div>
     </header>
-    {setup.isPending && <p className="text-sm text-muted-foreground">{t("assistantConnection.loadingAssistantSetup")}</p>}
-    {setup.error && <div role="alert" className="space-y-3"><p className="text-sm text-destructive">{setupError(setup.error)}</p><Button variant="outline" onClick={() => void setup.refetch()}>{t("common.tryAgain")}</Button></div>}
+    {(setup.isPending || setupView.kind === "reconnecting") && <p className="text-sm text-muted-foreground">Loading assistant setup…</p>}
+    {setupView.kind === "error" && (setupView.errorKind === "auth" || setupView.errorKind === "not_found"
+      ? <div role="alert" className="space-y-3"><p className="text-sm text-destructive">{setupUnavailableCopy(setupView.errorKind)}</p><Button variant="outline" disabled={setupView.isFetching} onClick={setupView.retry}>Try again</Button></div>
+      : <QueryErrorState error={setup.error} action="load assistant setup" onRetry={setupView.retry} retrying={setupView.isFetching} />)}
     {setup.data && !setup.data.enabled && <section className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
       <h2 className="text-sm font-semibold">{t("assistantConnection.enableAssistantConnections")}</h2>
       <p className="text-sm text-muted-foreground">{t("assistantConnection.anInstanceAdministratorMustTurn")}</p>
@@ -139,10 +148,11 @@ export function AssistantConnection({ initialAssistant = "codex" }: { initialAss
       </details>
     </>}
     <section className="space-y-3" aria-labelledby="connected-assistants">
-      <h2 id="connected-assistants" className="text-sm font-semibold">{t("assistantConnection.yourConnectedAssistants")}</h2>
-      {connections.isPending && <p className="text-sm text-muted-foreground">{t("assistantConnection.loadingConnections")}</p>}
-      {(connections.error || revoke.error) && <p role="alert" className="text-sm text-destructive">{revoke.error ? t("assistantConnection.couldnTRevokeThisConnection") : t("assistantConnection.couldnTLoadYourConnections")} <button type="button" className="underline" onClick={() => void connections.refetch()}>{t("common.refresh")}</button></p>}
-      {connections.isSuccess && connections.rows.length === 0 && <p className="text-sm text-muted-foreground">{t("assistantConnection.noAssistantsConnected", { company: selectedCompany.name })}</p>}
+      <h2 id="connected-assistants" className="text-sm font-semibold">Your connected assistants</h2>
+      {(connections.isPending || connections.view.kind === "reconnecting") && <p className="text-sm text-muted-foreground">Loading connections…</p>}
+      {revoke.error && <p role="alert" className="text-sm text-destructive">Couldn’t revoke this connection. Try again. <button type="button" className="underline" onClick={() => void connections.refetch()}>Refresh</button></p>}
+      {connections.view.kind === "error" && <QueryErrorState error={connections.error} action="load your connections" onRetry={connections.view.retry} retrying={connections.view.isFetching} />}
+      {connections.loaded && connections.rows.length === 0 && <p className="text-sm text-muted-foreground">No assistants connected to {selectedCompany.name} yet.</p>}
       <div className="divide-y divide-border">{connections.rows.map(row => <div key={row.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
         <div className="min-w-0 flex-1 space-y-1"><Identity name={assistantConnectionDisplayName(row)} avatarUrl={row.user?.image} initials={deriveInitials(row.user?.name ?? t("assistantConnection.you"))} className="font-medium" /><p className="text-xs text-muted-foreground">{t("assistantConnection.connectedAsYou", {
           access: row.scopes.includes("paperclip:write") ? t("assistantConnection.readAndWrite") : t("assistantConnection.readOnly"),

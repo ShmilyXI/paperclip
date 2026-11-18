@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import {
-  AlertCircle,
   ArrowRight,
   ExternalLink,
   Inbox,
@@ -12,6 +11,7 @@ import {
   Loader2,
 } from "lucide-react";
 import type { CompanySecretProviderConfig, SecretProposalView } from "@paperclipai/shared";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { secretsApi } from "../../api/secrets";
 import { queryKeys } from "../../lib/queryKeys";
 import { cn } from "../../lib/utils";
@@ -151,6 +151,7 @@ export function ProposalsTab({
     enabled: Boolean(companyId),
   });
 
+  const proposalsView = useQueryView(proposalsQuery);
   const review = useProposalReview(companyId, providerConfigs);
   const proposals = proposalsQuery.data ?? EMPTY_PROPOSALS;
 
@@ -165,15 +166,20 @@ export function ProposalsTab({
     [proposals],
   );
 
-  if (proposalsQuery.isError) {
+  if (proposalsView.kind === "error") {
     return (
-      <div className="flex items-center gap-2 py-4 text-sm text-destructive">
-        <AlertCircle className="size-4" /> {t("proposalsTab.couldnTLoadProposalsTry")}
+      <div className="py-4">
+        <QueryErrorState
+          error={proposalsQuery.error}
+          action="load proposals"
+          onRetry={proposalsView.retry}
+          retrying={proposalsView.isFetching}
+        />
       </div>
     );
   }
 
-  if (proposalsQuery.isPending) {
+  if (proposalsQuery.isPending || proposalsView.kind === "reconnecting") {
     return (
       <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground">
         <Loader2 className="size-4 animate-spin" /> {t("proposalsTab.loadingProposals")}

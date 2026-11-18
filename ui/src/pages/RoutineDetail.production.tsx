@@ -26,6 +26,8 @@ import { buildMarkdownMentionOptions } from "../lib/company-members";
 import { ToggleSwitch } from "@/components/ui/toggle-switch";
 import { EmptyState } from "../components/EmptyState";
 import { PageSkeleton } from "../components/PageSkeleton";
+import { QueryErrorState, useQueryView } from "../components/QueryView";
+import { describeError } from "../api/errors";
 import { type InlineEntityOption } from "../components/InlineEntitySelector";
 import { type MarkdownEditorRef, type MentionOption } from "../components/MarkdownEditor";
 import {
@@ -197,11 +199,13 @@ export function RoutineDetail() {
     [navigate, routineId],
   );
 
-  const { data: routine, isLoading, error } = useQuery({
+  const routineQuery = useQuery({
     queryKey: queryKeys.routines.detail(routineId!),
     queryFn: () => routinesApi.get(routineId!),
     enabled: !!routineId,
   });
+  const { data: routine, isLoading } = routineQuery;
+  const routineView = useQueryView(routineQuery);
   const activeIssueId = routine?.activeIssue?.id;
   const { data: liveRuns } = useQuery({
     queryKey: queryKeys.issues.liveRuns(activeIssueId!),
@@ -378,7 +382,7 @@ export function RoutineDetail() {
       } catch (copyError) {
         pushToast({
           title: `Failed to copy ${label.toLowerCase()}`,
-          body: copyError instanceof Error ? copyError.message : t("routineDetail.clipboardAccessWasDenied"),
+          body: describeError(copyError, { action: "copy to the clipboard" }).body,
           tone: "error",
         });
       }
@@ -415,8 +419,8 @@ export function RoutineDetail() {
         return;
       }
       pushToast({
-        title: t("routineDetail.failedToSaveRoutine"),
-        body: mutationError instanceof Error ? mutationError.message : t("routineDetail.paperclipCouldNotSaveThe"),
+        title: "Failed to save routine",
+        body: describeError(mutationError, { action: "save the routine" }).body,
         tone: "error",
       });
     },
@@ -449,8 +453,8 @@ export function RoutineDetail() {
     },
     onError: (runError) => {
       pushToast({
-        title: t("routines.routineRunFailed"),
-        body: runError instanceof Error ? runError.message : t("routines.paperclipCouldNotStartThe"),
+        title: "Routine run failed",
+        body: describeError(runError, { action: "start the routine run" }).body,
         tone: "error",
       });
     },
@@ -471,8 +475,8 @@ export function RoutineDetail() {
     },
     onError: (statusError) => {
       pushToast({
-        title: t("routines.failedToUpdateRoutine"),
-        body: statusError instanceof Error ? statusError.message : t("routines.paperclipCouldNotUpdateThe2"),
+        title: "Failed to update routine",
+        body: describeError(statusError, { action: "update the routine" }).body,
         tone: "error",
       });
     },
@@ -510,8 +514,8 @@ export function RoutineDetail() {
     },
     onError: (triggerError) => {
       pushToast({
-        title: t("routineDetail.failedToAddTrigger"),
-        body: triggerError instanceof Error ? triggerError.message : t("routineDetail.paperclipCouldNotCreateThe"),
+        title: "Failed to add trigger",
+        body: describeError(triggerError, { action: "create the trigger" }).body,
         tone: "error",
       });
     },
@@ -529,8 +533,8 @@ export function RoutineDetail() {
     },
     onError: (triggerError) => {
       pushToast({
-        title: t("routineDetail.failedToUpdateTrigger"),
-        body: triggerError instanceof Error ? triggerError.message : t("routineDetail.paperclipCouldNotUpdateThe2"),
+        title: "Failed to update trigger",
+        body: describeError(triggerError, { action: "update the trigger" }).body,
         tone: "error",
       });
     },
@@ -548,8 +552,8 @@ export function RoutineDetail() {
     },
     onError: (triggerError) => {
       pushToast({
-        title: t("routineDetail.failedToDeleteTrigger"),
-        body: triggerError instanceof Error ? triggerError.message : t("routineDetail.paperclipCouldNotDeleteThe"),
+        title: "Failed to delete trigger",
+        body: describeError(triggerError, { action: "delete the trigger" }).body,
         tone: "error",
       });
     },
@@ -569,8 +573,8 @@ export function RoutineDetail() {
     },
     onError: (triggerError) => {
       pushToast({
-        title: t("routineDetail.failedToRotateWebhookSecret"),
-        body: triggerError instanceof Error ? triggerError.message : t("routineDetail.paperclipCouldNotRotateThe"),
+        title: "Failed to rotate webhook secret",
+        body: describeError(triggerError, { action: "rotate the webhook secret" }).body,
         tone: "error",
       });
     },
@@ -697,15 +701,29 @@ export function RoutineDetail() {
     return <Navigate to={`/routines/${routineId}/overview`} replace />;
   }
 
-  if (isLoading) {
+  // Keep a loaded routine on screen through a failed refetch; only a real
+  // failure, or an outage before the first load, replaces the page.
+  if (isLoading || routineView.kind === "reconnecting") {
     return <PageSkeleton variant="issues-list" />;
   }
 
-  if (error || !routine || !routineDefaults) {
+  if (routineView.kind === "error") {
+    return (
+      <QueryErrorState
+        size="page"
+        error={routineView.error}
+        action="load this routine"
+        onRetry={routineView.retry}
+        retrying={routineView.isFetching}
+      />
+    );
+  }
+
+  if (!routine || !routineDefaults) {
     return (
       <EmptyState
         icon={AlertCircle}
-        message={error instanceof Error ? error.message : t("routineDetail.weCouldnTLoadThis")}
+        message="We couldn't load this routine."
       />
     );
   }

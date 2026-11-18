@@ -40,6 +40,7 @@ import {
   tokenStatus,
 } from "./gateway-helpers";
 import { gatewaysQueryKey } from "./NewGatewayDialog";
+import { describeError } from "@/api/errors";
 
 type PanelKey = string;
 type ClientIcon = ComponentType<{ className?: string }>;
@@ -137,8 +138,8 @@ export function ConnectClientDialog({
       await queryClient.invalidateQueries({ queryKey: gatewaysQueryKey(gateway.companyId) });
     },
     onError: (error) => pushToast({
-      title: t("connectClientDialog.tokenWasNotIssued"),
-      body: error instanceof Error ? error.message : String(error),
+      title: "Token was not issued",
+      body: describeError(error).body,
       tone: "error",
     }),
   });
@@ -149,8 +150,8 @@ export function ConnectClientDialog({
       pushToast({ title: t("common.copied"), body: label, tone: "success" });
     } catch (error) {
       pushToast({
-        title: t("connectClientDialog.copyFailed"),
-        body: error instanceof Error ? error.message : t("connectClientDialog.clipboardAccessIsUnavailable"),
+        title: "Copy failed",
+        body: describeError(error).body,
         tone: "error",
       });
     }

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Shield, ShieldCheck } from "lucide-react";
 import { accessApi } from "@/api/access";
-import { ApiError } from "@/api/client";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
@@ -33,11 +33,13 @@ export function InstanceAccess() {
     queryKey: queryKeys.access.adminUsers(search),
     queryFn: () => accessApi.searchAdminUsers(search),
   });
+  const usersView = useQueryView(usersQuery);
 
   const companiesQuery = useQuery({
     ...companyDirectoryQueryOptions(accountUserId),
     enabled: accountSettled && usersQuery.isSuccess,
   });
+  const companiesView = useQueryView(companiesQuery);
   const companies = companiesQuery.data ?? [];
 
   const selectedUser = useMemo(
@@ -50,6 +52,7 @@ export function InstanceAccess() {
     queryFn: () => accessApi.getUserCompanyAccess(selectedUserId!),
     enabled: !!selectedUserId,
   });
+  const userAccessView = useQueryView(userAccessQuery);
 
   useEffect(() => {
     if (!selectedUserId && usersQuery.data?.[0]) {
@@ -93,26 +96,39 @@ export function InstanceAccess() {
     },
   });
 
-  if (usersQuery.isLoading || !accountSettled || (usersQuery.isSuccess && companiesQuery.isPending)) {
-    return <div className="text-sm text-muted-foreground">{t("instanceAccess.loadingInstanceAccess")}</div>;
+  if (
+    usersQuery.isLoading ||
+    usersView.kind === "reconnecting" ||
+    !accountSettled ||
+    (usersQuery.isSuccess && (companiesQuery.isPending || companiesView.kind === "reconnecting"))
+  ) {
+    return <div className="text-sm text-muted-foreground">Loading instance access…</div>;
   }
 
-  if (usersQuery.error) {
-    const message =
-      usersQuery.error instanceof ApiError && usersQuery.error.status === 403
-        ? t("instanceAccess.instanceAdminAccessIsRequired")
-        : usersQuery.error instanceof Error
-          ? usersQuery.error.message
-          : t("instanceAccess.failedToLoadUsers");
-    return <div className="text-sm text-destructive">{message}</div>;
-  }
-
-  if (companiesQuery.error) {
+  if (usersView.kind === "error") {
+    if (usersView.errorKind === "forbidden") {
+      return <div className="text-sm text-destructive">Instance admin access is required to manage users.</div>;
+    }
     return (
-      <div className="space-y-3">
-        <p className="text-sm text-destructive">{t("instanceAccess.failedToLoadOrganizationsTry")}</p>
-        <Button onClick={() => void companiesQuery.refetch()}>{t("common.tryAgain")}</Button>
-      </div>
+      <QueryErrorState
+        size="page"
+        error={usersQuery.error}
+        action="load users"
+        onRetry={usersView.retry}
+        retrying={usersView.isFetching}
+      />
+    );
+  }
+
+  if (companiesView.kind === "error") {
+    return (
+      <QueryErrorState
+        size="page"
+        error={companiesQuery.error}
+        action="load organizations"
+        onRetry={companiesView.retry}
+        retrying={companiesView.isFetching}
+      />
     );
   }
 
@@ -172,13 +188,16 @@ export function InstanceAccess() {
 
         <Card className="block space-y-4 p-5">
           {!selectedUserId ? (
-            <div className="text-sm text-muted-foreground">{t("instanceAccess.selectAUserToInspect")}</div>
-          ) : userAccessQuery.isLoading ? (
-            <div className="text-sm text-muted-foreground">{t("instanceAccess.loadingUserAccess")}</div>
-          ) : userAccessQuery.error ? (
-            <div className="text-sm text-destructive">
-              {userAccessQuery.error instanceof Error ? userAccessQuery.error.message : t("instanceAccess.failedToLoadUserAccess")}
-            </div>
+            <div className="text-sm text-muted-foreground">Select a user to inspect instance access.</div>
+          ) : userAccessQuery.isLoading || userAccessView.kind === "reconnecting" ? (
+            <div className="text-sm text-muted-foreground">Loading user access…</div>
+          ) : userAccessView.kind === "error" ? (
+            <QueryErrorState
+              error={userAccessQuery.error}
+              action="load user access"
+              onRetry={userAccessView.retry}
+              retrying={userAccessView.isFetching}
+            />
           ) : (
             <>
               <div className="flex flex-wrap items-start justify-between gap-4">

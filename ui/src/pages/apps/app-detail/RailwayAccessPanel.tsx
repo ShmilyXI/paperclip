@@ -2,6 +2,7 @@ import { t } from "@/i18n";
 import { useEffect, useId, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ConfigureRailwaySsh, ConnectionGrantsResponse, RailwaySshSetup, ToolConnection } from "@paperclipai/shared";
+import { describeError } from "@/api/errors";
 import { toolsApi } from "@/api/tools";
 import { queryKeys } from "@/lib/queryKeys";
 import { Button } from "@/components/ui/button";
@@ -65,6 +66,6 @@ export function RailwayAccessPanel({ connection, grants }: { connection: ToolCon
         <p className="text-sm text-muted-foreground">{setup.enabled ? t("railwayAccessPanel.containerAccessIsEnabledFor") : t("railwayAccessPanel.registerThePublicKey")}{t("railwayAccessPanel.removingTheKeyStopsNewConnections")}</p>
       </>}
     </>}
-    {mutation.isError && <p role="alert" className="text-sm text-destructive">{mutation.error instanceof Error ? mutation.error.message : t("railwayAccessPanel.containerAccessCouldNotBeUpdated")}</p>}
+    {mutation.error ? <p role="alert" className="text-sm text-destructive">{describeError(mutation.error).body}</p> : null}
   </section>;
 }

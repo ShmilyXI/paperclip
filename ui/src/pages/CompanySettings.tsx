@@ -16,6 +16,7 @@ import { cloudPortfolioManageUrl } from "../lib/cloudLinks";
 import { navigateTopLevel } from "@/lib/browserNavigation";
 import { companiesApi } from "../api/companies";
 import { assetsApi } from "../api/assets";
+import { describeError } from "@/api/errors";
 import { queryKeys } from "../lib/queryKeys";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
@@ -293,17 +294,14 @@ export function CompanySettings() {
                       </Button>
                     </div>
                   )}
-                  {(logoUploadMutation.isError || logoUploadError) && (
+                  {(logoUploadMutation.error || logoUploadError) && (
                     <span className="text-xs text-destructive">
-                      {logoUploadError ??
-                        (logoUploadMutation.error instanceof Error
-                          ? logoUploadMutation.error.message
-                          : t("settings.logoUploadFailed"))}
+                      {logoUploadError ?? describeError(logoUploadMutation.error).body}
                     </span>
                   )}
-                  {clearLogoMutation.isError && (
+                  {clearLogoMutation.error && (
                     <span className="text-xs text-destructive">
-                      {clearLogoMutation.error.message}
+                      {describeError(clearLogoMutation.error).body}
                     </span>
                   )}
                   {logoUploadMutation.isPending && (
@@ -329,11 +327,9 @@ export function CompanySettings() {
           {generalMutation.isSuccess && (
             <span className="text-xs text-muted-foreground">{t("common.saved")}</span>
           )}
-          {generalMutation.isError && (
+          {generalMutation.error && (
             <span className="text-xs text-destructive">
-              {generalMutation.error instanceof Error
-                  ? generalMutation.error.message
-                  : t("common.failedToSave")}
+              {describeError(generalMutation.error).body}
             </span>
           )}
         </div>
@@ -360,13 +356,7 @@ export function CompanySettings() {
         governance={governance}
         onChange={handleGovernanceChange}
         isPending={governanceMutation.isPending}
-        errorMessage={
-          governanceMutation.isError
-            ? governanceMutation.error instanceof Error
-              ? governanceMutation.error.message
-              : t("settings.failedToSaveInteractionGovernance")
-            : null
-        }
+        errorMessage={governanceMutation.error ? describeError(governanceMutation.error).body : null}
       />
 
       <AgentObservabilitySettingsSection companyId={selectedCompanyId!} />
@@ -405,11 +395,9 @@ export function CompanySettings() {
                 ? t("settings.alreadyArchived")
                 : t("settings.archiveOrganization")}
             </Button>
-            {archiveMutation.isError && (
+            {archiveMutation.error && (
               <span className="text-xs text-destructive">
-                {archiveMutation.error instanceof Error
-                  ? archiveMutation.error.message
-                  : t("settings.failedToArchiveOrganization")}
+                {describeError(archiveMutation.error).body}
               </span>
             )}
           </div>

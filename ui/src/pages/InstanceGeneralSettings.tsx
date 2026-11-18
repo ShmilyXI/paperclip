@@ -9,8 +9,10 @@ import {
   DEFAULT_BACKUP_RETENTION,
 } from "@paperclipai/shared";
 import { LogOut, SlidersHorizontal } from "lucide-react";
+import { describeError } from "@/api/errors";
 import { healthApi } from "@/api/health";
 import { instanceSettingsApi } from "@/api/instanceSettings";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { ModeBadge } from "@/components/access/ModeBadge";
 import { Button } from "../components/ui/button";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -40,10 +42,10 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
     queryKey: queryKeys.instance.generalSettings,
     queryFn: () => instanceSettingsApi.getGeneral(),
   });
+  const generalView = useQueryView(generalQuery);
   const healthQuery = useQuery({
     queryKey: queryKeys.health,
     queryFn: () => healthApi.get(),
-    retry: false,
   });
 
   const updateGeneralMutation = useMutation({
@@ -58,21 +60,23 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       await queryClient.invalidateQueries({ queryKey: queryKeys.instance.generalSettings });
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : t("settings.failedToUpdateGeneralSettings"));
+      setActionError(describeError(error).body);
     },
   });
 
-  if (generalQuery.isLoading || healthQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("settings.loadingGeneralSettings")}</div>;
+  if (generalQuery.isLoading || generalView.kind === "reconnecting" || healthQuery.isLoading) {
+    return <div className="text-sm text-muted-foreground">Loading general settings...</div>;
   }
 
-  if (generalQuery.error) {
+  if (generalView.kind === "error") {
     return (
-      <div className="text-sm text-destructive">
-        {generalQuery.error instanceof Error
-          ? generalQuery.error.message
-          : t("settings.failedToLoadGeneralSettings")}
-      </div>
+      <QueryErrorState
+        size={embedded ? "panel" : "page"}
+        error={generalQuery.error}
+        action="load general settings"
+        onRetry={generalView.retry}
+        retrying={generalView.isFetching}
+      />
     );
   }
 
@@ -91,13 +95,11 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
     ...(showFeedbackDataSharing ? [t("instanceGeneralSettings.dataSharing")] : []),
   ];
   const topicSummary = visibleTopics.length > 2
-    ? t("instanceGeneralSettings.topicListAnd", { list: visibleTopics.slice(0, -1).join(", "), last: visibleTopics[visibleTopics.length - 1] })
-    : visibleTopics.join(t("instanceGeneralSettings.andConjunction"));
-  const visibleActionError = signOutMutation.error instanceof Error
-    ? signOutMutation.error.message
-    : signOutMutation.error
-      ? t("instanceGeneralSettings.failedToSignOut")
-      : actionError;
+    ? `${visibleTopics.slice(0, -1).join(", ")}, and ${visibleTopics[visibleTopics.length - 1]}`
+    : visibleTopics.join(" and ");
+  const visibleActionError = signOutMutation.error
+    ? describeError(signOutMutation.error).body
+    : actionError;
 
   return (
     <div className={embedded ? "space-y-8" : "max-w-4xl space-y-8"}>

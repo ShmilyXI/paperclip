@@ -9,6 +9,7 @@ import type { IssueScheduledRetry } from "@paperclipai/shared";
 import { useRetryNowMutation, type RetryNowError } from "../hooks/useRetryNowMutation";
 import { Badge } from "@/components/ui/badge";
 import { InlineBanner } from "@/components/InlineBanner";
+import { describeError } from "@/api/errors";
 
 const MAX_TURN_CONTINUATION = "max_turns_continuation";
 
@@ -119,7 +120,8 @@ export function IssueScheduledRetryCard({
               {t("issueScheduledRetryCard.lastAttemptFailed")} {scheduledRetry.error}{/[.!?]$/.test(scheduledRetry.error.trim()) ? "" : "."} {t("issueScheduledRetryCard.paperclipWillRetry")}
             </div>
           ) : null}
-          {isError ? (
+          {isError ? ( // query-error-ok: mutation result
+
             <RetryErrorBand
               error={retryNow.lastError}
               onRetry={() => {
@@ -192,8 +194,8 @@ export function RetryErrorBand({ error, onRetry, className }: RetryErrorBandProp
     >
       <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <div className="min-w-0 flex-1">
-        <div className="font-medium">{t("issueScheduledRetryCard.couldnTRetryNow")}</div>
-        <div className="mt-0.5 text-muted-foreground">{error.message}</div>
+        <div className="font-medium">Couldn't retry now</div>
+        <div className="mt-0.5 text-muted-foreground">{describeError({ status: error.status, body: { message: error.message } }).body}</div>
       </div>
       <button
         type="button"

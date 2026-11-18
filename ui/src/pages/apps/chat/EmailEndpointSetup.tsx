@@ -1,6 +1,8 @@
 import { t } from "@/i18n";
 import { isUuidLike } from "@paperclipai/shared";
 import { ApiError } from "@/api/client";
+import { describeError } from "@/api/errors";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { AgentMailCredentialField } from "@/features/connections/AgentMailCredentialField";
 import { AgentMailApiKeyField } from "@/features/connections/AgentMailApiKeyField";
 import { useEmailAddressCheck } from "@/features/connections/useEmailAddressCheck";
@@ -132,18 +134,24 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
   }, [companyId, draftKey, connectionId, step, agentId, requestId, addressMode, inboxId, username, domain, domainSelected, takenAddresses, mode, allowInboxKey, selectedCredentialId]);
   const agents = useQuery({ queryKey: queryKeys.agents.list(companyId),
     queryFn: () => agentsApi.list(companyId), enabled: !!companyId });
+  const agentsView = useQueryView(agents);
   const projects = useQuery({ queryKey: queryKeys.projects.list(companyId),
     queryFn: () => projectsApi.list(companyId), enabled: !!companyId && trustOpen });
+  const projectsView = useQueryView(projects);
   const boundaryIssues = useQuery({ queryKey: ["email-boundary-issues", companyId],
     queryFn: () => issuesApi.list(companyId), enabled: !!companyId && trustOpen });
+  const boundaryIssuesView = useQueryView(boundaryIssues);
   const chosen = agents.data?.find(a => a.id === agentId);
   const lowTrust = getTrustPreset(chosen?.permissions) === "low_trust_review";
   const scoped = lowTrustBoundaryHasScope(getLowTrustBoundary(chosen?.permissions));
   const inspected = useQuery({ queryKey: ["email-credential-inspect", companyId, connectionId],
     queryFn: () => emailApi.inspectSaved(companyId, connectionId),
-    enabled: !!companyId && !!connectionId, retry: false });
+    enabled: !!companyId && !!connectionId });
+  const inspectedView = useQueryView(inspected);
   const inboxes = useQuery({ queryKey: ["email-inboxes", companyId],
     queryFn: () => emailApi.list(companyId), enabled: !!companyId });
+  const inboxesView = useQueryView(inboxes);
+  const inboxesLoaded = inboxesView.kind === "ready" || inboxesView.kind === "stale";
   // A provider failure can leave an inbox allocated under this request. Resume
   // that exact endpoint; its agent and address are already fixed server-side.
   const pendingEndpoint = inboxes.data?.find(i => i.id === requestId && i.status !== "archived");
@@ -152,8 +160,8 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
     queryKey: ["email-resume-account", companyId, pendingEndpoint?.connectionId],
     queryFn: () => toolsApi.getConnection(pendingEndpoint!.connectionId),
     enabled: !!resumeId && requestId === resumeId && !!pendingEndpoint && !connectionId,
-    retry: false,
   });
+  const resumeAccountView = useQueryView(resumeAccount);
   useEffect(() => {
     if (!resumeId || !pendingEndpoint || connectionId || !resumeAccount.isSuccess) return;
     const savedAccount = resumeAccount.data?.config?.credentialConnectionId;
@@ -173,7 +181,7 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
     if (inspected.isSuccess && !domainSelected && !pendingAddress) setDomain(defaultDomain);
   }, [inspected.isSuccess, domainSelected, pendingAddress, defaultDomain]);
   useEffect(() => {
-    if (!scopedKey || !inboxes.isSuccess) return;
+    if (!scopedKey || !inboxesLoaded) return;
     if (pendingAddress || allowInboxKey) {
       setAddressMode("existing");
       setInboxId(inspected.data?.inboxes[0]?.inbox_id ?? "");
@@ -183,7 +191,7 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
       setSelectedCredentialId(null);
       setStep(0);
     }
-  }, [scopedKey, inspected.data, inboxes.isSuccess, pendingAddress, allowInboxKey, step]);
+  }, [scopedKey, inspected.data, inboxesLoaded, pendingAddress, allowInboxKey, step]);
   useEffect(() => {
     if (chosen && !suggestedUsername.current) {
       suggestedUsername.current = true;
@@ -250,6 +258,7 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
   }
   const agentDetail = useQuery({ queryKey: queryKeys.agents.detail(agentId),
     queryFn: () => agentsApi.get(agentId), enabled: !!agentId && trustOpen });
+  const agentDetailView = useQueryView(agentDetail);
   const trust = useMutation({
     mutationFn: () => agentsApi.updatePermissions(agentId, {
       ...permissions,
@@ -295,11 +304,17 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
       .map(suffix => `${username.slice(0, 64 - suffix.length)}${suffix}`)
       .filter(name => !knownAddresses.has(`${name}@${domain}`)) : [];
   const assignedInbox = addressMode === "existing" && inboxes.data?.some(i => i.id !== requestId && i.address === address && i.status !== "archived");
-  const addressError = addressTaken ? t("emailSetup.thisEmailAddressIsAlready")
-    : assignedInbox ? t("emailSetup.thisInboxIsAlreadyAssigned") : null;
-  const error = connect.error ?? (!addressTaken ? setup.error : null) ?? resumeAccount.error ?? inspected.error ?? agents.error;
+  const addressError = addressTaken ? "This email address is already in use. Choose a different address."
+    : assignedInbox ? "This inbox is already assigned to an agent." : null;
+  const writeError = connect.error ?? (!addressTaken ? setup.error : null);
+  const readFailure = resumeAccountView.kind === "error" ? resumeAccountView
+    : inspectedView.kind === "error" ? inspectedView
+    : agentsView.kind === "error" ? agentsView : null;
+  const setupError = writeError ? <p role="alert" className="text-sm text-destructive">{describeError(writeError).body}</p>
+    : readFailure ? <QueryErrorState size="inline" error={readFailure.error} action="load email setup" onRetry={readFailure.retry} retrying={readFailure.isFetching} />
+    : null;
   const busy = connect.isPending || setup.isPending;
-  const identityReady = inboxes.isSuccess && (!resumeId || requestId !== resumeId || !!pendingEndpoint) && (!pendingEndpoint || pendingEndpoint.assignedAgentId === agentId);
+  const identityReady = inboxesLoaded && (!resumeId || requestId !== resumeId || !!pendingEndpoint) && (!pendingEndpoint || pendingEndpoint.assignedAgentId === agentId);
   const canContinue = identityReady && !!chosen && !busy && !(lowTrust && !scoped) && (!!pendingAddress || !!selectedCredentialId || !!apiKey.trim());
   const canCreate = identityReady && !!chosen && !busy && !!inspected.data && !(lowTrust && !scoped) && !addressError && !addressCheck.checking
     && (!!pendingAddress || (addressMode === "existing" ? !!inboxId : validUsername));
@@ -327,20 +342,16 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
     <header className="space-y-2">
       <h1 className="text-xl font-bold">{step === 2 ? t("emailSetup.yourAgentSEmailIs") : t("emailSetup.giveAnAgentAnEmail")}</h1>
     </header>
-    {step < 2 && inboxes.isError && <div role="alert" className="space-y-2 text-sm">
-      <p className="text-destructive">{t("emailSetup.couldNotLoadProgress")} {inboxes.error.message}</p>
-      <Button type="button" variant="outline" size="sm" disabled={busy || inboxes.isFetching} onClick={() => { void inboxes.refetch(); }}>
-        {inboxes.isFetching ? t("common.loading2") : t("emailSetup.retryLoadingInboxes")}
-      </Button>
-    </div>}
-    {step < 2 && resumeId === requestId && inboxes.isSuccess && !pendingEndpoint && <p role="alert" className="text-sm text-destructive">{t("emailSetup.thisEmailSetupCouldNot")}</p>}
-    {step < 2 && <ChatSetupNavigation labels={[t("common.agent"), t("emailSetup.emailAddress")]} step={step}
+    {step < 2 && inboxesView.kind === "error" && <QueryErrorState error={inboxes.error} action="load email setup progress"
+      onRetry={inboxesView.retry} retrying={inboxesView.isFetching} />}
+    {step < 2 && resumeId === requestId && inboxesLoaded && !pendingEndpoint && <p role="alert" className="text-sm text-destructive">This email setup could not be found. Return to Connectors and start a new connection.</p>}
+    {step < 2 && <ChatSetupNavigation labels={["Agent", "Email address"]} step={step}
       availableStep={step} disabled={busy} onSelect={index => { setup.reset(); setStep(index as 0 | 1); }} />}
     {step === 0 && <form className="space-y-6" onSubmit={event => { event.preventDefault(); if (canContinue) connect.mutate(); }}>
       <div className="space-y-2">
-        <Label htmlFor="email-agent">{t("common.agent")}</Label>
-        <AgentSelect id="email-agent" value={agentId} disabled={busy || agents.isPending || !inboxes.isSuccess || !!pendingEndpoint}
-          placeholder={t("emailSetup.chooseAnAgent")} emptyMessage={t("emailSetup.noAgentsFound")} triggerClassName="h-10"
+        <Label htmlFor="email-agent">Agent</Label>
+        <AgentSelect id="email-agent" value={agentId} disabled={busy || agents.isPending || !inboxesLoaded || !!pendingEndpoint}
+          placeholder="Choose an agent" emptyMessage="No agents found." triggerClassName="h-10"
           agents={(agents.data ?? []).filter(a => !["terminated", "pending_approval"].includes(a.status))}
           onChange={id => { setAgentId(id); setUsername((agents.data?.find(a => a.id === id)?.name ?? "").toLowerCase().replace(/[^a-z0-9._-]+/g, "-").slice(0, 64)); }} />
       </div>
@@ -355,7 +366,7 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
         <p>{t("emailSetup.thisAgentNeedsAWork")}</p>
         <Button type="button" variant="outline" size="sm" onClick={openTrust}>{t("emailSetup.configureWorkBoundary")}</Button>
       </div>}
-      {error && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
+      {setupError}
       <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
         <Button type="button" variant="ghost" disabled={busy} onClick={cancel}>{t("common.cancel")}</Button>
         <Button disabled={!canContinue}>{connect.isPending ? t("emailSetup.connecting") : t("common.continue")}<ArrowRight className="size-4" /></Button>
@@ -430,8 +441,8 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
           </div>
         </div>
       </details>
-      {error && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
-      {inspected.isPending && <p role="status" className="text-sm text-muted-foreground">{t("emailSetup.loadingEmailOptions")}</p>}
+      {setupError}
+      {inspected.isPending && <p role="status" className="text-sm text-muted-foreground">Loading email options…</p>}
       <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
         <Button type="button" variant="ghost" disabled={busy} onClick={() => { setup.reset(); setStep(0); }}><ArrowLeft className="size-4" />{t("common.back")}</Button>
         <Button disabled={!canCreate}>
@@ -467,16 +478,25 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
               label: `${issue.identifier} · ${issue.title}`,
             }))}
             allowSingleIssue={false}
-            candidatesLoading={projects.isPending || boundaryIssues.isPending}
+            candidatesLoading={projects.isPending || boundaryIssues.isPending
+              || projectsView.kind === "reconnecting" || boundaryIssuesView.kind === "reconnecting"}
           />
           <p className="text-xs text-muted-foreground">
             {t("emailSetup.lowTrustLimitsPaperclipAccess")}
           </p>
-          {(trust.error || projects.error || boundaryIssues.error) && (
+          {trust.error ? (
             <p role="alert" className="text-sm text-destructive">
-              {(trust.error ?? projects.error ?? boundaryIssues.error)?.message}
+              {describeError(trust.error).body}
             </p>
-          )}
+          ) : projectsView.kind === "error" || boundaryIssuesView.kind === "error" ? (
+            <QueryErrorState
+              size="inline"
+              error={projectsView.kind === "error" ? projects.error : boundaryIssues.error}
+              action="load work boundary options"
+              onRetry={() => { projectsView.retry(); boundaryIssuesView.retry(); }}
+              retrying={projects.isFetching || boundaryIssues.isFetching}
+            />
+          ) : null}
           <DialogFooter>
             <Button variant="ghost" onClick={() => setTrustOpen(false)}>
               {t("common.cancel")}
@@ -484,8 +504,7 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
             <Button
               disabled={
                 trust.isPending ||
-                agentDetail.isPending ||
-                !!agentDetail.error ||
+                (agentDetailView.kind !== "ready" && agentDetailView.kind !== "stale") ||
                 (getTrustPreset(permissions) === "low_trust_review" &&
                   !lowTrustBoundaryHasScope(getLowTrustBoundary(permissions)))
               }
@@ -513,6 +532,7 @@ export function EmailConnectionInboxes({
     queryFn: () => emailApi.list(companyId),
     refetchInterval: 10_000,
   });
+  const view = useQueryView(query);
   const connections = useQuery({
     queryKey: queryKeys.tools.connections(companyId),
     queryFn: () => toolsApi.listConnections(companyId),
@@ -565,10 +585,8 @@ export function EmailConnectionInboxes({
         </div>
       ))}
       {!!inboxes.length && <EmailSafetyNotice />}
-      {query.error && (
-        <p role="alert" className="text-sm text-destructive">
-          {query.error.message}
-        </p>
+      {view.kind === "error" && (
+        <QueryErrorState error={query.error} action="load the inboxes" onRetry={view.retry} retrying={view.isFetching} />
       )}
     </section>
   );
@@ -588,6 +606,7 @@ export function EmailEndpointSettings({
     queryFn: () => emailApi.list(companyId),
     refetchInterval: 10_000,
   });
+  const view = useQueryView(query);
   const inbox = query.data?.find(
     (row: EmailEndpointSummary) => row.id === endpointId,
   );
@@ -623,13 +642,12 @@ export function EmailEndpointSettings({
     },
   });
   if (removed)
-    return <p>{t("emailSetup.inboxDisconnectedEmailHistoryRemains")}</p>;
-  if (!inbox)
-    return (
-      <p role={query.error ? "alert" : undefined}>
-        {query.error?.message ?? t("emailSetup.loadingEmailInbox")}
-      </p>
-    );
+    return <p>Inbox disconnected. Email history remains in its tasks.</p>;
+  if (!inbox) {
+    if (view.kind === "error")
+      return <QueryErrorState error={query.error} action="load the email inbox" onRetry={view.retry} retrying={view.isFetching} />;
+    return <p role="status">Loading email inbox…</p>;
+  }
   return (
     <div className="max-w-2xl space-y-8 pb-8">
       <header className="space-y-2">
@@ -697,7 +715,7 @@ export function EmailEndpointSettings({
         </dl>
         {inbox.lastError && <p role="alert" className="text-sm text-destructive">{inbox.lastError}</p>}
         {control.error && control.variables !== "remove" && (
-          <p role="alert" className="text-sm text-destructive">{control.error.message}</p>
+          <p role="alert" className="text-sm text-destructive">{describeError(control.error).body}</p>
         )}
       </section>
 
@@ -717,8 +735,8 @@ export function EmailEndpointSettings({
               <option value="webhook">{t("emailSetup.webhook")}</option>
             </select>
           </div>
-          {reconnect.error && <p role="alert" className="text-sm text-destructive">{reconnect.error.message}</p>}
-          {reconnect.isSuccess && <p role="status" className="text-sm">{t("emailSetup.inboxReconnected")}</p>}
+          {reconnect.error && <p role="alert" className="text-sm text-destructive">{describeError(reconnect.error).body}</p>}
+          {reconnect.isSuccess && <p role="status" className="text-sm">Inbox reconnected.</p>}
           <div className="flex justify-end">
             <Button variant="outline" disabled={!replacementKey || reconnect.isPending} onClick={() => reconnect.mutate()}>
               {reconnect.isPending ? t("emailSetup.reconnecting") : t("emailSetup.reconnectInbox")}
@@ -739,7 +757,7 @@ export function EmailEndpointSettings({
           </Button>
         </div>
         {control.error && control.variables === "remove" && (
-          <p role="alert" className="text-sm text-destructive">{control.error.message}</p>
+          <p role="alert" className="text-sm text-destructive">{describeError(control.error).body}</p>
         )}
       </section>
     </div>

@@ -16,6 +16,7 @@ import {
 import { useToast } from "@/context/ToastContext";
 import { allowedToolsLabel } from "./gateway-helpers";
 import { gatewaysQueryKey } from "./NewGatewayDialog";
+import { describeError } from "@/api/errors";
 
 export function EditGatewayDialog({
   companyId,
@@ -58,8 +59,8 @@ export function EditGatewayDialog({
     },
     onError: (error) => {
       pushToast({
-        title: t("editGatewayDialog.gatewayWasNotUpdated"),
-        body: error instanceof Error ? error.message : String(error),
+        title: "Gateway was not updated",
+        body: describeError(error).body,
         tone: "error",
       });
     },

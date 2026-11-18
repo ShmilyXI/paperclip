@@ -29,6 +29,7 @@ import { cn, formatDateTime } from "../lib/utils";
 import { restoreSubmittedCommentDraft } from "../lib/comment-submit-draft";
 import { copyTextToClipboard } from "../lib/clipboard";
 import { PluginSlotOutlet } from "@/plugins/slots";
+import { useComposerSubmitKey } from "@/hooks/useComposerSubmitKey";
 
 interface CommentWithRunMeta extends IssueComment {
   runId?: string | null;
@@ -750,6 +751,7 @@ export function CommentThread({
   composerDisabledReason = null,
   externalReferences,
 }: CommentThreadProps) {
+  const submitKey = useComposerSubmitKey();
   const [body, setBody] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [attaching, setAttaching] = useState(false);
@@ -1032,6 +1034,7 @@ export function CommentThread({
             placeholder={t("comments.leaveAComment")}
             mentions={mentions}
             onSubmit={handleSubmit}
+            submitKey={submitKey}
             imageUploadHandler={imageUploadHandler}
             contentClassName="min-h-(--sz-60px) text-sm"
           />

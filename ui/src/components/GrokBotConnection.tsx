@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { describeError } from "@/api/errors";
 import { useEffect, useId, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { DotPairing } from "@paperclipai/shared";
@@ -16,7 +17,7 @@ export function GrokBotConnection({ companyId, agentId }: { companyId?: string; 
   const cache = useQueryClient();
   const key = ["grok-binding", companyId, agentId];
   const state = useQuery({ queryKey: key, enabled: !!companyId && !!agentId,
-    queryFn: ({ signal }) => grokBotApi.connection(companyId!, agentId!, signal), retry: false, refetchInterval: 5000 });
+    queryFn: ({ signal }) => grokBotApi.connection(companyId!, agentId!, signal), refetchInterval: 5000 });
   const [pairing, setPairing] = useState<DotPairing | null>(null);
   const [replace, setReplace] = useState(false);
   const [botName, setBotName] = useState("");
@@ -54,11 +55,11 @@ export function GrokBotConnection({ companyId, agentId }: { companyId?: string; 
   const error = state.error ?? pair.error ?? configure.error ?? verify.error ?? disconnect.error ?? recover.error ?? stop.error ?? retryDelivery.error;
   const recovering = state.data?.recoveryNeeded || routine?.recoveryNeeded;
   const pending = exchange && ["prepared", "sending", "accepted"].includes(exchange.status) && Date.parse(exchange.expiresAt) > Date.now();
-  return <section aria-label={t("grokBotConnection.grokBotConnection")} className="space-y-4 text-sm">
-    <p className="text-muted-foreground">{t("grokBotConnection.runsInGrokBotThe")}</p>
-    {state.isPending && <p role="status">{t("grokBotConnection.loadingConnection")}</p>}
-    {error && <p role="alert" className="text-destructive">{error.message}</p>}
-    {state.data && !state.data.enabled && <p className="text-muted-foreground">{t("grokBotConnection.enableGrokBotAssistantConnections")}</p>}
+  return <section aria-label="Grok Bot connection" className="space-y-4 text-sm">
+    <p className="text-muted-foreground">Runs in Grok Bot. The Bot retains its apps and persistent context. Paperclip supplies task coordination and first-party tools. Usage and spending are not reported.</p>
+    {state.isPending && <p role="status">Loading connection…</p>}
+    {error && <p role="alert" className="text-destructive">{describeError(error).body}</p>}
+    {state.data && !state.data.enabled && <p className="text-muted-foreground">Enable Grok Bot, Assistant connections (MCP), and Paperclip Runner on an authenticated public HTTPS instance.</p>}
     {binding?.connected ? <>
       <p>{t("grokBotConnection.agentAccessConnected")} {routine?.verified && !recovering ? t("grokBotConnection.routineRoundTripVerified") : t("grokBotConnection.assignmentsRequireAVerifiedRoutine")}</p>
       <dl className="space-y-2 text-muted-foreground"><div><dt>{t("grokBotConnection.bot")}</dt><dd>{routine?.botName ?? t("grokBotConnection.notConfigured")}</dd></div><div><dt>{t("grokBotConnection.lastVerifiedExchange")}</dt><dd>{routine?.verifiedAt ? new Date(routine.verifiedAt).toLocaleString() : t("grokBotConnection.notYetVerified")}</dd></div><div><dt>{t("grokBotConnection.lastAuthenticatedContact")}</dt><dd>{routine?.lastContactAt ? new Date(routine.lastContactAt).toLocaleString() : t("grokBotConnection.notYetObserved")}</dd></div></dl>

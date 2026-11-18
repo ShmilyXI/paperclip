@@ -39,6 +39,7 @@ import { EmptyState } from "../components/EmptyState";
 import { MarkdownBody } from "../components/MarkdownBody";
 import { MarkdownEditor } from "../components/MarkdownEditor";
 import { PageSkeleton } from "../components/PageSkeleton";
+import { QueryErrorState, useQueryView, type QueryViewSource } from "@/components/QueryView";
 import { CopyText } from "../components/CopyText";
 import { Identity } from "../components/Identity";
 import { AgentMultiSelect } from "../components/AgentMultiSelect";
@@ -170,6 +171,7 @@ import {
 } from "lucide-react";
 import { GithubIcon } from "../components/icons/github-icon";
 import type { FolderListItem, FolderListResult } from "@paperclipai/shared";
+import { describeError } from "@/api/errors";
 
 type SkillTreeNode = {
   name: string;
@@ -1036,6 +1038,8 @@ export function DiscoveryGrid({
   onOpenCard,
   loading,
   error,
+  onRetry,
+  retrying = false,
   totalCount,
   onCreate,
   onImport,
@@ -1082,7 +1086,10 @@ export function DiscoveryGrid({
   cards: DiscoveryCard[];
   onOpenCard: (card: DiscoveryCard) => void;
   loading: boolean;
-  error: string | null;
+  /** The query error when the skill list could not load; null while data (even stale) is available. */
+  error: unknown;
+  onRetry?: () => void;
+  retrying?: boolean;
   totalCount: number;
   onCreate: () => void;
   onImport: () => void;
@@ -1198,8 +1205,8 @@ export function DiscoveryGrid({
 
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         {/* Search + sort + actions */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
-          <div className="flex h-9 min-w-(--sz-12rem) flex-1 items-center gap-2 rounded-md border border-border px-2.5">
+        <div data-canonical-toolbar="skill-catalog" role="toolbar" aria-label="Skill catalog controls" className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
+          <div data-toolbar-control className="design-task-search flex min-w-(--sz-12rem) flex-1 items-center gap-2 rounded-md border border-border px-2.5">
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
             <input
               value={search}
@@ -1409,10 +1416,12 @@ export function DiscoveryGrid({
               />
             </div>
           ) : null}
-          {loading ? (
+          {error ? (
+            <div className="py-6">
+              <QueryErrorState error={error} action="load skills" onRetry={onRetry} retrying={retrying} />
+            </div>
+          ) : loading ? (
             <PageSkeleton variant="list" />
-          ) : error ? (
-            <div className="py-6 text-sm text-destructive">{error}</div>
           ) : sourceFilteredCards.length === 0 ? (
             <div className="py-12">
               <EmptyState
@@ -1878,13 +1887,14 @@ function CatalogDetailPane({
   packageVersion: string | null;
   installedSkill: CompanySkillListItem | null;
   installedSkillId: string | null;
-  fileQuery: { data: CatalogSkillFileDetail | undefined; isLoading: boolean; error: unknown };
+  fileQuery: QueryViewSource<CatalogSkillFileDetail> & { isLoading: boolean };
   selectedPath: string;
   onInstall: () => void;
   onUpdate: () => void;
   onOpenInstalled: (skillId: string) => void;
   loadingPrimaryAction: boolean;
 }) {
+  const fileView = useQueryView(fileQuery);
   if (!skill) {
     return <EmptyState icon={Boxes} message={t("skills.selectACatalogSkillTo")} />;
   }
@@ -2008,10 +2018,10 @@ function CatalogDetailPane({
       </div>
 
       <div className="min-h-(--sz-400px) px-5 py-5">
-        {fileQuery.isLoading ? (
+        {fileQuery.isLoading || fileView.kind === "reconnecting" ? (
           <PageSkeleton variant="detail" />
-        ) : fileQuery.error ? (
-          <div className="text-sm text-destructive">{fileQuery.error instanceof Error ? fileQuery.error.message : "Failed to load file"}</div>
+        ) : fileView.kind === "error" ? (
+          <QueryErrorState error={fileQuery.error} action="load the file" onRetry={fileView.retry} retrying={fileView.isFetching} />
         ) : !fileQuery.data ? (
           <div className="text-sm text-muted-foreground">{t("skills.selectAFileToInspect")}</div>
         ) : fileQuery.data.markdown ? (
@@ -2978,7 +2988,7 @@ export function SkillDetailPage({
 
   // Track unsaved edits so we can float a save bar and warn before the page is
   // unloaded with a dirty draft (PAP-10907 J).
-  const savedFileContent = file?.content ?? "";
+  const savedFileContent = file?.markdown ? splitFrontmatter(file.content).body : file?.content ?? "";
   const isDirty = editMode && Boolean(file?.editable) && draft !== savedFileContent;
   useEffect(() => {
     if (!isDirty) return;
@@ -3077,7 +3087,7 @@ export function SkillDetailPage({
                 editMode ? (
                   <>
                     <Button variant="ghost" size="sm" onClick={() => setEditMode(false)} disabled={savePending}>Cancel</Button>
-                    <Button size="sm" onClick={onSave} disabled={savePending}>
+                    <Button size="sm" onClick={onSave} disabled={savePending || !isDirty}>
                       <Save className="mr-1.5 h-3.5 w-3.5" />
                       {savePending ? "Saving..." : "Save"}
                     </Button>
@@ -4032,7 +4042,7 @@ export function CompanySkills() {
     pushToast({
       tone: "error",
       title,
-      body: error instanceof Error && error.message ? error.message : fallbackBody,
+      body: error instanceof Error ? describeError(error).body : fallbackBody,
     });
   };
   const [skillFilter, setSkillFilter] = useState("");
@@ -4198,6 +4208,7 @@ export function CompanySkills() {
     enabled: Boolean(selectedCompanyId && ((isDiscovery && discoveryTab === "installed") || routeSkillToken)),
   });
 
+  const skillsView = useQueryView(skillsQuery);
   const installedSkills = skillsQuery.data ?? [];
   const routeResolution = useMemo(
     () => resolveSkillRouteToken(routeSkillToken, installedSkills),
@@ -4213,6 +4224,7 @@ export function CompanySkills() {
     queryFn: () => companySkillsApi.detail(selectedCompanyId!, selectedSkillId!),
     enabled: Boolean(selectedCompanyId && selectedSkillId),
   });
+  const detailView = useQueryView(detailQuery);
 
   const fileQuery = useQuery({
     queryKey: queryKeys.companySkills.file(selectedCompanyId ?? "", selectedSkillId ?? "", selectedPath),
@@ -4437,7 +4449,7 @@ export function CompanySkills() {
       });
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : t("skills.failedToCreateSkill");
+      const message = describeError(error).body;
       setCreateError(message);
       reportSkillError(error, t("skillStudio.skillCreationFailed"), t("skills.failedToCreateSkill"), "Creating a skill");
     },
@@ -4467,8 +4479,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("agentDetail.saveFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToSaveSkillFile"),
+        title: "Save failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4490,8 +4502,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("skills.starFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToUpdateStar"),
+        title: "Star failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4517,8 +4529,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("skills.skillSettingsUpdateFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToUpdateSkillSettings"),
+        title: "Skill settings update failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4550,6 +4562,8 @@ export function CompanySkills() {
     enabled: Boolean(selectedCompanyId),
     staleTime: 60_000,
   });
+  const catalogListView = useQueryView(catalogListQuery);
+  const discoveryFailure = [skillsView, catalogListView].find((view) => view.kind === "error");
 
   const catalogDetailQuery = useQuery({
     queryKey: queryKeys.companySkills.catalogDetail(selectedCatalogRef ?? ""),
@@ -4557,6 +4571,7 @@ export function CompanySkills() {
     enabled: Boolean(selectedCompanyId && selectedCatalogRef),
     staleTime: 60_000,
   });
+  const catalogDetailView = useQueryView(catalogDetailQuery);
 
   const catalogFileQuery = useQuery({
     queryKey: queryKeys.companySkills.catalogFile(selectedCatalogRef ?? "", catalogSelectedPath),
@@ -4716,7 +4731,7 @@ export function CompanySkills() {
       }
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : t("skills.failedToInstallCatalogSkill");
+      const message = describeError(error).body;
       setInstallDialogState((current) => ({ ...current, error: message }));
       // Also surface explicit-policy / platform denials in the persistent banner
       // so the reason stays visible after the dialog closes.
@@ -4745,8 +4760,8 @@ export function CompanySkills() {
         } catch (moveError) {
           pushToast({
             tone: "error",
-            title: t("routines.folderCreatedMoveFailed"),
-            body: moveError instanceof Error ? moveError.message : t("skills.failedToMoveTheSelected"),
+            title: "Folder created, move failed",
+            body: describeError(moveError).body,
           });
           return;
         }
@@ -4758,8 +4773,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("routines.folderSaveFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToSaveFolder"),
+        title: "Folder save failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4774,8 +4789,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("routines.folderSaveFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToUpdateFolder"),
+        title: "Folder save failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4794,8 +4809,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("skills.folderMoveFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToMoveFolder"),
+        title: "Folder move failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4813,8 +4828,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("routines.folderDeleteFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToDeleteFolder"),
+        title: "Folder delete failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4830,8 +4845,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("routines.moveFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToMoveSkill"),
+        title: "Move failed",
+        body: describeError(error).body,
       });
     },
   });
@@ -4851,8 +4866,8 @@ export function CompanySkills() {
     } catch (moveError) {
       pushToast({
         tone: "error",
-        title: t("skills.failedToMoveSkills"),
-        body: moveError instanceof Error ? moveError.message : t("skills.failedToMoveTheSelected"),
+        title: "Failed to move skills",
+        body: describeError(moveError).body,
       });
     }
   }
@@ -4867,8 +4882,8 @@ export function CompanySkills() {
     onError: (error) => {
       pushToast({
         tone: "error",
-        title: t("skills.couldnTOpenMySkills"),
-        body: error instanceof Error ? error.message : t("skills.failedToCreateYourPersonal"),
+        title: "Couldn't open My Skills",
+        body: describeError(error).body,
       });
     },
   });
@@ -4926,8 +4941,8 @@ export function CompanySkills() {
     } catch (error) {
       pushToast({
         tone: "error",
-        title: t("skills.folderCreateFailed"),
-        body: error instanceof Error ? error.message : t("skills.failedToCreateFolder"),
+        title: "Folder create failed",
+        body: describeError(error).body,
       });
       return null;
     }
@@ -4959,8 +4974,8 @@ export function CompanySkills() {
     } catch (moveError) {
       pushToast({
         tone: "error",
-        title: t("routines.moveFailed"),
-        body: moveError instanceof Error ? moveError.message : t("skills.failedToMove"),
+        title: "Move failed",
+        body: describeError(moveError).body,
       });
     }
   }
@@ -5029,7 +5044,7 @@ export function CompanySkills() {
       }
       pushToast({ tone: "success", title: t("skills.agentsUpdated"), body: `${nextAgentIds.length} agent(s) attached.` });
     } catch (error) {
-      pushToast({ tone: "error", title: t("skills.updateFailed"), body: error instanceof Error ? error.message : t("skills.failedToUpdateAgentSkills") });
+      pushToast({ tone: "error", title: "Update failed", body: describeError(error).body });
     }
   }
 
@@ -5441,8 +5456,10 @@ export function CompanySkills() {
           onSortChange={setDiscoverySort}
           cards={visibleDiscoveryCards}
           onOpenCard={openDiscoveryCard}
-          loading={skillsQuery.isLoading || catalogListQuery.isLoading}
-          error={skillsQuery.error?.message ?? catalogListQuery.error?.message ?? null}
+          loading={skillsQuery.isLoading || catalogListQuery.isLoading || skillsView.kind === "reconnecting" || catalogListView.kind === "reconnecting"}
+          error={discoveryFailure?.error}
+          onRetry={discoveryFailure?.retry}
+          retrying={discoveryFailure?.isFetching}
           totalCount={discoveryCards.length}
           onCreate={() => void openNewSkill()}
           onImport={() => setImportDialogOpen(true)}
@@ -5520,7 +5537,7 @@ export function CompanySkills() {
           folderDisplayPath={activeSkillFolderDisplayPath}
           catalogSource={catalogSourceForDetail}
           routeSkills={installedSkills}
-          loading={skillsQuery.isLoading || detailQuery.isLoading}
+          loading={skillsQuery.isLoading || detailQuery.isLoading || skillsView.kind === "reconnecting" || detailView.kind === "reconnecting"}
           activeTab={detailTab}
           onTabChange={setDetailTab}
           selectedPath={selectedPath}
@@ -5588,7 +5605,7 @@ export function CompanySkills() {
               Back to store
             </Link>
           </div>
-          {catalogListQuery.isLoading || catalogDetailQuery.isLoading ? (
+          {catalogListQuery.isLoading || catalogDetailQuery.isLoading || catalogListView.kind === "reconnecting" || catalogDetailView.kind === "reconnecting" ? (
             <PageSkeleton variant="detail" />
           ) : !selectedCatalogSkill ? (
             <EmptyState icon={Boxes} message={t("skills.catalogSkillNotFound")} />
@@ -5633,7 +5650,7 @@ export function CompanySkills() {
         </div>
       ) : (
         <div className="min-h-(--sz-calc-30)">
-          {skillsQuery.isLoading ? (
+          {skillsQuery.isLoading || skillsView.kind === "reconnecting" ? (
             <PageSkeleton variant="detail" />
           ) : (
             <EmptyState icon={Boxes} message={t("skills.skillNotFound")} />

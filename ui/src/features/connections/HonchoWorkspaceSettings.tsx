@@ -2,6 +2,7 @@ import { t } from "@/i18n";
 import { useId, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { connectionInstructionsConfig, type ToolConnection } from "@paperclipai/shared";
+import { describeError } from "@/api/errors";
 import { toolsApi } from "@/api/tools";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,11 +20,11 @@ export function HonchoWorkspaceSettings({ connection, canConfigure }: { connecti
     mutationFn: () => toolsApi.updateConnection(connection.id, { config: { ...connectionConfig, methodConfig: { ...config, workspaceId: value.trim() } } }),
     onSuccess: async () => { await client.invalidateQueries({ queryKey: ["tools"] }); setDraft(null); },
   });
-  return <section className="space-y-3" aria-label={t("honchoWorkspaceSettings.honchoWorkspace")}>
-    <label htmlFor={id} className="text-sm font-medium">{t("honchoWorkspaceSettings.honchoWorkspace")}</label>
-    <Input id={id} value={value} maxLength={512} disabled={!canConfigure || mutation.isPending} placeholder={t("honchoWorkspaceSettings.workspaceId")} onChange={(event) => setDraft(event.target.value)} />
-    {!value.trim() && <InlineBanner tone="warning">{t("honchoWorkspaceSettings.enterAWorkspaceToInclude")}</InlineBanner>}
-    {mutation.isError && <div role="alert"><InlineBanner tone="danger">{mutation.error.message}</InlineBanner></div>}
+  return <section className="space-y-3" aria-label="Honcho workspace">
+    <label htmlFor={id} className="text-sm font-medium">Honcho workspace</label>
+    <Input id={id} value={value} maxLength={512} disabled={!canConfigure || mutation.isPending} placeholder="Workspace ID" onChange={(event) => setDraft(event.target.value)} />
+    {!value.trim() && <InlineBanner tone="warning">Enter a workspace to include Honcho instructions. Existing tools remain available.</InlineBanner>}
+    {mutation.error && <div role="alert"><InlineBanner tone="danger">{describeError(mutation.error).body}</InlineBanner></div>}
     {draft !== null && draft !== saved && <div className="flex items-center justify-between">
       <Button variant="ghost" disabled={mutation.isPending} onClick={() => { setDraft(null); mutation.reset(); }}>{t("common.cancel")}</Button>
       <Button disabled={!canConfigure || mutation.isPending || !value.trim()} onClick={() => mutation.mutate()}>{mutation.isPending ? t("common.saving2") : t("honchoWorkspaceSettings.saveWorkspace")}</Button>

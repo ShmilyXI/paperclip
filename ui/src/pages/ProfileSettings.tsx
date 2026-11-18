@@ -1,10 +1,12 @@
 import { t } from "@/i18n";
 import { useEffect, useId, useRef, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Camera, LoaderCircle, Save, Trash2, UserRoundPen } from "lucide-react";
 import type { AuthSession, CurrentUserProfile, UpdateCurrentUserProfile } from "@paperclipai/shared";
 import { authApi } from "@/api/auth";
+import { useAccountBoundMutation } from "@/hooks/useAccountBoundMutation";
 import { assetsApi } from "@/api/assets";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useCompany } from "../context/CompanyContext";
 import { queryKeys } from "../lib/queryKeys";
@@ -14,6 +16,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { describeError } from "@/api/errors";
 
 function deriveInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -33,8 +36,8 @@ export function ProfileSettings() {
   const sessionQuery = useQuery({
     queryKey: queryKeys.auth.session,
     queryFn: () => authApi.getSession(),
-    retry: false,
   });
+  const sessionView = useQueryView(sessionQuery);
 
   useEffect(() => {
     setBreadcrumbs([
@@ -63,8 +66,13 @@ export function ProfileSettings() {
     });
   }
 
-  async function persistProfile(input: UpdateCurrentUserProfile) {
+  // A restored session can show one account while the cookie belongs to
+  // another, and the server saves for the cookie's user. Account-bound
+  // mutations wait for a verified session and abort if the user changed.
+  async function persistProfile(input: UpdateCurrentUserProfile, assertCurrentAccount: () => void) {
+    assertCurrentAccount();
     const profile = await authApi.updateProfile(input);
+    assertCurrentAccount();
     syncSessionProfile(profile);
     return profile;
   }
@@ -73,20 +81,20 @@ export function ProfileSettings() {
     return name.trim() || sessionQuery.data?.user.name || "Board";
   }
 
-  const updateMutation = useMutation({
-    mutationFn: (input: UpdateCurrentUserProfile) => persistProfile(input),
+  const updateMutation = useAccountBoundMutation({
+    mutationFn: (input: UpdateCurrentUserProfile, { assertCurrentAccount }) => persistProfile(input, assertCurrentAccount),
     onSuccess: (profile) => {
       setActionError(null);
       setName(profile.name ?? "");
       setImage(profile.image ?? "");
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : t("settings.failedToUpdateProfile"));
+      setActionError(describeError(error).body);
     },
   });
 
-  const uploadAvatarMutation = useMutation({
-    mutationFn: async (file: File) => {
+  const uploadAvatarMutation = useAccountBoundMutation({
+    mutationFn: async (file: File, { assertCurrentAccount }) => {
       if (!selectedCompanyId) {
         throw new Error(t("settings.selectAnOrganizationBeforeUploading"));
       }
@@ -96,7 +104,7 @@ export function ProfileSettings() {
         file,
         `profiles/${sessionQuery.data?.user.id ?? "board-user"}`,
       );
-      return persistProfile({ name: resolveProfileName(), image: asset.contentPath });
+      return persistProfile({ name: resolveProfileName(), image: asset.contentPath }, assertCurrentAccount);
     },
     onSuccess: (profile) => {
       setActionError(null);
@@ -104,32 +112,40 @@ export function ProfileSettings() {
       setImage(profile.image ?? "");
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : t("settings.failedToUploadAvatar"));
+      setActionError(describeError(error).body);
     },
   });
 
-  const removeAvatarMutation = useMutation({
-    mutationFn: () => persistProfile({ name: resolveProfileName(), image: null }),
+  const removeAvatarMutation = useAccountBoundMutation({
+    mutationFn: (_input, { assertCurrentAccount }) => persistProfile({ name: resolveProfileName(), image: null }, assertCurrentAccount),
     onSuccess: (profile) => {
       setActionError(null);
       setName(profile.name ?? "");
       setImage(profile.image ?? "");
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : t("settings.failedToRemoveAvatar"));
+      setActionError(describeError(error).body);
     },
   });
 
-  if (sessionQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("settings.loadingProfile")}</div>;
+  if (sessionQuery.isLoading || sessionView.kind === "reconnecting") {
+    return <div className="text-sm text-muted-foreground">Loading profile...</div>;
   }
 
-  if (sessionQuery.error || !sessionQuery.data) {
+  if (sessionView.kind === "error") {
     return (
-      <div className="text-sm text-destructive">
-        {sessionQuery.error instanceof Error ? sessionQuery.error.message : t("settings.failedToLoadProfile")}
-      </div>
+      <QueryErrorState
+        size="page"
+        error={sessionQuery.error}
+        action="load your profile"
+        onRetry={sessionView.retry}
+        retrying={sessionView.isFetching}
+      />
     );
+  }
+
+  if (!sessionQuery.data) {
+    return <div className="text-sm text-destructive">Failed to load profile.</div>;
   }
 
   const currentName = name.trim() || sessionQuery.data.user.name || "Board";

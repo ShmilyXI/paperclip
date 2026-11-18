@@ -55,6 +55,16 @@ export function reorderQueuedMessageEntries(
   }));
 }
 
+/**
+ * People see one readable line. A saved card response also carries a typed
+ * JSON receipt for the agent; it never reaches a label or a hover.
+ */
+export function queuedMessageLabel(entry: IssueQueuedCommentEntry): string {
+  if (entry.source?.kind !== "interaction") return entry.comment.body;
+  const summary = entry.source.summary?.trim();
+  return summary || entry.comment.body.split("\n")[0] || "Saved response";
+}
+
 function queueActionErrorCode(error: unknown): string | null {
   if (typeof error !== "object" || error === null) return null;
   const body = (error as { body?: unknown }).body;
@@ -98,7 +108,7 @@ function SortableQueuedMessage({
   onDiscard: () => void;
 }) {
   const immutableResponse = entry.source?.kind === "interaction";
-  const label = immutableResponse ? entry.comment.body.split("\n")[0] : entry.comment.body;
+  const label = queuedMessageLabel(entry);
   const sortable = useSortable({
     id: entry.comment.id,
     disabled: queueMutationDisabled || immutableResponse,
@@ -133,7 +143,7 @@ function SortableQueuedMessage({
         {...sortable.attributes}
         {...sortable.listeners}
         disabled={queueMutationDisabled || immutableResponse}
-        aria-label={t("taskChatQueuedMessages.reorderQueuedMessageBody", { body: entry.comment.body })}
+        aria-label={`Reorder queued message: ${label}`}
         className="flex h-7 w-7 shrink-0 cursor-grab items-center justify-center rounded-md text-muted-foreground/70 transition-colors hover:bg-accent hover:text-foreground active:cursor-grabbing disabled:cursor-default disabled:opacity-40"
       >
         <GripVertical className="h-3.5 w-3.5" aria-hidden />
@@ -143,11 +153,12 @@ function SortableQueuedMessage({
         className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
         aria-hidden
       />
-      <span className="min-w-0 flex-1 truncate px-1" title={entry.comment.body}>
+      <span className="min-w-0 flex-1 truncate px-1" title={label}>
         {label}
       </span>
 
-      {(queue.targetRunId || queue.state === "deferred") && (!queue.targetRunId || queue.protocol === "legacy" || entry.source?.requiresFreshSession ? (
+      {(queue.targetRunId || queue.state === "deferred") && (!queue.targetRunId || queue.protocol === "legacy" || entry.source?.requiresFreshSession ||
+        (queue.steeringDisposition !== "available" && onInterrupt) ? (
         <button
           type="button"
           onClick={onInterrupt}
@@ -190,8 +201,8 @@ function SortableQueuedMessage({
           (!queue.queueId && !entry.comment.id.startsWith("optimistic-")) ||
           !entry.canDiscard
         }
-        title={t("taskChatQueuedMessages.discardQueuedMessage")}
-        aria-label={t("taskChatQueuedMessages.discardQueuedMessageBody", { body: entry.comment.body })}
+        title="Discard queued message"
+        aria-label={`Discard queued message: ${label}`}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-40"
         data-testid={`task-chat-queued-discard-${entry.comment.id}`}
       >
@@ -207,8 +218,8 @@ function SortableQueuedMessage({
           <button
             type="button"
             disabled={queueMutationDisabled || immutableResponse}
-            title={t("taskChatQueuedMessages.queuedMessageActions")}
-            aria-label={t("taskChatQueuedMessages.queuedMessageActionsBody", { body: entry.comment.body })}
+            title="Queued message actions"
+            aria-label={`Queued message actions: ${label}`}
             className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           >
             <MoreHorizontal className="h-4 w-4" aria-hidden />
@@ -413,6 +424,11 @@ export function TaskChatQueuedMessages({
         onDragEnd={(event) => void handleDragEnd(event)}
       >
         <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+          {/* Bounded so a long queue scrolls here instead of covering the conversation. */}
+          <div
+            className="max-h-(--tc-queued-list-max-h) overflow-y-auto overscroll-contain"
+            data-testid="task-chat-queued-messages-list"
+          >
           {entries.map((entry) => {
             const action =
               pending?.commentId === entry.comment.id ? pending.action : null;
@@ -439,6 +455,7 @@ export function TaskChatQueuedMessages({
               />
             );
           })}
+          </div>
         </SortableContext>
       </DndContext>
       {deferredStatus ? <p role="status" className="border-t border-border px-3 py-1.5 text-xs text-muted-foreground">{deferredStatus.message}</p> : null}

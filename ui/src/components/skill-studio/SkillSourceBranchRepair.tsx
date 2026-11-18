@@ -1,3 +1,4 @@
+import { describeError } from "@/api/errors";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { SkillSource } from '@paperclipai/shared';
 import { skillSourcesApi } from '@/api/skillSources';
@@ -14,7 +15,7 @@ export function SkillSourceBranchRepair({ companyId, source, connectionId, onSav
   const branches = useQuery({
     queryKey: ['skill-source-branches', companyId, source.id, connectionId ?? source.connectionId],
     queryFn: ({ signal }) => skillSourcesApi.branches(companyId, source.id, connectionId ? { connectionId } : {}, signal),
-    retry: false, refetchOnMount: 'always',
+    refetchOnMount: 'always',
   });
   async function save(branch: string) {
     try {
@@ -32,6 +33,6 @@ export function SkillSourceBranchRepair({ companyId, source, connectionId, onSav
     await onSaved();
   }
   return <SkillSourceBranchRepairDialog repository={source.fullName} currentBranch={source.trackingRef}
-    branches={branches.data?.branches ?? []} loading={branches.isFetching} loadError={branches.error?.message}
+    branches={branches.data?.branches ?? []} loading={branches.isFetching} loadError={branches.error ? describeError(branches.error).body : undefined}
     onRetry={() => void branches.refetch()} onSave={save} onClose={onClose} onReturnFocus={onReturnFocus} />;
 }

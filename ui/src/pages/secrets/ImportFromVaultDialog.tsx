@@ -52,6 +52,7 @@ import {
 } from "@/components/ui/select";
 import { EmptyState } from "../../components/EmptyState";
 import { cn } from "../../lib/utils";
+import { describeError } from "@/api/errors";
 
 type Step = "select" | "review" | "result";
 
@@ -202,11 +203,7 @@ function formatRelativeShort(value: string | null | undefined): string {
 }
 
 function readableErrorMessage(error: unknown): string {
-  if (error instanceof ApiError) {
-    return error.message || t("importFromVaultDialog.requestFailedStatus", { status: error.status });
-  }
-  if (error instanceof Error) return error.message;
-  return t("importFromVaultDialog.unexpectedError");
+  return describeError(error).body;
 }
 
 function apiErrorCode(error: ApiError): string | null {
@@ -226,7 +223,7 @@ function isPermissionError(error: unknown): boolean {
   if (!(error instanceof ApiError)) return false;
   if (apiErrorCode(error) === "access_denied") return true;
   if (error.status === 401 || error.status === 403) return true;
-  const message = error.message.toLowerCase();
+  const message = error.message.toLowerCase(); // query-error-ok: classifies the failure, nothing is rendered here
   return (
     message.includes("accessdenied") ||
     message.includes("access denied") ||
@@ -237,7 +234,7 @@ function isPermissionError(error: unknown): boolean {
 function isThrottlingError(error: unknown): boolean {
   if (!(error instanceof ApiError)) return false;
   if (apiErrorCode(error) === "throttled") return true;
-  const message = error.message.toLowerCase();
+  const message = error.message.toLowerCase(); // query-error-ok: classifies the failure, nothing is rendered here
   return message.includes("throttl") || message.includes("toomanyrequests");
 }
 

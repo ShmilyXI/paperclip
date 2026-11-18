@@ -1,4 +1,6 @@
 import { t } from "@/i18n";
+import { useQueryView } from "@/components/QueryView";
+import { describeError } from "@/api/errors";
 import { useId, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { ExecutionBlocker } from "@paperclipai/shared";
@@ -21,6 +23,7 @@ export function WorkspaceReconstructionRecovery({ issueId, blocker, canManage, o
   const [acknowledged, setAcknowledged] = useState(false);
   const files = useQuery({ queryKey: queryKeys.issues.attachments(issueId),
     queryFn: () => issuesApi.listAttachments(issueId), enabled: canManage });
+  const filesView = useQueryView(files);
   const currentSelection = selected.filter(id => files.data?.some(file => file.id === id));
   const submit = useMutation({
     mutationFn: () => issuesApi.reconstructWorkspace(issueId, {
@@ -61,8 +64,8 @@ export function WorkspaceReconstructionRecovery({ issueId, blocker, canManage, o
         <Button disabled={submit.isPending || !acknowledged || currentSelection.length === 0 || missingWork.trim().length < 20 || outcomeEvidence.trim().length < 20}
           onClick={() => submit.mutate()}>{submit.isPending ? t("workspaceReconstructionRecovery.queuing") : t("workspaceReconstructionRecovery.rebuildAndContinue")}</Button>
       </div>
-      {files.isError && <p role="alert" className="text-destructive">{files.error.message}</p>}
-      {submit.isError && <p role="alert" className="text-destructive">{submit.error.message}</p>}
-    </div> : <p>{t("workspaceReconstructionRecovery.aBoardMemberWithRuntime")}</p>}
+      {(filesView.kind === "error") && <p role="alert" className="text-destructive">{describeError(files.error).body}</p>}
+      {submit.error && <p role="alert" className="text-destructive">{describeError(submit.error).body}</p>}
+    </div> : <p>A board member with runtime access can continue from the surviving task attachments.</p>}
   </details>;
 }

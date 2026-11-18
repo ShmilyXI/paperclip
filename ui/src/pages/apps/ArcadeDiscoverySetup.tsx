@@ -1,6 +1,7 @@
 import { t } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { describeError } from "@/api/errors";
 import { toolsApi } from "@/api/tools";
 import { useAccountIdentity } from "@/api/companies-query";
 import { queryKeys } from "@/lib/queryKeys";
@@ -34,9 +35,9 @@ export function ArcadeDiscoverySetup({ connection, onClose }: { connection: Tool
         <p className="text-xs text-muted-foreground">{t("arcadeDiscoverySetup.useTheEndUserId")}</p>
         <Input id="arcade-discovery-user" autoComplete="off" required value={userId} onChange={event => setUserId(event.target.value)} />
       </div>
-      {save.isError ? <p role="alert" className="text-sm text-destructive">{save.error instanceof Error ? save.error.message : t("arcadeDiscoverySetup.couldnTSaveAccountSync")}</p> : null}
-      <DialogFooter className="sm:justify-between"><Button type="button" variant="ghost" disabled={save.isPending} onClick={onClose}>{t("common.cancel")}</Button>
-        <Button type="submit" disabled={!settled || save.isPending || !apiKey.trim() || !userId.trim()}>{save.isPending ? t("common.saving2") : t("arcadeDiscoverySetup.saveAndSync")}</Button>
+      {save.error ? <p role="alert" className="text-sm text-destructive">{describeError(save.error).body}</p> : null}
+      <DialogFooter className="sm:justify-between"><Button type="button" variant="ghost" disabled={save.isPending} onClick={onClose}>Cancel</Button>
+        <Button type="submit" disabled={!settled || save.isPending || !apiKey.trim() || !userId.trim()}>{save.isPending ? "Saving…" : "Save and sync"}</Button>
       </DialogFooter>
     </form>
   </DialogContent></Dialog>;

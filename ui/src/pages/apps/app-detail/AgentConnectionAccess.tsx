@@ -1,12 +1,13 @@
 import { t } from "@/i18n";
 import { useState } from "react";
-import type { Agent, ToolCatalogEntry, ToolPolicy, ToolProfileWithDetails } from "@paperclipai/shared";
+import type { Agent, ToolCatalogEntry, ToolPolicy, ToolProfileConfiguration } from "@paperclipai/shared";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { Button } from "@/components/ui/button";
+import { describeError } from "@/api/errors";
 
 export function AgentConnectionAccess({ connectionId, profiles, policies, catalog, agents, canManage, onRemove }: {
   connectionId: string;
-  profiles: ToolProfileWithDetails[];
+  profiles: ToolProfileConfiguration[];
   policies: ToolPolicy[];
   catalog: ToolCatalogEntry[];
   agents: Agent[];
@@ -32,7 +33,7 @@ export function AgentConnectionAccess({ connectionId, profiles, policies, catalo
     try {
       await onRemove(profileId);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : t("agentConnectionAccess.couldnTRemoveThisAccess"));
+      setError(describeError(cause).body);
     } finally {
       setPending(null);
     }

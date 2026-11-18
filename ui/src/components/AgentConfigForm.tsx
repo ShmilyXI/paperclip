@@ -31,6 +31,7 @@ import { AGENT_DEFAULT_MAX_CONCURRENT_RUNS, supportedEnvironmentDriversForAdapte
 import type { AdapterModel } from "../api/agents";
 import { agentsApi } from "../api/agents";
 import { ApiError } from "../api/client";
+import { describeError } from "@/api/errors";
 import { environmentsApi } from "../api/environments";
 import { instanceSettingsApi } from "../api/instanceSettings";
 import { secretsApi } from "../api/secrets";
@@ -44,6 +45,7 @@ import { DEFAULT_CURSOR_LOCAL_MODEL } from "@paperclipai/adapter-cursor-local";
 import { DEFAULT_GEMINI_LOCAL_MODEL } from "@paperclipai/adapter-gemini-local";
 import { DEFAULT_KIMI_LOCAL_MODEL } from "@paperclipai/adapter-kimi-local";
 import { DEFAULT_OPENCODE_LOCAL_MODEL } from "@paperclipai/adapter-opencode-local";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect, SelectPopover } from "@/components/ui/select";
@@ -146,7 +148,9 @@ type AgentConfigFormProps = {
   /** Keep variable bindings beside secret access in a unified edit surface. */
   environmentVariablesPlacement?: "configuration" | "secrets";
   /** "cards" renders each section as heading + bordered card (for settings pages). Default: "inline" (border-b dividers). */
-  sectionLayout?: "inline" | "cards";
+  sectionLayout?: "inline" | "cards" | "panels";
+  /** Sections to leave out entirely (by `data-config-section` key). */
+  hiddenSections?: readonly string[];
   /** Optional settings composition; sorting changes DOM order as well as visual order. */
   sectionOrder?: readonly string[];
   sectionTitles?: Record<string, string>;
@@ -324,12 +328,21 @@ function clampDelayMsFromSeconds(value: number) {
   return clampInteger(value, 0, MAX_TURN_CONTINUATION_MAX_DELAY_SEC) * 1000;
 }
 
-function ConfigSections({ order, className, children }: {
+function ConfigSections({ order, hidden, className, children }: {
   order?: readonly string[];
+  hidden?: readonly string[];
   className: string;
   children: ReactNode;
 }) {
-  if (!order) return <div className={className}>{children}</div>;
+  const keyOf = (child: ReactNode) =>
+    isValidElement<{ "data-config-section"?: string }>(child) ? child.props["data-config-section"] : undefined;
+  const visible = hidden?.length
+    ? Children.toArray(children).filter((child) => {
+      const key = keyOf(child);
+      return !key || !hidden.includes(key);
+    })
+    : children;
+  if (!order) return <div className={className}>{visible}</div>;
   const rank = (child: ReactNode) => {
     const key = isValidElement<{ "data-config-section"?: string }>(child)
       ? child.props["data-config-section"]
@@ -337,7 +350,7 @@ function ConfigSections({ order, className, children }: {
     const index = key ? order.indexOf(key) : -1;
     return index < 0 ? order.length : index;
   };
-  const sections = Children.toArray(children).sort((a, b) => rank(a) - rank(b));
+  const sections = Children.toArray(visible).sort((a, b) => rank(a) - rank(b));
   return <div className={className}>{sections}</div>;
 }
 
@@ -346,7 +359,12 @@ function ConfigSections({ order, className, children }: {
 export function AgentConfigForm(props: AgentConfigFormProps) {
   const { mode, adapterModels: externalModels } = props;
   const isCreate = mode === "create";
-  const cards = props.sectionLayout === "cards";
+  const panels = props.sectionLayout === "panels";
+  const cards = props.sectionLayout === "cards" || panels;
+  const cardBody = panels
+    ? "space-y-3 rounded-lg bg-(--agent-detail-tile) p-(--agent-detail-module-inset)"
+    : "border border-border rounded-lg p-4 space-y-3";
+  const untitled = (key: string) => panels && props.sectionTitles?.[key] === "";
   const showAdapterTypeField = props.showAdapterTypeField ?? true;
   const showInlineAdapterTestEnvironmentFeedback = !props.onTestFeedbackChange;
   const showCreateRunPolicySection = props.showCreateRunPolicySection ?? true;
@@ -372,7 +390,6 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       : ["user-secret-definitions", "none"],
     queryFn: () => secretsApi.listUserSecretDefinitions(selectedCompanyId!),
     enabled: Boolean(selectedCompanyId),
-    retry: false,
   });
   // Pending binding proposals targeting this agent (PAP-14731). Board-only route;
   // non-permitted viewers simply get an empty list.
@@ -383,7 +400,6 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       : ["secret-proposals", "none"],
     queryFn: () => secretsApi.listProposals(selectedCompanyId!, "pending"),
     enabled: Boolean(selectedCompanyId) && !isCreate,
-    retry: false,
   });
   const agentBindingProposals = useMemo(
     () =>
@@ -396,7 +412,6 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const { data: experimentalSettings } = useQuery({
     queryKey: queryKeys.instance.experimentalSettings,
     queryFn: () => instanceSettingsApi.getExperimental(),
-    retry: false,
   });
   const adapterPickerDisabledTypes = useMemo(() => {
     const next = new Set(disabledTypes);
@@ -430,12 +445,10 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const { data: generalSettings } = useQuery({
     queryKey: queryKeys.instance.generalSettings,
     queryFn: () => instanceSettingsApi.getGeneral(),
-    retry: false,
   });
   const { data: instanceSettings } = useQuery({
     queryKey: queryKeys.instance.settings,
     queryFn: () => instanceSettingsApi.get(),
-    retry: false,
   });
 
   const { data: environments = [] } = useQuery<Environment[]>({
@@ -638,11 +651,18 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     queryFn: () => adaptersApi.list({ companyId: selectedCompanyId!, environmentId: rawCurrentDefaultEnvironmentId || null }),
     enabled: Boolean(selectedCompanyId),
   });
+  const runnerDiscoveryView = useQueryView(runnerDiscovery);
   const runnerAvailability = runnerDiscovery.data?.find(item => item.type === harnessType);
   const runner: AgentRunnerChoice = isCreate ? props.values.runner ?? "auto" : overlay.runner ?? agentRunner(adapterType);
   const fieldsAdapterType = isRunnerHarness
     ? (runner === "paperclip" || (runner === "auto" && runnerAvailability?.defaultRunner === "paperclip") ? "paperclip_runner" : harnessType)
     : adapterType;
+  const isCursorCloudRunner = harnessType === "cursor_cloud" && fieldsAdapterType === "paperclip_runner";
+  useEffect(() => {
+    if (props.mode !== "create" || !isCursorCloudRunner || !props.values.defaultEnvironmentId) return;
+    props.onChange({ defaultEnvironmentId: "" });
+  }, [props.mode, isCursorCloudRunner, isCreate ? props.values.defaultEnvironmentId : undefined,
+    isCreate ? props.onChange : undefined]);
   useEffect(() => {
     if (props.mode !== "create" || !isRunnerHarness) return;
     const resolvedRunner = runner === "auto" ? runnerAvailability?.defaultRunner : runner;
@@ -679,6 +699,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   // inert while every run happens in the platform-managed environment.
   const showLegacyWorkingDirectoryField =
     isLocal
+    && !isCursorCloudRunner
     && !hideHostPaths
     && shouldShowLegacyWorkingDirectoryField({ isCreate, adapterConfig: config });
   const uiAdapter = useMemo(() => getUIAdapter(adapterType), [adapterType]);
@@ -921,7 +942,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const showRunnerUpgrade = !isCreate
     && ["codex_local", "claude_local", "grok_local"].includes(props.agent.adapterType)
     && adapterType === props.agent.adapterType
-    && !runnerDiscovery.isError
+    && !(runnerDiscoveryView.kind === "error")
     && (runnerAvailability?.defaultRunner === "paperclip" || canQualifyRunnerUpgrade);
   const upgradeRunner = async () => {
     if (isCreate || runnerUpgradePending || upgradeEnvironmentChanged) return;
@@ -975,10 +996,10 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   // Only applies in create mode and only once the K8s environment is loaded; if
   // none is available the UI surfaces a notice instead of silently selecting it.
   useEffect(() => {
-    if (!isCreate || !set || !forcedKubernetes || !kubernetesEnvironment) return;
+    if (!isCreate || !set || isCursorCloudRunner || !forcedKubernetes || !kubernetesEnvironment) return;
     if (currentDefaultEnvironmentId === kubernetesEnvironment.id) return;
     set({ defaultEnvironmentId: kubernetesEnvironment.id });
-  }, [isCreate, set, forcedKubernetes, kubernetesEnvironment, currentDefaultEnvironmentId]);
+  }, [isCreate, set, isCursorCloudRunner, forcedKubernetes, kubernetesEnvironment, currentDefaultEnvironmentId]);
 
   const runnableEnvironments = useMemo(
     () => environments.filter((environment) => {
@@ -1008,8 +1029,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const inheritedEnvironmentLabel = instanceDefaultEnvironment
     ? environmentDisplayLabel(instanceDefaultEnvironment)
     : managedSandboxOnly
-      ? t("agentConfig.paperclipComputer")
-      : t("common.local");
+      ? "Paperclip Sandbox"
+      : "Local";
 
   const modelProvider = adapterType === "opencode_local" && aiConnectionBindingSchema.safeParse(
     (overlay.runtime.runtimeConfig as Record<string, unknown> | undefined)?.aiConnection ?? runtimeConfig.aiConnection,
@@ -1025,12 +1046,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const modelQueryKey = selectedCompanyId
     ? queryKeys.agents.adapterModels(selectedCompanyId, modelAdapterType, currentDefaultEnvironmentId || null, modelCacheIdentity)
     : ["agents", "none", "adapter-models", adapterType];
-  const {
-    data: fetchedModels,
-    error: fetchedModelsError,
-    isLoading: fetchingModels,
-    refetch: refreshConnectionModels,
-  } = useQuery({
+  const fetchedModelsQuery = useQuery({
     queryKey: modelQueryKey,
     queryFn: () => agentsApi.adapterModels(selectedCompanyId!, modelAdapterType, {
       environmentId: currentDefaultEnvironmentId || null,
@@ -1042,6 +1058,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     ...(accountBoundCatalog ? ACCOUNT_BOUND_MODEL_DISCOVERY_QUERY_OPTIONS : {}),
     enabled: Boolean(selectedCompanyId) && !isExternalRunner && !connectionModels,
   });
+  const { data: fetchedModels, error: fetchedModelsError, isLoading: fetchingModels, refetch: refreshConnectionModels } = fetchedModelsQuery;
+  const fetchedModelsView = useQueryView(fetchedModelsQuery);
   const accountModelScope = accountBoundCatalog ? JSON.stringify(modelQueryKey) : null;
   useEffect(() => {
     if (accountModelScope && selectedCompanyId && !isExternalRunner && !connectionModels) void refreshConnectionModels();
@@ -1049,7 +1067,10 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const [refreshModelsError, setRefreshModelsError] = useState<string | null>(null);
   const [refreshingModels, setRefreshingModels] = useState(false);
   const models = connectionModels?.models ?? fetchedModels ?? externalModels ?? [];
-  const modelError = connectionModels ? connectionModels.error : fetchedModelsError;
+  // `useConnectionModels` owns its own query and exposes only `error`; the
+  // adapter-models read is gated on its view below, so a transient refetch
+  // failure keeps the cached list without an error line.
+  const connectionModelsError = connectionModels?.error ?? null;
   const adapterCommandField = "command";
   const {
     data: detectedModelData,
@@ -1147,7 +1168,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       // server resolves the driver and probes the host in that case.
       //
       // Test can be clicked before the settings query settles (or after it
-      // failed with retry:false), so when the agent relies on the instance
+      // failed), so when the agent relies on the instance
       // default, resolve the settings here rather than trusting the
       // render-time cache. A fetch that still fails FAILS the test with an
       // honest diagnostic — silently probing the host instead would report
@@ -1156,7 +1177,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       let settings = instanceSettings;
       let environmentList = environments;
       let managedSandboxOnly = experimentalSettings?.enableManagedSandboxOnly === true;
-      if (!rawCurrentDefaultEnvironmentId) {
+      if (!isCursorCloudRunner && !rawCurrentDefaultEnvironmentId) {
         // The agent has no own environment, so the Test resolves the instance
         // default, the local default, or the managed sandbox. Resolve the
         // settings, the environment list, and the managed-sandbox-only policy
@@ -1194,7 +1215,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       // policy is on, probe the managed sandbox the real run uses instead. The
       // resolver throws when no managed sandbox is available, which the mutation
       // surfaces as a fail-closed error rather than a local host probe.
-      const environmentId = resolveAdapterTestEnvironmentId({
+      const environmentId = isCursorCloudRunner ? null : resolveAdapterTestEnvironmentId({
         agentDefaultEnvironmentId: rawCurrentDefaultEnvironmentId || null,
         instanceDefaultEnvironmentId: settings?.defaultEnvironmentId ?? null,
         localDefaultEnvironmentId: resolveLocalDefaultEnvironmentId(environmentList),
@@ -1211,6 +1232,9 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       const aiConnection = isCreate ? undefined : aiRuntimeConnectionBindingSchema.safeParse(
         (overlay.runtime.runtimeConfig as Record<string, unknown> | undefined)?.aiConnection ?? props.agent.runtimeConfig.aiConnection,
       ).data;
+      const testRunnerSelection = isCursorCloudRunner
+        ? { runner: "paperclip" as const }
+        : isRunnerHarness && (isCreate ? runner !== "auto" : overlay.runner !== undefined) ? { runner } : {};
       if (!isCreate && props.agent.adapterType === "paperclip_runner" && adapterType === "paperclip_runner"
         && runnerAvailability?.defaultRunner !== "paperclip"
         && !isExternalRunner && aiConnection?.mode !== "router" && !isDirty && environmentId && canQualifyRunnerEnvironment(environmentList.find(environment => environment.id === environmentId))) {
@@ -1230,9 +1254,9 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             : adapterConfig.provider === "acpx" && adapterConfig.acpxAgent === "claude" ? "claude_local"
               : adapterType
           : adapterType;
-        return testAgentSetup({ companyId: selectedCompanyId, adapterType, providerAdapter, adapterConfig, agentId, aiConnection, environmentId, ...(isRunnerHarness && (isCreate ? runner !== "auto" : overlay.runner !== undefined) ? { runner } : {}) });
+        return testAgentSetup({ companyId: selectedCompanyId, adapterType, providerAdapter, adapterConfig, agentId, aiConnection, environmentId, ...testRunnerSelection });
       }
-      return agentsApi.testEnvironment(selectedCompanyId, adapterType, { adapterConfig, agentId, aiConnection, environmentId, ...(isRunnerHarness && (isCreate ? runner !== "auto" : overlay.runner !== undefined) ? { runner } : {}) });
+      return agentsApi.testEnvironment(selectedCompanyId, adapterType, { adapterConfig, agentId, aiConnection, environmentId, ...testRunnerSelection });
     },
   });
   const [testActionPending, setTestActionPending] = useState(false);
@@ -1325,7 +1349,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     try {
       return await testEnvironment.mutateAsync();
     } catch (error) {
-      setTestActionError(error instanceof Error ? error.message : t("agentConfig.environmentTestFailed"));
+      setTestActionError(describeError(error).body);
       throw error;
     } finally {
       setTestActionPending(false);
@@ -1375,11 +1399,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     if (!props.onTestFeedbackChange) return;
     props.onTestFeedbackChange({
       errorMessage: testActionError
-        ?? (testEnvironment.error instanceof Error
-          ? testEnvironment.error.message
-          : testEnvironment.error
-            ? t("agentConfig.environmentTestFailed")
-            : null),
+        ?? (testEnvironment.error ? describeError(testEnvironment.error).body : null),
       result: testEnvironment.data ?? null,
       // `showAdapterLogin` already requires a selected company and a non-empty
       // environment id, so both are present here.
@@ -1416,7 +1436,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       const refreshed = await agentsApi.adapterModels(selectedCompanyId, modelAdapterType, { refresh: true, environmentId: currentDefaultEnvironmentId || null, provider: modelProvider, ...(runnerAcpxAgent ? { acpxAgent: runnerAcpxAgent } : {}), ...(accountBoundCatalog ? { aiConnection: modelAiBinding, agentId: !isCreate ? props.agent.id : undefined } : {}) });
       queryClient.setQueryData(modelQueryKey, refreshed);
     } catch (error) {
-      setRefreshModelsError(error instanceof Error ? error.message : t("agentConfig.failedToRefreshAdapterModels"));
+      setRefreshModelsError(describeError(error).body);
     } finally {
       setRefreshingModels(false);
     }
@@ -1466,7 +1486,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           : eff("adapterConfig", thinkingEffortKey, String(config[thinkingEffortKey] ?? ""));
   const showThinkingEffort = !(harnessType === "pi_local" && fieldsAdapterType === "paperclip_runner")
     && adapterType !== "gemini_local"
-    && adapterType !== "cursor_cloud"
+    && harnessType !== "cursor_cloud"
     && (adapterType !== "paperclip_runner" || isRunnerHarness);
   const codexSearchEnabled = adapterType === "codex_local"
     ? (isCreate ? Boolean(val!.search) : eff("adapterConfig", "search", Boolean(config.search)))
@@ -1541,7 +1561,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
   if (!isCreate && props.content === "secrets") {
     return (
-      <div className={cn("relative", cards && "space-y-6")}>
+      <div className={cn("relative", panels ? "flex flex-col gap-(--agent-detail-band-gap)" : cards && "space-y-6")}>
         {isDirty && !props.hideInlineSave && (
           <div className="sticky top-0 z-10 flex items-center justify-end border-b border-primary/20 bg-background/90 px-4 py-2 backdrop-blur-sm">
             <div className="flex items-center gap-3">
@@ -1559,7 +1579,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               ? <h3 className="mb-3 text-sm font-medium">{t("common.environmentVariables")}</h3>
               : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("common.environmentVariables")}</div>
             }
-            <div className={cn(cards ? "rounded-lg border border-border p-4" : "px-4 pb-3")}>
+            <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? (panels ? "rounded-lg bg-(--agent-detail-tile) p-(--agent-detail-module-inset)" : "rounded-lg border border-border p-4") : "px-4 pb-3")}>
               {environmentVariablesEditor}
             </div>
           </div>
@@ -1570,7 +1590,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             ? <h3 className="mb-3 text-sm font-medium">{t("agentConfig.secretAccess")}</h3>
             : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("agentConfig.secretAccess")}</div>
           }
-          <div className={cn(cards ? "space-y-3 rounded-lg border border-border p-4" : "space-y-3 px-4 pb-3")}>
+          <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "space-y-3 px-4 pb-3")}>
             <p className="text-xs text-muted-foreground">{help.secretAccess}</p>
             <AgentSecretAccessEditor
               config={{ ...config, ...overlay.adapterConfig }}
@@ -1620,7 +1640,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           {upgradeWarnings.map(warning => <p key={warning.field} className="text-sm text-muted-foreground">{warning.message}</p>)}
         </div>
       ) : null}
-    <ConfigSections order={props.sectionOrder} className={cn("relative", cards && "space-y-6")}>
+    <ConfigSections order={props.sectionOrder} hidden={props.hiddenSections} className={cn("relative", panels ? "agent-config-panels" : cards && "space-y-6")}>
       {/* ---- Floating Save button (edit mode, when dirty) ---- */}
       {isDirty && !props.hideInlineSave && (
         <div className="sticky top-0 z-10 flex items-center justify-end px-4 py-2 bg-background/90 backdrop-blur-sm border-b border-primary/20">
@@ -1644,8 +1664,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             ? <h3 className="text-sm font-medium mb-3">{props.sectionTitles?.["identity"] ?? t("agentConfig.identity")}</h3>
             : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("agentConfig.identity")}</div>
           }
-          <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
-            <Field label={t("common.name")} hint={help.name}>
+          <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
+            <Field label="Name" hint={help.name}>
               <DraftInput
                 value={eff("identity", "name", props.agent.name)}
                 onCommit={(v) => mark("identity", "name", v)}
@@ -1701,16 +1721,16 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       )}
 
       {/* ---- Execution ---- */}
-      {forcedKubernetes ? (
+      {isCursorCloudRunner ? null : forcedKubernetes ? (
         // Instance execution policy forces the managed Kubernetes sandbox
         // (executionMode=kubernetes): never offer local / non-Kubernetes targets.
         // Render the environment read-only instead of the selectable picker.
         <div data-config-section="environment" className={cn(!cards && (isCreate ? "border-t border-border" : "border-b border-border"))}>
           {cards
-            ? <h3 className="text-sm font-medium mb-3">{t("common.environment")}</h3>
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("common.environment")}</div>
+            ? (untitled("environment") ? null : <h3 className="text-sm font-medium mb-3">Environment</h3>)
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">Environment</div>
           }
-          <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
+          <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
             <Field
               label={t("agentConfig.defaultEnvironment")}
               hint={t("agentConfig.thisInstanceRunsAllAgents")}
@@ -1730,11 +1750,11 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       ) : showEnvironmentOverrideControl ? (
         <div data-config-section="environment" className={cn(!cards && (isCreate ? "border-t border-border" : "border-b border-border"))}>
           {cards
-            ? <h3 className="text-sm font-medium mb-3">{t("common.environment")}</h3>
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("common.environment")}</div>
+            ? (untitled("environment") ? null : <h3 className="text-sm font-medium mb-3">Environment</h3>)
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">Environment</div>
           }
-          <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
-            <Field label={t("agentConfig.environmentOverride")}>
+          <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
+            <Field label="Environment override">
               <div className="space-y-2">
                 <SelectPopover
                   aria-label={t("agentConfig.environmentOverride")}
@@ -1762,10 +1782,10 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
       {/* ---- Adapter ---- */}
       <div data-config-section="adapter" className={cn(!cards && (isCreate ? "border-t border-border" : "border-b border-border"))}>
-        <div className={cn(cards ? "flex items-center justify-between mb-3" : "px-4 py-2 flex items-center justify-between gap-2")}>
+        {untitled("adapter") && !showInlineAdapterTestEnvironmentButton ? null : <div className={cn(cards ? "flex items-center justify-between mb-3" : "px-4 py-2 flex items-center justify-between gap-2")}>
           {cards
-            ? <h3 className="text-sm font-medium">{props.sectionTitles?.["adapter"] ?? t("common.adapter")}</h3>
-            : <span className="text-xs font-medium text-muted-foreground">{t("common.adapter")}</span>
+            ? (untitled("adapter") ? <span /> : <h3 className="text-sm font-medium">{props.sectionTitles?.["adapter"] ?? "Adapter"}</h3>)
+            : <span className="text-xs font-medium text-muted-foreground">Adapter</span>
           }
           {showInlineAdapterTestEnvironmentButton && (
             <Button
@@ -1779,8 +1799,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               {testActionPending ? `${testActionLabel}...` : testActionLabel}
             </Button>
           )}
-        </div>
-        <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
+        </div>}
+        <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
           {showAdapterTypeField && isGrokBotRunner && (
             <Field label={t("agentConfig.harness")} hint={help.adapterType}>
               <div className="inline-flex items-center gap-1.5">
@@ -1876,10 +1896,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
           {showInlineAdapterTestEnvironmentFeedback && !props.compactTestFeedback && (testActionError || testEnvironment.error) && (
             <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-              {testActionError
-                ?? (testEnvironment.error instanceof Error
-                  ? testEnvironment.error.message
-                  : t("agentConfig.environmentTestFailed"))}
+              {testActionError ?? describeError(testEnvironment.error).body}
             </div>
           )}
 
@@ -1930,7 +1947,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           {isLocal && (<>
               <ModelDropdown
                 models={models}
-                loadingModels={connectionModels?.isLoading ?? fetchingModels}
+                loadingModels={connectionModels?.isLoading ?? (fetchingModels || fetchedModelsView.kind === "reconnecting")}
                 value={currentModelId}
                 onChange={(v) => {
                   const supportedEfforts = setupEfforts(isRunnerHarness ? harnessType : adapterType, v);
@@ -1951,9 +1968,9 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 }}
                 open={modelOpen}
                 onOpenChange={setModelOpen}
-                defaultLabel={adapterType === "claude_local" ? t("agentConfig.defaultModel", { MODEL: DEFAULT_CLAUDE_LOCAL_MODEL }) : undefined}
-                allowDefault={adapterType !== "opencode_local" && adapterType !== "pi_local" && adapterType !== "paperclip_runner"}
-                required={adapterType === "opencode_local" || adapterType === "pi_local" || runnerAcpxAgent === "antigravity"}
+                defaultLabel={adapterType === "claude_local" ? `Default (${DEFAULT_CLAUDE_LOCAL_MODEL})` : undefined}
+                allowDefault={adapterType !== "opencode_local" && adapterType !== "pi_local" && adapterType !== "paperclip_runner" && !isCursorCloudRunner}
+                required={adapterType === "opencode_local" || adapterType === "pi_local" || isCursorCloudRunner || runnerAcpxAgent === "antigravity"}
                 groupByProvider={!connectionModels && (adapterType === "opencode_local" || adapterType === "pi_local")}
                 preserveOrder={Boolean(connectionModels) || adapterCuratesModelOrder(adapterType)}
                 creatable
@@ -1974,14 +1991,19 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 detectModelLabel={t("agentConfig.detectModel")}
                 emptyDetectHint={t("agentConfig.noModelDetectedSelectOrEnterOneManually")}
               />
-              {(refreshModelsError || modelError) && (
-                <p className="text-xs text-destructive">
-                  {refreshModelsError
-                    ?? (modelError instanceof Error
-                      ? modelError.message
-                      : t("agentConfig.failedToLoadAdapterModels"))}
-                </p>
-              )}
+              {refreshModelsError ? (
+                <p className="text-xs text-destructive">{refreshModelsError}</p>
+              ) : connectionModelsError ? (
+                <p className="text-xs text-destructive">{describeError(connectionModelsError).body}</p>
+              ) : !connectionModels && fetchedModelsView.kind === "error" ? (
+                <QueryErrorState
+                  size="inline"
+                  error={fetchedModelsError}
+                  action="load adapter models"
+                  onRetry={fetchedModelsView.retry}
+                  retrying={fetchedModelsView.isFetching}
+                />
+              ) : null}
               {adapterType === "opencode_local"
                 && !connectionModels
                 && currentDefaultEnvironment
@@ -2054,10 +2076,10 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       {(
         <div data-config-section="configuration" className={cn(!cards && "border-b border-border")}>
           {cards
-            ? <h3 className="text-sm font-medium mb-3">{t("common.configuration")}</h3>
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("common.configuration")}</div>
+            ? (untitled("configuration") ? null : <h3 className="text-sm font-medium mb-3">Configuration</h3>)
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">Configuration</div>
           }
-          <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
+          <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
               {!isCreate && typeof config.bootstrapPromptTemplate === "string" && config.bootstrapPromptTemplate && (
                 <>
                   <Field label={t("agentConfig.bootstrapPromptLegacy")} hint={help.bootstrapPrompt}>
@@ -2093,7 +2115,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               >
                 <div className="space-y-3">
                   {isRunnerHarness && <AgentRunnerSelect value={runner}
-                    pending={runnerDiscovery.isFetching} error={runnerDiscovery.error?.message} onRetry={() => { void runnerDiscovery.refetch(); }}
+                    pending={runnerDiscovery.isFetching} error={runnerDiscovery.error ? describeError(runnerDiscovery.error).body : undefined} onRetry={() => { void runnerDiscovery.refetch(); }}
                     defaultRunner={runnerAvailability?.defaultRunner}
                     supportedRunners={runnerAvailability?.supportedRunners}
                     onChange={next => isCreate ? set!({ runner: next }) : setOverlay(prev => ({ ...prev, runner: next }))} />}
@@ -2177,7 +2199,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             ? <h3 className="text-sm font-medium mb-3">{t("common.environmentVariables")}</h3>
             : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("common.environmentVariables")}</div>
           }
-          <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
+          <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
             {isLocal ? environmentVariablesEditor : renderAdapterFields("environment")}
           </div>
         </div>
@@ -2190,7 +2212,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             ? <h3 className="text-sm font-medium flex items-center gap-2 mb-3"><Heart className="h-3 w-3" /> {t("agentConfig.runPolicy")}</h3>
             : <div className="px-4 py-2 text-xs font-medium text-muted-foreground flex items-center gap-2"><Heart className="h-3 w-3" /> {t("agentConfig.runPolicy")}</div>
           }
-          <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
+          <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
             <ToggleWithNumber
               label={t("agentConfig.heartbeatOnInterval")}
               hint={help.heartbeatInterval}
@@ -2388,11 +2410,12 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
       {props.compactTestFeedback && showInlineAdapterTestEnvironmentFeedback && showAdapterTestEnvironmentButton && (
         <RuntimeTestCard
+          tone={panels ? "tile" : "card"}
           variant={isExternalRunner ? "prerequisites" : "connection"}
           metadataOnly={accountBoundCatalog}
           state={testActionPending ? "running" : testActionError || testEnvironment.error ? "fail" : testResult?.status ?? "idle"}
           result={testResult ?? null}
-          error={testActionError ?? (testEnvironment.error instanceof Error ? testEnvironment.error.message : null)}
+          error={testActionError ?? (testEnvironment.error ? describeError(testEnvironment.error).body : null)}
           onTest={triggerTestEnvironment}
           disabled={testEnvironmentDisabled}
         />
@@ -2547,17 +2570,12 @@ export type AdapterLoginPanelProps = AdapterLoginDescriptor & {
   // the completion failed, or the session failed or ran out of time. The pair
   // of `onCodeSubmitted`, so a caller that showed work can stop showing it.
   onSubmitFailed?: () => void;
+  onOpenAuthorization?: () => void;
+  onSubmitReady?: (submit: (() => void) | null) => void;
+  onRetryReady?: (retry: (() => void) | null) => void;
   chrome?: AdapterLoginChrome;
   /**
    * The address the customer has to open, once the server has produced one.
-   *
-   * The one fact about a running login that the step needs outside the card:
-   * its own button is what sends the customer there, and a prompt arriving is
-   * what moves the step from waiting to ready. Everything else it needs the
-   * panel already does — the paste submits itself, and the submit and how it
-   * ended are reported through `onCodeSubmitted`, `onSubmitFailed` and
-   * `onConnected` — so this stays a single value rather than a whole session
-   * handed upward.
    */
   onPromptReady?: (authorizationUrl: string | null) => void;
 };
@@ -2610,8 +2628,11 @@ function DisplayedCodeLoginPanel({
   chrome = "panel",
   aiConnection,
   onPromptReady,
+  onOpenAuthorization,
+  onRetryReady,
 }: AdapterLoginPanelProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [retrying, setRetrying] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   // The server delivers the one-time prompt on the first owner read only. Latch
   // it so a later poll that returns a null prompt does not hide the code and the
@@ -2644,7 +2665,7 @@ function DisplayedCodeLoginPanel({
       setSessionId(session.sessionId);
     },
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotStartTheLogin"));
+      setStartError(describeError(error).body);
     },
   });
 
@@ -2661,7 +2682,7 @@ function DisplayedCodeLoginPanel({
     mutationFn: () => agentsApi.cancelAdapterAuthLogin(companyId, adapterType, sessionId!),
     onSuccess: clearActiveSession,
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotCancelTheLogin"));
+      setStartError(describeError(error).body);
     },
   });
 
@@ -2681,7 +2702,6 @@ function DisplayedCodeLoginPanel({
         throw error;
       }
     },
-    retry: false,
     // Never answered from cache. This read decides whether to adopt a running
     // session or start a new one, and a cached "none" from an earlier mount is
     // exactly wrong after Back: the panel would read `isFetched` immediately,
@@ -2690,6 +2710,7 @@ function DisplayedCodeLoginPanel({
     gcTime: 0,
     staleTime: 0,
   });
+  const activeSessionView = useQueryView(activeSessionQuery);
 
   // While the panel releases a resumed session it cannot recover (see below),
   // it keeps showing the login as active rather than dropping back to idle, so
@@ -2699,13 +2720,10 @@ function DisplayedCodeLoginPanel({
   const statusQuery = useQuery({
     queryKey: ["adapter-login-status", companyId, adapterType, sessionId],
     queryFn: () => agentsApi.getAdapterAuthLoginStatus(companyId, adapterType, sessionId!),
-    enabled: Boolean(sessionId) && !releasingResumedSession,
+    enabled: Boolean(sessionId) && !releasingResumedSession && !retrying,
     // A status 404 is unrecoverable: the server removed the row, so a retry
-    // cannot bring it back. Stop at once and fail loudly.
-    retry: (failureCount, error) => {
-      if (error instanceof ApiError && error.status === 404) return false;
-      return failureCount < 3;
-    },
+    // cannot bring it back. The shared retry policy never retries a 4xx, so
+    // it stops at once and fails loudly; only transient errors are retried.
     refetchInterval: (query) => {
       const status = query.state.data?.status;
       return status && ADAPTER_LOGIN_TERMINAL_STATUSES.has(status)
@@ -2718,14 +2736,14 @@ function DisplayedCodeLoginPanel({
   // returns a null prompt after the one-time delivery, so keep the latched value.
   useEffect(() => {
     const next = statusQuery.data?.prompt ?? null;
-    if (next) setLatchedPrompt(next);
-  }, [statusQuery.data]);
+    if (next && !retrying) setLatchedPrompt(next);
+  }, [statusQuery.data, retrying]);
 
   const session = statusQuery.data ?? startLogin.data ?? null;
   const status = session?.status ?? null;
   const prompt = latchedPrompt;
   const isTerminal = status ? ADAPTER_LOGIN_TERMINAL_STATUSES.has(status) : false;
-  const isActive = Boolean(sessionId) && !isTerminal;
+  const isActive = Boolean(sessionId) && !isTerminal && !retrying;
   // A saving bind also blocks a new Sign in: the bind is an agent-update save,
   // and a second login started while it is in flight could finish its own
   // save first — the older save would then land last and silently revert the
@@ -2758,7 +2776,7 @@ function DisplayedCodeLoginPanel({
   useEffect(() => {
     const error = statusQuery.error;
     if (!(error instanceof ApiError && error.status === 404)) return;
-    if (!resumedRef.current || releasingResumedSession) return;
+    if (chrome === "onboarding" || !resumedRef.current || releasingResumedSession) return;
     setReleasingResumedSession(true);
     const id = sessionId;
     void (async () => {
@@ -2770,7 +2788,7 @@ function DisplayedCodeLoginPanel({
       setReleasingResumedSession(false);
       clearActiveSession();
     })();
-  }, [statusQuery.error, releasingResumedSession, sessionId, companyId, adapterType, clearActiveSession]);
+  }, [statusQuery.error, releasingResumedSession, sessionId, companyId, adapterType, clearActiveSession, chrome]);
 
   // Start once, on mount, when the caller has already taken the press, and
   // only once the resume read has answered: a resumed session takes over
@@ -2801,13 +2819,9 @@ function DisplayedCodeLoginPanel({
     // A failed lookup is not proof that no session exists: only a successful
     // lookup is. Show the failure to the user instead of starting a second
     // login the server would reject against the per-owner cap.
-    if (activeSessionQuery.isError) {
+    if (activeSessionView.kind === "error") {
       autoStartedRef.current = true;
-      setStartError(
-        activeSessionQuery.error instanceof Error
-          ? activeSessionQuery.error.message
-          : t("agentConfig.couldNotCheckForAn"),
-      );
+      setStartError(describeError(activeSessionQuery.error).body);
       return;
     }
     if (!activeSessionQuery.isSuccess) return;
@@ -2817,7 +2831,7 @@ function DisplayedCodeLoginPanel({
   }, [
     autoStart,
     activeSessionQuery.isSuccess,
-    activeSessionQuery.isError,
+    activeSessionView.kind,
     activeSessionQuery.data,
     activeSessionQuery.error,
   ]);
@@ -2880,36 +2894,74 @@ function DisplayedCodeLoginPanel({
     onPromptReadyRef.current?.(prompt?.url ?? null);
   }, [prompt]);
 
+  const failed = Boolean(isTerminal && status !== "authenticated") || statusQuery.isError;
+  const retryingRef = useRef(false);
+  const retryLogin = useMutation({
+    mutationFn: async () => {
+      if (sessionId) {
+        await agentsApi.cancelAdapterAuthLogin(companyId, adapterType, sessionId).catch(error => {
+          if (!(error instanceof ApiError && error.status === 404)) throw error;
+        });
+      }
+      const active = await activeSessionQuery.refetch({ throwOnError: true });
+      clearActiveSession();
+      startLogin.reset();
+      if (active.data) {
+        resumedRef.current = true;
+        setLatchedPrompt(active.data.prompt ?? null);
+        setSessionId(active.data.sessionId);
+      } else {
+        await startLogin.mutateAsync();
+      }
+    },
+    onMutate: () => {
+      setStartError(null);
+      setLatchedPrompt(null);
+    },
+    onError: error => setStartError(describeError(error).body),
+    onSettled: () => {
+      retryingRef.current = false;
+      setRetrying(false);
+    },
+  });
+  const retryAction = () => {
+    if (retryingRef.current) return;
+    retryingRef.current = true;
+    setRetrying(true);
+    retryLogin.mutate();
+  };
+  const retryActionRef = useRef(retryAction);
+  retryActionRef.current = retryAction;
+  const onRetryReadyRef = useRef(onRetryReady);
+  onRetryReadyRef.current = onRetryReady;
+  const retryReady = Boolean(startError || failed) && !retryLogin.isPending && !startLogin.isPending;
+  useEffect(() => {
+    onRetryReadyRef.current?.(retryReady ? () => retryActionRef.current() : null);
+    return () => onRetryReadyRef.current?.(null);
+  }, [retryReady]);
+
   if (chrome === "onboarding") {
-    const failed = isTerminal && status && status !== "authenticated";
+    const failure = !retryLogin.isPending && (startError || failed)
+      ? status === "timed_out" ? "expired" : "failed"
+      : undefined;
     return (
       <ProviderSubscriptionCard
-        loading={!prompt && !startError && !failed}
+        loading={retryLogin.isPending || (!prompt && !failure)}
+        failure={failure}
+        onRetry={!onRetryReady && retryReady ? retryAction : undefined}
         providerName={connectSourceName(adapterType)}
         authorizationUrl={prompt?.url}
+        onOpenAuthorization={onOpenAuthorization}
         mode="displayed_code"
       >
-        {startError ? (
-          <div>
-            <p role="alert" className="pl-2 text-xs text-destructive">{startError}</p>
-            {activeSessionQuery.error instanceof AdapterLoginConflictError && (
-              <Button type="button" variant="outline" disabled={cancelConflictingLogin.isPending}
-                onClick={() => cancelConflictingLogin.mutate()}>
-                {t("agentConfig.cancelPreviousSignInAnd")}
-              </Button>
-            )}
-          </div>
-        ) : failed ? (
-          <p role="alert" className="pl-2 text-xs text-destructive">
-            {status === "timed_out"
-              ? t("agentConfig.theLoginTimedOutStart")
-              : status === "cancelled"
-                ? t("agentConfig.theLoginWasCancelled")
-                : t("agentConfig.theLoginDidNotFinish")}
-          </p>
-        ) : (
-          <OnboardingLoginCodeRow code={prompt?.code ?? ""} autoCopy />
-        )}
+        {failure ? (
+          activeSessionQuery.error instanceof AdapterLoginConflictError && (
+            <Button type="button" variant="outline" disabled={cancelConflictingLogin.isPending}
+              onClick={() => cancelConflictingLogin.mutate()}>
+              Cancel previous sign-in and retry
+            </Button>
+          )
+        ) : !retryLogin.isPending && <OnboardingLoginCodeRow code={prompt?.code ?? ""} autoCopy />}
       </ProviderSubscriptionCard>
     );
   }
@@ -3112,8 +3164,12 @@ function SubmittedBrowserCodeLoginPanel({
   chrome = "panel",
   aiConnection,
   onPromptReady,
+  onOpenAuthorization,
+  onSubmitReady,
+  onRetryReady,
 }: AdapterLoginPanelProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [retrying, setRetrying] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   // The server delivers the authorization URL on the guarded prompt read only.
   // Latch it so a later poll does not hide the URL.
@@ -3137,6 +3193,7 @@ function SubmittedBrowserCodeLoginPanel({
   // or a failure. The field is locked for that stretch: the step's button is
   // saying "Connecting" above it, and a second paste would submit again.
   const [codeSubmitted, setCodeSubmitted] = useState(false);
+  const codeSubmittedRef = useRef(false);
   // True after the status poll returns 404. The server removes the row and the
   // in-memory session at once on any non-stored terminal state, so a status 404
   // means the login failed and the server cleaned up. The panel stops both
@@ -3166,6 +3223,7 @@ function SubmittedBrowserCodeLoginPanel({
     setTimedOut(false);
     setStatusGone(false);
     setCodeSubmitted(false);
+    codeSubmittedRef.current = false;
     completionStartedRef.current = false;
   };
 
@@ -3186,10 +3244,6 @@ function SubmittedBrowserCodeLoginPanel({
         if (error instanceof ApiError && error.status === 404) return null;
         throw error;
       }
-    },
-    retry: (failureCount, error) => {
-      if (error instanceof ApiError && error.status === 404) return false;
-      return failureCount < 2;
     },
   });
   const storedToken = storedTokenQuery.data ?? null;
@@ -3217,7 +3271,7 @@ function SubmittedBrowserCodeLoginPanel({
       setSessionId(session.sessionId);
     },
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotStartTheLogin"));
+      setStartError(describeError(error).body);
     },
   });
 
@@ -3244,7 +3298,7 @@ function SubmittedBrowserCodeLoginPanel({
         clearActiveSession();
         return;
       }
-      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotCancelTheLogin"));
+      setStartError(describeError(error).body);
     },
   });
 
@@ -3285,7 +3339,6 @@ function SubmittedBrowserCodeLoginPanel({
         throw error;
       }
     },
-    retry: false,
     // Never answered from cache. This read decides whether to adopt a running
     // session or start a new one, and a cached "none" from an earlier mount is
     // exactly wrong after Back: the panel would read `isFetched` immediately,
@@ -3294,6 +3347,7 @@ function SubmittedBrowserCodeLoginPanel({
     gcTime: 0,
     staleTime: 0,
   });
+  const activeSessionView = useQueryView(activeSessionQuery);
 
   // While the panel releases a resumed session it cannot recover (see below),
   // it keeps showing the login as active rather than dropping back to idle, so
@@ -3305,18 +3359,15 @@ function SubmittedBrowserCodeLoginPanel({
   // status 404 also stops the polls: the server cleaned up the session, so the
   // panel enters a terminal failure state instead.
   const pollingEnabled =
-    Boolean(sessionId) && !timedOut && !statusGone && !releasingResumedSession;
+    Boolean(sessionId) && !timedOut && !statusGone && !releasingResumedSession && !retrying;
 
   const statusQuery = useQuery({
     queryKey: ["claude-setup-token-status", companyId, sessionId],
     queryFn: () => agentsApi.getClaudeSetupTokenLoginStatus(companyId, sessionId!),
     enabled: pollingEnabled,
     // A status 404 is terminal. The server removes a cleaned-up session at once,
-    // so a retry cannot recover it. Stop at once and fail loudly.
-    retry: (failureCount, error) => {
-      if (error instanceof ApiError && error.status === 404) return false;
-      return failureCount < 3;
-    },
+    // so a retry cannot recover it. The shared retry policy never retries a
+    // 4xx, so it stops at once and fails loudly; only transient errors are retried.
     refetchInterval: (query) => {
       if (timedOut || statusGone) return false;
       const status = query.state.data?.status;
@@ -3341,7 +3392,7 @@ function SubmittedBrowserCodeLoginPanel({
   useEffect(() => {
     const error = statusQuery.error;
     if (!(error instanceof ApiError && error.status === 404)) return;
-    if (resumedRef.current) {
+    if (resumedRef.current && chrome !== "onboarding") {
       if (releasingResumedSession) return;
       setReleasingResumedSession(true);
       const id = sessionId;
@@ -3357,7 +3408,7 @@ function SubmittedBrowserCodeLoginPanel({
       return;
     }
     setStatusGone(true);
-  }, [statusQuery.error, releasingResumedSession, sessionId, companyId]);
+  }, [statusQuery.error, releasingResumedSession, sessionId, companyId, chrome]);
 
   // Adopt the caller's active session once, on mount. This is what makes a
   // page reload keep the session: with no local state at all, the panel would
@@ -3398,17 +3449,17 @@ function SubmittedBrowserCodeLoginPanel({
 
   useEffect(() => {
     const url = promptQuery.data?.authorizationUrl ?? null;
-    if (url) setAuthorizationUrl(url);
+    if (url && !retrying) setAuthorizationUrl(url);
     // The advisory rides the same guarded prompt read as the URL. Latch it, so a
     // later poll does not clear the disclaimer.
     if (promptQuery.data?.transportAdvisory) setTransportInsecure(true);
-  }, [promptQuery.data]);
+  }, [promptQuery.data, retrying]);
 
   const submitCode = useMutation({
     mutationFn: (code: string) =>
       agentsApi.submitClaudeSetupTokenBrowserCode(companyId, sessionId!, code),
     onError: (error) => {
-      setStartError(error instanceof Error ? error.message : t("agentConfig.couldNotSubmitTheBrowser"));
+      setStartError(describeError(error).body);
     },
   });
 
@@ -3448,7 +3499,7 @@ function SubmittedBrowserCodeLoginPanel({
     statusGone ||
     Boolean(status && CLAUDE_LOGIN_FAILURE_STATUSES.has(status));
   const isCompleting = status === "authenticated" && !isStored && !completionFailed;
-  const isActive = Boolean(sessionId) && !isStored && !isFailure && !timedOut;
+  const isActive = Boolean(sessionId) && !isStored && !isFailure && !timedOut && !retrying;
   const startDisabled = startLogin.isPending || isActive;
 
   // Cap the active login at the server deadline. The timer arms when the login
@@ -3495,7 +3546,8 @@ function SubmittedBrowserCodeLoginPanel({
   onSubmitFailedRef.current = onSubmitFailed;
 
   const handleSubmit = () => {
-    if (!canSubmit) return;
+    if (!canSubmit || codeSubmittedRef.current) return;
+    codeSubmittedRef.current = true;
     // A new attempt supersedes the last attempt's error, and has to: the
     // failure report below watches for an error after a submit, and one left
     // over from before it would end this attempt the moment it began.
@@ -3536,13 +3588,9 @@ function SubmittedBrowserCodeLoginPanel({
     // A failed lookup is not proof that no session exists: only a successful
     // lookup is. Show the failure to the user instead of starting a second
     // login the server would reject against the per-owner cap.
-    if (activeSessionQuery.isError) {
+    if (activeSessionView.kind === "error") {
       autoStartedRef.current = true;
-      setStartError(
-        activeSessionQuery.error instanceof Error
-          ? activeSessionQuery.error.message
-          : t("agentConfig.couldNotCheckForAn"),
-      );
+      setStartError(describeError(activeSessionQuery.error).body);
       return;
     }
     if (!activeSessionQuery.isSuccess) return;
@@ -3552,7 +3600,7 @@ function SubmittedBrowserCodeLoginPanel({
   }, [
     autoStart,
     activeSessionQuery.isSuccess,
-    activeSessionQuery.isError,
+    activeSessionView.kind,
     activeSessionQuery.data,
     activeSessionQuery.error,
   ]);
@@ -3581,6 +3629,13 @@ function SubmittedBrowserCodeLoginPanel({
    */
   const handleSubmitRef = useRef(handleSubmit);
   handleSubmitRef.current = handleSubmit;
+  const onSubmitReadyRef = useRef(onSubmitReady);
+  onSubmitReadyRef.current = onSubmitReady;
+  const submitReady = canSubmit && !startError;
+  useEffect(() => {
+    onSubmitReadyRef.current?.(submitReady ? () => handleSubmitRef.current() : null);
+    return () => onSubmitReadyRef.current?.(null);
+  }, [submitReady]);
   const autoSubmit = chrome === "onboarding";
   const pastedRef = useRef(false);
   useEffect(() => {
@@ -3611,6 +3666,7 @@ function SubmittedBrowserCodeLoginPanel({
     if (!codeSubmitted) return;
     if (!startError && !isFailure && !timedOut) return;
     setCodeSubmitted(false);
+    codeSubmittedRef.current = false;
     onSubmitFailedRef.current?.();
   }, [codeSubmitted, startError, isFailure, timedOut]);
 
@@ -3620,13 +3676,67 @@ function SubmittedBrowserCodeLoginPanel({
     onPromptReadyRef.current?.(authorizationUrl);
   }, [authorizationUrl]);
 
+  const retryingRef = useRef(false);
+  const retryLogin = useMutation({
+    mutationFn: async () => {
+      if (sessionId) {
+        await agentsApi.cancelClaudeSetupTokenLogin(companyId, sessionId).catch(error => {
+          if (!(error instanceof ApiError && error.status === 404)) throw error;
+        });
+      }
+      const active = await activeSessionQuery.refetch({ throwOnError: true });
+      clearActiveSession();
+      startLogin.reset();
+      submitCode.reset();
+      completeLogin.reset();
+      if (active.data) {
+        resumedRef.current = true;
+        setSessionId(active.data.sessionId);
+        setAuthorizationUrl(active.data.prompt?.authorizationUrl ?? null);
+        setTransportInsecure(Boolean(active.data.prompt?.transportAdvisory));
+      } else {
+        await startLogin.mutateAsync();
+      }
+    },
+    onMutate: () => {
+      setStartError(null);
+      setAuthorizationUrl(null);
+    },
+    onError: error => setStartError(describeError(error).body),
+    onSettled: () => {
+      retryingRef.current = false;
+      setRetrying(false);
+    },
+  });
+  const retryAction = () => {
+    if (retryingRef.current) return;
+    retryingRef.current = true;
+    setRetrying(true);
+    retryLogin.mutate();
+  };
+  const retryActionRef = useRef(retryAction);
+  retryActionRef.current = retryAction;
+  const onRetryReadyRef = useRef(onRetryReady);
+  onRetryReadyRef.current = onRetryReady;
+  const onboardingFailed = Boolean(startError || isFailure || timedOut || statusQuery.isError || promptQuery.isError);
+  const retryReady = onboardingFailed && !retryLogin.isPending && !startLogin.isPending;
+  useEffect(() => {
+    onRetryReadyRef.current?.(retryReady ? () => retryActionRef.current() : null);
+    return () => onRetryReadyRef.current?.(null);
+  }, [retryReady]);
+
   if (chrome === "onboarding") {
-    const failedNow = isFailure || timedOut;
+    const failure = !retryLogin.isPending && onboardingFailed
+      ? timedOut || status === "timed_out" ? "expired" : "failed"
+      : undefined;
     return (
       <ProviderSubscriptionCard
-        loading={!authorizationUrl && !startError && !failedNow}
+        loading={retryLogin.isPending || (!authorizationUrl && !failure)}
+        failure={failure}
+        onRetry={!onRetryReady && retryReady ? retryAction : undefined}
         providerName={connectSourceName(adapterType)}
         authorizationUrl={authorizationUrl ?? undefined}
+        onOpenAuthorization={onOpenAuthorization}
         mode="submitted_code"
       >
         {/* The plain-HTTP advisory survives the redesign. It is the one thing on
@@ -3639,15 +3749,7 @@ function SubmittedBrowserCodeLoginPanel({
             {t("agentConfig.thisConnectionIsNotEncrypted")}
           </p>
         )}
-        {startError ? (
-          <p role="alert" className="pl-2 text-xs text-destructive">
-            {startError}
-          </p>
-        ) : failedNow ? (
-          <p role="alert" className="pl-2 text-xs text-destructive">
-            {timedOut && !isFailure ? CLAUDE_LOGIN_TIMED_OUT_MESSAGE : CLAUDE_LOGIN_FAILED_MESSAGE}
-          </p>
-        ) : (
+        {!failure && !retryLogin.isPending && (
           <OnboardingCardField
             value={browserCode}
             onChange={setBrowserCode}

@@ -2,9 +2,11 @@ import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../api/client";
+import { describeError } from "../api/errors";
 import { Button } from "./ui/button";
 import { buildDotSetupPrompt } from "../lib/dot-setup-prompt";
 import { AgentSetupPrompt } from "./AgentSetupPrompt";
+import { QueryErrorState, useQueryView } from "./QueryView";
 
 interface Connection {
   enabled: boolean;
@@ -26,6 +28,10 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
     refetchInterval: query => query.state.data?.binding?.status === "pairing" ||
       (query.state.data?.binding?.connected && !query.state.data.binding.subscriptionVerified) ||
       query.state.data?.binding?.hasPendingChallenge || query.state.data?.binding?.assignment ? 5000 : false });
+  // Read the connection state through the shared view: cached data stays
+  // visible while a transient refetch fails,and a no-data failure shows
+  // readable copy with Retry.
+  const stateView = useQueryView(state);
   const pair = useMutation({ mutationFn: () => api.post<{ bindingId: string; pairingCode: string; expiresAt: string }>(path, {}),
     onSuccess: result => { setPairing(result); onBinding(result.bindingId); void client.invalidateQueries({ queryKey: key }); } });
   const test = useMutation({ mutationFn: () => api.post(path + "/event-test", {}),
@@ -46,8 +52,8 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
   useEffect(() => {
     if (existingBindingId && existingBindingId !== bindingId && !revoke.isPending) onBinding(existingBindingId);
   }, [existingBindingId, bindingId, onBinding, revoke.isPending]);
-  if (!agentId) return <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.saveTheAgentThenReturn")}</p>;
-  const error = state.error ?? pair.error ?? test.error ?? revoke.error;
+  if (!agentId) return <p className="text-sm text-muted-foreground">Save the agent, then return here to pair your Dot.</p>;
+  const mutationError = pair.error ?? test.error ?? revoke.error;
   const b = state.data?.binding;
   const setupPrompt = pairing && state.data?.resourceUrl && companyId && agentId
     ? buildDotSetupPrompt({ companyId, agentId, resourceUrl: state.data.resourceUrl, ...pairing })
@@ -77,7 +83,16 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
       <Button type="button" variant="outline" onClick={() => { void state.refetch(); }}>{t("dotRunnerConnection.refreshConnection")}</Button>
       {b && <Button type="button" variant="outline" disabled={revoke.isPending} onClick={() => revoke.mutate()}>{t("dotRunnerConnection.revokeConnection")}</Button>}
     </div>
-    {b?.hasPendingChallenge && <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.waitingForDotToRead")}</p>}
-    {error && <p className="text-sm text-destructive" role="alert">{error instanceof Error ? error.message : t("dotRunnerConnection.connectionFailed")}</p>}
+    {b?.hasPendingChallenge && <p className="text-sm text-muted-foreground">Waiting for Dot to read and confirm the harmless mailbox challenge.</p>}
+    {stateView.kind === "error" && (
+      <QueryErrorState
+        size="inline"
+        error={stateView.error}
+        action="load the Dot connection"
+        onRetry={stateView.retry}
+        retrying={stateView.isFetching}
+      />
+    )}
+    {mutationError && <p role="alert" className="text-sm text-destructive">{describeError(mutationError).body}</p>}
   </div>;
 }

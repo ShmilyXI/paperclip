@@ -2,6 +2,7 @@ import { t } from "@/i18n";
 import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { describeError } from "@/api/errors";
 
 export function ChatCommunicationInstructions({ value, onSave }: {
   value: string;
@@ -26,7 +27,7 @@ export function ChatCommunicationInstructions({ value, onSave }: {
         setDraft(null);
         setSaved(true);
       } catch (cause) {
-        setError(cause instanceof Error ? cause.message : t("chatCommunicationInstructions.couldnTSaveInstructionsTry"));
+        setError(describeError(cause).body);
       } finally {
         setPending(false);
       }

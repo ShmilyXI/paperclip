@@ -29,6 +29,7 @@ import {
   tokenStatus,
   type TokenStatus,
 } from "../gateway-helpers";
+import { describeError } from "@/api/errors";
 
 const DEFAULT_ACTIONS: ToolMcpGatewayTokenAction[] = ["tools/list", "tools/call"];
 const TOKEN_PAGE_SIZE = 10;
@@ -135,8 +136,8 @@ export function TokensPanel({
     },
     onError: (error) =>
       pushToast({
-        title: t("tokensPanel.tokenWasNotIssued"),
-        body: error instanceof Error ? error.message : String(error),
+        title: "Token was not issued",
+        body: describeError(error).body,
         tone: "error",
       }),
   });
@@ -151,8 +152,8 @@ export function TokensPanel({
     },
     onError: (error) =>
       pushToast({
-        title: t("tokensPanel.tokenWasNotRevoked"),
-        body: error instanceof Error ? error.message : String(error),
+        title: "Token was not revoked",
+        body: describeError(error).body,
         tone: "error",
       }),
   });
@@ -163,8 +164,8 @@ export function TokensPanel({
       pushToast({ title: t("common.copied"), body: t("tokensPanel.accessToken"), tone: "success" });
     } catch (error) {
       pushToast({
-        title: t("tokensPanel.copyFailed"),
-        body: error instanceof Error ? error.message : t("tokensPanel.clipboardAccessIsUnavailable"),
+        title: "Copy failed",
+        body: describeError(error).body,
         tone: "error",
       });
     }

@@ -9,9 +9,9 @@ import {
 import { Shield, ShieldCheck, Trash2, UserPlus } from "lucide-react";
 import { accessApi, type CompanyMember } from "@/api/access";
 import { agentsApi } from "@/api/agents";
-import { ApiError } from "@/api/client";
 import { cloudApi } from "@/api/cloud";
 import { issuesApi } from "@/api/issues";
+import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,6 +35,7 @@ import { PageTabBar } from "@/components/PageTabBar";
 import { useHiddenSettings } from "@/hooks/useHiddenSettings";
 import { useCloudInstance } from "@/hooks/useCloudInstance";
 import { InvitesSection } from "@/components/access/InvitesSection";
+import { describeError } from "@/api/errors";
 
 const reassignmentIssueStatuses = "backlog,todo,in_progress,in_review,blocked,failed,timed_out";
 type EditableMemberStatus = "pending" | "active" | "suspended";
@@ -51,12 +52,12 @@ export function CompanyAccess() {
     queryFn: () => cloudApi.listStacks(),
     enabled: Boolean(cloud && selectedCompanyId),
     staleTime: 30_000,
-    retry: false,
   });
+  const cloudStacksView = useQueryView(cloudStacksQuery);
   const currentStack = cloudStacksQuery.data?.stacks.find((stack) => stack.isCurrent);
   // Company roles can differ from Cloud roles. Only the current stack's
   // owner/admin may invite, even if another portfolio entry grants ownership.
-  const cloudInviteUrl = cloud && !cloudStacksQuery.isError &&
+  const cloudInviteUrl = cloud && cloudStacksView.kind !== "error" &&
     (currentStack?.role === "owner" || currentStack?.role === "admin")
     ? cloudStackInviteUrl(cloud.cloudBaseUrl, currentStack.stackSlug)
     : null;
@@ -99,6 +100,7 @@ export function CompanyAccess() {
     queryFn: () => accessApi.listMembers(selectedCompanyId!),
     enabled: !!selectedCompanyId,
   });
+  const membersView = useQueryView(membersQuery);
 
   const agentsQuery = useQuery({
     queryKey: queryKeys.agents.list(selectedCompanyId ?? ""),
@@ -136,8 +138,8 @@ export function CompanyAccess() {
     },
     onError: (error) => {
       pushToast({
-        title: t("access.failedToUpdateMember"),
-        body: error instanceof Error ? error.message : t("access.unknownError"),
+        title: "Failed to update member",
+        body: describeError(error).body,
         tone: "error",
       });
     },
@@ -154,8 +156,8 @@ export function CompanyAccess() {
     },
     onError: (error) => {
       pushToast({
-        title: t("access.failedToApproveJoinRequest"),
-        body: error instanceof Error ? error.message : t("access.unknownError"),
+        title: "Failed to approve join request",
+        body: describeError(error).body,
         tone: "error",
       });
     },
@@ -172,8 +174,8 @@ export function CompanyAccess() {
     },
     onError: (error) => {
       pushToast({
-        title: t("access.failedToRejectJoinRequest"),
-        body: error instanceof Error ? error.message : t("access.unknownError"),
+        title: "Failed to reject join request",
+        body: describeError(error).body,
         tone: "error",
       });
     },
@@ -228,8 +230,8 @@ export function CompanyAccess() {
     },
     onError: (error) => {
       pushToast({
-        title: t("access.failedToRemoveMember"),
-        body: error instanceof Error ? error.message : t("access.unknownError"),
+        title: "Failed to remove member",
+        body: describeError(error).body,
         tone: "error",
       });
     },
@@ -250,18 +252,23 @@ export function CompanyAccess() {
     return <div className="text-sm text-muted-foreground">{t("access.selectAnOrganizationToManage")}</div>;
   }
 
-  if (membersQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("access.loadingOrganizationAccess")}</div>;
+  if (membersQuery.isLoading || membersView.kind === "reconnecting") {
+    return <div className="text-sm text-muted-foreground">Loading organization access…</div>;
   }
 
-  if (membersQuery.error) {
-    const message =
-      membersQuery.error instanceof ApiError && membersQuery.error.status === 403
-        ? t("companyAccess.youDoNotHavePermission")
-        : membersQuery.error instanceof Error
-          ? membersQuery.error.message
-          : t("access.failedToLoadOrganizationMembers");
-    return <div className="text-sm text-destructive">{message}</div>;
+  if (membersView.kind === "error") {
+    if (membersView.errorKind === "forbidden") {
+      return <div className="text-sm text-destructive">You do not have permission to manage organization members.</div>;
+    }
+    return (
+      <QueryErrorState
+        size="page"
+        error={membersQuery.error}
+        action="load organization members"
+        onRetry={membersView.retry}
+        retrying={membersView.isFetching}
+      />
+    );
   }
 
   const members = membersQuery.data?.members ?? [];
