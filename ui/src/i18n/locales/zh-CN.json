@@ -13723,6 +13723,7 @@
     "visibility": "可见范围",
     "liveRunsOnly": "仅显示进行中的运行",
     "showAgentCreatedTasks": "显示员工创建的任务",
+    "routineTasks": "例行任务",
     "searchPlaceholder": "搜索{{label}}...",
     "searchAriaLabel": "搜索{{label}}",
     "removeCreator": "移除创建者 {{label}}",

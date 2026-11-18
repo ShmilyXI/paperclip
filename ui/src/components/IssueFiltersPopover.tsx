@@ -522,13 +522,13 @@ export function IssueFiltersPopover({
               ) : null}
 
               {enableLiveRunsFilter || enableAgentCreatedVisibilityFilter || enableRoutineTasksFilter ? <div className="space-y-1" data-filter-options="visibility">
-                <span className="text-xs text-muted-foreground">Visibility</span>
+                <span className="text-xs text-muted-foreground">{t("issueFiltersPopover.visibility")}</span>
                 {enableLiveRunsFilter ? <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
                   <Checkbox
                     checked={state.liveOnly}
                     onCheckedChange={(checked) => onChange({ liveOnly: checked === true })}
                   />
-                  <span className="text-sm">Live runs only</span>
+                  <span className="text-sm">{t("issueFiltersPopover.liveRunsOnly")}</span>
                 </label> : null}
                 {enableAgentCreatedVisibilityFilter ? (
                   <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -536,7 +536,7 @@ export function IssueFiltersPopover({
                       checked={state.showAgentCreatedTasks}
                       onCheckedChange={(checked) => onChange({ showAgentCreatedTasks: checked === true })}
                     />
-                    <span className="text-sm">Show agent-created tasks</span>
+                    <span className="text-sm">{t("issueFiltersPopover.showAgentCreatedTasks")}</span>
                   </label>
                 ) : null}
                 {enableRoutineTasksFilter ? <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -544,7 +544,7 @@ export function IssueFiltersPopover({
                     checked={state.routineTasksOnly === true}
                     onCheckedChange={(checked) => onChange({ routineTasksOnly: checked === true })}
                   />
-                  <span className="text-sm">Routine tasks</span>
+                  <span className="text-sm">{t("issueFiltersPopover.routineTasks")}</span>
                 </label> : null}
               </div> : null}
             </div>
