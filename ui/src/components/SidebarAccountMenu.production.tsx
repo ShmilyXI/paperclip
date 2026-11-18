@@ -153,9 +153,9 @@ export function SidebarAccountMenu({
 
   const signOutMutation = useSignOut({ onSignedOut: closeNavigationChrome });
 
-  const displayName = session?.user.name?.trim() || "Board";
+  const displayName = session?.user.name?.trim() || t("accountMenu.board");
   const secondaryLabel =
-    session?.user.email?.trim() || (deploymentMode === "authenticated" ? "Signed in" : "Local workspace board");
+    session?.user.email?.trim() || (deploymentMode === "authenticated" ? t("accountMenu.signedIn") : t("accountMenu.localBoard"));
   const initials = deriveInitials(displayName);
   const profileHref = userProfilePath(session?.user);
 
@@ -219,7 +219,7 @@ export function SidebarAccountMenu({
                     href={`https://github.com/paperclipai/paperclip/commit/${stagingCommit}`}
                     target="_blank"
                     rel="noreferrer"
-                    aria-label={`View commit ${stagingCommit} on GitHub`}
+                    aria-label={t("accountMenu.viewCommitOnGitHub", { commit: stagingCommit })}
                     title={stagingCommit}
                   >
                     SHA {stagingCommit.slice(0, 7)}
@@ -231,8 +231,8 @@ export function SidebarAccountMenu({
             <div className="mt-4 space-y-1">
               {showInvite && inviteHref ? (
                 <MenuAction
-                  label="Invite"
-                  description="Invite people to your organization."
+                  label={t("accountMenu.invite")}
+                  description={t("accountMenu.inviteDescription")}
                   icon={UserPlus}
                   href={inviteHref}
                   topLevel={isCloud}
@@ -240,8 +240,8 @@ export function SidebarAccountMenu({
                 />
               ) : null}
               <MenuAction
-                label="Documentation"
-                description="Open Paperclip docs in a new tab."
+                label={t("accountMenu.documentation")}
+                description={t("accountMenu.documentationDescription")}
                 icon={BookOpen}
                 href={DOCS_URL}
                 external
@@ -263,10 +263,10 @@ export function SidebarAccountMenu({
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-medium text-foreground">
-                      {signOutMutation.isPending ? "Signing out..." : "Sign out"}
+                      {signOutMutation.isPending ? t("accountMenu.signingOut") : t("accountMenu.signOut")}
                     </span>
                     <span className="block text-xs text-muted-foreground">
-                      End this browser session.
+                      {t("accountMenu.endBrowserSession")}
                     </span>
                   </span>
                 </button>

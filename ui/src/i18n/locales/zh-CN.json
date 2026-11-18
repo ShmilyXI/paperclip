@@ -28,7 +28,11 @@
     "documentation": "文档",
     "signingOut": "正在退出...",
     "signOut": "退出登录",
-    "shareFeedback": "反馈意见"
+    "shareFeedback": "反馈意见",
+    "inviteDescription": "邀请他人加入你的组织。",
+    "documentationDescription": "在新标签页打开 Paperclip 文档。",
+    "endBrowserSession": "结束本次浏览器会话。",
+    "viewCommitOnGitHub": "在 GitHub 上查看提交 {{commit}}"
   },
   "nav": {
     "newTask": "新建任务",

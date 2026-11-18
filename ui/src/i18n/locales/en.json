@@ -28,7 +28,11 @@
     "documentation": "Documentation",
     "signingOut": "Signing out...",
     "signOut": "Sign out",
-    "shareFeedback": "Share feedback"
+    "shareFeedback": "Share feedback",
+    "inviteDescription": "Invite people to your organization.",
+    "documentationDescription": "Open Paperclip docs in a new tab.",
+    "endBrowserSession": "End this browser session.",
+    "viewCommitOnGitHub": "View commit {{commit}} on GitHub"
   },
   "nav": {
     "newTask": "New Task",
