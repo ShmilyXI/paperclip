@@ -41,8 +41,8 @@ const providers = [
     name: "Anthropic",
     description: t("aiProviderSetup.claudeSubscriptionOrApiKey"),
   },
-  { id: "google", name: "Google", description: "Antigravity sign-in or Gemini API key" },
-  { id: "xai", name: "xAI", description: "Grok subscription or API key" },
+  { id: "google", name: "Google", description: t("aiProviderSetup.antigravitySignInOrGemini") },
+  { id: "xai", name: "xAI", description: t("aiProviderSetup.grokSubscriptionOrApiKey") },
   {
     id: "openrouter",
     name: "OpenRouter",
@@ -140,7 +140,7 @@ export function AiProviderSetup({
     queryFn: () => agentsApi.list(companyId),
   });
   const agentsView = useQueryView(agents);
-  const label = providerLabel ?? providers.find((p) => p.id === provider)?.name ?? (provider === "github" ? "GitHub Copilot" : "provider");
+  const label = providerLabel ?? providers.find((p) => p.id === provider)?.name ?? (provider === "github" ? "GitHub Copilot" : t("aiProviderSetup.providerFallback"));
   const advanced = reconnect ? Boolean(reconnect.routing) : ["openrouter", "bedrock", "gateway", "local"].includes(provider ?? "");
   const nativeProvider: AiProvider =
     provider === "bedrock"
@@ -278,8 +278,8 @@ export function AiProviderSetup({
     />
   ) : undefined;
   const cancel = () => reconnect || initialProvider ? onCancel() : setStep("provider");
-  if (!reconnect && (accounts.isPending || accountsView.kind === "reconnecting")) return <p role="status">Loading connection permissions…</p>;
-  if (!reconnect && accountsView.kind === "error") return <QueryErrorState error={accounts.error} action="load connection permissions" onRetry={accountsView.retry} retrying={accountsView.isFetching} />;
+  if (!reconnect && (accounts.isPending || accountsView.kind === "reconnecting")) return <p role="status">{t("aiProviderSetup.loadingConnectionPermissions")}</p>;
+  if (!reconnect && accountsView.kind === "error") return <QueryErrorState error={accounts.error} action={t("aiProviderSetup.loadConnectionPermissions")} onRetry={accountsView.retry} retrying={accountsView.isFetching} />;
   return (
     <div className="mx-auto w-full max-w-2xl space-y-6" onSubmit={(event) => event.stopPropagation()}>
       <div className="space-y-2">
@@ -289,7 +289,7 @@ export function AiProviderSetup({
             : `${reconnect ? t("aiProviderSetup.reconnect") : t("common.connect")} ${label}`}
         </h2>
       </div>
-      {agentsView.kind === "error" && <QueryErrorState size="inline" error={agents.error} action="load agents" onRetry={agentsView.retry} retrying={agentsView.isFetching} />}
+      {agentsView.kind === "error" && <QueryErrorState size="inline" error={agents.error} action={t("sync20261028.errors.actions.loadAgents")} onRetry={agentsView.retry} retrying={agentsView.isFetching} />}
       {step === "provider" ? (
         <>
           {advancedOnly ? choices(true) : <>
@@ -358,7 +358,7 @@ export function AiProviderSetup({
                   }}
                   disabled={Boolean(reconnect) || Boolean(initialProtocol)}
                 >
-                  <SelectTrigger aria-label="API format" className={cn("w-full", ANALYTICS_MASK_CLASS)}>
+                  <SelectTrigger aria-label={t("aiProviderSetup.apiFormat")} className={cn("w-full", ANALYTICS_MASK_CLASS)}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className={ANALYTICS_MASK_CLASS}>
@@ -395,7 +395,7 @@ export function AiProviderSetup({
                 onValueChange={(v) => setAuth(v as typeof auth)}
                 disabled={Boolean(reconnect)}
               >
-                <SelectTrigger aria-label="Authentication" className={cn("w-full", ANALYTICS_MASK_CLASS)}>
+                <SelectTrigger aria-label={t("aiProviderSetup.authentication")} className={cn("w-full", ANALYTICS_MASK_CLASS)}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className={ANALYTICS_MASK_CLASS}>
@@ -439,7 +439,7 @@ export function AiProviderSetup({
           {save.error && (
             <p role="alert" className="text-sm text-destructive">
               {save.error instanceof Error && save.error.name === "ZodError"
-                ? "Check the URL, API format, and authentication fields."
+                ? t("aiProviderSetup.checkTheUrlApiFormat")
                 : describeError(save.error).body}
             </p>
           )}
