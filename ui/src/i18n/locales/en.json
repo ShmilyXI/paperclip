@@ -1866,7 +1866,9 @@
     "youLeftThisProjectIt": "You left this project. It no longer appears in your sidebar.",
     "pausedByBudgetHardStop": "Paused by budget hard stop",
     "managedByPlugin": "Managed by {{name}}",
-    "selectColor": "Select color {{color}}"
+    "selectColor": "Select color {{color}}",
+    "selectEnvironments": "Select environments",
+    "theseEnvironmentsCanShareThis": "These environments can share this project's working files. The storage choice stays with the project."
   },
   "routines": {
     "customRoutines": "Custom routines",

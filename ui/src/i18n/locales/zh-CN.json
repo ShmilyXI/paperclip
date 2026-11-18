@@ -1866,7 +1866,9 @@
     "youLeftThisProjectIt": "你已退出此项目。它不再显示在你的侧边栏中。",
     "pausedByBudgetHardStop": "因预算硬性停止而暂停",
     "managedByPlugin": "由 {{name}} 管理",
-    "selectColor": "选择颜色 {{color}}"
+    "selectColor": "选择颜色 {{color}}",
+    "selectEnvironments": "选择运行环境",
+    "theseEnvironmentsCanShareThis": "这些运行环境可以共享该项目的工作文件。存储选项与项目绑定。"
   },
   "routines": {
     "customRoutines": "自定义例行任务",

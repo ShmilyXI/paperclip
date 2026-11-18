@@ -73,19 +73,19 @@ export function NewProjectForm({ companyId, onClose, onCreated }: { companyId: s
               className="h-10 w-full min-w-0 border-0 bg-transparent text-base outline-none placeholder:text-muted-foreground md:text-sm" />
           </div>
         </div>
-        <div role="region" aria-label="Source repositories" tabIndex={0} className="min-h-0 overflow-y-auto overscroll-contain px-5 pb-1 outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring">
+        <div role="region" aria-label={t("projectDetail.sourceRepositories")} tabIndex={0} className="min-h-0 overflow-y-auto overscroll-contain px-5 pb-1 outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring">
           {options && options.groups.length > 1 && <div className="mb-4 space-y-2">
-            <label htmlFor="project-environment" className="text-sm font-medium">Available in</label>
+            <label htmlFor="project-environment" className="text-sm font-medium">{t("projectProperties.availableIn")}</label>
             <NativeSelect id="project-environment" value={selectedGroup?.environments[0].id ?? ""} disabled={create.isPending}
               onChange={event => setSelectedEnvironmentId(event.target.value)}>
-              {!selectedGroup && <option value="" disabled>Select environments</option>}
+              {!selectedGroup && <option value="" disabled>{t("projectDetail.selectEnvironments")}</option>}
               {options.groups.map(group => <option key={group.environments[0].id} value={group.environments[0].id}>
                 {group.environments.map(environment => environment.name).join(", ")}
               </option>)}
             </NativeSelect>
-            <p className="text-xs text-muted-foreground">These environments can share this project's working files. The storage choice stays with the project.</p>
+            <p className="text-xs text-muted-foreground">{t("projectDetail.theseEnvironmentsCanShareThis")}</p>
           </div>}
-          {(environmentView.kind === "loading" || environmentView.kind === "reconnecting") && <p role="status" className="mb-3 text-sm text-muted-foreground">Loading environments…</p>}
+          {(environmentView.kind === "loading" || environmentView.kind === "reconnecting") && <p role="status" className="mb-3 text-sm text-muted-foreground">{t("projectProperties.loadingEnvironments")}</p>}
           {environmentView.kind === "error" && <QueryErrorState error={environmentView.error} size="inline" action="load project environments"
             className="mb-3" onRetry={environmentView.retry} retrying={environmentView.isFetching} />}
           {options?.error && !selectedGroup && <p role="alert" className="mb-3 text-sm text-destructive">{options.error}</p>}
@@ -93,8 +93,8 @@ export function NewProjectForm({ companyId, onClose, onCreated }: { companyId: s
         </div>
         {create.status === "error" && <p role="alert" className="px-5 pt-3 text-sm text-destructive">{describeError(create.error).body}</p>}
         <div className="flex shrink-0 justify-between gap-2 px-5 py-5">
-          <Button type="button" variant="ghost" disabled={create.isPending} onClick={onClose}>Cancel</Button>
-          <Button type="submit" disabled={!name.trim() || !environmentReady || create.isPending}>{create.isPending ? "Creating…" : "Create project"}</Button>
+          <Button type="button" variant="ghost" disabled={create.isPending} onClick={onClose}>{t("common.cancel")}</Button>
+          <Button type="submit" disabled={!name.trim() || !environmentReady || create.isPending}>{create.isPending ? t("common.creating") : t("projectDetail.createProject")}</Button>
         </div>
       </form>}
     </DialogContent>
