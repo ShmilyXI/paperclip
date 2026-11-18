@@ -5386,7 +5386,9 @@
     "enableLabel": "Enable {{label}}",
     "replayFailedKind": "Replay failed {{kind}}",
     "interactivity": "Interactivity",
-    "eventsApi": "Events API"
+    "eventsApi": "Events API",
+    "requireAtMentionInChannels": "Require at-mention in channels",
+    "requireAtMentionInChannelsDetail": "In channels, require an @mention to start a conversation with this bot. Replies in existing threads and direct messages do not require an @mention. Direct messages must be allowed above."
   },
   "emailSetup": {
     "couldNotLoadProgress": "Could not load email setup progress.",

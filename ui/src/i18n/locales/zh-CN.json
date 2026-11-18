@@ -5386,7 +5386,9 @@
     "enableLabel": "启用 {{label}}",
     "replayFailedKind": "重放失败的 {{kind}}",
     "interactivity": "交互功能",
-    "eventsApi": "事件 API"
+    "eventsApi": "事件 API",
+    "requireAtMentionInChannels": "在频道中需要 @提及",
+    "requireAtMentionInChannelsDetail": "在频道中，需要 @提及 才能与此机器人开始对话。已有话题串中的回复和私聊不需要 @提及。必须先允许私聊（见上方开关）。"
   },
   "emailSetup": {
     "couldNotLoadProgress": "无法加载邮箱设置进度。",

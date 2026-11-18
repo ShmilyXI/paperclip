@@ -510,7 +510,7 @@ function Settings({
       ),
     onError: (error) =>
       pushToast({
-        title: "Couldn't update destination",
+        title: t("chatDetail.couldnTUpdateDestination"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -524,7 +524,7 @@ function Settings({
       ),
     onError: (error) =>
       pushToast({
-        title: "Couldn't update settings",
+        title: t("chatDetail.couldnTUpdateSettings"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -631,8 +631,8 @@ function Settings({
           />
           {endpoint.provider === "slack" && (
             <SettingToggle
-              label="Require at-mention in channels"
-              detail="In channels, require an @mention to start a conversation with this bot. Replies in existing threads and direct messages do not require an @mention. Direct messages must be allowed above."
+              label={t("chatDetail.requireAtMentionInChannels")}
+              detail={t("chatDetail.requireAtMentionInChannelsDetail")}
               checked={endpoint.requireAtMention ?? false}
               pending={updateEndpoint.isPending}
               onChange={(requireAtMention) =>
@@ -738,7 +738,7 @@ function Access({
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't create identity link",
+        title: t("chatDetail.couldnTCreateIdentityLink"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -755,7 +755,7 @@ function Access({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">{t("chatDetail.people")}</h2>
         {endpoint.provider === "slack" && <Dialog>
-          <DialogTrigger asChild><Button>Invite people</Button></DialogTrigger>
+          <DialogTrigger asChild><Button>{t("chatDetail.invitePeople")}</Button></DialogTrigger>
           <DialogContent className={ANALYTICS_MASK_CLASS}>
             <DialogHeader>
               <DialogTitle>{t("chatDetail.invitePeopleToTalkTo", { agentName: endpoint.assignedAgentName })}</DialogTitle>
@@ -939,7 +939,7 @@ function Activity({
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't replay activity",
+        title: t("chatDetail.couldnTReplayActivity"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -998,7 +998,7 @@ function Activity({
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't resolve activity",
+        title: t("chatDetail.couldnTResolveActivity"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -1030,7 +1030,7 @@ function Activity({
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't update connection",
+        title: t("chatDetail.couldnTUpdateConnection"),
         body: describeError(error).body,
         tone: "error",
       }),
