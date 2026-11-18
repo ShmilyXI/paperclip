@@ -4502,6 +4502,14 @@
     "disabledSecretsNotGivenToAgents": "禁用的密钥不会提供给员工。需要它的运行会提示。",
     "archivedSecretsNotGivenToAgents": "归档的密钥不会提供给员工，且不会出现在列表中。",
     "disabledSecretsMembersNotAsked": "禁用的密钥不会提供给员工，也不会要求成员提供值。",
+    "notUsedYet": "尚未使用",
+    "setInPlace_one": "在 {{count}} 处设置",
+    "setInPlace_other": "在 {{count}} 处设置",
+    "howSecretsWork": "密钥如何工作",
+    "howSecretsWorkStep1": "只需添加一次密钥。组织提供一个共享值，或每位用户添加自己的值。",
+    "howSecretsWorkStep2": "在此处或员工设置中选择哪些员工可以使用它。项目可以为其每个任务设置它。",
+    "howSecretsWorkStep3a": "运行开始时，员工会将其作为环境变量获取，例如",
+    "howSecretsWorkStep3b": "。该值不会再显示。",
     "whoProvidesTheValueLabel": "由谁提供值",
     "unavailableSuffix": " — 不可用",
     "chooseAnotherVault": "选择另一个保险库",
@@ -12173,6 +12181,11 @@
     "addApiAccess": "添加 API 访问",
     "proposedBy": "提议人：",
     "theAgentReadsThemByAliasThrough": "员工通过以下接口按别名读取它们："
+  },
+  "agentProjectAccess": {
+    "couldntLoadProjectAccess": "无法加载项目访问权限。",
+    "loadingProjectAccess": "正在加载项目访问权限…",
+    "returnToTask": "返回任务"
   },
   "routineTriggerCard": {
     "taskCreated": "任务已创建",

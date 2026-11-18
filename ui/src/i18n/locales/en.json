@@ -4502,6 +4502,14 @@
     "disabledSecretsNotGivenToAgents": "Disabled secrets are not given to agents. A run that needs it will say so.",
     "archivedSecretsNotGivenToAgents": "Archived secrets are not given to agents and stay out of the list.",
     "disabledSecretsMembersNotAsked": "Disabled secrets are not given to agents, and members are not asked for a value.",
+    "notUsedYet": "Not used yet",
+    "setInPlace_one": "Set in {{count}} place",
+    "setInPlace_other": "Set in {{count}} places",
+    "howSecretsWork": "How secrets work",
+    "howSecretsWorkStep1": "Add a secret once. The organization provides one shared value, or each user adds their own.",
+    "howSecretsWorkStep2": "Choose which agents can use it, here or in an agent's settings. A project can set it for every task in that project.",
+    "howSecretsWorkStep3a": "When a run starts, the agent finds it as an environment variable, such as",
+    "howSecretsWorkStep3b": ". The value is never shown again.",
     "whoProvidesTheValueLabel": "Who provides the value",
     "unavailableSuffix": " — unavailable",
     "chooseAnotherVault": "Choose another vault",
@@ -12173,6 +12181,11 @@
     "addApiAccess": "Add API access",
     "proposedBy": "proposed by",
     "theAgentReadsThemByAliasThrough": "The agent reads them by alias through"
+  },
+  "agentProjectAccess": {
+    "couldntLoadProjectAccess": "Couldn't load project access.",
+    "loadingProjectAccess": "Loading project access…",
+    "returnToTask": "Return to task"
   },
   "routineTriggerCard": {
     "taskCreated": "Task created",

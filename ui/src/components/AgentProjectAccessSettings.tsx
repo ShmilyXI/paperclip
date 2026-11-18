@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { isUuidLike } from "@paperclipai/shared";
 import { agentsApi } from "../api/agents";
@@ -14,9 +15,9 @@ export function AgentProjectAccessSettings({ agent }: { agent: { id: string; com
   const access = useQuery({ queryKey: queryKeys.agents.projectAccess(agent.id), queryFn: () => agentsApi.projectAccess(agent.id) });
   const projects = useQuery({ ...companyProjectsQuery(agent.companyId) });
   if (access.error || projects.error) return <div role="alert" className="space-y-2 text-sm">
-    <p>Couldn’t load project access.</p><Button variant="outline" size="sm" onClick={() => { void access.refetch(); void projects.refetch(); }}>Try again</Button>
+    <p>{t("agentProjectAccess.couldntLoadProjectAccess")}</p><Button variant="outline" size="sm" onClick={() => { void access.refetch(); void projects.refetch(); }}>{t("common.tryAgain")}</Button>
   </div>;
-  if (!access.data || !projects.data) return <p role="status" className="text-sm text-muted-foreground">Loading project access…</p>;
+  if (!access.data || !projects.data) return <p role="status" className="text-sm text-muted-foreground">{t("agentProjectAccess.loadingProjectAccess")}</p>;
   return <div className="space-y-4">
     <AllowedProjectsEditor key={agent.id} agentName={agent.name} projects={projects.data} projectIds={access.data.projectIds} canManage={access.data.canManage}
       onSave={async projectIds => {
@@ -29,6 +30,6 @@ export function AgentProjectAccessSettings({ agent }: { agent: { id: string; com
           client.invalidateQueries({ queryKey: ["issues"] }),
         ]);
       }} />
-    {fromTask && isUuidLike(fromTask) && <Button variant="outline" size="sm" asChild><Link to={`/issues/${fromTask}`}>Return to task</Link></Button>}
+    {fromTask && isUuidLike(fromTask) && <Button variant="outline" size="sm" asChild><Link to={`/issues/${fromTask}`}>{t("agentProjectAccess.returnToTask")}</Link></Button>}
   </div>;
 }

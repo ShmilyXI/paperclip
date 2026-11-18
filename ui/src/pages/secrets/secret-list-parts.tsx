@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { t } from "@/i18n";
 import type { Agent } from "@paperclipai/shared";
 import { Building2, ChevronRight, CircleHelp, Users } from "lucide-react";
 import { AgentAvatar } from "../../components/AgentAvatar";
@@ -11,7 +12,7 @@ export function SecretUsedBy({ agents, otherUseCount = 0 }: { agents: readonly A
   if (agents.length === 0) {
     return (
       <span className="truncate text-sm text-muted-foreground">
-        {otherUseCount > 0 ? `Set in ${otherUseCount} ${otherUseCount === 1 ? "place" : "places"}` : "Not used yet"}
+        {otherUseCount > 0 ? t("secrets.setInPlace", { count: otherUseCount }) : t("secrets.notUsedYet")}
       </span>
     );
   }
@@ -23,7 +24,7 @@ export function SecretUsedBy({ agents, otherUseCount = 0 }: { agents: readonly A
         ))}
       </span>
       <span className="truncate text-muted-foreground">
-        {agents.length === 1 ? agents[0].name : `${agents.length} agents`}
+        {agents.length === 1 ? agents[0].name : t("companies.agentCount", { count: agents.length })}
       </span>
     </span>
   );
@@ -36,7 +37,7 @@ export function SecretProvidedBy({ perUser, coverage }: { perUser: boolean; cove
     <span className="flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
       <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
       <span className="truncate">
-        {perUser ? "Each user" : "Organization"}
+        {perUser ? t("secrets.eachUser") : t("common.organization")}
         {perUser && coverage ? <> · {coverage}</> : null}
       </span>
     </span>
@@ -49,16 +50,16 @@ export function HowSecretsWork() {
       <PopoverTrigger asChild>
         <button type="button" className="inline-flex items-center gap-1 underline underline-offset-4 hover:text-foreground">
           <CircleHelp className="h-3.5 w-3.5" aria-hidden />
-          How secrets work
+          {t("secrets.howSecretsWork")}
         </button>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-80 text-sm">
         <ol className="flex list-decimal flex-col gap-2 pl-4 text-muted-foreground">
-          <li>Add a secret once. The organization provides one shared value, or each user adds their own.</li>
-          <li>Choose which agents can use it, here or in an agent&apos;s settings. A project can set it for every task in that project.</li>
+          <li>{t("secrets.howSecretsWorkStep1")}</li>
+          <li>{t("secrets.howSecretsWorkStep2")}</li>
           <li>
-            When a run starts, the agent finds it as an environment variable, such as{" "}
-            <code className="font-mono text-foreground">GITHUB_TOKEN</code>. The value is never shown again.
+            {t("secrets.howSecretsWorkStep3a")}{" "}
+            <code className="font-mono text-foreground">GITHUB_TOKEN</code>{t("secrets.howSecretsWorkStep3b")}
           </li>
         </ol>
       </PopoverContent>
@@ -97,7 +98,7 @@ export function ManagedSecretGroup({
         <span className="shrink-0 text-sm font-medium">{group.label}</span>
         <span className="hidden min-w-0 flex-1 truncate text-xs text-muted-foreground @min-[40rem]:inline">{group.detail}</span>
         <span className="ml-auto shrink-0 text-sm tabular-nums text-muted-foreground">
-          {count} {count === 1 ? "secret" : "secrets"}
+          {t("secrets.secretCount", { count })}
         </span>
       </button>
       {open ? children : null}
