@@ -664,6 +664,7 @@
     "todo": "待办",
     "inProgress": "进行中",
     "inReview": "评审中",
+    "monitoring": "监控中",
     "blocked": "已阻塞",
     "cancelled": "已取消",
     "searchTasks": "搜索任务",

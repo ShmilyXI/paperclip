@@ -664,6 +664,7 @@
     "todo": "Todo",
     "inProgress": "In progress",
     "inReview": "In review",
+    "monitoring": "Monitoring",
     "blocked": "Blocked",
     "cancelled": "Cancelled",
     "searchTasks": "Search tasks",

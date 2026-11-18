@@ -145,14 +145,14 @@ function findIssuesScrollContainer(element: HTMLElement | null): HTMLElement | n
 }
 const boardIssueStatuses = [...ISSUE_STATUSES, "monitoring"] as const;
 const issueStatusLabels: Record<IssueDisplayStatus, string> = {
-  backlog: "Backlog",
-  todo: "Todo",
-  in_progress: "In progress",
-  monitoring: "Monitoring",
-  in_review: "In review",
-  done: "Done",
-  blocked: "Blocked",
-  cancelled: "Cancelled",
+  backlog: t("common.backlog"),
+  todo: t("common.todo"),
+  in_progress: t("common.inProgress"),
+  monitoring: t("common.monitoring"),
+  in_review: t("common.inReview"),
+  done: t("common.done"),
+  blocked: t("common.blocked"),
+  cancelled: t("common.cancelled"),
 };
 const progressSegmentClasses: Record<IssueDisplayStatus, string> = {
   backlog: "bg-muted-foreground/40",
@@ -1249,8 +1249,8 @@ function StreamlinedIssuesList({
     return sortIssues(filteredByControls, viewState, issue => {
       const parent = issue.parentId ? byId.get(issue.parentId) : null;
       return {
-        createdBy: issue.createdByAgentId ? agentName(issue.createdByAgentId) ?? "Unknown agent" : companyUserLabelMap.get(issue.createdByUserId ?? "") ?? "Board",
-        assignee: issue.assigneeAgentId ? agentName(issue.assigneeAgentId) ?? "Unknown agent" : companyUserLabelMap.get(issue.assigneeUserId ?? "") ?? null,
+        createdBy: issue.createdByAgentId ? agentName(issue.createdByAgentId) ?? t("routines.unknownAgent") : companyUserLabelMap.get(issue.createdByUserId ?? "") ?? t("common.board"),
+        assignee: issue.assigneeAgentId ? agentName(issue.assigneeAgentId) ?? t("routines.unknownAgent") : companyUserLabelMap.get(issue.assigneeUserId ?? "") ?? null,
         project: projectById.get(issue.projectId ?? "")?.name,
         parentTask: parent ? `${parent.identifier} ${parent.title}` : null,
       };
