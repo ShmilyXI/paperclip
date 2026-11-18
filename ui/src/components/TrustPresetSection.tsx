@@ -14,8 +14,6 @@ import {
   lowTrustBoundaryHasScope,
   setSingleLowTrustBoundaryTarget,
   summarizeLowTrustBoundaryTarget,
-  TRUST_PRESET_DESCRIPTIONS,
-  TRUST_PRESET_LABELS,
   type LowTrustBoundaryTarget,
 } from "../lib/trust-policy-ui";
 import { cn } from "../lib/utils";
@@ -23,10 +21,10 @@ import { cn } from "../lib/utils";
 const inputClass =
   "w-full rounded-md border border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40";
 
-function formatCount(value: readonly unknown[] | undefined, singular: string, plural: string) {
+function formatCount(value: readonly unknown[] | undefined, key: string) {
   const count = value?.length ?? 0;
   if (count === 0) return "-";
-  return `${count} ${count === 1 ? singular : plural}`;
+  return t(key, { count });
 }
 
 function PolicyRow({ label, value }: { label: string; value: string }) {
@@ -198,12 +196,12 @@ export function TrustPresetSection({
                 <div className="rounded-md border border-border/70 bg-background/70 p-3 text-foreground">
                   <p className="text-sm font-medium">{t("trustPresetSection.managedByEeApi")}</p>
                   <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                    This policy has {summarizeLowTrustBoundaryTarget(boundary).toLowerCase()} and cannot be edited by the CE single-boundary editor.
+                    {t("trustPresetSection.thisPolicyHas", { summary: summarizeLowTrustBoundaryTarget(boundary).toLowerCase() })}
                   </p>
                 </div>
               )}
               {!projectAccessEditor && <p className="text-xs text-muted-foreground">
-                Want to set more than one containment boundary?{" "}
+                {t("trustPresetSection.wantToSetMoreThanOneContainmentBoundary")}{" "}
                 <a
                   className="underline underline-offset-2 hover:text-foreground"
                   href="https://paperclip.ing/ee"
@@ -219,14 +217,14 @@ export function TrustPresetSection({
                 onToggle={() => setPolicyOpen((open) => !open)}
               >
                 <div className="divide-y divide-border/60 text-foreground">
-                  <PolicyRow label={t("trustPresetSection.preset")} value="Low-trust review v1" />
-                  <PolicyRow label={t("trustPresetSection.rawOutput")} value="Quarantined from higher-trust agents" />
-                  <PolicyRow label={t("common.projects")} value={formatCount(boundary?.projectIds, "project", "projects")} />
+                  <PolicyRow label={t("trustPresetSection.preset")} value={t("trustPresetSection.lowTrustReviewV1")} />
+                  <PolicyRow label={t("trustPresetSection.rawOutput")} value={t("trustPresetSection.quarantinedFromHigherTrustAgents")} />
+                  <PolicyRow label={t("common.projects")} value={formatCount(boundary?.projectIds, "trustPresetSection.projectCount")} />
                   <PolicyRow label={t("trustPresetSection.rootIssue")} value={boundary?.rootIssueId ? boundary.rootIssueId.slice(0, 8) : "-"} />
-                  <PolicyRow label={t("trustPresetSection.explicitIssues")} value={formatCount(boundary?.issueIds, "issue", "issues")} />
-                  <PolicyRow label={t("trustPresetSection.allowedAgents")} value={formatCount(boundary?.allowedAgentIds, "agent", "agents")} />
+                  <PolicyRow label={t("trustPresetSection.explicitIssues")} value={formatCount(boundary?.issueIds, "trustPresetSection.issueCount")} />
+                  <PolicyRow label={t("trustPresetSection.allowedAgents")} value={formatCount(boundary?.allowedAgentIds, "trustPresetSection.agentCount")} />
                   <PolicyRow label={t("trustPresetSection.allowedTools")} value={boundary?.allowedToolClasses?.join(" · ") || "-"} />
-                  <PolicyRow label={t("trustPresetSection.allowedSecrets")} value={formatCount(boundary?.allowedSecretBindingIds, "binding", "bindings")} />
+                  <PolicyRow label={t("trustPresetSection.allowedSecrets")} value={formatCount(boundary?.allowedSecretBindingIds, "trustPresetSection.bindingCount")} />
                   <PolicyRow label={t("trustPresetSection.promotionTarget")} value={boundary?.outputPromotionTarget?.issueId?.slice(0, 8) ?? "-"} />
                   <PolicyRow
                     label={t("trustPresetSection.eeFields")}
@@ -244,7 +242,7 @@ export function TrustPresetSection({
     return (
       <div className="flex flex-col gap-(--agent-detail-module-gap)">
         <div className="agent-trust-cards grid gap-(--agent-detail-module-gap) sm:grid-cols-3">
-          <div role="radiogroup" aria-label="Trust preset" className="contents">
+          <div role="radiogroup" aria-label={t("trustPresetSection.trustPreset")} className="contents">
             {(["low_trust_review", "standard"] as const).map((value) => {
               const selected = preset === value;
               return (
@@ -262,10 +260,10 @@ export function TrustPresetSection({
                   )}
                 >
                   <span className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-semibold text-foreground">{TRUST_PRESET_LABELS[value]}</span>
+                    <span className="text-sm font-semibold text-foreground">{value === "low_trust_review" ? t("trustPresetSection.presetLowTrustReview") : t("trustPresetSection.presetStandard")}</span>
                     {selected ? <Check className="size-4 text-foreground" aria-hidden /> : null}
                   </span>
-                  <span className="text-sm leading-5 text-muted-foreground">{TRUST_PRESET_DESCRIPTIONS[value]}</span>
+                  <span className="text-sm leading-5 text-muted-foreground">{value === "low_trust_review" ? t("trustPresetSection.presetLowTrustReviewDescription") : t("trustPresetSection.presetStandardDescription")}</span>
                 </button>
               );
             })}
@@ -276,7 +274,7 @@ export function TrustPresetSection({
         {lowTrust ? projectAccessEditor : null}
         {managedPermissions.authorizationPolicy?.reviewPreset ? null : (
           <p className="text-xs text-muted-foreground">
-            Advanced permissions remain editable through the EE permissions extension when installed.
+            {t("trustPresetSection.advancedPermissionsRemainEditableThrough")}
           </p>
         )}
       </div>
@@ -285,20 +283,20 @@ export function TrustPresetSection({
 
   return (
     <div>
-      <h3 className="mb-3 text-sm font-medium">Trust</h3>
+      <h3 className="mb-3 text-sm font-medium">{t("trustPresetSection.trust")}</h3>
       <div className="rounded-lg border border-border p-4 space-y-3">
-        <Field label="Trust preset" hint="Choose how broadly this agent can read and act on Paperclip work objects.">
+        <Field label={t("trustPresetSection.trustPreset")} hint={t("trustPresetSection.chooseHowBroadlyThisAgent")}>
           <select
             className={inputClass}
             value={preset}
             onChange={(event) => handlePresetChange(event.target.value)}
             disabled={disabled}
           >
-            <option value="standard">{TRUST_PRESET_LABELS.standard}</option>
-            <option value="low_trust_review">{TRUST_PRESET_LABELS.low_trust_review}</option>
+            <option value="standard">{t("trustPresetSection.presetStandard")}</option>
+            <option value="low_trust_review">{t("trustPresetSection.presetLowTrustReview")}</option>
           </select>
         </Field>
-        <p className="text-xs text-muted-foreground">{TRUST_PRESET_DESCRIPTIONS[preset]}</p>
+        <p className="text-xs text-muted-foreground">{preset === "low_trust_review" ? t("trustPresetSection.presetLowTrustReviewDescription") : t("trustPresetSection.presetStandardDescription")}</p>
 
         {containment}
 
