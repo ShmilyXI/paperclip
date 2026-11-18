@@ -6475,6 +6475,7 @@
     "paperclipCouldnTCheckCloud": "Paperclip 无法检查 Cloud 注册状态。请重试。",
     "connectWithPaperclip": "通过 Paperclip 连接",
     "openSignInInA": "在新标签页中打开登录",
+    "allowASignInWindow": "请允许打开登录窗口，然后重试以刷新你的账户。",
     "secureMcpSignIn": "安全 MCP 登录",
     "installPaperclipOnGithub": "在 GitHub 上安装 Paperclip",
     "manageRepositoriesOnGithub": "在 GitHub 上管理仓库",

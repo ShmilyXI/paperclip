@@ -14,7 +14,7 @@ export function VoiceTranscript({ entries, agentName, unavailable = false }: Voi
   if (unavailable) return <p className="text-sm text-muted-foreground">{t("voiceTranscript.theTranscriptIsUnavailableYour")}</p>;
   if (!entries.length) return <p className="text-sm text-muted-foreground">{t("voiceTranscript.yourConversationWillAppearHere")}</p>;
   return (
-    <ol aria-label="Conversation transcript" aria-live="off" className={cn("flex min-w-0 flex-col gap-4", ANALYTICS_MASK_CLASS)}>
+    <ol aria-label={t("voiceTranscript.conversationTranscript")} aria-live="off" className={cn("flex min-w-0 flex-col gap-4", ANALYTICS_MASK_CLASS)}>
       {entries.map((entry) => (
         <li key={entry.id} className="flex min-w-0 flex-col gap-1">
           <span className="text-xs font-medium text-muted-foreground break-words">

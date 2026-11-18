@@ -6475,6 +6475,7 @@
     "paperclipCouldnTCheckCloud": "Paperclip couldn’t check Cloud registration. Try again.",
     "connectWithPaperclip": "Connect with Paperclip",
     "openSignInInA": "Open sign-in in a new tab",
+    "allowASignInWindow": "Allow a sign-in window and try again to refresh your account.",
     "secureMcpSignIn": "Secure MCP sign-in",
     "installPaperclipOnGithub": "Install Paperclip on GitHub",
     "manageRepositoriesOnGithub": "Manage repositories on GitHub",

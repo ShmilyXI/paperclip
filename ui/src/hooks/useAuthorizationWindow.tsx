@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useRef, useState } from "react";
 import type { ToolOAuthStartResult } from "@paperclipai/shared";
 import { prepareOAuthNavigation, savePendingCloudHandoff } from "@/lib/oauthHandoff";
@@ -27,7 +28,7 @@ export function useAuthorizationWindow() {
       const target = await prepareOAuthNavigation(request);
       const destination = popup.current;
       if (target.kind === "reauthentication" && request.handoff) {
-        if (!destination || destination.closed) throw new Error("Allow a sign-in window and try again to refresh your account.");
+        if (!destination || destination.closed) throw new Error(t("connectionSetup.allowASignInWindow"));
         savePendingCloudHandoff(request.handoff.session, destination.sessionStorage);
       }
       // Reauthentication requires the session already stored in this window.
@@ -40,7 +41,7 @@ export function useAuthorizationWindow() {
     } catch (error) { cancel(); throw error; }
   }, [cancel]);
   const fallback = fallbackUrl ? <Button variant="outline" asChild>
-    <a href={fallbackUrl} target="_blank" rel="noopener noreferrer">Open sign-in in a new tab</a>
+    <a href={fallbackUrl} target="_blank" rel="noopener noreferrer">{t("connectionSetup.openSignInInA")}</a>
   </Button> : null;
   return { reserve, open, cancel, fallback, windowRef: popup };
 }

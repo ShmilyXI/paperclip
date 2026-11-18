@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { TaskChatComposerDock } from "./TaskChatComposerDock";
@@ -11,7 +12,7 @@ export function TaskChatLoadingShell({ mobile, streamlined, coordinator }: {
   return <div
     data-testid="task-chat-loading-frame"
     role="status"
-    aria-label="Loading conversation"
+    aria-label={t("taskChatThread.loadingConversation")}
     className="task-chat-loading-shell relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden bg-background"
   >
     <div aria-hidden="true" className={cn(
