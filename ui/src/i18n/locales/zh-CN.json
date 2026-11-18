@@ -940,7 +940,10 @@
     "unknownEnvironmentId": "未知运行环境 - {{environmentId}}",
     "chat": "聊天",
     "sandboxProvider": "{{provider}} 沙箱服务商",
-    "selectCompanyToViewAgents": "请选择一家公司以查看员工。"
+    "selectCompanyToViewAgents": "请选择一家公司以查看员工。",
+    "viewMode": "视图模式",
+    "noAgentsMatchTheSelectedFilters": "没有员工符合所选筛选条件。",
+    "live": "实时"
   },
   "orgChart": {
     "orgChart": "组织架构",

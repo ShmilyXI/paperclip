@@ -940,7 +940,10 @@
     "unknownEnvironmentId": "Unknown environment - {{environmentId}}",
     "chat": "Chat",
     "sandboxProvider": "{{provider}} sandbox provider",
-    "selectCompanyToViewAgents": "Select a company to view agents."
+    "selectCompanyToViewAgents": "Select a company to view agents.",
+    "viewMode": "View mode",
+    "noAgentsMatchTheSelectedFilters": "No agents match the selected filters.",
+    "live": "Live"
   },
   "orgChart": {
     "orgChart": "Org Chart",
