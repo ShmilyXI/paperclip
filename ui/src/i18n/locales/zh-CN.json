@@ -12796,7 +12796,13 @@
     "chooseAnAgent": "选择员工",
     "browseAllAgents": "浏览全部员工",
     "agentCount_one": "{{count}} 位员工",
-    "agentCount_other": "{{count}} 位员工"
+    "agentCount_other": "{{count}} 位员工",
+    "chatContacts": "聊天联系人",
+    "searchChats": "搜索聊天",
+    "createANewAgent": "创建新员工",
+    "unreadMessageFrom_one": "来自 {{name}} 的 {{count}} 条未读消息",
+    "unreadMessageFrom_other": "来自 {{name}} 的 {{count}} 条未读消息",
+    "unreadMessagesFrom": "来自 {{name}} 的未读消息"
   },
   "matchSourceChip": {
     "identifier": "标识符",

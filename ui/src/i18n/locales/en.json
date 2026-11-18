@@ -12796,7 +12796,13 @@
     "chooseAnAgent": "Choose an agent",
     "browseAllAgents": "Browse all agents",
     "agentCount_one": "{{count}} agent",
-    "agentCount_other": "{{count}} agents"
+    "agentCount_other": "{{count}} agents",
+    "chatContacts": "Chat contacts",
+    "searchChats": "Search chats",
+    "createANewAgent": "Create a new agent",
+    "unreadMessageFrom_one": "{{count}} unread message from {{name}}",
+    "unreadMessageFrom_other": "{{count}} unread messages from {{name}}",
+    "unreadMessagesFrom": "Unread messages from {{name}}"
   },
   "matchSourceChip": {
     "identifier": "Identifier",
