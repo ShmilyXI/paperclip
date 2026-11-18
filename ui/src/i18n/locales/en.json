@@ -17504,5 +17504,11 @@
     "onceItIsSetUp": "Once it is set up, you get the address to call and its secret to give that system.",
     "reasonPlaceholder": "e.g. Run it on Mondays instead, and only for paying customers",
     "setItUp": "Set it up"
+  },
+  "aiConnectionAccountDetails": {
+    "connectedAccount": "Connected account",
+    "providerAccount": "{{provider}} account",
+    "chatGptWorkspace": "ChatGPT workspace",
+    "checkingAccountDetails": "Checking account details…"
   }
 }

@@ -17504,5 +17504,11 @@
     "onceItIsSetUp": "设置完成后，你会获得要调用的地址以及要提供给该系统的密钥。",
     "reasonPlaceholder": "例如：改为每周一运行，并且只针对付费客户",
     "setItUp": "设置它"
+  },
+  "aiConnectionAccountDetails": {
+    "connectedAccount": "已连接的账号",
+    "providerAccount": "{{provider}} 账号",
+    "chatGptWorkspace": "ChatGPT 工作区",
+    "checkingAccountDetails": "正在检查账号详情…"
   }
 }
