@@ -15230,7 +15230,11 @@
     "fileReference": "file reference",
     "terminal": "terminal",
     "init": "init",
-    "result": "result"
+    "result": "result",
+    "pathsStartingWith": "{{n}} paths, starting with {{first}}",
+    "noNameInput": "No {{name}} input",
+    "keyPayload": "{{key}} payload",
+    "fieldsCount": "{{n}} fields: {{names}}"
   },
   "fastResponseSettings": {
     "fastResponse": "Fast response",

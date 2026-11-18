@@ -15230,7 +15230,11 @@
     "fileReference": "文件引用",
     "terminal": "终端",
     "init": "初始化",
-    "result": "结果"
+    "result": "结果",
+    "pathsStartingWith": "{{n}} 个路径，以 {{first}} 开头",
+    "noNameInput": "无 {{name}} 输入",
+    "keyPayload": "{{key}} 负载",
+    "fieldsCount": "{{n}} 个字段：{{names}}"
   },
   "fastResponseSettings": {
     "fastResponse": "快速回复",

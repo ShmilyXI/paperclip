@@ -288,14 +288,14 @@ function summarizeToolInput(name: string, input: unknown, density: TranscriptDen
   if (Array.isArray(record.paths) && record.paths.length > 0) {
     const first = record.paths.find((value): value is string => typeof value === "string" && value.trim().length > 0);
     if (first) {
-      return truncate(`${record.paths.length} paths, starting with ${first}`, compactMax);
+      return truncate(t("runTranscriptView.pathsStartingWith", { n: record.paths.length, first }), compactMax);
     }
   }
 
   const keys = Object.keys(record);
-  if (keys.length === 0) return `No ${name} input`;
-  if (keys.length === 1) return truncate(`${keys[0]} payload`, compactMax);
-  return truncate(`${keys.length} fields: ${keys.slice(0, 3).join(", ")}`, compactMax);
+  if (keys.length === 0) return t("runTranscriptView.noNameInput", { name });
+  if (keys.length === 1) return truncate(t("runTranscriptView.keyPayload", { key: keys[0] }), compactMax);
+  return truncate(t("runTranscriptView.fieldsCount", { n: keys.length, names: keys.slice(0, 3).join(", ") }), compactMax);
 }
 
 function parseStructuredToolResult(result: string | undefined) {
