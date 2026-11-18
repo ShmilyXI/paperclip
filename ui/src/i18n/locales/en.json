@@ -17869,7 +17869,9 @@
         "loadThisPlugin": "load this plugin",
         "loadLocalFolderSettings": "load local folder settings",
         "loadTheProfile": "load the profile",
-        "loadNewTools": "load new tools"
+        "loadNewTools": "load new tools",
+        "checkAgentAccess": "check this agent's access",
+        "loadProfiles": "load profiles"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

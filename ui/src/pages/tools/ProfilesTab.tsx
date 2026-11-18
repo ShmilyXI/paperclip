@@ -493,7 +493,7 @@ export function EffectiveAgentPanel({ companyId, agentOptions }: { companyId: st
           {t("toolsProfiles.pickAnAgentToSee")}
         </div>
       ) : effective.isLoading || effectiveView.kind === "reconnecting" ? (
-        <LoadingState label="Checking access..." />
+        <LoadingState label={t("toolsProfiles.checkingAccess")} />
       ) : effectiveView.kind === "error" ? (
         <QueryErrorState
           error={effective.error}
@@ -736,7 +736,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.profileCreated"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: "Could not create profile",
+      title: t("toolsProfiles.couldNotCreateProfile"),
       body: describeError(error).body,
       tone: "error",
     }),
@@ -752,7 +752,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.profileUpdated"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: "Could not update profile",
+      title: t("toolsProfiles.couldNotUpdateProfile"),
       body: describeError(error).body,
       tone: "error",
     }),
@@ -768,7 +768,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.entryAdded"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: "Could not add entry",
+      title: t("toolsProfiles.couldNotAddEntry"),
       body: describeError(error).body,
       tone: "error",
     }),
@@ -781,7 +781,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.entryRemoved"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: "Could not remove entry",
+      title: t("toolsProfiles.couldNotRemoveEntry"),
       body: describeError(error).body,
       tone: "error",
     }),
@@ -798,7 +798,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.profileBound"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: "Could not bind profile",
+      title: t("toolsProfiles.couldNotBindProfile"),
       body: describeError(error).body,
       tone: "error",
     }),
@@ -815,7 +815,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
       pushToast({ title: t("toolsProfiles.bindingRemoved"), tone: "success" });
     },
     onError: (error) => pushToast({
-      title: "Could not remove binding",
+      title: t("toolsProfiles.couldNotRemoveBinding"),
       body: describeError(error).body,
       tone: "error",
     }),

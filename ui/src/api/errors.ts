@@ -180,6 +180,8 @@ const ACTION_KEYS = new Map([
   ["load local folder settings", "loadLocalFolderSettings"],
   ["load the profile", "loadTheProfile"],
   ["load new tools", "loadNewTools"],
+  ["check this agent's access", "checkAgentAccess"],
+  ["load profiles", "loadProfiles"],
 ]);
 
 function actionErrorTitle(action: string, fallback: string): string {

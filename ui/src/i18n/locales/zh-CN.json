@@ -17869,7 +17869,9 @@
         "loadThisPlugin": "加载此插件",
         "loadLocalFolderSettings": "加载本地文件夹设置",
         "loadTheProfile": "加载此配置档",
-        "loadNewTools": "加载新工具"
+        "loadNewTools": "加载新工具",
+        "checkAgentAccess": "检查此员工的访问权限",
+        "loadProfiles": "加载配置档"
       },
       "retry": "重试",
       "retrying": "正在重试…",
