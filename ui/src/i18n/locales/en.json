@@ -12738,6 +12738,16 @@
     "toRecipients": "To: {{recipients}}",
     "ccRecipients": "Cc: {{recipients}}"
   },
+  "linkPreview": {
+    "statusUnknown": "Status unknown",
+    "open": "Open",
+    "merged": "Merged",
+    "mergeConflicts": "Merge conflicts",
+    "draft": "Draft",
+    "closed": "Closed",
+    "updated": "Updated",
+    "loadingPullRequest": "Loading pull request…"
+  },
   "liveRunWidget": {
     "liveRuns": "Live Runs",
     "usesTheSharedChatStyle": "Uses the shared chat-style run surface from task activity.",

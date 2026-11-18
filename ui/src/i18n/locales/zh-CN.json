@@ -12738,6 +12738,16 @@
     "toRecipients": "收件人：{{recipients}}",
     "ccRecipients": "抄送：{{recipients}}"
   },
+  "linkPreview": {
+    "statusUnknown": "状态未知",
+    "open": "开启",
+    "merged": "已合并",
+    "mergeConflicts": "合并冲突",
+    "draft": "草稿",
+    "closed": "已关闭",
+    "updated": "更新于",
+    "loadingPullRequest": "正在加载拉取请求…"
+  },
   "liveRunWidget": {
     "liveRuns": "实时运行",
     "usesTheSharedChatStyle": "复用任务活动中的聊天式运行界面。",

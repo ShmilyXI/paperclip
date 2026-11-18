@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useId, useMemo, useRef, useState, type ReactElement } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PreviewCard } from "@base-ui/react/preview-card";
@@ -10,7 +11,7 @@ import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 import { cn } from "@/lib/utils";
 
 export const linkPreviewStateLabel: Record<LinkPreviewState, string> = {
-  unknown: "Status unknown", open: "Open", merged: "Merged", conflicts: "Merge conflicts", draft: "Draft", closed: "Closed",
+  unknown: t("linkPreview.statusUnknown"), open: t("linkPreview.open"), merged: t("linkPreview.merged"), conflicts: t("linkPreview.mergeConflicts"), draft: t("linkPreview.draft"), closed: t("linkPreview.closed"),
 };
 export const linkPreviewStateIcon = {
   unknown: GitPullRequest, open: GitPullRequest, merged: GitMerge,
@@ -31,9 +32,9 @@ function PreviewCardContents({ target, preview, loading }: { target: LinkPreview
       <p className="m-0 text-sm font-medium leading-snug">{preview.title}</p>
       {(preview.author || updated) ? <p className="m-0 flex flex-wrap gap-x-2 gap-y-1 text-xs text-muted-foreground">
         {preview.author ? <span>{preview.author}</span> : null}
-        {updated ? <span>Updated <time className="font-mono" dateTime={updated} title={new Date(updated).toLocaleString()}>{timeAgo(updated)}</time></span> : null}
+        {updated ? <span>{t("linkPreview.updated")} <time className="font-mono" dateTime={updated} title={new Date(updated).toLocaleString()}>{timeAgo(updated)}</time></span> : null}
       </p> : null}
-    </> : loading ? <p className="m-0 text-sm text-muted-foreground" role="status">Loading pull request…</p> : null}
+    </> : loading ? <p className="m-0 text-sm text-muted-foreground" role="status">{t("linkPreview.loadingPullRequest")}</p> : null}
     <span className="break-all font-mono text-xs text-muted-foreground">{target.canonicalUrl}</span>
   </div>;
 }

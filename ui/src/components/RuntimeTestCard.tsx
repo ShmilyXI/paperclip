@@ -87,7 +87,7 @@ export function RuntimeTestCard({
           : Play;
   return (
     <section
-      aria-label="Runtime test"
+      aria-label={t("runtimeTestCard.runtimeTest")}
       data-agent-tile={tone === "tile" ? "" : undefined}
       className={tone === "tile" ? "rounded-lg bg-(--agent-detail-tile)" : "rounded-lg border border-border bg-card"}
     >

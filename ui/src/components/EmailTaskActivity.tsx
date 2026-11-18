@@ -95,7 +95,7 @@ function EmailDelivery({
     <div className="space-y-2 text-xs text-muted-foreground">
       {p.request && !p.providerMessageId && (
         <article
-          aria-label="Email send intent"
+          aria-label={t("emailTaskActivity.emailSendIntent")}
           className={cn("task-context-notice space-y-3", ANALYTICS_MASK_CLASS)}
         >
           <p className="font-semibold">{p.request.subject ?? t("emailTaskActivity.emailReply")}</p>
