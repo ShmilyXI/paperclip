@@ -204,9 +204,9 @@ function ArchiveDangerZone({
           onClick={() => setConfirming(true)}
         >
           {isArchive ? (
-            <><Archive className="h-3 w-3 mr-1" />{action} project</>
+            <><Archive className="h-3 w-3 mr-1" />{t("projectProperties.actionProject", { action })}</>
           ) : (
-            <><ArchiveRestore className="h-3 w-3 mr-1" />{action} project</>
+            <><ArchiveRestore className="h-3 w-3 mr-1" />{t("projectProperties.actionProject", { action })}</>
           )}
         </Button>
       )}
@@ -508,10 +508,10 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
             {project.visibility === "private" ? <ProjectAccessMembers project={project} canManage={canManagePrivacy} /> : null}
           </div>
         </PropertyRow>
-        <PropertyRow label={<FieldLabel label="Decision owner" state={fieldState("decision_owner")} />} alignStart>
+        <PropertyRow label={<FieldLabel label={t("projectProperties.decisionOwner")} state={fieldState("decision_owner")} />} alignStart>
           <div className="space-y-1">
             <NativeSelect
-              aria-label="Decision owner"
+              aria-label={t("projectProperties.decisionOwner")}
               data-testid="project-decision-owner"
               value={project.decisionOwnerUserId ?? ""}
               disabled={!onUpdate && !onFieldUpdate}
@@ -519,7 +519,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                 commitField("decision_owner", { decisionOwnerUserId: event.target.value === "" ? null : event.target.value })
               }
             >
-              <option value="">Company default</option>
+              <option value="">{t("projectProperties.companyDefault")}</option>
               {(companyMembers?.members ?? [])
                 .filter((member) => member.user?.id)
                 .map((member) => (
@@ -529,7 +529,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
                 ))}
             </NativeSelect>
             <p className="text-(length:--text-micro) text-muted-foreground">
-              A Needs You card on this project's work that names no person goes to this user's For you list.
+              {t("projectProperties.needsYouCardGoesToForYouList")}
             </p>
           </div>
         </PropertyRow>
@@ -746,33 +746,33 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
           )}
           {createWorkspace.isError && ( // query-error-ok: mutation result
 
-            <p className="text-xs text-destructive">Failed to save workspace.</p>
+            <p className="text-xs text-destructive">{t("projectProps.failedToSaveWorkspace")}</p>
           )}
           {removeWorkspace.isError && ( // query-error-ok: mutation result
 
-            <p className="text-xs text-destructive">Failed to delete workspace.</p>
+            <p className="text-xs text-destructive">{t("projectProps.failedToDeleteWorkspace")}</p>
           )}
           {updateWorkspace.isError && ( // query-error-ok: mutation result
 
-            <p className="text-xs text-destructive">Failed to update workspace.</p>
+            <p className="text-xs text-destructive">{t("projectProps.failedToUpdateWorkspace")}</p>
           )}
         </div>}
 
         {showStorageAvailability ? (
           <div className="py-1.5 space-y-1" data-testid="project-storage-availability">
-            <div className="text-sm font-medium">Available in</div>
+            <div className="text-sm font-medium">{t("projectProperties.availableIn")}</div>
             {storagePluginUnavailable ? (
-              <p role="alert" className="text-sm text-destructive">Storage plugin unavailable</p>
+              <p role="alert" className="text-sm text-destructive">{t("projectProperties.storagePluginUnavailable")}</p>
             ) : projectEnvironmentView.kind === "loading" || projectEnvironmentView.kind === "reconnecting" ? (
-              <p role="status" className="text-sm text-muted-foreground">Loading environments…</p>
+              <p role="status" className="text-sm text-muted-foreground">{t("projectProperties.loadingEnvironments")}</p>
             ) : projectEnvironmentView.kind === "error" ? (
               <QueryErrorState error={projectEnvironmentView.error} size="inline" action="load project environments"
                 onRetry={projectEnvironmentView.retry} retrying={projectEnvironmentView.isFetching} />
             ) : (
-              <p className="text-sm">{storageEnvironmentNames.length ? storageEnvironmentNames.join(", ") : "No available environments"}</p>
+              <p className="text-sm">{storageEnvironmentNames.length ? storageEnvironmentNames.join(", ") : t("projectProperties.noAvailableEnvironments")}</p>
             )}
             <p className="text-xs text-muted-foreground">
-              {providerConfiguration?.displayName ?? "Core / local"} workspace storage was chosen when this project was created and does not change.
+              {t("projectProperties.workspaceStorageWasChosenWhen", { name: providerConfiguration?.displayName ?? "Core / local" })}
             </p>
             {providerConfiguration?.error && !storagePluginUnavailable
               ? <p role="alert" className="text-xs text-destructive">{providerConfiguration.error}</p> : null}

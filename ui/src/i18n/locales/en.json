@@ -8616,7 +8616,16 @@
     "hostManagedImplementation": "Host-managed implementation:",
     "runsOnceBeforeTheFirst": "Runs once before the first runtime-service start (heavy setup, e.g. DB seed). Leave empty to keep eager provisioning.",
     "provisionRunsInsideTheDerived": "Provision runs inside the derived worktree before agent execution. Teardown is stored here for future cleanup flows.",
-    "dangerZone": "Danger Zone"
+    "dangerZone": "Danger Zone",
+    "actionProject": "{{action}} project",
+    "decisionOwner": "Decision owner",
+    "companyDefault": "Company default",
+    "needsYouCardGoesToForYouList": "A Needs You card on this project's work that names no person goes to this user's For you list.",
+    "availableIn": "Available in",
+    "storagePluginUnavailable": "Storage plugin unavailable",
+    "loadingEnvironments": "Loading environments…",
+    "noAvailableEnvironments": "No available environments",
+    "workspaceStorageWasChosenWhen": "{{name}} workspace storage was chosen when this project was created and does not change."
   },
   "boardChat": {
     "typing": "typing",

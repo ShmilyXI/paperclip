@@ -8616,7 +8616,16 @@
     "hostManagedImplementation": "主机托管的实现：",
     "runsOnceBeforeTheFirst": "在首次启动运行时服务之前运行一次（较重的准备，例如数据库播种）。留空则保持即时预配。",
     "provisionRunsInsideTheDerived": "预配在员工执行前于派生出的 worktree 内运行。清理命令保存在此处，供后续清理流程使用。",
-    "dangerZone": "危险区域"
+    "dangerZone": "危险区域",
+    "actionProject": "{{action}}项目",
+    "decisionOwner": "决策负责人",
+    "companyDefault": "公司默认",
+    "needsYouCardGoesToForYouList": "此项目工作流中未指定人选的「需要你处理」卡片会进入此用户的「为你推荐」列表。",
+    "availableIn": "可在以下环境使用",
+    "storagePluginUnavailable": "存储插件不可用",
+    "loadingEnvironments": "正在加载运行环境…",
+    "noAvailableEnvironments": "没有可用的运行环境",
+    "workspaceStorageWasChosenWhen": "{{name}} 工作区存储在此项目创建时即已选定，之后不会更改。"
   },
   "boardChat": {
     "typing": "正在输入",
