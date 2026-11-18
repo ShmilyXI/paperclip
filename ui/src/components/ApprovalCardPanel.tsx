@@ -1,12 +1,14 @@
 import type { ReactNode } from "react";
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { FileText, UserRound } from "lucide-react";
-import { AGENT_ROLE_LABELS, type AgentRole, type AttentionItem } from "@paperclipai/shared";
+import { type AttentionItem } from "@paperclipai/shared";
 import { agentsApi } from "../api/agents";
 import { approvalsApi } from "../api/approvals";
 import { getAdapterLabel } from "../adapters/adapter-display-registry";
 import { queryKeys } from "../lib/queryKeys";
 import { formatCents } from "../lib/utils";
+import { localizedRoleLabels } from "../lib/role-labels";
 import { NeedsYouPanel, NeedsYouPanelNote, NeedsYouPanelRow } from "./coordinator/NeedsYouCardKit";
 
 function payloadString(payload: Record<string, unknown> | undefined, key: string): string | null {
@@ -15,9 +17,9 @@ function payloadString(payload: Record<string, unknown> | undefined, key: string
 }
 
 const APPROVAL_KIND_LABELS: Record<string, string> = {
-  request_board_approval: "Board approval request",
-  approve_ceo_strategy: "Strategy approval",
-  budget_override_required: "Budget override request",
+  request_board_approval: t("approvalCard.boardApprovalRequest"),
+  approve_ceo_strategy: t("approvalCard.strategyApproval"),
+  budget_override_required: t("approvalCard.budgetOverrideRequest"),
 };
 
 const wholeDollars =(cents: number) => formatCents(cents).replace(/\.00$/, "");
@@ -41,28 +43,28 @@ export function ApprovalCardPanel({ item, companyId, artifactRow, onViewDetails 
   if (artifactRow) return <NeedsYouPanel>{artifactRow}</NeedsYouPanel>;
   if (hire) {
     const budget = typeof payload?.budgetMonthlyCents === "number" && payload.budgetMonthlyCents > 0 ? payload.budgetMonthlyCents : null;
-    const name = payloadString(payload, "name") ?? item.subject.title ?? "New agent";
+    const name = payloadString(payload, "name") ?? item.subject.title ?? t("common.newAgent");
     const role = payloadString(payload, "role");
     const adapter = payloadString(payload, "adapterType");
     const manager = reportsTo ? agents.data?.find((agent) => agent.id === reportsTo)?.name : null;
     const meta = [
-      manager ? `Reports to ${manager}` : null,
-      payloadString(payload, "title") ?? (role ? `${AGENT_ROLE_LABELS[role as AgentRole] ?? role} role` : null),
+      manager ? t("approvalCard.reportsToManager", { manager }) : null,
+      payloadString(payload, "title") ?? (role ? t("approvalCard.roleLabel", { role: localizedRoleLabels[role] ?? role }) : null),
       adapter ? getAdapterLabel(adapter) : null,
     ].filter(Boolean).join(" · ");
     return <NeedsYouPanel>
-      <NeedsYouPanelRow icon={<UserRound />} title={budget ? `${name} · ${wholeDollars(budget)} / month` : name} meta={meta || undefined} onOpen={onViewDetails} label="View configuration" />
-      <NeedsYouPanelNote>{budget ? "Approval creates the agent with this monthly spending limit." : "Approval creates the agent."}</NeedsYouPanelNote>
+      <NeedsYouPanelRow icon={<UserRound />} title={budget ? `${name} · ${wholeDollars(budget)} ${t("builtIn.month")}` : name} meta={meta || undefined} onOpen={onViewDetails} label={t("attentionQueueRow.viewConfiguration")} />
+      <NeedsYouPanelNote>{budget ? t("approvalCard.approvalCreatesTheAgentWithThis") : t("approvalCard.approvalCreatesTheAgent")}</NeedsYouPanelNote>
     </NeedsYouPanel>;
   }
   // The ask above already says the request's title and summary, so the panel
   // names the request and what it recommends.
-  const kind = APPROVAL_KIND_LABELS[String(item.subject.metadata?.type ?? "")] ?? "Approval request";
+  const kind = APPROVAL_KIND_LABELS[String(item.subject.metadata?.type ?? "")] ?? t("approvalCard.approvalRequest");
   const recommended = payloadString(payload, "recommendedAction");
   const next = payloadString(payload, "nextActionOnApproval");
   return <NeedsYouPanel>
-    <NeedsYouPanelRow icon={<FileText />} title={recommended ?? kind} meta={recommended ? kind : undefined} onOpen={onViewDetails} label="View details" />
-    {next ? <NeedsYouPanelNote>{`On approval: ${next}`}</NeedsYouPanelNote> : null}
+    <NeedsYouPanelRow icon={<FileText />} title={recommended ?? kind} meta={recommended ? kind : undefined} onOpen={onViewDetails} label={t("approvalCard.viewDetails")} />
+    {next ? <NeedsYouPanelNote>{t("approvalCard.onApprovalNext", { next })}</NeedsYouPanelNote> : null}
   </NeedsYouPanel>;
 }
 

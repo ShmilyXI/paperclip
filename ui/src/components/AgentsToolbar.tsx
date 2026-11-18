@@ -19,7 +19,7 @@ export interface AgentsToolbarProps {
 
 /** Shared roster search, view controls and actions for the page and stories. */
 export function AgentsToolbar({ query, onQueryChange, view, onViewChange, hideViewToggle, onNewAgent, filters, orgControlsRef, orgActions }: AgentsToolbarProps) {
-  return <div data-canonical-toolbar="agents" role="toolbar" aria-label="Agents controls" className="flex flex-wrap items-center gap-3">
+  return <div data-canonical-toolbar="agents" role="toolbar" aria-label={t("agents.agentsControls")} className="flex flex-wrap items-center gap-3">
     <div className="design-toolbar-controls flex w-full flex-wrap items-center gap-4">
       <ToolbarSearch query={query} onQueryChange={onQueryChange} label={t("common.searchAgents")} placeholder={t("agents.searchAgents")} />
       {!hideViewToggle && <div className="design-view-toggle" role="group" aria-label={t("agents.agentView")}>
@@ -34,7 +34,7 @@ export function AgentsToolbar({ query, onQueryChange, view, onViewChange, hideVi
             <div className="min-w-0 overflow-hidden"><OrgChartControls {...orgActions} /></div>
           </div>
         )}
-        <Button size="sm" variant="outline" data-toolbar-primary onClick={onNewAgent}><Plus aria-hidden />New Agent</Button>
+        <Button size="sm" variant="outline" data-toolbar-primary onClick={onNewAgent}><Plus aria-hidden />{t("common.newAgent2")}</Button>
       </div>
     </div>
   </div>;

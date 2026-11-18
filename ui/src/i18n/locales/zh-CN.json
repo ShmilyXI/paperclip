@@ -14985,7 +14985,16 @@
   "approvalCard": {
     "approving": "正在批准...",
     "rejecting": "正在拒绝...",
-    "viewDetails": "查看详情"
+    "viewDetails": "查看详情",
+    "boardApprovalRequest": "董事会审批请求",
+    "strategyApproval": "战略审批",
+    "budgetOverrideRequest": "预算覆盖请求",
+    "approvalRequest": "审批请求",
+    "reportsToManager": "汇报对象：{{manager}}",
+    "roleLabel": "{{role}} 角色",
+    "approvalCreatesTheAgentWithThis": "批准后会按此每月支出限额创建员工。",
+    "approvalCreatesTheAgent": "批准后会创建员工。",
+    "onApprovalNext": "批准后：{{next}}"
   },
   "designPageAside": {
     "resizeRightSidebar": "调整右侧边栏大小"

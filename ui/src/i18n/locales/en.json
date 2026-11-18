@@ -14985,7 +14985,16 @@
   "approvalCard": {
     "approving": "Approving...",
     "rejecting": "Rejecting...",
-    "viewDetails": "View details"
+    "viewDetails": "View details",
+    "boardApprovalRequest": "Board approval request",
+    "strategyApproval": "Strategy approval",
+    "budgetOverrideRequest": "Budget override request",
+    "approvalRequest": "Approval request",
+    "reportsToManager": "Reports to {{manager}}",
+    "roleLabel": "{{role}} role",
+    "approvalCreatesTheAgentWithThis": "Approval creates the agent with this monthly spending limit.",
+    "approvalCreatesTheAgent": "Approval creates the agent.",
+    "onApprovalNext": "On approval: {{next}}"
   },
   "designPageAside": {
     "resizeRightSidebar": "Resize right sidebar"
