@@ -154,7 +154,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
   if (patchEligible && patchData.data !== undefined) {
     return <DocumentCard {...props} patch body={patchData.data} actions={<>
       {openTextAction}
-      {downloadPath ? <Button asChild size="sm" variant="outline"><a href={downloadPath} download={props.filename}>Download file</a></Button> : null}
+      {downloadPath ? <Button asChild size="sm" variant="outline"><a href={downloadPath} download={props.filename}>{t("issueArtifactCard.downloadFile")}</a></Button> : null}
     </>} />;
   }
   if (localCsv && !tooLarge && data.data) {
@@ -191,7 +191,7 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
             {openTextAction}
             {patchEligible && patchView.kind !== "error" ? (
               <Button variant="outline" size="sm" disabled={patchData.isFetching} onClick={() => setPatchRequested(true)}>
-                {patchData.isFetching ? "Loading preview…" : "Preview patch"}
+                {patchData.isFetching ? t("issueArtifactCard.loadingPreview") : t("issueArtifactCard.previewPatch")}
               </Button>
             ) : null}
             {localCsv && !tooLarge && dataView.kind !== "error" ? (
@@ -208,15 +208,15 @@ export function IssueArtifactFile(props: IssueArtifactFileProps) {
         }
       />
       {patchEligible && patchView.kind === "error" ? (
-        <QueryErrorState size="inline" error={patchView.error} action="load the patch preview" onRetry={patchView.retry} retrying={patchView.isFetching} />
-      ) : patchEligible && patchData.isFetching ? <p role="status" className="text-xs text-muted-foreground">Loading patch preview…</p> : null}
+        <QueryErrorState size="inline" error={patchView.error} action={t("issueArtifactCard.loadThePatchPreview")} onRetry={patchView.retry} retrying={patchView.isFetching} />
+      ) : patchEligible && patchData.isFetching ? <p role="status" className="text-xs text-muted-foreground">{t("issueArtifactCard.loadingPatchPreview")}</p> : null}
       {csv && (tooLarge || dataView.kind === "error" || !localCsv) && (
         <div className="px-2 text-xs text-muted-foreground" role="status">
           {tooLarge
-            ? "CSV is too large to preview. Download the file to view it."
+            ? t("issueArtifactCard.csvTooLargeToPreview")
             : dataView.kind === "error"
-              ? <QueryErrorState size="inline" error={dataView.error} action="load the CSV preview" onRetry={dataView.retry} retrying={dataView.isFetching} />
-              : "CSV preview is unavailable. Download the file to view it."}
+              ? <QueryErrorState size="inline" error={dataView.error} action={t("issueArtifactCard.loadTheCsvPreview")} onRetry={dataView.retry} retrying={dataView.isFetching} />
+              : t("issueArtifactCard.csvPreviewIsUnavailableDownload")}
         </div>
       )}
     </div>

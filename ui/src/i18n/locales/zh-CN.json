@@ -14255,7 +14255,11 @@
     "retryPreview": "重试预览",
     "unhealthy": "状态异常",
     "openInTabTitle": "在标签页中打开：{{title}}",
-    "csvTooLargeToPreview": "CSV 太大，无法预览。请下载文件后查看。"
+    "csvTooLargeToPreview": "CSV 太大，无法预览。请下载文件后查看。",
+    "previewPatch": "预览补丁",
+    "loadingPatchPreview": "正在加载补丁预览…",
+    "loadThePatchPreview": "加载补丁预览",
+    "loadTheCsvPreview": "加载 CSV 预览"
   },
   "companies": {
     "newOrganization": "新建组织",

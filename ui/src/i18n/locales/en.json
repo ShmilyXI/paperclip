@@ -14255,7 +14255,11 @@
     "retryPreview": "Retry preview",
     "unhealthy": "Unhealthy",
     "openInTabTitle": "Open in tab: {{title}}",
-    "csvTooLargeToPreview": "CSV is too large to preview. Download the file to view it."
+    "csvTooLargeToPreview": "CSV is too large to preview. Download the file to view it.",
+    "previewPatch": "Preview patch",
+    "loadingPatchPreview": "Loading patch preview…",
+    "loadThePatchPreview": "load the patch preview",
+    "loadTheCsvPreview": "load the CSV preview"
   },
   "companies": {
     "newOrganization": "New Organization",
