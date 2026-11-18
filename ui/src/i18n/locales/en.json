@@ -12264,7 +12264,8 @@
     "invalidAliasUseLettersDigits": "Invalid alias — use letters, digits and _",
     "addApiAccess": "Add API access",
     "proposedBy": "proposed by",
-    "theAgentReadsThemByAliasThrough": "The agent reads them by alias through"
+    "theAgentReadsThemByAliasThrough": "The agent reads them by alias through",
+    "noCompanySecretReferencesBound": "No company secret references are bound to this agent yet."
   },
   "agentProjectAccess": {
     "couldntLoadProjectAccess": "Couldn't load project access.",

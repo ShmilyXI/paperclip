@@ -12264,7 +12264,8 @@
     "invalidAliasUseLettersDigits": "别名无效 — 只能使用字母、数字和 _",
     "addApiAccess": "添加 API 访问",
     "proposedBy": "提议人：",
-    "theAgentReadsThemByAliasThrough": "员工通过以下接口按别名读取它们："
+    "theAgentReadsThemByAliasThrough": "员工通过以下接口按别名读取它们：",
+    "noCompanySecretReferencesBound": "此员工尚未绑定任何公司密钥引用。"
   },
   "agentProjectAccess": {
     "couldntLoadProjectAccess": "无法加载项目访问权限。",
