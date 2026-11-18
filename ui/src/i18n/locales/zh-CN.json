@@ -14193,6 +14193,7 @@
   },
   "createSecretPopover": {
     "valueIsRequired": "值必填",
+    "valuePlaceholder": "值",
     "failedToCreateSecret": "创建密钥失败",
     "createBind": "创建并绑定",
     "storeBind": "存储并绑定",

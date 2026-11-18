@@ -14193,6 +14193,7 @@
   },
   "createSecretPopover": {
     "valueIsRequired": "Value is required",
+    "valuePlaceholder": "value",
     "failedToCreateSecret": "Failed to create secret",
     "createBind": "Create & bind",
     "storeBind": "Store & bind",
