@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Project } from "@paperclipai/shared";
+import { t } from "@/i18n";
 import { projectsApi } from "@/api/projects";
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -24,26 +25,23 @@ export function ProjectGitAuthorization({ project }: { project: Project }) {
   });
   const data = authorization.data;
   return (
-    <section aria-label="Background GitHub authorization" className="flex flex-col gap-3 py-4">
-      <h3 className="text-sm font-medium">Background GitHub authorization</h3>
+    <section aria-label={t("projectGitAuthorization.title")} className="flex flex-col gap-3 py-4">
+      <h3 className="text-sm font-medium">{t("projectGitAuthorization.title")}</h3>
       <p className="text-sm text-muted-foreground">
-        Allow this project’s workspace provider to use your GitHub Connector for repository provisioning and maintenance
-        until revoked. This shares the Connector credential with the provider using its existing GitHub permissions.
-        Project repository editors can add repositories covered by this connection. Manage repository access in the GitHub connection.
-        Task runs continue to use their own identity.
+        {t("projectGitAuthorization.description")}
       </p>
       {data?.grantId && (
         <p role="status" className={cn("text-sm", ANALYTICS_MASK_CLASS)}>
-          Authorized:{" "}
+          {t("projectGitAuthorization.authorized")}{" "}
           {data.options.find((option) => option.grantId === data.grantId)?.login ??
-            "selected grant (unavailable or owned by another member)"}
+            t("projectGitAuthorization.selectedGrantUnavailable")}
         </p>
       )}
       {data && (
         <div className="flex flex-wrap gap-2">
           <Select value={selected} onValueChange={setSelected} disabled={save.isPending}>
-            <SelectTrigger aria-label="Your GitHub authorization" className={ANALYTICS_MASK_CLASS}>
-              <SelectValue placeholder="Select your GitHub account" />
+            <SelectTrigger aria-label={t("projectGitAuthorization.yourGitHubAuthorization")} className={ANALYTICS_MASK_CLASS}>
+              <SelectValue placeholder={t("projectGitAuthorization.selectYourGitHubAccount")} />
             </SelectTrigger>
             <SelectContent>
               {data.options.map((option) => (
@@ -54,18 +52,18 @@ export function ProjectGitAuthorization({ project }: { project: Project }) {
             </SelectContent>
           </Select>
           <Button disabled={!selected || save.isPending} onClick={() => save.mutate(selected)}>
-            Authorize project
+            {t("projectGitAuthorization.authorizeProject")}
           </Button>
           {data.grantId && (
             <Button variant="outline" disabled={save.isPending} onClick={() => save.mutate(null)}>
-              Revoke authorization
+              {t("projectGitAuthorization.revokeAuthorization")}
             </Button>
           )}
         </div>
       )}
       {data && !data.options.length && (
         <p className="text-sm text-muted-foreground">
-          Connect your GitHub account and install the Connector for this company to authorize it.
+          {t("projectGitAuthorization.connectGitHubAccount")}
         </p>
       )}
       {(authorization.error || save.error) && (

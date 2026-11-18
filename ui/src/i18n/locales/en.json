@@ -15388,6 +15388,17 @@
     "loadingAccess": "Loading access…",
     "couldnTLoadProjectAccess": "Couldn't load project access members."
   },
+  "projectGitAuthorization": {
+    "title": "Background GitHub authorization",
+    "description": "Allow this project’s workspace provider to use your GitHub Connector for repository provisioning and maintenance until revoked. This shares the Connector credential with the provider using its existing GitHub permissions. Project repository editors can add repositories covered by this connection. Manage repository access in the GitHub connection. Task runs continue to use their own identity.",
+    "authorized": "Authorized:",
+    "selectedGrantUnavailable": "selected grant (unavailable or owned by another member)",
+    "yourGitHubAuthorization": "Your GitHub authorization",
+    "selectYourGitHubAccount": "Select your GitHub account",
+    "authorizeProject": "Authorize project",
+    "revokeAuthorization": "Revoke authorization",
+    "connectGitHubAccount": "Connect your GitHub account and install the Connector for this company to authorize it."
+  },
   "gatewayOverviewPanel": {
     "copyFailed": "Copy failed",
     "clipboardAccessIsUnavailable": "Clipboard access is unavailable.",

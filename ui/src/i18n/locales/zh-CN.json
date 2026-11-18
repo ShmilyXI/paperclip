@@ -15388,6 +15388,17 @@
     "loadingAccess": "正在加载访问权限…",
     "couldnTLoadProjectAccess": "无法加载项目访问成员。"
   },
+  "projectGitAuthorization": {
+    "title": "后台 GitHub 授权",
+    "description": "允许该项目的工作区提供者使用你的 GitHub 连接器进行仓库供应与维护，直到撤销。这会把连接器凭据共享给提供者，并使用其现有的 GitHub 权限。项目仓库编辑者可以添加由此连接覆盖的仓库。请在 GitHub 连接中管理仓库访问权限。任务运行仍使用各自的身份。",
+    "authorized": "已授权：",
+    "selectedGrantUnavailable": "所选授权（不可用或属于其他成员）",
+    "yourGitHubAuthorization": "你的 GitHub 授权",
+    "selectYourGitHubAccount": "选择你的 GitHub 账户",
+    "authorizeProject": "授权项目",
+    "revokeAuthorization": "撤销授权",
+    "connectGitHubAccount": "连接你的 GitHub 账户并为该公司安装连接器以完成授权。"
+  },
   "gatewayOverviewPanel": {
     "copyFailed": "复制失败",
     "clipboardAccessIsUnavailable": "剪贴板不可用。",
