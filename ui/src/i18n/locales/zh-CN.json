@@ -10747,6 +10747,15 @@
     "lastAttemptFailed": "上一次尝试失败：",
     "paperclipWillRetry": "Paperclip 会自动重试。"
   },
+  "classicWorkspaceSetting": {
+    "title": "经典工作区",
+    "description": "使用之前的工作区，而不是标准的 Coordinator 工作区。这会改变你在此实例上所有公司的界面。",
+    "offByDefault": "默认关闭。关闭后返回 Coordinator。你的工作和你同事的设置保持不变。",
+    "localInstanceUsesShared": "此本地实例使用共享的本地董事会身份。",
+    "enableClassicWorkspace": "启用经典工作区",
+    "savingYourWorkspace": "正在保存你的工作区…",
+    "loadingYourPreference": "正在加载你的偏好设置…"
+  },
   "cliAuth": {
     "invalidCliAuthUrl": "无效的 CLI 授权链接。",
     "loadingCliAuthChallenge": "正在加载 CLI 授权请求...",
