@@ -282,7 +282,7 @@ export function GitHubChatSetup() {
   if (resume && !bot)
     return (
       <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-6">
-        <h1 className="text-2xl font-semibold">Resume GitHub setup</h1>
+        <h1 className="text-2xl font-semibold">{t("githubChatSetup.resumeGithubSetup")}</h1>
         {currentView.kind === "error" ? (
           <p role="alert" className="text-sm text-destructive">
             {t("githubChatSetup.couldNotLoadThisConnection")}
@@ -292,7 +292,7 @@ export function GitHubChatSetup() {
             {t("githubChatSetup.loadingYourDraft")}
           </p>
         )}
-        {footer(currentView.kind === "error" ? "Try again" : undefined, async () => {
+        {footer(currentView.kind === "error" ? t("common.tryAgain") : undefined, async () => {
           await current.refetch();
         })}
       </div>
@@ -426,16 +426,16 @@ export function GitHubChatSetup() {
           {identityOnly && identityLinked ? (
             <>
               <p role="status" className="text-sm">
-                GitHub account <strong className={ANALYTICS_MASK_CLASS}>{legacyIdentity?.login}</strong>{" "}
-                connected. You can now mention this bot on GitHub.
+                {t("githubChatSetup.githubAccount")} <strong className={ANALYTICS_MASK_CLASS}>{legacyIdentity?.login}</strong>{" "}
+                {t("githubChatSetup.connectedYouCanNowMentionThisBotOnGithub")}
               </p>
               {footer()}
             </>
           ) : state?.identity ? (
             <>
               <p className="text-sm">
-                Connect GitHub account <strong className={ANALYTICS_MASK_CLASS}>{state.identity.login}</strong>{" "}
-                to your Paperclip account.
+                {t("githubChatSetup.connectGithubAccount")} <strong className={ANALYTICS_MASK_CLASS}>{state.identity.login}</strong>{" "}
+                {t("githubChatSetup.toYourPaperclipAccount")}
               </p>
               {footer(t("githubChatSetup.confirmMyAccount"), async () => {
                 await githubChatApi.confirmIdentity(
@@ -545,7 +545,7 @@ export function GitHubChatSetup() {
           <p className="text-sm">
             {t("githubChatSetup.paperclipCloudReceivesGithubEvents")}
           </p>
-          {footer("Connect Paperclip Cloud", async () => {
+          {footer(t("githubChatSetup.connectPaperclipCloud"), async () => {
             authorization.reserve();
             const result = await toolsApi.startCloudConnectorEnrollment(
               selectedCompanyId!,
@@ -553,7 +553,7 @@ export function GitHubChatSetup() {
               `/apps/chat/connect${window.location.search}`,
             );
             if (!result.verificationUrl)
-              throw new Error("Cloud enrollment could not be started");
+              throw new Error(t("githubChatSetup.cloudEnrollmentCouldNotBe"));
             await authorization.open(result.verificationUrl);
           })}
         </>
