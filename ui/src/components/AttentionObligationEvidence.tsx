@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ArrowUpRight } from "lucide-react";
 import type { AttentionItem } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
@@ -22,7 +23,7 @@ export function AttentionObligationEvidence({
   if (!evidence?.length) return null;
   return (
     <ul
-      aria-label="Part of this request"
+      aria-label={t("attentionObligationEvidence.partOfThisRequest")}
       data-attention-obligation={item.obligationKey ?? undefined}
       className={cn("space-y-1 border-l-2 border-border pl-3 text-xs leading-5 text-muted-foreground", className)}
     >

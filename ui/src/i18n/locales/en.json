@@ -8483,7 +8483,18 @@
     "inDays": "in {{n}}d",
     "setByName": "· set by {{name}}",
     "reappearsAt": "Reappears {{time}}",
-    "reappearsIn": "Reappears {{when}}"
+    "reappearsIn": "Reappears {{when}}",
+    "decisionCouldNotBeSaved": "The decision could not be saved.",
+    "viewConfiguration": "View configuration",
+    "approveHire": "Approve hire",
+    "joinRequestCouldNotBeSaved": "The join request could not be saved.",
+    "memberAccess": "Member access",
+    "approvalAddsThisAgent": "Approval adds this agent to the company.",
+    "approvalAddsMember": "Approval adds them to the company as a member.",
+    "approveAccess": "Approve access"
+  },
+  "attentionObligationEvidence": {
+    "partOfThisRequest": "Part of this request"
   },
   "connectionInstructions": {
     "agentInstructions": "Agent instructions",

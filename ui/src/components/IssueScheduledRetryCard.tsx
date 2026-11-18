@@ -87,7 +87,7 @@ export function IssueScheduledRetryCard({
               {badgeLabel}
             </Badge>
             {attempt !== null ? (
-              <span className="text-muted-foreground">Attempt {attempt}</span>
+              <span className="text-muted-foreground">{t("issueProps.attempt", { attempt })}</span>
             ) : null}
             {reason ? (
               <span className="text-muted-foreground">{reason}</span>
@@ -100,7 +100,7 @@ export function IssueScheduledRetryCard({
               {absolute && scheduledRetry.retryOfRunId ? <span>{" · "}</span> : null}
               {scheduledRetry.retryOfRunId ? (
                 <span>
-                  Replaces run{" "}
+                  {t("issueProps.replacesRun")}{" "}
                   <Link
                     to={`/agents/${scheduledRetry.agentId}/runs/${scheduledRetry.retryOfRunId}`}
                     className="font-mono text-foreground hover:underline"
@@ -159,8 +159,8 @@ export function IssueScheduledRetryCard({
               ? t("issueScheduledRetryCard.promotingScheduledRetry")
               : isSuccessTransient
                 ? retryNow.data?.outcome === "already_promoted"
-                  ? "Already promoted — run starting"
-                  : "Promoted — run starting"
+                  ? t("issueScheduledRetryCard.alreadyPromotedRunStarting")
+                  : t("issueScheduledRetryCard.promotedRunStarting")
                 : (retryNow.data?.outcome === "waiting" && retryNow.data.scheduledRetry?.runId === scheduledRetry.runId)
                     || retryNow.data?.outcome === "no_scheduled_retry"
                   ? retryNow.data.message
@@ -191,7 +191,7 @@ export function RetryErrorBand({ error, onRetry, className }: RetryErrorBandProp
     >
       <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <div className="min-w-0 flex-1">
-        <div className="font-medium">Couldn't retry now</div>
+        <div className="font-medium">{t("issueScheduledRetryCard.couldnTRetryNow")}</div>
         <div className="mt-0.5 text-muted-foreground">{describeError({ status: error.status, body: { message: error.message } }).body}</div>
       </div>
       <button

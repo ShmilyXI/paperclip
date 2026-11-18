@@ -8483,7 +8483,18 @@
     "inDays": "{{n}} 天后",
     "setByName": "· 由 {{name}} 设定",
     "reappearsAt": "{{time}} 后重新出现",
-    "reappearsIn": "{{when}}重新出现"
+    "reappearsIn": "{{when}}重新出现",
+    "decisionCouldNotBeSaved": "决策无法保存。",
+    "viewConfiguration": "查看配置",
+    "approveHire": "批准雇佣",
+    "joinRequestCouldNotBeSaved": "加入请求无法保存。",
+    "memberAccess": "成员访问权限",
+    "approvalAddsThisAgent": "批准后会将此员工加入组织。",
+    "approvalAddsMember": "批准后会将他们作为成员加入组织。",
+    "approveAccess": "批准访问"
+  },
+  "attentionObligationEvidence": {
+    "partOfThisRequest": "此请求的一部分"
   },
   "connectionInstructions": {
     "agentInstructions": "员工指令",

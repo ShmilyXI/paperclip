@@ -803,7 +803,7 @@ export function ApprovalResolver({ item, companyId, toggle, onResolved, shareDra
 }) {
   const queryClient = useQueryClient();
   const [actionError, setActionError] = useState<string | null>(null);
-  const onError = (error: unknown) => setActionError(error instanceof Error ? error.message : "The decision could not be saved.");
+  const onError = (error: unknown) => setActionError(error instanceof Error ? error.message : t("attentionQueueRow.decisionCouldNotBeSaved"));
   // Keyed by the request's last (re)submission: a revised request starts clean.
   const draftKey = shareDraft ? reviseDraftKey(`approval:${item.subject.id}`, item.updatedAt) : null;
   const [sharedDraft, updateSharedDraft] = useReviseDraft(draftKey);
@@ -849,14 +849,14 @@ export function ApprovalResolver({ item, companyId, toggle, onResolved, shareDra
       {footerContext}
       {actionError ? <p role="alert" className="text-sm text-destructive">{actionError}</p> : null}
       <DecisionCardFooter leading={toggle}>
-        {onViewDetails ? <Button size="sm" variant="ghost" onClick={onViewDetails}>{hire ? "View configuration" : "View details"}</Button> : null}
+        {onViewDetails ? <Button size="sm" variant="ghost" onClick={onViewDetails}>{hire ? t("attentionQueueRow.viewConfiguration") : t("approvalCard.viewDetails")}</Button> : null}
         <Button size="sm" variant="outline" onClick={() => reject.mutate()} disabled={pending}>
           {working === "reject" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          Reject
+          {t("common.reject")}
         </Button>
         <Button size="sm" onClick={() => approve.mutate()} disabled={pending}>
           {working === "accept" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          {hire ? "Approve hire" : "Approve"}
+          {hire ? t("attentionQueueRow.approveHire") : t("common.approve")}
         </Button>
       </DecisionCardFooter>
     </>;
@@ -877,15 +877,15 @@ export function ApprovalResolver({ item, companyId, toggle, onResolved, shareDra
       <ResolverFooter toggle={toggle}>
         <Button size="sm" variant="outline" onClick={() => revise.mutate()} disabled={pending}>
           {working === "revise" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          Request revision
+          {t("approvalDetail.requestRevision")}
         </Button>
         <Button size="sm" variant="destructive" onClick={() => reject.mutate()} disabled={pending}>
           {working === "reject" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          Reject
+          {t("common.reject")}
         </Button>
         <Button size="sm" onClick={() => approve.mutate()} disabled={pending}>
           {working === "accept" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          Approve
+          {t("common.approve")}
         </Button>
       </ResolverFooter>
     </>
@@ -903,7 +903,7 @@ export function JoinRequestResolver({ item, companyId, toggle, onResolved, prese
 }) {
   const queryClient = useQueryClient();
   const [actionError, setActionError] = useState<string | null>(null);
-  const onError = (error: unknown) => setActionError(error instanceof Error ? error.message : "The join request could not be saved.");
+  const onError = (error: unknown) => setActionError(error instanceof Error ? error.message : t("attentionQueueRow.joinRequestCouldNotBeSaved"));
   const invalidate = () => { invalidateAttentionRecordViews(queryClient, companyId, item); onResolved?.(); };
   const approve = useMutation({
     mutationFn: () => accessApi.approveJoinRequest(companyId, item.subject.id),
@@ -924,19 +924,19 @@ export function JoinRequestResolver({ item, companyId, toggle, onResolved, prese
     const adapter = typeof item.subject.metadata?.adapterType === "string" ? item.subject.metadata.adapterType : null;
     return <>
       <NeedsYouPanel>
-        <NeedsYouPanelRow icon={agent ? <Bot /> : <UserRound />} title={item.subject.title ?? "Join request"}
-          meta={agent ? ["Agent access", adapter ? getAdapterLabel(adapter) : null].filter(Boolean).join(" · ") : "Member access"} />
-        <NeedsYouPanelNote>{agent ? "Approval adds this agent to the company." : "Approval adds them to the company as a member."}</NeedsYouPanelNote>
+        <NeedsYouPanelRow icon={agent ? <Bot /> : <UserRound />} title={item.subject.title ?? t("invitesSection.joinRequest")}
+          meta={agent ? [t("secrets.agentAccess"), adapter ? getAdapterLabel(adapter) : null].filter(Boolean).join(" · ") : t("attentionQueueRow.memberAccess")} />
+        <NeedsYouPanelNote>{agent ? t("attentionQueueRow.approvalAddsThisAgent") : t("attentionQueueRow.approvalAddsMember")}</NeedsYouPanelNote>
       </NeedsYouPanel>
       {actionError ? <p role="alert" className="text-sm text-destructive">{actionError}</p> : null}
       <DecisionCardFooter leading={toggle}>
         <Button size="sm" variant="ghost" onClick={() => reject.mutate()} disabled={pending}>
           {reject.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          Decline
+          {t("issueThreadInteractionCard.decline")}
         </Button>
         <Button size="sm" onClick={() => approve.mutate()} disabled={pending}>
           {approve.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          Approve access
+          {t("attentionQueueRow.approveAccess")}
         </Button>
       </DecisionCardFooter>
     </>;
