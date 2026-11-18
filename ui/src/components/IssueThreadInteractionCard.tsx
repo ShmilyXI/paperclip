@@ -1085,10 +1085,10 @@ function SuggestTasksCard({
                   {working === "accept" ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Accepting...
+                      {t("interaction.accepting")}
                     </>
                   ) : (
-                    selectedCount === totalTasks ? "Accept drafts" : "Accept selected drafts"
+                    selectedCount === totalTasks ? t("issueThreadInteractionCard.acceptDrafts") : t("issueThreadInteractionCard.acceptSelectedDrafts")
                   )}
                 </Button>
               </div>
@@ -1601,10 +1601,10 @@ function AskUserQuestionsCard({
                     {cancelling ? (
                       <>
                         <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                        Cancelling...
+                        {t("interaction.cancelling")}
                       </>
                     ) : (
-                      "Cancel question"
+                      t("issueThreadInteractionCard.cancelQuestion")
                     )}
                     </Button>
                   ) : null}
@@ -1616,10 +1616,10 @@ function AskUserQuestionsCard({
                   {working ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Submitting...
+                      {t("interaction.submitting")}
                     </>
                   ) : (
-                    interaction.payload.submitLabel ?? "Submit answers"
+                    interaction.payload.submitLabel ?? t("issueThreadInteractionCard.submitAnswers")
                   )}
                 </Button>
               </div>
@@ -1938,14 +1938,14 @@ function ToolActionResolution({
     try { formattedOutput = JSON.stringify(JSON.parse(output), null, 2); } catch { /* Plain-text results remain readable. */ }
   }
   const labels = {
-    pending: "Waiting for approval",
-    waiting_connection: "Approved · Sign-in needed",
-    running: "Approved · Running…",
-    executed: "Succeeded",
-    failed: "Execution failed",
-    declined: "Declined",
-    expired: "Expired",
-    cancelled: "Cancelled",
+    pending: t("issueThreadInteractionCard.waitingForApproval"),
+    waiting_connection: t("issueThreadInteractionCard.approvedSignInNeeded"),
+    running: t("issueThreadInteractionCard.approvedRunning"),
+    executed: t("common.succeeded"),
+    failed: t("issueThreadInteractionCard.executionFailed"),
+    declined: t("interaction.declined"),
+    expired: t("interaction.expired"),
+    cancelled: t("common.cancelled"),
   };
   const Icon = state === "running" ? Loader2 : state === "executed" ? CheckCircle2 : state === "failed" ? AlertTriangle : state === "expired" ? Clock : MinusCircle;
   const detail = state === "failed" ? result?.errorMessage?.trim() || t("issueThreadInteractionCard.theActionCouldNotComplete")
@@ -2089,11 +2089,11 @@ function RequestToolActionCard({
         {isPending ? (
           <DecisionCardFooter leading={footerSlot}>
             <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working !== null} onClick={() => void decide("reject")}>
-              {working === "reject" ? "Denying…" : "Deny"}
+              {working === "reject" ? t("issueThreadInteractionCard.denying") : t("actionCard.deny")}
             </Button>
             <div className="inline-flex" role="group" aria-label="Approve request">
               <Button size="sm" variant={payload.risk === "destructive" ? "destructive" : "default"} className={payload.rememberActionScope ? "rounded-r-none" : undefined} disabled={!onAcceptInteraction || working !== null} onClick={() => void decide("accept")}>
-                {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? "Saving…" : "Allowing…"}</> : "Allow once"}
+                {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("common.saving2") : t("issueThreadInteractionCard.allowing")}</> : t("reviewQueueCard.allowOnce")}
               </Button>
               {payload.rememberActionScope ? (
                 <DropdownMenu>
@@ -2541,7 +2541,7 @@ function ConfirmationActionRow({
   draftKey = null,
   compact = false,
   showReject = true,
-  sendLabel = "Send revision",
+  sendLabel = t("issueThreadInteractionCard.sendRevision"),
 }: {
   footerSlot?: ReactNode;
   /** A Needs You card (PAP-775): ghost, outline, then the one primary on the right. */
@@ -2895,7 +2895,7 @@ function RequestConnectionAuthorizationCard({
           <DecisionCardFooter leading={footerSlot}>
             <div data-testid="connection-authorization-actions" className="flex flex-wrap items-center justify-end gap-1.5">
               <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working} onClick={() => void handleNotNow()}>
-                {working ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Saving…</> : "Not now"}
+                {working ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{t("common.saving2")}</> : t("issueThreadInteractionCard.notNow")}
               </Button>
               <Button asChild size="sm">
                 <a href={href} target="_blank" rel="noreferrer">Connect {providerName}<ArrowUpRight className="h-3.5 w-3.5" /></a>
@@ -2906,8 +2906,8 @@ function RequestConnectionAuthorizationCard({
           <ConnectionAuthorizationStatusLine
             Icon={TriangleAlert}
             testId="connection-authorization-no-target"
-            headline="This authorization link is unavailable"
-            detail={`Ask ${requestingAgentLabel ?? "the agent"} to send a fresh ${providerName} authorization link.`}
+            headline={t("issueThreadInteractionCard.thisAuthorizationLinkIsUnavailable")}
+            detail={t("issueThreadInteractionCard.askToSendAFreshLink", { agent: requestingAgentLabel ?? t("issueThreadInteractionCard.theAgent"), provider: providerName })}
           />
         )}
         <InteractionActionError message={actionError} />
@@ -2948,10 +2948,10 @@ function RequestConnectionAuthorizationCard({
                   {working ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Saving…
+                      {t("common.saving2")}
                     </>
                   ) : (
-                    "Not now"
+                    t("issueThreadInteractionCard.notNow")
                   )}
                 </Button>
               </div>
@@ -3167,9 +3167,9 @@ function RequestConfirmationCard({
   const artifactRow = useContext(CompactArtifactRowContext);
   const deliverable = !isPlan && (target?.type === "issue_attachment" || target?.type === "issue_document");
   const compactActions = isPlan
-    ? { approveLabel: interaction.payload.acceptLabel ?? "Approve plan", rejectLabel: CONFIRMATION_REJECT_LABEL, reviseLabel: CONFIRMATION_REVISE_LABEL, allowRevise, showReject: true, sendLabel: "Send revision" }
+    ? { approveLabel: interaction.payload.acceptLabel ?? t("issueThreadInteractionCard.approvePlan"), rejectLabel: CONFIRMATION_REJECT_LABEL, reviseLabel: CONFIRMATION_REVISE_LABEL, allowRevise, showReject: true, sendLabel: t("issueThreadInteractionCard.sendRevision") }
     : deliverable
-      ? { approveLabel: interaction.payload.acceptLabel ?? CONFIRMATION_APPROVE_LABEL, rejectLabel: interaction.payload.rejectLabel ?? CONFIRMATION_REJECT_LABEL, reviseLabel: "Request changes", allowRevise, showReject: !allowRevise, sendLabel: "Request changes" }
+      ? { approveLabel: interaction.payload.acceptLabel ?? CONFIRMATION_APPROVE_LABEL, rejectLabel: interaction.payload.rejectLabel ?? CONFIRMATION_REJECT_LABEL, reviseLabel: t("issueThreadInteractionCard.requestChanges"), allowRevise, showReject: !allowRevise, sendLabel: t("issueThreadInteractionCard.requestChanges") }
       : { approveLabel: interaction.payload.acceptLabel ?? "Confirm", rejectLabel: interaction.payload.rejectLabel ?? "Decline", reviseLabel: `${interaction.payload.rejectLabel ?? "Decline"}…`, allowRevise: rejectRequiresReason, showReject: true, sendLabel: interaction.payload.rejectLabel ?? "Decline" };
   const compactAsk = interaction.title?.trim() || interaction.payload.prompt;
   const targetHref = target && isDisplayableRequestConfirmationTarget(target) ? requestConfirmationTargetHref({ interaction, target }) : null;
@@ -4502,30 +4502,30 @@ export function IssueThreadInteractionCard({
     ? [interaction.payload.questionSet?.description, ...interaction.payload.questions.flatMap(question => [question.prompt, question.helpText])]
     : interaction.kind === "request_confirmation" ? [interaction.payload.prompt, interaction.payload.detailsMarkdown] : [];
   const fallbackTitle = interaction.kind === "suggest_tasks"
-    ? "Suggested task tree"
+    ? t("issueThreadInteractionCard.suggestedTaskTree")
     : interaction.kind === "ask_user_questions"
       // Only a human-only card is genuinely "for the operator";
       // an open card is answerable by any teammate (PAP-17280).
       ? interaction.payload.title
         ?? (audience.policy === "human_only"
-          ? "Questions for the operator"
-          : "Questions to answer")
+          ? t("issueThreadInteractionCard.questionsForTheOperator")
+          : t("issueThreadInteractionCard.questionsToAnswer"))
     : interaction.kind === "request_checkbox_confirmation"
-      ? "Checkbox confirmation requested"
+      ? t("issueThreadInteractionCard.checkboxConfirmationRequested")
       : isSecretProposal
-        ? "Secret binding requested"
+        ? t("issueThreadInteractionCard.secretBindingRequested")
       : connectionAuthorization
-        ? `Connect your ${connectionAuthorization.providerName} to continue`
+        ? t("issueThreadInteractionCard.connectYourProvidernameToContinue", { providerName: connectionAuthorization.providerName })
       : isToolAction
-        ? "Tool approval requested"
+        ? t("issueThreadInteractionCard.toolApprovalRequested")
         : interaction.kind === "request_item_verdicts"
-          ? "Review these items"
+          ? t("issueThreadInteractionCard.reviewTheseItems")
           : isPlan
-            ? "Plan review"
-            : "Confirmation requested";
+            ? t("issueThreadInteractionCard.planReview")
+            : t("issueThreadInteractionCard.confirmationRequested");
   // A Needs You card's ask says what to decide, not what kind of record it is.
   const compactTitle = interaction.title ?? (
-    interaction.kind === "suggest_tasks" ? "Choose tasks to create"
+    interaction.kind === "suggest_tasks" ? t("issueThreadInteractionCard.chooseTasksToCreate")
       : interaction.kind === "request_checkbox_confirmation" || interaction.kind === "request_item_verdicts" ? interaction.payload.prompt
       : interaction.kind === "connection_intent" ? interaction.payload.accessRequest
         ? `Grant ${interaction.payload.requestingAgentName} access to “${interaction.payload.accessRequest.connectionName}”?`

@@ -15491,7 +15491,13 @@
     "draftVerdicts_one": "{{count}} draft verdict ready to apply",
     "draftVerdicts_other": "{{count}} draft verdicts ready to apply",
     "decidedOfTotal": "{{decided}} of {{total}} decided",
-    "resolvedOn": " on {{date}}"
+    "resolvedOn": " on {{date}}",
+    "approvePlan": "Approve plan",
+    "requestChanges": "Request changes",
+    "chooseTasksToCreate": "Choose tasks to create",
+    "approvedSignInNeeded": "Approved · Sign-in needed",
+    "denying": "Denying…",
+    "allowing": "Allowing…"
   },
   "routineActivityRow": {
     "connectionWorkingNoRunOr": "Connection working · No run or task created",

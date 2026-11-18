@@ -15491,7 +15491,13 @@
     "draftVerdicts_one": "{{count}} 个草拟裁决待应用",
     "draftVerdicts_other": "{{count}} 个草拟裁决待应用",
     "decidedOfTotal": "已裁定 {{decided}}/{{total}}",
-    "resolvedOn": " 于 {{date}}"
+    "resolvedOn": " 于 {{date}}",
+    "approvePlan": "批准计划",
+    "requestChanges": "请求修改",
+    "chooseTasksToCreate": "选择要创建的任务",
+    "approvedSignInNeeded": "已批准 · 需要登录",
+    "denying": "正在拒绝…",
+    "allowing": "正在允许…"
   },
   "routineActivityRow": {
     "connectionWorkingNoRunOr": "连接正常 · 未创建运行或任务",
