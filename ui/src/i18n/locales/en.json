@@ -17416,5 +17416,12 @@
     "currentResponsibleUser": "Current responsible user",
     "automaticTasksUseThisPerson": "Automatic tasks use this person. Manual runs use the person who starts them.",
     "thisRoutineChangedReload": "This routine changed. Reload before changing responsibility."
+  },
+  "agentAllowedConnectors": {
+    "allowedConnectors": "Allowed connectors",
+    "manageConnectors": "Manage connectors",
+    "resolvingAccess": "Resolving access…",
+    "couldntLoadThisAgentsConnectors": "Couldn’t load this agent’s connectors.",
+    "noConnectorsAreAllowedYet": "No connectors are allowed yet."
   }
 }

@@ -17416,5 +17416,12 @@
     "currentResponsibleUser": "当前负责人",
     "automaticTasksUseThisPerson": "自动任务使用该负责人。手动运行使用发起运行的人。",
     "thisRoutineChangedReload": "该例行任务已更改。请在更改负责人前重新加载。"
+  },
+  "agentAllowedConnectors": {
+    "allowedConnectors": "允许的连接器",
+    "manageConnectors": "管理连接器",
+    "resolvingAccess": "正在解析访问权限…",
+    "couldntLoadThisAgentsConnectors": "无法加载此员工的连接器。",
+    "noConnectorsAreAllowedYet": "尚未允许任何连接器。"
   }
 }
