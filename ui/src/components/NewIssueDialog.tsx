@@ -83,7 +83,7 @@ function isPendingCreate(value: unknown): value is PendingCreate {
 class StagedFilesMissingError extends Error {
   constructor(names: string[]) {
     super(
-      `This page no longer has ${names.length === 1 ? "the file" : `the ${names.length} files`} staged for this task (${names.join(", ")}). Attach ${names.length === 1 ? "it" : "them"} again, then create the task.`,
+      t("newIssue.stagedFilesMissing", { count: names.length, names: names.join(", ") }),
     );
     this.name = "StagedFilesMissingError";
   }
@@ -716,7 +716,7 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
     const hasOtherDraft = differentLaunch || (!sameDraft && (titleRef.current.trim() || descriptionRef.current.trim()
       || savedDraft?.title.trim() || savedDraft?.description.trim()));
     if (pending.payload.data.companyId !== effectiveCompanyId || hasOtherDraft) {
-      pushToast({ title: "A task could not be saved", body: "Open New task to recover the saved request.", tone: "warn" });
+      pushToast({ title: t("newIssue.aTaskCouldNotBeSaved"), body: t("newIssue.openNewTaskToRecover"), tone: "warn" });
       return;
     }
     if (pending.payload.draft) {
@@ -1257,16 +1257,16 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
     if (request.recovering) {
       const original = request.payload;
       const rejectRecovery = (message: string): never => {
-        setResendError({ title: "Saved request needs attention", body: message, retryable: false });
+        setResendError({ title: t("newIssue.savedRequestNeedsAttention"), body: message, retryable: false });
         throw new Error(message);
       };
-      if (!original) rejectRecovery("The saved request is unavailable. Cancel it before creating another task.");
+      if (!original) rejectRecovery(t("newIssue.savedRequestUnavailable"));
       let originalFingerprint: Record<string, unknown> = {};
       try { originalFingerprint = JSON.parse(original!.fingerprint); } catch {}
       const requiredFiles = originalFingerprint.stagedFiles;
       if (original!.stagedFileNames?.length && (!Array.isArray(requiredFiles) ||
           JSON.stringify([...requiredFiles].sort()) !== JSON.stringify(createFiles.map(stagedFileIdentity).sort()))) {
-        rejectRecovery(`Attach the original files again: ${original!.stagedFileNames.join(", ")}.`);
+        rejectRecovery(t("newIssue.attachOriginalFilesAgain", { names: original!.stagedFileNames.join(", ") }));
       }
       const normalize = (_key: string, value: unknown) => value && typeof value === "object" && !Array.isArray(value)
         ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b))) : value;
@@ -1274,7 +1274,7 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
         !["allowDuplicate", "navigateOnCreate"].includes(key) && JSON.stringify(value, normalize) !== JSON.stringify((createData as Record<string, unknown>)[key], normalize));
       if (fieldsChanged || (typeof originalFingerprint.companyId === "string" &&
           JSON.stringify(originalFingerprint, normalize) !== JSON.stringify(JSON.parse(fingerprint), normalize))) {
-        rejectRecovery("Restore the saved task's original fields before retrying, or cancel the saved request to start another task.");
+        rejectRecovery(t("newIssue.restoreSavedTaskFields"));
       }
       createPayload = original!;
     }
@@ -1536,7 +1536,7 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
               workMode={workMode}
               onWorkModeChange={setWorkMode}
               disabled={Boolean(visiblePending) || !effectiveCompanyId}
-              placeholder="Describe a task…"
+              placeholder={t("newIssue.describeATask")}
               mobile={isMobile}
               mentions={mentionOptions}
               companyId={effectiveCompanyId}
@@ -1588,12 +1588,12 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
                     <div className="mb-3 flex flex-col gap-2 text-xs">
                       {otherCreates.map(item => (
                         <div key={item.idempotencyKey}>
-                          <p role="alert" className="text-sm text-destructive">{item.rejection ? `${item.rejection.title}. ${item.rejection.body}` : "This task is waiting to be saved."}</p>
+                          <p role="alert" className="text-sm text-destructive">{item.rejection ? `${item.rejection.title}. ${item.rejection.body}` : t("newIssue.thisTaskIsWaitingToBeSaved")}</p>
                           <Button type="button" size="sm" variant="ghost" onClick={() => {
                             if (!titleRef.current.trim() && !descriptionRef.current.trim()) restoreBackgroundCreate(item, item.rejection ?? null);
                             else if (item.idempotencyKey === durableCreate.pending?.idempotencyKey) durableCreate.resendNow();
                             else durableCreate.enqueue(item.payload, item.idempotencyKey);
-                          }}>Retry saved task: {String(item.payload.data.title ?? item.payload.data.description ?? "New task").slice(0, 80)}</Button>
+                          }}>{t("newIssue.retrySavedTask", { title: String(item.payload.data.title ?? item.payload.data.description ?? t("common.newTask2")).slice(0, 80) })}</Button>
                         </div>
                       ))}
                       {visiblePending && durableCreate.status !== "sending" ? (
@@ -1624,7 +1624,7 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
                             if (awaitingFilesKey && key) clearPendingSend(awaitingFilesKey, key);
                             if (key) discardCreate(key, createRequestRef.current?.payload);
                             createRequestRef.current = null; visibleRequestKey.current = null; setRecoveredCreate(null); setRestoredLaunch(null); setResendError(null);
-                          }}>Cancel saved request</Button> : null}
+                          }}>{t("newIssue.cancelSavedRequest")}</Button> : null}
                         </div>
                       ) : null}
                       {hasTitle ? (
@@ -1705,7 +1705,7 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
                                     className="shrink-0 text-muted-foreground"
                                     onClick={() => removeStagedFile(file.id)}
                                     disabled={submittingRecoveredCreate}
-                                    title="Remove document"
+                                    title={t("newIssue.removeDocument")}
                                   >
                                     <X className="h-3.5 w-3.5" />
                                   </Button>
@@ -1739,7 +1739,7 @@ function AccountNewIssueDialog({ ignoreDefaults }: { ignoreDefaults: boolean }) 
                                     className="shrink-0 text-muted-foreground"
                                     onClick={() => removeStagedFile(file.id)}
                                     disabled={submittingRecoveredCreate}
-                                    title="Remove attachment"
+                                    title={t("newIssue.removeAttachment")}
                                   >
                                     <X className="h-3.5 w-3.5" />
                                   </Button>

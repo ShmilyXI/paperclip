@@ -1459,7 +1459,18 @@
     "thisSubTaskWillNoLongerUseParentWorkspace": "This sub-task will no longer use the parent task workspace{{workspace}}.",
     "subtaskOfPrivateTask": "Subtask of private task {{title}}",
     "inPrivateProject": "In private project {{project}}",
-    "lowTrustReviewAgentNote": "Low-trust review agent. It can only act inside its assigned review boundary; task, project, or run policy defines the concrete scope."
+    "lowTrustReviewAgentNote": "Low-trust review agent. It can only act inside its assigned review boundary; task, project, or run policy defines the concrete scope.",
+    "stagedFilesMissing_one": "This page no longer has the file staged for this task ({{names}}). Attach it again, then create the task.",
+    "stagedFilesMissing_other": "This page no longer has the {{count}} files staged for this task ({{names}}). Attach them again, then create the task.",
+    "aTaskCouldNotBeSaved": "A task could not be saved",
+    "openNewTaskToRecover": "Open New task to recover the saved request.",
+    "savedRequestNeedsAttention": "Saved request needs attention",
+    "savedRequestUnavailable": "The saved request is unavailable. Cancel it before creating another task.",
+    "attachOriginalFilesAgain": "Attach the original files again: {{names}}.",
+    "restoreSavedTaskFields": "Restore the saved task's original fields before retrying, or cancel the saved request to start another task.",
+    "thisTaskIsWaitingToBeSaved": "This task is waiting to be saved.",
+    "retrySavedTask": "Retry saved task: {{title}}",
+    "cancelSavedRequest": "Cancel saved request"
   },
   "issueRow": {
     "thinking": "Thinking",
@@ -17288,7 +17299,8 @@
         "loadBundledPlugins": "load bundled plugins",
         "loadPluginExtensions": "load plugin extensions",
         "loadRunnerInspection": "load the runner inspection",
-        "deleteRawTrace": "delete the raw trace"
+        "deleteRawTrace": "delete the raw trace",
+        "createTheTask": "create the task"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

@@ -1459,7 +1459,18 @@
     "thisSubTaskWillNoLongerUseParentWorkspace": "此子任务将不再使用父任务的工作区{{workspace}}。",
     "subtaskOfPrivateTask": "私有任务 {{title}} 的子任务",
     "inPrivateProject": "位于私有项目 {{project}}",
-    "lowTrustReviewAgentNote": "低信任度评审员工。它只能在被分配的评审边界内行动；具体范围由任务、项目或运行策略决定。"
+    "lowTrustReviewAgentNote": "低信任度评审员工。它只能在被分配的评审边界内行动；具体范围由任务、项目或运行策略决定。",
+    "stagedFilesMissing_one": "此页面已不再为这个任务暂存该文件（{{names}}）。请重新附加它，然后创建任务。",
+    "stagedFilesMissing_other": "此页面已不再为这个任务暂存 {{count}} 个文件（{{names}}）。请重新附加它们，然后创建任务。",
+    "aTaskCouldNotBeSaved": "任务未能保存",
+    "openNewTaskToRecover": "打开「新建任务」以恢复已保存的请求。",
+    "savedRequestNeedsAttention": "已保存的请求需要处理",
+    "savedRequestUnavailable": "已保存的请求不可用。请在创建其他任务前先取消它。",
+    "attachOriginalFilesAgain": "请重新附加原始文件：{{names}}。",
+    "restoreSavedTaskFields": "请先恢复已保存任务的原始字段再重试，或取消已保存的请求以创建其他任务。",
+    "thisTaskIsWaitingToBeSaved": "此任务正在等待保存。",
+    "retrySavedTask": "重试已保存的任务：{{title}}",
+    "cancelSavedRequest": "取消已保存的请求"
   },
   "issueRow": {
     "thinking": "思考中",
@@ -17288,7 +17299,8 @@
         "loadBundledPlugins": "加载内置插件",
         "loadPluginExtensions": "加载插件扩展",
         "loadRunnerInspection": "加载运行检查",
-        "deleteRawTrace": "删除原始轨迹"
+        "deleteRawTrace": "删除原始轨迹",
+        "createTheTask": "创建任务"
       },
       "retry": "重试",
       "retrying": "正在重试…",
