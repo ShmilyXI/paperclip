@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { describeError } from "../api/errors";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "@/lib/router";

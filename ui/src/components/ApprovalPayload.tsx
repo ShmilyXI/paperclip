@@ -180,7 +180,7 @@ function stripLeadingListMarker(value: string): string {
  */
 function collectBoardApprovalMediaPaths(
   payload: Record<string, unknown>,
-  texts: Array<string | undefined>,
+  texts: Array<string | null | undefined>,
 ): string[] {
   const paths: string[] = [];
   for (const field of ["media", "attachments"]) {

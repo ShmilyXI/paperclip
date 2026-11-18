@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { CompanySkillVersionSummary } from "@paperclipai/shared";
 import { Badge } from "@/components/ui/badge";
 import {
