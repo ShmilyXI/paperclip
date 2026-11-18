@@ -17331,5 +17331,16 @@
     "filtersCount": "Filters: {{count}}",
     "previouslySelected": "Previously selected {{label}}",
     "connectionNamesCouldntBeLoaded": "Connection names couldn’t be loaded."
+  },
+  "routineResponsibleUser": {
+    "unavailableUser": "Unavailable user",
+    "noResponsibleUser": "No responsible user",
+    "changeResponsibleUser": "Change responsible user: {{label}}",
+    "findAPerson": "Find a person…",
+    "findAResponsibleUser": "Find a responsible user",
+    "noPeopleFound": "No people found.",
+    "currentResponsibleUser": "Current responsible user",
+    "automaticTasksUseThisPerson": "Automatic tasks use this person. Manual runs use the person who starts them.",
+    "thisRoutineChangedReload": "This routine changed. Reload before changing responsibility."
   }
 }

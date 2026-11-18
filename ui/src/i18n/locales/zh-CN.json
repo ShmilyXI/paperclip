@@ -17331,5 +17331,16 @@
     "filtersCount": "筛选：{{count}}",
     "previouslySelected": "之前选择的 {{label}}",
     "connectionNamesCouldntBeLoaded": "无法加载连接名称。"
+  },
+  "routineResponsibleUser": {
+    "unavailableUser": "不可用的用户",
+    "noResponsibleUser": "未设置负责人",
+    "changeResponsibleUser": "更改负责人：{{label}}",
+    "findAPerson": "查找成员…",
+    "findAResponsibleUser": "查找负责人",
+    "noPeopleFound": "未找到成员。",
+    "currentResponsibleUser": "当前负责人",
+    "automaticTasksUseThisPerson": "自动任务使用该负责人。手动运行使用发起运行的人。",
+    "thisRoutineChangedReload": "该例行任务已更改。请在更改负责人前重新加载。"
   }
 }
