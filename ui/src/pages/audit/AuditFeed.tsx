@@ -544,7 +544,7 @@ export function AuditFeed({
       pushToast({ title: t("audit.auditExported"), body: t("audit.yourCsvDownloadHasStarted"), tone: "success" });
     } catch (error) {
       pushToast({
-        title: "Export failed",
+        title: t("audit.exportFailed"),
         body: describeError(error, { action: "export the audit log" }).body,
         tone: "error",
       });
