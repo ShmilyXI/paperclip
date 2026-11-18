@@ -2147,7 +2147,7 @@
     "whatCanTheAgentsWorkingOnThisDo": "负责这项工作的员工能做什么？",
     "noSkillsYetTheyAppearHere": "暂无技能。技能会出现在这里，来自负责这项工作的员工：被指派任务和例行事务的员工，以及项目的负责人。",
     "showingTheNewestOf": "显示最新的 {{shown}}，共 {{of}}。",
-    "countOrMore": "{{count}} 或更多",
+    "countOrMore": "{{limit}} 或更多",
     "whatHasTheWorkProduced": "这项工作产出了什么？最新在前；每项都会在生成它的任务中打开。",
     "nothingProducedYetDocumentsFiles": "还没有产出。此职责下任务产生的文档、文件和其他输出会汇集在这里。",
     "moreForTitle": "{{title}} 的更多操作",

@@ -2147,7 +2147,7 @@
     "whatCanTheAgentsWorkingOnThisDo": "What can the agents working on this do?",
     "noSkillsYetTheyAppearHere": "No skills yet. They appear here from the agents doing the work: the ones assigned its tasks and routines, and the leads of its projects.",
     "showingTheNewestOf": "Showing the newest {{shown}} of {{of}}.",
-    "countOrMore": "{{count}} or more",
+    "countOrMore": "{{limit}} or more",
     "whatHasTheWorkProduced": "What has the work produced? Newest first; each opens in the task that made it.",
     "nothingProducedYetDocumentsFiles": "Nothing produced yet. Documents, files and other output from the tasks under this responsibility collect here.",
     "moreForTitle": "More for {{title}}",

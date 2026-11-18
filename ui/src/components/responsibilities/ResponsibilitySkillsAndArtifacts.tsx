@@ -92,7 +92,7 @@ export function ResponsibilitySkills({
 /** "Showing the newest 50 of 312", or "of 1,000 or more" once the count stops. */
 export function artifactsTruncationNote(shown: number, total: number): string {
   const of = total >= RESPONSIBILITY_ARTIFACT_COUNT_LIMIT
-    ? t("responsibilities.countOrMore", { count: RESPONSIBILITY_ARTIFACT_COUNT_LIMIT.toLocaleString("en-US") })
+    ? t("responsibilities.countOrMore", { limit: RESPONSIBILITY_ARTIFACT_COUNT_LIMIT.toLocaleString("en-US") })
     : total.toLocaleString("en-US");
   return t("responsibilities.showingTheNewestOf", { shown, of });
 }
