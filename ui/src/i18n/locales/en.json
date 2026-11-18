@@ -17716,6 +17716,16 @@
     "backToTheDashboard": "Back to the dashboard",
     "thisResponsibilityBelongsToAnotherOrganization": "This responsibility belongs to another organization"
   },
+  "responsibilityMeasures": {
+    "whereThingsStand": "Where things stand",
+    "responsibilityCount_one": "1 responsibility",
+    "responsibilityCount_other": "{{count}} responsibilities",
+    "filterByStatus": "Filter by status",
+    "agentPowered": "Agent-powered",
+    "openTasksRunByAnAgent": "Open tasks run by an agent",
+    "runByAnAgent": "Run by an agent",
+    "onYouAlone": "On you alone"
+  },
   "responsibilityOneScreen": {
     "noOpenProjects": "No open projects.",
     "noRoutines": "No routines.",

@@ -17716,6 +17716,16 @@
     "backToTheDashboard": "返回仪表盘",
     "thisResponsibilityBelongsToAnotherOrganization": "该职责属于另一个组织"
   },
+  "responsibilityMeasures": {
+    "whereThingsStand": "当前状态概览",
+    "responsibilityCount_one": "1 项职责",
+    "responsibilityCount_other": "{{count}} 项职责",
+    "filterByStatus": "按状态筛选",
+    "agentPowered": "员工驱动的",
+    "openTasksRunByAnAgent": "由员工运行的未完成任务",
+    "runByAnAgent": "由员工运行",
+    "onYouAlone": "仅由你处理"
+  },
   "responsibilityOneScreen": {
     "noOpenProjects": "没有未完成项目。",
     "noRoutines": "没有例行任务。",
