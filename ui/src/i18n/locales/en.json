@@ -17670,5 +17670,12 @@
     "applyChanges": "Apply changes",
     "thoseDashboardChangesArentRight": "Those dashboard changes aren't right yet.",
     "egKeepHiring": "e.g. Keep Hiring, and fewer responsibilities under Fundraising"
+  },
+  "legacyBoardSendNotice": {
+    "discardSavedDeliveryRecord": "Discard saved delivery record",
+    "discardSavedDeliveryRecordQuestion": "Discard saved delivery record?",
+    "firstCheckActivity": "First check Activity. Discarding this browser record does not cancel an update that was already accepted. It lets you start a new update.",
+    "keepRecord": "Keep record",
+    "discardRecord": "Discard record"
   }
 }

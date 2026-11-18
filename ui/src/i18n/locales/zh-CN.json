@@ -17670,5 +17670,12 @@
     "applyChanges": "应用改动",
     "thoseDashboardChangesArentRight": "那些仪表盘改动还不合适。",
     "egKeepHiring": "例如：保留招聘，减少筹款下的职责"
+  },
+  "legacyBoardSendNotice": {
+    "discardSavedDeliveryRecord": "丢弃已保存的投递记录",
+    "discardSavedDeliveryRecordQuestion": "丢弃已保存的投递记录？",
+    "firstCheckActivity": "请先查看活动记录。丢弃此浏览器记录不会取消已被接受的更新，它只是让你可以开始新的更新。",
+    "keepRecord": "保留记录",
+    "discardRecord": "丢弃记录"
   }
 }
