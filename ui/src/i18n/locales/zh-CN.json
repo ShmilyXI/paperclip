@@ -12465,7 +12465,8 @@
   "inlineEditor": {
     "autosaving": "正在自动保存...",
     "couldNotSave": "无法保存",
-    "clickToEdit": "点击即可编辑..."
+    "clickToEdit": "点击即可编辑...",
+    "changedSinceLoaded": "内容在你加载后发生了变化。你的草稿已保留，供你查看。"
   },
   "companySettingsNav": {
     "environments": "运行环境",

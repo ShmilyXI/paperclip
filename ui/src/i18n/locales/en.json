@@ -12465,7 +12465,8 @@
   "inlineEditor": {
     "autosaving": "Autosaving...",
     "couldNotSave": "Could not save",
-    "clickToEdit": "Click to edit..."
+    "clickToEdit": "Click to edit...",
+    "changedSinceLoaded": "This changed since you loaded it. Your draft is kept for review."
   },
   "companySettingsNav": {
     "environments": "Environments",
