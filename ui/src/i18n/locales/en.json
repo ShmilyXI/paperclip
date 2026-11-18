@@ -1267,7 +1267,21 @@
     "fileCopied": "File copied",
     "thisFileIsRequired": "This file is required",
     "failedToStopRun": "Failed to stop run",
-    "reloadThisFileBeforeRenaming": "Reload this file before renaming; your draft is retained."
+    "reloadThisFileBeforeRenaming": "Reload this file before renaming; your draft is retained.",
+    "inputTokens": "Input tokens",
+    "outputTokens": "Output tokens",
+    "cachedTokens": "Cached tokens",
+    "totalCost": "Total cost",
+    "date": "Date",
+    "runHeartbeat": "Run Heartbeat",
+    "savedAdapterConfigAffectsTheNext": "Saved adapter config affects the next run. Active runs keep the config they started with, and config changes may start a fresh adapter session.",
+    "enabledViaExplicitCompanyPermission": "Enabled via explicit company permission grant.",
+    "enabledBySimpleCompanyWide": "Enabled by simple company-wide task assignment defaults.",
+    "letsThisAgentInstallImportCompany": "Lets this agent install, import, create, and scan company skills without creating agents.",
+    "selectACompanyToUpload": "Select a company to upload images",
+    "managedInParens": "(managed)",
+    "entryBadge": "entry",
+    "languageFile": "{{language}} file"
   },
   "agentNav": {
     "agent": "Agent",

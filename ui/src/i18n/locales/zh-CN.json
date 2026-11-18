@@ -1267,7 +1267,21 @@
     "fileCopied": "文件已复制",
     "thisFileIsRequired": "此文件为必需",
     "failedToStopRun": "停止运行失败",
-    "reloadThisFileBeforeRenaming": "重命名前请重新加载此文件；你的草稿已保留。"
+    "reloadThisFileBeforeRenaming": "重命名前请重新加载此文件；你的草稿已保留。",
+    "inputTokens": "输入 tokens",
+    "outputTokens": "输出 tokens",
+    "cachedTokens": "缓存 tokens",
+    "totalCost": "总成本",
+    "date": "日期",
+    "runHeartbeat": "运行心跳",
+    "savedAdapterConfigAffectsTheNext": "保存的适配器配置会对下一次运行生效。进行中的运行会沿用其启动时的配置，配置变更可能开启新的适配器会话。",
+    "enabledViaExplicitCompanyPermission": "通过公司权限显式授予启用。",
+    "enabledBySimpleCompanyWide": "由公司级任务分配默认值启用。",
+    "letsThisAgentInstallImportCompany": "允许该员工在不创建员工的情况下安装、导入、创建和扫描公司技能。",
+    "selectACompanyToUpload": "请选择公司以上传图片",
+    "managedInParens": "(托管)",
+    "entryBadge": "入口",
+    "languageFile": "{{language}} 文件"
   },
   "agentNav": {
     "agent": "员工",
