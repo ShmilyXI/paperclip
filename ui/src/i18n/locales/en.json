@@ -1766,7 +1766,14 @@
     "documentActions": "Document actions",
     "outOfDate": "Out of date",
     "remoteRevisionN": "Remote revision {{n}}",
-    "updatedAtTime": "updated {{time}}"
+    "updatedAtTime": "updated {{time}}",
+    "createAndRevisePlansIn": "Create and revise Plans in the task conversation.",
+    "reviewThisDocumentThroughIts": "Review this document through its work product.",
+    "documentKeyReservedForTask": "This document key is reserved for task state.",
+    "couldNotLoadTheReviewed": "Could not load the reviewed revision. Try opening the link again.",
+    "theReviewedRevisionIsUnavailable": "The reviewed revision is unavailable.",
+    "loadingReviewedRevision": "Loading reviewed revision…",
+    "retrySaving": "Retry saving"
   },
   "projectProps": {
     "concurrentRunsOnLocalSsh": "Concurrent runs on local/SSH runners; runs take turns in cloud environments.",

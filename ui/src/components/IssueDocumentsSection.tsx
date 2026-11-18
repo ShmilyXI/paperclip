@@ -138,9 +138,9 @@ function isPlanKey(key: string) {
 
 function generalDocumentKeyError(key: string): string | null {
   if (isGeneralTaskDocumentKey(key)) return null;
-  if (isPlanKey(key)) return "Create and revise Plans in the task conversation.";
-  if (isArtifactReviewDocumentKey(key)) return "Review this document through its work product.";
-  return "This document key is reserved for task state.";
+  if (isPlanKey(key)) return t("issueDocs.createAndRevisePlansIn");
+  if (isArtifactReviewDocumentKey(key)) return t("issueDocs.reviewThisDocumentThroughIts");
+  return t("issueDocs.documentKeyReservedForTask");
 }
 
 function titlesMatchKey(title: string | null | undefined, key: string) {
@@ -557,7 +557,7 @@ function AccountIssueDocumentsSection({
   const newGeneralDocumentKeyError = draft?.isNew && generalDocumentsOnly ? generalDocumentKeyError(draft.key) : null;
   const newDocumentKeyError = newGeneralDocumentKeyError
     ?? (draft?.isNew && draft.key.trim().length > 0 && !DOCUMENT_KEY_PATTERN.test(draft.key.trim())
-      ? "Use lowercase letters, numbers, -, or _, and start with a letter or number."
+      ? t("issueDocumentsSection.useLowercaseLettersNumbersOr")
       : null);
 
   const resetAutosaveState = useCallback(() => {
@@ -871,7 +871,7 @@ function AccountIssueDocumentsSection({
     const selectedRevision = revisionState.revisions.find((revision) => revision.id === revisionId);
     if (!selectedRevision) return false;
     if (documentConflict?.key === doc.key || documentHasUnsavedChanges(doc, draft)) {
-      setError("Save or cancel your local changes before viewing an older revision.");
+      setError(t("issueDocs.saveOrCancelYourLocal"));
       return false;
     }
     if (selectedRevision.id === revisionState.currentRevision.id) {
@@ -977,13 +977,13 @@ function AccountIssueDocumentsSection({
     if (!doc) return;
     if (handledRevisionHash?.target === revisionTarget && handledRevisionHash.latestRevisionId === doc.latestRevisionId) return;
     if (revisionsQueryFailed) {
-      setError("Could not load the reviewed revision. Try opening the link again.");
+      setError(t("issueDocs.couldNotLoadTheReviewed"));
       return;
     }
     if (!getDocumentRevisions(doc.key).some((revision) => revision.id === documentHashTarget.revisionId)
       && doc.latestRevisionId !== documentHashTarget.revisionId) {
       if (!isFetchingDocumentRevisions && activeDocumentRevisions !== undefined) {
-        setError("The reviewed revision is unavailable.");
+        setError(t("issueDocs.theReviewedRevisionIsUnavailable"));
       }
       return;
     }
@@ -1398,7 +1398,7 @@ function AccountIssueDocumentsSection({
                 >
                   {waitingForLinkedRevision ? (
                     <p role="status" className="text-sm text-muted-foreground">
-                      {error ?? "Loading reviewed revision…"}
+                      {error ?? t("issueDocs.loadingReviewedRevision")}
                     </p>
                   ) : null}
                   {isHistoricalPreview && selectedHistoricalRevision && (
@@ -1589,7 +1589,7 @@ function AccountIssueDocumentsSection({
                             : ""
                           : ""}
                     </span>
-                    {activeDraft && autosaveDocumentKey === doc.key && autosaveState === "stalled" ? <Button type="button" size="sm" variant="ghost" onClick={autosave.resendNow}>Retry saving</Button> : null}
+                    {activeDraft && autosaveDocumentKey === doc.key && autosaveState === "stalled" ? <Button type="button" size="sm" variant="ghost" onClick={autosave.resendNow}>{t("issueDocs.retrySaving")}</Button> : null}
                   </div>
                   {canVoteOnDocument && doc.latestRevisionId ? (
                     <OutputFeedbackButtons

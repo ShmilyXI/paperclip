@@ -1766,7 +1766,14 @@
     "documentActions": "文档操作",
     "outOfDate": "已过期",
     "remoteRevisionN": "远端修订 {{n}}",
-    "updatedAtTime": "更新于 {{time}}"
+    "updatedAtTime": "更新于 {{time}}",
+    "createAndRevisePlansIn": "请在任务对话中创建和修改计划。",
+    "reviewThisDocumentThroughIts": "请通过其工作成果来审阅此文档。",
+    "documentKeyReservedForTask": "此文档标识保留给任务状态使用。",
+    "couldNotLoadTheReviewed": "无法加载所审阅的修订。请重新打开链接。",
+    "theReviewedRevisionIsUnavailable": "所审阅的修订不可用。",
+    "loadingReviewedRevision": "正在加载所审阅的修订…",
+    "retrySaving": "重试保存"
   },
   "projectProps": {
     "concurrentRunsOnLocalSsh": "本地/SSH 运行器上并发运行；云环境中依次运行。",
