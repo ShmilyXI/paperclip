@@ -17518,6 +17518,12 @@
     "makingTheRoutine": "正在创建例行任务…",
     "makeTheRoutine": "创建例行任务"
   },
+  "moveToArea": {
+    "archivedSuffix": "（已归档）",
+    "archived": "（已归档）",
+    "areaMoveAria": "区域：{{title}}。移动到其他区域",
+    "noAreaChooseOne": "无区域。请选择一个"
+  },
   "dashboardAutomation": {
     "couldRunOnASchedule": "可以按计划运行",
     "couldStartFromAWebhook": "可以由 Webhook 触发",

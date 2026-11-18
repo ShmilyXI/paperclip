@@ -17518,6 +17518,12 @@
     "makingTheRoutine": "Making the routine…",
     "makeTheRoutine": "Make the routine"
   },
+  "moveToArea": {
+    "archivedSuffix": " (archived)",
+    "archived": "(archived)",
+    "areaMoveAria": "Area: {{title}}. Move to another area",
+    "noAreaChooseOne": "No area. Choose one"
+  },
   "dashboardAutomation": {
     "couldRunOnASchedule": "Could run on a schedule",
     "couldStartFromAWebhook": "Could start from a webhook",

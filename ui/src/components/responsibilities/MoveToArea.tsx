@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ResponsibilityArea } from "@paperclipai/shared";
+import { t } from "@/i18n";
 import { ChevronDown } from "lucide-react";
 import { describeError } from "@/api/errors";
 import { responsibilitiesApi } from "@/api/responsibilities";
@@ -46,11 +47,11 @@ export function AreaRadioItems({
       {choices.map((area) => (
         <DropdownMenuRadioItem key={area.id} value={area.id} disabled={area.status === "archived"}>
           {area.title}
-          {area.status === "archived" ? " (archived)" : ""}
+          {area.status === "archived" ? t("moveToArea.archivedSuffix") : ""}
         </DropdownMenuRadioItem>
       ))}
       {choices.length > 0 ? <DropdownMenuSeparator /> : null}
-      <DropdownMenuRadioItem value="">No area</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="">{t("addResponsibilityDialog.noArea")}</DropdownMenuRadioItem>
     </DropdownMenuRadioGroup>
   );
 }
@@ -74,15 +75,15 @@ export function AreaControl({
             size="sm"
             variant="ghost"
             disabled={move.isPending}
-            aria-label={area ? `Area: ${area.title}. Move to another area` : "No area. Choose one"}
+            aria-label={area ? t("moveToArea.areaMoveAria", { title: area.title }) : t("moveToArea.noAreaChooseOne")}
           >
-            {area ? area.title : <span className="text-muted-foreground">No area</span>}
-            {area?.status === "archived" ? <span className="text-muted-foreground">(archived)</span> : null}
+            {area ? area.title : <span className="text-muted-foreground">{t("addResponsibilityDialog.noArea")}</span>}
+            {area?.status === "archived" ? <span className="text-muted-foreground">{t("moveToArea.archived")}</span> : null}
             <ChevronDown aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="max-h-(--sz-50vh) overflow-y-auto">
-          <DropdownMenuLabel>Move to area</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("responsibilities.moveToArea")}</DropdownMenuLabel>
           <AreaRadioItems
             areas={area && !areas.some((candidate) => candidate.id === area.id) ? [area, ...areas] : areas}
             value={area?.id ?? null}
@@ -94,7 +95,7 @@ export function AreaControl({
       </DropdownMenu>
       {move.error ? (
         <span role="alert" className="text-xs text-destructive">
-          Couldn’t move it. {describeError(move.error).body}
+          {t("responsibilities.couldntMoveIt")} {describeError(move.error).body}
         </span>
       ) : null}
     </span>
