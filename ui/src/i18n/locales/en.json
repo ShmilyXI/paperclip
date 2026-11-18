@@ -17247,5 +17247,19 @@
     "compactions": "Compactions",
     "contextWindowAria": "Context window: {{percent}}% of {{window}} tokens used",
     "ofWindow": " of {{window}}"
+  },
+  "instructionsBundleSettings": {
+    "useAnAbsolutePath": "Use an absolute path that starts with / or ~.",
+    "entryFileHasToSitInside": "The entry file has to sit inside the root path.",
+    "couldntRead": "Couldn’t read {{entry}} in {{root}}.",
+    "couldntSwitchBackToTheManaged": "Couldn’t switch back to the managed bundle.",
+    "advancedManagement": "Advanced management",
+    "externalManagement": "External management",
+    "pointThisAgentAt": "Point this agent at a directory on disk. Paperclip checks that the root file exists before it switches over.",
+    "rootFile": "Root file",
+    "useManagedBundle": "Use managed bundle",
+    "saveOrDiscardYourFileChanges": "Save or discard your file changes first.",
+    "loadedFrom": "Loaded {{entry}} from {{root}}",
+    "loadProfile": "Load profile"
   }
 }

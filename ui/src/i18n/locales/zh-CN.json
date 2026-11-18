@@ -17247,5 +17247,19 @@
     "compactions": "压缩次数",
     "contextWindowAria": "上下文窗口：已使用 {{window}} 个 token 中的 {{percent}}%",
     "ofWindow": "，共 {{window}}"
+  },
+  "instructionsBundleSettings": {
+    "useAnAbsolutePath": "请使用以 / 或 ~ 开头的绝对路径。",
+    "entryFileHasToSitInside": "入口文件必须位于根路径内。",
+    "couldntRead": "无法读取 {{root}} 中的 {{entry}}。",
+    "couldntSwitchBackToTheManaged": "无法切换回托管指令包。",
+    "advancedManagement": "高级管理",
+    "externalManagement": "外部管理",
+    "pointThisAgentAt": "将此员工指向磁盘上的目录。Paperclip 在切换前会检查根文件是否存在。",
+    "rootFile": "根文件",
+    "useManagedBundle": "使用托管指令包",
+    "saveOrDiscardYourFileChanges": "请先保存或放弃你的文件更改。",
+    "loadedFrom": "已从 {{root}} 加载 {{entry}}",
+    "loadProfile": "加载配置文件"
   }
 }
