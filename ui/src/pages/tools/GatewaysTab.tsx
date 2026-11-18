@@ -184,7 +184,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
       await invalidateGateways();
     },
     onError: (error) => {
-      pushToast({ title: "Gateway was not created", body: describeError(error).body, tone: "error" });
+      pushToast({ title: t("gatewaysTab.gatewayWasNotCreated"), body: describeError(error).body, tone: "error" });
     },
   });
 
@@ -207,7 +207,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
       await invalidateGateways();
     },
     onError: (error) => {
-      pushToast({ title: "Token was not issued", body: describeError(error).body, tone: "error" });
+      pushToast({ title: t("gatewaysTab.tokenWasNotIssued"), body: describeError(error).body, tone: "error" });
     },
   });
 
@@ -219,7 +219,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
       await invalidateGateways();
     },
     onError: (error) => {
-      pushToast({ title: "Token was not revoked", body: describeError(error).body, tone: "error" });
+      pushToast({ title: t("gatewaysTab.tokenWasNotRevoked"), body: describeError(error).body, tone: "error" });
     },
   });
 
@@ -228,7 +228,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
       await copyTextToClipboard(value);
       pushToast({ title: t("gatewaysTab.copiedToClipboard"), body: label, tone: "success" });
     } catch (error) {
-      pushToast({ title: "Copy failed", body: describeError(error).body, tone: "error" });
+      pushToast({ title: t("gatewaysTab.copyFailed"), body: describeError(error).body, tone: "error" });
     }
   }
 
@@ -261,7 +261,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
     createTokenMutation.mutate(gatewayId);
   }
 
-  if (gatewaysQuery.isLoading || gatewaysView.kind === "reconnecting") return <LoadingState label="Loading gateways..." />;
+  if (gatewaysQuery.isLoading || gatewaysView.kind === "reconnecting") return <LoadingState label={t("gatewaysTab.loadingGateways")} />;
   if (gatewaysView.kind === "error") {
     return (
       <QueryErrorState

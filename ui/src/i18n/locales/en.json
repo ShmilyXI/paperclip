@@ -17871,7 +17871,8 @@
         "loadTheProfile": "load the profile",
         "loadNewTools": "load new tools",
         "checkAgentAccess": "check this agent's access",
-        "loadProfiles": "load profiles"
+        "loadProfiles": "load profiles",
+        "loadGateways": "load gateways"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

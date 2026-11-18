@@ -17871,7 +17871,8 @@
         "loadTheProfile": "加载此配置档",
         "loadNewTools": "加载新工具",
         "checkAgentAccess": "检查此员工的访问权限",
-        "loadProfiles": "加载配置档"
+        "loadProfiles": "加载配置档",
+        "loadGateways": "加载网关"
       },
       "retry": "重试",
       "retrying": "正在重试…",
