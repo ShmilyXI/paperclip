@@ -17465,5 +17465,29 @@
     "noConfigurationChanges": "没有配置更改",
     "noUnsavedChanges": "没有未保存的更改",
     "agentYamlConfiguration": "员工 YAML 配置"
+  },
+  "automationProposalCard": {
+    "defaultNotRight": "这个自动化还不太对。",
+    "noResponsibility": "没有职责：此任务未归档到任何职责下。",
+    "listCommaSeparator": "、",
+    "onASchedule": "按计划：{{label}}",
+    "fromAWebhook": "来自网络钩子（webhook），当其他系统调用时触发",
+    "aStandingCheck": "持续检查：{{label}}",
+    "calledBy": "由以下调用：{{caller}}",
+    "looksFor": "查找：{{lookFor}}",
+    "whenItFindsIt": "当找到时：{{whenFound}}",
+    "automationSetUp": "自动化已设置：",
+    "settingUpTheAutomation": "正在设置自动化…",
+    "proposedAutomationReplaced": "提议的自动化，已被更新的取代：",
+    "notThisAutomation": "不是这个自动化：",
+    "proposedAutomationFor": "为 {{title}} 提议的自动化",
+    "agentProposedAnAutomationFor": "{{name}} 为以下内容提议了一个自动化：",
+    "eachTime": "每次",
+    "howItStarts": "如何启动",
+    "whoRunsIt": "由谁运行",
+    "filedUnder": "归档于",
+    "onceItIsSetUp": "设置完成后，你会获得要调用的地址以及要提供给该系统的密钥。",
+    "reasonPlaceholder": "例如：改为每周一运行，并且只针对付费客户",
+    "setItUp": "设置它"
   }
 }

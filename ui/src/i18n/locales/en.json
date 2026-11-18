@@ -17465,5 +17465,29 @@
     "noConfigurationChanges": "No configuration changes",
     "noUnsavedChanges": "No unsaved changes",
     "agentYamlConfiguration": "Agent YAML configuration"
+  },
+  "automationProposalCard": {
+    "defaultNotRight": "That automation isn't right yet.",
+    "noResponsibility": "No responsibility: the task is not filed under one.",
+    "listCommaSeparator": ", ",
+    "onASchedule": "On a schedule: {{label}}",
+    "fromAWebhook": "From a webhook, when another system calls it",
+    "aStandingCheck": "A standing check: {{label}}",
+    "calledBy": "Called by: {{caller}}",
+    "looksFor": "Looks for: {{lookFor}}",
+    "whenItFindsIt": "When it finds it: {{whenFound}}",
+    "automationSetUp": "Automation set up:",
+    "settingUpTheAutomation": "Setting up the automation…",
+    "proposedAutomationReplaced": "Proposed automation, replaced by a newer one: ",
+    "notThisAutomation": "Not this automation: ",
+    "proposedAutomationFor": "Proposed automation for {{title}}",
+    "agentProposedAnAutomationFor": "{{name}} proposed an automation for",
+    "eachTime": "Each time",
+    "howItStarts": "How it starts",
+    "whoRunsIt": "Who runs it",
+    "filedUnder": "Filed under",
+    "onceItIsSetUp": "Once it is set up, you get the address to call and its secret to give that system.",
+    "reasonPlaceholder": "e.g. Run it on Mondays instead, and only for paying customers",
+    "setItUp": "Set it up"
   }
 }
