@@ -98,7 +98,7 @@ export function InstructionHistory({
             <p role="alert" className="text-sm text-destructive">{describeError(restore.error).body}</p>
           )}
           {(historyView.kind === "loading" || historyView.kind === "reconnecting") && (
-            <p role="status" className="text-sm text-muted-foreground">Loading revisions…</p>
+            <p role="status" className="text-sm text-muted-foreground">{t("instructionHistory.loadingRevisions")}</p>
           )}
           {history.data?.pages
             .flatMap((page) => page.revisions)
@@ -115,7 +115,7 @@ export function InstructionHistory({
                 <span className="text-sm text-muted-foreground">
                   {revision.source} ·{" "}
                   {new Date(revision.createdAt).toLocaleString()}
-                  {revision.id === currentRevisionId ? " · Current" : ""}
+                  {revision.id === currentRevisionId ? ` · ${t("routineHistory.current")}` : ""}
                 </span>
               </div>
             ))}
@@ -131,7 +131,7 @@ export function InstructionHistory({
           )}
           {diff.data && (
             <>
-              <p className="text-sm text-muted-foreground">Selected revision</p>
+              <p className="text-sm text-muted-foreground">{t("instructionHistory.selectedRevision")}</p>
               <pre className={cn("whitespace-pre-wrap break-words rounded-md border border-border p-3 font-mono text-sm", ANALYTICS_MASK_CLASS)}>
                 {diff.data.from.content}
               </pre>
@@ -139,11 +139,11 @@ export function InstructionHistory({
                 {t("instructionHistory.changesFromSelectedRevisionTo")}
               </p>
               <pre className={cn("whitespace-pre-wrap break-words rounded-md border border-border p-3 font-mono text-sm", ANALYTICS_MASK_CLASS)}>
-                {diff.data.removed && `Removed:\n${diff.data.removed}\n`}
-                {diff.data.added && `Added:\n${diff.data.added}`}
+                {diff.data.removed && `${t("instructionHistory.removed")}\n${diff.data.removed}\n`}
+                {diff.data.added && `${t("instructionHistory.added")}\n${diff.data.added}`}
                 {!diff.data.removed &&
                   !diff.data.added &&
-                  "No content changes."}
+                  t("instructionHistory.noContentChanges")}
               </pre>
               <Button
                 type="button"

@@ -10291,7 +10291,14 @@
     "selectedRevision": "Selected revision",
     "changesFromSelectedRevisionTo": "Changes from selected revision to current",
     "restoreAsNewRevision": "Restore as new revision",
-    "saveOrCancelYourEdits": "Save or cancel your edits before restoring."
+    "saveOrCancelYourEdits": "Save or cancel your edits before restoring.",
+    "removed": "Removed:",
+    "added": "Added:",
+    "noContentChanges": "No content changes."
+  },
+  "coordinatorAgentSwitcher": {
+    "switchAgent": "Switch agent",
+    "switchAgentCurrently": "Switch agent. Currently {{name}}"
   },
   "designSandboxTasks": {
     "unknownAgent": "Unknown agent",

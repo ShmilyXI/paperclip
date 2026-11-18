@@ -10291,7 +10291,14 @@
     "selectedRevision": "已选修订版",
     "changesFromSelectedRevisionTo": "从已选修订版到当前版本的变更",
     "restoreAsNewRevision": "恢复为新修订版",
-    "saveOrCancelYourEdits": "恢复前请先保存或取消你的编辑。"
+    "saveOrCancelYourEdits": "恢复前请先保存或取消你的编辑。",
+    "removed": "删除：",
+    "added": "新增：",
+    "noContentChanges": "内容无变更。"
+  },
+  "coordinatorAgentSwitcher": {
+    "switchAgent": "切换员工",
+    "switchAgentCurrently": "切换员工。当前：{{name}}"
   },
   "designSandboxTasks": {
     "unknownAgent": "未知员工",
