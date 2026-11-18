@@ -14065,7 +14065,9 @@
   "taskChatInteractionCard": {
     "question": "问题",
     "unansweredQuestion": "未回答的问题",
-    "reviewRequest": "评审请求"
+    "reviewRequest": "评审请求",
+    "answerQuestion": "回答问题：{{prompt}}",
+    "openRequest": "打开请求：{{label}}"
   },
   "agentDetailPage": {
     "pluginView": "插件视图",

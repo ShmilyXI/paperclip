@@ -14065,7 +14065,9 @@
   "taskChatInteractionCard": {
     "question": "Question",
     "unansweredQuestion": "Unanswered question",
-    "reviewRequest": "Review request"
+    "reviewRequest": "Review request",
+    "answerQuestion": "Answer question: {{prompt}}",
+    "openRequest": "Open request: {{label}}"
   },
   "agentDetailPage": {
     "pluginView": "Plugin view",
