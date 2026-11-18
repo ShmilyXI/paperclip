@@ -105,17 +105,17 @@ function McpConnectRequest({ id, device = false, agentPairingOnly = false, onEdi
       </div>
       {clientOrigin && <ClientOrigin key={clientOrigin} origin={clientOrigin} />}
       {!device && data?.redirectOrigin && data.redirectOrigin !== clientOrigin && <ClientOrigin key={data.redirectOrigin} origin={data.redirectOrigin} />}
-      {device && <p className="text-sm">Confirm this matches the code shown by your assistant: <strong className={cn("font-mono", ANALYTICS_NO_CAPTURE_CLASS)}>{id.toUpperCase()}</strong></p>}
-      {(requestView.kind === "loading" || requestView.kind === "reconnecting") && <p role="status" className="text-sm text-muted-foreground">Loading connection request…</p>}
+      {device && <p className="text-sm">{t("mcpConnect.confirmThisMatchesTheCode")}<strong className={cn("font-mono", ANALYTICS_NO_CAPTURE_CLASS)}>{id.toUpperCase()}</strong></p>}
+      {(requestView.kind === "loading" || requestView.kind === "reconnecting") && <p role="status" className="text-sm text-muted-foreground">{t("mcpConnect.loadingConnectionRequest")}</p>}
       {requestView.kind === "error" && <QueryErrorState error={requestView.error} action="load this connection request" onRetry={requestView.retry} retrying={requestView.isFetching} />}
-      {requestView.kind === "error" && <p className="text-sm text-muted-foreground">Start a new connection from your assistant.</p>}
-      {device && requestView.kind === "error" && <Button variant="outline" onClick={onEditCode}>Enter a different code</Button>}
+      {requestView.kind === "error" && <p className="text-sm text-muted-foreground">{t("mcpConnect.startANewConnectionFrom")}</p>}
+      {device && requestView.kind === "error" && <Button variant="outline" onClick={onEditCode}>{t("mcpConnect.enterADifferentCode")}</Button>}
       {data?.agentConnection && !device && <form className="space-y-3" onSubmit={event => { event.preventDefault(); pairDot.mutate(); }}>
-        <p className="text-sm">Enter the one-use code from Paperclip’s agent setup to review this connection’s access. Keep the code out of Bot chat. Access is granted only when you approve the named agent below.</p>
-        <label htmlFor="dot-pairing-code" className="text-sm">Pairing code</label>
+        <p className="text-sm">{t("mcpConnect.enterTheOneUseCodeFrom")}</p>
+        <label htmlFor="dot-pairing-code" className="text-sm">{t("mcpConnect.pairingCode")}</label>
         <Input id="dot-pairing-code" type="password" autoComplete="off" value={pairingCode} onChange={event => setPairingCode(event.target.value)} required maxLength={32} />
-        {previewPending && <p role="status" className="text-sm text-muted-foreground">Checking pairing code…</p>}
-        {pairingPreview?.providerKind === "grok_bot" && <p className="text-sm font-medium">Allow this connection to work as {pairingPreview.agent.name} in {pairingPreview.company.name}.</p>}
+        {previewPending && <p role="status" className="text-sm text-muted-foreground">{t("mcpConnect.checkingPairingCode")}</p>}
+        {pairingPreview?.providerKind === "grok_bot" && <p className="text-sm font-medium">{t("mcpConnect.allowThisConnectionToWorkAs", { agent: pairingPreview.agent.name, company: pairingPreview.company.name })}</p>}
         {pairingPreview && <dl className="space-y-2 rounded-md border border-border p-3 text-sm">
           <div><dt className="text-muted-foreground">{t("common.company")}</dt><dd>{pairingPreview.company.name} <span className="text-xs text-muted-foreground">({pairingPreview.company.id})</span></dd></div>
           <div><dt className="text-muted-foreground">{t("common.agent")}</dt><dd>{pairingPreview.agent.name} <span className="text-xs text-muted-foreground">({pairingPreview.agent.id})</span></dd></div>
@@ -125,7 +125,7 @@ function McpConnectRequest({ id, device = false, agentPairingOnly = false, onEdi
         </dl>}
         {previewEnabled && preview.view.kind === "error" && <QueryErrorState size="inline" error={preview.error} action="check this pairing code" onRetry={preview.view.retry} retrying={preview.view.isFetching} />}
         {pairDot.error && <p role="alert" className="text-sm text-destructive">{describeError(pairDot.error, { action: "connect Dot" }).body}</p>}
-        <div className="flex justify-end"><Button type="submit" disabled={!pairingPreview || !PAIRING_CODE_PATTERN.test(trimmedPairingCode) || pairDot.isPending}>{pairDot.isPending ? "Connecting…" : "Allow agent connection"}</Button></div>
+        <div className="flex justify-end"><Button type="submit" disabled={!pairingPreview || !PAIRING_CODE_PATTERN.test(trimmedPairingCode) || pairDot.isPending}>{pairDot.isPending ? t("mcpConnect.connecting") : t("mcpConnect.allowAgentConnection")}</Button></div>
       </form>}
       {data && <>
         {data.requiresSignIn ? <Button asChild><Link to={`/auth?next=${encodeURIComponent(returnPath)}`}>{t("mcpConnect.signInCreateAccount")}</Link></Button> : <>
@@ -151,7 +151,7 @@ function McpConnectRequest({ id, device = false, agentPairingOnly = false, onEdi
             </span>
             <span>{t("mcpConnect.writeAllOfYourPaperclip")}</span>
           </label>}
-          {company && !company.canWrite && <p className="text-sm text-muted-foreground">Your role in this organization is read-only.</p>}
+          {company && !company.canWrite && <p className="text-sm text-muted-foreground">{t("mcpConnect.yourRoleInThisOrganization")}</p>}
           {consent.error && <p role="alert" className="text-sm text-destructive">{describeError(consent.error).body}</p>}
           <div className="flex items-center justify-between gap-3">
             <Button variant="outline" disabled={consent.isPending} onClick={() => consent.mutate("deny")}>{t("common.cancel")}</Button>
@@ -173,14 +173,14 @@ export function AssistantConnectionsPage() {
     return client.invalidateQueries({ queryKey: ["mcp-connections"] });
   } });
   return <div className="mx-auto max-w-xl space-y-4 py-10">
-    <h1 className="text-xl font-semibold">Assistant connections</h1>
-    <p className="text-sm text-muted-foreground">Revoking a connection stops its future tool calls. Work already delegated continues under your organization’s normal controls.</p>
-    {(connectionsView.kind === "loading" || connectionsView.kind === "reconnecting") && <p role="status" className="text-sm text-muted-foreground">Loading connections…</p>}
+    <h1 className="text-xl font-semibold">{t("mcpConnect.assistantConnections")}</h1>
+    <p className="text-sm text-muted-foreground">{t("mcpConnect.revokingAConnectionStops")}</p>
+    {(connectionsView.kind === "loading" || connectionsView.kind === "reconnecting") && <p role="status" className="text-sm text-muted-foreground">{t("mcpConnect.loadingConnections")}</p>}
     {connectionsView.kind === "error" && <QueryErrorState error={connectionsView.error} action="load assistant connections" onRetry={connectionsView.retry} retrying={connectionsView.isFetching} />}
     {revoke.error && <p role="alert" className="text-sm text-destructive">{describeError(revoke.error, { action: "revoke the connection" }).body}</p>}
-    {active?.length === 0 && <p className="text-sm">No assistant connections.</p>}
+    {active?.length === 0 && <p className="text-sm">{t("mcpConnect.noAssistantConnections")}</p>}
     {active?.map((connection) => <Card key={connection.id} className="block space-y-2 p-4">
-      <h2 className="font-medium"><Identity name={assistantConnectionDisplayName(connection)} avatarUrl={connection.user?.image} initials={deriveInitials(connection.user?.name ?? "You")} /></h2>
+      <h2 className="font-medium"><Identity name={assistantConnectionDisplayName(connection)} avatarUrl={connection.user?.image} initials={deriveInitials(connection.user?.name ?? t("assistantConnection.you"))} /></h2>
       <p className="text-sm text-muted-foreground">{t("mcpConnect.organizationLabel", { name: connection.companyName })}</p>
       {connection.agent && <p className="text-sm">{t("mcpConnect.worksAs")} <Link className="underline" to={`/${connection.companyPrefix ?? connection.companyId}/agents/${connection.agent.id}/runtime`}>{connection.agent.name}</Link>{connection.user ? t("mcpConnect.authorizedBySuffix", { name: connection.user.name }) : ""}</p>}
       <p className="text-sm">{connection.scopes.includes("paperclip:agent") ? t("mcpConnect.agentConnection") : connection.scopes.includes("paperclip:write") ? t("mcpConnect.readAndEditWork") : t("mcpConnect.readOnly")}</p>

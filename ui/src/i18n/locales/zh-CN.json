@@ -8862,7 +8862,18 @@
     "allowThisConnectionToWork": "允许该连接以 {{agent}} 身份在 {{company}} 中工作。",
     "organizationLabel": "组织：{{name}}",
     "authorizedBySuffix": "· 授权人 {{name}}",
-    "yourAssistant": "你的助手"
+    "yourAssistant": "你的助手",
+    "confirmThisMatchesTheCode": "请确认此代码与你的助手显示的代码一致：",
+    "loadingConnectionRequest": "正在加载连接请求…",
+    "startANewConnectionFrom": "请从你的助手处发起新的连接。",
+    "enterADifferentCode": "输入另一个代码",
+    "enterTheOneUseCodeFrom": "输入 Paperclip 员工设置中的一次性代码，以查看此连接的访问权限。请勿在 Bot 聊天中泄露该代码。只有当你批准下方指定的员工后，才会授予访问权限。",
+    "checkingPairingCode": "正在检查配对码…",
+    "allowThisConnectionToWorkAs": "允许此连接以 {{agent}} 的身份在 {{company}} 中工作。",
+    "yourRoleInThisOrganization": "你在此组织中的角色是只读的。",
+    "assistantConnections": "助手连接",
+    "revokingAConnectionStops": "撤销连接会阻止其将来的工具调用。已委托的工作会在你组织的正常管控下继续。",
+    "noAssistantConnections": "没有助手连接。"
   },
   "decisionModelSettings": {
     "chooseAndSaveAConnection": "请先选择并保存连接。",

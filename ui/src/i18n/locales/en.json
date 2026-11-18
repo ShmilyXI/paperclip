@@ -8862,7 +8862,18 @@
     "allowThisConnectionToWork": "Allow this connection to work as {{agent}} in {{company}}.",
     "organizationLabel": "Organization: {{name}}",
     "authorizedBySuffix": "· Authorized by {{name}}",
-    "yourAssistant": "your assistant"
+    "yourAssistant": "your assistant",
+    "confirmThisMatchesTheCode": "Confirm this matches the code shown by your assistant: ",
+    "loadingConnectionRequest": "Loading connection request…",
+    "startANewConnectionFrom": "Start a new connection from your assistant.",
+    "enterADifferentCode": "Enter a different code",
+    "enterTheOneUseCodeFrom": "Enter the one-use code from Paperclip’s agent setup to review this connection’s access. Keep the code out of Bot chat. Access is granted only when you approve the named agent below.",
+    "checkingPairingCode": "Checking pairing code…",
+    "allowThisConnectionToWorkAs": "Allow this connection to work as {{agent}} in {{company}}.",
+    "yourRoleInThisOrganization": "Your role in this organization is read-only.",
+    "assistantConnections": "Assistant connections",
+    "revokingAConnectionStops": "Revoking a connection stops its future tool calls. Work already delegated continues under your organization’s normal controls.",
+    "noAssistantConnections": "No assistant connections."
   },
   "decisionModelSettings": {
     "chooseAndSaveAConnection": "Choose and save a connection first.",
