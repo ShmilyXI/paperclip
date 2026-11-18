@@ -1,7 +1,7 @@
 import { t } from "@/i18n";
 import { useCallback, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarClock, Plus, Webhook } from "lucide-react";
+import { CalendarClock, Plus, Radar, Webhook } from "lucide-react";
 import type { RoutineTrigger } from "@paperclipai/shared";
 import { useSearchParams } from "@/lib/router";
 import { routinesApi } from "@/api/routines";
@@ -166,9 +166,11 @@ export function RoutineTriggers() {
             {trigger.kind === "schedule"
               ? t("routineTriggers.schedule")
               : trigger.kind === "api"
-                ? t("routineTriggers.apiTrigger")
-                : t("routineTriggers.webhook")}{" "}
-            {t("routineTriggers.removed")}
+                ? "API trigger"
+                : trigger.kind === "heartbeat"
+                  ? "Standing check"
+                  : "Webhook"}{" "}
+            removed.
           </span>
           <Button
             variant="ghost"
@@ -217,11 +219,15 @@ export function RoutineTriggers() {
                 ? "schedule"
                 : trigger.kind === "api"
                   ? "api"
-                  : "webhook"
+                  : trigger.kind === "heartbeat"
+                    ? "heartbeat"
+                    : "webhook"
             }
             icon={
               trigger.kind === "schedule" ? (
                 <CalendarClock className="h-4 w-4" />
+              ) : trigger.kind === "heartbeat" ? (
+                <Radar className="h-4 w-4" />
               ) : (
                 <Webhook className="h-4 w-4" />
               )
@@ -230,10 +236,12 @@ export function RoutineTriggers() {
               trigger.kind === "schedule"
                 ? (describeCron(trigger.cronExpression) ?? t("routineTriggers.schedule"))
                 : trigger.kind === "api"
-                  ? t("routineTriggers.apiTrigger")
-                  : trigger.signingMode === "github_hmac"
-                    ? t("routineTriggers.gitHubWebhook")
-                    : t("routineTriggers.webhook")
+                  ? "API trigger"
+                  : trigger.kind === "heartbeat"
+                    ? "Standing check"
+                    : trigger.signingMode === "github_hmac"
+                      ? "GitHub webhook"
+                      : "Webhook"
             }
             summary={
               trigger.setupPending
@@ -243,9 +251,11 @@ export function RoutineTriggers() {
                   : trigger.kind === "schedule"
                     ? (trigger.timezone ?? "UTC")
                     : trigger.kind === "api"
-                      ? t("routineTriggers.runThroughTheApi")
-                      : trigger.lastWebhookDelivery?.status === "rejected"
-                        ? t("routineTriggers.authenticationFailedCheckTheKey")
+                      ? "Run through the API"
+                      : trigger.kind === "heartbeat"
+                        ? trigger.lastResult ? `On each wake-up · Last: ${trigger.lastResult}` : "On each wake-up · Not checked yet"
+                        : trigger.lastWebhookDelivery?.status === "rejected"
+                        ? "Authentication failed · Check the key in your app"
                         : trigger.lastWebhookDelivery?.status === "received" &&
                             !trigger.lastWebhookDelivery.test
                           ? t("routineTriggers.receivingEvents")
@@ -282,6 +292,10 @@ export function RoutineTriggers() {
             ) : trigger.kind === "api" ? (
               <p className="text-sm text-muted-foreground">
                 {t("triggers.thisTriggerStartsTheRoutine")}
+              </p>
+            ) : trigger.kind === "heartbeat" ? (
+              <p className="text-sm text-muted-foreground">
+                A standing check: the routine’s agent carries out these instructions each time its heartbeat wakes it, and reports what it found. It never creates a task by itself.
               </p>
             ) : (
               <WebhookSettings

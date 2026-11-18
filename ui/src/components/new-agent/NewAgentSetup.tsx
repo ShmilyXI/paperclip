@@ -1184,9 +1184,8 @@ function Setup({
                     <fieldset disabled={busy} className="space-y-8">
                       <section className="space-y-5">
                         {isDot && <>
-                          <p className="text-sm text-muted-foreground">{t("newAgent.createThisAgentThenCopy")}</p>
-                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">{t("newAgentSetup.enableAssistantConnectionsMcpIn")}</p>}
-                          <ToggleField label={t("newAgent.allowExternallyBilledProvider")} hint={t("newAgentSetup.dotDoesNotReportToken")}
+                          <p className="text-sm text-muted-foreground">Create this agent, then copy its pairing prompt to your Dot.</p>
+                          <ToggleField label="Allow externally billed provider" hint="Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply."
                             checked={allowUnmeteredProvider} onChange={value => { setAllowUnmeteredProvider(value); resetTest(); }} />
                         </>}
                         {!connectionAdapter && aiProviderForAdapter(brandType) && (
@@ -1201,7 +1200,7 @@ function Setup({
                           <div className="grid items-start gap-5 sm:grid-cols-2">
                             {showModel && !usingKimiApi && (
                               <ModelDropdown
-                                presentation={brandType === "codex_local" ? "searchable" : "native"}
+                                presentation={brandType === "codex_local" || multiProvider || connectionModels ? "searchable" : "native"}
                                 models={connectionModels?.models ?? models.data ?? []}
                                 loadingModels={connectionModels?.isLoading ?? models.isLoading}
                                 onRefreshModels={connectionModels?.refreshModels ?? (accountCatalogAvailable ? async () => { await models.refetch(); } : undefined)}

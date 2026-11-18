@@ -1,6 +1,7 @@
 import { t } from "@/i18n";
 import { statusLabel } from "@/lib/i18n-labels";
 import { AgentIdentity } from "./AgentIdentity";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { memo, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -963,8 +964,8 @@ export function CommentThread({
   const canSubmit = !submitting && !!body.trim();
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold">{t("commentThread.timelineCount", { count: timeline.length + queuedComments.length })}</h3>
+    <div className={cn("space-y-4", ANALYTICS_MASK_CLASS)}>
+      <h3 className="text-sm font-semibold">Timeline ({timeline.length + queuedComments.length})</h3>
 
       <TimelineList
         timeline={timeline}

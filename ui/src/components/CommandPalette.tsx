@@ -1,6 +1,7 @@
 import { t } from "@/i18n";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { useCombinedInboxTasksEnabled } from "@/hooks/useCombinedInboxTasksEnabled";
+import { useResponsibilitiesEnabled } from "@/hooks/useResponsibilitiesEnabled";
 import { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -23,6 +24,7 @@ import {
 } from "@/components/ui/command";
 import {
   CircleDot,
+  Compass,
   Bot,
   Hexagon,
   Target,
@@ -105,6 +107,7 @@ export function CommandPalette() {
     queryFn: () => instanceSettingsApi.getExperimental(),
   });
   const { enabled: combinedInboxTasksEnabled } = useCombinedInboxTasksEnabled();
+  const { enabled: responsibilitiesEnabled } = useResponsibilitiesEnabled();
   const fileViewerEnabled = experimentalSettings?.enableExperimentalFileViewer === true;
 
   useEffect(() => {
@@ -354,11 +357,19 @@ export function CommandPalette() {
 
         <CommandSeparator />
 
-        <CommandGroup heading={t("commandPalette.pages")}>
-          <CommandItem onSelect={() => go("/dashboard")}>
-            <LayoutDashboard className="mr-2 h-4 w-4" />
-            {t("commandPalette.dashboard")}
-          </CommandItem>
+        <CommandGroup heading="Pages">
+          {/* One Dashboard: the Responsibilities home while that experiment is on, the classic one otherwise. */}
+          {responsibilitiesEnabled ? (
+            <CommandItem onSelect={() => go("/responsibilities")}>
+              <Compass className="mr-2 h-4 w-4" />
+              Dashboard
+            </CommandItem>
+          ) : (
+            <CommandItem onSelect={() => go("/dashboard")}>
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              Dashboard
+            </CommandItem>
+          )}
           <CommandItem onSelect={() => go(combinedInboxTasksEnabled ? "/issues?view=mine" : "/inbox")}>
             <Inbox className="mr-2 h-4 w-4" />
             {combinedInboxTasksEnabled ? t("commandPalette.myWork") : t("commandPalette.inbox")}

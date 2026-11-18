@@ -164,6 +164,7 @@ export function AgentActionButtons({
   size = "sm",
   assignLabel = "Assign Task",
   showAssignIcon = true,
+  assignIcon: AssignIcon = Plus,
   showChat = false,
   runLabel = "Run now",
   showStatus = true,
@@ -188,6 +189,7 @@ export function AgentActionButtons({
   size?: "sm" | "default";
   assignLabel?: string;
   showAssignIcon?: boolean;
+  assignIcon?: typeof Plus;
   showChat?: boolean;
   runLabel?: string;
   showStatus?: boolean;
@@ -525,9 +527,10 @@ export function AgentActionButtons({
             )}
           </PopoverContent>
         </Popover>
-        {showChat && <Button variant="outline" size="icon" aria-label={`Chat with ${agent.name}`} title="Chat with this agent"
+        {showChat && <Button variant="outline" size={size} aria-label={`Chat with ${agent.name}`} title="Chat with this agent"
           disabled={disabled} onClick={() => { if (!onBeforeNavigate || onBeforeNavigate()) navigate(`/chats/${canonicalAgentRef}`); }}>
           <MessagesSquare className="size-4" />
+          Chat
         </Button>}
         {needsSetup ? (
           <Button size={size} disabled={disabled} onClick={finishSetup}>
@@ -541,7 +544,7 @@ export function AgentActionButtons({
             disabled={assignAndRunDisabled}
             title={workActionsDisabled ? workActionsDisabledReason : undefined}
           >
-            {showAssignIcon && <Plus className="size-4" />}
+            {showAssignIcon && <AssignIcon className="size-4" />}
             {assignLabel}
           </Button>
         )}

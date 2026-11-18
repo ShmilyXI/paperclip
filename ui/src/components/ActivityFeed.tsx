@@ -370,8 +370,8 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
 
   // Fetch issues for name resolution
   const { data: issues } = useQuery({
-    queryKey: queryKeys.issues.list(selectedCompanyId ?? ""),
-    queryFn: () => issuesApi.list(selectedCompanyId!),
+    queryKey: queryKeys.issues.listIndex(selectedCompanyId ?? ""),
+    queryFn: ({ signal }) => issuesApi.listCompact(selectedCompanyId!, { projection: "index" }, { signal }),
     enabled: !!selectedCompanyId,
   });
 
@@ -391,12 +391,6 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
   const entityTitleMap = useMemo(() => {
     const map = new Map<string, string>();
     for (const i of issues ?? []) map.set(`issue:${i.id}`, i.title);
-    return map;
-  }, [issues]);
-
-  const entityStatusMap = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const i of issues ?? []) map.set(`issue:${i.id}`, i.status);
     return map;
   }, [issues]);
 
@@ -527,7 +521,6 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
               agentMap={agentMap}
               entityNameMap={entityNameMap}
               entityTitleMap={entityTitleMap}
-              entityStatusMap={entityStatusMap}
               isActive={isActiveHeartbeat}
             />
           </div>
@@ -545,7 +538,6 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
             agentMap={agentMap}
             entityNameMap={entityNameMap}
             entityTitleMap={entityTitleMap}
-            entityStatusMap={entityStatusMap}
             isActive={isActiveHeartbeat}
             isMuted
           />

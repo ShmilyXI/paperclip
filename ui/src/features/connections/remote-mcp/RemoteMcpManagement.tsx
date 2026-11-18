@@ -2,6 +2,7 @@ import { t } from "@/i18n";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 /** Shared by the saved connection and its interactive review stories. */
 export function RemoteMcpManagement({ providerName, connected = true, canReconnect = true, canDisconnect = true, busy = false, onReconnect, onManage, onDisconnect }: {
@@ -21,8 +22,8 @@ export function RemoteMcpManagement({ providerName, connected = true, canReconne
       <Button variant="outline" disabled={!canReconnect || busy} onClick={onReconnect}>{t("remoteMcpManagement.reconnect")}</Button>
       <Button variant="outline" onClick={onManage}>{t("remoteMcpManagement.manageIn", { provider: providerName })}</Button>
       {connected && canDisconnect && <AlertDialog open={confirming} onOpenChange={(open) => { if (!busy) setConfirming(open); }}>
-        <AlertDialogTrigger asChild><Button variant="ghost" className="text-destructive">{t("common.disconnect")}</Button></AlertDialogTrigger>
-        <AlertDialogContent>
+        <AlertDialogTrigger asChild><Button variant="ghost" className="text-destructive">Disconnect</Button></AlertDialogTrigger>
+        <AlertDialogContent className={ANALYTICS_MASK_CLASS}>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("remoteMcpManagement.disconnectProvider", { provider: providerName })}</AlertDialogTitle>
             <AlertDialogDescription>{t("remoteMcpManagement.disconnectDescription")}</AlertDialogDescription>

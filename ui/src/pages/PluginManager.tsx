@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToastActions } from "@/context/ToastContext";
 import { cn } from "@/lib/utils";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 function firstNonEmptyLine(value: string | null | undefined): string | null {
   if (!value) return null;
@@ -575,9 +576,9 @@ export function PluginManager() {
               </div>
             </div>
             <div className="space-y-2">
-              <p className="text-sm font-medium">{t("pluginManager.fullErrorOutput")}</p>
-              <pre className="max-h-(--sz-50vh) overflow-auto rounded-md border bg-muted/40 p-3 text-xs leading-5 whitespace-pre-wrap break-words">
-                {errorDetailsPlugin?.lastError ?? t("pluginManager.noStoredErrorMessage")}
+              <p className="text-sm font-medium">Full error output</p>
+              <pre className={cn("max-h-(--sz-50vh) overflow-auto rounded-md border bg-muted/40 p-3 text-xs leading-5 whitespace-pre-wrap break-words", ANALYTICS_MASK_CLASS)}>
+                {errorDetailsPlugin?.lastError ?? "No stored error message."}
               </pre>
             </div>
           </div>

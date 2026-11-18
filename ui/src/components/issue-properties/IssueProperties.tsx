@@ -2718,6 +2718,10 @@ export function IssueProperties({
           <PropertyRow label={t("common.workspace")}>
             <span className="text-sm text-muted-foreground">{t("issueProps.waitingForWorkspace")}</span>
           </PropertyRow>
+        ) : showScheduledRetryRow && scheduledRetry?.scheduledRetryReason === "environment_provider_wait" ? (
+          <PropertyRow label="Sandbox">
+            <span className="text-sm text-muted-foreground">Waiting for the provider</span>
+          </PropertyRow>
         ) : showScheduledRetryRow && scheduledRetryContent ? (
           <PropertyPicker
             inline={inline}

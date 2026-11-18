@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { describeError } from "@/api/errors";
 import { QueryErrorState, useQueryView } from "./QueryView";
 import type { EmailPublicationSummary } from "@paperclipai/shared";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
+import { cn } from "@/lib/utils";
 
 // Email actions belong to the agent's task conversation. Only surface mail
 // without a task comment yet and delivery outcomes that need attention here.
@@ -93,8 +95,8 @@ function EmailDelivery({
     <div className="space-y-2 text-xs text-muted-foreground">
       {p.request && !p.providerMessageId && (
         <article
-          aria-label={t("emailTaskActivity.emailSendIntent")}
-          className="task-context-notice space-y-3"
+          aria-label="Email send intent"
+          className={cn("task-context-notice space-y-3", ANALYTICS_MASK_CLASS)}
         >
           <p className="font-semibold">{p.request.subject ?? t("emailTaskActivity.emailReply")}</p>
           {p.request.to && <p>To: {p.request.to.join(", ")}</p>}

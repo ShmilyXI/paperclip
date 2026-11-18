@@ -73,6 +73,8 @@ import { queryKeys } from "@/lib/queryKeys";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { Link, Navigate, useLocation, useNavigate, useParams } from "@/lib/router";
 import { describeError } from "@/api/errors";
+import { ANALYTICS_MASK_CLASS, ANALYTICS_NO_CAPTURE_CLASS } from "@/lib/analytics/privacy";
+import { cn } from "@/lib/utils";
 
 const tabs = ["settings", "access", "reviews", "conversations", "activity"] as const;
 type ChatTab = (typeof tabs)[number];
@@ -349,8 +351,8 @@ export function ChatEndpointDetail() {
             {endpoint.provider === "speko" && <AppLogo name="Speko" brandKey="speko" size={36} />}
             {endpoint.provider === "github" ? (endpoint.botLabel ?? endpoint.assignedAgentName) : endpoint.assignedAgentName}{endpoint.provider === "speko" ? t("chatDetail.inSpeko") : ""}
           </h1>
-          <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            {endpoint.provider === "github" ? <><AppLogo name="GitHub" brandKey="github" compact className="size-4! rounded-sm bg-transparent" /><Link to={`/agents/${endpoint.assignedAgentId}`} className="hover:underline">{endpoint.assignedAgentName}</Link>{endpoint.providerAccountLabel && <span>· {endpoint.providerAccountLabel}</span>}</> : endpoint.providerAccountLabel ?? (endpoint.provider === "agentmail" ? endpoint.botExternalId ?? t("chatDetail.emailConnection") : t("chatDetail.chatConnection"))}
+          <p className={cn("mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground", ANALYTICS_MASK_CLASS)}>
+            {endpoint.provider === "github" ? <><AppLogo name="GitHub" brandKey="github" compact className="size-4! rounded-sm bg-transparent" /><Link to={`/agents/${endpoint.assignedAgentId}`} className="hover:underline">{endpoint.assignedAgentName}</Link>{endpoint.providerAccountLabel && <span>· {endpoint.providerAccountLabel}</span>}</> : endpoint.providerAccountLabel ?? (endpoint.provider === "agentmail" ? endpoint.botExternalId ?? "Email connection" : "Chat connection")}
           </p>
           {endpoint.provider === "github" && <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
             <GitHubBotMention endpoint={endpoint} />
@@ -387,6 +389,7 @@ export function ChatEndpointDetail() {
           {endpoint.status !== "active" && <StatusBadge status={endpoint.status} className={endpoint.provider === "speko" ? "text-foreground" : undefined} />}
         </div>
       </header>
+      <div className={cn("space-y-6", ANALYTICS_MASK_CLASS)}>
       {endpoint.provider === "github" && <GitHubConnectionRecoveryNotice endpoint={endpoint} />}
       {activeTab === "settings" && endpoint.provider === "speko" && endpoint.status === "active" && <div className="space-y-6"><SpekoPhoneCallback companyId={endpoint.companyId} endpointId={endpoint.id} /><SpekoPhoneLine companyId={endpoint.companyId} endpointId={endpoint.id} /><SpekoIncomingCalls companyId={endpoint.companyId} endpointId={endpoint.id} agentId={endpoint.assignedAgentId} /></div>}
       {endpoint.provider === "slack" && <SlackTestMessageButton key={endpoint.id} endpointId={endpoint.id} />}
@@ -430,6 +433,7 @@ export function ChatEndpointDetail() {
           onCloseAutoFocus={() => heading.current?.focus()}
         />
       )}
+      </div>
     </div>
   );
 }
@@ -564,7 +568,7 @@ function Settings({
             {destinationResources.map((resource) => (
               <div key={resource.id} className="py-3 space-y-3">
               <div className="flex items-center gap-3">
-                <div className="min-w-0 flex-1">
+                <div className={cn("min-w-0 flex-1", ANALYTICS_MASK_CLASS)}>
                   <p className="truncate text-sm font-medium">
                     {resource.label}
                   </p>
@@ -751,8 +755,8 @@ function Access({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">{t("chatDetail.people")}</h2>
         {endpoint.provider === "slack" && <Dialog>
-          <DialogTrigger asChild><Button>{t("chatDetail.invitePeople")}</Button></DialogTrigger>
-          <DialogContent>
+          <DialogTrigger asChild><Button>Invite people</Button></DialogTrigger>
+          <DialogContent className={ANALYTICS_MASK_CLASS}>
             <DialogHeader>
               <DialogTitle>{t("chatDetail.invitePeopleToTalkTo", { agentName: endpoint.assignedAgentName })}</DialogTitle>
               <DialogDescription>{t("chatDetail.shareTheseInstructionsWithSomeone")}</DialogDescription>
@@ -780,9 +784,9 @@ function Access({
       <p className="text-sm text-muted-foreground">{t("chatDetail.peopleWithLinkedAccountsUse")} <Link className="underline underline-offset-4" to="/company/settings/members">{t("chatDetail.manageMembers")}</Link></p>
       {confirmationUrl && (
         <div className="space-y-2 border-y border-border py-3">
-          <p className="text-sm font-medium">{t("chatDetail.confirmAccount", { account: confirmationFor ?? t("chatDetail.thisAccount") })}</p>
-          <p className="text-xs text-muted-foreground">{t("chatDetail.shareOnlyWithThisPerson")}</p>
-          <p className="break-all text-xs text-muted-foreground">
+          <p className={cn("text-sm font-medium", ANALYTICS_MASK_CLASS)}>Confirm {confirmationFor ?? "this account"}</p>
+          <p className="text-xs text-muted-foreground">Share only with this person. They must sign in and confirm their own account.</p>
+          <p className={cn("break-all text-xs text-muted-foreground", ANALYTICS_NO_CAPTURE_CLASS)}>
             {confirmationUrl}
           </p>
           <Button
@@ -827,7 +831,7 @@ function Access({
                     {link.paperclipUserImage && <AvatarImage src={link.paperclipUserImage} alt="" />}
                     <AvatarFallback>{deriveInitials(link.paperclipUserLabel ?? link.externalLabel)}</AvatarFallback>
                   </Avatar>
-                  <div className="min-w-0">
+                  <div className={cn("min-w-0", ANALYTICS_MASK_CLASS)}>
                     <p className="truncate text-sm" title={link.paperclipUserLabel ?? link.externalLabel}>{link.paperclipUserLabel ?? link.externalLabel}</p>
                     {(link.status !== "linked" || link.externalLabel !== link.paperclipUserLabel) && <p className="text-xs text-muted-foreground">
                       {link.status === "revoked" ? t("common.disconnected") : link.status === "linked"
@@ -1317,7 +1321,7 @@ function Activity({
         open={resolutionItem !== null}
         onOpenChange={(open) => !open && setResolutionItem(null)}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className={ANALYTICS_MASK_CLASS}>
           <AlertDialogHeader>
             <AlertDialogTitle>
               {resolutionItem?.actionType === "slash_task_start"
@@ -1405,7 +1409,7 @@ function Activity({
         </AlertDialogContent>
       </AlertDialog>
       <AlertDialog open={removeOpen} onOpenChange={setRemoveOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className={ANALYTICS_MASK_CLASS}>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("chatDetail.removeThisConnection")}</AlertDialogTitle>
             <AlertDialogDescription>

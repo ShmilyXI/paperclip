@@ -42,6 +42,7 @@ import {
 } from "./board-send-draft";
 
 import { LegacyBoardSendNotice } from "./LegacyBoardSendNotice";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 const providerNames: Record<ChatProvider, string> = {
   speko: "Speko",
@@ -559,7 +560,7 @@ function ConnectedTaskComposer({
             <p className="font-medium">
               {t("externallyConnectedTaskBanner.connectedTo")} {providerNames[binding.provider]}
             </p>
-            <p className="truncate text-xs text-muted-foreground">
+            <p className={cn("truncate text-xs text-muted-foreground", ANALYTICS_MASK_CLASS)}>
               {binding.externalLabel} · {binding.provider === "slack"
                 ? t("externallyConnectedTaskBanner.messagesYouSendHereAnd")
                 : t("externallyConnectedTaskBanner.agentAssignmentIsFixedFor")}

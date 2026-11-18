@@ -5,6 +5,7 @@ import { decisionModelsApi } from "@/api/decision-models";
 import { Link } from "@/lib/router";
 import { formatDateTime, formatTokens, formatDetailedCents } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 export function DecisionHistoryTable({ entries, fastResponse = false, fastResponsesEnabled = true }: { entries: (DecisionHistoryEntry & { publicationStatus?: string; connectionName?: string | null })[]; fastResponse?: boolean; fastResponsesEnabled?: boolean }) {
   if (!entries.length) return <p className="text-sm text-muted-foreground">{fastResponse ? t("decisionHistory.noFastResponsesInThis") : t("decisionHistory.noDecisionRequestsInThis")} <Link to={fastResponse && !fastResponsesEnabled ? "/company/settings/instance/experimental" : "/company/settings/connections"} className="underline underline-offset-4">{fastResponse ? fastResponsesEnabled ? t("decisionHistory.configureFastResponse") : t("decisionHistory.enableExperimentalFastResponses") : t("decisionHistory.configureADecisionModel")}</Link> {t("decisionHistory.toRunATest")}</p>;
@@ -13,10 +14,10 @@ export function DecisionHistoryTable({ entries, fastResponse = false, fastRespon
     <div className="overflow-x-auto"><table className="w-full text-sm" aria-label={fastResponse ? t("decisionHistory.fastResponses") : t("decisionHistory.decisionRequests")}>
       <thead><tr className="border-b border-border text-muted-foreground">{[t("decisionHistory.whenFeature"), t("decisionHistory.responsible"), t("common.task"), ...(fastResponse ? [t("common.connection")] : []), t("common.model"), t("common.status"), t("common.duration"), t("decisionHistory.tokensInOut"), t("common.cost")].map(label => <th key={label} className="px-3 py-2 text-left font-medium">{label}</th>)}</tr></thead>
       <tbody>{entries.map(row => <tr key={row.id} className="border-b border-border last:border-0">
-        <td className="px-3 py-3"><div className="whitespace-nowrap">{formatDateTime(row.startedAt)}</div><div className="text-xs text-muted-foreground">{row.feature === "settings.test" ? t("decisionHistory.setupTest") : row.feature}</div></td>
-        <td className="px-3 py-3">{row.actorType === "system" ? t("decisionHistory.paperclipServices") : row.userName ?? (row.responsibleUserId === "local-board" ? t("common.board") : t("decisionHistory.formerUser"))}</td>
-        <td className="px-3 py-3">{row.issueId ? <Link className="underline underline-offset-4" to={`/issues/${row.issueIdentifier ?? row.issueId}`}>{row.issueIdentifier ?? t("decisionHistory.viewTask")}</Link> : "—"}</td>
-        {fastResponse && <td className="px-3 py-3">{row.connectionName ?? (row.connectionId ? t("decisionHistory.removedConnection") : "—")}</td>}
+        <td className="px-3 py-3"><div className="whitespace-nowrap">{formatDateTime(row.startedAt)}</div><div className="text-xs text-muted-foreground">{row.feature === "settings.test" ? "Setup test" : row.feature}</div></td>
+        <td className="px-3 py-3">{row.actorType === "system" ? "Paperclip services" : row.userName ?? (row.responsibleUserId === "local-board" ? "Board" : "Former user")}</td>
+        <td className="px-3 py-3">{row.issueId ? <Link className="underline underline-offset-4" to={`/issues/${row.issueIdentifier ?? row.issueId}`}>{row.issueIdentifier ?? "View task"}</Link> : "—"}</td>
+        {fastResponse && <td className={`px-3 py-3 ${ANALYTICS_MASK_CLASS}`}>{row.connectionName ?? (row.connectionId ? "Removed connection" : "—")}</td>}
         <td className="px-3 py-3 font-mono text-xs">{row.model}</td>
         <td className="px-3 py-3"><div>{row.status === "succeeded" ? t("common.succeeded") : row.status === "running" ? t("common.running") : row.status === "unknown" ? t("decisionHistory.unresolved") : row.status === "skipped" ? t("decisionHistory.skipped") : row.status === "pending" ? t("common.pending") : t("common.failed")}</div>{row.publicationStatus && <div className="text-xs text-muted-foreground">{row.publicationStatus}</div>}{row.errorCode && <div className="text-xs text-muted-foreground">{row.errorCode.replaceAll("_", " ")}</div>}</td>
         <td className="px-3 py-3 font-mono">{row.durationMs === null ? "—" : `${(row.durationMs / 1000).toFixed(1)}s`}</td>

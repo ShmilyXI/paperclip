@@ -1,7 +1,6 @@
 import { t } from "@/i18n";
-import { AgentLoginTarget } from "./AgentLoginTarget";
 import { environmentSupportsLoginPty } from "@paperclipai/shared";
-import { useAdapterLoginCancellation } from "./useAdapterLoginCancellation";
+import { matchesAdapterLoginTarget, useAdapterLoginCancellation } from "./useAdapterLoginCancellation";
 import { ACCOUNT_BOUND_MODEL_DISCOVERY_QUERY_OPTIONS, isAccountBoundAcpxAgent } from "@/lib/native-model-catalog";
 import { useConnectionModels } from "./ai-connections/useConnectionModels";
 import { agentHarnessType, agentRunner, paperclipRunnerProfileForHarness, normalizeClaudeRunnerOptions, type AgentRunnerChoice } from "@paperclipai/shared";
@@ -115,6 +114,7 @@ import {
   type CreateConfigValues,
 } from "@paperclipai/adapter-utils";
 import { Badge } from "@/components/ui/badge";
+import { ANALYTICS_NO_CAPTURE_CLASS } from "@/lib/analytics/privacy";
 
 /* ---- Props ---- */
 
@@ -544,8 +544,11 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
   type RecordOverlayGroup = "identity" | "adapterConfig" | "heartbeat" | "debug" | "runtime";
 
+  const displayedOriginals = new Map<string, unknown>();
+
   /** Read effective value: overlay if dirty, else original */
   function eff<T>(group: RecordOverlayGroup, field: string, original: T): T {
+    displayedOriginals.set(`${group}.${field}`, original);
     const o = overlay[group];
     if (field in o) return o[field] as T;
     return original;
@@ -553,10 +556,16 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
   /** Mark field dirty in overlay */
   function mark(group: RecordOverlayGroup, field: string, value: unknown) {
-    setOverlay((prev) => ({
-      ...prev,
-      [group]: { ...prev[group], [field]: value },
-    }));
+    const key = `${group}.${field}`;
+    setOverlay((prev) => {
+      const next = { ...prev[group] };
+      if (displayedOriginals.has(key) && overlayValuesEqual(value, displayedOriginals.get(key))) {
+        delete next[field];
+      } else {
+        next[field] = value;
+      }
+      return { ...prev, [group]: next };
+    });
   }
 
   function flushEnvironmentDraft() {
@@ -631,6 +640,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const runtimeConfig = !isCreate ? ((props.agent.runtimeConfig ?? {}) as Record<string, unknown>) : {};
   const heartbeat = !isCreate ? ((runtimeConfig.heartbeat ?? {}) as Record<string, unknown>) : {};
   const debug = !isCreate ? ((runtimeConfig.debug ?? {}) as Record<string, unknown>) : {};
+  displayedOriginals.set("runtime.runtimeConfig", { ...runtimeConfig, aiConnection: runtimeConfig.aiConnection });
 
   const adapterType = isCreate
     ? props.values.adapterType
@@ -1335,7 +1345,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const showAdapterLogin =
     (isCreate || !((overlay.runtime.runtimeConfig as Record<string, unknown> | undefined)?.aiConnection ?? runtimeConfig.aiConnection)) &&
     adapterSupportsSandboxLogin &&
-    (effectiveLoginEnvironment?.driver === "sandbox" || effectiveLoginEnvironment?.driver === "plugin") &&
+    (effectiveLoginEnvironment?.driver === "sandbox" || (effectiveLoginEnvironment?.driver === "plugin" && !isCreate)) &&
     Boolean(effectiveLoginEnvironmentId) &&
     Boolean(selectedCompanyId) &&
     Boolean(authMissingCheck) &&
@@ -1513,7 +1523,15 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     };
   }, [isCreate, overlay.heartbeat, runtimeConfig, val]);
   const effectiveHeartbeat = asObject(effectiveRuntimeConfig.heartbeat);
-  const maxTurnContinuation = asObject(effectiveHeartbeat.maxTurnContinuation);
+  const savedContinuation = asObject(heartbeat.maxTurnContinuation);
+  const continuationDefaults = {
+    ...savedContinuation,
+    enabled: asBoolean(savedContinuation.enabled, true),
+    maxAttempts: clampInteger(asFiniteNumber(savedContinuation.maxAttempts, MAX_TURN_CONTINUATION_DEFAULT_MAX_ATTEMPTS), 0, MAX_TURN_CONTINUATION_MAX_ATTEMPTS_CAP),
+    delayMs: clampInteger(asFiniteNumber(savedContinuation.delayMs, MAX_TURN_CONTINUATION_DEFAULT_DELAY_SEC * 1000) / 1000, 0, MAX_TURN_CONTINUATION_MAX_DELAY_SEC) * 1000,
+  };
+  const maxTurnContinuation = isCreate ? asObject(effectiveHeartbeat.maxTurnContinuation)
+    : eff("heartbeat", "maxTurnContinuation", continuationDefaults);
   const maxTurnContinuationEnabled = asBoolean(maxTurnContinuation.enabled, true);
   const maxTurnContinuationMaxAttempts = clampInteger(
     asFiniteNumber(maxTurnContinuation.maxAttempts, MAX_TURN_CONTINUATION_DEFAULT_MAX_ATTEMPTS),
@@ -1613,7 +1631,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     <div className="space-y-6">
       {showRunnerUpgrade && !runnerUpgraded ? (
         <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
-          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="agent-runner-upgrade flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div className="min-w-0 flex-1 space-y-1">
               <p className="text-sm font-medium">{t("agentConfig.upgradeToPaperclipRunner")}</p>
               <p className="text-sm text-muted-foreground">
@@ -2613,11 +2631,8 @@ export function AdapterLoginPanel(props: AdapterLoginPanelProps) {
   const getCapabilities = useAdapterCapabilities();
   const Panel = getCapabilities(props.adapterType).login?.panelMode === "submitted_browser_code"
     ? SubmittedBrowserCodeLoginPanel : DisplayedCodeLoginPanel;
-  return props.requiresAgent
-    ? <AgentLoginTarget companyId={props.companyId} environmentId={props.environmentId} agentId={props.agentId}>
-        {agentId => <Panel key={agentId} {...props} agentId={agentId} />}
-      </AgentLoginTarget>
-    : <Panel {...props} agentId={undefined} />;
+  const agentId = props.requiresAgent ? props.agentId : undefined;
+  return <Panel key={agentId} {...props} agentId={agentId} />;
 }
 
 class AdapterLoginConflictError extends Error {
@@ -2628,6 +2643,7 @@ class AdapterLoginConflictError extends Error {
 
 function DisplayedCodeLoginPanel({
   active: loginActive = true,
+  requiresAgent,
   companyId,
   adapterType,
   environmentId,
@@ -2642,6 +2658,7 @@ function DisplayedCodeLoginPanel({
   onRetryReady,
 }: AdapterLoginPanelProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const automaticComputer = Boolean(requiresAgent && !agentId && aiConnection);
   const cancellation = useAdapterLoginCancellation(loginActive, companyId, adapterType, false, sessionId, { environmentId, aiConnection });
   const [retrying, setRetrying] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
@@ -2709,7 +2726,11 @@ function DisplayedCodeLoginPanel({
       try {
         const active = await cancellation.resume(() => agentsApi.getActiveAdapterAuthLoginSession(companyId, adapterType, { signal }));
         if (!active) return null;
-        if (active.agentId !== agentId || (aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new AdapterLoginConflictError(active.sessionId);
+        const wrongComputer = !automaticComputer && active.agentId !== agentId;
+        const wrongConnection = aiConnection
+          ? !matchesAdapterLoginTarget(active, { environmentId, aiConnection })
+          : Boolean(active.aiConnection);
+        if (wrongComputer || wrongConnection) throw new AdapterLoginConflictError(active.sessionId);
         return active;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
@@ -2964,6 +2985,7 @@ function DisplayedCodeLoginPanel({
       <ProviderSubscriptionCard
         loading={retryLogin.isPending || (!prompt && !failure)}
         failure={failure}
+        failureMessage={automaticComputer ? startError ?? undefined : undefined}
         onRetry={!onRetryReady && retryReady ? retryAction : undefined}
         providerName={connectSourceName(adapterType)}
         authorizationUrl={prompt?.url}
@@ -3058,7 +3080,7 @@ function DisplayedCodeLoginPanel({
               <div className="text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
                 {t("agentConfig.n1Code")}
               </div>
-              <span className="font-mono text-xs text-foreground break-all">{prompt.code}</span>
+              <span className={cn("font-mono text-xs text-foreground break-all", ANALYTICS_NO_CAPTURE_CLASS)}>{prompt.code}</span>
             </div>
             <AdapterLoginCopyButton value={prompt.code} label={t("agentConfig.copyCode")} />
           </div>
@@ -3169,6 +3191,7 @@ const CLAUDE_LOGIN_TIMED_OUT_MESSAGE = t("agentConfig.theLoginTimedOut");
 // only the server `stored` state as success, and it never shows the OAuth token.
 function SubmittedBrowserCodeLoginPanel({
   active: loginActive = true,
+  requiresAgent,
   companyId,
   adapterType,
   environmentId,
@@ -3187,6 +3210,7 @@ function SubmittedBrowserCodeLoginPanel({
   onRetryReady,
 }: AdapterLoginPanelProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const automaticComputer = Boolean(requiresAgent && !agentId && aiConnection);
   const cancellation = useAdapterLoginCancellation(loginActive, companyId, adapterType, true, sessionId, { environmentId, aiConnection });
   const [retrying, setRetrying] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
@@ -3354,7 +3378,11 @@ function SubmittedBrowserCodeLoginPanel({
       try {
         const active = await cancellation.resume(() => agentsApi.getActiveClaudeSetupTokenLoginSession(companyId, { signal }));
         if (!active) return null;
-        if (active.agentId !== agentId || (aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new Error("Another sign-in attempt is active. Finish or cancel it in its original account setup before starting this one.");
+        const wrongComputer = !automaticComputer && active.agentId !== agentId;
+        const wrongConnection = aiConnection
+          ? !matchesAdapterLoginTarget(active, { environmentId, aiConnection })
+          : Boolean(active.aiConnection);
+        if (wrongComputer || wrongConnection) throw new Error("Another sign-in attempt is active. Finish or cancel it in its original account setup before starting this one.");
         return active;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
@@ -3759,6 +3787,7 @@ function SubmittedBrowserCodeLoginPanel({
       <ProviderSubscriptionCard
         loading={retryLogin.isPending || (!authorizationUrl && !failure)}
         failure={failure}
+        failureMessage={automaticComputer ? startError ?? undefined : undefined}
         onRetry={!onRetryReady && retryReady ? retryAction : undefined}
         providerName={connectSourceName(adapterType)}
         authorizationUrl={authorizationUrl ?? undefined}

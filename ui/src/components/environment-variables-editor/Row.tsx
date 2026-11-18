@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import type { CompanySecret, UserSecretDefinition } from "@paperclipai/shared";
 import { cn } from "@/lib/utils";
+import { ANALYTICS_NO_CAPTURE_CLASS } from "@/lib/analytics/privacy";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -301,8 +302,8 @@ export function EnvironmentVariableRow({
                 <>
                   <input
                     ref={valueInputRef}
-                    className={valueTextInputClass}
-                    placeholder={t("environmentVariablesEditorRow.valuePlaceholder")}
+                    className={cn(valueTextInputClass, ANALYTICS_NO_CAPTURE_CLASS)}
+                    placeholder="value"
                     value={row.textValue}
                     type={sensitive ? "password" : "text"}
                     spellCheck={false}

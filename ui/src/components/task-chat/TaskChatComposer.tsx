@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { createUuid } from "@/lib/uuid";
 import { useCurrentAccountGuard } from "@/hooks/useAccountBoundMutation";
 import { ComposerFileDropTarget } from "./ComposerFileDropTarget";
 import { AgentAvatar } from "../AgentAvatar";
@@ -320,9 +321,9 @@ function AssigneeIdentityAvatar({
 /** v7 per-mode placeholder copy; `{agent}` is the pending assignee's name. */
 function modePlaceholder(mode: IssueWorkMode, agentName: string, mobile: boolean): string {
   if (mobile) {
-    if (mode === "planning") return t("taskChatComposer.planWithAgentname", { agentName });
-    if (mode === "ask") return t("taskChatComposer.askAgentname", { agentName });
-    return t("taskChatComposer.messageAgentname", { agentName });
+    if (mode === "planning") return `Plan with ${agentName}…`;
+    if (mode === "ask") return `Ask ${agentName}…`;
+    return `Work with ${agentName}`;
   }
   switch (mode) {
     case "planning":
@@ -330,7 +331,7 @@ function modePlaceholder(mode: IssueWorkMode, agentName: string, mobile: boolean
     case "ask":
       return t("taskChatComposer.askAgentnameAQuestionRead", { agentName });
     default:
-      return t("taskChat.messageAgentnameDescribeWhatYou", { agentName });
+      return `Work with ${agentName}`;
   }
 }
 
@@ -722,7 +723,7 @@ export function TaskChatComposer({
   }
 
   async function uploadImage(file: File): Promise<string> {
-    const id = crypto.randomUUID();
+    const id = createUuid();
     setAttachments((prev) => [
       ...prev,
       {
@@ -1077,7 +1078,7 @@ export function TaskChatComposer({
         setBody(submittedBody);
         return;
       }
-      attemptId = crypto.randomUUID();
+      attemptId = createUuid();
       if (requestOwner === undefined) markRequestUnbound(attemptId);
       // IDs come only from this composer's upload receipts, never from parsing
       // arbitrary Markdown. A removed inline image no longer selects its receipt.

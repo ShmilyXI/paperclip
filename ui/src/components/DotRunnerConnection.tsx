@@ -59,12 +59,12 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
     ? buildDotSetupPrompt({ companyId, agentId, resourceUrl: state.data.resourceUrl, ...pairing })
     : "";
   return <div className="space-y-3">
-    <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.dotManagesItsModelAnd")}</p>
-    {state.data && !state.data.enabled && <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.enableOpenaiDotAndAssistant")}</p>}
-    {state.data?.resourceUrl && <p className="text-sm break-all">{t("dotRunnerConnection.privatePluginMcpUrl")} <code>{state.data.resourceUrl}</code></p>}
-    {b && <p className="text-sm">{t("common.connection")}: {b.status}. {t("dotRunnerConnection.eventSubscription")} {b.subscriptionVerified ? t("dotRunnerConnection.verified") : t("dotRunnerConnection.required")}.</p>}
-    {b?.assignment && <p className="text-sm">{t("dotRunnerConnection.assignment")} {b.assignment.status === "offered" ? t("dotRunnerConnection.waitingForDotToAccept") : t("dotRunnerConnection.acceptedByDot")}.</p>}
-    {b?.assignment?.attentionRequired && <p className="text-sm text-destructive" role="alert">{t("dotRunnerConnection.dotHasNotReportedUseful")}</p>}
+    <p className="text-sm text-muted-foreground">Dot manages its model and external tools. Paperclip supplies task coordination, people, assigned skills, and connected app tools. Dot can start a task directly from its conversation. Enable Read task attachments below to send assigned task file contents to OpenAI. Enable workspace files and commands for work in the assigned workspace. Provider usage and cost are unavailable; stopping a Paperclip run revokes access without confirming an external stop.</p>
+    {state.data && !state.data.enabled && <p className="text-sm text-muted-foreground">Enable OpenAI Dot in experimental settings.</p>}
+    {state.data?.resourceUrl && <p className="text-sm break-all">Private plugin MCP URL: <code>{state.data.resourceUrl}</code></p>}
+    {b && <p className="text-sm">Connection: {b.status}. Event subscription: {b.subscriptionVerified ? "verified" : "required"}.</p>}
+    {b?.assignment && <p className="text-sm">Assignment: {b.assignment.status === "offered" ? "waiting for Dot to accept" : "accepted by Dot"}.</p>}
+    {b?.assignment?.attentionRequired && <p className="text-sm text-destructive" role="alert">Dot has not reported useful activity for 15 minutes. Inspect the Dot before assigning replacement work; Paperclip cannot confirm its external stop.</p>}
     {pairing && setupPrompt && b?.status === "pairing" && <div className="space-y-2">
       <AgentSetupPrompt
         prompt={setupPrompt}

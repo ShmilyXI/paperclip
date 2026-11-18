@@ -34,6 +34,7 @@ import { LoadingState, RelativeTime, ToolsPageHeader } from "../shared";
 import { ProfileActionDialog, type ProfileActionDialogKind } from "./ProfileActionDialog";
 import { allowsLabel, STATUS_LABEL } from "./profile-summary";
 import { useProfilesData } from "./useProfilesData";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 type DialogKind = "edit" | "duplicate" | "archive" | "delete" | "restore" | null;
 
@@ -423,8 +424,8 @@ function NewToolsReviewDialog({
                   {tool.description ? (
                     <p className="mt-1 text-sm text-muted-foreground">{tool.description}</p>
                   ) : null}
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {`${tool.applicationName ?? tool.connectionName ?? t("profileDetail.appTool")} · ${t("profileDetail.addedAt", { date: formatShortDate(tool.addedAt) })}`}
+                  <p className={cn("mt-1 text-xs text-muted-foreground", ANALYTICS_MASK_CLASS)}>
+                    {tool.applicationName ?? tool.connectionName ?? "App tool"} · added {formatShortDate(tool.addedAt)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 sm:justify-end">

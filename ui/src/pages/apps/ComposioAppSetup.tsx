@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/context/ToastContext";
 import { describeError } from "@/api/errors";
+import { cn } from "@/lib/utils";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 /** Provider authorization is performed by the backend; no task or agent run. */
 export function ComposioAppSetup({ name, toolkit, connections, onClose, onBack, onConnectNew }: {
@@ -50,7 +52,7 @@ export function ComposioAppSetup({ name, toolkit, connections, onClose, onBack, 
       <Label htmlFor="composio-app-account">{t("composioAppSetup.composioAccount")}</Label>
       <select id="composio-app-account" value={connectionId} disabled={busy} onChange={event => {
         setConnectionId(event.target.value); setResult(null); setError(null);
-      }} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      }} className={cn("h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", ANALYTICS_MASK_CLASS)}>
         {connections.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name}</option>)}
         <option value="__new__">{t("composioAppSetup.connectANewAccount")}</option>
       </select>

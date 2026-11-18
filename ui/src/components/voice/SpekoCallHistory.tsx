@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { voiceSessionsApi } from "@/api/voiceSessions";
 import { voicePhoneApi } from "@/api/voicePhone";
 import { voiceHistoryApi } from "@/api/voiceHistory";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
+import { cn } from "@/lib/utils";
 
 function charge(amount: string | null) {
   if (amount === null) return "Not yet reported";
@@ -16,10 +18,10 @@ function charge(amount: string | null) {
 }
 export function SpekoCallReport({ report }: { report: VoiceCallReport }) {
   return <div className="space-y-3">
-    <dl className="flex flex-wrap gap-4 text-sm"><div><dt className="text-muted-foreground">{t("spekoCallHistory.spekoCharge")}</dt><dd>{charge(report.costMicroUsd)}</dd></div>{report.durationSeconds !== null && <div><dt className="text-muted-foreground">{t("common.duration")}</dt><dd>{t("spekoCallHistory.durationSeconds", { seconds: report.durationSeconds })}</dd></div>}</dl>
-    <p className="text-xs text-muted-foreground">{t("spekoCallHistory.agentCostsAreSeparateRecordings")}</p>
-    {report.transcript.length ? <ol aria-label={t("spekoCallHistory.callTranscript")} className="space-y-3">{report.transcript.map(turn => <li key={turn.id} className="min-w-0"><p className="text-xs font-medium text-muted-foreground">{turn.speaker === "caller" ? t("spekoCallHistory.you") : t("common.agent")}{turn.interrupted ? t("spekoCallHistory.interrupted") : ""}</p><p className="whitespace-pre-wrap break-words text-sm">{turn.text}</p></li>)}</ol>
-      : <p className="text-sm text-muted-foreground">{report.status === "unavailable" ? t("spekoCallHistory.theTranscriptIsUnavailablePaperclip") : report.status === "pending" ? t("spekoCallHistory.theTranscriptWillAppearAfter") : t("spekoCallHistory.spekoDidNotProvideA")}</p>}
+    <dl className="flex flex-wrap gap-4 text-sm"><div><dt className="text-muted-foreground">Speko charge</dt><dd>{charge(report.costMicroUsd)}</dd></div>{report.durationSeconds !== null && <div><dt className="text-muted-foreground">Duration</dt><dd>{report.durationSeconds} seconds</dd></div>}</dl>
+    <p className="text-xs text-muted-foreground">Agent costs are separate. Recordings remain in Speko.</p>
+    {report.transcript.length ? <ol aria-label="Call transcript" className={cn("space-y-3", ANALYTICS_MASK_CLASS)}>{report.transcript.map(turn => <li key={turn.id} className="min-w-0"><p className="text-xs font-medium text-muted-foreground">{turn.speaker === "caller" ? "You" : "Agent"}{turn.interrupted ? " · interrupted" : ""}</p><p className="whitespace-pre-wrap break-words text-sm">{turn.text}</p></li>)}</ol>
+      : <p className="text-sm text-muted-foreground">{report.status === "unavailable" ? "The transcript is unavailable. Paperclip will retry while Speko finishes the report." : report.status === "pending" ? "The transcript will appear after Speko finishes the call report." : "Speko did not provide a transcript for this call."}</p>}
   </div>;
 }
 const modeNames = { browser: t("spekoCallHistory.browserVoice"), inbound_phone: t("spekoCallHistory.incomingCall"), outbound_phone: t("spekoCallHistory.outgoingCall") } as const;

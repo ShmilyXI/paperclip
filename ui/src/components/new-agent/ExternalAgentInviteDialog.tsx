@@ -37,13 +37,13 @@ export function ExternalAgentInviteDialog({ companyId, onClose, onBack, initialP
   const [genericPrompt, setGenericPrompt] = useState("");
   const attemptedAutomaticPairing = useRef(false);
   const experimental = useQuery({ queryKey: queryKeys.instance.experimentalSettings, queryFn: instanceSettingsApi.getExperimental });
-  const dotDisabledReason = experimental.isPending ? t("externalAgentInviteDialog.loadingAvailableAgents")
-    : experimental.error ? t("externalAgentInviteDialog.unableToLoadExperimentalSettingsTryAgainAfterRefreshing")
-    : !experimental.data?.enableOpenAiDot || !experimental.data.enablePublicMcp
-      ? t("externalAgentInviteDialog.enableOpenAiDotAndAssistantConnectionsInExperimentalSettings") : undefined;
-  const grokDisabledReason = experimental.isPending ? t("externalAgentInviteDialog.loadingAvailableAgents") : experimental.error ? t("externalAgentInviteDialog.unableToLoadExperimentalSettings")
-    : !experimental.data?.enableGrokBot || !experimental.data.enablePublicMcp || !experimental.data.enableNativeRunner
-      ? t("externalAgentInviteDialog.enableGrokBotAssistantConnectionsAndPaperclipRunnerInExperimentalSettings") : undefined;
+  const dotDisabledReason = experimental.isPending ? "Loading available agents…"
+    : experimental.error ? "Unable to load experimental settings. Try again after refreshing."
+    : !experimental.data?.enableOpenAiDot
+      ? "Enable OpenAI Dot in experimental settings." : undefined;
+  const grokDisabledReason = experimental.isPending ? "Loading available agents…" : experimental.error ? "Unable to load experimental settings."
+    : !experimental.data?.enableGrokBot || !experimental.data.enableNativeRunner
+      ? "Enable Grok Bot and Paperclip Runner in experimental settings." : undefined;
   const key = ["dot-binding", companyId, invitation?.agent.id];
   const state = useQuery({ queryKey: key,
     queryFn: ({ signal }) => dotInvitationsApi.connection(companyId, invitation!.agent.id, signal),

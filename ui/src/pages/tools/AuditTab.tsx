@@ -26,6 +26,7 @@ import {
 import { agentsApi } from "@/api/agents";
 import { AgentSelect } from "@/components/AgentMultiSelect";
 import { ToolsPageHeader, LoadingState, RelativeTime } from "./shared";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 const PAGE_SIZE = 50;
 const ALL = "__all";
@@ -305,8 +306,8 @@ function ActivityRow({
                       const connectionName = detailString(connection, "name") ?? t("auditTab.unnamedConnection");
                       return connectionId ? (
                         <div key={connectionId} className="flex gap-2">
-                          <span className="shrink-0 text-muted-foreground">{t("auditTab.notInstalled")}</span>
-                          <Link to={`/apps/${connectionId}/permissions`} className="font-medium text-primary hover:underline">
+                          <span className="shrink-0 text-muted-foreground">Not installed</span>
+                          <Link to={`/apps/${connectionId}/permissions`} className={cn("font-medium text-primary hover:underline", ANALYTICS_MASK_CLASS)}>
                             {connectionName}
                           </Link>
                         </div>
@@ -316,8 +317,8 @@ function ActivityRow({
                 ) : null}
                 {argumentsText ? (
                   <div className="space-y-1">
-                    <span className="text-muted-foreground">{t("auditTab.parametersRedacted")}</span>
-                    <pre className="whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-xs text-foreground">
+                    <span className="text-muted-foreground">Parameters (redacted)</span>
+                    <pre className={cn("whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>
                       {argumentsText}
                     </pre>
                   </div>

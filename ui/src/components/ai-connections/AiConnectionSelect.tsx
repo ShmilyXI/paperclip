@@ -18,12 +18,14 @@ import { Button } from "@/components/ui/button";
 import { aiConnectionDisplayLabel, aiConnectionProblem, personalAiDefault } from "./model";
 import type { AiConnectionPickerProps } from "./AiConnectionPicker";
 import type { AiConnectionSummary } from "./model";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
+import { cn } from "@/lib/utils";
 
 function ConnectionLabel({ connection, label, wrap = false }: { connection: AiConnectionSummary; label?: string; wrap?: boolean }) {
   return (
     <span className="flex min-w-0 items-center gap-2">
       <AppLogo name={connection.name} brandKey={aiConnectionCatalogSlug(connection.provider, connection.routing)} size={20} compact />
-      <span className={wrap ? "min-w-0 break-words whitespace-normal" : "truncate"}>{label ?? aiConnectionDisplayLabel(connection)}</span>
+      <span className={cn(wrap ? "min-w-0 break-words whitespace-normal" : "truncate", ANALYTICS_MASK_CLASS)}>{label ?? aiConnectionDisplayLabel(connection)}</span>
     </span>
   );
 }
@@ -120,7 +122,7 @@ export function AiConnectionSelect({
         onValueChange={change}
         disabled={readOnly || loading || Boolean(error)}
       >
-        <SelectTrigger id={selectId} aria-label={t("common.connection")} title={selected ? aiConnectionDisplayLabel(selected) : undefined} className="w-full">
+        <SelectTrigger id={selectId} aria-label="Connection" title={selected ? aiConnectionDisplayLabel(selected) : undefined} className={cn("w-full", ANALYTICS_MASK_CLASS)}>
           <SelectValue
             placeholder={
               loading ? t("aiConnectionSelect.loadingConnections") : t("aiConnectionSelect.chooseAConnection")
@@ -133,7 +135,7 @@ export function AiConnectionSelect({
                 : value ? t("aiConnectionSelect.unavailableConnection") : undefined}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className={ANALYTICS_MASK_CLASS}>
           {incompatible && selected && (
             <SelectItem value={selected.id} disabled>
               <ConnectionLabel connection={selected} label={`${aiConnectionDisplayLabel(selected)} · Incompatible`} wrap />

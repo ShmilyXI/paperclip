@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { queryKeys } from "@/lib/queryKeys";
 import { Navigate, useSearchParams } from "@/lib/router";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
+import { cn } from "@/lib/utils";
 
 const providerNames: Record<ChatProvider, string> = {
   speko: "Speko",
@@ -100,12 +102,10 @@ export function ChatIdentityConfirm() {
       <main className="mx-auto max-w-lg space-y-5 px-6 py-12">
         <CheckCircle2 className="h-8 w-8" />
         <div>
-          <h1 className="text-xl font-bold">{t("chatIdentityConfirm.identityLinked")}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t("chatIdentityConfirm.futureMessagesUseYourPermissions", {
-              label: identity.externalLabel,
-              company: identity.companyName,
-            })}
+          <h1 className="text-xl font-bold">Identity linked</h1>
+          <p className={cn("mt-1 text-sm text-muted-foreground", ANALYTICS_MASK_CLASS)}>
+            Future messages from {identity.externalLabel} use your current
+            Paperclip permissions in {identity.companyName}.
           </p>
         </div>
         {identity.provider === "slack" && <Button asChild><a href="https://app.slack.com/" target="_blank" rel="noopener noreferrer">{t("chatIdentityConfirm.returnToSlack")}</a></Button>}
@@ -118,7 +118,7 @@ export function ChatIdentityConfirm() {
         <p className="text-sm text-muted-foreground">{identity.companyName}</p>
         <h1 className="mt-1 text-xl font-bold">{t("chatIdentityConfirm.linkYourExternalIdentity")}</h1>
       </div>
-      <dl className="divide-y divide-border border-y border-border">
+      <dl className={cn("divide-y divide-border border-y border-border", ANALYTICS_MASK_CLASS)}>
         <div className="flex items-center justify-between gap-4 py-3">
           <dt className="text-sm text-muted-foreground">{t("chatIdentityConfirm.provider")}</dt>
           <dd className="text-sm font-medium">
@@ -126,8 +126,8 @@ export function ChatIdentityConfirm() {
           </dd>
         </div>
         <div className="flex items-center justify-between gap-4 py-3">
-          <dt className="text-sm text-muted-foreground">{t("chatIdentityConfirm.externalIdentity")}</dt>
-          <dd className="text-right text-sm font-medium">
+          <dt className="text-sm text-muted-foreground">External identity</dt>
+          <dd className={cn("text-right text-sm font-medium", ANALYTICS_MASK_CLASS)}>
             {identity.externalLabel}
             {identity.externalDetail ? ` · ${identity.externalDetail}` : ""}
           </dd>

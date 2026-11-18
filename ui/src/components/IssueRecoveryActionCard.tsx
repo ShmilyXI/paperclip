@@ -52,6 +52,7 @@ import {
   readRecoveryRetryLineage,
   type RecoveryRetryLineage,
 } from "@/lib/recovery-lineage";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 export type RecoveryCardCardState = RecoveryDisplayState;
 export const deriveRecoveryCardState = deriveRecoveryDisplayState;
@@ -768,10 +769,10 @@ function readWakePolicySummary(action: IssueRecoveryAction): string | null {
   if (type === "bounded_owner_disposition_repair") {
     return t("issueRecoveryActionCard.paperclipIsRetryingTheOriginalOwner");
   }
-  if (type === "bounded_recovery_owner") return t("issueRecoveryActionCard.aRecoveryOwnerIsRepairing");
-  if (type === "board_escalation") return t("issueRecoveryActionCard.boardDecisionRequired");
-  if (type === "manual") return t("issueRecoveryActionCard.manualFollowUpNeeded");
-  if (type === "manual_repair_required") return t("issueRecoveryActionCard.repairNeededBeforeRetry");
+  if (type === "bounded_recovery_owner") return "An agent is choosing the next step";
+  if (type === "board_escalation") return "Waiting for you";
+  if (type === "manual") return "Manual follow-up needed";
+  if (type === "manual_repair_required") return "Needs a fix before Retry";
   if (type === "monitor") {
     const interval = readEvidenceString(policy.intervalLabel);
     return interval ? t("issueRecoveryActionCard.checkScheduledInterval", { interval }) : t("issueRecoveryActionCard.checkScheduled");
@@ -1164,7 +1165,7 @@ export function IssueRecoveryActionCard({
               </>
             ) : null}
           </div>
-          <p className="mt-1 text-sm leading-6">{headline}</p>
+          <p className={cn("mt-1 text-sm leading-6", ANALYTICS_MASK_CLASS)}>{headline}</p>
         </div>
       </header>
       {variant === "compact" ? null : (
@@ -1302,11 +1303,11 @@ export function IssueRecoveryActionCard({
         <MetadataRow label={t("recovery.evidence")}>
           {evidenceSummary ? (
             evidenceSummary.isCode ? (
-              <span className="break-words font-mono text-(length:--text-micro) text-foreground/80">
+              <span className={cn("break-words font-mono text-(length:--text-micro) text-foreground/80", ANALYTICS_MASK_CLASS)}>
                 {evidenceSummary.text}
               </span>
             ) : (
-              <span className="text-xs leading-5 text-foreground/80">{evidenceSummary.text}</span>
+              <span className={cn("text-xs leading-5 text-foreground/80", ANALYTICS_MASK_CLASS)}>{evidenceSummary.text}</span>
             )
           ) : (
             <MissingValue />
@@ -1377,7 +1378,7 @@ export function IssueRecoveryActionCard({
                       )}
                     >
                       <span className="font-medium leading-5">{option.label}</span>
-                      <span className="text-(length:--text-micro) leading-4 text-muted-foreground">{option.description}</span>
+                      <span className={cn("text-(length:--text-micro) leading-4 text-muted-foreground", ANALYTICS_MASK_CLASS)}>{option.description}</span>
                     </button>
                   ))}
                 </div>

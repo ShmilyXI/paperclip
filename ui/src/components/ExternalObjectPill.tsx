@@ -19,6 +19,7 @@ import {
   externalObjectTypeLabel,
 } from "../lib/external-objects";
 import { cn } from "../lib/utils";
+import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 
 export interface ExternalObjectPillData {
   providerKey: string | null;
@@ -154,7 +155,7 @@ export function ExternalObjectPill({
         sizeClassName="h-3 w-3"
         label={`${providerLabel}: ${statusLabel}`}
       />
-      <span className="max-w-(--sz-16rem) truncate font-medium">{valueLabel}</span>
+      <span className={cn("max-w-(--sz-16rem) truncate font-medium", ANALYTICS_MASK_CLASS)}>{valueLabel}</span>
     </>
   );
   const countSuffix = typeof sourceCount === "number" && sourceCount > 1 ? (
@@ -165,7 +166,7 @@ export function ExternalObjectPill({
       {showProviderIcon && ProviderIcon ? (
         <ProviderIcon aria-hidden="true" className="h-3 w-3 shrink-0" />
       ) : null}
-      <span className="inline-flex min-w-0 items-center gap-1">
+      <span className={cn("inline-flex min-w-0 items-center gap-1", ANALYTICS_MASK_CLASS)}>
         {labelText}
       </span>
       {countSuffix}
