@@ -9085,6 +9085,17 @@
   "attentionObligationEvidence": {
     "partOfThisRequest": "Part of this request"
   },
+  "attentionViews": {
+    "decisionViews": "Decision views",
+    "openUnassigned": "Open Unassigned",
+    "whyMe": "Why me?",
+    "anotherPerson": "another person",
+    "forName": "For @{{name}}",
+    "claiming": "Claiming…",
+    "receipts": "Receipts",
+    "reasonPrefix": "Reason: ",
+    "dismissReceipt": "Dismiss receipt"
+  },
   "connectionInstructions": {
     "agentInstructions": "Agent instructions",
     "agentsCanStillUseThis": "Agents can still use this connection’s tools, but won’t receive these instructions.",

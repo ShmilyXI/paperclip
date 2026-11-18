@@ -9085,6 +9085,17 @@
   "attentionObligationEvidence": {
     "partOfThisRequest": "此请求的一部分"
   },
+  "attentionViews": {
+    "decisionViews": "决策视图",
+    "openUnassigned": "打开未分配",
+    "whyMe": "为什么是我？",
+    "anotherPerson": "另一个人",
+    "forName": "给 @{{name}}",
+    "claiming": "正在认领…",
+    "receipts": "回执",
+    "reasonPrefix": "原因：",
+    "dismissReceipt": "忽略回执"
+  },
   "connectionInstructions": {
     "agentInstructions": "员工指令",
     "agentsCanStillUseThis": "员工仍可使用此连接的工具，但不会收到这些指令。",
