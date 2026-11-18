@@ -42,11 +42,11 @@ export function MyUserSecretsTab({ companyId }: { companyId: string }) {
     mutationFn: (secret: CompanySecret) => secretsApi.removeMyUserSecret(companyId, secret.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.secrets.myUserSecrets(companyId) });
-      pushToast({ title: "Your value was removed", tone: "info" });
+      pushToast({ title: t("myUserSecretsTab.yourValueWasRemoved"), tone: "info" });
     },
     onError: (err) =>
       pushToast({
-        title: "Couldn't remove your value",
+        title: t("myUserSecretsTab.couldntRemoveYourValue"),
         body: describeError(err).body,
         tone: "error",
       }),
@@ -61,13 +61,13 @@ export function MyUserSecretsTab({ companyId }: { companyId: string }) {
   );
 
   return (
-    <section aria-label="My secrets" className="flex flex-col gap-4">
+    <section aria-label={t("secrets.mySecrets")} className="flex flex-col gap-4">
       <p className="max-w-xl text-sm text-muted-foreground">
-        Values only you provide. Agents use them when they work for you.
+        {t("myUserSecretsTab.valuesOnlyYouProvide")}
         {missingCount > 0 ? (
           <span className="text-foreground">
             {" "}
-            {missingCount} still {missingCount === 1 ? "needs" : "need"} your value.
+            {t("myUserSecretsTab.missingStillNeedYourValue", { count: missingCount })}
           </span>
         ) : null}
       </p>
@@ -82,7 +82,7 @@ export function MyUserSecretsTab({ companyId }: { companyId: string }) {
       ) : entries.length === 0 && !mySecretsQuery.isPending && mySecretsView.kind !== "reconnecting" ? (
         <EmptyState
           icon={KeyRound}
-          message="Nothing is asked of you yet. An admin decides which secrets each member provides."
+          message={t("myUserSecretsTab.nothingIsAskedOfYouYet")}
         />
       ) : (
         <ul className="divide-y divide-border border-y border-border">
@@ -147,11 +147,11 @@ function MyUserSecretRow({
         ) : null}
         {disabledDefinition ? (
           <span className="text-xs text-muted-foreground">
-            Turned off by an admin. Agents won't ask for it.
+            {t("myUserSecretsTab.turnedOffByAnAdmin")}
           </span>
         ) : state === "inactive" ? (
           <span className="text-xs text-muted-foreground">
-            Your value is turned off. Replace it to use it again.
+            {t("myUserSecretsTab.yourValueIsTurnedOff")}
           </span>
         ) : null}
       </div>
@@ -161,12 +161,12 @@ function MyUserSecretRow({
           <span className="mr-2 flex items-center gap-1.5 text-sm text-muted-foreground">
             <Check className="size-3.5" aria-hidden />
             {replaced
-              ? `Replaced ${relativeTime(replaced)}`
-              : `Added ${relativeTime(secret.createdAt)}`}
+              ? t("myUserSecretsTab.replacedAt", { time: relativeTime(replaced) })
+              : t("myUserSecretsTab.addedAt", { time: relativeTime(secret.createdAt) })}
           </span>
           {!disabledDefinition ? (
             <Button variant="ghost" size="sm" onClick={onSet}>
-              Replace
+              {t("myUserSecretsTab.replace")}
             </Button>
           ) : null}
           <DropdownMenu>
@@ -175,7 +175,7 @@ function MyUserSecretRow({
                 variant="ghost"
                 size="icon-sm"
                 className="text-muted-foreground"
-                aria-label={`More actions for ${definition.name}`}
+                aria-label={t("secrets.moreActionsFor", { name: definition.name })}
                 disabled={clearing}
               >
                 <MoreHorizontal aria-hidden />
@@ -183,14 +183,14 @@ function MyUserSecretRow({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem variant="destructive" disabled={clearing} onSelect={onClear}>
-                Remove your value
+                {t("myUserSecretsTab.removeYourValue")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </span>
       ) : !disabledDefinition ? (
         <Button size="sm" onClick={onSet}>
-          Set value
+          {t("myUserSecretsTab.setValue")}
         </Button>
       ) : null}
     </li>

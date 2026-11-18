@@ -16466,7 +16466,19 @@
     "couldNotClearValue": "Could not clear value",
     "noUserSecretsAreDefined": "No user secrets are defined for this organization yet. An admin defines which credentials each member supplies.",
     "setValue": "Set value",
-    "clearMyValue": "Clear my value"
+    "clearMyValue": "Clear my value",
+    "yourValueWasRemoved": "Your value was removed",
+    "couldntRemoveYourValue": "Couldn't remove your value",
+    "valuesOnlyYouProvide": "Values only you provide. Agents use them when they work for you.",
+    "missingStillNeedYourValue_one": "{{count}} still needs your value.",
+    "missingStillNeedYourValue_other": "{{count}} still need your value.",
+    "nothingIsAskedOfYouYet": "Nothing is asked of you yet. An admin decides which secrets each member provides.",
+    "turnedOffByAnAdmin": "Turned off by an admin. Agents won't ask for it.",
+    "yourValueIsTurnedOff": "Your value is turned off. Replace it to use it again.",
+    "replacedAt": "Replaced {{time}}",
+    "addedAt": "Added {{time}}",
+    "replace": "Replace",
+    "removeYourValue": "Remove your value"
   },
   "commentThread": {
     "copyFailed": "Copy failed",

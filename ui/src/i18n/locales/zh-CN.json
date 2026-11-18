@@ -16466,7 +16466,19 @@
     "couldNotClearValue": "无法清除值",
     "noUserSecretsAreDefined": "此组织还没有定义成员密钥。由管理员决定每位成员需要提供哪些凭证。",
     "setValue": "设置值",
-    "clearMyValue": "清除我的值"
+    "clearMyValue": "清除我的值",
+    "yourValueWasRemoved": "你的值已移除",
+    "couldntRemoveYourValue": "无法移除你的值",
+    "valuesOnlyYouProvide": "只有你自己提供的值。员工为你工作时会使用它们。",
+    "missingStillNeedYourValue_one": "还有 {{count}} 个仍在等待你提供值。",
+    "missingStillNeedYourValue_other": "还有 {{count}} 个仍在等待你提供值。",
+    "nothingIsAskedOfYouYet": "目前没有要求你提供任何内容。由管理员决定每位成员需要提供哪些密钥。",
+    "turnedOffByAnAdmin": "已被管理员关闭。员工不会要求提供它。",
+    "yourValueIsTurnedOff": "你的值已关闭。请替换它以再次使用。",
+    "replacedAt": "已于 {{time}} 替换",
+    "addedAt": "已于 {{time}} 添加",
+    "replace": "替换",
+    "removeYourValue": "移除你的值"
   },
   "commentThread": {
     "copyFailed": "复制失败",
