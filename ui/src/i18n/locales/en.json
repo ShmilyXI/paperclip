@@ -3778,7 +3778,8 @@
     "apiSubscription": "{{api}} api · {{subscription}} subscription",
     "byModel": "By model",
     "noModelBreakdownForThisPeriod": "No model breakdown for this period.",
-    "tok": "tok"
+    "tok": "tok",
+    "costDateRange": "Cost date range"
   },
   "goals": {
     "selectAnOrganizationToView": "Select an organization to view goals.",

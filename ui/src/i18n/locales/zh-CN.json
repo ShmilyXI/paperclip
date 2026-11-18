@@ -3778,7 +3778,8 @@
     "apiSubscription": "{{api}} API · {{subscription}} 订阅",
     "byModel": "按模型",
     "noModelBreakdownForThisPeriod": "此期间没有按模型细分。",
-    "tok": "tok"
+    "tok": "tok",
+    "costDateRange": "成本日期范围"
   },
   "goals": {
     "selectAnOrganizationToView": "选择一个组织以查看目标。",
