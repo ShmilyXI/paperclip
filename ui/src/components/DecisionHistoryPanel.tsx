@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { useState, type ReactNode } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
@@ -58,33 +59,33 @@ export function DecisionHistoryPanel({
   const items = history.data?.pages.flatMap((page) => page.items) ?? [];
   const groups = new Map<string, typeof items>();
   for (const item of items) {
-    const label = groupBy === "task" ? item.issueIdentifier ?? item.issueTitle ?? "No task" : groupBy === "agent" ? item.agentName ?? "Other agents" : groupBy === "project" ? item.projectName ?? "No project" : "";
+    const label = groupBy === "task" ? item.issueIdentifier ?? item.issueTitle ?? t("decisionHistory.noTask") : groupBy === "agent" ? item.agentName ?? t("needsYou.otherAgents") : groupBy === "project" ? item.projectName ?? t("newIssue.noProject") : "";
     groups.set(label, [...(groups.get(label) ?? []), item]);
   }
   return <div className="space-y-5" data-decision-history>
     {header}
-    <ToolbarSearch query={search} onQueryChange={setSearch} label="Search decision history" placeholder="Search decisions or task IDs…" />
+    <ToolbarSearch query={search} onQueryChange={setSearch} label={t("decisionHistory.searchDecisionHistory")} placeholder={t("decisionHistory.searchDecisionsOrTaskIds")} />
     <div className="grid grid-cols-2 gap-2">
-      <NativeSelect aria-label="Whose decision history" value={scope} onChange={(event) => setScope(event.target.value as DecisionHistoryScope)} className="col-span-2">
+      <NativeSelect aria-label={t("decisionHistory.whoseDecisionHistory")} value={scope} onChange={(event) => setScope(event.target.value as DecisionHistoryScope)} className="col-span-2">
         {DECISION_HISTORY_SCOPE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
       </NativeSelect>
-      <NativeSelect aria-label="Filter decision outcomes" value={outcome} onChange={(event) => setOutcome(event.target.value)}>
-        <option value="">All outcomes</option>
+      <NativeSelect aria-label={t("decisionHistory.filterDecisionOutcomes")} value={outcome} onChange={(event) => setOutcome(event.target.value)}>
+        <option value="">{t("auditTab.allOutcomes")}</option>
         {DECISION_HISTORY_OUTCOME_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-        <option value={HANDLED_FOR_ME}>Handled for me</option>
+        <option value={HANDLED_FOR_ME}>{t("decisionHistory.handledForMe")}</option>
       </NativeSelect>
-      <NativeSelect aria-label="Sort decision history" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}><option value="newest">Newest first</option><option value="oldest">Oldest first</option></NativeSelect>
-      <NativeSelect aria-label="Filter decision history by agent" value={agentId} onChange={(event) => setAgentId(event.target.value)} className="col-span-2"><option value="">All agents</option>{agents.map((agent) => <option key={agent.id} value={agent.id}>{agent.name}</option>)}</NativeSelect>
-      <NativeSelect aria-label="Filter decision history by project" value={projectId} onChange={(event) => setProjectId(event.target.value)} className="col-span-2"><option value="">All projects</option>{(projects.data ?? []).map((project) => <option key={project.id} value={project.id}>{project.name}</option>)}</NativeSelect>
-      <NativeSelect aria-label="Group decision history" value={groupBy} onChange={(event) => setGroupBy(event.target.value as Group)} className="col-span-2"><option value="none">No grouping</option><option value="task">By task</option><option value="agent">By agent</option><option value="project">By project</option></NativeSelect>
+      <NativeSelect aria-label={t("decisionHistory.sortDecisionHistory")} value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}><option value="newest">{t("decisionHistory.newestFirst")}</option><option value="oldest">{t("decisionHistory.oldestFirst")}</option></NativeSelect>
+      <NativeSelect aria-label={t("decisionHistory.filterDecisionHistoryByAgent")} value={agentId} onChange={(event) => setAgentId(event.target.value)} className="col-span-2"><option value="">{t("agentCommentary.allAgents")}</option>{agents.map((agent) => <option key={agent.id} value={agent.id}>{agent.name}</option>)}</NativeSelect>
+      <NativeSelect aria-label={t("decisionHistory.filterDecisionHistoryByProject")} value={projectId} onChange={(event) => setProjectId(event.target.value)} className="col-span-2"><option value="">{t("cases.allProjects")}</option>{(projects.data ?? []).map((project) => <option key={project.id} value={project.id}>{project.name}</option>)}</NativeSelect>
+      <NativeSelect aria-label={t("decisionHistory.groupDecisionHistory")} value={groupBy} onChange={(event) => setGroupBy(event.target.value as Group)} className="col-span-2"><option value="none">{t("needsYou.noGrouping")}</option><option value="task">{t("needsYou.byTask")}</option><option value="agent">{t("costs.byAgent")}</option><option value="project">{t("costs.byProject")}</option></NativeSelect>
     </div>
-    {waiting ? <p role="status" className="text-sm text-muted-foreground">Loading decisions…</p> : null}
+    {waiting ? <p role="status" className="text-sm text-muted-foreground">{t("needsYou.loadingDecisions")}</p> : null}
     {historyView.kind === "error" ? <QueryErrorState error={historyView.error} onRetry={historyView.retry} /> : null}
     {!waiting && historyView.kind !== "error" && !items.length ? <div className="space-y-2 text-sm text-muted-foreground">
-      <p>{scope === "mine" && !search && !outcome && !agentId && !projectId ? "No decisions handled by you or for you yet." : "No decisions match these filters."}</p>
-      {scope === "mine" ? <Button variant="outline" size="sm" onClick={() => setScope("all")}>Show everyone's decisions</Button> : null}
+      <p>{scope === "mine" && !search && !outcome && !agentId && !projectId ? t("decisionHistory.noDecisionsHandledByYou") : t("decisionHistory.noDecisionsMatchTheseFilters")}</p>
+      {scope === "mine" ? <Button variant="outline" size="sm" onClick={() => setScope("all")}>{t("decisionHistory.showEveryonesDecisions")}</Button> : null}
     </div> : null}
     <div className="space-y-4">{[...groups].map(([label, entries]) => <section key={label} className="space-y-3">{label ? <h3 className="text-sm font-medium text-muted-foreground">{label}</h3> : null}{entries.map((item) => <div key={item.id} className="space-y-1"><Receipt item={item} onOpen={navigate} userLabelMap={userLabelMap} /><p className="px-1 text-xs text-muted-foreground"><time dateTime={item.resolvedAt}>{new Date(item.resolvedAt).toLocaleString()}</time></p></div>)}</section>)}</div>
-    {history.hasNextPage ? <Button variant="outline" disabled={history.isFetchingNextPage} onClick={() => void history.fetchNextPage()}>{history.isFetchingNextPage ? "Loading…" : "Load more decisions"}</Button> : null}
+    {history.hasNextPage ? <Button variant="outline" disabled={history.isFetchingNextPage} onClick={() => void history.fetchNextPage()}>{history.isFetchingNextPage ? t("common.loading2") : t("decisionHistory.loadMoreDecisions")}</Button> : null}
   </div>;
 }
