@@ -905,9 +905,9 @@ export function GitHubAccessEditor({
             </p>
           ) : (
             <>
-              <Label>Responsible member</Label>
+              <Label>{t("githubConfig.responsibleMember")}</Label>
               <GitHubSponsorSelect
-                label="Responsible member"
+                label={t("githubConfig.responsibleMember")}
                 companyId={companyId}
                 members={activeMembers}
                 access={boardAccess.data}
@@ -922,11 +922,7 @@ export function GitHubAccessEditor({
             </>
           )}
           <p className="text-xs text-muted-foreground">
-            The member accountable for automatically created Paperclip tasks.
-            GitHub authors remain recorded separately. This grants no access to
-            the member’s personal credentials.
-            Only company owners, company admins, and instance admins can select
-            another person as a sponsor or responsible member.
+            {t("githubConfig.responsibleMemberHelp")}
           </p>
         </div>
       </GitHubSettingsDisclosure>
@@ -1039,9 +1035,9 @@ export function GitHubAccessEditor({
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Sponsor</Label>
+                <Label>{t("githubConfig.sponsor")}</Label>
                 <GitHubSponsorSelect
-                  label="Sponsor"
+                  label={t("githubConfig.sponsor")}
                   companyId={companyId}
                   members={activeMembers}
                   access={boardAccess.data}

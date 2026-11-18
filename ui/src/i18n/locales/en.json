@@ -5693,6 +5693,7 @@
     "turnOnAutomaticRunsIn": "Turn on automatic runs in Settings first. Mentions remain available.",
     "automaticTaskResponsibility": "Automatic task responsibility",
     "responsibleMember": "Responsible member",
+    "responsibleMemberHelp": "The member accountable for automatically created Paperclip tasks. GitHub authors remain recorded separately. This grants no access to the member’s personal credentials. Only company owners, company admins, and instance admins can select another person as a sponsor or responsible member.",
     "selectAMember": "Select a member",
     "theMemberAccountableForAutomatically": "The member accountable for automatically created Paperclip tasks. GitHub authors remain recorded separately. This grants no access to the member’s personal credentials.",
     "couldNotLoadMembersOr": "Could not load members or linked accounts.",
