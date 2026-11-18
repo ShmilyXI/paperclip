@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { AutomationStartKind } from "@paperclipai/shared";
+import { t } from "@/i18n";
 import { CalendarClock, Check, Copy, Hand, Radar, Webhook, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,12 +44,12 @@ function CopyField({ label, value }: { label: string; value: string }) {
       <span className="text-xs text-muted-foreground">{label}</span>
       <div className="flex min-w-0 items-center gap-2">
         <Input aria-label={label} value={value} readOnly className="h-8 min-w-0 flex-1 font-mono text-xs" onFocus={(event) => event.currentTarget.select()} />
-        <Button type="button" variant="outline" size="sm" onClick={copy} aria-label={`Copy ${label.toLowerCase()}`}>
+        <Button type="button" variant="outline" size="sm" onClick={copy} aria-label={t("automationParts.copyAria", { label: label.toLowerCase() })}>
           {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-          {copied ? "Copied" : "Copy"}
+          {copied ? t("common.copied") : t("common.copy")}
         </Button>
       </div>
-      {failed ? <span role="alert" className="text-xs text-destructive">Couldn’t copy; select the text and copy it.</span> : null}
+      {failed ? <span role="alert" className="text-xs text-destructive">{t("automationParts.couldntCopySelect")}</span> : null}
     </div>
   );
 }
@@ -59,11 +60,11 @@ export function webhookSecuredWords(signingMode: string | null | undefined): str
     case "bearer":
     case null:
     case undefined:
-      return "Each call sends the secret as a bearer token: Authorization: Bearer <secret>.";
+      return t("automationParts.bearerTokenSecret");
     case "none":
-      return "Calls are not signed: the address itself is the secret.";
+      return t("automationParts.notSignedAddressIsSecret");
     default:
-      return "Calls are signed with the secret.";
+      return t("automationParts.signedWithSecret");
   }
 }
 
@@ -89,20 +90,20 @@ export function WebhookDetails({
   return (
     <div className={cn("flex min-w-0 flex-col gap-3 rounded-md border border-border bg-muted/30 p-3", className)} data-webhook-details="">
       <p className="text-sm text-foreground">
-        Give the other system this address. Each call (POST) starts one run.
+        {t("automationParts.giveTheOtherSystemAddress")}
       </p>
-      <CopyField label="Address to call" value={url} />
+      <CopyField label={t("automationParts.addressToCall")} value={url} />
       {secret ? (
         <>
-          <CopyField label="Secret" value={secret} />
+          <CopyField label={t("automationParts.secret")} value={secret} />
           <p className="text-xs text-muted-foreground">
-            Save the secret now: it is shown only this once. {webhookSecuredWords(signingMode)}
+            {t("automationParts.saveTheSecretNow")} {webhookSecuredWords(signingMode)}
           </p>
         </>
       ) : (
         <p className="text-xs text-muted-foreground">
-          {webhookSecuredWords(signingMode)} The secret was shown once, when it was set up.
-          {routineHref ? <> You can make a new one from <Link to={routineHref} className="underline underline-offset-4 hover:text-foreground">the automation’s page</Link>.</> : null}
+          {webhookSecuredWords(signingMode)} {t("automationParts.secretShownOnce")}
+          {routineHref ? <> {t("automationParts.makeNewOneFrom")}<Link to={routineHref} className="underline underline-offset-4 hover:text-foreground">{t("automationParts.theAutomationsPage")}</Link>.</> : null}
         </p>
       )}
     </div>

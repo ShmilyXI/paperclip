@@ -17868,6 +17868,20 @@
     "noUnsavedChanges": "No unsaved changes",
     "agentYamlConfiguration": "Agent YAML configuration"
   },
+  "automationParts": {
+    "copyAria": "Copy {{label}}",
+    "couldntCopySelect": "Couldn’t copy; select the text and copy it.",
+    "bearerTokenSecret": "Each call sends the secret as a bearer token: Authorization: Bearer <secret>.",
+    "notSignedAddressIsSecret": "Calls are not signed: the address itself is the secret.",
+    "signedWithSecret": "Calls are signed with the secret.",
+    "giveTheOtherSystemAddress": "Give the other system this address. Each call (POST) starts one run.",
+    "addressToCall": "Address to call",
+    "secret": "Secret",
+    "saveTheSecretNow": "Save the secret now: it is shown only this once.",
+    "secretShownOnce": "The secret was shown once, when it was set up.",
+    "makeNewOneFrom": "You can make a new one from ",
+    "theAutomationsPage": "the automation’s page"
+  },
   "automationProposalCard": {
     "defaultNotRight": "That automation isn't right yet.",
     "noResponsibility": "No responsibility: the task is not filed under one.",

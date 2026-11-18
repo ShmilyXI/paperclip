@@ -17868,6 +17868,20 @@
     "noUnsavedChanges": "没有未保存的更改",
     "agentYamlConfiguration": "员工 YAML 配置"
   },
+  "automationParts": {
+    "copyAria": "复制 {{label}}",
+    "couldntCopySelect": "无法复制；请选中文本后复制。",
+    "bearerTokenSecret": "每次调用都以承载令牌发送密钥：Authorization: Bearer <secret>。",
+    "notSignedAddressIsSecret": "调用未签名：地址本身就是密钥。",
+    "signedWithSecret": "调用使用密钥签名。",
+    "giveTheOtherSystemAddress": "把这个地址交给另一个系统。每次调用（POST）都会启动一次运行。",
+    "addressToCall": "要调用的地址",
+    "secret": "密钥",
+    "saveTheSecretNow": "立即保存密钥：它只显示这一次。",
+    "secretShownOnce": "密钥在设置时显示过一次。",
+    "makeNewOneFrom": "你可以从 ",
+    "theAutomationsPage": "自动化页面"
+  },
   "automationProposalCard": {
     "defaultNotRight": "这个自动化还不太对。",
     "noResponsibility": "没有职责：此任务未归档到任何职责下。",
