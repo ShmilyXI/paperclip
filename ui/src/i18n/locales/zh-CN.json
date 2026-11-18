@@ -17452,7 +17452,14 @@
   },
   "appsSidebar": {
     "waitingForYourOk": "等待你的确认",
+    "countWaitingForYourOk": "{{count}} 项等待你的确认",
     "developerCaption": "面向开发者的高级设置。大多数团队无需打开。"
+  },
+  "gitHubStarPrompt": {
+    "youCompletedTasks": "你已完成 {{count}} 个任务！",
+    "ifYouReEnjoyingPaperclip": "如果你喜欢 Paperclip，欢迎在 GitHub 上给我们点个星！",
+    "starOnGithub": "在 GitHub 上点星",
+    "notNow": "暂不"
   },
   "smokeLabTab": {
     "servicesStarted": "冒烟服务已启动",

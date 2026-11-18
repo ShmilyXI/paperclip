@@ -47,8 +47,8 @@ export function DesignSidebar({ onNewTask, recentTasks = [] }: { onNewTask: () =
             <SidebarNavItem className="design-sidebar-item" to={`${root}/activity`} label={t("common.audit")} icon={History} />
           </SidebarSection>
           {companyRecentTasks.length > 0 ? <div className="design-sidebar-recents">
-            <SidebarSection label="Recent Tasks">
-              <div onScroll={handleRecentScroll} className="design-sidebar-recent-list scrollbar-while-scrolling" role="region" aria-label="Recent tasks" tabIndex={0}>
+            <SidebarSection label={t("designSidebar.recentTasks")}>
+              <div onScroll={handleRecentScroll} className="design-sidebar-recent-list scrollbar-while-scrolling" role="region" aria-label={t("designSidebar.recentTasks2")} tabIndex={0}>
               {companyRecentTasks.map(issue => <RecentTaskNavItem key={issue.id} task={issue} className="design-sidebar-item" to={`${root}/issues/${recentTaskPathRef(issue)}`} label={issue.title} />)}
               </div>
             </SidebarSection>

@@ -17452,7 +17452,14 @@
   },
   "appsSidebar": {
     "waitingForYourOk": "waiting for your OK",
+    "countWaitingForYourOk": "{{count}} waiting for your OK",
     "developerCaption": "Advanced setup for developers. Most teams never open this."
+  },
+  "gitHubStarPrompt": {
+    "youCompletedTasks": "You completed {{count}} tasks!",
+    "ifYouReEnjoyingPaperclip": "If you're enjoying Paperclip, consider giving us a star on GitHub!",
+    "starOnGithub": "Star on GitHub",
+    "notNow": "Not now"
   },
   "smokeLabTab": {
     "servicesStarted": "Smoke services started",

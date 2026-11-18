@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { healthApi } from "@/api/health";
@@ -110,19 +111,19 @@ export function GitHubStarPrompt() {
           <div className="mb-2 flex size-14 items-center justify-center rounded-full border border-border bg-muted">
             <PaperclipMark decorative className="size-7" />
           </div>
-          <DialogTitle>You completed {STAR_PROMPT_COMPLETED_TASKS} tasks!</DialogTitle>
+          <DialogTitle>{t("gitHubStarPrompt.youCompletedTasks", { count: STAR_PROMPT_COMPLETED_TASKS })}</DialogTitle>
           <DialogDescription className="max-w-xs">
-            If you're enjoying Paperclip, consider giving us a star on GitHub!
+            {t("gitHubStarPrompt.ifYouReEnjoyingPaperclip")}
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2">
           <Button asChild className="w-full">
             <a href={PAPERCLIP_GITHUB_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
               <Star className="size-4 fill-current" aria-hidden />
-              Star on GitHub
+              {t("gitHubStarPrompt.starOnGithub")}
             </a>
           </Button>
-          <Button variant="ghost" className="w-full text-muted-foreground" onClick={() => setOpen(false)}>Not now</Button>
+          <Button variant="ghost" className="w-full text-muted-foreground" onClick={() => setOpen(false)}>{t("gitHubStarPrompt.notNow")}</Button>
         </div>
       </DialogContent>
     </Dialog>
