@@ -17261,5 +17261,19 @@
     "saveOrDiscardYourFileChanges": "请先保存或放弃你的文件更改。",
     "loadedFrom": "已从 {{root}} 加载 {{entry}}",
     "loadProfile": "加载配置文件"
+  },
+  "responsibilityDetail": {
+    "couldntSaveTheChange": "无法保存更改。",
+    "removedLabelFromThisResponsibility": "已从此职责中移除「{{label}}」。它仍然存在，并保留在它所属的其他职责下。",
+    "couldntRemoveItFromThisResponsibility": "无法将其从此职责中移除。",
+    "couldntPutItBack": "无法将其放回。",
+    "deleteTitleQuestion": "删除 {{title}}？",
+    "deleteDescription": "这将删除该职责、其衡量标准和数字。归入其下的项目、任务和例行任务会保留。如果只想停止拥有它但保留其历史，请改为放手。",
+    "couldntDeleteIt": "无法删除。",
+    "deleteResponsibility": "删除职责",
+    "thisResponsibilityIsNotAvailable": "该职责不可用",
+    "itMayHaveBeenDeleted": "它可能已被删除，或属于其他人。",
+    "backToTheDashboard": "返回仪表盘",
+    "thisResponsibilityBelongsToAnotherOrganization": "该职责属于另一个组织"
   }
 }

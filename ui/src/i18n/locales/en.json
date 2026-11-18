@@ -17261,5 +17261,19 @@
     "saveOrDiscardYourFileChanges": "Save or discard your file changes first.",
     "loadedFrom": "Loaded {{entry}} from {{root}}",
     "loadProfile": "Load profile"
+  },
+  "responsibilityDetail": {
+    "couldntSaveTheChange": "Couldn’t save the change.",
+    "removedLabelFromThisResponsibility": "Removed “{{label}}” from this responsibility. It still exists, and stays under any other responsibility it is filed under.",
+    "couldntRemoveItFromThisResponsibility": "Couldn’t remove it from this responsibility.",
+    "couldntPutItBack": "Couldn’t put it back.",
+    "deleteTitleQuestion": "Delete {{title}}?",
+    "deleteDescription": "This removes the responsibility, its bar and its number. The projects, tasks and routines filed under it stay. To stop owning it but keep its history, let it go instead.",
+    "couldntDeleteIt": "Couldn’t delete it.",
+    "deleteResponsibility": "Delete responsibility",
+    "thisResponsibilityIsNotAvailable": "This responsibility is not available",
+    "itMayHaveBeenDeleted": "It may have been deleted, or it belongs to someone else.",
+    "backToTheDashboard": "Back to the dashboard",
+    "thisResponsibilityBelongsToAnotherOrganization": "This responsibility belongs to another organization"
   }
 }
