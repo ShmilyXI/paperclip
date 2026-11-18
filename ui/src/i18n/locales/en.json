@@ -13640,6 +13640,18 @@
     "updated": "Updated",
     "loadingPullRequest": "Loading pull request…"
   },
+  "looseWorkSection": {
+    "filedUnder": "Filed “{{label}}” under {{title}}.",
+    "couldntFile": "Couldn’t file “{{label}}”.",
+    "fileUnderAria": "File {{label}} under a responsibility",
+    "fileUnder": "File under…",
+    "showFewer": "Show fewer",
+    "showAll": "Show all {{count}}",
+    "showingMostRecentlyUpdated": "Showing the {{shown}} most recently updated of {{total}} open tasks.",
+    "outsideYourResponsibilities": "Outside your responsibilities",
+    "outsideDescription": "Work in the company that is not filed under a responsibility. Not everything needs to be: a daily standup or a one-off errand can live here.",
+    "openTasks": "Open tasks"
+  },
   "liveRunWidget": {
     "liveRuns": "Live Runs",
     "usesTheSharedChatStyle": "Uses the shared chat-style run surface from task activity.",

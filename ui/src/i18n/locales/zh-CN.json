@@ -13640,6 +13640,18 @@
     "updated": "更新于",
     "loadingPullRequest": "正在加载拉取请求…"
   },
+  "looseWorkSection": {
+    "filedUnder": "已将“{{label}}”归档到 {{title}} 下。",
+    "couldntFile": "无法归档“{{label}}”。",
+    "fileUnderAria": "将 {{label}} 归档到职责下",
+    "fileUnder": "归档到…",
+    "showFewer": "显示更少",
+    "showAll": "显示全部 {{count}} 项",
+    "showingMostRecentlyUpdated": "显示 {{total}} 个未完成任务中最近更新的 {{shown}} 个。",
+    "outsideYourResponsibilities": "职责之外",
+    "outsideDescription": "公司里未归档到任何职责的工作。并非所有工作都需要归档：每日站会或一次性事务可以放在这里。",
+    "openTasks": "未完成任务"
+  },
   "liveRunWidget": {
     "liveRuns": "实时运行",
     "usesTheSharedChatStyle": "复用任务活动中的聊天式运行界面。",

@@ -1,5 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type {
   Agent,
   LinkResponsibility,
@@ -58,10 +59,10 @@ function FileUnderMenu({
   const file = useMutation({
     mutationFn: (responsibility: ResponsibilityWithRollup) => responsibilitiesApi.link(responsibility.id, target.body),
     onSuccess: (_result, responsibility) => {
-      onFiled(`Filed “${target.label}” under ${responsibility.title}.`);
+      onFiled(t("looseWorkSection.filedUnder", { label: target.label, title: responsibility.title }));
       void queryClient.invalidateQueries({ queryKey: queryKeys.responsibilities.all });
     },
-    onError: (error) => onFiled(`Couldn’t file “${target.label}”. ${describeError(error).body}`),
+    onError: (error) => onFiled(`${t("looseWorkSection.couldntFile", { label: target.label })} ${describeError(error).body}`),
   });
   return (
     <DropdownMenu>
@@ -71,15 +72,15 @@ function FileUnderMenu({
           variant="ghost"
           className="text-muted-foreground"
           disabled={file.isPending}
-          aria-label={`File ${target.label} under a responsibility`}
+          aria-label={t("looseWorkSection.fileUnderAria", { label: target.label })}
         >
-          File under…
+          {t("looseWorkSection.fileUnder")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-h-(--sz-50vh) overflow-y-auto">
         {groups.map((group) => (
           <DropdownMenuGroup key={group.area?.id ?? "__none__"}>
-            <DropdownMenuLabel>{group.area ? group.area.title : "No area"}</DropdownMenuLabel>
+            <DropdownMenuLabel>{group.area ? group.area.title : t("addResponsibilityDialog.noArea")}</DropdownMenuLabel>
             {group.items.map((responsibility) => (
               <DropdownMenuItem key={responsibility.id} onSelect={() => file.mutate(responsibility)}>
                 {responsibility.title}
@@ -117,7 +118,7 @@ function LooseList<T>({
       <ul className="flex flex-col">{shown.map(render)}</ul>
       {items.length > PREVIEW_COUNT ? (
         <Button size="xs" variant="ghost" className="w-fit text-muted-foreground" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)}>
-          {expanded ? "Show fewer" : `Show all ${items.length}`}
+          {expanded ? t("looseWorkSection.showFewer") : t("looseWorkSection.showAll", { count: items.length })}
         </Button>
       ) : null}
       {note && (expanded || items.length <= PREVIEW_COUNT) ? <p className="text-xs text-muted-foreground">{note}</p> : null}
@@ -155,24 +156,23 @@ export function LooseWorkSection({
       <FileUnderMenu target={target} responsibilities={responsibilities} areas={areas} onFiled={setNotice} />
     ) : null;
   const taskNote = loose.openTaskCount > loose.tasks.length
-    ? `Showing the ${loose.tasks.length} most recently updated of ${loose.openTaskCount} open tasks.`
+    ? t("looseWorkSection.showingMostRecentlyUpdated", { shown: loose.tasks.length, total: loose.openTaskCount })
     : null;
 
   return (
     <section aria-labelledby="loose-work-heading" className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <h2 id="loose-work-heading" className="text-base font-semibold text-foreground">
-          Outside your responsibilities
+          {t("looseWorkSection.outsideYourResponsibilities")}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Work in the company that is not filed under a responsibility. Not everything needs to be: a daily standup
-          or a one-off errand can live here.
+          {t("looseWorkSection.outsideDescription")}
         </p>
       </div>
       {notice ? <p role="status" className="text-sm text-muted-foreground">{notice}</p> : null}
       {loose.projectCount > 0 ? (
         <LooseList
-          title="Projects"
+          title={t("common.projects")}
           count={loose.projectCount}
           items={loose.projects}
           render={(project) => {
@@ -185,7 +185,7 @@ export function LooseWorkSection({
                     leading={<FolderOpen className="size-4 text-muted-foreground" aria-hidden="true" />}
                     title={project.name}
                     to={projectUrl(project)}
-                    meta={due ? <span className="text-xs tabular-nums text-muted-foreground">Due {due.label}</span> : null}
+                    meta={due ? <span className="text-xs tabular-nums text-muted-foreground">{t("responsibilities.dueLabel", { label: due.label })}</span> : null}
                     trailing={<StatusBadge status={project.status} />}
                   />
                 </div>
@@ -198,7 +198,7 @@ export function LooseWorkSection({
       ) : null}
       {loose.openTaskCount > 0 ? (
         <LooseList
-          title="Open tasks"
+          title={t("looseWorkSection.openTasks")}
           count={loose.openTaskCount}
           items={loose.tasks}
           note={taskNote}
@@ -221,7 +221,7 @@ export function LooseWorkSection({
       ) : null}
       {loose.routineCount > 0 ? (
         <LooseList
-          title="Routines"
+          title={t("common.routines")}
           count={loose.routineCount}
           items={loose.routines}
           render={(routine) => (
