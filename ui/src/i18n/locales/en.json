@@ -7916,7 +7916,15 @@
     "revokeToken": "Revoke token",
     "revoking": "Revoking…",
     "expired": "Expired",
-    "expires": "Expires"
+    "expires": "Expires",
+    "tokenRevealed": "Token revealed",
+    "tokenWasNotRevealed": "Token was not revealed",
+    "tokensWaitingToBeRevealed": "Tokens waiting to be revealed",
+    "waitingForYouToReveal": "Waiting for you to reveal",
+    "agentCreatedTheseTokensForYou": "An agent created these tokens for you. A value is generated when you reveal it and is shown only once.",
+    "revealTokenName": "Reveal token {{name}}",
+    "revealToken": "Reveal token",
+    "pageXOfYTokens": "Page {{page}} of {{total}} · {{count}} tokens"
   },
   "aiProviderSetup": {
     "chatgptSubscriptionOrApiKey": "ChatGPT subscription or API key",

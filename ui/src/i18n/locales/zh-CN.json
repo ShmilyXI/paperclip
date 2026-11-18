@@ -7916,7 +7916,15 @@
     "revokeToken": "撤销令牌",
     "revoking": "正在撤销…",
     "expired": "已过期",
-    "expires": "到期时间"
+    "expires": "到期时间",
+    "tokenRevealed": "令牌已显示",
+    "tokenWasNotRevealed": "令牌未显示",
+    "tokensWaitingToBeRevealed": "等待显示的令牌",
+    "waitingForYouToReveal": "等待你显示",
+    "agentCreatedTheseTokensForYou": "员工为你创建了这些令牌。显示时才会生成值，且仅显示一次。",
+    "revealTokenName": "显示令牌 {{name}}",
+    "revealToken": "显示令牌",
+    "pageXOfYTokens": "第 {{page}} / {{total}} 页 · {{count}} 个令牌"
   },
   "aiProviderSetup": {
     "chatgptSubscriptionOrApiKey": "ChatGPT 订阅或 API 密钥",

@@ -145,7 +145,7 @@ export function TokensPanel({
     },
     onError: (error) =>
       pushToast({
-        title: "Token was not issued",
+        title: t("tokensPanel.tokenWasNotIssued"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -158,8 +158,8 @@ export function TokensPanel({
       setCreated(token);
       setRevealed(true);
       pushToast({
-        title: "Token revealed",
-        body: "Copy it now — you won’t see the full value again after leaving this page.",
+        title: t("tokensPanel.tokenRevealed"),
+        body: t("tokensPanel.copyItNowYouWon"),
         tone: "success",
       });
       onTokenCreated?.(token);
@@ -167,7 +167,7 @@ export function TokensPanel({
     },
     onError: (error) =>
       pushToast({
-        title: "Token was not revealed",
+        title: t("tokensPanel.tokenWasNotRevealed"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -183,7 +183,7 @@ export function TokensPanel({
     },
     onError: (error) =>
       pushToast({
-        title: "Token was not revoked",
+        title: t("tokensPanel.tokenWasNotRevoked"),
         body: describeError(error).body,
         tone: "error",
       }),
@@ -195,7 +195,7 @@ export function TokensPanel({
       pushToast({ title: t("common.copied"), body: t("tokensPanel.accessToken"), tone: "success" });
     } catch (error) {
       pushToast({
-        title: "Copy failed",
+        title: t("tokensPanel.copyFailed"),
         body: describeError(error).body,
         tone: "error",
       });
@@ -268,11 +268,11 @@ export function TokensPanel({
       ) : null}
 
       {pendingTokens.length > 0 ? (
-        <section className="space-y-2 border-y border-border py-4" aria-label="Tokens waiting to be revealed">
+        <section className="space-y-2 border-y border-border py-4" aria-label={t("tokensPanel.tokensWaitingToBeRevealed")}>
           <div>
-            <div className="text-sm font-semibold text-foreground">Waiting for you to reveal</div>
+            <div className="text-sm font-semibold text-foreground">{t("tokensPanel.waitingForYouToReveal")}</div>
             <div className="text-xs text-muted-foreground">
-              An agent created these tokens for you. A value is generated when you reveal it and is shown only once.
+              {t("tokensPanel.agentCreatedTheseTokensForYou")}
             </div>
           </div>
           {pendingTokens.map((token) => (
@@ -287,9 +287,9 @@ export function TokensPanel({
                 size="sm"
                 disabled={revealMutation.isPending}
                 onClick={() => revealMutation.mutate(token.id)}
-                aria-label={`Reveal token ${token.name}`}
+                aria-label={t("tokensPanel.revealTokenName", { name: token.name })}
               >
-                Reveal token
+                {t("tokensPanel.revealToken")}
               </Button>
             </div>
           ))}
@@ -425,7 +425,7 @@ export function TokensPanel({
               {pageCount > 1 ? (
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs text-muted-foreground">
-                    Page {historyPage} of {pageCount} · {tokens.length} tokens
+                    {t("tokensPanel.pageXOfYTokens", { page: historyPage, total: pageCount, count: tokens.length })}
                   </p>
                   <div className="flex items-center gap-1">
                     <Button
