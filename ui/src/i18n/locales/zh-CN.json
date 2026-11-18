@@ -10263,7 +10263,11 @@
     "approveInstallationWithYourSlack": " 使用你的 Slack 账户批准安装。Paperclip 会将其关联到你已登录的 Paperclip 账户，并向你发送欢迎私信。",
     "preparingSlackInstallation": "正在准备 Slack 安装",
     "preparingYourSlackInstallation": "正在准备你的 Slack 安装…",
-    "accessToken": "访问令牌"
+    "accessToken": "访问令牌",
+    "isCreated": " 已创建。",
+    "retryAppConfiguration": "重试应用配置",
+    "retryConnecting": "重试连接",
+    "installInSlack": "在 Slack 中安装"
   },
   "newGatewayDialog": {
     "gatewayCreated": "网关已创建",

@@ -161,7 +161,7 @@ export function OwnSlackAppSetup({ endpoint, stage, disabled, saveDetails, onSav
     </>}
     {creating && <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" /> {t("ownSlackAppSetup.creatingYourSlackAppYou")}</p>}
     {created && <p className="text-sm">
-      <strong>{endpoint.setup?.slackApp?.appName ?? t("ownSlackAppSetup.yourSlackApp")}</strong> is created.
+      <strong>{endpoint.setup?.slackApp?.appName ?? t("ownSlackAppSetup.yourSlackApp")}</strong>{t("ownSlackAppSetup.isCreated")}
       {stage === "credentials" && t("ownSlackAppSetup.approveInstallationWithYourSlack")}
     </p>}
     {stage === "credentials" && registration?.status === "credentials_saved" && <div className="space-y-2">
@@ -175,14 +175,14 @@ export function OwnSlackAppSetup({ endpoint, stage, disabled, saveDetails, onSav
     </div></SlackSetupAdvanced>}
     <SetupWizardFooter onSaveExit={onSaveExit} disabled={busy}>
       {configurationPending ? <Button disabled={busy || disabled || !configurationToken.trim()} onClick={() => void run(create)}>
-        {busy && <Loader2 className="size-4 animate-spin" />}Retry app configuration
+        {busy && <Loader2 className="size-4 animate-spin" />}{t("ownSlackAppSetup.retryAppConfiguration")}
       </Button> : stage === "app" ? <Button disabled={busy || disabled || creating || (!created && (!configurationToken.trim() || uncertain && !checkedNoApp))}
         onClick={() => created ? onContinue() : void run(create)}>
         {busy && <Loader2 className="size-4 animate-spin" />}{created ? t("ownSlackAppSetup.continueToInstallation") : t("ownSlackAppSetup.createSlackApp")}
       </Button> : registration?.status === "credentials_saved" ? <Button disabled={busy} onClick={() => void run(async () => onSaved(await chatEndpointsApi.resumeSlackInstallation(endpoint.id)))}>
-        {busy && <Loader2 className="size-4 animate-spin" />}Retry connecting
+        {busy && <Loader2 className="size-4 animate-spin" />}{t("ownSlackAppSetup.retryConnecting")}
       </Button> : <Button disabled={busy || !created || disabled} onClick={() => void run(authorize)}>
-        {busy ? <Loader2 className="size-4 animate-spin" /> : <ExternalLink className="size-4" />}Install in Slack
+        {busy ? <Loader2 className="size-4 animate-spin" /> : <ExternalLink className="size-4" />}{t("ownSlackAppSetup.installInSlack")}
       </Button>}
     </SetupWizardFooter>
   </div>;

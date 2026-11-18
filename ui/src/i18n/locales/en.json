@@ -10263,7 +10263,11 @@
     "approveInstallationWithYourSlack": " Approve installation with your Slack account. Paperclip will link it to your signed-in Paperclip account and send you a welcome DM.",
     "preparingSlackInstallation": "Preparing Slack installation",
     "preparingYourSlackInstallation": "Preparing your Slack installation…",
-    "accessToken": "Access Token"
+    "accessToken": "Access Token",
+    "isCreated": " is created.",
+    "retryAppConfiguration": "Retry app configuration",
+    "retryConnecting": "Retry connecting",
+    "installInSlack": "Install in Slack"
   },
   "newGatewayDialog": {
     "gatewayCreated": "Gateway created",
