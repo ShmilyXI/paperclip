@@ -670,7 +670,7 @@ function RepairWorkspace({
       ) : (
         <Wrench className="h-3.5 w-3.5" aria-hidden />
       )}
-      Repair workspace — quarantine changes &amp; restore branch
+      {t("recovery.repairWorkspace")} — {t("issueRecoveryActionCard.quarantineChangesRestoreBranch")}
     </Button>
   );
   if (disabled) {
@@ -769,10 +769,10 @@ function readWakePolicySummary(action: IssueRecoveryAction): string | null {
   if (type === "bounded_owner_disposition_repair") {
     return t("issueRecoveryActionCard.paperclipIsRetryingTheOriginalOwner");
   }
-  if (type === "bounded_recovery_owner") return "An agent is choosing the next step";
-  if (type === "board_escalation") return "Waiting for you";
-  if (type === "manual") return "Manual follow-up needed";
-  if (type === "manual_repair_required") return "Needs a fix before Retry";
+  if (type === "bounded_recovery_owner") return t("issueRecoveryActionCard.anAgentIsChoosingTheNextStep");
+  if (type === "board_escalation") return t("issueRecoveryActionCard.waitingForYou");
+  if (type === "manual") return t("issueRecoveryActionCard.manualFollowUpNeeded");
+  if (type === "manual_repair_required") return t("issueRecoveryActionCard.needsAFixBeforeRetry");
   if (type === "monitor") {
     const interval = readEvidenceString(policy.intervalLabel);
     return interval ? t("issueRecoveryActionCard.checkScheduledInterval", { interval }) : t("issueRecoveryActionCard.checkScheduled");
@@ -1180,7 +1180,7 @@ export function IssueRecoveryActionCard({
                 <AgentLink
                   agentId={sourceOwnerAgentId}
                   agentMap={agentMap}
-                  fallback="unassigned"
+                  fallback={t("common.unassigned")}
                 />
                 <span className="text-muted-foreground">{t("recovery.keepsThisTask")}</span>
               </span>
@@ -1399,7 +1399,7 @@ export function IssueRecoveryActionCard({
               ) : (
                 <RefreshCw className="h-3.5 w-3.5" aria-hidden />
               )}
-              Reconcile forward &amp; continue
+              {t("issueRecoveryActionCard.reconcileForwardContinue")}
             </Button>
           ) : null}
           {showRepairAction && divergence ? (
@@ -1427,7 +1427,7 @@ export function IssueRecoveryActionCard({
                   ) : (
                     <GitBranchPlus className="h-3.5 w-3.5" aria-hidden />
                   )}
-                  Re-issue on isolated workspace
+                  {t("recovery.reIssueOnIsolatedWorkspace")}
                   {reissueRecommended ? (
                     <span
                       data-testid="recovery-reissue-recommended"
@@ -1537,30 +1537,30 @@ export function NativeControllerContainmentRecovery({ issue, canManage, onRecord
   if (!action || action.kind !== "active_run_watchdog" || action.ownerType !== "board"
     || action.cause !== "native_restart_recovery_blocked" || action.evidence?.reason !== "controller_process_space_unverified"
     || !["active", "escalated"].includes(action.status) || typeof digest !== "string") return null;
-  return <section aria-label="Original controller recovery">
-    <h3>Verify the original execution stopped</h3>
-    <p>Paperclip cannot compare process IDs across hosts or kernel sessions. Stop both the controller and provider on the original host before recording evidence. The saved lease must also expire and environment/workspace cleanup must finish. Recording containment does not retry the task.</p>
+  return <section aria-label={t("issueRecoveryActionCard.originalControllerRecovery")}>
+    <h3>{t("issueRecoveryActionCard.verifyTheOriginalExecutionStopped")}</h3>
+    <p>{t("issueRecoveryActionCard.paperclipCannotCompareProcessIds")}</p>
     {canManage ? <>
-      <Label><Checkbox checked={controllerStopped} onCheckedChange={value => setControllerStopped(value === true)} /> I verified the original controller stopped on its original host.</Label>
-      <Label><Checkbox checked={providerStopped} onCheckedChange={value => setProviderStopped(value === true)} /> I verified the original provider and its tools stopped on their original host.</Label>
-      <Label>Reviewed external action outcomes
+      <Label><Checkbox checked={controllerStopped} onCheckedChange={value => setControllerStopped(value === true)} /> {t("issueRecoveryActionCard.iVerifiedTheOriginalControllerStopped")}</Label>
+      <Label><Checkbox checked={providerStopped} onCheckedChange={value => setProviderStopped(value === true)} /> {t("issueRecoveryActionCard.iVerifiedTheOriginalProviderStopped")}</Label>
+      <Label>{t("issueRecoveryActionCard.reviewedExternalActionOutcomes")}
         <NativeSelect value={outcome} onChange={event => {
           const value = event.target.value;
           if (value === "completed" || value === "not_performed" || value === "mixed" || value === "") setOutcome(value);
         }}>
-          <option value="">Select only after reviewing the effects</option>
-          <option value="completed">All completed</option>
-          <option value="not_performed">None performed</option>
-          <option value="mixed">Some completed and some not performed</option>
+          <option value="">{t("issueRecoveryActionCard.selectOnlyAfterReviewingTheEffects")}</option>
+          <option value="completed">{t("issueRecoveryActionCard.allCompleted")}</option>
+          <option value="not_performed">{t("issueRecoveryActionCard.nonePerformed")}</option>
+          <option value="mixed">{t("issueRecoveryActionCard.someCompletedAndSomeNotPerformed")}</option>
         </NativeSelect>
       </Label>
-      <Label>Original-host containment evidence and actions that must not be repeated
+      <Label>{t("issueRecoveryActionCard.originalHostContainmentEvidence")}
         <Textarea maxLength={12000} value={evidence} onChange={event => setEvidence(event.target.value)} />
       </Label>
-      <p>If any action outcome is still unknown, keep this hold. After evidence and cleanup settle, use the task’s ordinary Retry action separately.</p>
+      <p>{t("issueRecoveryActionCard.ifAnyActionOutcomeIsStillUnknown")}</p>
       <Button disabled={submit.isPending || !controllerStopped || !providerStopped || !outcome || evidence.trim().length < 20}
-        onClick={() => submit.mutate()}>{submit.isPending ? "Recording…" : "Record containment"}</Button>
+        onClick={() => submit.mutate()}>{submit.isPending ? t("issueRecoveryActionCard.recording") : t("issueRecoveryActionCard.recordContainment")}</Button>
       {submit.error && <p role="alert">{describeError(submit.error).body}</p>}
-    </> : <p>A company owner, company administrator, or instance administrator must review this original-host execution.</p>}
+    </> : <p>{t("issueRecoveryActionCard.aCompanyOwnerMustReview")}</p>}
   </section>;
 }
