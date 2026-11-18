@@ -14497,7 +14497,8 @@
     "tryRefreshingAgain": " 请再次尝试刷新。",
     "refreshingApps": "正在刷新应用…",
     "checkedOfTotal": " {{checked}} / {{total}}",
-    "connectedAppsList": "已连接的 {{provider}} 应用"
+    "connectedAppsList": "已连接的 {{provider}} 应用",
+    "accountsCount": "{{count}} 个账号"
   },
   "stageSecretsPanel": {
     "secretsAreAvailableOnlyTo": "密钥只对步骤自动化可用。请选择一位员工来运行此步骤，然后添加它需要的密钥。",

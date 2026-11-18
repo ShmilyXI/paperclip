@@ -14497,7 +14497,8 @@
     "tryRefreshingAgain": " Try refreshing again.",
     "refreshingApps": "Refreshing apps…",
     "checkedOfTotal": " {{checked}} of {{total}}",
-    "connectedAppsList": "Connected {{provider}} apps"
+    "connectedAppsList": "Connected {{provider}} apps",
+    "accountsCount": "{{count}} accounts"
   },
   "stageSecretsPanel": {
     "secretsAreAvailableOnlyTo": "Secrets are available only to step automation. Pick an agent to run this step, then add the secrets it needs.",

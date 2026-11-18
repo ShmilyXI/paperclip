@@ -59,8 +59,8 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
 
   return <section aria-labelledby="connected-aggregator-apps-heading" className="space-y-3">
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <h2 id="connected-aggregator-apps-heading" className="text-sm font-semibold">Connected apps</h2>
-      <Button variant="outline" size="sm" aria-label={`Refresh ${providerName}`}
+      <h2 id="connected-aggregator-apps-heading" className="text-sm font-semibold">{t("connectedAggregatorApps.connectedApps")}</h2>
+      <Button variant="outline" size="sm" aria-label={t("connectedAggregatorApps.refreshProvidername", { providerName })}
         disabled={!settled || queryPending || syncing || Boolean(unavailable)}
         onClick={() => refresh.mutate(userId)}>
         <RefreshCw className={syncing ? "size-4 animate-spin" : "size-4"} aria-hidden="true" />
@@ -69,13 +69,13 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
     </div>
     {queryView.kind === "error" ? <QueryErrorState error={query.error} action={`load ${providerName} apps`} onRetry={queryView.retry} retrying={queryView.isFetching} /> : null}
     {failed || syncFailed ? <p role="alert" className="text-sm text-destructive">
-      Couldn’t refresh {providerName} apps.{apps.length ? " Last known apps are shown." : " Try refreshing again."}
+      {t("connectedAggregatorApps.couldNotRefreshApps", { provider: providerName })}{apps.length ? t("connectedAggregatorApps.lastKnownAppsShown") : t("connectedAggregatorApps.tryRefreshingAgain")}
     </p> : null}
     {syncing ? <p role="status" className="text-sm text-muted-foreground">
-      Refreshing apps…{data?.sync.total ? ` ${data.sync.checked} of ${data.sync.total}` : ""}
-    </p> : refresh.isSuccess && !syncFailed && !unavailable ? <p role="status" className="text-sm text-muted-foreground">Apps refreshed.</p> : null}
-    {(!settled && !failed) || queryPending ? <p role="status" className="text-sm text-muted-foreground">Loading apps…</p>
-      : apps.length ? <ul aria-label={`Connected ${providerName} apps`} tabIndex={0}
+      {t("connectedAggregatorApps.refreshingApps")}{data?.sync.total ? t("connectedAggregatorApps.checkedOfTotal", { checked: data.sync.checked, total: data.sync.total }) : ""}
+    </p> : refresh.isSuccess && !syncFailed && !unavailable ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.appsRefreshed")}</p> : null}
+    {(!settled && !failed) || queryPending ? <p role="status" className="text-sm text-muted-foreground">{t("connectedAggregatorApps.loadingApps")}</p>
+      : apps.length ? <ul aria-label={t("connectedAggregatorApps.connectedAppsList", { provider: providerName })} tabIndex={0}
         className="max-h-80 overflow-y-auto rounded-lg border border-border divide-y divide-border">
         {apps.map(snapshots => {
           const app = snapshots[0];
@@ -90,7 +90,7 @@ export function ConnectedAggregatorApps({ connection }: { connection: ToolConnec
             <AppLogo name={app.appName} brandKey={app.appSlug} logoUrl={logoUrl} />
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium" title={app.appName}>{app.appName}</p>
-              {accounts.length > 1 ? <p className="text-xs text-muted-foreground">{accounts.length} accounts</p>
+              {accounts.length > 1 ? <p className="text-xs text-muted-foreground">{t("connectedAggregatorApps.accountsCount", { count: accounts.length })}</p>
                 : accounts[0]?.alias ? <p className={`truncate text-xs text-muted-foreground ${ANALYTICS_MASK_CLASS}`}>{accounts[0].alias}</p> : null}
             </div>
             <span className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
