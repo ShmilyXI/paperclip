@@ -11307,7 +11307,9 @@
   "executorManagementSetup": {
     "enterAnHttpsConsoleUrl": "Enter an HTTPS console URL without credentials.",
     "executorConsole": "Executor console",
-    "consoleUrl": "Console URL"
+    "consoleUrl": "Console URL",
+    "chooseWhereToManageAccounts": "Choose where to manage accounts for",
+    "includeYourWorkspacePath": ". Include your workspace path."
   },
   "boardDialogs": {
     "newGoal": "New goal"

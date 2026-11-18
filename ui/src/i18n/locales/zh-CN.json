@@ -11307,7 +11307,9 @@
   "executorManagementSetup": {
     "enterAnHttpsConsoleUrl": "请输入不含凭证的 HTTPS 控制台 URL。",
     "executorConsole": "执行器控制台",
-    "consoleUrl": "控制台 URL"
+    "consoleUrl": "控制台 URL",
+    "chooseWhereToManageAccounts": "选择在哪里管理",
+    "includeYourWorkspacePath": "的账户。请包含你的工作区路径。"
   },
   "boardDialogs": {
     "newGoal": "新建目标"

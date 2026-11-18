@@ -26,11 +26,11 @@ export function ExecutorManagementSetup({ connection, onClose }: { connection: T
     queries.setQueryData(queryKeys.tools.aggregatorApps(connection.id, userId), result);
   }, onSuccess: async () => { await queries.invalidateQueries({ queryKey: queryKeys.tools.connections(connection.companyId) }); onClose(); } });
   return <Dialog open onOpenChange={open => { if (!open && !save.isPending) onClose(); }}><DialogContent className={ANALYTICS_MASK_CLASS}>
-    <DialogHeader><DialogTitle>Executor console</DialogTitle><DialogDescription>Choose where to manage accounts for <span className={ANALYTICS_MASK_CLASS}>“{connection.name}”</span>. Include your workspace path.</DialogDescription></DialogHeader>
+    <DialogHeader><DialogTitle>{t("executorManagementSetup.executorConsole")}</DialogTitle><DialogDescription>{t("executorManagementSetup.chooseWhereToManageAccounts")} <span className={ANALYTICS_MASK_CLASS}>“{connection.name}”</span>{t("executorManagementSetup.includeYourWorkspacePath")}</DialogDescription></DialogHeader>
     <form className="space-y-4" onSubmit={event => { event.preventDefault(); save.mutate(); }}>
-      <div className="space-y-2"><Label htmlFor="executor-console-url">Console URL</Label><Input id="executor-console-url" type="url" required value={url} onChange={event => setUrl(event.target.value)} /></div>
+      <div className="space-y-2"><Label htmlFor="executor-console-url">{t("executorManagementSetup.consoleUrl")}</Label><Input id="executor-console-url" type="url" required value={url} onChange={event => setUrl(event.target.value)} /></div>
       {save.error ? <p role="alert" className="text-sm text-destructive">{describeError(save.error).body}</p> : null}
-      <DialogFooter className="sm:justify-between"><Button type="button" variant="ghost" onClick={onClose} disabled={save.isPending}>Cancel</Button><Button type="submit" disabled={!settled || save.isPending || !url.trim()}>{save.isPending ? "Saving…" : "Save"}</Button></DialogFooter>
+      <DialogFooter className="sm:justify-between"><Button type="button" variant="ghost" onClick={onClose} disabled={save.isPending}>{t("common.cancel")}</Button><Button type="submit" disabled={!settled || save.isPending || !url.trim()}>{save.isPending ? t("common.saving2") : t("common.save")}</Button></DialogFooter>
     </form>
   </DialogContent></Dialog>;
 }
