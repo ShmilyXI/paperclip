@@ -7756,7 +7756,8 @@
     "grokBotConnection": "Grok Bot 连接",
     "agentAccessConnected": "员工访问已连接。",
     "assignmentDeliveredAndReplyReceived": "任务已送达：{{delivered}}。已收到回复：{{reply}}。",
-    "webhookUrl": "Webhook 地址"
+    "webhookUrl": "Webhook 地址",
+    "enableGrokBotAndRunner": "请在已认证的公网 HTTPS 实例上启用 Grok Bot 与 Paperclip Runner。"
   },
   "gitHubConnectionRecovery": {
     "githubConnectionNeedsRepair": "GitHub 连接需要修复",

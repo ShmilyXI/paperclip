@@ -7756,7 +7756,8 @@
     "grokBotConnection": "Grok Bot connection",
     "agentAccessConnected": "Agent access connected.",
     "assignmentDeliveredAndReplyReceived": "Assignment delivered: {{delivered}}. Reply received: {{reply}}.",
-    "webhookUrl": "Webhook URL"
+    "webhookUrl": "Webhook URL",
+    "enableGrokBotAndRunner": "Enable Grok Bot and Paperclip Runner on an authenticated public HTTPS instance."
   },
   "gitHubConnectionRecovery": {
     "githubConnectionNeedsRepair": "GitHub connection needs repair",
