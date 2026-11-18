@@ -12397,7 +12397,13 @@
     "actionCreatingSkill": "创建技能",
     "actionUpdatingSkill": "更新此技能",
     "actionInstallingSkill": "安装此技能",
-    "actionRemovingSkill": "移除此技能"
+    "actionRemovingSkill": "移除此技能",
+    "selectName": "选择 {{name}}",
+    "moreActionsForName": "{{name}} 的更多操作",
+    "useColor": "使用 {{color}}",
+    "newVersion": "新",
+    "browseCatalog": "浏览目录",
+    "loadingSelectedVersions": "正在加载所选版本…"
   },
   "agentMultiSelect": {
     "filterAgents": "筛选员工",

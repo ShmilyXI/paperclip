@@ -12397,7 +12397,13 @@
     "actionCreatingSkill": "Creating a skill",
     "actionUpdatingSkill": "Updating this skill",
     "actionInstallingSkill": "Installing this skill",
-    "actionRemovingSkill": "Removing this skill"
+    "actionRemovingSkill": "Removing this skill",
+    "selectName": "Select {{name}}",
+    "moreActionsForName": "More actions for {{name}}",
+    "useColor": "Use {{color}}",
+    "newVersion": "New",
+    "browseCatalog": "Browse catalog",
+    "loadingSelectedVersions": "Loading selected versions…"
   },
   "agentMultiSelect": {
     "filterAgents": "Filter agents",
