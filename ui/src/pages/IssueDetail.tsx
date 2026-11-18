@@ -1009,13 +1009,13 @@ export function IssueDetailLoadingState({
   if (titleEditor) {
     return <div className="max-w-3xl space-y-6">
       <div data-testid="issue-detail-header">{titleEditor}</div>
-      <div role="status" aria-label="Loading conversation" className="flex items-center justify-center">
+      <div role="status" aria-label={t("taskChatThread.loadingConversation")} className="flex items-center justify-center">
         <Skeleton aria-hidden="true" className="h-4 w-24" />
       </div>
     </div>;
   }
   if (!loaded) {
-    return <div data-testid="task-detail-presentation-loading" role="status" aria-label="Loading conversation" className="flex h-full min-h-0 w-full flex-1 items-center justify-center">
+    return <div data-testid="task-detail-presentation-loading" role="status" aria-label={t("taskChatThread.loadingConversation")} className="flex h-full min-h-0 w-full flex-1 items-center justify-center">
       <Skeleton aria-hidden="true" className="h-4 w-24" />
     </div>;
   }
@@ -1714,8 +1714,8 @@ const IssueDetailChatTab = memo(function IssueDetailChatTab({
     onError: (error, runId) => {
       const failedRun = resolvedLinkedRuns.find((run) => run.runId === runId);
       pushToast(modelStillUnavailableToast(error, failedRun ? agentMap.get(failedRun.agentId) : undefined) ?? {
-        title: "Run retry failed",
-        body: error instanceof Error ? error.message : "Unable to retry run",
+        title: t("issueDetail.runRetryFailed"),
+        body: error instanceof Error ? error.message : t("issueDetail.unableToRetryRun"),
         tone: "error",
       });
     },
@@ -5385,7 +5385,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     onError: (err) => {
       if (describeInteractionResolutionFailure(err).kind === "settled") invalidateIssueDetail();
       pushToast({
-        title: "Accept failed",
+        title: t("issueDetail.acceptFailed"),
         body: interactionResolutionErrorMessage(err),
         tone: "error",
       });
@@ -5415,7 +5415,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     onError: (err) => {
       if (describeInteractionResolutionFailure(err).kind === "settled") invalidateIssueDetail();
       pushToast({
-        title: "Reject failed",
+        title: t("issueDetail.rejectFailed"),
         body: interactionResolutionErrorMessage(err),
         tone: "error",
       });
@@ -5441,7 +5441,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     },
     onError: (err) => {
       pushToast({
-        title: "Submit failed",
+        title: t("issueDetail.submitFailed"),
         body: interactionResolutionErrorMessage(err),
         tone: "error",
       });
@@ -6102,7 +6102,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     setBreadcrumbs([
       sourceBreadcrumb,
       ...(breadcrumbParent ? [{
-        label: isLockedIssueStub(breadcrumbParent) ? "Private task" : breadcrumbParent.title,
+        label: isLockedIssueStub(breadcrumbParent) ? t("relationControls.privateTask") : breadcrumbParent.title,
         href: isLockedIssueStub(breadcrumbParent)
           ? undefined
           : createIssueDetailPath(breadcrumbParent.identifier ?? breadcrumbParent.id),
@@ -8304,7 +8304,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
           {error && coreIssueQuery.data && !isTransientError(error) ? (
             <div role="status" className="flex items-center gap-2 text-sm text-muted-foreground">
               Some task details could not be loaded.
-              <Button type="button" variant="ghost" size="sm" onClick={() => void refetchIssueDetail()}>Retry</Button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => void refetchIssueDetail()}>{t("common.retry")}</Button>
             </div>
           ) : null}
           {/* Parent chain breadcrumb (redesign: rendered inside the thread viewport) */}
@@ -8666,7 +8666,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                         <Button variant="ghost" size="sm" onClick={() => {
                           void refetchChildIssues();
                           void createdTasksQuery.refetch();
-                        }}>Retry</Button>
+                        }}>{t("common.retry")}</Button>
                       </div>
                     )}
                   </>}
