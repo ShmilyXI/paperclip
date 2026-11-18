@@ -10956,7 +10956,17 @@
     "noAssigneesMatch": "No assignees match.",
     "label": "Label",
     "noLabelsAvailable": "No labels available.",
-    "noLabelsMatch": "No labels match."
+    "noLabelsMatch": "No labels match.",
+    "visibility": "Visibility",
+    "liveRunsOnly": "Live runs only",
+    "showAgentCreatedTasks": "Show agent-created tasks",
+    "routineTasks": "Routine tasks",
+    "projects": "projects",
+    "creators": "creators",
+    "assignees": "assignees",
+    "labels": "labels",
+    "searchLabel": "Search {{label}}",
+    "searchLabelEllipsis": "Search {{label}}..."
   },
   "outputPrimaryCard": {
     "outputMetadataIsUnavailableThis": "Output metadata is unavailable — this file can’t be played or downloaded here.",

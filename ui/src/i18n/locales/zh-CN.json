@@ -10956,7 +10956,17 @@
     "noAssigneesMatch": "没有匹配的负责人。",
     "label": "标签",
     "noLabelsAvailable": "没有可用标签。",
-    "noLabelsMatch": "没有匹配的标签。"
+    "noLabelsMatch": "没有匹配的标签。",
+    "visibility": "可见性",
+    "liveRunsOnly": "仅运行中的",
+    "showAgentCreatedTasks": "显示员工创建的任务",
+    "routineTasks": "例行任务",
+    "projects": "项目",
+    "creators": "创建人",
+    "assignees": "负责人",
+    "labels": "标签",
+    "searchLabel": "搜索{{label}}",
+    "searchLabelEllipsis": "搜索{{label}}…"
   },
   "outputPrimaryCard": {
     "outputMetadataIsUnavailableThis": "无法获取产物元数据 — 此文件不能在这里播放或下载。",
