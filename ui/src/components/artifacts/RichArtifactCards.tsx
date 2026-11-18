@@ -1,4 +1,4 @@
-import { t } from "@/i18n";
+import { t, dateLocale } from "@/i18n";
 import { isPatchFile } from "@/lib/patch";
 import { PatchLines } from "@/components/PatchLines";
 import { useState, type ReactNode } from "react";

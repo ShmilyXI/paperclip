@@ -1,4 +1,4 @@
-import { t } from "@/i18n";
+import { t, dateLocale } from "@/i18n";
 import { companyProjectsQuery } from "@/lib/company-projects-query";
 import { describeError } from "../api/errors";
 import { useSelectedHeartbeatRun } from "../hooks/useSelectedHeartbeatRun";

@@ -1,4 +1,4 @@
-import { t } from "@/i18n";
+import { t, i18n } from "@/i18n";
 /**
  * Shared error classification and user-facing copy.
  *
