@@ -3387,6 +3387,12 @@
     "organizationCreatedButOnboardingSwitched": "组织已创建，但引导已切换到另一个组织。",
     "failedToLaunchFirstTask": "启动首个任务失败",
     "couldNotStoreTheApi": "无法保存 API 密钥。",
+    "failedToOpenYourChat": "无法打开你的聊天。请重试。",
+    "chooseASubscriptionAccount": "请在连接中选择一个订阅账户，然后重试设置。",
+    "theEnvironmentsPlatformQualification": "无法确认该环境的平台资质。请重试连接探测。",
+    "chooseAConnectedApiAccount": "请先选择一个已连接的 API 账户再继续。",
+    "chooseAConnectedApiAccountOr": "请选择一个已连接的 API 账户，或输入新的 API 密钥以替换该员工已连接的账户。",
+    "waitingForCodeEllipsis": "等待验证码…",
     "couldNotSaveAgentSetup": "无法保存员工设置。",
     "createOrSelectAnOrganization": "测试适配器环境前，请先创建或选择组织。",
     "couldNotLoadEnvironmentSettings": "无法加载运行环境设置以确定在哪个环境测试，请重试测试。",
@@ -14274,6 +14280,16 @@
     "densityTaskList": "{{density}} 任务列表",
     "titleTaskGroup": "{{title}} 任务组",
     "showMoreTasks": "显示更多任务"
+  },
+  "recentTasks": {
+    "collapseSubtasksOf": "折叠 {{title}} 的子任务",
+    "expandSubtasksOf": "展开 {{title}} 的子任务",
+    "countSubtasks": "{{count}} 个子任务",
+    "unreadCount": "{{count}} 未读",
+    "subtasksOf": "{{title}} 的子任务",
+    "loadingSubtasks": "正在加载子任务…",
+    "noSubtasksAvailable": "没有可用的子任务。",
+    "showMoreCount": "显示更多（{{count}}）"
   },
   "taskChatThread": {
     "questions": "问题",

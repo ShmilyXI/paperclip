@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { t } from "@/i18n";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { readRecentSubtasks } from "@/lib/recent-subtask-requests";
 import { ChevronRight } from "lucide-react";
@@ -94,26 +95,26 @@ function ExpandableRecentTaskGroup({ task, userId, selectedChild, children, clas
   return <div ref={anchor} className="min-w-0">
     <div className="flex min-w-0 items-center">
       <div className="min-w-0 flex-1">{children}</div>
-      <button type="button" aria-label={`${expanded ? "Collapse" : "Expand"} subtasks of ${task.title}`} aria-expanded={expanded} aria-controls={expanded ? contentId : undefined}
+      <button type="button" aria-label={expanded ? t("recentTasks.collapseSubtasksOf", { title: task.title }) : t("recentTasks.expandSubtasksOf", { title: task.title })} aria-expanded={expanded} aria-controls={expanded ? contentId : undefined}
         onClick={() => { if (expanded) preview(); setExpanded(value => !value); }}
         className="mr-2 flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring">
         <ChevronRight aria-hidden="true" className={cn("size-3.5 transition-transform motion-reduce:transition-none", expanded && "rotate-90")} />
       </button>
     </div>
     {!expanded ? <button type="button" className={cn(controlClass, "ml-7")} onClick={() => setExpanded(true)}>
-      {count} subtasks{task.unreadSubtaskCount ? ` · ${task.unreadSubtaskCount} unread` : ""}
-    </button> : <div id={contentId} className="ml-6 min-w-0 border-l border-border pl-1" role="group" aria-label={`Subtasks of ${task.title}`}>
-      {(view.kind === "loading" || view.kind === "reconnecting") && <p role="status" className="px-3 py-1 text-xs text-muted-foreground">Loading subtasks…</p>}
+      {t("recentTasks.countSubtasks", { count })}{task.unreadSubtaskCount ? ` · ${t("recentTasks.unreadCount", { count: task.unreadSubtaskCount })}` : ""}
+    </button> : <div id={contentId} className="ml-6 min-w-0 border-l border-border pl-1" role="group" aria-label={t("recentTasks.subtasksOf", { title: task.title })}>
+      {(view.kind === "loading" || view.kind === "reconnecting") && <p role="status" className="px-3 py-1 text-xs text-muted-foreground">{t("recentTasks.loadingSubtasks")}</p>}
       {displayed.map(child => <div key={child.id}>{childRow({ ...child, recordedAt: 0 })}</div>)}
       {pinned && childRow(pinned)}
       {view.kind === "error" ? <QueryErrorState size="inline" action="load subtasks" error={view.error} retrying={view.isFetching}
         className="px-3 py-1 text-xs" onRetry={() => { if (query.isFetchNextPageError) void query.fetchNextPage(); else view.retry(); }} />
-        : view.data && loaded.length === 0 ? <p className="px-3 py-1 text-xs text-muted-foreground">No subtasks available.</p> : null}
+        : view.data && loaded.length === 0 ? <p className="px-3 py-1 text-xs text-muted-foreground">{t("recentTasks.noSubtasksAvailable")}</p> : null}
       {remaining > 0 && loaded.length > 0 && (loaded.length > displayed.length || query.hasNextPage) && view.kind !== "error" && <button type="button" disabled={query.isFetching} className={controlClass}
         onClick={() => { setShowAllLoaded(true); if (loaded.length <= displayed.length + (pinned ? 1 : 0) && query.hasNextPage) void query.fetchNextPage(); }}>
-        {query.isFetching ? "Loading…" : `Show more (${remaining})`}{hiddenUnread > 0 ? ` · ${hiddenUnread} unread` : ""}
+        {query.isFetching ? t("common.loading") : t("recentTasks.showMoreCount", { count: remaining })}{hiddenUnread > 0 ? ` · ${t("recentTasks.unreadCount", { count: hiddenUnread })}` : ""}
       </button>}
-      {showAllLoaded && displayed.length > RECENT_SUBTASK_PAGE_SIZE && <button type="button" className={controlClass} onClick={preview}>Show less</button>}
+      {showAllLoaded && displayed.length > RECENT_SUBTASK_PAGE_SIZE && <button type="button" className={controlClass} onClick={preview}>{t("common.showLess")}</button>}
     </div>}
   </div>;
 }

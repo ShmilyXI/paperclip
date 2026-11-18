@@ -3387,6 +3387,12 @@
     "organizationCreatedButOnboardingSwitched": "Organization created, but onboarding switched to another organization.",
     "failedToLaunchFirstTask": "Failed to launch first task",
     "couldNotStoreTheApi": "Could not store the API key.",
+    "failedToOpenYourChat": "Failed to open your chat. Please try again.",
+    "chooseASubscriptionAccount": "Choose a subscription account in Connections, then retry setup.",
+    "theEnvironmentsPlatformQualification": "The environment's platform qualification could not be confirmed. Retry the connection probe.",
+    "chooseAConnectedApiAccount": "Choose a connected API account before continuing.",
+    "chooseAConnectedApiAccountOr": "Choose a connected API account or Enter a new API key to replace this agent's connected account.",
+    "waitingForCodeEllipsis": "Waiting for code…",
     "couldNotSaveAgentSetup": "Could not save agent setup.",
     "createOrSelectAnOrganization": "Create or select an organization before testing adapter environment.",
     "couldNotLoadEnvironmentSettings": "Could not load environment settings to determine which environment to test in. Retry the test.",
@@ -14274,6 +14280,16 @@
     "densityTaskList": "{{density}} task list",
     "titleTaskGroup": "{{title}} task group",
     "showMoreTasks": "Show more tasks"
+  },
+  "recentTasks": {
+    "collapseSubtasksOf": "Collapse subtasks of {{title}}",
+    "expandSubtasksOf": "Expand subtasks of {{title}}",
+    "countSubtasks": "{{count}} subtasks",
+    "unreadCount": "{{count}} unread",
+    "subtasksOf": "Subtasks of {{title}}",
+    "loadingSubtasks": "Loading subtasks…",
+    "noSubtasksAvailable": "No subtasks available.",
+    "showMoreCount": "Show more ({{count}})"
   },
   "taskChatThread": {
     "questions": "Questions",

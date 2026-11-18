@@ -1006,9 +1006,9 @@ function OnboardingWizardInner({
     || (loginEnvironmentSettingsReady
       && runnerDiscovery.isSuccess && !runnerDiscovery.isFetching && resolvedRunner !== undefined);
   const runnerDiscoveryError = needsRunnerDiscovery && (loginEnvironmentsFailed || loginSettingsFailed || loginPolicyFailed)
-    ? "Could not load execution environment settings. Retry setup."
+    ? t("onboarding.couldNotLoadExecutionEnvironment")
     : needsRunnerDiscovery && (runnerDiscoveryView.kind === "error")
-      ? "Could not load runner availability. Retry setup."
+      ? t("onboarding.couldNotLoadRunnerAvailability")
     : needsRunnerDiscovery && runnerDiscovery.isSuccess && resolvedRunner === undefined
       ? t("onboarding.runnerAvailabilityIsMissingFor")
       : null;
@@ -1530,13 +1530,13 @@ function OnboardingWizardInner({
    */
   const connectSourceLabel = CONNECT_SOURCE_NAMES[adapterType] ?? adapterType;
   const connectCta: { label: string; icon: FooterPrimaryIcon; disabled: boolean } =
-    setupError ? { label: "Retry", icon: "arrow", disabled: false }
-      : retryLogin ? { label: "Retry sign-in", icon: "arrow", disabled: false } : connectProgress
-      ? { label: adapterEnvLoading ? "Testing…" : connectProgress, icon: "spinner", disabled: true }
+    setupError ? { label: t("common.retry"), icon: "arrow", disabled: false }
+      : retryLogin ? { label: t("adapterLoginChrome.retrySignIn"), icon: "arrow", disabled: false } : connectProgress
+      ? { label: adapterEnvLoading ? t("onboardingWizard.testing") : connectProgress, icon: "spinner", disabled: true }
       : (connectPhase === "ready" || connectPhase === "waiting") && submitLoginCode
-      ? { label: "Submit code", icon: "arrow", disabled: false }
+      ? { label: t("adapterLoginChrome.submitCode"), icon: "arrow", disabled: false }
       : connectPhase === "waiting"
-      ? { label: adapterType === "codex_local" ? "Waiting for auth…" : "Waiting for code…", icon: "spinner", disabled: true }
+      ? { label: adapterType === "codex_local" ? t("agentProviderConnection.waitingForAuth") : t("onboarding.waitingForCodeEllipsis"), icon: "spinner", disabled: true }
       : connectPhase === "connecting"
         ? { label: t("onboarding.connecting2"), icon: "spinner", disabled: true }
         : connectPhase === "ready"
@@ -1896,7 +1896,7 @@ function OnboardingWizardInner({
       closeOnboarding();
       navigate(`${prefix ? `/${prefix}` : ""}/chats/${agentId}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to open your chat. Please try again.");
+      setError(err instanceof Error ? err.message : t("onboarding.failedToOpenYourChat"));
     } finally {
       setLoading(false);
     }
@@ -1944,8 +1944,8 @@ function OnboardingWizardInner({
     } catch (err) {
       if (isCurrent()) setError(
         err instanceof Error
-          ? `Could not store the API key: ${describeError(err).body}`
-          : "Could not store the API key.",
+          ? t("onboardingWizard.couldNotStoreTheApi", { message: describeError(err).body })
+          : t("onboarding.couldNotStoreTheApi"),
       );
       return false;
     }
@@ -1996,7 +1996,7 @@ function OnboardingWizardInner({
       grantId = selected?.grantId;
     }
     if (!isCurrent()) return;
-    if (!grantId) throw new Error("Choose a subscription account in Connections, then retry setup.");
+    if (!grantId) throw new Error(t("onboarding.chooseASubscriptionAccount"));
     managedSubscriptionRef.current = { companyId, binding, grantId };
     await selectManagedDefault(companyId, binding.provider, grantId, isCurrent, visibleDefault);
   }
@@ -2169,7 +2169,7 @@ function OnboardingWizardInner({
         } catch {
           if (!testIsCurrent()) return null;
           setAdapterEnvError(
-            "Could not load environment settings to determine which environment to test in. Retry the test.",
+            t("onboarding.couldNotLoadEnvironmentSettings"),
           );
           return null;
         }
@@ -2205,7 +2205,7 @@ function OnboardingWizardInner({
           const native = adapters.find(adapter => adapter.type === "paperclip_runner");
           if (!codex || (codex.defaultRunner !== "paperclip" && codex.defaultRunner !== "legacy")
             || !codex.supportedRunners?.includes(codex.defaultRunner)) {
-            throw new Error("Could not confirm Codex runner availability for this environment. Retry setup.");
+            throw new Error(t("onboarding.couldNotConfirmCodexRunner"));
           }
           if (codex.defaultRunner !== "paperclip" && !codex?.disabled && !codex?.overriddenBuiltin
             && !native?.disabled && !native?.overriddenBuiltin) {
@@ -2215,7 +2215,7 @@ function OnboardingWizardInner({
               || typeof probe.details.leaseId !== "string" || !probe.details.leaseId) {
               throw new Error(typeof probe.details?.platformQualificationDiagnostic === "string"
                 ? probe.details.platformQualificationDiagnostic
-                : probe.summary || "The environment's platform qualification could not be confirmed. Retry the connection probe.");
+                : probe.summary || t("onboarding.theEnvironmentsPlatformQualification"));
             }
             const refreshed = await queryClient.fetchQuery({ queryKey: availabilityKey, staleTime: 0,
               queryFn: () => adaptersApi.list({ companyId: createdCompanyId, environmentId }, { signal }) });
@@ -2224,7 +2224,7 @@ function OnboardingWizardInner({
             const defaultRunner = refreshedCodex?.defaultRunner;
             if ((defaultRunner !== "paperclip" && defaultRunner !== "legacy")
               || !refreshedCodex?.supportedRunners?.includes(defaultRunner)) {
-              throw new Error("Could not confirm the environment's default runner. Retry setup.");
+              throw new Error(t("onboarding.couldNotConfirmTheEnvironment"));
             }
           }
         }
@@ -2403,7 +2403,7 @@ function OnboardingWizardInner({
       }
       if (credentialMode === "api" && selectedApiKey?.aiConnection?.mode === "responsible_user") {
         const grantId = selectedApiKey.id.startsWith("ai:") ? selectedApiKey.id.slice(3) : undefined;
-        if (!grantId) throw new Error("Choose a connected API account before continuing.");
+        if (!grantId) throw new Error(t("onboarding.chooseAConnectedApiAccount"));
         if (!await selectManagedDefault(createdCompanyId, selectedApiKey.aiConnection.provider, grantId, isCurrent, grantId)) return;
       }
       if (credentialMode !== "api" && canUseLocalLogin && managedProvider && !managedBindingForStep() && !savedSubscription && !savedKeys.storedLogin.data) {
@@ -2417,7 +2417,7 @@ function OnboardingWizardInner({
       const existingAgent = createdAgentId ? await agentsApi.get(createdAgentId, createdCompanyId) : undefined;
       if (!isCurrent()) return;
       if (existingAgent?.runtimeConfig.aiConnection && credentialMode === "api" && selectedApiKey?.binding && !managedBinding) {
-        throw new Error("Choose a connected API account or Enter a new API key to replace this agent’s connected account.");
+        throw new Error(t("onboarding.chooseAConnectedApiAccountOr"));
       }
       const existingRunner = existingAgent && runner === "auto" && agentHarnessType(existingAgent.adapterType, existingAgent.adapterConfig) === adapterType
         ? agentRunner(existingAgent.adapterType) : undefined;
