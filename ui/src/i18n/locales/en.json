@@ -3506,7 +3506,10 @@
     "branch": "Branch",
     "repositoryDefault": "Repository default",
     "saveExit": "Save & exit",
-    "connectModel": "Connect model"
+    "connectModel": "Connect model",
+    "enterTheExactCursorCloudModel": "Enter the exact Cursor Cloud model ID.",
+    "enterTheExactKimiModel": "Enter the exact Kimi model ID.",
+    "chooseOrEnterAnExactGoogleAntigravity": "Choose or enter an exact Google Antigravity model ID."
   },
   "costs": {
     "financeLedger": "Finance ledger",
@@ -13068,7 +13071,22 @@
     "finishSetup": "Finish setup",
     "couldNotRemoveUnusedSetupCredential": " Could not remove an unused setup credential. Remove it from Secrets before retrying.",
     "useAProviderModelId": " Use a {{provider}}/model ID.",
-    "defaultEnvironment": "Default: {{environment}}"
+    "defaultEnvironment": "Default: {{environment}}",
+    "couldNotSaveTheEnvironment": "Could not save the environment.",
+    "loadingYourAgentSetup": "Loading your agent setup…",
+    "preparingYourAgentComputer": "Preparing your agent computer…",
+    "couldNotRetryComputerPreparation": "Could not retry computer preparation.",
+    "retryPreparation": "Retry preparation",
+    "googleAntigravityNotAvailableYet": "Google Antigravity is not available yet. You can connect your Google account and review settings. This agent cannot finish setup or run tasks yet. Model and connection settings are not saved to this agent yet.",
+    "changeAdapter": "Change adapter",
+    "googleAntigravityCandidateEnabled": "Google Antigravity candidate is enabled for testing on this instance.",
+    "finishingAgentSetup": "Finishing agent setup",
+    "yourAgentIsPaused": "Your agent is paused",
+    "paperclipIsPreparingAndVerifying": "Paperclip is preparing and verifying your agent. You can assign a task when it is ready.",
+    "reviewTheAgentsStatusInConfiguration": "Review the agent’s status in configuration before assigning work.",
+    "experimentalCursorHostsThis": "Experimental. Cursor hosts this agent’s execution environment. A Paperclip computer is not required. Cursor manages cloud command permissions; the effective model is not acknowledged.",
+    "retrySavingEnvironment": "Retry saving environment",
+    "backToAgentsLower": "Back to agents"
   },
   "boardClaim": {
     "invalidBoardClaimUrl": "Invalid board claim URL.",

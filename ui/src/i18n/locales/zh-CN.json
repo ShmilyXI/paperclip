@@ -3506,7 +3506,10 @@
     "branch": "分支",
     "repositoryDefault": "仓库默认",
     "saveExit": "保存并退出",
-    "connectModel": "连接模型"
+    "connectModel": "连接模型",
+    "enterTheExactCursorCloudModel": "请输入准确的 Cursor Cloud 模型 ID。",
+    "enterTheExactKimiModel": "请输入准确的 Kimi 模型 ID。",
+    "chooseOrEnterAnExactGoogleAntigravity": "请选择或输入准确的 Google Antigravity 模型 ID。"
   },
   "costs": {
     "financeLedger": "财务账本",
@@ -13068,7 +13071,22 @@
     "finishSetup": "完成设置",
     "couldNotRemoveUnusedSetupCredential": " 无法移除未使用的初始化凭证。请先在「密钥」中移除它，再重试。",
     "useAProviderModelId": " 请使用 {{provider}}/模型 ID。",
-    "defaultEnvironment": "默认：{{environment}}"
+    "defaultEnvironment": "默认：{{environment}}",
+    "couldNotSaveTheEnvironment": "无法保存运行环境。",
+    "loadingYourAgentSetup": "正在加载你的员工设置…",
+    "preparingYourAgentComputer": "正在准备你的员工电脑…",
+    "couldNotRetryComputerPreparation": "无法重试电脑准备。",
+    "retryPreparation": "重试准备",
+    "googleAntigravityNotAvailableYet": "Google Antigravity 尚不可用。你可以连接 Google 账户并查看设置。此员工暂时无法完成设置或运行任务。模型和连接设置尚未保存到此员工。",
+    "changeAdapter": "更换适配器",
+    "googleAntigravityCandidateEnabled": "此实例已启用 Google Antigravity 候选版本用于测试。",
+    "finishingAgentSetup": "正在完成员工设置",
+    "yourAgentIsPaused": "你的员工已暂停",
+    "paperclipIsPreparingAndVerifying": "Paperclip 正在准备并验证你的员工。就绪后即可为其指派任务。",
+    "reviewTheAgentsStatusInConfiguration": "在指派工作前，请先在配置中查看员工状态。",
+    "experimentalCursorHostsThis": "实验性功能。Cursor 托管此员工的执行环境，无需 Paperclip 电脑。Cursor 管理云端命令权限；实际使用的模型不会被确认。",
+    "retrySavingEnvironment": "重试保存运行环境",
+    "backToAgentsLower": "返回员工列表"
   },
   "boardClaim": {
     "invalidBoardClaimUrl": "董事会认领链接无效。",

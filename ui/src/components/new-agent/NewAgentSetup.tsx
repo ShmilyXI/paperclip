@@ -548,11 +548,11 @@ function Setup({
     return config;
   }
   function preparedConfig(nextConnection = connection, setupRunner?: AgentRunner) {
-    if (nativeCursorCloud && !model.trim()) throw new Error("Enter the exact Cursor Cloud model ID.");
-    if (isKimi && !model.trim()) throw new Error("Enter the exact Kimi model ID.");
-    if (isKimi && !apiKey.trim() && !selectedBinding) throw new Error("Enter KIMI_API_KEY or select an organization secret.");
+    if (nativeCursorCloud && !model.trim()) throw new Error(t("newAgent.enterTheExactCursorCloudModel"));
+    if (isKimi && !model.trim()) throw new Error(t("newAgent.enterTheExactKimiModel"));
+    if (isKimi && !apiKey.trim() && !selectedBinding) throw new Error(t("newAgentSetup.enterEnvkeyOrSelectAn", { envKey: "KIMI_API_KEY" }));
     if (brandType === "antigravity_runtime" && (!model.trim() || model !== model.trim() || /\s/.test(model) || ["auto", "default"].includes(model.toLowerCase())))
-      throw new Error("Choose or enter an exact Google Antigravity model ID.");
+      throw new Error(t("newAgent.chooseOrEnterAnExactGoogleAntigravity"));
     if (brandType === "copilot_runtime" && !models.data?.some(candidate => candidate.id === model))
       throw new Error(t("newAgent.refreshCopilotModelsAndSelect"));
     if (isDot && !allowUnmeteredProvider) throw new Error(t("newAgent.acknowledgeExternalProviderBillingBefore"));
@@ -714,7 +714,7 @@ function Setup({
     setEnvironmentSaving(true);
     setEnvironmentSaveError(null);
     try { await saveDraft(connection, false, undefined, selected); }
-    catch (cause) { setEnvironmentSaveError(cause instanceof Error ? cause.message : "Could not save the environment."); }
+    catch (cause) { setEnvironmentSaveError(cause instanceof Error ? cause.message : t("newAgentSetup.couldNotSaveTheEnvironment")); }
     finally { setEnvironmentSaving(false); }
   }
 
@@ -872,7 +872,7 @@ function Setup({
           : t("newAgentSetup.loadingYourAgent")}
       </p>
     );
-  if (resumeSavedChoice) return <p role="status" className="text-sm text-muted-foreground">Loading your agent setup…</p>;
+  if (resumeSavedChoice) return <p role="status" className="text-sm text-muted-foreground">{t("newAgentSetup.loadingYourAgentSetup")}</p>;
   if (choosingAdapter || !name || !adapterType || (created?.metadata?.setupAdapterPending === true && !unreleasedAntigravity))
     return (
       <AgentBasicsDialog
@@ -890,8 +890,8 @@ function Setup({
       />
     );
   if (!created && connectionSettingsReady && !pendingAntigravity) return <div className="space-y-4">
-    <p role={error ? "alert" : "status"}>{error ?? "Creating your agent…"}</p>
-    {error && <Button onClick={() => setCreationAttempt(value => value + 1)}>Retry</Button>}
+    <p role={error ? "alert" : "status"}>{error ?? t("newAgentSetup.creatingYourAgent")}</p>
+    {error && <Button onClick={() => setCreationAttempt(value => value + 1)}>{t("common.retry")}</Button>}
   </div>;
   const steps = [
     ...(connectionAdapter ? ["connect" as const] : []),
@@ -967,7 +967,7 @@ function Setup({
             {environmentError}
           </p>
         )}
-        {preparingComputer && <p role="status" className="text-sm text-muted-foreground">Preparing your agent computer…</p>}
+        {preparingComputer && <p role="status" className="text-sm text-muted-foreground">{t("newAgentSetup.preparingYourAgentComputer")}</p>}
         {created?.lifecycleError && <div className="space-y-2">
           <p role="alert" className="text-sm text-destructive">{created.lifecycleError}</p>
           <Button disabled={busy} onClick={() => {
@@ -976,9 +976,9 @@ function Setup({
               await cache.cancelQueries({ queryKey: queryKeys.agents.detail(agent.id) });
               setCreated(agent);
               cache.setQueryData(queryKeys.agents.detail(agent.id), agent);
-            }).catch(cause => setError(cause instanceof Error ? cause.message : "Could not retry computer preparation."))
+            }).catch(cause => setError(cause instanceof Error ? cause.message : t("newAgentSetup.couldNotRetryComputerPreparation")))
               .finally(() => setEnvironmentSaving(false));
-          }}>Retry preparation</Button>
+          }}>{t("newAgentSetup.retryPreparation")}</Button>
         </div>}
         {setupError && (
           <QueryErrorState
@@ -991,12 +991,12 @@ function Setup({
         {pendingAntigravity && configurationAvailable && (
           <div className="space-y-2">
             <p role="status" className="text-sm text-muted-foreground">
-              Google Antigravity is not available yet. You can connect your Google account and review settings. This agent cannot finish setup or run tasks yet. Model and connection settings are not saved to this agent yet.
+              {t("newAgentSetup.googleAntigravityNotAvailableYet")}
             </p>
-            {created && <Button variant="link" className="px-0" onClick={() => setChoosingAdapter(true)}>Change adapter</Button>}
+            {created && <Button variant="link" className="px-0" onClick={() => setChoosingAdapter(true)}>{t("newAgentSetup.changeAdapter")}</Button>}
           </div>
         )}
-        {antigravityCandidate && <p role="status" className="text-sm text-muted-foreground">Google Antigravity candidate is enabled for testing on this instance.</p>}
+        {antigravityCandidate && <p role="status" className="text-sm text-muted-foreground">{t("newAgentSetup.googleAntigravityCandidateEnabled")}</p>}
         {adapterInventory.data && !configurationAvailable && (
           <p role="alert" className="text-sm text-destructive">
             {t("newAgent.thisAdapterIsUnavailableChoose")}
@@ -1116,7 +1116,7 @@ function Setup({
                           setScreen("runtime");
                         }).catch(cause => setError(cause instanceof Error ? cause.message : t("newAgent.couldNotSaveAgentSetup")));
                       }}
-                    /></fieldset> : <p role="status" className="text-sm text-muted-foreground">Loading connection settings…</p>}
+                    /></fieldset> : <p role="status" className="text-sm text-muted-foreground">{t("newAgent.loadingConnectionSettings")}</p>}
                   </OnboardingCard>
                 ) : screen === "saved" && created ? (
                   <div className="space-y-6">
@@ -1124,9 +1124,9 @@ function Setup({
                       <h2 className="flex items-center gap-3 text-lg font-semibold">
                         <Check className="size-5" />
                         {created.status === "pending_approval"
-                          ? "Agent submitted for approval"
-                          : isDot ? "Your Dot agent has been created"
-                            : finishingSetup ? "Finishing agent setup" : runtimeReady ? "Your agent is ready" : "Your agent is paused"}
+                          ? t("newAgentSetup.agentSubmittedForApproval")
+                          : isDot ? t("newAgentSetup.yourDotAgentHasBeen")
+                            : finishingSetup ? t("newAgentSetup.finishingAgentSetup") : runtimeReady ? t("newAgentSetup.yourAgentIsReady") : t("newAgentSetup.yourAgentIsPaused")}
                       </h2>
                       <dl className="grid grid-cols-2 gap-4 text-sm">
                         <dt className="text-muted-foreground">{t("common.adapter")}</dt>
@@ -1144,10 +1144,10 @@ function Setup({
                       </dl>
                       <p className="text-sm text-muted-foreground">
                         {created.status === "pending_approval"
-                          ? "An organization administrator must approve this agent before it can work."
-                          : isDot ? "Pair your Dot and test event delivery in configuration before assigning work."
-                            : finishingSetup ? "Paperclip is preparing and verifying your agent. You can assign a task when it is ready."
-                              : runtimeReady ? "Assign a task when you’re ready for this agent to work." : "Review the agent’s status in configuration before assigning work."}
+                          ? t("newAgentSetup.anOrganizationAdministratorMustApprove")
+                          : isDot ? t("newAgentSetup.pairYourDotAndTest")
+                            : finishingSetup ? t("newAgentSetup.paperclipIsPreparingAndVerifying")
+                              : runtimeReady ? t("newAgentSetup.assignATaskWhenYou") : t("newAgentSetup.reviewTheAgentsStatusInConfiguration")}
                       </p>
                     </div>
                     <div className="flex flex-wrap justify-between gap-3">
@@ -1184,8 +1184,8 @@ function Setup({
                     <fieldset disabled={busy} className="space-y-8">
                       <section className="space-y-5">
                         {isDot && <>
-                          <p className="text-sm text-muted-foreground">Create this agent, then copy its pairing prompt to your Dot.</p>
-                          <ToggleField label="Allow externally billed provider" hint="Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply."
+                          <p className="text-sm text-muted-foreground">{t("newAgent.createThisAgentThenCopy")}</p>
+                          <ToggleField label={t("newAgent.allowExternallyBilledProvider")} hint={t("newAgentSetup.dotDoesNotReportToken")}
                             checked={allowUnmeteredProvider} onChange={value => { setAllowUnmeteredProvider(value); resetTest(); }} />
                         </>}
                         {!connectionAdapter && aiProviderForAdapter(brandType) && (
@@ -1320,13 +1320,13 @@ function Setup({
                                     }}
                                     placeholder={
                                       selectedBinding
-                                        ? "Using saved key"
+                                        ? t("newAgentSetup.usingSavedKey")
                                         : (isKimi || [
                                               "cursor_cloud",
                                               "hermes_gateway",
                                             ].includes(adapterType))
-                                          ? "Required"
-                                          : "Optional if already configured"
+                                          ? t("common.required")
+                                          : t("newAgentSetup.optionalIfAlreadyConfigured")
                                     }
                                   />
                                   {adapterType === "cursor_cloud" && (
@@ -1441,7 +1441,7 @@ function Setup({
                         )}
                         {adapterType === "cursor_cloud" && (
                           <>
-                          {nativeCursorCloud && <p className="text-sm text-muted-foreground">Experimental. Cursor hosts this agent’s execution environment. A Paperclip computer is not required. Cursor manages cloud command permissions; the effective model is not acknowledged.</p>}
+                          {nativeCursorCloud && <p className="text-sm text-muted-foreground">{t("newAgentSetup.experimentalCursorHostsThis")}</p>}
                           <div className="grid gap-5 sm:grid-cols-2">
                             <Field label={t("newAgent.githubRepository")}>
                               <Input
@@ -1510,10 +1510,10 @@ function Setup({
                       </p>
                     )}
                     {environmentSaveError && <p role="alert" className="text-sm text-destructive">{environmentSaveError}</p>}
-                    {environmentSaveError && !environmentSelectionSaved && <Button disabled={busy} onClick={() => void changeEnvironment()}>Retry saving environment</Button>}
+                    {environmentSaveError && !environmentSelectionSaved && <Button disabled={busy} onClick={() => void changeEnvironment()}>{t("newAgentSetup.retrySavingEnvironment")}</Button>}
                     <div className="flex justify-between border-t border-border py-5">
                       <div className="flex items-center gap-3">
-                        <Button type="button" variant="ghost" disabled={busy} onClick={() => void saveAndExit()}>{pendingAntigravity ? "Back to agents" : "Save & exit"}</Button>
+                        <Button type="button" variant="ghost" disabled={busy} onClick={() => void saveAndExit()}>{pendingAntigravity ? t("newAgentSetup.backToAgentsLower") : t("newAgent.saveExit")}</Button>
                       {connectionAdapter ? (
                         <Button
                           type="button"
