@@ -6350,7 +6350,8 @@
     "referencesExternalSources": "此团队引用了 {{count}} 个外部来源",
     "sourcePolicyReferences": "此团队引用了 {{count}} 个外部来源。请逐项检查并决定允许哪些，然后继续。",
     "pickAStarterTeam": "选择一个入门团队",
-    "alreadyInstalled": "已安装"
+    "alreadyInstalled": "已安装",
+    "teamsControls": "团队控件"
   },
   "connectionSetup": {
     "myNameApi": "我的 {{name}} {{API}}",

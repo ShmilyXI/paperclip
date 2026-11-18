@@ -6350,7 +6350,8 @@
     "referencesExternalSources": "This team references {{count}} external source(s)",
     "sourcePolicyReferences": "This team references {{count}} external source(s). Review each one and decide what to allow before continuing.",
     "pickAStarterTeam": "Pick a starter team",
-    "alreadyInstalled": "Already installed"
+    "alreadyInstalled": "Already installed",
+    "teamsControls": "Teams controls"
   },
   "connectionSetup": {
     "myNameApi": "My {{name}} {{API}}",
