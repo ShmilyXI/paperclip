@@ -167,7 +167,7 @@ export function ProfileDetail({
     onError: (error: unknown) => pushToast({ title: t("profileDetail.couldNotSubmitReview"), body: errorBody(error), tone: "error" }),
   });
 
-  if (data.profiles.isLoading || profilesView.kind === "reconnecting") return <LoadingState label="Loading profile..." />;
+  if (data.profiles.isLoading || profilesView.kind === "reconnecting") return <LoadingState label={t("profileDetail.loadingProfile")} />;
   if (profilesView.kind === "error") {
     return (
       <QueryErrorState
@@ -425,7 +425,7 @@ function NewToolsReviewDialog({
                     <p className="mt-1 text-sm text-muted-foreground">{tool.description}</p>
                   ) : null}
                   <p className={cn("mt-1 text-xs text-muted-foreground", ANALYTICS_MASK_CLASS)}>
-                    {tool.applicationName ?? tool.connectionName ?? "App tool"} · added {formatShortDate(tool.addedAt)}
+                    {tool.applicationName ?? tool.connectionName ?? t("profileDetail.appTool")} · {t("profileDetail.addedAt", { date: formatShortDate(tool.addedAt) })}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 sm:justify-end">

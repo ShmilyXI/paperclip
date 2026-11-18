@@ -17867,7 +17867,9 @@
         "loadAiAccountDefaults": "load AI account defaults",
         "loadTheDotConnection": "load the Dot connection",
         "loadThisPlugin": "load this plugin",
-        "loadLocalFolderSettings": "load local folder settings"
+        "loadLocalFolderSettings": "load local folder settings",
+        "loadTheProfile": "load the profile",
+        "loadNewTools": "load new tools"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

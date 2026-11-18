@@ -178,6 +178,8 @@ const ACTION_KEYS = new Map([
   ["load the Dot connection", "loadTheDotConnection"],
   ["load this plugin", "loadThisPlugin"],
   ["load local folder settings", "loadLocalFolderSettings"],
+  ["load the profile", "loadTheProfile"],
+  ["load new tools", "loadNewTools"],
 ]);
 
 function actionErrorTitle(action: string, fallback: string): string {

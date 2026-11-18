@@ -17867,7 +17867,9 @@
         "loadAiAccountDefaults": "加载 AI 账户默认值",
         "loadTheDotConnection": "加载 Dot 连接",
         "loadThisPlugin": "加载此插件",
-        "loadLocalFolderSettings": "加载本地文件夹设置"
+        "loadLocalFolderSettings": "加载本地文件夹设置",
+        "loadTheProfile": "加载此配置档",
+        "loadNewTools": "加载新工具"
       },
       "retry": "重试",
       "retrying": "正在重试…",
