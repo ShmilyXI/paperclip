@@ -15345,7 +15345,12 @@
     "connectGoogleWorkspace": "连接 Google Workspace",
     "chooseTheGoogleServicesTo": "选择要连接的 Google 服务。",
     "selectAtLeastOneService": "至少选择一个服务以继续。",
-    "serviceAccess": "{{name}} 访问权限"
+    "serviceAccess": "{{name}} 访问权限",
+    "whatAgentsCanDo": "员工可以做什么",
+    "howYourDataIsUsed": "你的数据如何被使用",
+    "howPaperclipUsesYourGoogleData": "Paperclip 如何使用你的 Google 数据",
+    "readOurPrivacyPolicyIncluding": "阅读我们的隐私政策，包括我们如何满足 Google 的受限使用要求",
+    "opensInANewTab": "（在新标签页中打开）"
   },
   "summarySlotCard": {
     "summaryGenerationCouldNotBe": "无法启动摘要生成。",

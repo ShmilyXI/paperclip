@@ -15345,7 +15345,12 @@
     "connectGoogleWorkspace": "Connect Google Workspace",
     "chooseTheGoogleServicesTo": "Choose the Google services to connect.",
     "selectAtLeastOneService": "Select at least one service to continue.",
-    "serviceAccess": "{{name}} access"
+    "serviceAccess": "{{name}} access",
+    "whatAgentsCanDo": "What agents can do",
+    "howYourDataIsUsed": "How your data is used",
+    "howPaperclipUsesYourGoogleData": "How Paperclip uses your Google data",
+    "readOurPrivacyPolicyIncluding": "Read our privacy policy, including how we meet Google's Limited Use requirements",
+    "opensInANewTab": "(opens in a new tab)"
   },
   "summarySlotCard": {
     "summaryGenerationCouldNotBe": "Summary generation could not be started.",

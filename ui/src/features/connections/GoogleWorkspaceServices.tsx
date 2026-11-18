@@ -74,8 +74,8 @@ export function GoogleWorkspaceServicesDialog(props: DialogProps) {
   const grants = useQuery({ queryKey: ["workspace-service-consent", existing?.id], queryFn: () => toolsApi.listConnectionGrants(existing!.id), enabled: Boolean(existing) });
   const grantsView = useQueryView(grants);
   if (existing && !grants.data) return <Dialog open onOpenChange={open => { if (!open) props.onCancel(); }}><DialogContent className={ANALYTICS_MASK_CLASS}>
-    <DialogTitle>Connect Google Workspace</DialogTitle><DialogDescription>{(grantsView.kind === "error") ? "Could not load your saved service access. Your connection has not changed." : "Loading your saved service access…"}</DialogDescription>
-    <footer className="flex items-center justify-between gap-3"><Button variant="ghost" onClick={() => props.onCancel()}>Cancel</Button>{(grantsView.kind === "error") && <Button onClick={() => void grants.refetch()}>Try again</Button>}</footer>
+    <DialogTitle>{t("googleWorkspaceServices.connectGoogleWorkspace")}</DialogTitle><DialogDescription>{(grantsView.kind === "error") ? t("googleWorkspaceServices.couldNotLoadYourSaved") : t("googleWorkspaceServices.loadingYourSavedServiceAccess")}</DialogDescription>
+    <footer className="flex items-center justify-between gap-3"><Button variant="ghost" onClick={() => props.onCancel()}>{t("common.cancel")}</Button>{(grantsView.kind === "error") && <Button onClick={() => void grants.refetch()}>{t("common.tryAgain")}</Button>}</footer>
   </DialogContent></Dialog>;
   const grant = grants.data?.grants.find(grant => existing?.credentialPolicy === "per_user"
     ? grant.kind === "user" && grant.subjectUserId === grants.data?.currentUserId
@@ -103,18 +103,18 @@ export function GoogleWorkspaceServicesDialog(props: DialogProps) {
 
 function DataUseDisclosure({ selection }: { selection: GoogleWorkspaceServiceSelection }) {
   const { access, use } = googleWorkspaceDataUseDisclosure(selection);
-  return <section aria-label="How Paperclip uses your Google data" className="space-y-3 text-sm">
+  return <section aria-label={t("googleWorkspaceServices.howPaperclipUsesYourGoogleData")} className="space-y-3 text-sm">
     <div className="space-y-1">
-      <h3 className="font-medium">What agents can do</h3>
+      <h3 className="font-medium">{t("googleWorkspaceServices.whatAgentsCanDo")}</h3>
       <ul className="list-disc space-y-1 pl-5 text-muted-foreground">{access.map(line => <li key={line}>{line}</li>)}</ul>
     </div>
     <div className="space-y-1">
-      <h3 className="font-medium">How your data is used</h3>
+      <h3 className="font-medium">{t("googleWorkspaceServices.howYourDataIsUsed")}</h3>
       <ul className="list-disc space-y-1 pl-5 text-muted-foreground">{use.map(line => <li key={line}>{line}</li>)}</ul>
     </div>
     <p className="text-muted-foreground">
       <a href={GOOGLE_WORKSPACE_PRIVACY_POLICY_URL} target="_blank" rel="noopener noreferrer" className="underline">
-        Read our privacy policy, including how we meet Google's Limited Use requirements<span className="sr-only"> (opens in a new tab)</span>
+        {t("googleWorkspaceServices.readOurPrivacyPolicyIncluding")}<span className="sr-only"> {t("googleWorkspaceServices.opensInANewTab")}</span>
       </a>
     </p>
   </section>;
@@ -131,7 +131,7 @@ function ServicePicker({ onContinue, onCancel, initial = GOOGLE_WORKSPACE_DEFAUL
       </DialogHeader>
       <GoogleWorkspaceServiceFields value={selection} onChange={setSelection} />
       {empty
-        ? <p role="status" className="text-xs text-muted-foreground">Select at least one service to continue.</p>
+        ? <p role="status" className="text-xs text-muted-foreground">{t("googleWorkspaceServices.selectAtLeastOneService")}</p>
         : <DataUseDisclosure selection={selection} />}
       <footer className="flex items-center justify-between gap-3 pt-4">
         <Button variant="ghost" onClick={() => onCancel(selection)}>{t("common.cancel")}</Button>
