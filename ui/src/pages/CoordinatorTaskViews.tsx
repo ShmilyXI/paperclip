@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { t } from "@/i18n";
 import { Plus } from "lucide-react";
 import { TaskViewsMenu } from "@/components/TaskViewsMenu";
 import { Button } from "@/components/ui/button";
@@ -48,9 +49,9 @@ export function CoordinatorTaskViews() {
   }
   const views = <TaskViewsMenu coordinator value={view} onChange={next => navigate(`/issues?view=${next}`)} />;
   if (definition.surface === "issues") return <CoordinatorTasks viewControl={views} />;
-  return <section className="coordinator-task-list" aria-label="Tasks"><Inbox
+  return <section className="coordinator-task-list" aria-label={t("common.tasks")}><Inbox
     tab={definition.inboxTab}
-    surfaceLabel="Tasks"
-    toolbarContext={<div className="flex min-w-0 items-center gap-2">{views}<Button variant="outline" size="sm" onClick={() => openNewIssue()}><Plus className="size-4" />New Task</Button></div>}
+    surfaceLabel={t("common.tasks")}
+    toolbarContext={<div className="flex min-w-0 items-center gap-2">{views}<Button variant="outline" size="sm" onClick={() => openNewIssue()}><Plus className="size-4" />{t("common.newTask")}</Button></div>}
   /></section>;
 }
