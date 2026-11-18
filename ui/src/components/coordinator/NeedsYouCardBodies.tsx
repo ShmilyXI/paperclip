@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { FileText, TriangleAlert } from "lucide-react";
 import type { Agent, AttentionItem } from "@paperclipai/shared";
+import { t } from "@/i18n";
 import { Link } from "@/lib/router";
 import { readIssueReviewPolicyMetadata } from "@/lib/review-policy";
 import { DecisionCardFooter } from "@/components/DecisionCardFooter";
@@ -36,7 +37,7 @@ const metadataString = (item: AttentionItem, key: string) => {
 
 /** "NEE-19 · Review pilot consent copy". */
 const taskLine = (task: { identifier?: string | null; title?: string | null }) =>
-  [task.identifier, task.title].filter(Boolean).join(" · ") || "Task";
+  [task.identifier, task.title].filter(Boolean).join(" · ") || t("common.task");
 
 /** The assignee's name, from the same agent and people lists the page reads. */
 function assigneeName(item: AttentionItem, agentMap?: ReadonlyMap<string, Agent>, userLabelMap?: ReadonlyMap<string, string>): string | null {
@@ -63,11 +64,11 @@ export function ReviewTaskCardBody({ item, companyId, agentMap, userLabelMap, le
   // The feed carries no acceptance checklist yet, so the panel is the state line.
   return <>
     <NeedsYouPanel>
-      <NeedsYouPanelNote>{["In review", assignee ? `Assigned to ${assignee}` : null].filter(Boolean).join(" · ")}</NeedsYouPanelNote>
+      <NeedsYouPanelNote>{[t("common.inReview"), assignee ? t("needsYouCardBodies.assignedTo", { name: assignee }) : null].filter(Boolean).join(" · ")}</NeedsYouPanelNote>
     </NeedsYouPanel>
     {footerContext}
     <DecisionCardFooter leading={leading}>
-      {href ? <OpenButton href={href} onOpen={onOpen}>Open task</OpenButton> : null}
+      {href ? <OpenButton href={href} onOpen={onOpen}>{t("needsYou.openTask")}</OpenButton> : null}
     </DecisionCardFooter>
   </>;
 }
@@ -90,43 +91,43 @@ export function BlockedTaskCardBody({ item, companyId, agentMap, userLabelMap, l
   const blocked = blocking ? item.subject : item.relatedIssue?.id !== item.subject.id ? item.relatedIssue : null;
   const blockedCount = item.detail?.kind === "blocker" ? item.detail.blockedTaskCount ?? 0 : 0;
   const status = item.subject.status ? `${item.subject.status[0]!.toUpperCase()}${item.subject.status.slice(1).replaceAll("_", " ")}` : null;
-  const meta = stalledReview ? ["Review stalled", assignee].filter(Boolean).join(" · ")
+  const meta = stalledReview ? [t("needsYouCardBodies.reviewStalled"), assignee].filter(Boolean).join(" · ")
     : blocking ? item.whyNow
       : [status, assignee].filter(Boolean).join(" · ") || undefined;
-  const note = stalledReview ? "No reviewer, approval or run is moving this review."
-    : blocked ? `Blocks ${taskLine(blocked)}${blockedCount > 1 ? ` and ${blockedCount - 1} more` : ""}`
-      : blockedCount > 0 ? `Blocks ${blockedCount} ${blockedCount === 1 ? "task" : "tasks"}`
+  const note = stalledReview ? t("needsYouCardBodies.noReviewerMoving")
+    : blocked ? `${t("needsYouCardBodies.blocks", { task: taskLine(blocked) })}${blockedCount > 1 ? t("needsYouCardBodies.andMore", { count: blockedCount - 1 }) : ""}`
+      : blockedCount > 0 ? t("needsYouCardBodies.blocksTasks", { count: blockedCount })
         : null;
   const panel = <NeedsYouPanel>
     {/* Without a separate blocker the task is the footer's, so the row only says its state (IA4). */}
     {blocking ? <NeedsYouPanelRow icon={<FileText />} title={taskLine(blocking)} meta={meta}
-      onOpen={href && onOpen ? () => onOpen(href) : undefined} /> : <NeedsYouPanelRow icon={<FileText />} title={meta ?? "Blocked"} />}
+      onOpen={href && onOpen ? () => onOpen(href) : undefined} /> : <NeedsYouPanelRow icon={<FileText />} title={meta ?? t("needsYouCardBodies.blocked")} />}
     {note ? <NeedsYouPanelNote>{note}</NeedsYouPanelNote> : null}
   </NeedsYouPanel>;
   if (stalledReview) {
     return <>
       {panel}
       <StalledReviewActions presentation="card" footerSlot={leading} issueId={item.subject.id} companyId={companyId}
-        reviewPolicy={readIssueReviewPolicyMetadata(item.subject.metadata)} approveLabel="Mark task done" onResolved={() => onResolved?.()} />
+        reviewPolicy={readIssueReviewPolicyMetadata(item.subject.metadata)} approveLabel={t("recovery.markTaskDone")} onResolved={() => onResolved?.()} />
     </>;
   }
   return <>
     {panel}
     {footerContext}
     <DecisionCardFooter leading={leading}>
-      {href ? <OpenButton href={href} onOpen={onOpen}>{blockingHref ? "Open blocking task" : "Open task"}</OpenButton> : null}
+      {href ? <OpenButton href={href} onOpen={onOpen}>{blockingHref ? t("needsYouCardBodies.openBlockingTask") : t("needsYou.openTask")}</OpenButton> : null}
     </DecisionCardFooter>
   </>;
 }
 
-const RECOVERY_KIND_LABELS: Record<string, string> = {
-  missing_disposition: "No next step chosen",
-  deliberate_wait_without_target: "Waiting on nothing",
-  stranded_assigned_issue: "Task stranded",
-  workspace_validation: "Workspace unavailable",
-  configuration_validation: "Configuration missing",
-  active_run_watchdog: "Run gone quiet",
-  issue_graph_liveness: "Task needs a next step",
+const RECOVERY_KIND_LABEL_KEYS: Record<string, string> = {
+  missing_disposition: "needsYouCardBodies.recoveryKindMissingDisposition",
+  deliberate_wait_without_target: "needsYouCardBodies.recoveryKindDeliberateWait",
+  stranded_assigned_issue: "needsYouCardBodies.recoveryKindStranded",
+  workspace_validation: "needsYouCardBodies.recoveryKindWorkspaceValidation",
+  configuration_validation: "needsYouCardBodies.recoveryKindConfigurationValidation",
+  active_run_watchdog: "needsYouCardBodies.recoveryKindActiveRunWatchdog",
+  issue_graph_liveness: "needsYouCardBodies.recoveryKindIssueGraphLiveness",
 };
 
 /**
@@ -137,19 +138,19 @@ const RECOVERY_KIND_LABELS: Record<string, string> = {
 export function RecoveryCardBody({ item, leading, footerContext, onOpen }: NeedsYouCardBodyProps) {
   const kind = metadataString(item, "kind");
   const title = [
-    kind ? RECOVERY_KIND_LABELS[kind] ?? `${kind[0]!.toUpperCase()}${kind.slice(1).replaceAll("_", " ")}` : "Recovery",
-    item.subject.status === "escalated" ? "Recovery escalated" : "Recovery paused",
+    kind ? (RECOVERY_KIND_LABEL_KEYS[kind] ? t(RECOVERY_KIND_LABEL_KEYS[kind]) : `${kind[0]!.toUpperCase()}${kind.slice(1).replaceAll("_", " ")}`) : t("needsYouCardBodies.recovery"),
+    item.subject.status === "escalated" ? t("needsYouCardBodies.recoveryEscalated") : t("needsYouCardBodies.recoveryPaused"),
   ].join(" · ");
   const href = item.subject.href;
   return <>
     <NeedsYouPanel>
       <NeedsYouPanelRow icon={<TriangleAlert className="text-amber-600 dark:text-amber-300" />} title={title} />
       {/* The ask above is the recovery's next action; this says where it is done. */}
-      <NeedsYouPanelNote>Resolve, reassign or cancel it in the recovery control on the task.</NeedsYouPanelNote>
+      <NeedsYouPanelNote>{t("needsYouCardBodies.resolveReassignOrCancel")}</NeedsYouPanelNote>
     </NeedsYouPanel>
     {footerContext}
     <DecisionCardFooter leading={leading}>
-      {href ? <OpenButton href={href} onOpen={onOpen}>Open recovery</OpenButton> : null}
+      {href ? <OpenButton href={href} onOpen={onOpen}>{t("needsYouCardBodies.openRecovery")}</OpenButton> : null}
     </DecisionCardFooter>
   </>;
 }
