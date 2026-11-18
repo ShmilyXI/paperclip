@@ -305,12 +305,12 @@ export function CodexLocalConfigFields({
       )}
       {runnerManaged && runnerProvider === "grok_bot" && <GrokBotConnection companyId={companyId} agentId={agentId} />}
       {runnerManaged && isCursorCloud && <>
-        <p className="text-sm text-muted-foreground">Experimental. Cursor hosts this agent’s execution environment. A Paperclip computer is not required. Cursor manages command permissions; effective model identity is unavailable. Agent environment settings support only CURSOR_API_KEY. Configure hosted secrets in your Cursor Cloud environment.</p>
+        <p className="text-sm text-muted-foreground">{t("codexLocal.cursorCloudExperimental")}</p>
         {[
-          { key: "repoUrl", label: "GitHub repository", fallback: "", legacy: undefined, placeholder: "https://github.com/your-org/repo", hint: "Select a repository or a named Cursor cloud environment." },
-          { key: "repoRef", label: "Starting ref", fallback: config.repoStartingRef ?? "", legacy: "repoStartingRef", placeholder: "Repository default" },
-          { key: "prUrl", label: "Pull request URL", fallback: config.repoPullRequestUrl ?? "", legacy: "repoPullRequestUrl", placeholder: "Optional" },
-          { key: "cloudEnvName", label: "Cursor cloud environment", fallback: config.runtimeEnvName ?? "", legacy: "runtimeEnvName", placeholder: "Use instead of a repository" },
+          { key: "repoUrl", label: t("newAgent.githubRepository"), fallback: "", legacy: undefined, placeholder: "https://github.com/your-org/repo", hint: t("codexLocal.cursorCloudRepoUrlHint") },
+          { key: "repoRef", label: t("codexLocal.cursorCloudStartingRef"), fallback: config.repoStartingRef ?? "", legacy: "repoStartingRef", placeholder: t("newAgent.repositoryDefault") },
+          { key: "prUrl", label: t("codexLocal.cursorCloudPullRequestUrl"), fallback: config.repoPullRequestUrl ?? "", legacy: "repoPullRequestUrl", placeholder: t("common.optional") },
+          { key: "cloudEnvName", label: t("codexLocal.cursorCloudEnvName"), fallback: config.runtimeEnvName ?? "", legacy: "runtimeEnvName", placeholder: t("codexLocal.cursorCloudEnvNamePlaceholder") },
         ].map(field => <Field key={field.key} configSection="adapter" label={field.label} hint={field.hint}>
           <DraftInput value={String(runnerSchemaValue(field.key, field.fallback))} placeholder={field.placeholder} className={inputClass}
             onCommit={value => {
@@ -319,9 +319,9 @@ export function CodexLocalConfigFields({
             }} />
         </Field>)}
         {[
-          { key: "workOnCurrentBranch", label: "Work on current branch" },
-          { key: "autoCreatePR", label: "Auto-create pull request" },
-          { key: "skipReviewerRequest", label: "Skip reviewer request" },
+          { key: "workOnCurrentBranch", label: t("codexLocal.cursorCloudWorkOnCurrentBranch") },
+          { key: "autoCreatePR", label: t("codexLocal.cursorCloudAutoCreatePr") },
+          { key: "skipReviewerRequest", label: t("codexLocal.cursorCloudSkipReviewerRequest") },
         ].map(field => <ToggleField key={field.key} label={field.label}
           checked={runnerSchemaValue(field.key, false) === true} onChange={value => updateRunnerSchemaValue(field.key, value)} />)}
       </>}
@@ -333,18 +333,18 @@ export function CodexLocalConfigFields({
           checked={runnerSchemaValue("dotAttachmentAccess", false) === true} onChange={value => updateRunnerSchemaValue("dotAttachmentAccess", value)} />
         <ToggleField label={t("codexLocal.workspaceFilesAndCommands")} hint={t("codexLocal.workspaceFilesAndCommandsHint")}
           checked={runnerSchemaValue("dotWorkspaceAccess", false) === true} onChange={value => updateRunnerSchemaValue("dotWorkspaceAccess", value)} />
-        <ToggleField label="Allow externally billed provider" hint={t("codexLocal.dotUnmeteredHint")}
+        <ToggleField label={t("newAgent.allowExternallyBilledProvider")} hint={t("codexLocal.dotUnmeteredHint")}
           checked={runnerSchemaValue("allowUnmeteredProvider", false) === true} onChange={value => updateRunnerSchemaValue("allowUnmeteredProvider", value)} />
       </>}
       {runnerManaged && isMuse && <>
         <Field configSection="adapter" label={t("codexLocal.museConnection")} hint={t("codexLocal.museConnectionHint")}>
           <MuseRunnerConnection companyId={companyId} agentId={agentId} />
         </Field>
-        <ToggleField label="Allow externally billed provider" hint={t("codexLocal.museUnmeteredHint")}
+        <ToggleField label={t("newAgent.allowExternallyBilledProvider")} hint={t("codexLocal.museUnmeteredHint")}
           checked={runnerSchemaValue("allowUnmeteredProvider", false) === true} onChange={value => updateRunnerSchemaValue("allowUnmeteredProvider", value)} />
       </>}
       {runnerManaged && !hideRunnerHarness && runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") !== "grok" && (
-        <Field configSection="adapter" label="ACP agent" hint="Choose a qualified harness and enter its exact model ID.">
+        <Field configSection="adapter" label={t("codexLocal.acpAgent")} hint={t("codexLocal.acpAgentCursorHint")}>
           <Select
             value={String(isCreate ? values!.adapterSchemaValues?.acpxAgent ?? "claude" : eff("adapterConfig", "acpxAgent", config.acpxAgent ?? "claude"))}
             onValueChange={(value) => {
@@ -567,7 +567,7 @@ export function CodexLocalConfigFields({
             <SelectContent>
               {runnerPermissionModeUnsupported && (
                 <SelectItem value="__unsupported__" disabled>
-                  Unsupported saved mode — select a qualified mode
+                  {t("codexLocal.unsupportedSavedQualifiedMode")}
                 </SelectItem>
               )}
               {runnerPermissionCapability.options.map((option) => (
@@ -579,16 +579,15 @@ export function CodexLocalConfigFields({
           </Select>
           {runnerPermissionModeUnsupported && runnerProvider === "codex" && (
             <p className="mt-1 text-xs text-destructive" role="alert">
-              This saved Codex mode cannot start or recover a Paperclip Runner
-              run. Select Automatic (isolated) to remediate it.
+              {t("codexLocal.codexModeUnrecoverableHint")}
             </p>
           )}
         </Field>
       )}
       {runnerManaged && !isExternal && !isCursorCloud && (
         <Field configSection="runPolicy"
-          label="Runner lifecycle"
-          hint="Automatic keeps Codex and OpenCode warm on this computer for 5 minutes after a run, so a follow-up starts faster, and runs other harnesses turn by turn. Turn by turn suspends after each run. Warm keeps the same provider process available between governed runs."
+          label={t("codexLocal.runnerLifecycle")}
+          hint={t("codexLocal.runnerLifecycleAutomaticHint")}
         >
           <SelectPopover
             aria-label={t("codexLocal.runnerLifecycle")}
@@ -600,9 +599,9 @@ export function CodexLocalConfigFields({
                 : mark("adapterConfig", "lifecycleMode", value);
             }}
             options={[
-              { value: "automatic", label: "Automatic" },
-              { value: "per_turn", label: "Turn by turn" },
-              { value: "warm", label: "Warm session" },
+              { value: "automatic", label: t("codexLocal.automatic") },
+              { value: "per_turn", label: t("codexLocal.turnByTurn") },
+              { value: "warm", label: t("codexLocal.warmSession") },
             ]}
           />
         </Field>
