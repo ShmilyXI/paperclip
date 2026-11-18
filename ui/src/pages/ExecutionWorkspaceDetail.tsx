@@ -711,7 +711,7 @@ function ExecutionWorkspaceRoutinesList({
     },
     onError: (mutationError) => {
       pushToast({
-        title: "Routine run failed",
+        title: t("executionWorkspaceDetail.routineRunFailed"),
         body: describeError(mutationError).body,
         tone: "error",
       });

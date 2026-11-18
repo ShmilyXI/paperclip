@@ -11975,6 +11975,9 @@
     "workspacePath": "工作区路径：",
     "lastChecked": "上次检查"
   },
+  "executionWorkspaceDetail": {
+    "routineRunFailed": "例行任务运行失败"
+  },
   "browse": {
     "replaceTheCredentialToRestore": "替换凭据以恢复访问。",
     "thisConnectorIsUnavailableOn": "此连接器在此实例上不可用。",

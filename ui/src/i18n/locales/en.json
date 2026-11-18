@@ -11975,6 +11975,9 @@
     "workspacePath": "Workspace path:",
     "lastChecked": "Last checked"
   },
+  "executionWorkspaceDetail": {
+    "routineRunFailed": "Routine run failed"
+  },
   "browse": {
     "replaceTheCredentialToRestore": "Replace the credential to restore access.",
     "thisConnectorIsUnavailableOn": "This connector is unavailable on this instance.",
