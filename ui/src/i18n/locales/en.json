@@ -6856,6 +6856,8 @@
     "couldnTReRun": "Couldn't re-run",
     "couldnTDeleteRun": "Couldn't delete run",
     "restoreOfVRevisionnumber": "Restore of v{{revisionNumber}}",
+    "restoredSavedVersion": "Restored saved version",
+    "discardUnsavedEditsAndLoadLatest": "Discard unsaved edits and load the latest saved file?",
     "binaryAsset": "[Binary asset]",
     "executable": " (executable)",
     "nameCopy": "{{name}} copy"

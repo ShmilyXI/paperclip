@@ -6856,6 +6856,8 @@
     "couldnTReRun": "无法重新运行",
     "couldnTDeleteRun": "无法删除运行",
     "restoreOfVRevisionnumber": "恢复自 v{{revisionNumber}}",
+    "restoredSavedVersion": "已恢复保存的版本",
+    "discardUnsavedEditsAndLoadLatest": "放弃未保存的修改并加载最新保存的文件？",
     "binaryAsset": "[二进制文件]",
     "executable": "（可执行）",
     "nameCopy": "{{name}} 副本"

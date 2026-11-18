@@ -1392,7 +1392,7 @@ function SkillPane({
   });
 
   async function loadLatestSavedFile() {
-    if (dirty && !window.confirm("Discard unsaved edits and load the latest saved file?")) return;
+    if (dirty && !window.confirm(t("skillStudio.discardUnsavedEditsAndLoadLatest"))) return;
     const result = await fileQuery.refetch();
     if (result.error) { onError("Couldn't load latest file")(result.error); return; }
     if (!result.data) return;
@@ -2463,9 +2463,9 @@ function RunsPane({
     hasUnsavedSkillEdits: skillDirty,
   });
   const templateGateReason = templatesQuery.isLoading
-    ? "Loading run templates"
+    ? t("skillStudio.loadingRunTemplates")
     : (templatesQueryView.kind === "error")
-      ? "Run templates couldn't load"
+      ? t("skillStudio.runTemplatesCouldnTLoad")
       : null;
 
   const createTemplateMutation = useMutation({
@@ -3522,12 +3522,12 @@ function VersionHistorySheet({
           expectedVersionId = saved.versionId ?? expectedVersionId;
         }
         return companySkillsApi.createVersion(companyId, skillId, {
-          label: `Restore of v${version.revisionNumber}`, expectedVersionId,
+          label: t("skillStudio.restoreOfVRevisionnumber", { revisionNumber: version.revisionNumber }), expectedVersionId,
         });
       }
       return companySkillsApi.createVersion(companyId, skillId, {
         sourceVersionId: selection.id, expectedVersionId: skill.currentVersionId,
-        label: "Restored saved version",
+        label: t("skillStudio.restoredSavedVersion"),
       });
     },
     onSuccess: () => {
