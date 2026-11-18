@@ -215,17 +215,16 @@ export function AuditRuns({
     <div className="space-y-4">
       {hideHeader ? null : (
         <div>
-          <h2 className="text-lg font-semibold text-foreground">Runs</h2>
+          <h2 className="text-lg font-semibold text-foreground">{t("common.runs")}</h2>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-            Recent agent executions across the organization. Open a run to inspect its transcript,
-            output, and task context.
+            {t("auditRuns.recentAgentExecutionsAcrossThe")}
           </p>
         </div>
       )}
 
-      <div data-canonical-toolbar="audit-runs" role="toolbar" aria-label="Audit filters" className="flex flex-wrap items-end gap-3 border-y border-border py-3">
+      <div data-canonical-toolbar="audit-runs" role="toolbar" aria-label={t("auditRuns.auditFilters")} className="flex flex-wrap items-end gap-3 border-y border-border py-3">
         {lockedAgentId ? null : <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
-          <span>Agent</span>
+          <span>{t("common.agent")}</span>
           <Select value={agentId} onValueChange={(value) => updateFilter("agentId", value)}>
             <SelectTrigger className="w-48">
               <SelectValue placeholder={t("auditRuns.allAgents")} />
@@ -302,7 +301,7 @@ export function AuditRuns({
                       <StatusBadge status={run.status} />
                     </div>
                     <p className="mt-1 truncate text-sm text-muted-foreground">
-                      {summary ?? `${readableSource(run.invocationSource)} run`}
+                      {summary ?? t("auditRuns.sourceRun", { source: readableSource(run.invocationSource) })}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground sm:justify-end">

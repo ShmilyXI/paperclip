@@ -9953,7 +9953,9 @@
     "recentRuns": "Recent runs",
     "unknownAgent": "Unknown agent",
     "showingRecentRoutineRuns": "Showing the {{count}} most recent routine runs.",
-    "showingRecentRuns": "Showing the {{count}} most recent runs."
+    "showingRecentRuns": "Showing the {{count}} most recent runs.",
+    "auditFilters": "Audit filters",
+    "sourceRun": "{{source}} run"
   },
   "workspaceServiceControlBar": {
     "provisioning": "Provisioning…",
