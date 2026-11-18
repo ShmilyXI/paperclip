@@ -16855,7 +16855,19 @@
     "connectTailscaleNetwork": "Connect Tailscale Network",
     "signInExpired": "Sign-in expired",
     "authorizationNotCompleted": "Authorization not completed",
-    "refreshConnections": "Refresh connections"
+    "refreshConnections": "Refresh connections",
+    "instanceAdministratorMustConfigure": "An instance administrator must configure this Tailscale machine.",
+    "manageTailscaleConnector": "Manage Tailscale connector",
+    "tailnetConnection": "Tailnet connection",
+    "chooseAConnection": "Choose a connection",
+    "unavailableConnection": "Unavailable connection",
+    "machine": "Machine",
+    "loadingMachines": "Loading machines…",
+    "chooseAMachine": "Choose a machine",
+    "offline": " — Offline",
+    "prepareMachinePairing": "Prepare machine pairing",
+    "runThisOnTheSelectedComputer": "Run this on the selected computer as the user who will run tasks. Enter the printed username, workspace, and known hosts below. Paperclip keeps the private key in its vault.",
+    "machinePairingCommand": "Machine pairing command"
   },
   "makeRoutineDialog": {
     "everyDay": "Every day",

@@ -16855,7 +16855,19 @@
     "connectTailscaleNetwork": "连接 Tailscale 网络",
     "signInExpired": "登录已过期",
     "authorizationNotCompleted": "授权未完成",
-    "refreshConnections": "刷新连接"
+    "refreshConnections": "刷新连接",
+    "instanceAdministratorMustConfigure": "必须由实例管理员来配置此 Tailscale 机器。",
+    "manageTailscaleConnector": "管理 Tailscale 连接器",
+    "tailnetConnection": "Tailnet 连接",
+    "chooseAConnection": "选择连接",
+    "unavailableConnection": "不可用的连接",
+    "machine": "机器",
+    "loadingMachines": "正在加载机器…",
+    "chooseAMachine": "选择机器",
+    "offline": " — 离线",
+    "prepareMachinePairing": "准备机器配对",
+    "runThisOnTheSelectedComputer": "请在选定的电脑上以运行任务的用户身份执行此命令。然后在下方输入打印出的用户名、工作区和已知主机。Paperclip 会将私钥保存在其保险库中。",
+    "machinePairingCommand": "机器配对命令"
   },
   "makeRoutineDialog": {
     "everyDay": "每天",
