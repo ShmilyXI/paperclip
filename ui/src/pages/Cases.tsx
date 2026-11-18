@@ -148,10 +148,11 @@ export function Cases() {
             data-page-search-target="true" onChange={event => setFilter("q", event.target.value)} className="h-8 pl-8" />
         </div>
         <p role="status" className="whitespace-nowrap text-xs text-muted-foreground">
-          {casesWaiting ? "Loading cases…" : casesQuery.isFetching ? "Updating cases…"
+          {casesWaiting ? t("cases.loadingCases") : casesQuery.isFetching ? t("cases.updatingCases")
             : (casesQueryView.kind === "error") ? ""
-              : page > 1 && records.length > 0 ? `${offset + 1}–${offset + records.length} cases`
-                : `${records.length}${hasNext ? "+" : ""} ${records.length === 1 && !hasNext ? "case" : "cases"}`}
+              : page > 1 && records.length > 0 ? t("cases.rangeCases", { start: offset + 1, end: offset + records.length })
+                : hasNext ? t("cases.countCasesPlus", { count: records.length })
+                  : t("cases.countCases", { count: records.length })}
         </p>
       </div>} controls={<CaseListControls activeFilterCount={activeFilterCount} columns={view.columns}
         onColumnsChange={columns => setView({ columns: columns.join(",") === DEFAULT_CASE_COLUMNS.join(",") ? "" : columns.join(",") || "none" }, false)}
@@ -163,12 +164,12 @@ export function Cases() {
           { value: ALL, label: t("cases.allStatuses") },
           ...CASE_STATUSES.map(value => ({ value, label: CASE_STATUS_LABELS[value] })),
         ]} />
-        <CaseFilter label="Type" value={type} disabled={typesQuery.isPending || (typesQueryView.kind === "error")}
+        <CaseFilter label={t("common.type")} value={type} disabled={typesQuery.isPending || (typesQueryView.kind === "error")}
           onChange={value => setFilter("type", value)} options={[
             { value: ALL, label: t("cases.allTypes") },
             ...typeOptions.map(value => ({ value, label: value })),
           ]} />
-        <CaseFilter label="Project" value={project} disabled={projectsQuery.isPending || (projectsQueryView.kind === "error")}
+        <CaseFilter label={t("common.project")} value={project} disabled={projectsQuery.isPending || (projectsQueryView.kind === "error")}
           onChange={value => setFilter("project", value)} options={[
             { value: ALL, label: t("cases.allProjects") },
             { value: "none", label: t("cases.noProject") },
@@ -180,18 +181,18 @@ export function Cases() {
         feedback={hasFilters ? <Button variant="ghost" size="sm" onClick={clearFilters}>{t("cases.clearFilters")}</Button> : undefined} />
 
       {(typesQueryView.kind === "error") || (projectsQueryView.kind === "error") ? <div role="alert" className="flex flex-wrap items-center gap-3 text-sm">
-        <p>Some case filters couldn’t be loaded.</p>
+        <p>{t("cases.someCaseFiltersCouldnT")}</p>
         <Button variant="ghost" size="sm" onClick={() => {
           if ((typesQueryView.kind === "error")) void typesQuery.refetch();
           if ((projectsQueryView.kind === "error")) void projectsQuery.refetch();
-        }}>Retry filters</Button>
+        }}>{t("cases.retryFilters")}</Button>
       </div> : null}
 
       {casesWaiting ? <div aria-hidden="true" className="space-y-2">
         {Array.from({ length: 6 }, (_, index) => <Skeleton key={index} className="h-16 w-full rounded-none" />)}
       </div> : (casesQueryView.kind === "error") ? <div role="alert" className="flex flex-wrap items-center gap-3 py-6 text-sm">
-        <p>Cases couldn’t be loaded.</p>
-        <Button variant="outline" size="sm" onClick={() => void casesQuery.refetch()}>Try again</Button>
+        <p>{t("cases.casesCouldnTBeLoaded")}</p>
+        <Button variant="outline" size="sm" onClick={() => void casesQuery.refetch()}>{t("common.tryAgain")}</Button>
       </div> : records.length === 0 ? (
         <EmptyState icon={hasFilters ? Search : FolderOpen}
           message={page > 1 ? t("cases.noCasesOnThisPage") : hasFilters ? t("cases.noCasesMatchTheseFilters") : t("cases.noCasesYet")}
