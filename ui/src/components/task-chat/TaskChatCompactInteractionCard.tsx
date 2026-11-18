@@ -136,23 +136,23 @@ const KIND_COPY = {
     icon: Plug,
   },
   suggest_routine: {
-    fallbackTitle: "Routine offer",
-    label: "Routine",
+    fallbackTitle: t("taskChatCompactInteractionCard.routineOffer"),
+    label: t("common.routine"),
     icon: Repeat,
   },
   propose_responsibility_bar: {
-    fallbackTitle: "Proposed bar",
-    label: "Bar",
+    fallbackTitle: t("taskChatCompactInteractionCard.proposedBar"),
+    label: t("taskChatCompactInteractionCard.bar"),
     icon: Target,
   },
   propose_automation: {
-    fallbackTitle: "Proposed automation",
-    label: "Automation",
+    fallbackTitle: t("taskChatCompactInteractionCard.proposedAutomation"),
+    label: t("taskChatCompactInteractionCard.automation"),
     icon: Zap,
   },
   propose_dashboard_changes: {
-    fallbackTitle: "Proposed dashboard changes",
-    label: "Dashboard",
+    fallbackTitle: t("taskChatCompactInteractionCard.proposedDashboardChanges"),
+    label: t("common.dashboard"),
     icon: LayoutList,
   },
 } as const;
@@ -394,7 +394,9 @@ function PlanReviewPreview({
       }}
       href={coordinator ? decisionReceiptHref({ issueHref: `/issues/${interaction.issueId}`, interactionId: interaction.id, target }) : "#document-plan"}
       testId="plan-review-preview"
-      ariaLabel={`Open ${target.label ?? (targetRevision == null ? "plan" : `plan revision ${targetRevision}`)}`}
+      ariaLabel={t("taskChatCompactInteractionCard.openTarget", {
+        label: target.label ?? (targetRevision == null ? t("taskChatCompactInteractionCard.plan") : t("taskChatCompactInteractionCard.planRevisionAria", { revision: targetRevision })),
+      })}
     />
   );
 }
@@ -404,9 +406,9 @@ function planReviewReceiptSummary(interaction: IssueThreadInteraction, reason: s
   if (interaction.kind !== "request_confirmation") return null;
   const target = interaction.payload.target;
   if (target?.type !== "issue_document" || target.key !== "plan") return null;
-  const plan = target.revisionNumber == null ? "the plan" : `Plan v${target.revisionNumber}`;
-  if (interaction.status === "accepted") return `Approved ${plan}`;
-  if (interaction.status === "rejected") return reason ? `Requested changes to ${plan}: ${reason}` : `Requested changes to ${plan}`;
+  const plan = target.revisionNumber == null ? t("taskChatCompactInteractionCard.thePlan") : t("taskChatCompactInteractionCard.planVersion", { revision: target.revisionNumber });
+  if (interaction.status === "accepted") return t("taskChatCompactInteractionCard.approvedPlan", { plan });
+  if (interaction.status === "rejected") return reason ? t("taskChatCompactInteractionCard.requestedChangesToPlan", { plan, reason }) : t("taskChatCompactInteractionCard.requestedChangesToPlanShort", { plan });
   return null;
 }
 
@@ -583,7 +585,7 @@ function ReceiptDisclosure({
   } else if (interaction.kind === "suggest_routine") {
     request = (
       <p className="text-sm text-foreground">
-        Repeat {interaction.payload.title}: {interaction.payload.cadenceLabel}.
+        {t("taskChatCompactInteractionCard.repeatRoutineSummary", { title: interaction.payload.title, cadenceLabel: interaction.payload.cadenceLabel })}
       </p>
     );
   } else if (interaction.kind === "propose_responsibility_bar") {
@@ -601,7 +603,7 @@ function ReceiptDisclosure({
   } else if (interaction.kind === "propose_dashboard_changes") {
     request = (
       <p className="text-sm text-foreground">
-        {interaction.payload.message ?? (interaction.payload.changes.length === 1 ? "1 change to the dashboard." : `${interaction.payload.changes.length} changes to the dashboard.`)}
+        {interaction.payload.message ?? t("taskChatCompactInteractionCard.changeToTheDashboard", { count: interaction.payload.changes.length })}
       </p>
     );
   } else {
@@ -624,10 +626,11 @@ function ReceiptDisclosure({
               {t("taskChatCompactInteractionCard.toolRisk", { risk: interaction.payload.toolAction.risk })}
             </p>
             {interaction.payload.toolAction.expiresAt ? <p className="mt-1">
-              Expires{" "}
-              {new Date(
-                interaction.payload.toolAction.expiresAt,
-              ).toLocaleString()}
+              {t("taskChatCompactInteractionCard.expiresAt", {
+                time: new Date(
+                  interaction.payload.toolAction.expiresAt,
+                ).toLocaleString(),
+              })}
             </p> : null}
             <div className="mt-2">
               <MarkdownBody externalReferences={externalReferences}>
@@ -693,7 +696,7 @@ function ReceiptDisclosure({
     const summary =
       interaction.kind === "ask_user_questions" &&
       interaction.status === "answered"
-        ? "Questions answered"
+        ? t("taskChatCompactInteractionCard.questionsAnswered")
         : planReviewReceiptSummary(interaction, answerReason)
           ?? buildIssueThreadInteractionSummary(interaction);
     return (
@@ -997,10 +1000,11 @@ function ConfirmationCard({
               {t("taskChatCompactInteractionCard.toolRiskBare", { risk: interaction.payload.toolAction.risk })}
             </span>
             {interaction.payload.toolAction.expiresAt ? <span className="ml-auto text-xs text-muted-foreground">
-              Expires{" "}
-              {new Date(
-                interaction.payload.toolAction.expiresAt,
-              ).toLocaleString()}
+              {t("taskChatCompactInteractionCard.expiresAt", {
+                time: new Date(
+                  interaction.payload.toolAction.expiresAt,
+                ).toLocaleString(),
+              })}
             </span> : null}
           </div>
           <MarkdownBody externalReferences={externalReferences}>
@@ -1008,7 +1012,7 @@ function ConfirmationCard({
           </MarkdownBody>
           <details>
             <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-              Arguments
+              {t("taskChatCompactInteractionCard.arguments")}
             </summary>
             <pre className={cn("mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>
               {interaction.payload.toolAction.argumentsSummaryJson}
@@ -1581,7 +1585,7 @@ function SuggestedTasksCard({
             htmlFor={`${interaction.id}-reject-reason`}
             className="text-xs font-medium text-foreground"
           >
-            {coordinator ? "What should change?" : "Why should these tasks change? (optional)"}
+            {coordinator ? t("taskChatCompactInteractionCard.whatShouldChange") : t("taskChatCompactInteractionCard.whyShouldTheseTasksChange")}
           </label>
           <Textarea
             id={`${interaction.id}-reject-reason`}
@@ -1595,10 +1599,10 @@ function SuggestedTasksCard({
       ) : null}
       <InteractionActionError message={actionError} />
       {coordinator && interaction.payload.tasks.length > 1 ? (
-        <p className="mt-3 text-xs text-muted-foreground">{selected.size} of {interaction.payload.tasks.length} selected</p>
+        <p className="mt-3 text-xs text-muted-foreground">{t("taskChatCompactInteractionCard.selectedOfTotal", { selected: selected.size, total: interaction.payload.tasks.length })}</p>
       ) : null}
       <ActionRow
-        hint={coordinator ? null : `${selected.size} of ${interaction.payload.tasks.length} selected`}
+        hint={coordinator ? null : t("taskChatCompactInteractionCard.selectedOfTotal", { selected: selected.size, total: interaction.payload.tasks.length })}
       >
         {rejecting ? (
           <>
@@ -1609,7 +1613,7 @@ function SuggestedTasksCard({
               disabled={working !== null}
               onClick={() => setRejecting(false)}
             >
-              {coordinator ? "Cancel" : "Back"}
+              {coordinator ? t("common.cancel") : t("common.back")}
             </Button>
             <Button
               type="button"
@@ -1621,13 +1625,13 @@ function SuggestedTasksCard({
               {working === "reject" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {coordinator ? "Request revision" : "Send back"}
+              {coordinator ? t("taskChatCompactInteractionCard.requestRevision") : t("taskChatCompactInteractionCard.sendBack")}
             </Button>
           </>
         ) : (
           <>
             {coordinator ? <Button type="button" size="sm" variant="ghost" disabled={working !== null || !onRejectInteraction}
-              onClick={() => { setReason(""); void resolve("reject", ""); }}>Reject</Button> : null}
+              onClick={() => { setReason(""); void resolve("reject", ""); }}>{t("common.reject")}</Button> : null}
             <Button
               type="button"
               size="sm"
@@ -1635,7 +1639,7 @@ function SuggestedTasksCard({
               disabled={working !== null || !onRejectInteraction}
               onClick={() => setRejecting(true)}
             >
-              {coordinator ? "Revise…" : "Revise"}
+              {coordinator ? t("taskChatCompactInteractionCard.revising") : t("taskChatCompactInteractionCard.revise")}
             </Button>
             <Button
               type="button"
@@ -1648,7 +1652,7 @@ function SuggestedTasksCard({
               {working === "accept" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}
-              {coordinator ? "Create" : "Create selected"}
+              {coordinator ? t("common.create") : t("taskChatCompactInteractionCard.createSelected")}
             </Button>
           </>
         )}
