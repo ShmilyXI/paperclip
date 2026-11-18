@@ -127,35 +127,35 @@ function ClassicSidebar({ children }: { children?: ReactNode }) {
   // Work. Hidden until the flag is known (no-flash, same as above).
   const { enabled: responsibilitiesHome } = useResponsibilitiesEnabled();
 
-  const chatItem = <SidebarNavItem to="/chats" label="Chat" icon={MessageCircle} badge={unreadChatCount} badgeLabel="unread chats" />;
+  const chatItem = <SidebarNavItem to="/chats" label={t("nav.chat")} icon={MessageCircle} badge={unreadChatCount} badgeLabel={t("nav.unreadChats")} />;
   // Combined Inbox + Task List: Inbox is a view inside Tasks, so the
   // unread/failed-run badge rides on Tasks.
   const tasksItem = combinedInboxTasks ? (
     <SidebarNavItem
       to="/issues"
-      label="Tasks"
+      label={t("nav.tasks")}
       icon={CircleCheck}
       badge={inboxBadge.inbox}
-      badgeLabel="unread"
+      badgeLabel={t("nav.unread")}
       badgeTone={inboxBadge.failedRuns > 0 ? "danger" : "default"}
       alert={inboxBadge.failedRuns > 0}
     />
   ) : (
-    <SidebarNavItem to="/issues" label="Tasks" icon={CircleCheck} />
+    <SidebarNavItem to="/issues" label={t("nav.tasks")} icon={CircleCheck} />
   );
   const inboxItem = !combinedInboxTasks ? (
     <SidebarNavItem
       to="/inbox"
-      label="Inbox"
+      label={t("nav.inbox")}
       icon={Inbox}
       badge={inboxBadge.inbox}
-      badgeLabel="unread"
+      badgeLabel={t("nav.unread")}
       badgeTone={inboxBadge.failedRuns > 0 ? "danger" : "default"}
       alert={inboxBadge.failedRuns > 0}
     />
   ) : null;
   // The classic dashboard. With Responsibilities as home that page takes the "Dashboard" name and this row is not shown.
-  const dashboardItem = <SidebarNavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} liveCount={liveRunCount} />;
+  const dashboardItem = <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />;
 
   const pluginContext = {
     companyId: selectedCompanyId,
@@ -189,12 +189,12 @@ function ClassicSidebar({ children }: { children?: ReactNode }) {
             className="flex items-center gap-2.5 mx-2 rounded-lg px-2 py-1.5 pointer-coarse:py-1 text-(length:--text-compact) font-medium text-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
             <SquarePen className="h-4 w-4 shrink-0" />
-            <span className="truncate">New Task</span>
+            <span className="truncate">{t("nav.newTask")}</span>
           </button>
-          <SidebarNavItem to="/search" label="Search" icon={Search} />
+          <SidebarNavItem to="/search" label={t("nav.search")} icon={Search} />
           {responsibilitiesHome ? (
             <>
-              <SidebarNavItem to="/responsibilities" label="Dashboard" icon={Compass} />
+              <SidebarNavItem to="/responsibilities" label={t("nav.dashboard")} icon={Compass} />
               {agentChatEnabled ? chatItem : null}
               {tasksItem}
               {inboxItem}

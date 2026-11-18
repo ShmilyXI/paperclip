@@ -67,7 +67,8 @@
     "board": "Board",
     "infiniteCanvas": "Infinite Canvas",
     "deployConsole": "Deploy Console",
-    "office": "Office"
+    "office": "Office",
+    "unreadChats": "unread chats"
   },
   "sidebar": {
     "top": "Top",

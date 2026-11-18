@@ -67,7 +67,8 @@
     "board": "统筹看板",
     "infiniteCanvas": "无限画布",
     "deployConsole": "部署控制台",
-    "office": "办公室"
+    "office": "办公室",
+    "unreadChats": "未读对话"
   },
   "sidebar": {
     "top": "默认排序",
