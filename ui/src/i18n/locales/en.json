@@ -9612,7 +9612,8 @@
     "cannotManageOpenclawSkillsHere": "Paperclip cannot manage OpenClaw skills here. Visit your OpenClaw instance to manage this agent's skills.",
     "cannotManageSkillsForThisAdapter": "Paperclip cannot manage skills for this adapter yet. Manage them in the adapter directly.",
     "enabledOfTotal": "{{enabled}} of {{total}} enabled",
-    "adapter": "Adapter:"
+    "adapter": "Adapter:",
+    "agentSkillsControls": "Agent skills controls"
   },
   "taskSidePanel": {
     "subtasks": "Subtasks",

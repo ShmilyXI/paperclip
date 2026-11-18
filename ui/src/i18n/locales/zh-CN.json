@@ -9612,7 +9612,8 @@
     "cannotManageOpenclawSkillsHere": "Paperclip 无法在此管理 OpenClaw 技能。请到你的 OpenClaw 实例中管理该员工的技能。",
     "cannotManageSkillsForThisAdapter": "Paperclip 目前还无法为这个适配器管理技能。请直接在适配器中管理。",
     "enabledOfTotal": "已启用 {{enabled}} / {{total}}",
-    "adapter": "适配器："
+    "adapter": "适配器：",
+    "agentSkillsControls": "员工技能控件"
   },
   "taskSidePanel": {
     "subtasks": "子任务",
