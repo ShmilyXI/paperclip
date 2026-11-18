@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -79,10 +80,10 @@ function useReadingAuthor(responsibility: ResponsibilityDetail, agentsById: Read
   });
   const actor = lastReadingActor(activity.data ?? [], responsibility.metricUpdatedAt);
   if (!actor) return null;
-  if (actor.actorType === "agent") return agentsById.get(actor.actorId)?.name ?? "an agent";
+  if (actor.actorType === "agent") return agentsById.get(actor.actorId)?.name ?? t("decisionCard.anAgent");
   if (actor.actorType === "user") {
-    if (session.data?.user?.id && actor.actorId === session.data.user.id) return "you";
-    return actor.actorId === responsibility.ownerUserId ? "the owner" : "a teammate";
+    if (session.data?.user?.id && actor.actorId === session.data.user.id) return t("issueThreadInteractionCard.youMidSentence");
+    return actor.actorId === responsibility.ownerUserId ? t("responsibilities.theOwner") : t("responsibilities.aTeammate");
   }
   return null;
 }
@@ -99,20 +100,20 @@ export function RecordReading({ responsibility }: { responsibility: Responsibili
     update.mutate({ metricCurrent }, {
       onSuccess: () => {
         onDone?.();
-        setNotice("Recorded.");
+        setNotice(t("responsibilities.recorded"));
       },
     });
   };
   const failed = update.error ? (
-    <p role="alert" className="text-xs text-destructive">Couldn’t record it. {describeError(update.error).body}</p>
+    <p role="alert" className="text-xs text-destructive">{t("responsibilities.couldNotRecordIt")} {describeError(update.error).body}</p>
   ) : null;
   if (responsibility.metricKind === "yes_no") {
     return (
-      <div className="flex flex-col gap-1.5" role="group" aria-label="Record a new reading">
-        <span className="text-xs text-muted-foreground">Is it true today?</span>
+      <div className="flex flex-col gap-1.5" role="group" aria-label={t("responsibilities.recordANewReading")}>
+        <span className="text-xs text-muted-foreground">{t("responsibilities.isItTrueToday")}</span>
         <div className="flex items-center gap-2">
-          <Button type="button" size="sm" variant="outline" disabled={update.isPending} onClick={() => record(true)}>Yes</Button>
-          <Button type="button" size="sm" variant="outline" disabled={update.isPending} onClick={() => record(false)}>No</Button>
+          <Button type="button" size="sm" variant="outline" disabled={update.isPending} onClick={() => record(true)}>{t("common.yes")}</Button>
+          <Button type="button" size="sm" variant="outline" disabled={update.isPending} onClick={() => record(false)}>{t("common.no")}</Button>
         </div>
         {notice ? <p role="status" className="text-xs text-muted-foreground">{notice}</p> : null}
         {failed}
@@ -126,16 +127,16 @@ export function RecordReading({ responsibility }: { responsibility: Responsibili
   };
   const unit = responsibility.metricKind === "percentage" ? "%" : responsibility.metricUnit?.trim();
   return (
-    <form className="flex flex-col gap-1.5" onSubmit={submit} aria-label="Record a new reading">
+    <form className="flex flex-col gap-1.5" onSubmit={submit} aria-label={t("responsibilities.recordANewReading")}>
       <label htmlFor={inputId} className="text-xs text-muted-foreground">
-        New reading{unit ? ` (${unit})` : ""}
+        {t("responsibilities.newReading")}{unit ? ` (${unit})` : ""}
       </label>
       <div className="flex items-center gap-2">
         <Input
           id={inputId}
           inputMode="decimal"
           value={value}
-          placeholder={responsibility.metricCurrent === null ? "e.g. 9" : String(responsibility.metricCurrent)}
+          placeholder={responsibility.metricCurrent === null ? t("responsibilities.exampleNumber") : String(responsibility.metricCurrent)}
           className="max-w-40"
           aria-invalid={parsed === "invalid" || undefined}
           onChange={(event) => {
@@ -144,10 +145,10 @@ export function RecordReading({ responsibility }: { responsibility: Responsibili
           }}
         />
         <Button type="submit" size="sm" variant="outline" disabled={typeof parsed !== "number" || update.isPending}>
-          {update.isPending ? "Saving…" : "Record"}
+          {update.isPending ? t("common.saving2") : t("responsibilities.record")}
         </Button>
       </div>
-      {parsed === "invalid" ? <p className="text-xs text-destructive">Enter a number</p> : null}
+      {parsed === "invalid" ? <p className="text-xs text-destructive">{t("responsibilities.enterANumber")}</p> : null}
       {notice ? <p role="status" className="text-xs text-muted-foreground">{notice}</p> : null}
       {failed}
     </form>
@@ -193,16 +194,16 @@ export function EditBarDialog({
       <DialogContent className="sm:max-w-xl">
         <form className="flex flex-col gap-5" onSubmit={submit} noValidate>
           <DialogHeader>
-            <DialogTitle>{responsibility.standard?.trim() ? "Edit the bar" : "Set the bar"}</DialogTitle>
-            <DialogDescription>How is success measured for {responsibility.title}? The status follows from the reading, by the kind of measure you choose.</DialogDescription>
+            <DialogTitle>{responsibility.standard?.trim() ? t("responsibilities.editTheBar") : t("responsibilities.setTheBar")}</DialogTitle>
+            <DialogDescription>{t("responsibilities.howIsSuccessMeasuredFor", { title: responsibility.title })}</DialogDescription>
           </DialogHeader>
           <ResponsibilityBarFields draft={draft} onChange={setDraft} missing={missing} invalid={invalid} problems={problems} />
           {update.error ? (
-            <p role="alert" className="text-sm text-destructive">Couldn’t save the bar. {describeError(update.error).body}</p>
+            <p role="alert" className="text-sm text-destructive">{t("responsibilities.couldNotSaveTheBar")} {describeError(update.error).body}</p>
           ) : null}
           <DialogFooter className="items-center sm:justify-between">
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" disabled={update.isPending}>{update.isPending ? "Saving…" : "Save the bar"}</Button>
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>{t("common.cancel")}</Button>
+            <Button type="submit" disabled={update.isPending}>{update.isPending ? t("common.saving2") : t("responsibilities.saveTheBar")}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -276,12 +277,12 @@ function BarConversationNotice({
   return (
     <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground" data-testid="bar-conversation-open">
       <MessageSquare aria-hidden className="h-4 w-4 shrink-0" />
-      <span>You are talking the bar through with {agentName ?? "an agent"}.</span>
+      <span>{t("responsibilities.youAreTalkingTheBarThroughWith", { name: agentName ?? t("decisionCard.anAgent") })}</span>
       <Link
         to={`/issues/${state.conversation.identifier ?? state.conversation.issueId}`}
         className="font-medium text-foreground underline-offset-4 hover:underline"
       >
-        Open the conversation
+        {t("responsibilities.openTheConversation")}
       </Link>
     </p>
   );
@@ -297,9 +298,9 @@ function StatusOverride({ responsibility }: { responsibility: ResponsibilityDeta
       {rollup.healthOverridden ? (
         <>
           <p className="text-xs text-muted-foreground">
-            Set by hand.
+            {t("responsibilities.setByHand")}
             {rollup.computedHealth !== rollup.health
-              ? ` From the number alone it is ${RESPONSIBILITY_HEALTH_LABEL[rollup.computedHealth].toLowerCase()}.`
+              ? ` ${t("responsibilities.fromTheNumberAloneItIs", { label: RESPONSIBILITY_HEALTH_LABEL[rollup.computedHealth].toLowerCase() })}`
               : ""}
           </p>
           <InlineEditor
@@ -307,7 +308,7 @@ function StatusOverride({ responsibility }: { responsibility: ResponsibilityDeta
             onSave={(healthNote) => update.mutateAsync({ healthNote: healthNote.trim() || null })}
             as="p"
             className="text-sm text-foreground"
-            placeholder="Why you set it (optional)"
+            placeholder={t("responsibilities.whyYouSetItOptional")}
             nullable
           />
         </>
@@ -315,25 +316,25 @@ function StatusOverride({ responsibility }: { responsibility: ResponsibilityDeta
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="xs" variant="ghost" className="w-fit text-muted-foreground" disabled={update.isPending}>
-            {rollup.healthOverridden ? "Change or clear" : "Set the status by hand"}
+            {rollup.healthOverridden ? t("responsibilities.changeOrClear") : t("responsibilities.setTheStatusByHand")}
             <ChevronDown aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
-          <DropdownMenuLabel>Status</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("common.status")}</DropdownMenuLabel>
           <DropdownMenuRadioGroup
             value={value}
             onValueChange={(next) => update.mutate({ healthOverride: next === "automatic" ? null : (next as ResponsibilityHealthOverride) })}
           >
-            <DropdownMenuRadioItem value="automatic">From the number</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="behind">Behind</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="at_risk">At risk</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="on_track">On track</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="automatic">{t("responsibilities.fromTheNumber")}</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="behind">{t("responsibilities.behind")}</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="at_risk">{t("responsibilities.atRisk")}</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="on_track">{t("responsibilities.onTrack")}</DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
       {update.error ? (
-        <p role="alert" className="text-xs text-destructive">Couldn’t change the status. {describeError(update.error).body}</p>
+        <p role="alert" className="text-xs text-destructive">{t("responsibilities.couldNotChangeTheStatus")} {describeError(update.error).body}</p>
       ) : null}
     </div>
   );
@@ -370,9 +371,9 @@ export function ResponsibilityBarCard({
     <Card id="responsibility-bar" elevation="low" className="gap-5 px-5 py-5" aria-labelledby={headingId}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <h2 id={headingId} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">The bar</h2>
+          <h2 id={headingId} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("responsibilities.theBar")}</h2>
           <p className="text-base text-foreground">
-            {responsibility.standard?.trim() || <span className="text-muted-foreground">No bar yet. How is success measured?</span>}
+            {responsibility.standard?.trim() || <span className="text-muted-foreground">{t("responsibilities.noBarYetHowIsSuccessMeasured")}</span>}
           </p>
         </div>
         {editable ? (
@@ -381,7 +382,7 @@ export function ResponsibilityBarCard({
               <>
                 <Button size="sm" variant="ghost" onClick={() => setEditing(true)}>
                   <Pencil aria-hidden="true" />
-                  Edit by hand
+                  {t("responsibilities.editByHand")}
                 </Button>
                 <Button
                   size="sm"
@@ -391,13 +392,13 @@ export function ResponsibilityBarCard({
                   onClick={() => conversation.start.mutate()}
                 >
                   {conversation.start.isPending ? <Loader2 aria-hidden="true" className="animate-spin" /> : <MessageSquare aria-hidden="true" />}
-                  {conversation.open ? "Continue the conversation" : hasBar ? "Edit the bar" : "Set the bar"}
+                  {conversation.open ? t("responsibilities.continueTheConversation") : hasBar ? t("responsibilities.editTheBar") : t("responsibilities.setTheBar")}
                 </Button>
               </>
             ) : (
               <Button size="sm" variant="ghost" data-bar-edit-primary="" onClick={() => setEditing(true)}>
                 <Pencil aria-hidden="true" />
-                {hasBar ? "Edit the bar" : "Set the bar"}
+                {hasBar ? t("responsibilities.editTheBar") : t("responsibilities.setTheBar")}
               </Button>
             )}
           </div>
@@ -405,7 +406,7 @@ export function ResponsibilityBarCard({
       </div>
       {conversation.start.error ? (
         <p role="alert" className="text-sm text-destructive">
-          Couldn’t start the conversation. {describeError(conversation.start.error).body} You can still edit the bar by hand.
+          {t("responsibilities.couldNotStartTheConversation")} {describeError(conversation.start.error).body} {t("responsibilities.youCanStillEditTheBarByHand")}
         </p>
       ) : null}
       {conversation.loadError ? (
@@ -416,7 +417,7 @@ export function ResponsibilityBarCard({
 
       <div className="flex flex-col gap-3" data-bar-status="">
         <div className="flex flex-col gap-1.5">
-          <span className="text-xs text-muted-foreground">Status</span>
+          <span className="text-xs text-muted-foreground">{t("common.status")}</span>
           <ResponsibilityStatusBlock responsibility={responsibility} agentsById={agentsById} now={now} editable={editable} />
         </div>
         {editable ? <StatusOverride responsibility={responsibility} /> : null}
@@ -438,8 +439,10 @@ export function ResponsibilityBarCard({
         <div className="flex flex-col gap-3">
           <p className="text-xs text-muted-foreground">
             {updatedAt
-              ? `Updated ${describeReadingAge(updatedAt, now)}${author ? ` by ${author}` : ""}.`
-              : "No reading yet. The agents working on this keep the number current; you can record one too."}
+              ? (author
+                  ? t("responsibilities.updatedAgeBy", { age: describeReadingAge(updatedAt, now), author })
+                  : t("responsibilities.updatedAge", { age: describeReadingAge(updatedAt, now) }))
+              : t("responsibilities.noReadingYet")}
           </p>
           {editable && rollup.metric ? <RecordReading responsibility={responsibility} /> : null}
         </div>
