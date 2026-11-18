@@ -37,8 +37,8 @@ export function SkillPackagePreview({ companyId, repository, commitSha, skill, i
   return <Dialog open onOpenChange={open => { if (!open) onClose(); }}>
     <DialogContent className="flex max-h-(--sz-calc-18) flex-col overflow-y-auto p-4 sm:max-w-4xl sm:p-6">
       <DialogHeader>
-        <DialogTitle>{repositoryPackage ? 'Included repository files' : skill.name}</DialogTitle>
-        <DialogDescription className="break-all font-mono text-xs">{repositoryPackage ? 'Repository root' : root || 'Repository root'}/ · {inspection?.files.length ?? skill.fileCount ?? '?'} files{commitSha ? ` · ${commitSha.slice(0, 8)}` : ''}</DialogDescription>
+        <DialogTitle>{repositoryPackage ? t("skillPackagePreview.includedRepositoryFiles") : skill.name}</DialogTitle>
+        <DialogDescription className="break-all font-mono text-xs">{repositoryPackage ? t("skillPackagePreview.repositoryRoot") : root || t("skillPackagePreview.repositoryRoot")}/ · {t("skillPackagePreview.fileCount", { total: inspection?.files.length ?? skill.fileCount ?? '?' })}{commitSha ? ` · ${commitSha.slice(0, 8)}` : ''}</DialogDescription>
       </DialogHeader>
       {!inspection && <p role="status" className="text-sm text-muted-foreground">{t("skillPackagePreview.refreshThisSourceToInspect")}</p>}
       {skill.error && <p className="text-sm text-muted-foreground">{t("skillPackagePreview.needsSetup", { error: skill.error })}</p>}
@@ -67,15 +67,15 @@ export function SkillPackagePreview({ companyId, repository, commitSha, skill, i
         <div className="flex min-w-0 flex-1 flex-col">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-muted/30 px-3 py-2 text-xs">
             <span className="break-all font-mono">{filePath}</span>
-            {file && <span className="text-muted-foreground">{file.sizeBytes.toLocaleString()} bytes{file.executable ? ' · executable' : ''}</span>}
+            {file && <span className="text-muted-foreground">{t("skillPackagePreview.bytes", { bytes: file.sizeBytes.toLocaleString() })}{file.executable ? t("skillPackagePreview.executable") : ''}</span>}
           </div>
           <div className="max-h-(--sz-480px) min-h-40 overflow-auto p-3">
-            {(preview.isFetching || previewView.kind === 'reconnecting') && <p role="status" className="text-sm text-muted-foreground">Loading preview…</p>}
-            {previewView.kind === 'error' && <div className="space-y-2 text-sm"><QueryErrorState size="inline" error={preview.error} action="load the preview" onRetry={previewView.retry} retrying={previewView.isFetching} /> <Link to="/apps" className="underline">Manage GitHub access</Link></div>}
-            {skill.error && <p className="text-sm text-muted-foreground">Preview unavailable for a package that failed validation.</p>}
-            {preview.data?.file.encoding === 'base64' && <div className="flex flex-col items-center gap-3 py-8 text-sm text-muted-foreground"><FileImage className="size-6" /><p>Binary asset · included without changes</p><p className="text-xs">Open on GitHub to preview or download this file.</p></div>}
+            {(preview.isFetching || previewView.kind === 'reconnecting') && <p role="status" className="text-sm text-muted-foreground">{t("skillPackagePreview.loadingPreview")}</p>}
+            {previewView.kind === 'error' && <div className="space-y-2 text-sm"><QueryErrorState size="inline" error={preview.error} action="load the preview" onRetry={previewView.retry} retrying={previewView.isFetching} /> <Link to="/apps" className="underline">{t("skillPackagePreview.manageGithubAccess")}</Link></div>}
+            {skill.error && <p className="text-sm text-muted-foreground">{t("skillPackagePreview.previewUnavailableForPackage")}</p>}
+            {preview.data?.file.encoding === 'base64' && <div className="flex flex-col items-center gap-3 py-8 text-sm text-muted-foreground"><FileImage className="size-6" /><p>{t("skillPackagePreview.binaryAssetIncludedWithoutChanges")}</p><p className="text-xs">{t("skillPackagePreview.openOnGithubToPreview")}</p></div>}
             {preview.data?.content !== null && preview.data?.content !== undefined && <pre className={cn("whitespace-pre-wrap break-words font-mono text-xs leading-relaxed", ANALYTICS_MASK_CLASS)}>{preview.data.content}</pre>}
-            {preview.data?.truncated && <p className="mt-3 text-xs text-muted-foreground">Showing the first 64 KB. The complete file is imported.</p>}
+            {preview.data?.truncated && <p className="mt-3 text-xs text-muted-foreground">{t("skillPackagePreview.showingTheFirst64Kb")}</p>}
           </div>
         </div>
       </div>}

@@ -15997,7 +15997,13 @@
     "referencedIn": "referenced in {{path}}",
     "contentAudit_one": "Content audit · {{count}} notice",
     "contentAudit_other": "Content audit · {{count}} notices",
-    "needsSetup": "Needs setup: {{error}}"
+    "needsSetup": "Needs setup: {{error}}",
+    "includedRepositoryFiles": "Included repository files",
+    "repositoryRoot": "Repository root",
+    "fileCount": "{{total}} files",
+    "bytes": "{{bytes}} bytes",
+    "executable": " · executable",
+    "previewUnavailableForPackage": "Preview unavailable for a package that failed validation."
   },
   "richWorkProductCard": {
     "changesRequested": "Changes requested",
@@ -17322,7 +17328,8 @@
         "loadPluginExtensions": "load plugin extensions",
         "loadRunnerInspection": "load the runner inspection",
         "deleteRawTrace": "delete the raw trace",
-        "createTheTask": "create the task"
+        "createTheTask": "create the task",
+        "loadPreview": "load the preview"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

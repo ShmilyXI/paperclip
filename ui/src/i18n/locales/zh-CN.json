@@ -15997,7 +15997,13 @@
     "referencedIn": "引用自 {{path}}",
     "contentAudit_one": "内容审计 · {{count}} 条提示",
     "contentAudit_other": "内容审计 · {{count}} 条提示",
-    "needsSetup": "需要配置：{{error}}"
+    "needsSetup": "需要配置：{{error}}",
+    "includedRepositoryFiles": "已包含的仓库文件",
+    "repositoryRoot": "仓库根目录",
+    "fileCount": "{{total}} 个文件",
+    "bytes": "{{bytes}} 字节",
+    "executable": " · 可执行",
+    "previewUnavailableForPackage": "包验证失败，无法预览。"
   },
   "richWorkProductCard": {
     "changesRequested": "已请求修改",
@@ -17322,7 +17328,8 @@
         "loadPluginExtensions": "加载插件扩展",
         "loadRunnerInspection": "加载运行检查",
         "deleteRawTrace": "删除原始轨迹",
-        "createTheTask": "创建任务"
+        "createTheTask": "创建任务",
+        "loadPreview": "加载预览"
       },
       "retry": "重试",
       "retrying": "正在重试…",
