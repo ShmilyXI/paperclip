@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -43,10 +44,10 @@ export interface RoutineTaskTarget {
 }
 
 const FREQUENCY_LABEL: Record<RoutineSuggestionFrequency, string> = {
-  daily: "Every day",
-  weekdays: "Every weekday",
-  weekly: "Every week",
-  monthly: "Every month",
+  daily: t("makeRoutineDialog.everyDay"),
+  weekdays: t("makeRoutineDialog.everyWeekday"),
+  weekly: t("makeRoutineDialog.everyWeek"),
+  monthly: t("makeRoutineDialog.everyMonth"),
 };
 
 const WEEKDAY_ORDER: readonly RoutineSuggestionWeekday[] = [...ROUTINE_SUGGESTION_WEEKDAYS.slice(1), ROUTINE_SUGGESTION_WEEKDAYS[0]];
@@ -179,7 +180,7 @@ export function MakeRoutineDialog({
     setDayOfMonth(start.dayOfMonth ?? 1);
     setTime(start.time);
     setAgentId("");
-    setHint(source === "offer" ? "The agent suggested this." : source === "title" ? "Suggested from the title." : null);
+    setHint(source === "offer" ? t("makeRoutineDialog.theAgentSuggestedThis") : source === "title" ? t("makeRoutineDialog.suggestedFromTheTitle") : null);
   }, [open, task]);
 
   const effectiveAgentId = agentId || defaultRoutineAgentId(available, task?.assigneeAgentId ?? newFor?.assigneeAgentId ?? null);
@@ -243,30 +244,30 @@ export function MakeRoutineDialog({
       >
         <form className="flex flex-col gap-5" onSubmit={submit} data-make-routine-dialog="">
           <DialogHeader>
-            <DialogTitle>{fresh ? "New routine" : "Make it a routine"}</DialogTitle>
+            <DialogTitle>{fresh ? t("common.newRoutine") : t("makeRoutineDialog.makeItARoutine")}</DialogTitle>
             <DialogDescription>
-              {fresh ? "An agent does this on a schedule." : "An agent repeats this on a schedule, so it no longer needs you to start it."}
+              {fresh ? t("makeRoutineDialog.anAgentDoesThisOnASchedule") : t("makeRoutineDialog.anAgentRepeatsThisOnASchedule")}
             </DialogDescription>
           </DialogHeader>
 
           <label className="flex flex-col gap-2 text-sm">
-            <span className="font-medium text-foreground">What repeats</span>
+            <span className="font-medium text-foreground">{t("makeRoutineDialog.whatRepeats")}</span>
             <Input
               ref={titleInput}
               value={title}
               maxLength={200}
               onChange={(event) => setTitle(event.target.value)}
               required
-              aria-label="What repeats"
-              placeholder={fresh ? "e.g. Review the investor pipeline" : undefined}
+              aria-label={t("makeRoutineDialog.whatRepeats")}
+              placeholder={fresh ? t("makeRoutineDialog.reviewTheInvestorPipeline") : undefined}
             />
           </label>
 
           <fieldset className="flex flex-col gap-2 text-sm">
-            <legend className="mb-2 font-medium text-foreground">How often</legend>
+            <legend className="mb-2 font-medium text-foreground">{t("makeRoutineDialog.howOften")}</legend>
             <div className="flex flex-wrap items-center gap-2">
               <NativeSelect
-                aria-label="How often"
+                aria-label={t("makeRoutineDialog.howOften")}
                 className="w-auto"
                 value={frequency}
                 onChange={(event) => setFrequency(event.target.value as RoutineSuggestionFrequency)}
@@ -277,9 +278,9 @@ export function MakeRoutineDialog({
               </NativeSelect>
               {frequency === "weekly" ? (
                 <>
-                  <span className="text-muted-foreground">on</span>
+                  <span className="text-muted-foreground">{t("makeRoutineDialog.on")}</span>
                   <NativeSelect
-                    aria-label="Day of the week"
+                    aria-label={t("makeRoutineDialog.dayOfTheWeek")}
                     className="w-auto"
                     value={dayOfWeek}
                     onChange={(event) => setDayOfWeek(event.target.value as RoutineSuggestionWeekday)}
@@ -292,9 +293,9 @@ export function MakeRoutineDialog({
               ) : null}
               {frequency === "monthly" ? (
                 <>
-                  <span className="text-muted-foreground">on day</span>
+                  <span className="text-muted-foreground">{t("makeRoutineDialog.onDay")}</span>
                   <NativeSelect
-                    aria-label="Day of the month"
+                    aria-label={t("makeRoutineDialog.dayOfTheMonth")}
                     className="w-auto"
                     value={String(dayOfMonth)}
                     onChange={(event) => setDayOfMonth(Number(event.target.value))}
@@ -305,10 +306,10 @@ export function MakeRoutineDialog({
                   </NativeSelect>
                 </>
               ) : null}
-              <span className="text-muted-foreground">at</span>
+              <span className="text-muted-foreground">{t("makeRoutineDialog.at")}</span>
               <Input
                 type="time"
-                aria-label="Time"
+                aria-label={t("makeRoutineDialog.time")}
                 className="w-auto"
                 value={time}
                 step={300}
@@ -316,51 +317,51 @@ export function MakeRoutineDialog({
               />
             </div>
             <p className="text-xs text-muted-foreground" data-cadence-preview="">
-              {cadenceLabel}, your time ({zone}).{hint ? ` ${hint}` : ""}
+              {t("makeRoutineDialog.cadencePreview", { cadenceLabel, zone })}{hint ? ` ${hint}` : ""}
             </p>
           </fieldset>
 
           <label className="flex flex-col gap-2 text-sm">
-            <span className="font-medium text-foreground">Who runs it</span>
+            <span className="font-medium text-foreground">{t("makeRoutineDialog.whoRunsIt")}</span>
             <NativeSelect
-              aria-label="Who runs it"
+              aria-label={t("makeRoutineDialog.whoRunsIt")}
               value={effectiveAgentId}
               onChange={(event) => setAgentId(event.target.value)}
               disabled={available.length === 0}
             >
-              {available.length === 0 ? <option value="">No agents yet</option> : null}
+              {available.length === 0 ? <option value="">{t("makeRoutineDialog.noAgentsYet")}</option> : null}
               {available.map((agent) => (
                 <option key={agent.id} value={agent.id}>{agent.name}</option>
               ))}
             </NativeSelect>
             {available.length === 0 ? (
-              <span className="text-xs text-muted-foreground">Add an agent first: a routine needs one to run it.</span>
+              <span className="text-xs text-muted-foreground">{t("makeRoutineDialog.addAnAgentFirst")}</span>
             ) : null}
           </label>
 
           <p className="text-xs text-muted-foreground" data-routine-filing-note="">
-            {fresh ? `Filed under ${newFor!.responsibilityTitle}.` : (
+            {fresh ? t("makeRoutineDialog.filedUnder", { title: newFor!.responsibilityTitle }) : (
               <>
-                The task itself stays as it is.{" "}
+                {t("makeRoutineDialog.theTaskItselfStaysAsItIs")}{" "}
                 {filedUnder.length > 0
-                  ? `The routine is filed under ${joinTitles(filedUnder)}, like the task.`
-                  : "The routine is filed wherever the task is."}
+                  ? t("makeRoutineDialog.theRoutineIsFiledUnder", { titles: joinTitles(filedUnder) })
+                  : t("makeRoutineDialog.theRoutineIsFiledWherever")}
               </>
             )}
           </p>
 
           {create.error ? (
             <p role="alert" className="text-sm text-destructive">
-              Couldn’t make the routine. {describeError(create.error).body}
+              {t("makeRoutineDialog.couldntMakeTheRoutine")} {describeError(create.error).body}
             </p>
           ) : null}
 
           <DialogFooter className="sm:justify-between">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={!canSubmit}>
-              {create.isPending ? "Making the routine…" : fresh ? "Make the routine" : "Make it a routine"}
+              {create.isPending ? t("makeRoutineDialog.makingTheRoutine") : fresh ? t("makeRoutineDialog.makeTheRoutine") : t("makeRoutineDialog.makeItARoutine")}
             </Button>
           </DialogFooter>
         </form>
