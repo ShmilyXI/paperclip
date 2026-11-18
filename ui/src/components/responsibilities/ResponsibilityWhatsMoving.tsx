@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { RESPONSIBILITY_DETAIL_TASK_LIMIT } from "@paperclipai/shared";
+import { t } from "@/i18n";
 import { Card } from "@/components/ui/card";
 import { describeStale } from "@/lib/responsibilities";
 import { responsibilityWorkList } from "@/lib/responsibility-views";
@@ -36,24 +37,24 @@ export function ResponsibilityWhatsMoving({ responsibility, agentsById, now, not
       {responsibility.status === "proposed" ? <ProposalsNotice count={1} subject="this" onReview={onReviewProposal} /> : null}
 
       <section aria-labelledby="moving-summary-heading" className="flex flex-col gap-3">
-        <h2 id="moving-summary-heading" className="text-base font-semibold text-foreground">What's moving</h2>
+        <h2 id="moving-summary-heading" className="text-base font-semibold text-foreground">{t("responsibilities.whatsMoving")}</h2>
         {rollup.workSummary.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Nothing to report yet. Once projects, tasks or routines are filed here, what they need shows up here.
+            {t("responsibilities.nothingToReportYet")}
           </p>
         ) : (
           <Card elevation="low" className="gap-5 px-5 py-4">
             {attention.length > 0 ? (
               <div className="flex flex-col gap-2" data-signal-group="attention">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Needs attention</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("responsibilities.needsAttention")}</h3>
                 <WorkSignalList signals={attention} responsibilityHref={() => STATUS_ANCHOR} />
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">Nothing in the work needs attention.</p>
+              <p className="text-sm text-muted-foreground">{t("responsibilities.nothingInTheWorkNeedsAttention")}</p>
             )}
             {moving.length > 0 ? (
               <div className="flex flex-col gap-2" data-signal-group="moving">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Everything else</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("responsibilities.everythingElse")}</h3>
                 <WorkSignalList signals={moving} responsibilityHref={() => STATUS_ANCHOR} />
               </div>
             ) : null}
@@ -63,7 +64,7 @@ export function ResponsibilityWhatsMoving({ responsibility, agentsById, now, not
 
       <section aria-labelledby="moving-work-heading" className="flex flex-col gap-2">
         <h2 id="moving-work-heading" className="text-base font-semibold text-foreground">
-          The work <span className="text-sm font-normal tabular-nums text-muted-foreground">{work.items.length}</span>
+          {t("responsibilities.theWork")} <span className="text-sm font-normal tabular-nums text-muted-foreground">{work.items.length}</span>
         </h2>
         {work.items.length > 0 ? (
           <Card elevation="low" className="gap-0 overflow-hidden py-0">
@@ -74,13 +75,13 @@ export function ResponsibilityWhatsMoving({ responsibility, agentsById, now, not
             </ul>
           </Card>
         ) : (
-          <p className="text-sm text-muted-foreground">No open projects, tasks or routines are filed here.</p>
+          <p className="text-sm text-muted-foreground">{t("responsibilities.noOpenProjectsTasksOrRoutines")}</p>
         )}
         {work.finished > 0 || responsibility.tasksTruncated ? (
           <p className="text-xs text-muted-foreground">
-            {work.finished > 0 ? `${work.finished} finished ${work.finished === 1 ? "item is" : "items are"} not listed.` : null}
+            {work.finished > 0 ? t("responsibilities.finishedItemsNotListed", { count: work.finished }) : null}
             {work.finished > 0 && responsibility.tasksTruncated ? " " : null}
-            {responsibility.tasksTruncated ? `Only the first ${RESPONSIBILITY_DETAIL_TASK_LIMIT} tasks are listed.` : null}
+            {responsibility.tasksTruncated ? t("responsibilities.onlyTheFirstTasksAreListed", { count: RESPONSIBILITY_DETAIL_TASK_LIMIT }) : null}
           </p>
         ) : null}
       </section>
