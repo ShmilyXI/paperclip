@@ -2326,6 +2326,9 @@
     "noNumber": "No number",
     "notUpdatedRecently": "not updated recently",
     "andCountMore": "and {{count}} more",
+    "addAResponsibilityTo": "Add a responsibility to {{name}}",
+    "noAreasYet": "No areas yet.",
+    "nothingMatchesQuery": "Nothing matches “{{query}}”.",
     "theWork": "The work",
     "noneYetShort": "None yet",
     "andMore": " and {{count}} more",
@@ -11123,6 +11126,10 @@
     "leadsItNow": "{{name}} leads it now.",
     "hasItNow": "{{name}} has it now.",
     "couldntGiveItTo": "Couldn't give it to {{name}}."
+  },
+  "metricCharts": {
+    "weekOf": "Week of",
+    "readOn": "Read on"
   },
   "dashboardChatComposer": {
     "chooseAnAgentToTalkTo": "Choose an agent to talk to.",

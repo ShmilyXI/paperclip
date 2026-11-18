@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useMemo, useState } from "react";
 import type { ResponsibilityWithRollup } from "@paperclipai/shared";
 import { ChevronRight, Plus } from "lucide-react";
@@ -64,7 +65,7 @@ function OutlineV2Area({
   onToggle: () => void;
   onAdd: () => void;
 }) {
-  const name = group.area?.title ?? "No area";
+  const name = group.area?.title ?? t("addResponsibilityDialog.noArea");
   const listId = `outline-v2-area-${group.key}`;
   const canAdd = group.area?.status !== "archived";
   return (
@@ -92,7 +93,7 @@ function OutlineV2Area({
             size="icon-xs"
             variant="ghost"
             className="relative z-10 text-muted-foreground"
-            aria-label={`Add a responsibility to ${name}`}
+            aria-label={t("responsibilities.addAResponsibilityTo", { name })}
             onClick={onAdd}
           >
             <Plus aria-hidden="true" />
@@ -112,7 +113,7 @@ function OutlineV2Area({
             onClick={onAdd}
             className="block w-full border-t border-border py-3 pl-11 pr-5 text-left text-sm text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
           >
-            Add a responsibility
+            {t("addResponsibilityDialog.title")}
           </button>
         ) : null}
       </div>
@@ -183,10 +184,10 @@ export function DashboardOutlineV2({
         shown.map(renderArea)
       ) : query ? (
         <p className="text-sm text-muted-foreground" role="status" data-outline-v2-no-match="">
-          Nothing matches “{query}”.
+          {t("responsibilities.nothingMatchesQuery", { query })}
         </p>
       ) : (
-        <p className="text-sm text-muted-foreground">No areas yet.</p>
+        <p className="text-sm text-muted-foreground">{t("responsibilities.noAreasYet")}</p>
       )}
       <DashboardEditModule
         companyId={companyId}

@@ -2326,6 +2326,9 @@
     "noNumber": "暂无数字",
     "notUpdatedRecently": "最近未更新",
     "andCountMore": "以及另外 {{count}} 条",
+    "addAResponsibilityTo": "向 {{name}} 添加职责",
+    "noAreasYet": "还没有区域。",
+    "nothingMatchesQuery": "没有与“{{query}}”匹配的内容。",
     "theWork": "工作内容",
     "noneYetShort": "还没有",
     "andMore": " 还有 {{count}} 个",
@@ -11123,6 +11126,10 @@
     "leadsItNow": "{{name}} 现在负责它。",
     "hasItNow": "{{name}} 现在接手它。",
     "couldntGiveItTo": "无法把它交给 {{name}}。"
+  },
+  "metricCharts": {
+    "weekOf": "周",
+    "readOn": "读取于"
   },
   "dashboardChatComposer": {
     "chooseAnAgentToTalkTo": "选择一名员工进行对话。",
