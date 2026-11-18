@@ -16331,6 +16331,7 @@
     "questionContext": "问题背景",
     "writeAnAnswer": "写下回答",
     "writeYourAnswer": "写下你的回答",
+    "addContextForTheAgent": "为员工补充上下文…",
     "filterChoices": "筛选选项",
     "filterChoicesForPrompt": "筛选 {{prompt}} 的选项",
     "other": "其他",

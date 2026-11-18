@@ -567,7 +567,7 @@ function QuestionFormForRequest({
             {decision && questionSet.questions.length > 1 ? <span>{page + 1}.</span> : null}
             <MarkdownBody mediaMode="reference" linkIssueReferences={false} className={cn("min-w-0", decision && "text-(length:--text-compact)")}>{question.prompt}</MarkdownBody>
           </div>
-          {decision ? <span aria-hidden className="text-muted-foreground"> · {question.required ? "Required" : "Optional"}</span> : null}
+          {decision ? <span aria-hidden className="text-muted-foreground"> · {question.required ? t("common.required") : t("common.optional")}</span> : null}
         </div>
         {question.helpText ? (
           <p className="mt-1 text-xs leading-4 text-muted-foreground">
@@ -584,7 +584,7 @@ function QuestionFormForRequest({
             value={answer.text ?? ""}
             disabled={disabled || working != null}
             onChange={(value) => updateAnswer({ text: value })}
-            placeholder={decision ? "Add context for the agent…" : "Write your answer"}
+            placeholder={decision ? t("questionForm.addContextForTheAgent") : t("questionForm.writeYourAnswer")}
             imageUploadHandler={imageUploadHandler}
             mentions={mentions}
             autoFocus={!decision}
@@ -720,7 +720,7 @@ function QuestionFormForRequest({
               {working === "cancel" ? (
                 <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
               ) : null}{" "}
-              Cancel
+              {t("common.cancel")}
             </Button>
           ) : null}
           {!question.required ? (
@@ -731,7 +731,7 @@ function QuestionFormForRequest({
               disabled={busy}
               onClick={skipQuestion}
             >
-              Skip
+              {t("common.skip")}
             </Button>
           ) : null}
           <Button
@@ -743,7 +743,7 @@ function QuestionFormForRequest({
             {working === "submit" ? (
               <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
             ) : null}
-            {isLastPage ? (questionSet.submitLabel ?? "Submit answers") : "Next"}
+            {isLastPage ? (questionSet.submitLabel ?? t("questionForm.submitAnswers")) : t("common.next")}
           </Button>
         </div>
       </DecisionCardFooter>

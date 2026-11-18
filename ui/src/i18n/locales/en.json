@@ -16331,6 +16331,7 @@
     "questionContext": "Question context",
     "writeAnAnswer": "Write an answer",
     "writeYourAnswer": "Write your answer",
+    "addContextForTheAgent": "Add context for the agent…",
     "filterChoices": "Filter choices",
     "filterChoicesForPrompt": "Filter choices for {{prompt}}",
     "other": "Other",
