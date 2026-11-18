@@ -16273,7 +16273,11 @@
     "activityHistory": "活动历史",
     "permissionDecision": "权限 {{decision}}",
     "activityCount_one": "{{count}} 个活动",
-    "activityCount_other": "{{count}} 个活动"
+    "activityCount_other": "{{count}} 个活动",
+    "exitCode": "退出码 {{code}}",
+    "filesRead": "已读取的文件",
+    "readCountFiles_one": "读取 {{count}} 个文件",
+    "readCountFiles_other": "读取 {{count}} 个文件"
   },
   "myIssues": {
     "myTasks": "我的任务",

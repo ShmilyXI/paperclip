@@ -16273,7 +16273,11 @@
     "activityHistory": "Activity history",
     "permissionDecision": "Permission {{decision}}",
     "activityCount_one": "{{count}} activity",
-    "activityCount_other": "{{count}} activities"
+    "activityCount_other": "{{count}} activities",
+    "exitCode": "exit {{code}}",
+    "filesRead": "Files read",
+    "readCountFiles_one": "Read {{count}} file",
+    "readCountFiles_other": "Read {{count}} files"
   },
   "myIssues": {
     "myTasks": "My Tasks",

@@ -139,7 +139,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     if (item.blockedReason) {
       return {
         icon: ShieldX,
-        label: "Blocked",
+        label: t("common.blocked"),
         target: subject ? (terminal ? `$ ${subject}` : subject) : undefined,
         mono: true,
         running: false,
@@ -161,7 +161,7 @@ function presentation(item: Activity, active: boolean, taskLabel?: string): Acti
     const running = active && Boolean(item.streaming);
     return {
       icon: Brain,
-      label: running ? "Thinking" : "Thought",
+      label: running ? t("taskChatRunnerActivityGroup.thinking") : t("taskChatRunnerActivityGroup.thought"),
       target:
         latestReasoningHeadline(item.lines.join("\n")) ??
         item.lines
@@ -319,7 +319,7 @@ function ActivityRowContent({
               )}
               data-tool-exit-code={exitCode}
             >
-              exit {exitCode}
+              {t("taskChatRunnerActivityGroup.exitCode", { code: exitCode })}
             </span>
           ) : null}
           {durationMs != null ? (
@@ -430,7 +430,7 @@ function ActivityDetailsBody({ item }: { item: Activity }) {
       {item.target ? (
         <p className="break-all font-mono">{item.target}</p>
       ) : null}
-      {item.blockedReason ? <p className="text-destructive">Blocked: {item.blockedReason}</p> : null}
+      {item.blockedReason ? <p className="text-destructive">{t("common.blocked")}: {item.blockedReason}</p> : null}
       {item.detail ? (
         <pre className={cn("whitespace-pre-wrap break-words font-mono", ANALYTICS_MASK_CLASS)}>
           {item.detail}
@@ -567,14 +567,14 @@ function ReadRunActivity({ items }: { items: ToolActivity[] }) {
             <BookOpen className="size-3.5" aria-hidden="true" />
           </span>
           <span className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden whitespace-nowrap">
-            <span className="shrink-0 text-xs">Read {items.length} files</span>
+            <span className="shrink-0 text-xs">{t("taskChatRunnerActivityGroup.readCountFiles", { count: items.length })}</span>
             <span className="truncate font-mono text-xs text-muted-foreground">{readRunPreview(items)}</span>
           </span>
         </span>
         <ChevronRight className={cn("size-3.5 shrink-0", open && "rotate-90")} aria-hidden="true" />
       </button>
       {open ? (
-        <ol id={listId} className="ml-2.5 flex min-w-0 flex-col border-l border-border pl-2" aria-label="Files read">
+        <ol id={listId} className="ml-2.5 flex min-w-0 flex-col border-l border-border pl-2" aria-label={t("taskChatRunnerActivityGroup.filesRead")}>
           {items.map((item) => (
             <ExpandedActivity key={item.id} item={item} active={false} />
           ))}
@@ -603,7 +603,7 @@ export function TaskChatRunnerActivityGroup({
   const latest = activities.at(-1);
   const summary = completedActivitySummary(activities);
   const SummaryIcon = summary.icon;
-  const countLabel = `${activities.length} ${activities.length === 1 ? "activity" : "activities"}`;
+  const countLabel = t("taskChatRunnerActivityGroup.activityCount", { count: activities.length });
   const editTotals = activities.reduce(
     (sum, activity) =>
       activity.kind === "tool" && activity.diff
