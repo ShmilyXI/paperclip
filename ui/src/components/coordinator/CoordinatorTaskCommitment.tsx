@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight, FileCheck2 } from "lucide-react";
 import type { ConversationTaskHandoff, IssueSummary } from "@paperclipai/shared";
@@ -153,7 +154,7 @@ function CreatedTaskLinks({ interaction }: { interaction: SuggestTasksInteractio
       return <CoordinatorCreatedTaskLink key={task.issueId} createdAt={interaction.resolvedAt} task={{
         issueId: task.issueId,
         identifier: summary?.identifier ?? task.identifier ?? null,
-        title: summary?.title ?? task.title ?? "Task created",
+        title: summary?.title ?? task.title ?? t("routineTriggerCard.taskCreated"),
         status: summary?.status,
         displayStatus: summary?.displayStatus,
         externalConversationState: summary?.externalConversationState,

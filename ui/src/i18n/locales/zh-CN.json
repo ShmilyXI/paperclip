@@ -1434,7 +1434,10 @@
     "openTask": "打开任务",
     "viewARequestUpdate": "查看请求更新",
     "yourRequest": "你的请求",
-    "viewRequest": "查看请求"
+    "viewRequest": "查看请求",
+    "waitingOnYou": "等待你处理",
+    "nothingElseIsWaitingOnYou": "没有其他等待你处理的事项。",
+    "thisIsNoLongerWaitingOnYou": "这已不再等待你处理。"
   },
   "needsYouCardBodies": {
     "assignedTo": "分配给 {{name}}",
@@ -2553,6 +2556,7 @@
     "newFolder2": "新建文件夹...",
     "deleteFolder": "删除文件夹",
     "deselectAll": "取消全选",
+    "selectedCount": "已选 {{count}} 项",
     "mySkills": "我的技能",
     "bundled": "内置",
     "editFolder": "编辑文件夹",

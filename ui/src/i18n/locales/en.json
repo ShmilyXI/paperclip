@@ -1434,7 +1434,10 @@
     "openTask": "Open task",
     "viewARequestUpdate": "View a request update",
     "yourRequest": "Your request",
-    "viewRequest": "View request"
+    "viewRequest": "View request",
+    "waitingOnYou": "Waiting on you",
+    "nothingElseIsWaitingOnYou": "Nothing else is waiting on you.",
+    "thisIsNoLongerWaitingOnYou": "This is no longer waiting on you."
   },
   "needsYouCardBodies": {
     "assignedTo": "Assigned to {{name}}",
@@ -2553,6 +2556,7 @@
     "newFolder2": "New folder...",
     "deleteFolder": "Delete folder",
     "deselectAll": "Deselect all",
+    "selectedCount": "{{count}} selected",
     "mySkills": "My Skills",
     "bundled": "Bundled",
     "editFolder": "Edit folder",
