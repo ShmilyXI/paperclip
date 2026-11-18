@@ -16366,7 +16366,9 @@
     "composioPermissionsApplyToAll": "Composio permissions apply to all apps on this connection.",
     "checking": "Checking…",
     "openInComposio": "Open in Composio",
-    "manageApp": "Manage {{app}}"
+    "manageApp": "Manage {{app}}",
+    "noConnectedAccounts": "No connected {{app}} accounts.",
+    "accountFallback": "{{app}} account"
   },
   "issueThreadInteractionCard": {
     "changesRequested": "Changes requested",

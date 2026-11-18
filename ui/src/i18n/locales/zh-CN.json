@@ -16366,7 +16366,9 @@
     "composioPermissionsApplyToAll": "Composio 权限会应用于此连接上的所有应用。",
     "checking": "正在检查…",
     "openInComposio": "在 Composio 中打开",
-    "manageApp": "管理 {{app}}"
+    "manageApp": "管理 {{app}}",
+    "noConnectedAccounts": "没有已连接的 {{app}} 账户。",
+    "accountFallback": "{{app}} 账户"
   },
   "issueThreadInteractionCard": {
     "changesRequested": "已请求修改",

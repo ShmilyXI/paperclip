@@ -22,8 +22,8 @@ export function ComposioAppManager({ app, connections, initialConnectionId, onCl
   const [connectionId, setConnectionId] = useState(initialConnectionId ?? connections[0]?.id ?? "");
   const connection = connections.find(candidate => candidate.id === connectionId);
   return <Dialog open onOpenChange={open => { if (!open) onClose(); }}><DialogContent className={ANALYTICS_MASK_CLASS}>
-    <DialogHeader><DialogTitle>Manage {app.name}</DialogTitle><DialogDescription>Accounts and sign-in are managed in Composio.</DialogDescription></DialogHeader>
-    {connections.length > 1 ? <div className="space-y-2"><Label htmlFor="composio-manage-gateway">Composio account</Label>
+    <DialogHeader><DialogTitle>{t("composioAppManager.manageApp", { app: app.name })}</DialogTitle><DialogDescription>{t("composioAppManager.accountsAndSignInAre")}</DialogDescription></DialogHeader>
+    {connections.length > 1 ? <div className="space-y-2"><Label htmlFor="composio-manage-gateway">{t("composioAppManager.composioAccount")}</Label>
       <select id="composio-manage-gateway" value={connectionId} onChange={event => setConnectionId(event.target.value)} className={cn("h-9 w-full rounded-md border border-input bg-background px-3 text-sm", ANALYTICS_MASK_CLASS)}>
         {connections.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name}</option>)}
       </select></div> : null}
@@ -54,16 +54,16 @@ function ComposioAccountObservations({ app, connection, onClose }: { app: Aggreg
   return <>
     {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     {accountsView.kind === "error" ? <QueryErrorState error={accountsQuery.error} action="load Composio accounts" onRetry={accountsView.retry} retrying={accountsView.isFetching} /> : null}
-    {accountsQuery.isLoading || accountsView.kind === "reconnecting" ? <p role="status" className="text-sm text-muted-foreground">Loading accounts…</p> : accounts.length === 0 ? <p className="text-sm text-muted-foreground">No connected {app.name} accounts.</p> : <div className="divide-y divide-border">
+    {accountsQuery.isLoading || accountsView.kind === "reconnecting" ? <p role="status" className="text-sm text-muted-foreground">{t("composioAppManager.loadingAccounts")}</p> : accounts.length === 0 ? <p className="text-sm text-muted-foreground">{t("composioAppManager.noConnectedAccounts", { app: app.name })}</p> : <div className="divide-y divide-border">
       {accounts.map(({ account, snapshot }) => <div key={`${snapshot.toolkit}:${account.id}`} className="py-3">
-        <p className={cn("truncate text-sm font-medium", ANALYTICS_MASK_CLASS)}>{account.alias || `${app.name} account`}</p>
+        <p className={cn("truncate text-sm font-medium", ANALYTICS_MASK_CLASS)}>{account.alias || t("composioAppManager.accountFallback", { app: app.name })}</p>
         <p className="text-xs text-muted-foreground">{snapshot.errorAt || Date.now() - new Date(snapshot.checkedAt).getTime() > 5 * 60_000
-          ? t("composioAppManager.lastKnownAccountRefreshTo") : account.status === "ACTIVE" ? t("common.connected") : account.status === "INITIATED" ? t("composioAppManager.waitingForSignIn") : t("composioAppManager.needsSignIn")}{account.isDefault ? " · Default" : ""}</p>
+          ? t("composioAppManager.lastKnownAccountRefreshTo") : account.status === "ACTIVE" ? t("common.connected") : account.status === "INITIATED" ? t("composioAppManager.waitingForSignIn") : t("composioAppManager.needsSignIn")}{account.isDefault ? ` · ${t("common.default")}` : ""}</p>
       </div>)}
     </div>}
     <div className="space-y-1 text-xs text-muted-foreground">
-      <p>Via <Link to={`/apps/${connection.id}/permissions`} onClick={onClose} className={cn("underline underline-offset-2", ANALYTICS_MASK_CLASS)}>“{connection.name}”</Link></p>
-      <p>Composio permissions apply to all apps on this connection.</p>
+      <p>{t("composioAppManager.via")} <Link to={`/apps/${connection.id}/permissions`} onClick={onClose} className={cn("underline underline-offset-2", ANALYTICS_MASK_CLASS)}>“{connection.name}”</Link></p>
+      <p>{t("composioAppManager.composioPermissionsApplyToAll")}</p>
     </div>
     <DialogFooter className="sm:items-center sm:justify-between"><Button variant="ghost" onClick={onClose}>{t("common.close")}</Button>
       <div className="flex items-center gap-2"><Button variant="ghost" disabled={busy} onClick={() => void refresh()}>{busy ? t("composioAppManager.checking") : t("common.refresh")}</Button>
