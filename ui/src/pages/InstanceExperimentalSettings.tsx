@@ -185,7 +185,7 @@ export function InstanceExperimentalSettings() {
     return (
       <div className="max-w-6xl space-y-6">
         <ClassicWorkspaceSetting key="personal-workspace" />
-        <div className="text-sm text-muted-foreground">Loading experimental settings...</div>
+        <div className="text-sm text-muted-foreground">{t("experimental.loadingExperimentalSettings")}</div>
       </div>
     );
   }
@@ -309,15 +309,15 @@ export function InstanceExperimentalSettings() {
         </div>
 
         <ExperimentalToggleCard
-          title="Areas & Responsibilities dashboard"
-          description="Replace the classic dashboard with one built around the areas you care about and the responsibilities you own in each. An agent can interview you to create it, and you can undo any change."
-          footnote="Turning this off brings back the classic dashboard. Your areas and responsibilities are kept."
+          title={t("experimental.areasResponsibilitiesDashboard")}
+          description={t("experimental.replaceTheClassicDashboardWith")}
+          footnote={t("experimental.turningThisOffBringsBackThe")}
           checked={enableResponsibilities}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableResponsibilities: checked })}
           disabled={toggleMutation.isPending}
           settingKey="enableResponsibilities"
           managed={managedKeys.enableResponsibilities}
-          ariaLabel="Toggle Areas & Responsibilities dashboard experimental setting"
+          ariaLabel={t("experimental.toggleAreasResponsibilitiesDashboard")}
         />
 
         <ExperimentalToggleCard
@@ -367,9 +367,9 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
-          title="Combined Inbox + Task List"
-          description="In the Classic workspace, fold Inbox into Tasks. One Tasks row carries the unread badge, and a Views menu reaches every personal and organization task view."
-          footnote="Coordinator always includes personal views in Tasks. For Classic, turning this off restores its separate Inbox. No data changes."
+          title={t("experimental.combinedInboxTaskList")}
+          description={t("experimental.inTheClassicWorkspaceFoldInbox")}
+          footnote={t("experimental.coordinatorAlwaysIncludesPersonalViews")}
           checked={experimentalQuery.data?.enableCombinedInboxTasks ?? false}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableCombinedInboxTasks: checked })}
           disabled={toggleMutation.isPending}
@@ -392,20 +392,20 @@ export function InstanceExperimentalSettings() {
         ) : null}
 
         <ExperimentalToggleCard
-          title="Command/Ctrl+Enter to Submit"
-          description="Restore the previous keyboard shortcut for task replies and new tasks: Command/Ctrl+Enter submits, and Enter adds a new line."
-          footnote="Off by default: Enter submits, and Shift+Enter adds a new line."
+          title={t("experimental.commandCtrlEnterToSubmit")}
+          description={t("experimental.restoreThePreviousKeyboardShortcut")}
+          footnote={t("experimental.offByDefaultEnterSubmits")}
           checked={experimentalQuery.data?.enableLegacyComposerSubmit === true}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableLegacyComposerSubmit: checked })}
           disabled={toggleMutation.isPending}
           settingKey="enableLegacyComposerSubmit"
           managed={managedKeys.enableLegacyComposerSubmit}
-          ariaLabel="Toggle Command/Ctrl+Enter to submit"
+          ariaLabel={t("experimental.toggleCommandCtrlEnterToSubmit")}
         />
 
         <ExperimentalToggleCard
-          title="Decisions"
-          description="Show the Decisions item in the main sidebar — the attention home that surfaces the tasks awaiting your input — while the surface is still being evaluated."
+          title={t("experimental.decisions")}
+          description={t("experimental.showTheDecisionsItemIn")}
           checked={enableDecisions}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableDecisions: checked })}
           disabled={toggleMutation.isPending}
@@ -415,20 +415,20 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
-          title="Durable app actions (MCP Tasks)"
-          description="Let connected apps run long actions, such as CI runs or deploys, as tasks Paperclip keeps track of. If an action outlasts a call, a restart, or a deploy, the agent collects the result later and the work is never started twice."
-          footnote="Applies to apps that support MCP Tasks. Turning this off stops new tasks; apps then answer as before."
+          title={t("experimental.durableAppActionsMcpTasks")}
+          description={t("experimental.letConnectedAppsRunLongActions")}
+          footnote={t("experimental.appliesToAppsThatSupportMcpTasks")}
           checked={experimentalQuery.data?.enableMcpTasks === true}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableMcpTasks: checked })}
           disabled={toggleMutation.isPending}
           settingKey="enableMcpTasks"
           managed={managedKeys.enableMcpTasks}
-          ariaLabel="Toggle durable app actions experimental setting"
+          ariaLabel={t("experimental.toggleDurableAppActionsExperimental")}
         />
 
         <ExperimentalToggleCard
-          title="Enable Environments"
-          description="Show environment management in company settings and allow project and agent environment assignment controls."
+          title={t("experimental.enableEnvironments")}
+          description={t("experimental.showEnvironmentManagementInCompany")}
           checked={enableEnvironments}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableEnvironments: checked })}
           disabled={toggleMutation.isPending}
@@ -507,21 +507,21 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
-          title="Google Workspace connector (Paperclip)"
-          description="Show the built-in Google Workspace connector for Gmail, Drive, and Calendar while Google verification is pending."
-          footnote="Off by default. While off, Google apps are offered through Composio and Arcade instead, and the built-in connector cannot be set up or run."
+          title={t("experimental.googleWorkspaceConnectorPaperclip")}
+          description={t("experimental.showTheBuiltInGoogleWorkspaceConnector")}
+          footnote={t("experimental.offByDefaultWhileOffGoogle")}
           checked={experimentalQuery.data?.enableGoogleWorkspaceConnector === true}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableGoogleWorkspaceConnector: checked })}
           disabled={toggleMutation.isPending}
           settingKey="enableGoogleWorkspaceConnector"
           managed={managedKeys.enableGoogleWorkspaceConnector}
-          ariaLabel="Toggle Paperclip Google Workspace connector experimental setting"
+          ariaLabel={t("experimental.togglePaperclipGoogleWorkspaceConnector")}
         />
 
         <ExperimentalToggleCard
-          title="Grok Bot"
-          description="Connect an existing Grok Bot as an agent. Verify routine delivery and an authenticated reply before assigning work."
-          footnote="Requires Paperclip Runner and authenticated public HTTPS. Usage is not reported. Turning this off blocks Grok calls and new dispatch."
+          title={t("experimental.grokBot")}
+          description={t("experimental.connectAnExistingGrokBot")}
+          footnote={t("experimental.requiresPaperclipRunnerAndAuthenticatedHttps")}
           checked={experimentalQuery.data?.enableGrokBot === true}
           onCheckedChange={checked => toggleMutation.mutate({ enableGrokBot: checked })}
           disabled={toggleMutation.isPending}
@@ -555,9 +555,9 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
-          title="OpenAI Dot"
-          description="Add OpenAI Dot as a standalone agent choice. Pair your Dot and verify event delivery before assigning work."
-          footnote="Requires an authenticated instance with a public HTTPS URL. Turning this off blocks Dot calls and new work; saved connections are kept."
+          title={t("companyImport.openaiDot")}
+          description={t("experimental.addOpenaiDotAsA")}
+          footnote={t("experimental.requiresAnAuthenticatedInstanceWith")}
           checked={experimentalQuery.data?.enableOpenAiDot === true}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableOpenAiDot: checked })}
           disabled={toggleMutation.isPending}
@@ -753,7 +753,7 @@ export function InstanceExperimentalSettings() {
                         {worktreeRunExecutionState.reason === "instance_mismatch"
                           ? t("experimental.thisSettingWasArmedIn")
                           : t("experimental.thisSettingIsMissingIts")}{" "}
-                        Toggle it off and back on to arm execution for tasks created here.
+                        {t("experimental.toggleItOffAndBackOn")}
                       </p>
                     </div>
                   </div>
@@ -764,7 +764,7 @@ export function InstanceExperimentalSettings() {
 
           <ExperimentalToggleCard
             title={t("experimental.serverInfoDebugView")}
-            description='Show a "Server" section in the account drawer with the current server restart time and running commit.'
+            description={t("experimental.showAServerSectionIn")}
             checked={enableServerInfoDebugView}
             onCheckedChange={(checked) =>
               toggleMutation.mutate({ enableServerInfoDebugView: checked })
