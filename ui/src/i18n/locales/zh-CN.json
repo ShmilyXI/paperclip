@@ -15287,7 +15287,13 @@
     "org": "组织",
     "recentTasks": "最近任务",
     "recentTasks2": "最近任务",
-    "searchTasksAgentsProjects": "搜索任务、员工、项目"
+    "searchTasksAgentsProjects": "搜索任务、员工、项目",
+    "recents": "最近",
+    "workspaceNavigation": "工作区导航",
+    "moreWorkspacePages": "更多工作区页面",
+    "unreadChats": "未读对话",
+    "unpin": "取消置顶",
+    "couldNotLoadTasks": "无法加载任务。"
   },
   "documentAnnotationPanel": {
     "closeAnnotationPanel": "关闭批注面板",

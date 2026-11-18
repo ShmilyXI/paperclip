@@ -15287,7 +15287,13 @@
     "org": "Org",
     "recentTasks": "Recent Tasks",
     "recentTasks2": "Recent tasks",
-    "searchTasksAgentsProjects": "Search tasks, agents, projects"
+    "searchTasksAgentsProjects": "Search tasks, agents, projects",
+    "recents": "Recents",
+    "workspaceNavigation": "Workspace navigation",
+    "moreWorkspacePages": "More workspace pages",
+    "unreadChats": "unread chats",
+    "unpin": "Unpin",
+    "couldNotLoadTasks": "Couldn’t load tasks."
   },
   "documentAnnotationPanel": {
     "closeAnnotationPanel": "Close annotation panel",
