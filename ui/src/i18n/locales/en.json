@@ -12397,7 +12397,10 @@
     "unapprovedIncomingCalls": "Unapproved incoming calls",
     "you": "You",
     "interrupted": " · interrupted",
-    "durationSeconds": "{{seconds}} seconds"
+    "durationSeconds": "{{seconds}} seconds",
+    "notYetReported": "Not yet reported",
+    "unapprovedCallsCouldNotBeLoaded": "Unapproved calls could not be loaded.",
+    "theCallCouldNotBeEnded": "The call could not be ended."
   },
   "interruptHandoffViews": {
     "noResponsible": "No responsible —",

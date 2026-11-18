@@ -12397,7 +12397,10 @@
     "unapprovedIncomingCalls": "未批准的呼入通话",
     "you": "你",
     "interrupted": " · 已打断",
-    "durationSeconds": "{{seconds}} 秒"
+    "durationSeconds": "{{seconds}} 秒",
+    "notYetReported": "尚未报告",
+    "unapprovedCallsCouldNotBeLoaded": "无法加载未批准的通话。",
+    "theCallCouldNotBeEnded": "无法结束通话。"
   },
   "interruptHandoffViews": {
     "noResponsible": "无负责人 —",

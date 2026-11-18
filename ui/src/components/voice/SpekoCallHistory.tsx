@@ -11,17 +11,17 @@ import { ANALYTICS_MASK_CLASS } from "@/lib/analytics/privacy";
 import { cn } from "@/lib/utils";
 
 function charge(amount: string | null) {
-  if (amount === null) return "Not yet reported";
+  if (amount === null) return t("spekoCallHistory.notYetReported");
   const value = BigInt(amount);
   const whole = value / 1_000_000n, fraction = (value % 1_000_000n).toString().padStart(6, "0");
   return `$${whole}.${fraction} USD`;
 }
 export function SpekoCallReport({ report }: { report: VoiceCallReport }) {
   return <div className="space-y-3">
-    <dl className="flex flex-wrap gap-4 text-sm"><div><dt className="text-muted-foreground">Speko charge</dt><dd>{charge(report.costMicroUsd)}</dd></div>{report.durationSeconds !== null && <div><dt className="text-muted-foreground">Duration</dt><dd>{report.durationSeconds} seconds</dd></div>}</dl>
-    <p className="text-xs text-muted-foreground">Agent costs are separate. Recordings remain in Speko.</p>
-    {report.transcript.length ? <ol aria-label="Call transcript" className={cn("space-y-3", ANALYTICS_MASK_CLASS)}>{report.transcript.map(turn => <li key={turn.id} className="min-w-0"><p className="text-xs font-medium text-muted-foreground">{turn.speaker === "caller" ? "You" : "Agent"}{turn.interrupted ? " · interrupted" : ""}</p><p className="whitespace-pre-wrap break-words text-sm">{turn.text}</p></li>)}</ol>
-      : <p className="text-sm text-muted-foreground">{report.status === "unavailable" ? "The transcript is unavailable. Paperclip will retry while Speko finishes the report." : report.status === "pending" ? "The transcript will appear after Speko finishes the call report." : "Speko did not provide a transcript for this call."}</p>}
+    <dl className="flex flex-wrap gap-4 text-sm"><div><dt className="text-muted-foreground">{t("spekoCallHistory.spekoCharge")}</dt><dd>{charge(report.costMicroUsd)}</dd></div>{report.durationSeconds !== null && <div><dt className="text-muted-foreground">{t("common.duration")}</dt><dd>{t("spekoCallHistory.durationSeconds", { seconds: report.durationSeconds })}</dd></div>}</dl>
+    <p className="text-xs text-muted-foreground">{t("spekoCallHistory.agentCostsAreSeparateRecordings")}</p>
+    {report.transcript.length ? <ol aria-label={t("spekoCallHistory.callTranscript")} className={cn("space-y-3", ANALYTICS_MASK_CLASS)}>{report.transcript.map(turn => <li key={turn.id} className="min-w-0"><p className="text-xs font-medium text-muted-foreground">{turn.speaker === "caller" ? t("spekoCallHistory.you") : t("common.agent")}{turn.interrupted ? t("spekoCallHistory.interrupted") : ""}</p><p className="whitespace-pre-wrap break-words text-sm">{turn.text}</p></li>)}</ol>
+      : <p className="text-sm text-muted-foreground">{report.status === "unavailable" ? t("spekoCallHistory.theTranscriptIsUnavailablePaperclip") : report.status === "pending" ? t("spekoCallHistory.theTranscriptWillAppearAfter") : t("spekoCallHistory.spekoDidNotProvideA")}</p>}
   </div>;
 }
 const modeNames = { browser: t("spekoCallHistory.browserVoice"), inbound_phone: t("spekoCallHistory.incomingCall"), outbound_phone: t("spekoCallHistory.outgoingCall") } as const;
@@ -50,8 +50,8 @@ export function SpekoCallHistoryView({ entries = [], unapprovedCalls = [], loadi
     <div className="flex items-center justify-between gap-3"><h2 className="text-lg font-semibold">{t("spekoCallHistory.yourCalls")}</h2><Button size="sm" variant="ghost" onClick={onRetry} disabled={loading}>{t("common.refresh")}</Button></div>
     {loading && <p role="status" className="text-sm text-muted-foreground">{t("spekoCallHistory.loadingCalls")}</p>}
     {error && <div className="space-y-2"><p role="alert" className="text-sm text-destructive">{error}</p><Button size="sm" variant="outline" onClick={onRetry}>{t("common.tryAgain")}</Button></div>}
-    {incomingError && <p role="alert" className="text-sm text-destructive">Unapproved calls could not be loaded. {incomingError}</p>}
-    {endError && <p role="alert" className="text-sm text-destructive">The call could not be ended. {endError}</p>}
+    {incomingError && <p role="alert" className="text-sm text-destructive">{t("spekoCallHistory.unapprovedCallsCouldNotBeLoaded")} {incomingError}</p>}
+    {endError && <p role="alert" className="text-sm text-destructive">{t("spekoCallHistory.theCallCouldNotBeEnded")} {endError}</p>}
     {!loading && !error && !incomingError && !entries.length && !unapprovedCalls.length && <p className="text-sm text-muted-foreground">{t("spekoCallHistory.yourBrowserConversationsAndPhone")}</p>}
     {!error && entries.map(entry => <SpekoCallActivityItem key={entry.session.id} entry={entry} onEnd={onEnd} ending={endingSessionId === entry.session.id} />)}
     {!incomingError && unapprovedCalls.length > 0 && <div className="space-y-2"><h3 className="text-sm font-medium">{t("spekoCallHistory.unapprovedIncomingCalls")}</h3><ul className="space-y-2">{unapprovedCalls.map(call => <li key={call.id}><SpekoUnapprovedCallActivityItem call={call} /></li>)}</ul></div>}
