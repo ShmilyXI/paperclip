@@ -728,8 +728,8 @@ function ProviderResumeControls({ pending, connectionId, agent, onResult }: {
       <Button variant="outline" disabled={!entry || expired || permission === "off" || resume.isPending} onClick={() => submit("decline")}>{t("appActionTestDialog.decline")}</Button>
       <Button variant="ghost" disabled={!entry || expired || permission === "off" || resume.isPending} onClick={() => submit("cancel")}>{t("appActionTestDialog.cancelRequest")}</Button>
     </div>
-    {expired && <p>This provider approval expired. Check the provider before starting a new action.</p>}
-    {permission === "off" && <p>Allow the resume action in Permissions before continuing.</p>}
+    {expired && <p>{t("appActionTestDialog.thisProviderApprovalExpiredCheck")}</p>}
+    {permission === "off" && <p>{t("appActionTestDialog.allowTheResumeActionIn")}</p>}
     {catalogView.kind === "error" && <QueryErrorState size="inline" error={catalog.error} action="load the resume action" onRetry={catalogView.retry} retrying={catalogView.isFetching} />}
     {resume.error && <p role="alert">{describeError(resume.error).body}</p>}
   </div>;
