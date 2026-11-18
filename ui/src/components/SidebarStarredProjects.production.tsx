@@ -101,7 +101,7 @@ export function SidebarStarredProjects() {
   }
 
   return (
-    <div className="flex flex-col gap-0.5" aria-label="Starred projects">
+    <div className="flex flex-col gap-0.5" aria-label={t("sidebar.starredProjects")}>
       {starredProjects.map((project) => {
         const routeRef = projectRouteRef(project);
         const isActive = activeProjectRef === routeRef || activeProjectRef === project.id;
@@ -127,9 +127,9 @@ export function SidebarStarredProjects() {
           >
             <ProjectTile color={project.color ?? null} icon={project.icon ?? null} size="xs" />
             <span className="flex-1 truncate">{project.name}</span>
-            {project.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label="Private project" /> : null}
+            {project.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label={t("sidebar.privateProject")} /> : null}
             {project.pauseReason === "budget" ? (
-              <BudgetSidebarMarker title="Project paused by budget" />
+              <BudgetSidebarMarker title={t("sidebar.projectPausedByBudget")} />
             ) : null}
           </NavLink>
         );
@@ -161,7 +161,7 @@ export function SidebarStarredProjects() {
                     variant="ghost"
                     size="icon-xs"
                     className="absolute right-3 top-1/2 h-6 w-6 -translate-y-1/2 opacity-100"
-                    aria-label={`Open actions for ${project.name}`}
+                    aria-label={t("sidebar.openActionsForName", { name: project.name })}
                   >
                     <MoreHorizontal className="h-3.5 w-3.5" />
                   </Button>
