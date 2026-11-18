@@ -12108,6 +12108,14 @@
     "someEarlierDecisionsCouldntBeLoaded": "部分更早的决策无法加载。请刷新页面重试。"
   },
   "instanceGeneralSettings": {
+    "loadingGeneralSettings": "正在加载常规设置…",
+    "loadGeneralSettings": "加载常规设置",
+    "daysCount_one": "{{count}} 天",
+    "daysCount_other": "{{count}} 天",
+    "weeksCount_one": "{{count}} 周",
+    "weeksCount_other": "{{count}} 周",
+    "monthsCount_one": "{{count}} 个月",
+    "monthsCount_other": "{{count}} 个月",
     "failedToSignOut": "退出登录失败。",
     "localTrustedModeIsOptimized": "本地可信模式针对本地操作者做了优化。浏览器请求以本地董事会上下文运行，无需登录。",
     "authenticatedPublicModeRequiresSign": "需认证的公网模式要求登录后才能访问董事会，适用于公开 URL 的场景。",

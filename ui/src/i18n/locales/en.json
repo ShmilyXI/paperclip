@@ -12108,6 +12108,14 @@
     "someEarlierDecisionsCouldntBeLoaded": "Some earlier decisions couldn’t be loaded. Reload the page to try again."
   },
   "instanceGeneralSettings": {
+    "loadingGeneralSettings": "Loading general settings...",
+    "loadGeneralSettings": "load general settings",
+    "daysCount_one": "{{count}} day",
+    "daysCount_other": "{{count}} days",
+    "weeksCount_one": "{{count}} week",
+    "weeksCount_other": "{{count}} weeks",
+    "monthsCount_one": "{{count}} month",
+    "monthsCount_other": "{{count}} months",
     "failedToSignOut": "Failed to sign out.",
     "localTrustedModeIsOptimized": "Local trusted mode is optimized for a local operator. Browser requests run as local board context and no sign-in is required.",
     "authenticatedPublicModeRequiresSign": "Authenticated public mode requires sign-in for board access and is intended for public URLs.",

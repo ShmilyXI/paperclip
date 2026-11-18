@@ -65,7 +65,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
   });
 
   if (generalQuery.isLoading || generalView.kind === "reconnecting" || healthQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading general settings...</div>;
+    return <div className="text-sm text-muted-foreground">{t("instanceGeneralSettings.loadingGeneralSettings")}</div>;
   }
 
   if (generalView.kind === "error") {
@@ -73,7 +73,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
       <QueryErrorState
         size={embedded ? "panel" : "page"}
         error={generalQuery.error}
-        action="load general settings"
+        action={t("instanceGeneralSettings.loadGeneralSettings")}
         onRetry={generalView.retry}
         retrying={generalView.isFetching}
       />
@@ -95,8 +95,8 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
     ...(showFeedbackDataSharing ? [t("instanceGeneralSettings.dataSharing")] : []),
   ];
   const topicSummary = visibleTopics.length > 2
-    ? `${visibleTopics.slice(0, -1).join(", ")}, and ${visibleTopics[visibleTopics.length - 1]}`
-    : visibleTopics.join(" and ");
+    ? t("instanceGeneralSettings.topicListAnd", { list: visibleTopics.slice(0, -1).join(", "), last: visibleTopics[visibleTopics.length - 1] })
+    : visibleTopics.join(t("instanceGeneralSettings.andConjunction"));
   const visibleActionError = signOutMutation.error
     ? describeError(signOutMutation.error).body
     : actionError;
@@ -209,7 +209,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
                       })
                     }
                   >
-                    <div className="text-sm font-medium">{days} days</div>
+                    <div className="text-sm font-medium">{t("instanceGeneralSettings.daysCount", { count: days })}</div>
                   </button>
                 );
               })}
@@ -221,7 +221,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             <div className="flex flex-wrap gap-2">
               {WEEKLY_RETENTION_PRESETS.map((weeks) => {
                 const active = backupRetention.weeklyWeeks === weeks;
-                const label = weeks === 1 ? "1 week" : `${weeks} weeks`;
+                const label = t("instanceGeneralSettings.weeksCount", { count: weeks });
                 return (
                   <button
                     key={weeks}
@@ -251,7 +251,7 @@ export function InstanceGeneralSettings({ embedded = false }: { embedded?: boole
             <div className="flex flex-wrap gap-2">
               {MONTHLY_RETENTION_PRESETS.map((months) => {
                 const active = backupRetention.monthlyMonths === months;
-                const label = months === 1 ? "1 month" : `${months} months`;
+                const label = t("instanceGeneralSettings.monthsCount", { count: months });
                 return (
                   <button
                     key={months}
