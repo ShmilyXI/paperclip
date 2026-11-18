@@ -13225,7 +13225,8 @@
   "taskList": {
     "noProject": "No project",
     "densityTaskList": "{{density}} task list",
-    "titleTaskGroup": "{{title}} task group"
+    "titleTaskGroup": "{{title}} task group",
+    "showMoreTasks": "Show more tasks"
   },
   "taskChatThread": {
     "questions": "Questions",

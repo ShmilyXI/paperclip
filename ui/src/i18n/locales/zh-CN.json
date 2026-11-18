@@ -13225,7 +13225,8 @@
   "taskList": {
     "noProject": "无项目",
     "densityTaskList": "{{density}} 任务列表",
-    "titleTaskGroup": "{{title}} 任务组"
+    "titleTaskGroup": "{{title}} 任务组",
+    "showMoreTasks": "显示更多任务"
   },
   "taskChatThread": {
     "questions": "问题",
