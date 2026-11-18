@@ -15388,6 +15388,25 @@
     "loadingAccess": "正在加载访问权限…",
     "couldnTLoadProjectAccess": "无法加载项目访问成员。"
   },
+  "projectAccessNotice": {
+    "projectAccess": "项目访问权限",
+    "thisAgent": "该员工",
+    "projectAccessIsReady": "项目访问权限已就绪",
+    "agentCantAccessThisProject": "{{agentName}}无法访问此项目",
+    "agentCanNowAccess": "员工现在可以访问所需项目。重试以继续使用你已保存的消息。",
+    "taskNeedsProjectOutside": "此任务需要 {{projectName}}，但它不在员工的允许项目范围内。员工尚未开始。你的消息已保存。",
+    "aProject": "某个项目",
+    "personWithAgentManagement": "拥有员工管理权限的人员可以在员工的权限 / 信任设置中添加此项目。",
+    "retryTask": "重试任务",
+    "manageProjectAccess": "管理项目访问权限",
+    "viewAgentAccess": "查看员工访问权限",
+    "runDetails": "运行详情",
+    "stoppedDuring": "停止阶段",
+    "workspaceSetup": "工作区设置",
+    "reason": "原因",
+    "projectOutsideAllowedScope": "项目超出允许范围",
+    "providerStarted": "提供者已启动"
+  },
   "projectGitAuthorization": {
     "title": "后台 GitHub 授权",
     "description": "允许该项目的工作区提供者使用你的 GitHub 连接器进行仓库供应与维护，直到撤销。这会把连接器凭据共享给提供者，并使用其现有的 GitHub 权限。项目仓库编辑者可以添加由此连接覆盖的仓库。请在 GitHub 连接中管理仓库访问权限。任务运行仍使用各自的身份。",

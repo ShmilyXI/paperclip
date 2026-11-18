@@ -15388,6 +15388,25 @@
     "loadingAccess": "Loading access…",
     "couldnTLoadProjectAccess": "Couldn't load project access members."
   },
+  "projectAccessNotice": {
+    "projectAccess": "Project access",
+    "thisAgent": "This agent",
+    "projectAccessIsReady": "Project access is ready",
+    "agentCantAccessThisProject": "{{agentName}} can’t access this project",
+    "agentCanNowAccess": "The agent can now access the required project. Retry to continue with your saved message.",
+    "taskNeedsProjectOutside": "This task needs {{projectName}} outside the agent’s allowed projects. The agent hasn’t started. Your message is saved.",
+    "aProject": "a project",
+    "personWithAgentManagement": "A person with agent-management permission can add this project in the agent’s Permissions / Trust settings.",
+    "retryTask": "Retry task",
+    "manageProjectAccess": "Manage project access",
+    "viewAgentAccess": "View agent access",
+    "runDetails": "Run details",
+    "stoppedDuring": "Stopped during",
+    "workspaceSetup": "Workspace setup",
+    "reason": "Reason",
+    "projectOutsideAllowedScope": "Project outside allowed scope",
+    "providerStarted": "Provider started"
+  },
   "projectGitAuthorization": {
     "title": "Background GitHub authorization",
     "description": "Allow this project’s workspace provider to use your GitHub Connector for repository provisioning and maintenance until revoked. This shares the Connector credential with the provider using its existing GitHub permissions. Project repository editors can add repositories covered by this connection. Manage repository access in the GitHub connection. Task runs continue to use their own identity.",
