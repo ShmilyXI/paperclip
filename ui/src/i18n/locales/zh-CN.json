@@ -2321,6 +2321,11 @@
     "noReadingYetShort": "暂无读数",
     "towardItsBar": "{{name}}，对照其衡量标准",
     "noNumberToTrackYet": "还没有可追踪的数字",
+    "nothingMeasured": "未衡量任何内容",
+    "noReading": "暂无读数",
+    "noNumber": "暂无数字",
+    "notUpdatedRecently": "最近未更新",
+    "andCountMore": "以及另外 {{count}} 条",
     "theWork": "工作内容",
     "noneYetShort": "还没有",
     "andMore": " 还有 {{count}} 个",
@@ -11118,6 +11123,12 @@
     "leadsItNow": "{{name}} 现在负责它。",
     "hasItNow": "{{name}} 现在接手它。",
     "couldntGiveItTo": "无法把它交给 {{name}}。"
+  },
+  "dashboardChatComposer": {
+    "chooseAnAgentToTalkTo": "选择一名员工进行对话。",
+    "couldntStartTheChatWith": "无法与 {{name}} 开始对话。",
+    "addAnAgent": "添加员工",
+    "toStartAChatFromHere": "以从这里开始对话。"
   },
   "dashboardPersonaSwitcher": {
     "whoseDashboard": "谁的仪表盘"

@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { memo, useMemo } from "react";
 import type { ResponsibilityHealth, ResponsibilityWithRollup } from "@paperclipai/shared";
 import { Clock } from "lucide-react";
@@ -53,7 +54,7 @@ const BoardCard = memo(function BoardCard({ responsibility }: { responsibility: 
   const standard = responsibility.standard?.trim();
   const gapLine = why.gap ?? why.missing;
   const target = metric ? describeTargetPhrase(metric) : null;
-  const metricLine = metric ? (target ? `${target} · ${metric.name}` : metric.name) : "Nothing measured";
+  const metricLine = metric ? (target ? `${target} · ${metric.name}` : metric.name) : t("responsibilities.nothingMeasured");
   return (
     <li className="min-w-0" data-responsibility-id={responsibility.id} data-health={health}>
       <Link
@@ -66,17 +67,17 @@ const BoardCard = memo(function BoardCard({ responsibility }: { responsibility: 
           {responsibility.title}
         </span>
         <span className="mt-0.5 line-clamp-2 text-xs text-muted-foreground" title={standard || undefined}>
-          {standard || "No bar yet."}
+          {standard || t("responsibilityOneScreen.noBarYet")}
         </span>
 
         <span className="mt-2.5 flex min-w-0 items-center gap-1.5 tabular-nums" data-board-reading="">
           <span className={cn("whitespace-nowrap text-lg font-semibold", value ? "text-foreground" : "text-muted-foreground")}>
-            {value ?? (metric ? "No reading" : "No number")}
+            {value ?? (metric ? t("responsibilities.noReading") : t("responsibilities.noNumber"))}
           </span>
           {metric?.stale ? (
-            <span className="text-(--status-task-icon-todo)" title="Not updated recently">
+            <span className="text-(--status-task-icon-todo)" title={t("responsibilities.notUpdatedRecently")}>
               <Clock aria-hidden="true" className="size-3.5" />
-              <span className="sr-only">, not updated recently</span>
+              <span className="sr-only">, {t("responsibilities.notUpdatedRecently")}</span>
             </span>
           ) : null}
         </span>
@@ -100,7 +101,7 @@ const BoardCard = memo(function BoardCard({ responsibility }: { responsibility: 
                 </span>
               </span>
             ))}
-            {why.more > 0 ? <span className="pl-3 text-xs text-muted-foreground">and {why.more} more</span> : null}
+            {why.more > 0 ? <span className="pl-3 text-xs text-muted-foreground">{t("responsibilities.andCountMore", { count: why.more })}</span> : null}
           </span>
         ) : null}
       </Link>
@@ -130,7 +131,7 @@ function AreaRow({ row }: { row: BoardAreaRow }) {
       header={
         <BoardAreaHeader
           headingId={headingId}
-          title={row.area?.title ?? "Not in an area"}
+          title={row.area?.title ?? t("responsibilities.notInAnArea")}
           archived={row.area?.status === "archived"}
           ownedLabel={row.ownedLabel}
           shareLabel={row.share?.label ?? null}

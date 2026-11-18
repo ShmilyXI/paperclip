@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Agent } from "@paperclipai/shared";
@@ -71,7 +72,7 @@ export function DashboardChatComposer({
     async (text: string, _mode: unknown, settings: ComposerRunSettings | null) => {
       const agent = agents.find((candidate) => candidate.id === agentIdFromChatValue(value));
       if (!agent) {
-        setError("Choose an agent to talk to.");
+        setError(t("dashboardChatComposer.chooseAnAgentToTalkTo"));
         return;
       }
       const key = `${agent.id}\n${text}\n${files.map((staged) => staged.id).join(",")}`;
@@ -83,7 +84,7 @@ export function DashboardChatComposer({
         setBody("");
         setFiles([]);
       } catch (failure) {
-        setError(`Couldn’t start the chat with ${agent.name}. ${describeError(failure).body}`);
+        setError(`${t("dashboardChatComposer.couldntStartTheChatWith", { name: agent.name })} ${describeError(failure).body}`);
       }
     },
     [agents, files, startChat, value],
@@ -93,7 +94,7 @@ export function DashboardChatComposer({
   if (options.length === 0) {
     return (
       <p className="mx-auto w-full max-w-(--tc-shell-max-w) text-sm text-muted-foreground" data-dashboard-chat="no-agents">
-        <Link to="/agents/new" className="underline underline-offset-4 hover:text-foreground">Add an agent</Link> to start a chat from here.
+        <Link to="/agents/new" className="underline underline-offset-4 hover:text-foreground">{t("dashboardChatComposer.addAnAgent")}</Link> {t("dashboardChatComposer.toStartAChatFromHere")}
       </p>
     );
   }
@@ -128,7 +129,7 @@ export function DashboardChatComposer({
             if (error) setError(null);
           },
           onSubmit: submit,
-          submitLabel: "Send",
+          submitLabel: t("common.send"),
           onSelectFiles: (picked) => setFiles((current) => [...current, ...picked.map((file) => ({ id: crypto.randomUUID(), file }))]),
           images: images.map((staged) => ({ id: staged.id, name: staged.file.name, file: staged.file })),
           onRemoveImage: removeFile,
@@ -145,7 +146,7 @@ export function DashboardChatComposer({
                   <button
                     type="button"
                     className="rounded-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={`Remove ${staged.file.name}`}
+                    aria-label={t("composerImageAttachments.removeName", { name: staged.file.name })}
                     onClick={() => removeFile(staged.id)}
                   >
                     <X aria-hidden="true" className="size-3" />

@@ -2321,6 +2321,11 @@
     "noReadingYetShort": "No reading yet",
     "towardItsBar": "{{name}}, toward its bar",
     "noNumberToTrackYet": "No number to track yet",
+    "nothingMeasured": "Nothing measured",
+    "noReading": "No reading",
+    "noNumber": "No number",
+    "notUpdatedRecently": "not updated recently",
+    "andCountMore": "and {{count}} more",
     "theWork": "The work",
     "noneYetShort": "None yet",
     "andMore": " and {{count}} more",
@@ -11118,6 +11123,12 @@
     "leadsItNow": "{{name}} leads it now.",
     "hasItNow": "{{name}} has it now.",
     "couldntGiveItTo": "Couldn't give it to {{name}}."
+  },
+  "dashboardChatComposer": {
+    "chooseAnAgentToTalkTo": "Choose an agent to talk to.",
+    "couldntStartTheChatWith": "Couldn't start the chat with {{name}}.",
+    "addAnAgent": "Add an agent",
+    "toStartAChatFromHere": "to start a chat from here."
   },
   "dashboardPersonaSwitcher": {
     "whoseDashboard": "Whose dashboard"
