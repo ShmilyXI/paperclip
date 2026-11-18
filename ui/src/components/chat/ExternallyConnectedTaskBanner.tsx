@@ -221,7 +221,7 @@ function ConnectedTaskComposer({
     try {
       if (sessionStorage.getItem(legacyStorageKey) !== null) {
         setUnownedRequest(true);
-        setStorageError("An earlier update has an unknown sender. Open Activity to check its delivery before starting a new update.");
+        setStorageError(t("externallyConnectedTaskBanner.unknownSenderEarlierUpdate"));
         setComposing(true);
         return;
       }
@@ -331,7 +331,7 @@ function ConnectedTaskComposer({
       endpointId: string;
       conversationId: string;
     }) => {
-      if (readOwner() !== draftOwner) throw new DOMException("Your account changed. Reopen this task to send from your current account.", "AbortError");
+      if (readOwner() !== draftOwner) throw new DOMException(t("externallyConnectedTaskBanner.yourAccountChangedReopen"), "AbortError");
       return chatEndpointsApi.publishBoardMessage(
         input.endpointId,
         input.conversationId,
@@ -401,8 +401,8 @@ function ConnectedTaskComposer({
       // identity; the inline notice covers them.
       if (classifySendFailure(error) === "pending") return;
       pushToast({
-        title: "Couldn't confirm channel delivery",
-        body: `${describeError(error).body} Your draft is kept; retrying here reuses the same request identity.`,
+        title: t("externallyConnectedTaskBanner.couldnTConfirmChannelDelivery"),
+        body: `${describeError(error).body} ${t("externallyConnectedTaskBanner.yourDraftIsKept")}`,
         tone: "error",
       });
     },
@@ -724,7 +724,7 @@ function ConnectedTaskComposer({
             if (readOwner() !== draftOwner) return;
             try { clearBoardSendDraft(legacyStorageKey); }
             catch {
-              setStorageError("Saved delivery record could not be discarded. Restore browser storage, then try again.");
+              setStorageError(t("externallyConnectedTaskBanner.savedRecordCouldNotBeDiscarded"));
               return;
             }
             loadedStorageKey.current = null;
@@ -788,17 +788,17 @@ function ConnectedTaskComposer({
               >
                 <p className="font-medium">
                   {resendStalled
-                    ? "Couldn’t send this update yet."
+                    ? t("externallyConnectedTaskBanner.couldntSendThisUpdateYet")
                     : resendWaiting || autoResend.resending
-                      ? "Sending when reconnected…"
-                      : "Delivery result not confirmed"}
+                      ? t("externallyConnectedTaskBanner.sendingWhenReconnected")
+                      : t("externallyConnectedTaskBanner.deliveryResultNotConfirmed")}
                 </p>
                 <p className="text-muted-foreground">
                   {resendStalled
-                    ? "Your exact draft and request identity are kept. Automatic resends stopped; choose Resend now to try again without creating a duplicate."
+                    ? t("externallyConnectedTaskBanner.resendsStopped")
                     : resendWaiting || autoResend.resending
-                      ? "Your exact draft and request identity are kept. It resends on its own without creating a duplicate."
-                      : "Your exact draft and request identity are kept. Retry safely to learn the authoritative publication state without creating a duplicate."}
+                      ? t("externallyConnectedTaskBanner.itResendsOnItsOwn")
+                      : t("externallyConnectedTaskBanner.yourExactDraftAndRequest")}
                 </p>
                 <Link
                   className="inline-block font-medium underline underline-offset-4"
@@ -969,12 +969,12 @@ function ConnectedTaskComposer({
               }}
             >
               {publish.isPending
-                ? "Sending…"
+                ? t("externallyConnectedTaskBanner.sending")
                 : resendWaiting
-                  ? "Resend now"
+                  ? t("externallyConnectedTaskBanner.resendNow")
                   : !rejection && (publish.isError || unconfirmedRequest)
-                  ? "Retry safely"
-                  : "Send to channel"}
+                  ? t("externallyConnectedTaskBanner.retrySafely")
+                  : t("externallyConnectedTaskBanner.sendToChannel")}
             </Button>
           </div>
         </div>
