@@ -80,7 +80,7 @@ export function ProfileSettings() {
   }
 
   function resolveProfileName() {
-    return name.trim() || sessionQuery.data?.user.name || "Board";
+    return name.trim() || sessionQuery.data?.user.name || t("common.board");
   }
 
   const updateMutation = useAccountBoundMutation({
@@ -131,7 +131,7 @@ export function ProfileSettings() {
   });
 
   if (sessionQuery.isLoading || sessionView.kind === "reconnecting") {
-    return <div className="text-sm text-muted-foreground">Loading profile...</div>;
+    return <div className="text-sm text-muted-foreground">{t("settings.loadingProfile")}</div>;
   }
 
   if (sessionView.kind === "error") {
@@ -147,10 +147,10 @@ export function ProfileSettings() {
   }
 
   if (!sessionQuery.data) {
-    return <div className="text-sm text-destructive">Failed to load profile.</div>;
+    return <div className="text-sm text-destructive">{t("settings.failedToLoadProfile")}</div>;
   }
 
-  const currentName = name.trim() || sessionQuery.data.user.name || "Board";
+  const currentName = name.trim() || sessionQuery.data.user.name || t("common.board");
   const currentImage = image.trim() || null;
   const initials = deriveInitials(currentName);
   const isSavingProfile = updateMutation.isPending || uploadAvatarMutation.isPending || removeAvatarMutation.isPending;
@@ -228,7 +228,7 @@ export function ProfileSettings() {
                       disabled={isSavingProfile}
                     >
                       {removeAvatarMutation.isPending ? <LoaderCircle className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
-                      Remove
+                      {t("common.remove")}
                     </Button>
                   ) : null}
                 </div>

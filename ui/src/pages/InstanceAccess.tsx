@@ -102,12 +102,12 @@ export function InstanceAccess() {
     !accountSettled ||
     (usersQuery.isSuccess && (companiesQuery.isPending || companiesView.kind === "reconnecting"))
   ) {
-    return <div className="text-sm text-muted-foreground">Loading instance access…</div>;
+    return <div className="text-sm text-muted-foreground">{t("instanceAccess.loadingInstanceAccess")}</div>;
   }
 
   if (usersView.kind === "error") {
     if (usersView.errorKind === "forbidden") {
-      return <div className="text-sm text-destructive">Instance admin access is required to manage users.</div>;
+      return <div className="text-sm text-destructive">{t("instanceAccess.instanceAdminAccessIsRequired")}</div>;
     }
     return (
       <QueryErrorState
@@ -188,9 +188,9 @@ export function InstanceAccess() {
 
         <Card className="block space-y-4 p-5">
           {!selectedUserId ? (
-            <div className="text-sm text-muted-foreground">Select a user to inspect instance access.</div>
+            <div className="text-sm text-muted-foreground">{t("instanceAccess.selectAUserToInspect")}</div>
           ) : userAccessQuery.isLoading || userAccessView.kind === "reconnecting" ? (
-            <div className="text-sm text-muted-foreground">Loading user access…</div>
+            <div className="text-sm text-muted-foreground">{t("instanceAccess.loadingUserAccess")}</div>
           ) : userAccessView.kind === "error" ? (
             <QueryErrorState
               error={userAccessQuery.error}
