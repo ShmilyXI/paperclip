@@ -12563,6 +12563,19 @@
     "clickToEdit": "Click to edit...",
     "changedSinceLoaded": "This changed since you loaded it. Your draft is kept for review."
   },
+  "companySettings": {
+    "decisions": "Decisions",
+    "eachOwnerSavesAsSoonAs": "Each owner saves as soon as you choose it.",
+    "defaultDecisionOwner": "Default decision owner",
+    "defaultDecisionOwnerHint": "When a card needs a person but has no explicit owner, it goes to this user's For you list. Leave as Unassigned to keep ownerless cards in the claimable pool.",
+    "unassignedNoDefaultOwner": "Unassigned (no default owner)",
+    "couldntSaveDefaultDecisionOwner": "Couldn't save the default decision owner.",
+    "budgetOwner": "Budget owner",
+    "budgetOwnerHint": "A budget hard stop also goes to this user's For you list, with Raise limit and Keep paused. The Company view still shows it to every operator.",
+    "noBudgetOwnerCompanyViewOnly": "No budget owner (Company view only)",
+    "couldntSaveBudgetOwner": "Couldn't save the budget owner.",
+    "archiving": "Archiving..."
+  },
   "companySettingsNav": {
     "environments": "Environments",
     "access": "Access",

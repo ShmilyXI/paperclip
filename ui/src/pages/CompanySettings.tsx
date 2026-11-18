@@ -404,33 +404,33 @@ export function CompanySettings() {
       <div className="max-w-2xl space-y-4" data-testid="company-settings-decisions-section">
         <div className="space-y-1">
           <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            Decisions
+            {t("companySettings.decisions")}
           </div>
           <p className="text-xs text-muted-foreground">
-            Each owner saves as soon as you choose it.
+            {t("companySettings.eachOwnerSavesAsSoonAs")}
           </p>
         </div>
         {membersView.kind === "error" ? <QueryErrorState error={membersView.error} onRetry={membersView.retry} /> : null}
         <DecisionOwnerField
-          label="Default decision owner"
-          hint="When a card needs a person but has no explicit owner, it goes to this user's For you list. Leave as Unassigned to keep ownerless cards in the claimable pool."
+          label={t("companySettings.defaultDecisionOwner")}
+          hint={t("companySettings.defaultDecisionOwnerHint")}
           testId="company-settings-default-decision-owner"
-          unsetLabel="Unassigned (no default owner)"
+          unsetLabel={t("companySettings.unassignedNoDefaultOwner")}
           savedUserId={selectedCompany.defaultDecisionOwnerUserId ?? null}
           memberOptions={memberOptions}
           membersLoading={membersQuery.isLoading}
-          fallbackError="Couldn't save the default decision owner."
+          fallbackError={t("companySettings.couldntSaveDefaultDecisionOwner")}
           save={saveDefaultDecisionOwner}
         />
         <DecisionOwnerField
-          label="Budget owner"
-          hint="A budget hard stop also goes to this user's For you list, with Raise limit and Keep paused. The Company view still shows it to every operator."
+          label={t("companySettings.budgetOwner")}
+          hint={t("companySettings.budgetOwnerHint")}
           testId="company-settings-budget-owner"
-          unsetLabel="No budget owner (Company view only)"
+          unsetLabel={t("companySettings.noBudgetOwnerCompanyViewOnly")}
           savedUserId={selectedCompany.budgetOwnerUserId ?? null}
           memberOptions={memberOptions}
           membersLoading={membersQuery.isLoading}
-          fallbackError="Couldn't save the budget owner."
+          fallbackError={t("companySettings.couldntSaveBudgetOwner")}
           save={saveBudgetOwner}
         />
       </div>
@@ -482,7 +482,7 @@ export function CompanySettings() {
               }}
             >
               {archiveMutation.isPending
-                ? "Archiving..."
+                ? t("companySettings.archiving")
                 : selectedCompany.status === "archived"
                 ? t("settings.alreadyArchived")
                 : t("settings.archiveOrganization")}
@@ -566,7 +566,7 @@ function DecisionOwnerField({
         </p>
       ) : (
         <p role="status" className="min-h-4 text-xs text-muted-foreground">
-          {mutation.isPending ? "Saving…" : mutation.isSuccess ? "Saved" : null}
+          {mutation.isPending ? t("common.saving2") : mutation.isSuccess ? t("common.saved") : null}
         </p>
       )}
     </div>
