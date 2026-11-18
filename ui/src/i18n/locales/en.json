@@ -5843,6 +5843,7 @@
     "responsibleMember": "Responsible member",
     "responsibleMemberHelp": "The member accountable for automatically created Paperclip tasks. GitHub authors remain recorded separately. This grants no access to the member’s personal credentials. Only company owners, company admins, and instance admins can select another person as a sponsor or responsible member.",
     "selectAMember": "Select a member",
+    "searchMembers": "Search members…",
     "theMemberAccountableForAutomatically": "The member accountable for automatically created Paperclip tasks. GitHub authors remain recorded separately. This grants no access to the member’s personal credentials.",
     "couldNotLoadMembersOr": "Could not load members or linked accounts.",
     "linkACompanyMember": "Link a company member",
@@ -12317,7 +12318,9 @@
     "existingWorkspaces": "Existing workspaces",
     "projectAndWorkspaceAccessIs": "Project and workspace access is checked for each task. A shared folder must also be allowed by the agent’s execution policy.",
     "savedForNewTasks": "Saved for new tasks.",
-    "saveDefaults": "Save defaults"
+    "saveDefaults": "Save defaults",
+    "isolatedCheckout": "isolated checkout",
+    "sharedFolder": "shared folder"
   },
   "reviewQueueCard": {
     "couldNotLoadConnectionReviews": "Could not load connection reviews. Please refresh to try again.",

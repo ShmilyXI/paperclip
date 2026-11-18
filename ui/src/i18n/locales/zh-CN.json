@@ -5843,6 +5843,7 @@
     "responsibleMember": "责任成员",
     "responsibleMemberHelp": "负责自动创建的 Paperclip 任务的成员。GitHub 作者会单独记录。这不会授予对该成员个人凭证的任何访问权限。只有公司所有者、公司管理员和实例管理员可以将其他人选为担保人或责任成员。",
     "selectAMember": "选择一位成员",
+    "searchMembers": "搜索成员…",
     "theMemberAccountableForAutomatically": "对自动创建的 Paperclip 任务负责的成员。GitHub 作者仍会单独记录。这不会授予对该成员个人凭据的访问权限。",
     "couldNotLoadMembersOr": "无法加载成员或已关联账号。",
     "linkACompanyMember": "关联组织成员",
@@ -12317,7 +12318,9 @@
     "existingWorkspaces": "现有工作区",
     "projectAndWorkspaceAccessIs": "每个任务都会检查项目与工作区访问权限。共享文件夹还必须在员工的执行策略中被允许。",
     "savedForNewTasks": "已为新任务保存。",
-    "saveDefaults": "保存默认设置"
+    "saveDefaults": "保存默认设置",
+    "isolatedCheckout": "独立检出",
+    "sharedFolder": "共享文件夹"
   },
   "reviewQueueCard": {
     "couldNotLoadConnectionReviews": "无法加载连接审核。请刷新后重试。",

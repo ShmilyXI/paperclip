@@ -95,8 +95,8 @@ export function ChatExecutionDefaults({ companyId, value, resource = false, onSa
         {current.workspace && !choices.has(workspaceValue) && <option value={workspaceValue}>{t("chatExecutionDefaults.savedWorkspaceUnavailable")}</option>}
         {(projects.data ?? []).filter((project) => project.workspaces?.length).map((project) => <optgroup key={project.id} label={project.name}>
           {project.workspaces.flatMap((source) => [
-            <option key={`${source.id}:isolated`} value={`source:${source.id}:managed_isolated`}>{source.name} — isolated checkout</option>,
-            <option key={`${source.id}:shared`} value={`source:${source.id}:shared`}>{source.name} — shared folder</option>,
+            <option key={`${source.id}:isolated`} value={`source:${source.id}:managed_isolated`}>{source.name} — {t("chatExecutionDefaults.isolatedCheckout")}</option>,
+            <option key={`${source.id}:shared`} value={`source:${source.id}:shared`}>{source.name} — {t("chatExecutionDefaults.sharedFolder")}</option>,
           ])}
         </optgroup>)}
         {(workspaces.data?.length ?? 0) > 0 && <optgroup label={t("chatExecutionDefaults.existingWorkspaces")}>{workspaces.data!.map((workspace) => <option key={workspace.id} value={`existing:${workspace.id}`}>{workspace.name}</option>)}</optgroup>}

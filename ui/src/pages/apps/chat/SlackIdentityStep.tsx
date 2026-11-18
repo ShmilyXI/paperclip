@@ -68,7 +68,7 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
         <a href="https://app.slack.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{t("slackIdentityStep.openSlack")} <ExternalLink className="inline size-3" /></a>{t("slackIdentityStep.sendTheCommandInYour")}
       </p>
       {identitiesView.kind === "error" ? (
-        <p role="alert" className="text-sm text-destructive">Couldn&apos;t check for your Slack account. We&apos;ll keep trying.</p>
+        <p role="alert" className="text-sm text-destructive">{t("slackIdentityStep.couldnTCheckForYour")}</p>
       ) : candidates.length === 0 ? (
         <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("slackIdentityStep.waitingForYourConnectCommand")}</p>
       ) : (
@@ -94,8 +94,8 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
           })}
         </div>
       )}
-      {!userId && !session.isPending && !health.isPending && sessionView.kind !== "reconnecting" && healthView.kind !== "reconnecting" && <p role="alert" className="text-sm text-destructive">Sign in to Paperclip to link your Slack account. Refresh this page after signing in.</p>}
-      {link.error ? <p role="alert" className="text-sm text-destructive">Couldn&apos;t link your account. Check that you are a member of this company and try again.</p> : null}
+      {!userId && !session.isPending && !health.isPending && sessionView.kind !== "reconnecting" && healthView.kind !== "reconnecting" && <p role="alert" className="text-sm text-destructive">{t("slackIdentityStep.signInToPaperclipTo")}</p>}
+      {link.error ? <p role="alert" className="text-sm text-destructive">{t("slackIdentityStep.couldnTLinkYourAccount")}</p> : null}
       <div className="flex items-center justify-between gap-3">
         <Button variant="ghost" className="text-muted-foreground" onClick={onSaveExit}>{t("slackIdentityStep.saveExit")}</Button>
         {linkedToMe && <Button onClick={onConnected}>{t("slackIdentityStep.continueToMessageTest")}</Button>}

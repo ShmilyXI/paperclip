@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { CompanyMember, CurrentBoardAccess } from "@/api/access";
 import { Identity } from "@/components/Identity";
 import { SearchableSelect } from "@/components/SearchableSelect";
@@ -33,8 +34,8 @@ export function GitHubSponsorSelect({
       value={value}
       groups={[{ id: "sponsors", options }]}
       onValueChange={onChange}
-      placeholder="Select a member"
-      searchPlaceholder="Search members…"
+      placeholder={t("githubConfig.selectAMember")}
+      searchPlaceholder={t("githubConfig.searchMembers")}
       triggerAriaLabel={label}
       disabled={!access || options.length === 0}
       renderValue={(option) => option
