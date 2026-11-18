@@ -10756,7 +10756,14 @@
   },
   "decisionResolver": {
     "loadingDecision": "正在加载决策…",
-    "thisDecisionIsNoLonger": "此决策已不可用 — 它可能已在别处处理完毕。"
+    "thisDecisionIsNoLonger": "此决策已不可用 — 它可能已在别处处理完毕。",
+    "createTitle": "创建「{{title}}」",
+    "unblockTarget": "解除 {{target}} 的阻塞",
+    "cancelTargetAndSubtree": "取消 {{target}} 及其子树",
+    "targetChanged": "目标已变更",
+    "optionsThatNeedUnchangedTarget": "提议之后目标发生了变化，因此需要目标保持不变的选项已禁用。",
+    "submitChoice": "提交选择",
+    "issueFallback": "任务 {{id}}"
   },
   "projectWorkspacesContent": {
     "projectWorkspaceHasNoProject": "项目工作区没有关联项目",
@@ -12974,7 +12981,11 @@
     "loadingRevisions": "正在加载修订版本…",
     "selectTwoRevisionsToCompare": "请选择两个修订版本进行比较。",
     "bothSidesAreTheSame": "两侧是同一个修订版本。",
-    "content": "内容"
+    "content": "内容",
+    "board": "看板",
+    "agent": "员工",
+    "system": "系统",
+    "revisionLabel": "rev {{revisionNumber}} — {{time}} • {{actor}}"
   },
   "issueWorkspaceCard": {
     "projectDefault": "项目默认",

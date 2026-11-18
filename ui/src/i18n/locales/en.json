@@ -10756,7 +10756,14 @@
   },
   "decisionResolver": {
     "loadingDecision": "Loading decision…",
-    "thisDecisionIsNoLonger": "This decision is no longer available — it may have been resolved elsewhere."
+    "thisDecisionIsNoLonger": "This decision is no longer available — it may have been resolved elsewhere.",
+    "createTitle": "Create “{{title}}”",
+    "unblockTarget": "Unblock {{target}}",
+    "cancelTargetAndSubtree": "Cancel {{target}} and its sub-tree",
+    "targetChanged": "Target changed",
+    "optionsThatNeedUnchangedTarget": "A target changed since this was proposed, so options that need it unchanged are off.",
+    "submitChoice": "Submit choice",
+    "issueFallback": "issue {{id}}"
   },
   "projectWorkspacesContent": {
     "projectWorkspaceHasNoProject": "Project workspace has no project",
@@ -12974,7 +12981,11 @@
     "loadingRevisions": "Loading revisions...",
     "selectTwoRevisionsToCompare": "Select two revisions to compare.",
     "bothSidesAreTheSame": "Both sides are the same revision.",
-    "content": "Content"
+    "content": "Content",
+    "board": "board",
+    "agent": "agent",
+    "system": "system",
+    "revisionLabel": "rev {{revisionNumber}} — {{time}} • {{actor}}"
   },
   "issueWorkspaceCard": {
     "projectDefault": "Project default",

@@ -26,11 +26,11 @@ import { cn } from "@/lib/utils";
 
 function getRevisionLabel(revision: DocumentRevision) {
   const actor = revision.createdByUserId
-    ? "board"
+    ? t("documentDiffModal.board")
     : revision.createdByAgentId
-      ? "agent"
-      : "system";
-  return `rev ${revision.revisionNumber} — ${relativeTime(revision.createdAt)} • ${actor}`;
+      ? t("documentDiffModal.agent")
+      : t("documentDiffModal.system");
+  return t("documentDiffModal.revisionLabel", { revisionNumber: revision.revisionNumber, time: relativeTime(revision.createdAt), actor });
 }
 
 export function DocumentDiffModal({
