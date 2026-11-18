@@ -44,12 +44,12 @@ export function TextAttachmentPreview({ title, text, markdown, html = false, csv
         </Button>
       </header>
       <div className={cn(renderHtml || renderCsv ? "flex min-h-0 flex-1 flex-col overflow-hidden" : "min-h-0 min-w-0 flex-1 overflow-auto p-4", ANALYTICS_MASK_CLASS)}>
-        {text.length === 0 ? <p className="text-sm text-muted-foreground">File is empty.</p>
+        {text.length === 0 ? <p className="text-sm text-muted-foreground">{t("taskAttachmentPanel.fileIsEmpty")}</p>
           : renderCsv ? <CsvPreview text={text} title={title} />
           : renderHtml ? <HtmlArtifactPreview html={text} title={title} />
           : markdown && mode === "rendered" ? <MarkdownBody mediaMode="reference">{text}</MarkdownBody>
-          : patch ? <pre className={cn("paperclip-patch-source m-0 min-w-0 whitespace-pre-wrap wrap-anywhere font-mono text-sm", ANALYTICS_MASK_CLASS)} aria-label={`${title} patch`}><code><PatchLines text={text} /></code></pre>
-          : <pre className={cn("whitespace-pre-wrap wrap-anywhere font-mono text-sm", ANALYTICS_MASK_CLASS)} aria-label={`${title} raw text`}>{text}</pre>}
+          : patch ? <pre className={cn("paperclip-patch-source m-0 min-w-0 whitespace-pre-wrap wrap-anywhere font-mono text-sm", ANALYTICS_MASK_CLASS)} aria-label={t("taskAttachmentPanel.titlePatch", { title })}><code><PatchLines text={text} /></code></pre>
+          : <pre className={cn("whitespace-pre-wrap wrap-anywhere font-mono text-sm", ANALYTICS_MASK_CLASS)} aria-label={t("taskAttachmentPanel.rawText", { title })}>{text}</pre>}
       </div>
     </div>
   );
@@ -96,6 +96,6 @@ export function TaskAttachmentPanel({ issueId, attachmentId }: { issueId: string
       </div>
     );
   }
-  if (content.data === undefined) return <p className="p-4 text-sm" role="status">Loading file…</p>;
+  if (content.data === undefined) return <p className="p-4 text-sm" role="status">{t("taskAttachmentPanel.loadingFile")}</p>;
   return <TextAttachmentPreview key={attachment.id} title={attachment.originalFilename ?? attachment.id} text={content.data} patch={isPatchFile(attachment.originalFilename, attachment.contentType)} csv={isCsvFile(attachment.originalFilename ?? "", attachment.contentType)} markdown={isMarkdownAttachment(attachment)} html={isHtmlPreview(attachment.contentType, attachment.originalFilename)} downloadUrl={downloadUrl} />;
 }

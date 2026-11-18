@@ -12364,6 +12364,12 @@
     "whoUpdatedAllowlistCounts": "{{who}} updated the allowlist (added {{added}}, removed {{removed}})",
     "whoUpdatedAllowlist": "{{who}} updated the allowlist"
   },
+  "agentBudgetsPanel": {
+    "budgetDataCouldNotBeLoaded": "Budget data could not be loaded. Showing the agent's saved monthly budget.",
+    "couldNotUpdateBudget": "Could not update {{name}}'s budget. Review the amount and try again.",
+    "couldNotKeepPaused": "Could not keep this agent paused.",
+    "couldNotRaiseBudget": "Could not raise the budget and resume."
+  },
   "budgetIncidentCard": {
     "accountingIsIncompleteKnownSpend": "Accounting is incomplete. Known spend is {{amountObserved}}; review pending or unpriced usage in the budget policy.",
     "spendingReachedAmountobservedAgainstA": "Spending reached {{amountObserved}} against a limit of {{amountLimit}}.",
@@ -14157,7 +14163,8 @@
     "htmlView": "HTML view",
     "csvView": "CSV view",
     "downloadNamed": "Download {{title}}",
-    "rawText": "{{title}} raw text"
+    "rawText": "{{title}} raw text",
+    "titlePatch": "{{title}} patch"
   },
   "devRestartBanner": {
     "restartPaperclipNowThisMay": "Restart Paperclip now? This may interrupt {{activeRunLabel}}.",

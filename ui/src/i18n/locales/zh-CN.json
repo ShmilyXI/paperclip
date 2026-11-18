@@ -12364,6 +12364,12 @@
     "whoUpdatedAllowlistCounts": "{{who}} 更新了允许列表（新增 {{added}}，移除 {{removed}}）",
     "whoUpdatedAllowlist": "{{who}} 更新了允许列表"
   },
+  "agentBudgetsPanel": {
+    "budgetDataCouldNotBeLoaded": "无法加载预算数据。正在显示该员工已保存的月度预算。",
+    "couldNotUpdateBudget": "无法更新 {{name}} 的预算。请检查金额后重试。",
+    "couldNotKeepPaused": "无法保持该员工暂停状态。",
+    "couldNotRaiseBudget": "无法提高预算并恢复。"
+  },
   "budgetIncidentCard": {
     "accountingIsIncompleteKnownSpend": "账务记录不完整。已知支出为 {{amountObserved}}；请在预算策略中检查待处理或未定价的用量。",
     "spendingReachedAmountobservedAgainstA": "支出已达 {{amountObserved}}，限额为 {{amountLimit}}。",
@@ -14157,7 +14163,8 @@
     "htmlView": "HTML 视图",
     "csvView": "CSV 视图",
     "downloadNamed": "下载 {{title}}",
-    "rawText": "{{title}} 的原始文本"
+    "rawText": "{{title}} 的原始文本",
+    "titlePatch": "{{title}} 补丁"
   },
   "devRestartBanner": {
     "restartPaperclipNowThisMay": "现在重启 Paperclip？这可能会中断 {{activeRunLabel}}。",
