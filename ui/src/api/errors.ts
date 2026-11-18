@@ -175,6 +175,7 @@ const ACTION_KEYS = new Map([
   ["load Composio accounts", "loadComposioAccounts"],
   ["load every connector", "loadEveryConnector"],
   ["load AI account defaults", "loadAiAccountDefaults"],
+  ["load the Dot connection", "loadTheDotConnection"],
 ]);
 
 function actionErrorTitle(action: string, fallback: string): string {

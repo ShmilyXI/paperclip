@@ -8829,7 +8829,9 @@
     "assignment": "Assignment:",
     "waitingForDotToAccept": "waiting for Dot to accept",
     "acceptedByDot": "accepted by Dot",
-    "setupPromptExpires": "Setup prompt expires {{time}}."
+    "setupPromptExpires": "Setup prompt expires {{time}}.",
+    "enableOpenaiDot": "Enable OpenAI Dot in experimental settings.",
+    "connection": "Connection:"
   },
   "cases": {
     "cases": "Cases",
@@ -17487,7 +17489,8 @@
         "loadIdentityLink": "load the identity link",
         "loadComposioAccounts": "load Composio accounts",
         "loadEveryConnector": "load every connector",
-        "loadAiAccountDefaults": "load AI account defaults"
+        "loadAiAccountDefaults": "load AI account defaults",
+        "loadTheDotConnection": "load the Dot connection"
       },
       "retry": "Retry",
       "retrying": "Retrying…",

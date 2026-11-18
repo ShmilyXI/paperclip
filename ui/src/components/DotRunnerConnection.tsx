@@ -52,19 +52,19 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
   useEffect(() => {
     if (existingBindingId && existingBindingId !== bindingId && !revoke.isPending) onBinding(existingBindingId);
   }, [existingBindingId, bindingId, onBinding, revoke.isPending]);
-  if (!agentId) return <p className="text-sm text-muted-foreground">Save the agent, then return here to pair your Dot.</p>;
+  if (!agentId) return <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.saveTheAgentThenReturn")}</p>;
   const mutationError = pair.error ?? test.error ?? revoke.error;
   const b = state.data?.binding;
   const setupPrompt = pairing && state.data?.resourceUrl && companyId && agentId
     ? buildDotSetupPrompt({ companyId, agentId, resourceUrl: state.data.resourceUrl, ...pairing })
     : "";
   return <div className="space-y-3">
-    <p className="text-sm text-muted-foreground">Dot manages its model and external tools. Paperclip supplies task coordination, people, assigned skills, and connected app tools. Dot can start a task directly from its conversation. Enable Read task attachments below to send assigned task file contents to OpenAI. Enable workspace files and commands for work in the assigned workspace. Provider usage and cost are unavailable; stopping a Paperclip run revokes access without confirming an external stop.</p>
-    {state.data && !state.data.enabled && <p className="text-sm text-muted-foreground">Enable OpenAI Dot in experimental settings.</p>}
-    {state.data?.resourceUrl && <p className="text-sm break-all">Private plugin MCP URL: <code>{state.data.resourceUrl}</code></p>}
-    {b && <p className="text-sm">Connection: {b.status}. Event subscription: {b.subscriptionVerified ? "verified" : "required"}.</p>}
-    {b?.assignment && <p className="text-sm">Assignment: {b.assignment.status === "offered" ? "waiting for Dot to accept" : "accepted by Dot"}.</p>}
-    {b?.assignment?.attentionRequired && <p className="text-sm text-destructive" role="alert">Dot has not reported useful activity for 15 minutes. Inspect the Dot before assigning replacement work; Paperclip cannot confirm its external stop.</p>}
+    <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.dotManagesItsModelAnd")}</p>
+    {state.data && !state.data.enabled && <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.enableOpenaiDot")}</p>}
+    {state.data?.resourceUrl && <p className="text-sm break-all">{t("dotRunnerConnection.privatePluginMcpUrl")} <code>{state.data.resourceUrl}</code></p>}
+    {b && <p className="text-sm">{t("dotRunnerConnection.connection")} {b.status}. {t("dotRunnerConnection.eventSubscription")} {b.subscriptionVerified ? t("dotRunnerConnection.verified") : t("dotRunnerConnection.required")}.</p>}
+    {b?.assignment && <p className="text-sm">{t("dotRunnerConnection.assignment")} {b.assignment.status === "offered" ? t("dotRunnerConnection.waitingForDotToAccept") : t("dotRunnerConnection.acceptedByDot")}.</p>}
+    {b?.assignment?.attentionRequired && <p className="text-sm text-destructive" role="alert">{t("dotRunnerConnection.dotHasNotReportedUseful")}</p>}
     {pairing && setupPrompt && b?.status === "pairing" && <div className="space-y-2">
       <AgentSetupPrompt
         prompt={setupPrompt}
@@ -83,7 +83,7 @@ export function DotRunnerConnection({ companyId, agentId, bindingId, onBinding }
       <Button type="button" variant="outline" onClick={() => { void state.refetch(); }}>{t("dotRunnerConnection.refreshConnection")}</Button>
       {b && <Button type="button" variant="outline" disabled={revoke.isPending} onClick={() => revoke.mutate()}>{t("dotRunnerConnection.revokeConnection")}</Button>}
     </div>
-    {b?.hasPendingChallenge && <p className="text-sm text-muted-foreground">Waiting for Dot to read and confirm the harmless mailbox challenge.</p>}
+    {b?.hasPendingChallenge && <p className="text-sm text-muted-foreground">{t("dotRunnerConnection.waitingForDotToRead")}</p>}
     {stateView.kind === "error" && (
       <QueryErrorState
         size="inline"

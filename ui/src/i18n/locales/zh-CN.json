@@ -8829,7 +8829,9 @@
     "assignment": "分配关系：",
     "waitingForDotToAccept": "等待 Dot 接受",
     "acceptedByDot": "已被 Dot 接受",
-    "setupPromptExpires": "设置提示将于 {{time}} 过期。"
+    "setupPromptExpires": "设置提示将于 {{time}} 过期。",
+    "enableOpenaiDot": "在实验性设置中启用 OpenAI Dot。",
+    "connection": "连接状态："
   },
   "cases": {
     "cases": "案例",
@@ -17487,7 +17489,8 @@
         "loadIdentityLink": "加载身份链接",
         "loadComposioAccounts": "加载 Composio 账户",
         "loadEveryConnector": "加载所有连接器",
-        "loadAiAccountDefaults": "加载 AI 账户默认值"
+        "loadAiAccountDefaults": "加载 AI 账户默认值",
+        "loadTheDotConnection": "加载 Dot 连接"
       },
       "retry": "重试",
       "retrying": "正在重试…",
