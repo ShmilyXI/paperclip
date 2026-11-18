@@ -17384,6 +17384,7 @@
       "actions": {
         "loadTask": "load this task",
         "loadAgent": "load this agent",
+        "loadAgents": "load agents",
         "loadAgentTasks": "load this agent's tasks",
         "loadAgentArtifacts": "load this agent's artifacts",
         "loadProject": "load this project",
@@ -17701,6 +17702,28 @@
     "saveOrDiscardYourFileChanges": "Save or discard your file changes first.",
     "loadedFrom": "Loaded {{entry}} from {{root}}",
     "loadProfile": "Load profile"
+  },
+  "responsibilityDelegateDialog": {
+    "yourPrimaryAgent": "Your primary agent",
+    "taskCreated": "Task created",
+    "agentHasIt": "{{name}} has it.",
+    "theAgentHasIt": "The agent has it.",
+    "itIsFiledUnder": "It is filed under {{title}}.",
+    "giveAnotherTask": "Give another task",
+    "createsATaskUnder": "Creates a task under {{title}} and gives it to the agent.",
+    "who": "Who",
+    "loadingAgents": "Loading agents…",
+    "chooseAnAgent": "Choose an agent",
+    "searchAgents": "Search agents…",
+    "noAgentsCanTakeThis": "No agents can take this. Add an agent first.",
+    "how": "How",
+    "howTheAgentWorks": "How the agent works",
+    "whatToDo": "What to do",
+    "egDraftTheInvestorUpdate": "e.g. Draft the investor update",
+    "anythingElse": "Anything else",
+    "contextConstraints": "Context, constraints, or what done looks like",
+    "couldntCreateTheTask": "Couldn’t create the task.",
+    "creatingTask": "Creating task…"
   },
   "responsibilityDetail": {
     "couldntSaveTheChange": "Couldn’t save the change.",

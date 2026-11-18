@@ -147,6 +147,7 @@ const ACTION_KEYS = new Map([
   ["load this task", "loadTask"],
   ["load the task", "loadTask"],
   ["load this agent", "loadAgent"],
+  ["load agents", "loadAgents"],
   ["load this agent's tasks", "loadAgentTasks"],
   ["load this agent's artifacts", "loadAgentArtifacts"],
   ["load this project", "loadProject"],

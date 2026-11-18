@@ -17384,6 +17384,7 @@
       "actions": {
         "loadTask": "加载此任务",
         "loadAgent": "加载此智能体",
+        "loadAgents": "加载员工",
         "loadAgentTasks": "加载此智能体的任务",
         "loadAgentArtifacts": "加载此智能体的产物",
         "loadProject": "加载此项目",
@@ -17701,6 +17702,28 @@
     "saveOrDiscardYourFileChanges": "请先保存或放弃你的文件更改。",
     "loadedFrom": "已从 {{root}} 加载 {{entry}}",
     "loadProfile": "加载配置文件"
+  },
+  "responsibilityDelegateDialog": {
+    "yourPrimaryAgent": "你的主要员工",
+    "taskCreated": "任务已创建",
+    "agentHasIt": "{{name}} 已接手。",
+    "theAgentHasIt": "员工已接手。",
+    "itIsFiledUnder": "已归档到 {{title}} 下。",
+    "giveAnotherTask": "再给一个任务",
+    "createsATaskUnder": "在 {{title}} 下创建任务并交给员工。",
+    "who": "谁",
+    "loadingAgents": "正在加载员工…",
+    "chooseAnAgent": "选择员工",
+    "searchAgents": "搜索员工…",
+    "noAgentsCanTakeThis": "没有员工可以接手。请先添加员工。",
+    "how": "如何",
+    "howTheAgentWorks": "员工的工作方式",
+    "whatToDo": "要做什么",
+    "egDraftTheInvestorUpdate": "例如：起草投资人更新",
+    "anythingElse": "还有什么",
+    "contextConstraints": "上下文、限制条件，或完成的标准",
+    "couldntCreateTheTask": "无法创建任务。",
+    "creatingTask": "正在创建任务…"
   },
   "responsibilityDetail": {
     "couldntSaveTheChange": "无法保存更改。",

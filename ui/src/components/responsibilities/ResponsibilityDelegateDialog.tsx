@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type { Agent, ResponsibilityDelegationMode, ResponsibilityDelegationResult } from "@paperclipai/shared";
 import { CircleCheck } from "lucide-react";
 import { agentsApi } from "@/api/agents";
@@ -98,8 +99,8 @@ export function ResponsibilityDelegateDialog({
     const primaryAgent = ordered[0]?.id === primaryAgentId ? ordered[0] : null;
     const others = primaryAgent ? ordered.slice(1) : ordered;
     return [
-      ...(primaryAgent ? [{ id: "primary", label: "Your primary agent", options: [toOption(primaryAgent)] }] : []),
-      ...(others.length > 0 ? [{ id: "others", label: primaryAgent ? "Other agents" : undefined, options: others.map(toOption) }] : []),
+      ...(primaryAgent ? [{ id: "primary", label: t("responsibilityDelegateDialog.yourPrimaryAgent"), options: [toOption(primaryAgent)] }] : []),
+      ...(others.length > 0 ? [{ id: "others", label: primaryAgent ? t("needsYou.otherAgents") : undefined, options: others.map(toOption) }] : []),
     ];
   }, [ordered, primaryAgentId]);
 
@@ -167,10 +168,11 @@ export function ResponsibilityDelegateDialog({
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <CircleCheck className="size-5 text-(--status-task-icon-done)" aria-hidden="true" />
-                Task created
+                {t("responsibilityDelegateDialog.taskCreated")}
               </DialogTitle>
               <DialogDescription>
-                {assignee ? `${assignee.name} has it.` : "The agent has it."} It is filed under {responsibility.title}.
+                {assignee ? t("responsibilityDelegateDialog.agentHasIt", { name: assignee.name }) : t("responsibilityDelegateDialog.theAgentHasIt")}{" "}
+                {t("responsibilityDelegateDialog.itIsFiledUnder", { title: responsibility.title })}
               </DialogDescription>
             </DialogHeader>
             <Link
@@ -185,29 +187,29 @@ export function ResponsibilityDelegateDialog({
             </Link>
             <DialogFooter className="sm:justify-between">
               <Button variant="ghost" onClick={() => setCreated(null)}>
-                Give another task
+                {t("responsibilityDelegateDialog.giveAnotherTask")}
               </Button>
-              <Button onClick={() => onOpenChange(false)}>Done</Button>
+              <Button onClick={() => onOpenChange(false)}>{t("common.done")}</Button>
             </DialogFooter>
           </div>
         ) : (
           <form className="flex flex-col gap-5" onSubmit={submit}>
             <DialogHeader>
-              <DialogTitle>New task for an agent</DialogTitle>
-              <DialogDescription>Creates a task under {responsibility.title} and gives it to the agent.</DialogDescription>
+              <DialogTitle>{t("responsibilities.newTaskForAnAgent")}</DialogTitle>
+              <DialogDescription>{t("responsibilityDelegateDialog.createsATaskUnder", { title: responsibility.title })}</DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-foreground">Who</span>
+              <span className="text-sm font-medium text-foreground">{t("responsibilityDelegateDialog.who")}</span>
               <SearchableSelect<string, AgentOption>
                 value={effectiveAgentId}
                 groups={groups}
                 onValueChange={(value) => setAgentId(value)}
-                placeholder={agentsQuery.isPending ? "Loading agents…" : "Choose an agent"}
-                searchPlaceholder="Search agents…"
-                emptyMessage="No agents can take this. Add an agent first."
+                placeholder={agentsQuery.isPending ? t("responsibilityDelegateDialog.loadingAgents") : t("responsibilityDelegateDialog.chooseAnAgent")}
+                searchPlaceholder={t("responsibilityDelegateDialog.searchAgents")}
+                emptyMessage={t("responsibilityDelegateDialog.noAgentsCanTakeThis")}
                 loading={agentsQuery.isPending}
-                triggerAriaLabel="Agent"
+                triggerAriaLabel={t("common.agent")}
                 disablePortal
               />
               {agentsView.kind === "error" ? (
@@ -222,9 +224,9 @@ export function ResponsibilityDelegateDialog({
             </div>
 
             <div className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-foreground">How</span>
+              <span className="text-sm font-medium text-foreground">{t("responsibilityDelegateDialog.how")}</span>
               <RadioCardGroup
-                ariaLabel="How the agent works"
+                ariaLabel={t("responsibilityDelegateDialog.howTheAgentWorks")}
                 value={mode}
                 onValueChange={(value) => setMode(value as ResponsibilityDelegationMode)}
                 options={RESPONSIBILITY_DELEGATION_MODE_OPTIONS.map((option) => ({
@@ -237,40 +239,40 @@ export function ResponsibilityDelegateDialog({
             </div>
 
             <label className="flex flex-col gap-2 text-sm">
-              <span className="font-medium text-foreground">What to do</span>
+              <span className="font-medium text-foreground">{t("responsibilityDelegateDialog.whatToDo")}</span>
               <Input
                 ref={titleInput}
                 value={title}
                 maxLength={200}
-                placeholder="e.g. Draft the investor update"
+                placeholder={t("responsibilityDelegateDialog.egDraftTheInvestorUpdate")}
                 onChange={(event) => setTitle(event.target.value)}
                 required
               />
             </label>
             <label className="flex flex-col gap-2 text-sm">
               <span className="font-medium text-foreground">
-                Anything else <span className="font-normal text-muted-foreground">(optional)</span>
+                {t("responsibilityDelegateDialog.anythingElse")} <span className="font-normal text-muted-foreground">{t("secrets.optional")}</span>
               </span>
               <Textarea
                 rows={3}
                 value={instructions}
-                placeholder="Context, constraints, or what done looks like"
+                placeholder={t("responsibilityDelegateDialog.contextConstraints")}
                 onChange={(event) => setInstructions(event.target.value)}
               />
             </label>
 
             {delegate.error ? (
               <p role="alert" className="text-sm text-destructive">
-                Couldn’t create the task. {describeError(delegate.error).body}
+                {t("responsibilityDelegateDialog.couldntCreateTheTask")} {describeError(delegate.error).body}
               </p>
             ) : null}
 
             <DialogFooter className="sm:justify-between">
               <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button type="submit" disabled={!title.trim() || !effectiveAgentId || delegate.isPending}>
-                {delegate.isPending ? "Creating task…" : "Create task"}
+                {delegate.isPending ? t("responsibilityDelegateDialog.creatingTask") : t("newIssue.createTask")}
               </Button>
             </DialogFooter>
           </form>
