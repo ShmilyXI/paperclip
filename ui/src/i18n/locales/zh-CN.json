@@ -17519,5 +17519,30 @@
     "couldNotLoadThisDecision": "无法加载此决策。",
     "thisDecisionIsNotAvailable": "此决策在此任务中不可用。",
     "recordedChoice": "已记录的选择"
+  },
+  "attentionInlineVerbs": {
+    "theRunFailed": "运行失败",
+    "retryDidNotStart": "重试未启动",
+    "couldNotRetryThisRun": "无法重试此运行",
+    "retryStartsANewRun": "重试会启动一次新运行。",
+    "retryRun": "重试运行",
+    "warningDismissed": "告警已忽略",
+    "keptPausedToast": "已保持暂停",
+    "limitRaised": "限额已提高",
+    "couldNotUpdateTheBudget": "无法更新预算",
+    "newLimitUsd": "新限额（USD）",
+    "spentOfLimit": "已支出 {{spent}}，限额 {{limit}}",
+    "percentUsed": "已使用 {{percent}}%",
+    "scopeLimit": "{{scope}} 限额",
+    "limit": "限额",
+    "workContinuesUntilTheLimitIsReached": "在达到限额之前，工作会继续进行",
+    "newRunsArePaused": "新运行已暂停",
+    "theNewLimitMustBeMore": "新限额必须高于当前支出。",
+    "raiseLimit": "提高限额",
+    "raiseLimitAndResume": "提高限额并恢复",
+    "increaseLimit": "提高限额…",
+    "spendIsOfLimit": "支出为 {{spent}}，限额为 {{limit}}。",
+    "thisWarningDoesNotPauseWork": " 此告警不会暂停工作。",
+    "workInThisScopeIsPaused": " 此范围内的工作已暂停。"
   }
 }

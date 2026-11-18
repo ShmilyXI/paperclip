@@ -17519,5 +17519,30 @@
     "couldNotLoadThisDecision": "Could not load this decision.",
     "thisDecisionIsNotAvailable": "This decision is not available in this task.",
     "recordedChoice": "Recorded choice"
+  },
+  "attentionInlineVerbs": {
+    "theRunFailed": "The run failed",
+    "retryDidNotStart": "Retry did not start",
+    "couldNotRetryThisRun": "Could not retry this run",
+    "retryStartsANewRun": "Retry starts a new run.",
+    "retryRun": "Retry run",
+    "warningDismissed": "Warning dismissed",
+    "keptPausedToast": "Kept paused",
+    "limitRaised": "Limit raised",
+    "couldNotUpdateTheBudget": "Could not update the budget",
+    "newLimitUsd": "New limit (USD)",
+    "spentOfLimit": "{{spent}} spent of {{limit}}",
+    "percentUsed": "{{percent}}% used",
+    "scopeLimit": "{{scope}} limit",
+    "limit": "Limit",
+    "workContinuesUntilTheLimitIsReached": "Work continues until the limit is reached",
+    "newRunsArePaused": "New runs are paused",
+    "theNewLimitMustBeMore": "The new limit must be more than the current spend.",
+    "raiseLimit": "Raise limit",
+    "raiseLimitAndResume": "Raise limit & resume",
+    "increaseLimit": "Increase limit…",
+    "spendIsOfLimit": "Spend is {{spent}} of a {{limit}} limit.",
+    "thisWarningDoesNotPauseWork": " This warning does not pause work.",
+    "workInThisScopeIsPaused": " Work in this scope is paused."
   }
 }
