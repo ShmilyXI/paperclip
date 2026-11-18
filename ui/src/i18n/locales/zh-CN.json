@@ -794,6 +794,7 @@
     "newAgent2": "新建员工",
     "configuration": "配置",
     "experimental": "实验功能",
+    "experimentalSettings": "实验功能设置",
     "local": "本地",
     "submit": "提交",
     "test": "测试",
@@ -9295,7 +9296,9 @@
     "loadingAgents": "正在加载员工…",
     "couldnTOpenChatTry": "无法打开聊天。请重试。",
     "addAnAgentToStart": "添加一名员工以开始对话。",
-    "browseAllAgents": "浏览全部员工"
+    "browseAllAgents": "浏览全部员工",
+    "agentChatIsOffForThisInstance": "该实例已关闭 Agent Chat。管理员可以在 ",
+    "yourWorkspacePreferenceDoesNot": "。你的工作区偏好不会改变 Chat 的可用性。"
   },
   "issueDocumentsSection": {
     "useLowercaseLettersNumbersOr": "请使用小写字母、数字、- 或 _，并以字母或数字开头。",
@@ -16393,7 +16396,11 @@
   "agentChat": {
     "loadingConversation": "正在加载会话…",
     "agentChatIsDisabledEnable": "员工聊天已禁用。请在「实验性设置」中启用。已有历史仍可通过任务链接查看。",
-    "agentNotFound": "未找到员工"
+    "agentNotFound": "未找到员工",
+    "agentChatIsDisabledForThisInstance": "该实例已禁用 Agent Chat。管理员可以在 ",
+    "yourWorkspacePreferenceDoesNot": "。你的工作区偏好不会改变 Chat 的可用性。已有历史仍可通过任务链接查看。",
+    "theWelcomeCouldNotStart": "欢迎语无法启动。",
+    "retryWelcome": "重试欢迎语"
   },
   "appDetail": {
     "checkingWhoCanReconnectThis": "正在检查谁可以重新连接此身份…",

@@ -794,6 +794,7 @@
     "newAgent2": "New Agent",
     "configuration": "Configuration",
     "experimental": "Experimental",
+    "experimentalSettings": "Experimental settings",
     "local": "Local",
     "submit": "Submit",
     "test": "Test",
@@ -9295,7 +9296,9 @@
     "loadingAgents": "Loading agents…",
     "couldnTOpenChatTry": "Couldn’t open chat. Try again.",
     "addAnAgentToStart": "Add an agent to start a conversation.",
-    "browseAllAgents": "Browse all agents"
+    "browseAllAgents": "Browse all agents",
+    "agentChatIsOffForThisInstance": "Agent Chat is off for this instance. An administrator can enable it in ",
+    "yourWorkspacePreferenceDoesNot": ". Your workspace preference does not change Chat availability."
   },
   "issueDocumentsSection": {
     "useLowercaseLettersNumbersOr": "Use lowercase letters, numbers, -, or _, and start with a letter or number.",
@@ -16393,7 +16396,11 @@
   "agentChat": {
     "loadingConversation": "Loading conversation…",
     "agentChatIsDisabledEnable": "Agent Chat is disabled. Enable it in Experimental settings. Existing history remains available through task links.",
-    "agentNotFound": "Agent not found"
+    "agentNotFound": "Agent not found",
+    "agentChatIsDisabledForThisInstance": "Agent Chat is disabled for this instance. An administrator can enable it in ",
+    "yourWorkspacePreferenceDoesNot": ". Your workspace preference does not change Chat availability. Existing history remains available through task links.",
+    "theWelcomeCouldNotStart": "The welcome could not start.",
+    "retryWelcome": "Retry welcome"
   },
   "appDetail": {
     "checkingWhoCanReconnectThis": "Checking who can reconnect this identity…",

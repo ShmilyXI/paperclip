@@ -74,7 +74,7 @@ export function AgentChat() {
       void agentChatsApi.greet(selectedCompanyId, agent.id).then(() => {
         if (!cancelled) void client.invalidateQueries({ queryKey: queryKeys.issues.detail(chat.data!.id) });
       }).catch(error => {
-        if (!cancelled) setGreetingError(error instanceof Error ? error.message : "The welcome could not start.");
+        if (!cancelled) setGreetingError(error instanceof Error ? error.message : t("agentChat.theWelcomeCouldNotStart"));
       });
     });
     return () => { cancelled = true; cancelPaint(); };
@@ -115,9 +115,8 @@ export function AgentChat() {
   if (!enabled && !chat.data)
     return (
       <p className="text-sm text-muted-foreground">
-        Agent Chat is disabled for this instance. An administrator can enable it in{" "}
-        <Link className="underline underline-offset-4" to="/company/settings/instance/experimental#experimental-enableAgentChat">Experimental settings</Link>.
-        {" "}Your workspace preference does not change Chat availability. Existing history remains available through task links.
+        {t("agentChat.agentChatIsDisabledForThisInstance")}
+        <Link className="underline underline-offset-4" to="/company/settings/instance/experimental#experimental-enableAgentChat">{t("common.experimentalSettings")}</Link>{t("agentChat.yourWorkspacePreferenceDoesNot")}
       </p>
     );
   const failed = [agentsView, chatView, ...(rosterAgent ? [] : [historyView])].find((view) => view.kind === "error");
@@ -141,7 +140,7 @@ export function AgentChat() {
     <>
       {greetingError && <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
         <span>{greetingError}</span>
-        <Button variant="outline" size="sm" onClick={() => setGreetingAttempt(attempt => attempt + 1)}>Retry welcome</Button>
+        <Button variant="outline" size="sm" onClick={() => setGreetingAttempt(attempt => attempt + 1)}>{t("agentChat.retryWelcome")}</Button>
       </div>}
       <TaskDetailSurface
         key={`${agent.id}:${userId}`}
