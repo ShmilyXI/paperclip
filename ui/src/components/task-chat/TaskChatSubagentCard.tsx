@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useId } from "react";
 import { Bot, ChevronRight } from "lucide-react";
 import { MarkdownBody } from "@/components/MarkdownBody";
@@ -31,10 +32,10 @@ function formatElapsed(ms: number | null): string | null {
 }
 
 const STATUS_LABEL: Record<TaskChatSubagentStatus, string> = {
-  running: "Running",
-  completed: "Done",
-  failed: "Failed",
-  cancelled: "Stopped",
+  running: t("labels.status.running"),
+  completed: t("labels.status.done"),
+  failed: t("labels.status.failed"),
+  cancelled: t("taskChatRunnerTurn.stopped"),
 };
 
 export function TaskChatSubagentStatusDot({ status }: { status: TaskChatSubagentStatus }) {
@@ -73,7 +74,7 @@ function useElapsed(subagent: TaskChatSubagent): string | null {
 function SubagentMeta({ subagent }: { subagent: TaskChatSubagent }) {
   const elapsed = useElapsed(subagent);
   const tools = toolCount(subagent);
-  const parts = [tools > 0 ? `${tools} ${tools === 1 ? "tool" : "tools"}` : null, elapsed].filter(Boolean);
+  const parts = [tools > 0 ? t("taskChatSubagentCard.tool", { count: tools }) : null, elapsed].filter(Boolean);
   if (parts.length === 0) return null;
   return <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">{parts.join(" · ")}</span>;
 }
@@ -93,7 +94,7 @@ function SubagentBody({ subagent }: { subagent: TaskChatSubagent }) {
         <details className="group min-w-0 text-xs text-muted-foreground">
           <summary className="flex cursor-pointer list-none items-center gap-1 hover:text-foreground">
             <ChevronRight className="size-3.5 shrink-0 group-open:rotate-90" aria-hidden />
-            Prompt{subagent.model ? <span className="font-mono"> · {subagent.model}</span> : null}
+            {t("agentDetail.prompt")}{subagent.model ? <span className="font-mono"> · {subagent.model}</span> : null}
           </summary>
           <div className="mt-1 whitespace-pre-wrap break-words rounded-md bg-muted/40 p-2 leading-relaxed">{subagent.prompt}</div>
         </details>
@@ -181,17 +182,17 @@ export function TaskChatSubagentTree({ subagents }: { subagents: readonly TaskCh
   const running = subagents.filter((subagent) => subagent.status === "running").length;
   const failed = subagents.filter((subagent) => subagent.status === "failed").length;
   const label = running > 0
-    ? `Running ${subagents.length} subagents · ${subagents.length - running} done`
+    ? t("taskChatSubagentCard.runningSubagents", { total: subagents.length, done: subagents.length - running })
     : failed > 0
-      ? `Ran ${subagents.length} subagents · ${failed} failed`
-      : `Ran ${subagents.length} subagents`;
+      ? t("taskChatSubagentCard.ranSubagentsFailed", { total: subagents.length, failed })
+      : t("taskChatSubagentCard.ranSubagents", { total: subagents.length });
   return (
     <section className="min-w-0 rounded-lg border border-border bg-card" data-testid="task-chat-subagent-tree">
       <div className="flex min-h-9 items-center gap-2 px-3 pt-2 text-xs text-muted-foreground">
         <span className="flex size-5 items-center justify-center"><Bot className="size-3.5" aria-hidden /></span>
         <span className={cn(running > 0 && "text-foreground")}>{label}</span>
       </div>
-      <ol className="ml-5 flex min-w-0 flex-col gap-0.5 border-l border-border py-1 pl-2 pr-1 pb-2" aria-label="Subagents">
+      <ol className="ml-5 flex min-w-0 flex-col gap-0.5 border-l border-border py-1 pl-2 pr-1 pb-2" aria-label={t("taskChatSubagentCard.subagents")}>
         {subagents.map((subagent) => (
           <li key={subagent.id} className="min-w-0">
             <TaskChatSubagentCard subagent={subagent} nested />

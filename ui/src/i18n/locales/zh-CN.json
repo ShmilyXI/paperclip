@@ -12539,6 +12539,14 @@
     "interrupted": "已中断",
     "changed": "已变更"
   },
+  "taskChatSubagentCard": {
+    "tool_one": "{{count}} 个工具",
+    "tool_other": "{{count}} 个工具",
+    "runningSubagents": "正在运行 {{total}} 个子代理 · 已完成 {{done}} 个",
+    "ranSubagentsFailed": "已运行 {{total}} 个子代理 · {{failed}} 个失败",
+    "ranSubagents": "已运行 {{total}} 个子代理",
+    "subagents": "子代理"
+  },
   "providerQuotaCard": {
     "periodSpend": "周期支出",
     "thisWeek": "本周",

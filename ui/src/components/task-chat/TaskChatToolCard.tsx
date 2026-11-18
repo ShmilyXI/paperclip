@@ -166,7 +166,7 @@ export function TaskChatToolCard({ item, progress: givenProgress }: {
             data-testid="task-chat-tool-change-summary"
           >
             <div className="flex min-w-0 items-center gap-2 text-(length:--text-micro) text-muted-foreground">
-              <span className="shrink-0">Changed</span>
+              <span className="shrink-0">{t("taskChatToolCard.changed")}</span>
               {item.diff.path ? (
                 <span className="min-w-0 truncate font-mono text-foreground">
                   {item.diff.path}

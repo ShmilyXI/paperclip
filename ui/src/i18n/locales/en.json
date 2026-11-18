@@ -12539,6 +12539,14 @@
     "interrupted": "Interrupted",
     "changed": "Changed"
   },
+  "taskChatSubagentCard": {
+    "tool_one": "{{count}} tool",
+    "tool_other": "{{count}} tools",
+    "runningSubagents": "Running {{total}} subagents · {{done}} done",
+    "ranSubagentsFailed": "Ran {{total}} subagents · {{failed}} failed",
+    "ranSubagents": "Ran {{total}} subagents",
+    "subagents": "Subagents"
+  },
   "providerQuotaCard": {
     "periodSpend": "Period spend",
     "thisWeek": "This week",
