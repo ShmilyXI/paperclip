@@ -41,9 +41,9 @@ export function SkillSourceConnectionRepair({ companyId, source, onClose, onSave
         <DialogDescription>{t("skillSourceConnectionRepair.automaticUpdatesWillUseYour")}</DialogDescription>
       </DialogHeader>
       <div className="min-h-0 overflow-y-auto space-y-4">
-      {query.isPending && <p role="status" className="text-sm text-muted-foreground">Loading connections…</p>}
-      {query.error && <p role="alert" className="text-sm text-destructive">{describeError(query.error).body} <Button variant="ghost" size="sm" onClick={() => void query.refetch()}>Try again</Button></p>}
-      <RadioCardGroup ariaLabel="GitHub connection" className={ANALYTICS_MASK_CLASS} value={connectionId} onValueChange={setConnectionId} disabled={save.isPending}
+      {query.isPending && <p role="status" className="text-sm text-muted-foreground">{t("skillSourceConnectionRepair.loadingConnections")}</p>}
+      {query.error && <p role="alert" className="text-sm text-destructive">{describeError(query.error).body} <Button variant="ghost" size="sm" onClick={() => void query.refetch()}>{t("common.tryAgain")}</Button></p>}
+      <RadioCardGroup ariaLabel={t("skillSourceConnectionRepair.githubConnection")} className={ANALYTICS_MASK_CLASS} value={connectionId} onValueChange={setConnectionId} disabled={save.isPending}
         options={connections.map(connection => ({ value: connection.id, title: connection.name }))} />
       {query.isSuccess && connections.length === 0 && <p className="text-sm text-muted-foreground">{t("skillSourceConnectionRepair.connectGithubToContinue")}</p>}
       <Button asChild variant="link" className="justify-start p-0"><Link to="/apps">{t("skillSourceConnectionRepair.manageGithubConnections")}</Link></Button>

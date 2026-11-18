@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useResilientFetch } from "@/hooks/useResilientFetch";
 import { QueryErrorState } from "@/components/QueryView";
 import { isTransientError } from "@/api/errors";
@@ -249,7 +250,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
       } catch (error) {
         failed = true; failedRead = { requested, catchup };
         connection.reportError(error);
-        if (!cancelled && !isTransientError(error)) setEventsError("Could not load events. Try again.");
+        if (!cancelled && !isTransientError(error)) setEventsError(t("sync20261028.agents.eventsLoadFailed"));
       }
       if (cancelled) return;
       reading = false; setLoadingMoreEvents(false);
@@ -448,11 +449,11 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
   }, [run.id]);
 
   if (loading && logLoading && !eventsError && !logError) {
-    return <p className="text-xs text-muted-foreground">Loading run logs...</p>;
+    return <p className="text-xs text-muted-foreground">{t("agentDetail.loadingRunLogs")}</p>;
   }
 
   if (events.length === 0 && logLines.length === 0 && !logError && !eventsError) {
-    return <p className="text-xs text-muted-foreground">{loading || logLoading ? "Loading run logs..." : "No log events."}</p>;
+    return <p className="text-xs text-muted-foreground">{loading || logLoading ? t("agentDetail.loadingRunLogs") : t("agentDetail.noLogEvents")}</p>;
   }
 
   const levelColors: Record<string, string> = {
@@ -479,7 +480,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted-foreground">
-          Transcript ({transcript.length})
+          {t("agentDetail.transcriptCount", { count: transcript.length })}
         </span>
         <div className="flex items-center gap-2">
           <div className="inline-flex rounded-lg border border-border/70 bg-background/70 p-0.5">
@@ -495,7 +496,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
                 )}
                 onClick={() => setTranscriptMode(mode)}
               >
-                {mode}
+                {mode === "nice" ? t("agentDetail.transcriptModeNice") : t("agentDetail.transcriptModeRaw")}
               </button>
             ))}
           </div>
@@ -511,7 +512,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
                 lastMetricsRef.current = readScrollMetrics(container);
               }}
             >
-              Jump to live
+              {t("agentDetail.jumpToLive")}
             </Button>
           )}
           {isLive && (
@@ -520,7 +521,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
                 <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
               </span>
-              Live
+              {t("agentDetail.live")}
             </span>
           )}
         </div>
@@ -532,7 +533,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
           mode={transcriptMode}
           streaming={isLive}
           limit={isLive ? LIVE_TRANSCRIPT_RENDER_LIMIT : undefined}
-          emptyMessage={run.logRef ? "Waiting for transcript..." : "No persisted transcript for this run."}
+          emptyMessage={run.logRef ? t("agentDetail.waitingForTranscript") : t("agentDetail.noPersistedTranscriptForThis")}
         />
         {hasMoreLog && (
           <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
@@ -543,12 +544,12 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
               onClick={persistedLog.view.retry}
               disabled={loadingMoreLog}
             >
-              {loadingMoreLog ? "Loading..." : "Load more log"}
+              {loadingMoreLog ? t("common.loading") : t("agentDetail.loadMoreLog")}
             </Button>
             <span className="text-xs text-muted-foreground">
-              Showing the first {Math.round(logOffset / 1024).toLocaleString("en-US")} KB
+              {t("agentDetail.showingTheFirstKb", { kb: Math.round(logOffset / 1024).toLocaleString("en-US") })}
               {typeof run.logBytes === "number" && run.logBytes > 0
-                ? ` of ${Math.round(run.logBytes / 1024).toLocaleString("en-US")} KB`
+                ? ` ${t("agentDetail.ofKb", { kb: Math.round(run.logBytes / 1024).toLocaleString("en-US") })}`
                 : ""}
             </span>
           </div>
@@ -559,16 +560,16 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
       {(run.status === "failed" || run.status === "timed_out") && (
         <div className={cn("rounded-lg border border-red-300 dark:border-red-500/30 bg-red-50 dark:bg-red-950/20 p-3 space-y-2", ANALYTICS_MASK_CLASS)}>
-          <div className="text-xs font-medium text-red-700 dark:text-red-300">Failure details</div>
+          <div className="text-xs font-medium text-red-700 dark:text-red-300">{t("agentDetail.failureDetails")}</div>
           {run.error && (
             <div className="text-xs text-red-600 dark:text-red-200">
-              <span className="text-red-700 dark:text-red-300">Error: </span>
+              <span className="text-red-700 dark:text-red-300">{t("common.error")}: </span>
               {redactPathText(run.error, censorUsernameInLogs)}
             </div>
           )}
           {run.stderrExcerpt && run.stderrExcerpt.trim() && (
             <div>
-              <div className="text-xs text-red-700 dark:text-red-300 mb-1">stderr excerpt</div>
+              <div className="text-xs text-red-700 dark:text-red-300 mb-1">{t("agentDetail.stderrExcerpt")}</div>
               <pre className={cn("bg-red-50 dark:bg-neutral-950 rounded-md p-2 text-xs overflow-x-auto whitespace-pre-wrap text-red-800 dark:text-red-100", ANALYTICS_MASK_CLASS)}>
                 {redactPathText(run.stderrExcerpt, censorUsernameInLogs)}
               </pre>
@@ -576,7 +577,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
           )}
           {run.resultJson && (
             <div>
-              <div className="text-xs text-red-700 dark:text-red-300 mb-1">adapter result JSON</div>
+              <div className="text-xs text-red-700 dark:text-red-300 mb-1">{t("agentDetail.adapterResultJson")}</div>
               <pre className={cn("bg-red-50 dark:bg-neutral-950 rounded-md p-2 text-xs overflow-x-auto whitespace-pre-wrap text-red-800 dark:text-red-100", ANALYTICS_MASK_CLASS)}>
                 {JSON.stringify(redactPathValue(run.resultJson, censorUsernameInLogs), null, 2)}
               </pre>
@@ -584,7 +585,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
           )}
           {run.stdoutExcerpt && run.stdoutExcerpt.trim() && !run.resultJson && (
             <div>
-              <div className="text-xs text-red-700 dark:text-red-300 mb-1">stdout excerpt</div>
+              <div className="text-xs text-red-700 dark:text-red-300 mb-1">{t("agentDetail.stdoutExcerpt")}</div>
               <pre className={cn("bg-red-50 dark:bg-neutral-950 rounded-md p-2 text-xs overflow-x-auto whitespace-pre-wrap text-red-800 dark:text-red-100", ANALYTICS_MASK_CLASS)}>
                 {redactPathText(run.stdoutExcerpt, censorUsernameInLogs)}
               </pre>
@@ -595,11 +596,11 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
       {(events.length > 0 || eventsError) && (
         <div>
-          <div className="mb-2 text-xs font-medium text-muted-foreground">Events ({events.length})</div>
+          <div className="mb-2 text-xs font-medium text-muted-foreground">{t("agentDetail.events", { count: events.length })}</div>
           {eventsError && <p className="text-sm text-destructive">{eventsError}</p>}
           {(hasMoreEvents || eventsError) && (
             <Button variant="outline" size="sm" disabled={loadingMoreEvents} onClick={() => loadMoreEventsRef.current?.()}>
-              {loadingMoreEvents ? "Loading..." : eventsError ? "Retry events" : "Load more events"}
+              {loadingMoreEvents ? t("common.loading") : eventsError ? t("sync20261028.agents.retryEvents") : t("sync20261028.agents.loadMoreEvents")}
             </Button>
           )}
           <div className={cn("bg-neutral-100 dark:bg-neutral-950 rounded-lg p-3 font-mono text-xs space-y-0.5", ANALYTICS_MASK_CLASS)}>
