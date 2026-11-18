@@ -17716,6 +17716,19 @@
     "backToTheDashboard": "返回仪表盘",
     "thisResponsibilityBelongsToAnotherOrganization": "该职责属于另一个组织"
   },
+  "responsibilityOneScreen": {
+    "noOpenProjects": "没有未完成项目。",
+    "noRoutines": "没有例行任务。",
+    "holdingTheNumberBack": "拖累这个数字",
+    "holdingTheNumberBackPrefix": "拖累这个数字：",
+    "movingTheNumberPrefix": "推动这个数字：",
+    "movingIt": "在推动它",
+    "andMore": "还有 {{more}} 项",
+    "setUpByHand": "手动设置“{{title}}”",
+    "setItUpByHand": "手动设置",
+    "noBarYet": "还没有衡量标准。",
+    "whatIsAffectingTheNumber": "是什么在影响这个数字"
+  },
   "addResponsibilityDialog": {
     "title": "添加职责",
     "description": "你负责的某件事，配有衡量成功与否的标准，以及显示你是否达标的数字。",

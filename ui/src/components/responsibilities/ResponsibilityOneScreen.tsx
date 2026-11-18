@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { AutomationCandidate } from "@paperclipai/shared";
@@ -29,17 +30,17 @@ import {
 import type { ResponsibilityViewProps } from "./view-props";
 
 const CAP: Record<WorkItemKind, number> = { project: 3, task: 4, routine: 3 };
-const TITLE: Record<WorkItemKind, string> = { project: "Projects", task: "Tasks", routine: "Routines" };
+const TITLE: Record<WorkItemKind, string> = { project: t("common.projects"), task: t("common.tasks"), routine: t("common.routines") };
 const EMPTY: Record<WorkItemKind, string> = {
-  project: "No open projects.",
-  task: "No open tasks.",
-  routine: "No routines.",
+  project: t("responsibilityOneScreen.noOpenProjects"),
+  task: t("responsibilities.noOpenTasks"),
+  routine: t("responsibilityOneScreen.noRoutines"),
 };
 
 /** Words for screen readers before the reason; the icon and the reason say it on screen. */
 const BEARING_PREFIX: Record<WorkBearing, string> = {
-  holding: "Holding the number back: ",
-  moving: "Moving the number: ",
+  holding: t("responsibilityOneScreen.holdingTheNumberBackPrefix"),
+  moving: t("responsibilityOneScreen.movingTheNumberPrefix"),
   neutral: "",
 };
 const BEARING_TEXT: Record<WorkBearing, string> = {
@@ -127,8 +128,8 @@ function BearingRow({ entry, automate }: { entry: BearingItem; automate?: Automa
             size="icon-xs"
             variant="ghost"
             className="text-muted-foreground"
-            aria-label={`Set up “${item.title}” by hand`}
-            title="Set it up by hand"
+            aria-label={t("responsibilityOneScreen.setUpByHand", { title: item.title })}
+            title={t("responsibilityOneScreen.setItUpByHand")}
             onClick={automate.onByHand}
             data-make-routine=""
           >
@@ -171,7 +172,7 @@ function CappedList({
         ) : (
           <p className="px-4 py-2 text-sm text-muted-foreground">{EMPTY[kind]}</p>
         )}
-        {more > 0 ? <p className="border-t border-border px-4 py-1.5 text-xs text-muted-foreground">and {more} more</p> : null}
+        {more > 0 ? <p className="border-t border-border px-4 py-1.5 text-xs text-muted-foreground">{t("responsibilityOneScreen.andMore", { more })}</p> : null}
       </Card>
     </section>
   );
@@ -183,11 +184,11 @@ function BearingKey() {
     <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground" data-bearing-key="">
       <span className={cn("flex items-center gap-1", BEARING_TEXT.holding)}>
         <BearingIcon bearing="holding" />
-        Holding the number back
+        {t("responsibilityOneScreen.holdingTheNumberBack")}
       </span>
       <span className={cn("flex items-center gap-1", BEARING_TEXT.moving)}>
         <BearingIcon bearing="moving" />
-        Moving it
+        {t("responsibilityOneScreen.movingIt")}
       </span>
     </p>
   );
@@ -278,16 +279,16 @@ export function ResponsibilityOneScreen({
         <Card id="responsibility-bar-summary" elevation="low" className="h-fit gap-5 px-5 py-5 lg:col-span-2" aria-labelledby="one-screen-bar-heading">
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between gap-2">
-              <h2 id="one-screen-bar-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">The bar</h2>
+              <h2 id="one-screen-bar-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("responsibilities.theBar")}</h2>
               {canEditBar ? (
                 <Button size="xs" variant="ghost" onClick={onEditBar}>
                   <Pencil aria-hidden="true" />
-                  Edit the bar
+                  {t("responsibilities.editTheBar")}
                 </Button>
               ) : null}
             </div>
             <p className="text-sm text-foreground">
-              {standard || <span className="text-muted-foreground">No bar yet.</span>}
+              {standard || <span className="text-muted-foreground">{t("responsibilityOneScreen.noBarYet")}</span>}
             </p>
           </div>
           <div className="flex flex-col gap-1.5">
@@ -314,7 +315,7 @@ export function ResponsibilityOneScreen({
           {narrative.summary?.text.trim() ? (
             <section aria-labelledby="one-screen-affecting-heading" className="flex flex-col gap-1.5 border-t border-border pt-4" data-affecting-summary="">
               <h3 id="one-screen-affecting-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                What is affecting the number
+                {t("responsibilityOneScreen.whatIsAffectingTheNumber")}
               </h3>
               <NarrativeParagraph summary={narrative.summary} stillWaiting={narrative.stillWaiting} />
             </section>
@@ -333,7 +334,7 @@ export function ResponsibilityOneScreen({
             automateFor={automateFor}
           />
           {conversation.error ? (
-            <p role="alert" className="text-xs text-destructive">Couldn’t open the conversation. {describeError(conversation.error).body}</p>
+            <p role="alert" className="text-xs text-destructive">{t("dashboardAutomation.couldntOpenTheConversation")} {describeError(conversation.error).body}</p>
           ) : null}
           <ArtifactCards artifacts={responsibility.artifacts} total={responsibility.artifactsTotal} />
         </div>

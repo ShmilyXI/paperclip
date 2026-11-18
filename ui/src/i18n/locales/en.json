@@ -17716,6 +17716,19 @@
     "backToTheDashboard": "Back to the dashboard",
     "thisResponsibilityBelongsToAnotherOrganization": "This responsibility belongs to another organization"
   },
+  "responsibilityOneScreen": {
+    "noOpenProjects": "No open projects.",
+    "noRoutines": "No routines.",
+    "holdingTheNumberBack": "Holding the number back",
+    "holdingTheNumberBackPrefix": "Holding the number back: ",
+    "movingTheNumberPrefix": "Moving the number: ",
+    "movingIt": "Moving it",
+    "andMore": "and {{more}} more",
+    "setUpByHand": "Set up “{{title}}” by hand",
+    "setItUpByHand": "Set it up by hand",
+    "noBarYet": "No bar yet.",
+    "whatIsAffectingTheNumber": "What is affecting the number"
+  },
   "addResponsibilityDialog": {
     "title": "Add a responsibility",
     "description": "Something you own, with a bar for success and a number that shows whether you are meeting it.",
