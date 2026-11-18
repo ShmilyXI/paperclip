@@ -2378,7 +2378,10 @@
     "newFolder": "新建文件夹",
     "createRoutine": "创建例行任务",
     "asc": "升序",
-    "desc": "降序"
+    "desc": "降序",
+    "sortRoutines": "排序例行任务",
+    "groupRoutines": "分组例行任务",
+    "viewAllTasks": "查看全部任务"
   },
   "routineOverview": {
     "runsOnIncomingRequests": "收到请求时运行",

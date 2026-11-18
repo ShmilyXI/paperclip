@@ -21,22 +21,22 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
   onCreateRoutine: () => void;
   tasksHref?: string;
 }) {
-  return <div data-canonical-toolbar="routines" role="toolbar" aria-label="Routines controls" className="flex flex-wrap items-center gap-4">
+  return <div data-canonical-toolbar="routines" role="toolbar" aria-label={t("routinesToolbar.routinesControls")} className="flex flex-wrap items-center gap-4">
     <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto [&>[data-toolbar-search]]:min-w-0 [&>[data-toolbar-search]]:flex-1">
-      <ToolbarSearch query={query} onQueryChange={onQueryChange} label="Search routines" placeholder="Search routines…" />
+      <ToolbarSearch query={query} onQueryChange={onQueryChange} label={t("routinesToolbar.searchRoutines")} placeholder={t("routinesToolbar.searchRoutines2")} />
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="icon-sm" title="Sort" aria-label="Sort routines">
+          <Button variant="outline" size="icon-sm" title={t("common.sort")} aria-label={t("routinesToolbar.sortRoutines")}>
             <ArrowUpDown className="h-3.5 w-3.5" aria-hidden="true" />
           </Button>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-44 p-0">
           <div className="p-2 space-y-0.5">
             {([
-              ["updated", "Updated"],
-              ["created", "Created"],
-              ["lastRun", "Last run"],
-              ["title", "Title"],
+              ["updated", t("common.updated")],
+              ["created", t("common.created")],
+              ["lastRun", t("common.lastRun")],
+              ["title", t("common.title")],
             ] as const).map(([field, label]) => (
               <button
                   type="button"
@@ -55,7 +55,7 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
                 <span>{label}</span>
                 {sortField === field ? (
                   <span className="text-xs text-muted-foreground">
-                    {sortDir === "asc" ? "Asc" : "Desc"}
+                    {sortDir === "asc" ? t("routinesToolbar.asc") : t("routinesToolbar.desc")}
                   </span>
                 ) : null}
               </button>
@@ -65,17 +65,17 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
       </Popover>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="icon-sm" title="Group" aria-label="Group routines">
+          <Button variant="outline" size="icon-sm" title={t("routinesToolbar.group")} aria-label={t("routinesToolbar.groupRoutines")}>
             <Layers className="h-3.5 w-3.5" aria-hidden="true" />
           </Button>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-44 p-0">
           <div className="p-2 space-y-0.5">
             {([
-              ["folder", "Folder"],
-              ["project", "Project"],
-              ["assignee", "Agent"],
-              ["none", "None"],
+              ["folder", t("common.folder")],
+              ["project", t("common.project")],
+              ["assignee", t("common.agent")],
+              ["none", t("common.none")],
             ] as const).map(([value, label]) => (
               <button
                   type="button"
@@ -96,9 +96,9 @@ export function RoutinesToolbar({ query, onQueryChange, sortField, sortDir, grou
       </Popover>
     </div>
     <div className="design-toolbar-actions">
-      {tasksHref && <Button variant="outline" size="sm" asChild><Link data-toolbar-control to={tasksHref}>View all tasks</Link></Button>}
-      {onNewFolder && <Button variant="outline" size="sm" onClick={onNewFolder}><Plus className="h-4 w-4" />New folder</Button>}
-      <Button variant="outline" size="sm" data-toolbar-primary onClick={onCreateRoutine}><Plus className="h-4 w-4" />Create routine</Button>
+      {tasksHref && <Button variant="outline" size="sm" asChild><Link data-toolbar-control to={tasksHref}>{t("routinesToolbar.viewAllTasks")}</Link></Button>}
+      {onNewFolder && <Button variant="outline" size="sm" onClick={onNewFolder}><Plus className="h-4 w-4" />{t("routinesToolbar.newFolder")}</Button>}
+      <Button variant="outline" size="sm" data-toolbar-primary onClick={onCreateRoutine}><Plus className="h-4 w-4" />{t("routinesToolbar.createRoutine")}</Button>
     </div>
   </div>;
 }

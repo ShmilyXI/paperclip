@@ -2378,7 +2378,10 @@
     "newFolder": "New folder",
     "createRoutine": "Create routine",
     "asc": "Asc",
-    "desc": "Desc"
+    "desc": "Desc",
+    "sortRoutines": "Sort routines",
+    "groupRoutines": "Group routines",
+    "viewAllTasks": "View all tasks"
   },
   "routineOverview": {
     "runsOnIncomingRequests": "Runs on incoming requests",
