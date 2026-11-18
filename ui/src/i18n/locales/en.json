@@ -12189,6 +12189,30 @@
     "loadingProjectAccess": "Loading project access…",
     "returnToTask": "Return to task"
   },
+  "agentRateLimitGauge": {
+    "resetsTime": " · resets {{time}}",
+    "limitReachedWorkContinues": "Limit reached; work continues on account credits.",
+    "unlimitedCredits": "Unlimited credits",
+    "noCreditsRemaining": "No credits remaining",
+    "balanceCredits": "{{balance}} credits",
+    "limited": "Limited",
+    "limitedUntil": "Limited until {{time}}",
+    "usingCredits": "using credits",
+    "providerUsageLimit": "Provider usage limit: {{label}}",
+    "usageLimits": "usage limits",
+    "reportedAt": "Reported {{time}}"
+  },
+  "composerImageAttachments": {
+    "uploadingName": "Uploading {{name}}…",
+    "removeName": "Remove {{name}}",
+    "retryName": "Retry {{name}}",
+    "imageAttachments": "Image attachments"
+  },
+  "composerFileDropTarget": {
+    "dropFilesToAttach": "Drop files to attach",
+    "addImagesAndFilesToYourNewTask": "Add images and files to your new task",
+    "addImagesAndFilesToYourMessage": "Add images and files to your message"
+  },
   "routineTriggerCard": {
     "taskCreated": "Task created",
     "nextTolocalestring": "Next: {{toLocaleString}}",

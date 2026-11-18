@@ -12189,6 +12189,30 @@
     "loadingProjectAccess": "正在加载项目访问权限…",
     "returnToTask": "返回任务"
   },
+  "agentRateLimitGauge": {
+    "resetsTime": " · {{time}} 后重置",
+    "limitReachedWorkContinues": "已达到限额；工作将继续使用账户积分。",
+    "unlimitedCredits": "无限积分",
+    "noCreditsRemaining": "无剩余积分",
+    "balanceCredits": "{{balance}} 积分",
+    "limited": "已限额",
+    "limitedUntil": "限额至 {{time}}",
+    "usingCredits": "使用积分中",
+    "providerUsageLimit": "供应商用量限额：{{label}}",
+    "usageLimits": "用量限额",
+    "reportedAt": "报告于 {{time}}"
+  },
+  "composerImageAttachments": {
+    "uploadingName": "正在上传 {{name}}…",
+    "removeName": "移除 {{name}}",
+    "retryName": "重试 {{name}}",
+    "imageAttachments": "图片附件"
+  },
+  "composerFileDropTarget": {
+    "dropFilesToAttach": "拖放文件以添加附件",
+    "addImagesAndFilesToYourNewTask": "将图片和文件添加到你的新任务",
+    "addImagesAndFilesToYourMessage": "将图片和文件添加到你的消息"
+  },
   "routineTriggerCard": {
     "taskCreated": "任务已创建",
     "nextTolocalestring": "下次：{{toLocaleString}}",

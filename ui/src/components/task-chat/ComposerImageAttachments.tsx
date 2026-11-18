@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { t } from "@/i18n";
 import { ImageIcon, Loader2, RotateCw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -43,13 +44,13 @@ function ImageAttachment({ image, disabled, onRemove, onRetry }: {
         {image.status === "uploading" ? (
           <div className="absolute inset-0 flex items-center justify-center bg-background/60" role="status">
             <Loader2 className="size-5 animate-spin" aria-hidden />
-            <span className="sr-only">Uploading {image.name}…</span>
+            <span className="sr-only">{t("composerImageAttachments.uploadingName", { name: image.name })}</span>
           </div>
         ) : null}
         <Button
           type="button" variant="secondary" size="icon-xs"
           className="absolute right-1 top-1 rounded-full"
-          aria-label={`Remove ${image.name}`}
+          aria-label={t("composerImageAttachments.removeName", { name: image.name })}
           disabled={disabled} onClick={() => onRemove(image.id)}
         >
           <X aria-hidden />
@@ -58,7 +59,7 @@ function ImageAttachment({ image, disabled, onRemove, onRetry }: {
           <Button
             type="button" variant="secondary" size="icon-xs"
             className="absolute bottom-1 left-1 rounded-full"
-            aria-label={`Retry ${image.name}`}
+            aria-label={t("composerImageAttachments.retryName", { name: image.name })}
             disabled={disabled} onClick={() => onRetry(image.id)}
           >
             <RotateCw aria-hidden />
@@ -66,7 +67,7 @@ function ImageAttachment({ image, disabled, onRemove, onRetry }: {
         ) : null}
       </div>
       {image.status === "error" ? (
-        <p className="mt-1 text-xs text-destructive" role="alert">{image.error ?? "Upload failed"}</p>
+        <p className="mt-1 text-xs text-destructive" role="alert">{image.error ?? t("taskChat.uploadFailed")}</p>
       ) : null}
     </div>
   );
@@ -82,7 +83,7 @@ export function ComposerImageAttachments({ images, disabled, onRemove, onRetry }
   return (
     <div
       className="mb-2 flex flex-wrap gap-2 px-1"
-      role="group" aria-label="Image attachments"
+      role="group" aria-label={t("composerImageAttachments.imageAttachments")}
       data-testid="task-chat-composer-images"
     >
       {images.map(image => (
