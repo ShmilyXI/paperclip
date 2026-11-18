@@ -433,11 +433,11 @@ function CommentCard({
                 to={`/agents/${comment.runAgentId}/runs/${comment.runId}`}
                 className="inline-flex items-center rounded-md border border-border bg-accent/30 px-2 py-1 text-(length:--text-nano) font-mono text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
               >
-                run {comment.runId.slice(0, 8)}
+                {t("commentThread.run")} {comment.runId.slice(0, 8)}
               </Link>
             ) : (
               <span className="inline-flex items-center rounded-md border border-border bg-accent/30 px-2 py-1 text-(length:--text-nano) font-mono text-muted-foreground">
-                run {comment.runId.slice(0, 8)}
+                {t("commentThread.run")} {comment.runId.slice(0, 8)}
               </span>
             )
           ) : undefined}
@@ -965,7 +965,7 @@ export function CommentThread({
 
   return (
     <div className={cn("space-y-4", ANALYTICS_MASK_CLASS)}>
-      <h3 className="text-sm font-semibold">Timeline ({timeline.length + queuedComments.length})</h3>
+      <h3 className="text-sm font-semibold">{t("commentThread.timelineCount", { count: timeline.length + queuedComments.length })}</h3>
 
       <TimelineList
         timeline={timeline}
