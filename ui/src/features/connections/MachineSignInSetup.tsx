@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import type {
@@ -53,13 +54,13 @@ function writeDraftId(key: string, connectionId: string | null) {
 const METHOD_OPTIONS: Array<{ method: MachineSignInMethod; label: string; hint: string }> = [
   {
     method: "paperclip_key",
-    label: "Paperclip key (recommended)",
-    hint: "Paperclip creates a key and keeps its private half. You register the public key with the provider; nothing secret is copied.",
+    label: t("machineSignIn.paperclipKeyRecommended"),
+    hint: t("machineSignIn.paperclipKeyHint"),
   },
   {
     method: "client_secret",
-    label: "Client secret",
-    hint: "For providers that only issue a secret. Paperclip stores it securely and never shows it again.",
+    label: t("connectionSetup.clientSecret"),
+    hint: t("machineSignIn.clientSecretHint"),
   },
 ];
 
@@ -188,18 +189,17 @@ export function MachineSignInSetup({
   return (
     <div className="space-y-5" data-testid="machine-sign-in-setup">
       <p className="text-xs text-muted-foreground">
-        For automation your organization owns. Agents use this connection as the provider client you set up for
-        Paperclip, not as any person. Only shared connections can use machine sign-in.
+        {t("machineSignIn.forAutomationYourOrganization")}
       </p>
 
-      {error ? <InlineBanner tone="warning" title="Machine sign-in didn’t work">{error}</InlineBanner> : null}
+      {error ? <InlineBanner tone="warning" title={t("machineSignIn.machineSignInDidNotWork")}>{error}</InlineBanner> : null}
 
       {!setup ? (
         <div className="space-y-4">
           <div
             className="flex flex-wrap gap-2"
             role="radiogroup"
-            aria-label="How Paperclip proves who it is"
+            aria-label={t("machineSignIn.howPaperclipProvesWhoItIs")}
             onKeyDown={(event) => {
               const step = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1
                 : event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 0;
@@ -229,19 +229,19 @@ export function MachineSignInSetup({
             ))}
           </div>
           <p className="text-xs text-muted-foreground">{METHOD_OPTIONS.find((option) => option.method === method)?.hint}</p>
-          <Field id="machine-sign-in-service" label="Sign-in service" hint={`Leave blank and Paperclip asks ${host} where to sign in. Otherwise enter the address or token URL from the provider’s docs.`}>
-            <Input id="machine-sign-in-service" value={signInService} onChange={(event) => setSignInService(event.target.value)} placeholder="Found automatically" autoComplete="off" className="h-11 font-mono" />
+          <Field id="machine-sign-in-service" label={t("machineSignIn.signInService")} hint={t("machineSignIn.signInServiceHint", { host })}>
+            <Input id="machine-sign-in-service" value={signInService} onChange={(event) => setSignInService(event.target.value)} placeholder={t("machineSignIn.foundAutomatically")} autoComplete="off" className="h-11 font-mono" />
           </Field>
-          <Field id="machine-sign-in-client-id" label="Client ID" hint={method === "paperclip_key" ? "You can add this after registering the key." : undefined}>
+          <Field id="machine-sign-in-client-id" label={t("connectionSetup.clientId")} hint={method === "paperclip_key" ? t("machineSignIn.clientIdHint") : undefined}>
             <Input id="machine-sign-in-client-id" value={clientId} onChange={(event) => setClientId(event.target.value)} autoComplete="off" className="h-11 font-mono" />
           </Field>
           {method === "client_secret" ? (
-            <Field id="machine-sign-in-client-secret" label="Client secret">
+            <Field id="machine-sign-in-client-secret" label={t("connectionSetup.clientSecret")}>
               <Input id="machine-sign-in-client-secret" type="password" value={clientSecret} onChange={(event) => setClientSecret(event.target.value)} autoComplete="off" className="h-11 font-mono" />
             </Field>
           ) : null}
-          <Field id="machine-sign-in-scopes" label="Scopes" hint="Optional. Separate with spaces, as the provider’s docs list them.">
-            <Input id="machine-sign-in-scopes" value={scopes} onChange={(event) => setScopes(event.target.value)} placeholder="Optional" autoComplete="off" className="h-11 font-mono" />
+          <Field id="machine-sign-in-scopes" label={t("machineSignIn.scopes")} hint={t("machineSignIn.scopesHint")}>
+            <Input id="machine-sign-in-scopes" value={scopes} onChange={(event) => setScopes(event.target.value)} placeholder={t("common.optional")} autoComplete="off" className="h-11 font-mono" />
           </Field>
         </div>
       ) : (
@@ -249,22 +249,21 @@ export function MachineSignInSetup({
           {publicKey ? (
             <div className="space-y-3">
               <p className="text-sm text-foreground">
-                Register this public key with the provider for the Paperclip client. It isn’t secret, so you can paste it
-                into the provider’s console or send it to whoever manages it.
+                {t("machineSignIn.registerThisPublicKey")}
               </p>
-              <PublicKeyBlock label="Public key (PEM)" value={publicKey.pem} />
-              <PublicKeyBlock label="Public key (JSON)" value={JSON.stringify(publicKey.jwk, null, 2)} />
+              <PublicKeyBlock label={t("machineSignIn.publicKeyPem")} value={publicKey.pem} />
+              <PublicKeyBlock label={t("machineSignIn.publicKeyJson")} value={JSON.stringify(publicKey.jwk, null, 2)} />
             </div>
           ) : null}
-          <Field id="machine-sign-in-client-id-confirm" label="Client ID" hint="The ID the provider shows for the Paperclip client.">
+          <Field id="machine-sign-in-client-id-confirm" label={t("connectionSetup.clientId")} hint={t("machineSignIn.clientIdConfirmHint")}>
             <Input id="machine-sign-in-client-id-confirm" value={clientId} onChange={(event) => setClientId(event.target.value)} autoComplete="off" className="h-11 font-mono" />
           </Field>
           {setup.machineSignIn.method === "client_secret" ? (
-            <Field id="machine-sign-in-client-secret-replace" label="Client secret" hint={setup.machineSignIn.hasClientSecret ? "Saved. Enter a new one only to replace it." : undefined}>
+            <Field id="machine-sign-in-client-secret-replace" label={t("connectionSetup.clientSecret")} hint={setup.machineSignIn.hasClientSecret ? t("machineSignIn.savedEnterANewOne") : undefined}>
               <Input id="machine-sign-in-client-secret-replace" type="password" value={clientSecret} onChange={(event) => setClientSecret(event.target.value)} placeholder={setup.machineSignIn.hasClientSecret ? "••••••••" : ""} autoComplete="off" className="h-11 font-mono" />
             </Field>
           ) : null}
-          <Field id="machine-sign-in-scopes-confirm" label="Scopes" hint="Optional. Separate with spaces.">
+          <Field id="machine-sign-in-scopes-confirm" label={t("machineSignIn.scopes")} hint={t("machineSignIn.scopesHintShort")}>
             <Input id="machine-sign-in-scopes-confirm" value={scopes} onChange={(event) => setScopes(event.target.value)} autoComplete="off" className="h-11 font-mono" />
           </Field>
         </div>
@@ -273,11 +272,11 @@ export function MachineSignInSetup({
       {beforeFooter}
 
       <div className="flex items-center justify-between pt-3">
-        <Button variant="ghost" onClick={onBack} disabled={busy !== null}>Back</Button>
+        <Button variant="ghost" onClick={onBack} disabled={busy !== null}>{t("common.back")}</Button>
         {!setup && method === "paperclip_key" ? (
           <Button onClick={() => void createDraft()} disabled={busy !== null || restoring || !canCreate}>
             {busy === "creating" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {busy === "creating" ? "Creating key…" : "Create key"}
+            {busy === "creating" ? t("machineSignIn.creatingKey") : t("machineSignIn.createKey")}
           </Button>
         ) : (
           <Button
@@ -288,7 +287,7 @@ export function MachineSignInSetup({
             disabled={busy !== null || restoring || (setup ? !canTest : !canCreate)}
           >
             {busy !== null && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {busy === "testing" ? "Testing…" : busy === "creating" ? "Saving…" : "Test connection"}
+            {busy === "testing" ? t("runtimeTestCard.testing") : busy === "creating" ? t("common.saving2") : t("common.testConnection")}
           </Button>
         )}
       </div>
@@ -320,7 +319,7 @@ function PublicKeyBlock({ label, value }: { label: string; value: string }) {
             await copyTextToClipboard(value).then(() => setCopied(true), () => setCopied(false));
           }}
         >
-          {copied ? "Copied" : "Copy"}
+          {copied ? t("common.copied") : t("common.copy")}
         </Button>
       </div>
       <Textarea readOnly value={value} aria-label={label} rows={6} className="mt-2 font-mono text-xs" />

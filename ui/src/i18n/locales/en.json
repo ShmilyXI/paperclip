@@ -8570,6 +8570,28 @@
     "loadingSearchAccess": "Loading search access…",
     "yourExistingConnectionStillWorks": "Your existing connection still works. In"
   },
+  "machineSignIn": {
+    "paperclipKeyRecommended": "Paperclip key (recommended)",
+    "paperclipKeyHint": "Paperclip creates a key and keeps its private half. You register the public key with the provider; nothing secret is copied.",
+    "clientSecretHint": "For providers that only issue a secret. Paperclip stores it securely and never shows it again.",
+    "forAutomationYourOrganization": "For automation your organization owns. Agents use this connection as the provider client you set up for Paperclip, not as any person. Only shared connections can use machine sign-in.",
+    "machineSignInDidNotWork": "Machine sign-in didn’t work",
+    "howPaperclipProvesWhoItIs": "How Paperclip proves who it is",
+    "signInService": "Sign-in service",
+    "signInServiceHint": "Leave blank and Paperclip asks {{host}} where to sign in. Otherwise enter the address or token URL from the provider’s docs.",
+    "foundAutomatically": "Found automatically",
+    "clientIdHint": "You can add this after registering the key.",
+    "scopes": "Scopes",
+    "scopesHint": "Optional. Separate with spaces, as the provider’s docs list them.",
+    "scopesHintShort": "Optional. Separate with spaces.",
+    "registerThisPublicKey": "Register this public key with the provider for the Paperclip client. It isn’t secret, so you can paste it into the provider’s console or send it to whoever manages it.",
+    "publicKeyPem": "Public key (PEM)",
+    "publicKeyJson": "Public key (JSON)",
+    "clientIdConfirmHint": "The ID the provider shows for the Paperclip client.",
+    "savedEnterANewOne": "Saved. Enter a new one only to replace it.",
+    "creatingKey": "Creating key…",
+    "createKey": "Create key"
+  },
   "mcpConnect": {
     "connectYourAssistantToPaperclip": "Connect your assistant to Paperclip",
     "enterTheCodeShownBy": "Enter the code shown by your assistant",

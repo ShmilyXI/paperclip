@@ -8570,6 +8570,28 @@
     "loadingSearchAccess": "正在加载搜索权限…",
     "yourExistingConnectionStillWorks": "你现有的连接仍然可用。在"
   },
+  "machineSignIn": {
+    "paperclipKeyRecommended": "Paperclip 密钥（推荐）",
+    "paperclipKeyHint": "Paperclip 会创建密钥并保留私钥部分。你将公钥注册给提供方；不会有任何机密内容被复制。",
+    "clientSecretHint": "适用于仅签发密钥的提供方。Paperclip 会安全存储密钥，且不会再显示。",
+    "forAutomationYourOrganization": "用于你的组织拥有的自动化。员工使用此连接作为你为 Paperclip 设置的提供方客户端，而非以个人身份。只有共享连接才能使用机器登录。",
+    "machineSignInDidNotWork": "机器登录未成功",
+    "howPaperclipProvesWhoItIs": "Paperclip 如何证明自己的身份",
+    "signInService": "登录服务",
+    "signInServiceHint": "留空则 Paperclip 会向 {{host}} 询问登录地址。否则请输入提供方文档中的地址或令牌 URL。",
+    "foundAutomatically": "自动查找",
+    "clientIdHint": "你可以在注册密钥后添加此项。",
+    "scopes": "作用域",
+    "scopesHint": "可选。按提供方文档所列，用空格分隔。",
+    "scopesHintShort": "可选。用空格分隔。",
+    "registerThisPublicKey": "请将此公钥注册给提供方，用于 Paperclip 客户端。它不是机密内容，你可以将其粘贴到提供方的控制台，或发送给管理它的人。",
+    "publicKeyPem": "公钥（PEM）",
+    "publicKeyJson": "公钥（JSON）",
+    "clientIdConfirmHint": "提供方为 Paperclip 客户端显示的 ID。",
+    "savedEnterANewOne": "已保存。仅在需要替换时才输入新的。",
+    "creatingKey": "创建密钥中…",
+    "createKey": "创建密钥"
+  },
   "mcpConnect": {
     "connectYourAssistantToPaperclip": "将你的助手连接到 Paperclip",
     "enterTheCodeShownBy": "输入助手显示的代码",
