@@ -10463,7 +10463,11 @@
     "actionAssistantConnectionMcp": "{{action}} Assistant Connection (MCP)",
     "noAssistantsConnected": "No assistants connected to {{company}} yet.",
     "connectedAsYou": "Connected as you · {{access}}{{configure}}",
-    "configureExtra": " · Configure agents, projects and skills"
+    "configureExtra": " · Configure agents, projects and skills",
+    "open": "Open",
+    "copyLabel": "Copy {{label}}",
+    "signInToConnectAnAssistant": "Sign in to connect an assistant. This requires a Paperclip instance with authenticated user accounts.",
+    "assistantConnectionsNeedAnAuthenticated": "Assistant connections need an authenticated instance with a public HTTPS URL. Ask your instance administrator to configure the public URL, then try again."
   },
   "taskChatProtocolCard": {
     "planSteps": "Plan steps",

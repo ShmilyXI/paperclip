@@ -10463,7 +10463,11 @@
     "actionAssistantConnectionMcp": "{{action}} 助手连接（MCP）",
     "noAssistantsConnected": "尚未有助手连接到 {{company}}。",
     "connectedAsYou": "以你的身份连接 · {{access}}{{configure}}",
-    "configureExtra": " · 配置员工、项目和技能"
+    "configureExtra": " · 配置员工、项目和技能",
+    "open": "打开",
+    "copyLabel": "复制{{label}}",
+    "signInToConnectAnAssistant": "登录以连接助手。这需要一个启用了用户账号认证的 Paperclip 实例。",
+    "assistantConnectionsNeedAnAuthenticated": "助手连接需要一个具有公开 HTTPS 地址且已认证的实例。请让你的实例管理员配置公开地址，然后重试。"
   },
   "taskChatProtocolCard": {
     "planSteps": "计划步骤",
