@@ -1282,7 +1282,8 @@
     "selectACompanyToUpload": "Select a company to upload images",
     "managedInParens": "(managed)",
     "entryBadge": "entry",
-    "languageFile": "{{language}} file"
+    "languageFile": "{{language}} file",
+    "baseRef": "Base ref:"
   },
   "agentNav": {
     "agent": "Agent",

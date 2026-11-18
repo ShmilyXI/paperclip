@@ -1282,7 +1282,8 @@
     "selectACompanyToUpload": "请选择公司以上传图片",
     "managedInParens": "(托管)",
     "entryBadge": "入口",
-    "languageFile": "{{language}} 文件"
+    "languageFile": "{{language}} 文件",
+    "baseRef": "基线引用："
   },
   "agentNav": {
     "agent": "员工",
