@@ -13,10 +13,10 @@ export function BoardDialogs() {
   const { newIssueOpen, newProjectOpen, newGoalOpen, newAgentOpen } = useDialogState();
   const { closeNewIssue, closeNewProject, closeNewGoal, closeNewAgent } = useDialogActions();
   return <>
-    <DeferredOverlay requested={newIssueOpen} title="New task" onClose={closeNewIssue}><NewIssueDialog /></DeferredOverlay>
-    <DeferredOverlay requested={newProjectOpen} title="New project" onClose={closeNewProject}><NewProjectDialog /></DeferredOverlay>
-    <DeferredOverlay requested={newGoalOpen} title="New goal" onClose={closeNewGoal}><NewGoalDialog /></DeferredOverlay>
-    <DeferredOverlay requested={newAgentOpen} title="New agent" onClose={closeNewAgent}><NewAgentDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newIssueOpen} title={t("common.newTask2")} onClose={closeNewIssue}><NewIssueDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newProjectOpen} title={t("common.newProject")} onClose={closeNewProject}><NewProjectDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newGoalOpen} title={t("boardDialogs.newGoal")} onClose={closeNewGoal}><NewGoalDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newAgentOpen} title={t("common.newAgent")} onClose={closeNewAgent}><NewAgentDialog /></DeferredOverlay>
     <GitHubStarPrompt />
   </>;
 }
