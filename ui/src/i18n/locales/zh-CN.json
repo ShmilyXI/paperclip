@@ -6614,7 +6614,9 @@
     "useYourOwnClientId": "使用你自己的客户端 ID",
     "paperclipSetsSignInUpOnItsOwnFillTheseIn": "只要服务器允许，Paperclip 会自行完成登录设置。仅当服务器的文档要求你先自行注册 Paperclip 时，才需要填写这些内容。",
     "howDoesThisServerSignIn": "这台服务器如何登录？",
-    "howThisServerSignsIn": "这台服务器的登录方式"
+    "howThisServerSignsIn": "这台服务器的登录方式",
+    "authorizationHasNotBeenConfirmedYet": "授权尚未确认。请重试。",
+    "theSignInWindowClosedTry": "登录窗口已关闭。请重试以完成连接。"
   },
   "skillStudio": {
     "studio": "工作室",

@@ -43,7 +43,7 @@ export function ConnectionInstructionsEditor({ provider, template, value, onChan
     {editing ? <Textarea aria-label={t("connectionInstructions.instructionsText")} value={value.text} disabled={disabled} maxLength={CONNECTION_INSTRUCTIONS_MAX_LENGTH}
       className="min-h-40" onChange={(event) => onChange({ ...value, text: event.target.value })} />
       : <p className={cn("whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground", ANALYTICS_MASK_CLASS)}>{value.text}</p>}
-    {!value.text.trim() && <p role="alert" className="text-sm text-destructive">Enter instructions.</p>}
+    {!value.text.trim() && <p role="alert" className="text-sm text-destructive">{t("connectionInstructions.enterInstructions")}</p>}
     <div className="flex items-center gap-3">
       <Button variant="ghost" size="sm" disabled={disabled} onClick={() => setEditing(!editing)}>{editing ? t("connectionInstructions.doneEditing") : t("connectionInstructions.editInstructions")}</Button>
       {changed && <Button variant="ghost" size="sm" disabled={disabled} onClick={() => onChange({ ...defaultConnectionAgentInstructions(template)!, enabled: value.enabled })}>{t("connectionInstructions.resetToDefault")}</Button>}
@@ -84,7 +84,7 @@ export function AgentConnectionInstructions({ companyId, agentId }: { companyId:
   const query = useQuery({ queryKey: queryKeys.tools.effectiveProfilesForAgent(companyId, agentId), queryFn: () => toolsApi.getEffectiveProfilesForAgent(companyId, agentId) });
   const view = useQueryView(query);
   const sources = query.data?.installedConnections.filter((connection) => connection.agentInstructions && connection.enabled && connection.status === "active") ?? [];
-  if (query.isLoading || view.kind === "reconnecting") return <p className="text-sm text-muted-foreground">Loading connection instructions…</p>;
+  if (query.isLoading || view.kind === "reconnecting") return <p className="text-sm text-muted-foreground">{t("connectionInstructions.loadingConnectionInstructions")}</p>;
   if (view.kind === "error") return <QueryErrorState error={query.error} action="load connection instructions" onRetry={view.retry} retrying={view.isFetching} />;
   if (!sources.length) return null;
   return <section className="mt-8 space-y-4" aria-label={t("connectionInstructions.fromConnections")}>
@@ -96,8 +96,8 @@ export function AgentConnectionInstructions({ companyId, agentId }: { companyId:
       const context = connectionInstructionContext(app, config);
       return <div key={connection.id} className="space-y-3 rounded-lg border border-border p-4">
         <Link className={cn("text-sm font-medium underline underline-offset-2", ANALYTICS_MASK_CLASS)} to={`/apps/${connection.id}/permissions`}>{connection.name}</Link>
-        {!connection.agentInstructions!.enabled && <InlineBanner tone="warning">These instructions are turned off for this connection.</InlineBanner>}
-        {context === null ? <InlineBanner tone="warning">Complete this connection’s configuration before agents receive its instructions.</InlineBanner>
+        {!connection.agentInstructions!.enabled && <InlineBanner tone="warning">{t("connectionInstructions.theseInstructionsAreTurnedOff")}</InlineBanner>}
+        {context === null ? <InlineBanner tone="warning">{t("connectionInstructions.completeThisConnectionSConfiguration")}</InlineBanner>
           : <p className={cn("whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground", ANALYTICS_MASK_CLASS)}>{connection.agentInstructions!.text}</p>}
       </div>;
     })}

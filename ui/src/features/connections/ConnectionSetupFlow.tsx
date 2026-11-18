@@ -347,7 +347,7 @@ type AppAccessSelection = "all_agents" | { agentIds: string[] };
 // PAP-659: identity and agent reach are no longer a step. They are resolved to
 // a default, stated in one line above the primary action, and changed either in
 // the Advanced disclosure on this screen or on the Permissions tab afterwards.
-const STEP_LABELS = ["Pick app", "Connect"];
+const STEP_LABELS = [t("connectionSetup.pickApp"), t("common.connect")];
 const STEP_INDEX: Record<Exclude<Step, "success">, number> = {
   gallery: 0,
   key: 1,
@@ -622,8 +622,8 @@ export function ConnectionSetupFlow(props: ConnectionSetupFlowProps = {}) {
   const existingView = useQueryView(existing);
   const provider = source || existing.data?.config?.sourceTemplateKey;
   const method = searchParams.get("method") || existing.data?.config?.connectionMethodKey;
-  if (lookup && (existingView.kind === "loading" || existingView.kind === "reconnecting")) return <p className="p-6 text-sm text-muted-foreground">Loading connection…</p>;
-  if (lookup && existingView.kind === "error") return <div role="alert" className="space-y-3 p-6"><p>Could not load this connection. Your saved access and credentials have not changed.</p><Button variant="outline" onClick={() => void existing.refetch()}>Try again</Button></div>;
+  if (lookup && (existingView.kind === "loading" || existingView.kind === "reconnecting")) return <p className="p-6 text-sm text-muted-foreground">{t("connectionSetup.loadingConnection")}</p>;
+  if (lookup && existingView.kind === "error") return <div role="alert" className="space-y-3 p-6"><p>{t("connectionSetup.couldNotLoadThisConnection")}</p><Button variant="outline" onClick={() => void existing.refetch()}>{t("common.tryAgain")}</Button></div>;
   if (gatedDefinitions.length) {
     if (!availability.loaded) return <p role="status" className="p-6 text-sm text-muted-foreground">{t("connectionSetup.loadingConnectionSettings")}</p>;
     if (availability.failed) return <p role="alert" className="p-6 text-destructive text-sm">{t("connectionSetup.couldNotLoadConnectorAvailability")}</p>;
@@ -934,7 +934,7 @@ function StandardConnectionSetupFlow({
           try {
             const verified = await connectionIntentsApi.setupOptions(connectionIntentId);
             if (disposed || !account.isCurrentScope()) return;
-            if (verified.interaction.status !== "accepted") throw new Error("Authorization has not been confirmed yet. Try again.");
+            if (verified.interaction.status !== "accepted") throw new Error(t("connectionSetup.authorizationHasNotBeenConfirmedYet"));
             navigate(`/issues/${verified.interaction.issueId}`);
           } catch (error) {
             if (disposed || !account.isCurrentScope()) return;
@@ -973,7 +973,7 @@ function StandardConnectionSetupFlow({
       if (popup.closed) {
         setDialogOAuthConnectionId(null);
         setOAuthPhase("error");
-        setOAuthError("The sign-in window closed. Try again to finish connecting.");
+        setOAuthError(t("connectionSetup.theSignInWindowClosedTry"));
         return;
       }
       const outcome = readOAuthWindowOutcome(popup, dialogOAuthConnectionId);

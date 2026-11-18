@@ -6614,7 +6614,9 @@
     "useYourOwnClientId": "Use your own client ID",
     "paperclipSetsSignInUpOnItsOwnFillTheseIn": "Paperclip sets sign-in up on its own whenever the server allows it. Fill these in only when the server’s docs tell you to register Paperclip yourself first.",
     "howDoesThisServerSignIn": "How does this server sign in?",
-    "howThisServerSignsIn": "How this server signs in"
+    "howThisServerSignsIn": "How this server signs in",
+    "authorizationHasNotBeenConfirmedYet": "Authorization has not been confirmed yet. Try again.",
+    "theSignInWindowClosedTry": "The sign-in window closed. Try again to finish connecting."
   },
   "skillStudio": {
     "studio": "Studio",

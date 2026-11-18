@@ -29,8 +29,8 @@ export function TaskVoiceLauncher({ companyId, issueId, agentId, boundEndpointId
   const candidates = (connections.data ?? []).filter((endpoint) => endpoint.provider === "speko" && endpoint.status === "active" && (boundEndpointId ? endpoint.id === boundEndpointId : endpoint.assignedAgentId === agentId));
   const endpoint = candidates.find((entry) => entry.id === selected) ?? candidates[0];
   const connectionError = (connectionsView.kind === "error") ? <div role="alert" className="space-y-2 text-sm">
-    <p>Voice connections could not be loaded.</p>
-    <Button variant="outline" disabled={connections.isFetching} onClick={() => { restoreFocus.current = true; void connections.refetch().then(result => { if (result.isError) restoreFocus.current = false; }); }}>Retry voice connections</Button>
+    <p>{t("taskVoiceLauncher.voiceConnectionsCouldNotBe")}</p>
+    <Button variant="outline" disabled={connections.isFetching} onClick={() => { restoreFocus.current = true; void connections.refetch().then(result => { if (result.isError) restoreFocus.current = false; }); }}>{t("taskVoiceLauncher.retryVoiceConnections")}</Button>
   </div> : null;
   if (!endpoint && connectionError) return <section aria-label={t("taskVoiceLauncher.taskVoiceConversation")} className="space-y-3 rounded-lg border border-border p-4">{connectionError}</section>;
   if (!endpoint) return boundEndpointId ? <p className="text-sm text-muted-foreground">{connections.isPending ? t("taskVoiceLauncher.loadingVoiceConnection") : t("taskVoiceLauncher.voiceIsUnavailableCheckThe")}</p> : null;
