@@ -9229,7 +9229,7 @@
     "additionalToolDetailsClaudeCode": "Additional tool details (Claude Code)",
     "reviewTheConfiguration": "Review the configuration.",
     "agentObservability": "Agent observability",
-    "sendCodexAndClaudeCode": "Send Codex and Claude Code logs and traces to your observability service.",
+    "sendCodexAndClaudeCode": "Send Codex, Claude Code and native OpenCode execution data to your observability service.",
     "manageConnectionsPermissionIsRequired": "Manage connections permission is required to configure agent observability.",
     "destination": "Destination",
     "projectId": "Project ID",

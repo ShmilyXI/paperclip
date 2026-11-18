@@ -9229,7 +9229,7 @@
     "additionalToolDetailsClaudeCode": "额外的工具详情（Claude Code）",
     "reviewTheConfiguration": "请核对配置。",
     "agentObservability": "员工可观测性",
-    "sendCodexAndClaudeCode": "将 Codex 与 Claude Code 的日志和链路追踪发送到你的可观测性服务。",
+    "sendCodexAndClaudeCode": "将 Codex、Claude Code 与原生 OpenCode 的执行数据发送到你的可观测性服务。",
     "manageConnectionsPermissionIsRequired": "配置员工可观测性需要「管理连接」权限。",
     "destination": "目标位置",
     "projectId": "项目 ID",
