@@ -58,11 +58,11 @@ function AgentChatsContent({ companyId, userId, enabled, loaded, agents, chats, 
   useEffect(() => {
     if (entryPath) navigate(entryPath, { replace: true });
   }, [navigate, entryPath]);
-  if (!loaded) return <p role="status" className="text-sm text-muted-foreground">{t("agentChats.loadingChat")}</p>;
-  if (!enabled) return <p className="text-sm text-muted-foreground">{t("agentChats.agentChatIsDisabledEnable")}</p>;
-  if (!companyId) return <p className="text-sm text-muted-foreground">{t("agentChats.selectACompanyToStart")}</p>;
-  if (reconnecting) return <p role="status" className="text-sm text-muted-foreground">{t("agentChats.loadingChat")}</p>;
-  if (resolvingRecent || entryPath || primary?.loading) return <p role="status" className="text-sm text-muted-foreground">{t("agentChats.openingChat")}</p>;
+  if (!loaded) return <p role="status" className="text-sm text-muted-foreground">Loading chat…</p>;
+  if (!enabled) return <p className="text-sm text-muted-foreground">Agent Chat is off for this instance. An administrator can enable it in <Link className="underline underline-offset-4" to="/company/settings/instance/experimental#experimental-enableAgentChat">Experimental settings</Link>. Your workspace preference does not change Chat availability.</p>;
+  if (!companyId) return <p className="text-sm text-muted-foreground">Select a company to start a conversation.</p>;
+  if (reconnecting) return <p role="status" className="text-sm text-muted-foreground">Loading chat…</p>;
+  if (resolvingRecent || entryPath || primary?.loading) return <p role="status" className="text-sm text-muted-foreground">Opening chat…</p>;
   const error = blockingError ?? (recentIds.length > 0 && chatsView.kind === "error" ? chats.error : null);
   return <div className="mx-auto flex h-full max-w-xl flex-col justify-center gap-6 px-4 py-12">
     <div className="flex flex-col gap-3">

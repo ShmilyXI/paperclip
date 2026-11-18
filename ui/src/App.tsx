@@ -1,3 +1,4 @@
+import { useCoordinatorWorkspaceEnabled } from "./hooks/useCoordinatorWorkspaceEnabled";
 import { AgentChats } from "./pages/AgentChats";
 import { lazy, Suspense, useEffect, type ReactNode } from "react";
 import type { ToolConnectionCredentialSource } from "@paperclipai/shared";
@@ -773,7 +774,10 @@ function NoCompaniesStartPage() {
 
 export function App() {
   const { pathname } = useLocation();
-  const { enabled: streamlinedUiEnabled, loaded: streamlinedUiLoaded } = useStreamlinedUiEnabled();
+  const { enabled: classicStreamlinedUiEnabled, loaded: classicStreamlinedUiLoaded } = useStreamlinedUiEnabled();
+  const { enabled: coordinatorWorkspaceEnabled, loaded: coordinatorWorkspaceLoaded } = useCoordinatorWorkspaceEnabled();
+  const streamlinedUiEnabled = classicStreamlinedUiEnabled || coordinatorWorkspaceEnabled;
+  const streamlinedUiLoaded = classicStreamlinedUiLoaded && coordinatorWorkspaceLoaded;
   const { enabled: combinedInboxTasksEnabled } = useCombinedInboxTasksEnabled();
   useEffect(() => {
     // Download the requested collection while access/company checks run. Detail
@@ -808,7 +812,7 @@ export function App() {
         <Route path="ux-lab/cross-issue-collaboration" element={<CrossIssueCollaborationUxLab />} />
 
         <Route element={<CloudAccessGate />}>
-          <Route element={<ShellConfigurationGate loaded={streamlinedUiLoaded} />}>
+          <Route element={<ShellConfigurationGate loaded={streamlinedUiLoaded} allowPendingTaskDetail={classicStreamlinedUiLoaded && !coordinatorWorkspaceLoaded} />}>
           <Route index element={<CompanyRootRedirect />} />
           <Route path="onboarding" element={<OnboardingRoutePage />} />
           <Route path="instance" element={<LegacySettingsRedirect />} />

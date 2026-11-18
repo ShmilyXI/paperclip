@@ -36,7 +36,7 @@ export function useAgentLifecycleStatus(agent?: Agent) {
     queryKey: [...queryKeys.agents.detail(agent?.id ?? ""), "lifecycle", agent?.companyId],
     queryFn: () => agentsApi.get(agent!.id, agent!.companyId),
     enabled: Boolean(agent),
-    select: current => ({ status: current.status, lifecycleState: current.lifecycleState,
+    select: current => ({ status: current.status, pauseReason: current.pauseReason, pausedAt: current.pausedAt, lifecycleState: current.lifecycleState,
       lifecycleVersion: current.lifecycleVersion, lifecycleError: current.lifecycleError }),
     refetchInterval: query => agentLifecycleRefetchInterval(query.state.data?.lifecycleState ?? agent?.lifecycleState),
   });
@@ -65,6 +65,8 @@ export function AgentLifecycleStatus({ agent, onRetry, retryPending, refreshErro
         {retryPending ? t("agentLifecycleStatus.retrying") : t("agentLifecycleStatus.retryNow")}
       </Button>
     </div>}
-    {phase && agent.lifecycleError && <p className="text-muted-foreground">{t("agentLifecycleStatus.paperclipRetriesAutomatically")}</p>}
+    {phase && agent.lifecycleError && <p className="text-muted-foreground">{agent.lifecycleState === "verifying"
+      ? "Retry now checks the saved configuration again immediately."
+      : "Paperclip retries automatically; Retry now checks again immediately."}</p>}
   </div>;
 }

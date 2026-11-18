@@ -94,8 +94,8 @@ export function AgentObservabilitySettingsView(props: AgentObservabilitySettings
   const receipt = props.result?.revision === revision ? props.result : settings?.lastTest;
   return <section aria-labelledby="agent-observability-heading" className="max-w-2xl space-y-4">
     <div className="space-y-1">
-      <h2 id="agent-observability-heading" className="text-lg font-medium">{t("agentObservabilitySettings.agentObservability")}</h2>
-      <p className="text-sm text-muted-foreground">{t("agentObservabilitySettings.sendCodexAndClaudeCode")}</p>
+      <h2 id="agent-observability-heading" className="text-lg font-medium">Agent observability</h2>
+      <p className="text-sm text-muted-foreground">Send Codex, Claude Code and native OpenCode execution data to your observability service.</p>
     </div>
     {!canManage ? <p className="text-sm text-muted-foreground">{t("agentObservabilitySettings.manageConnectionsPermissionIsRequired")}</p> : <>
       <fieldset disabled={busy} className="space-y-4">

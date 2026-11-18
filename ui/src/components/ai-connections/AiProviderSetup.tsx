@@ -37,8 +37,8 @@ const providers = [
     name: "Anthropic",
     description: t("aiProviderSetup.claudeSubscriptionOrApiKey"),
   },
-  { id: "google", name: "Google", description: t("aiProviderSetup.geminiApiKey") },
-  { id: "xai", name: "xAI", description: t("aiProviderSetup.grokSubscriptionOrApiKey") },
+  { id: "google", name: "Google", description: "Antigravity sign-in or Gemini API key" },
+  { id: "xai", name: "xAI", description: "Grok subscription or API key" },
   {
     id: "openrouter",
     name: "OpenRouter",

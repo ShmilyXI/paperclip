@@ -1,4 +1,7 @@
-import { t } from "@/i18n";
+import { CoordinatorRelativeTime } from "@/components/coordinator/CoordinatorRelativeTime";
+import { useAgentChatRead } from "@/hooks/useAgentChatRead";
+import { Link } from "@/lib/router";
+import { useCoordinatorPresentation } from "@/components/coordinator/CoordinatorPresentation";
 import { TextAttachmentContext } from "@/context/TextAttachmentContext";
 import { useArtifactsV1Enabled } from "@/hooks/useArtifactsV1Enabled";
 import { ArtifactRow, ArtifactRowGroup, inlineRowStyle, subjectFromAttachmentRef } from "@/components/artifacts/v1";
@@ -147,7 +150,12 @@ function TaskChatBubbleContent({
   onTryAgainNoLiveExecutionPath,
   tryAgainNoLiveExecutionPathPending,
 }: TaskChatBubbleProps) {
+  const readRef = useAgentChatRead(item.id, item.createdAtIso, item.author === "agent" && !item.optimistic);
   const streamlined = useStreamlinedTaskChatPresentation();
+  const coordinator = useCoordinatorPresentation();
+  const recordedTimestamp = item.createdAtIso ?? (typeof item.atMs === "number" && Number.isFinite(item.atMs) ? new Date(item.atMs) : null);
+  const timestamp = coordinator && recordedTimestamp && !item.optimistic
+    ? <CoordinatorRelativeTime value={recordedTimestamp} /> : item.timestamp;
   const { enabled: artifactsV1 } = useArtifactsV1Enabled();
   const openText = useContext(TextAttachmentContext);
   // Task attachments share the page gallery; standalone images retain the bubble viewer.
@@ -225,6 +233,7 @@ function TaskChatBubbleContent({
   return (
     <div
       data-conversation-message={isHuman ? "human" : "agent"}
+      ref={readRef}
       className={cn(
         "flex w-full flex-col gap-1",
         animateEntry && "tc-enter-bubble",
@@ -232,6 +241,9 @@ function TaskChatBubbleContent({
       )}
     >
       {beforeTurn ? <div className="w-full pb-1">{beforeTurn}</div> : null}
+      {item.chatMessage && <Link to={`/issues/${item.chatMessage.sourceTaskIdentifier}`} className="px-1 text-xs text-muted-foreground underline underline-offset-4">
+        From {item.chatMessage.sourceTaskIdentifier}
+      </Link>}
       {isHuman && !item.isCurrentUser && item.authorName ? (
         <span className="px-1 text-sm font-semibold text-foreground" data-testid="task-chat-human-identity" data-author-user-id={item.authorUserId}>
           <Identity name={item.authorName} avatarUrl={paperclipHumanAvatarUrl(item.authorAvatarUrl)} size="default" className="gap-2" />
@@ -392,6 +404,7 @@ function TaskChatBubbleContent({
           </ul>
         </div>
       ) : null}
+      {coordinator && recordedTimestamp && attachedTurn ? <span className="px-1 text-(length:--text-micro) text-muted-foreground"><CoordinatorRelativeTime value={recordedTimestamp!} /></span> : null}
       {item.optimistic ? (
         <span className="flex items-center gap-1 px-1 text-(length:--text-micro) text-muted-foreground">
           <span>{item.optimistic === "queued" ? t("common.queued") : t("taskChatBubble.sending")}</span>
@@ -412,9 +425,9 @@ function TaskChatBubbleContent({
       ) : actions ? (
         streamlined ? (
           <div className="flex w-full items-center justify-between gap-2 px-1">
-            {item.timestamp ? (
+            {timestamp ? (
               <span className="text-(length:--text-micro) text-muted-foreground">
-                {item.timestamp}
+                {timestamp}
               </span>
             ) : null}
             {actions}
@@ -422,19 +435,19 @@ function TaskChatBubbleContent({
         ) : (
           <div className="flex items-center gap-1">
             {actions}
-            {item.timestamp ? (
+            {timestamp ? (
               <span className="px-1 text-(length:--text-micro) text-muted-foreground">
-                {item.timestamp}
+                {timestamp}
               </span>
             ) : null}
           </div>
         )
-      ) : item.timestamp || sentFromIMessage ? (
+      ) : timestamp || sentFromIMessage ? (
         // Timestamps are always visible (round 9) — no longer hover-revealed.
         <span className="px-1 text-(length:--text-micro) text-muted-foreground">
-          {sentFromIMessage ? t("taskChatBubble.sentFromImessage") : null}
-          {sentFromIMessage && item.timestamp ? " · " : null}
-          {item.timestamp}
+          {sentFromIMessage ? "Sent from iMessage" : null}
+          {sentFromIMessage && timestamp ? " · " : null}
+          {timestamp}
         </span>
       ) : null}
       {artifactsV1 && imageRefs.length + attachmentRefs.length > 0 ? (

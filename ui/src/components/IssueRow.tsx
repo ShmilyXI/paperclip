@@ -222,10 +222,7 @@ export function IssueRow({
   // The row already carries the issue's own scheduled retry, so the chip can tell a retry the
   // scheduler is actually running from one whose due time simply passed.
   const recoveryIndicator = issue.interruption?.responsibility === "system" && issue.interruption.state !== "resolved"
-    ? <span className="text-xs text-muted-foreground" data-testid="issue-row-interruption">
-        {issue.interruption.state === "working" ? t("issueRow.thinking")
-          : issue.interruption.state === "retry_scheduled" ? t("issueRow.tryingAgainSoon") : t("issueRow.retryAvailable")}
-      </span>
+    ? null
     : recoveryAction && !requiresExecutionReconciliation(recoveryAction.cause)
     ? renderRecoveryChip(recoveryAction, selected, { scheduledRetry: issue.scheduledRetry ?? null })
     : null;

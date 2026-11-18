@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { describeError } from "../api/errors";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
@@ -93,7 +94,7 @@ export function ApprovalDetail() {
       refresh();
       navigate(`/approvals/${approvalId}?resolved=approved`, { replace: true });
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.approveFailed")),
+    onError: (err) => setError(describeError(err, { action: "approve this request" }).body),
   });
 
   const rejectMutation = useMutation({
@@ -102,7 +103,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.rejectFailed")),
+    onError: (err) => setError(describeError(err, { action: "reject this request" }).body),
   });
 
   const revisionMutation = useMutation({
@@ -111,7 +112,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.revisionRequestFailed")),
+    onError: (err) => setError(describeError(err, { action: "request a revision" }).body),
   });
 
   const resubmitMutation = useMutation({
@@ -120,7 +121,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvals.resubmitFailed")),
+    onError: (err) => setError(describeError(err, { action: "resubmit this request" }).body),
   });
 
   const addCommentMutation = useMutation({

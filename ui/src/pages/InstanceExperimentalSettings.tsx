@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "@/lib/router";
+import { CoordinatorWorkspaceSetting } from "@/components/CoordinatorWorkspaceSetting";
 
 type WorktreeRunExecutionDisplayState =
   | { kind: "off" }
@@ -96,7 +97,7 @@ function ExperimentalToggleCard({
   const isManaged = managed?.managed === true;
   if (hiddenSettings.has(experimentalSettingKey(settingKey))) return null;
   return (
-    <Card className="block bg-transparent p-5">
+    <Card id={`experimental-${settingKey}`} className="block scroll-mt-4 bg-transparent p-5">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
@@ -179,15 +180,23 @@ export function InstanceExperimentalSettings() {
   });
 
   if (experimentalQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("experimental.loadingExperimentalSettings")}</div>;
+    return (
+      <div className="max-w-6xl space-y-6">
+        <CoordinatorWorkspaceSetting key="personal-workspace" />
+        <div className="text-sm text-muted-foreground">Loading experimental settings...</div>
+      </div>
+    );
   }
 
   if (experimentalQuery.error) {
     return (
-      <div className="text-sm text-destructive">
-        {experimentalQuery.error instanceof Error
-          ? experimentalQuery.error.message
-          : t("experimental.failedToLoadExperimentalSettings")}
+      <div className="max-w-6xl space-y-6">
+        <CoordinatorWorkspaceSetting key="personal-workspace" />
+        <div className="text-sm text-destructive">
+          {experimentalQuery.error instanceof Error
+            ? experimentalQuery.error.message
+            : "Failed to load experimental settings."}
+        </div>
       </div>
     );
   }
@@ -262,6 +271,8 @@ export function InstanceExperimentalSettings() {
           {t("experimental.optIntoFeaturesThatAre")}
         </p>
       </div>
+
+      <CoordinatorWorkspaceSetting key="personal-workspace" />
 
       <div
         role="alert"

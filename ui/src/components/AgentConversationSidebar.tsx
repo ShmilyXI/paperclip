@@ -16,6 +16,7 @@ export interface AgentConversationSidebarProps {
   availableAgents?: Agent[];
   activeId?: string;
   previews?: Record<string, string>;
+  unreadAgentIds?: readonly string[];
   loading?: boolean;
   error?: Error | null;
   onRetry?: () => void;
@@ -29,7 +30,7 @@ export interface AgentConversationSidebarProps {
 }
 
 /** Searchable navigation for one conversation per agent. */
-export function AgentConversationSidebar({ agents, existingChatAgentIds, availableAgents = agents, activeId, previews = {}, loading = false, error, onRetry, initialSearch = "", onSelect, onBrowse, onAddChat, historyLoading, historyError, onRetryHistory }: AgentConversationSidebarProps) {
+export function AgentConversationSidebar({ agents, existingChatAgentIds, availableAgents = agents, activeId, previews = {}, unreadAgentIds = [], loading = false, error, onRetry, initialSearch = "", onSelect, onBrowse, onAddChat, historyLoading, historyError, onRetryHistory }: AgentConversationSidebarProps) {
   const navigate = useNavigate();
   const [pickerOpen, setPickerOpen] = useState(false);
   const [search, setSearch] = useState(initialSearch);
@@ -83,6 +84,7 @@ export function AgentConversationSidebar({ agents, existingChatAgentIds, availab
             <span className="truncate text-sm font-medium">{agent.name}</span>
             <span className="truncate text-xs text-muted-foreground">{agent.status === "terminated" ? t("common.terminated") : agent.status === "paused" ? t("common.paused") : previews[agent.id] ?? agent.title ?? t("agentConversationSidebar.startAConversation")}</span>
           </span>
+          {unreadAgentIds.includes(agent.id) && <span role="img" aria-label={`Unread messages from ${agent.name}`} className="size-2 shrink-0 rounded-full bg-primary" />}
         </Link>)}
       </nav> : !agents.length && (historyLoading || historyError) ? null : <div className="flex flex-col items-start gap-2 px-2 py-6">
         <p className="text-sm font-medium">{agents.length ? t("agentConversationSidebar.noAgentsFound") : t("agentConversationSidebar.noChatsYet")}</p>

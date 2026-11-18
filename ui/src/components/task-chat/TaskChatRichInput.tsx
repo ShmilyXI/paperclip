@@ -22,6 +22,7 @@ interface TaskChatRichInputProps {
   testId?: string;
   attachAriaLabel?: string;
   showImageAttachControls?: boolean;
+  questionAnswer?: boolean;
 }
 
 /** Composer-grade rich text field for takeover answers and revision notes. */
@@ -39,6 +40,7 @@ export function TaskChatRichInput({
   testId = "task-chat-rich-input",
   attachAriaLabel = t("taskChatRichInput.attachImage"),
   showImageAttachControls = false,
+  questionAnswer = false,
 }: TaskChatRichInputProps) {
   const editorRef = useRef<MarkdownEditorRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -94,6 +96,7 @@ export function TaskChatRichInput({
       role="group"
       aria-labelledby={ariaLabelledBy}
       data-testid={testId}
+      data-question-answer={questionAnswer || undefined}
     >
       <MarkdownEditor
         ref={editorRef}

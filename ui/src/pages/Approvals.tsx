@@ -1,4 +1,4 @@
-import { t } from "@/i18n";
+import { describeError } from "../api/errors";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -51,7 +51,7 @@ export function Approvals() {
       navigate(`/approvals/${id}?resolved=approved`);
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : t("approvals.failedToApprove"));
+      setActionError(describeError(err, { action: "approve this request" }).body);
     },
   });
 
@@ -62,7 +62,7 @@ export function Approvals() {
       queryClient.invalidateQueries({ queryKey: queryKeys.approvals.list(selectedCompanyId!) });
     },
     onError: (err) => {
-      setActionError(err instanceof Error ? err.message : t("approvals.failedToReject"));
+      setActionError(describeError(err, { action: "reject this request" }).body);
     },
   });
 

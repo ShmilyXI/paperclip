@@ -35,7 +35,7 @@ type Props = {
 
 /** Connections hosts the same provider step as agent setup, with its own save intent. */
 export function AiConnectionCredentialStep(props: Props) {
-  if (props.provider === "openrouter" || props.provider === "github" || props.provider === "google") return <ApiKeyConnectionStep {...props} />;
+  if (props.provider === "openrouter" || props.provider === "github") return <ApiKeyConnectionStep {...props} />;
   return <SubscriptionConnectionStep {...props} />;
 }
 
@@ -62,7 +62,7 @@ function SubscriptionConnectionStep({ companyId, provider, initialMethod, fixedM
     });
   } catch (error) { environmentError = error instanceof Error ? error.message : t("aiConnectionCredentialStep.couldNotResolveTheSign"); }
   const loginEnvironments = (envs.data ?? []).filter((env) =>
-    env.status === "active" && (env.driver === "local" || (env.driver === "sandbox" &&
+    env.status === "active" && (env.driver === "local" || (provider !== "google" && env.driver === "sandbox" &&
     typeof env.config.provider === "string" &&
     caps.data?.sandboxProviders?.[env.config.provider]?.supportsLoginPty === true)),
   );
@@ -89,7 +89,7 @@ function SubscriptionConnectionStep({ companyId, provider, initialMethod, fixedM
     {loading ? <p role="status" className="text-sm text-muted-foreground">{t("aiConnectionCredentialStep.preparingSignIn")}</p> : <AgentProviderConnection
       key={environmentId ?? "local"}
       companyId={companyId}
-      adapterType={provider === "anthropic" ? "claude_local" : provider === "xai" ? "grok_local" : "codex_local"}
+      adapterType={provider === "google" ? "antigravity_runtime" : provider === "anthropic" ? "claude_local" : provider === "xai" ? "grok_local" : "codex_local"}
       environmentId={environmentId}
       canLogin={canLogin}
       localEnvironment={environment?.driver === "local"}

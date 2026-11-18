@@ -286,7 +286,7 @@ export function AgentSecretAccessEditor({
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">{t("secretAccess.noSecretsAreBoundTo")}</p>
+        <p className="text-sm text-muted-foreground">No company secret references are bound to this agent yet.</p>
       )}
 
       {/* Pending binding proposals targeting this agent (PAP-14731). */}

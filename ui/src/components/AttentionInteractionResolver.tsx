@@ -1,5 +1,4 @@
-import { t } from "@/i18n";
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import type { Agent } from "@paperclipai/shared";
@@ -17,6 +16,7 @@ import {
   type RequestItemVerdictValue,
   type SuggestTasksInteraction,
 } from "../lib/issue-thread-interactions";
+import { DecisionCardFooter } from "./DecisionCardFooter";
 import { IssueThreadInteractionCard } from "./IssueThreadInteractionCard";
 
 interface AttentionInteractionResolverProps {
@@ -26,8 +26,10 @@ interface AttentionInteractionResolverProps {
   agentMap?: Map<string, Agent>;
   currentUserId?: string | null;
   userLabelMap?: ReadonlyMap<string, string> | null;
-  /** Called after a resolution so the parent can refresh the feed. */
-  onResolved?: () => void;
+  footerSlot?: ReactNode;
+  presentation?: "default" | "coordinator-decision";
+  /** Successful updates include partial item reviews; inspect status before settling the whole card. */
+  onResolved?: (interaction?: IssueThreadInteraction) => void;
 }
 
 export function replaceResolvedInteraction(
@@ -55,6 +57,8 @@ export function AttentionInteractionResolver({
   agentMap,
   currentUserId,
   userLabelMap,
+  presentation,
+  footerSlot,
   onResolved,
 }: AttentionInteractionResolverProps) {
   const queryClient = useQueryClient();
@@ -84,7 +88,9 @@ export function AttentionInteractionResolver({
     }
     queryClient.invalidateQueries({ queryKey: queryKeys.issues.interactions(issueId) });
     queryClient.invalidateQueries({ queryKey: queryKeys.attention(companyId) });
-    onResolved?.();
+    queryClient.invalidateQueries({ queryKey: ["issues", "pending-questions"] });
+    queryClient.invalidateQueries({ queryKey: ["issues", "decision-receipts"] });
+    onResolved?.(resolvedInteraction);
   };
 
   const acceptMutation = useMutation({
@@ -130,23 +136,32 @@ export function AttentionInteractionResolver({
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 py-3 text-xs text-muted-foreground">
-        <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("attentionInteractionResolver.loadingDecision")}
+      <div className="space-y-3 py-3">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading decision…
+        </div>
+        <DecisionCardFooter leading={footerSlot} />
       </div>
     );
   }
 
   if (error || !interaction) {
     return (
-      <p className="py-3 text-xs text-muted-foreground">
-        {t("attentionInteractionResolver.thisDecisionIsNoLonger")}
-      </p>
+      <div className="space-y-3 py-3">
+        <p className="text-xs text-muted-foreground">
+          This decision is no longer available — it may have been resolved elsewhere.
+        </p>
+        <DecisionCardFooter leading={footerSlot} />
+      </div>
     );
   }
 
   return (
     <IssueThreadInteractionCard
       interaction={interaction}
+      presentationVariant={presentation}
+      footerSlot={footerSlot}
+      primaryActionOnRight={presentation === "coordinator-decision"}
       agentMap={agentMap}
       currentUserId={currentUserId}
       userLabelMap={userLabelMap}

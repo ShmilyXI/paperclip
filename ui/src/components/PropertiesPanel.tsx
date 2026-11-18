@@ -1,4 +1,4 @@
-import { t } from "@/i18n";
+import { useCoordinatorWorkspaceEnabled } from "@/hooks/useCoordinatorWorkspaceEnabled";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { usePanel } from "../context/PanelContext";
@@ -22,12 +22,13 @@ export function PropertiesPanel({ taskDetailLayout = false }: { taskDetailLayout
   const { enabled: classicTaskInterfaceEnabled } = useClassicTaskInterfaceEnabled();
   const { enabled: streamlinedUiEnabled } = useStreamlinedUiEnabled();
   const designSandbox = useDesignSandbox();
-  const streamlinedTaskDetailLayout = streamlinedUiEnabled && taskDetailLayout;
+  const { enabled: coordinatorWorkspaceEnabled } = useCoordinatorWorkspaceEnabled();
+  const streamlinedTaskDetailLayout = (streamlinedUiEnabled || coordinatorWorkspaceEnabled) && taskDetailLayout;
   // Keep the zero-width host mounted while route data loads. Inserting an
   // already-open pane skips its width transition and snaps the thread sideways.
   const visible = panelVisible && panelContent != null;
 
-  if (classicTaskInterfaceEnabled) {
+  if (classicTaskInterfaceEnabled && !coordinatorWorkspaceEnabled) {
     return (
       <aside
         inert={!visible}

@@ -1,5 +1,4 @@
-import { t } from "@/i18n";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   Check,
   ChevronLeft,
@@ -12,6 +11,7 @@ import type {
   PaperclipQuestionSet,
 } from "@paperclipai/adapter-utils";
 import type { MentionOption } from "@/components/MarkdownEditor";
+import { DecisionCardFooter } from "@/components/DecisionCardFooter";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,8 +41,11 @@ type Answer = PaperclipQuestionResponse["answers"][string];
  */
 type FormError = { message: string; fromMissingAnswer?: boolean };
 
+
 export interface QuestionFormProps {
+  footerSlot?: ReactNode;
   id: string;
+  presentation?: "default" | "decision";
   questionSet: PaperclipQuestionSet;
   initialResponse?: PaperclipQuestionResponse | null;
   implicitCustomAnswer?: boolean;
@@ -238,7 +241,9 @@ export function QuestionForm(props: QuestionFormProps) {
 }
 
 function QuestionFormForRequest({
+  footerSlot,
   id,
+  presentation = "default",
   questionSet,
   initialResponse,
   implicitCustomAnswer = false,
@@ -290,6 +295,7 @@ function QuestionFormForRequest({
   const [working, setWorking] = useState<"submit" | "cancel" | null>(null);
   const [inputUploading, setInputUploading] = useState(false);
   const [error, setError] = useState<FormError | null>(null);
+  const [attemptedQuestions, setAttemptedQuestions] = useState<Record<string, boolean>>({});
   const promptRef = useRef<HTMLParagraphElement>(null);
   const previousPage = useRef(page);
 
@@ -323,9 +329,6 @@ function QuestionFormForRequest({
       ),
     [answers, questionSet.questions],
   );
-  const allValid = Object.values(validationErrors).every(
-    (value) => value == null,
-  );
   if (!question)
     return (
       <p className="text-sm text-muted-foreground">
@@ -349,6 +352,9 @@ function QuestionFormForRequest({
 
   function updateAnswer(next: Answer) {
     setAnswers((current) => ({ ...current, [question.id]: next }));
+    if (answerError(question, next) == null) {
+      setError((current) => current?.fromMissingAnswer ? null : current);
+    }
   }
 
   function toggleOption(optionId: string) {
@@ -396,6 +402,7 @@ function QuestionFormForRequest({
         answerError(candidate, responseAnswers[candidate.id]) != null,
     );
     if (invalidIndex >= 0) {
+      setAttemptedQuestions((current) => ({ ...current, [questionSet.questions[invalidIndex]!.id]: true }));
       // A required answer is missing: the pagination arrows browse without
       // validating, and a restored draft can land past it. Go back to that
       // question and say so rather than dropping the send.
@@ -498,6 +505,11 @@ function QuestionFormForRequest({
     ) : null;
 
   function progressOrSubmit() {
+    if (busy) return;
+    if (currentError) {
+      setAttemptedQuestions((current) => ({ ...current, [question.id]: true }));
+      return;
+    }
     if (!isLastPage) {
       setPage((current) =>
         Math.min(current + 1, questionSet.questions.length - 1),
@@ -540,7 +552,7 @@ function QuestionFormForRequest({
           <MarkdownBody mediaMode="reference" linkIssueReferences={false}>{questionSet.description}</MarkdownBody>
         </div>
       ) : null}
-      {question.answerMode === "text" ? (
+      {question.answerMode === "text" && presentation !== "decision" ? (
         <div className="mb-2 flex items-center gap-3 text-xs text-muted-foreground">
           {question.answerMode === "text" ? <span>{t("questionForm.writeAnAnswer")}</span> : null}
         </div>
@@ -557,7 +569,7 @@ function QuestionFormForRequest({
         )
       ) : null}
       <div>
-        {question.header ? (
+        {question.header && presentation !== "decision" ? (
           <p className="mb-1 text-xs font-medium text-muted-foreground">
             {question.header}
           </p>
@@ -566,7 +578,8 @@ function QuestionFormForRequest({
           ref={promptRef}
           tabIndex={-1}
           id={`${id}-${question.id}-prompt`}
-          className="text-sm font-medium leading-5 text-foreground"
+          data-decision-prompt={presentation === "decision" ? true : undefined}
+          className={presentation === "decision" ? "text-lg font-medium leading-relaxed text-foreground" : "text-sm font-medium leading-5 text-foreground"}
         >
           {question.prompt}
         </p>
@@ -579,6 +592,7 @@ function QuestionFormForRequest({
       {question.answerMode === "text" ? (
         <div className="mt-3">
           <TaskChatRichInput
+            questionAnswer
             ariaLabelledBy={`${id}-${question.id}-prompt`}
             testId="question-text-answer-composer"
             value={answer.text ?? ""}
@@ -590,7 +604,7 @@ function QuestionFormForRequest({
             autoFocus
             onUploadingChange={setInputUploading}
             onSubmit={() => {
-              if (!inputUploading && currentError == null) progressOrSubmit();
+              progressOrSubmit();
             }}
             attachAriaLabel={t("questionForm.attachImageToAnswerFor", { prompt: question.prompt })}
           />
@@ -646,6 +660,7 @@ function QuestionFormForRequest({
               />
               {isCustomActive ? (
                 <TaskChatRichInput
+                  questionAnswer
                   ariaLabelledBy={`${id}-${question.id}-prompt`}
                   testId="question-other-answer-composer"
                   value={answer.customText ?? ""}
@@ -661,8 +676,7 @@ function QuestionFormForRequest({
                   mentions={mentions}
                   onUploadingChange={setInputUploading}
                   onSubmit={() => {
-                    if (!inputUploading && currentError == null)
-                      progressOrSubmit();
+                    progressOrSubmit();
                   }}
                   attachAriaLabel={t("questionForm.attachImageToOtherAnswerFor", { prompt: question.prompt })}
                 />
@@ -671,8 +685,8 @@ function QuestionFormForRequest({
           ) : null}
         </div>
       )}
-      {currentError && answerHasValue(answer) ? (
-        <p className="mt-2 text-xs text-destructive">{currentError}</p>
+      {currentError && attemptedQuestions[question.id] ? (
+        <p role="alert" className="mt-2 text-xs text-destructive">{currentError}</p>
       ) : null}
       <div aria-live="assertive">
         {error ? (
@@ -681,44 +695,46 @@ function QuestionFormForRequest({
           </div>
         ) : null}
       </div>
-      <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
-        {cancelAction ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            disabled={busy}
-            onClick={cancelAction}
-          >
-            {working === "cancel" ? (
-              <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
-            ) : null}{" "}
-            {t("common.cancel")}
-          </Button>
-        ) : null}
-        {!question.required ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={busy}
-            onClick={skipQuestion}
-          >
-            {t("common.skip")}
-          </Button>
-        ) : null}
-        <Button
-          type="button"
-          size="sm"
-          disabled={busy || (isLastPage ? !allValid : currentError != null)}
-          onClick={progressOrSubmit}
-        >
-          {working === "submit" ? (
-            <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+      <DecisionCardFooter leading={footerSlot} className="mt-3">
+        <div className={cn(!footerSlot && "mt-3", "flex flex-wrap items-center justify-end gap-2")}>
+          {cancelAction ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              disabled={busy}
+              onClick={cancelAction}
+            >
+              {working === "cancel" ? (
+                <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+              ) : null}{" "}
+              Cancel
+            </Button>
           ) : null}
-          {isLastPage ? (questionSet.submitLabel ?? t("questionForm.submitAnswers")) : t("common.next")}
-        </Button>
-      </div>
+          {!question.required ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={busy}
+              onClick={skipQuestion}
+            >
+              Skip
+            </Button>
+          ) : null}
+          <Button
+            type="button"
+            size="sm"
+            disabled={busy}
+            onClick={progressOrSubmit}
+          >
+            {working === "submit" ? (
+              <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+            ) : null}
+            {isLastPage ? (questionSet.submitLabel ?? "Submit answers") : "Next"}
+          </Button>
+        </div>
+      </DecisionCardFooter>
     </div>
   );
 }
