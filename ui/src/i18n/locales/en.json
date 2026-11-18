@@ -1408,7 +1408,17 @@
     "summaryProblem": "problem",
     "summaryProblems": "problems",
     "summaryUpdate": "update",
-    "summaryUpdates": "updates"
+    "summaryUpdates": "updates",
+    "aTeammate": "A teammate",
+    "fromName": "from {{name}}",
+    "whyMe": "Why me? {{text}}",
+    "someone": "someone",
+    "claim": "Claim",
+    "openToAssign": "Open to assign",
+    "openTask": "Open task",
+    "viewARequestUpdate": "View a request update",
+    "yourRequest": "Your request",
+    "viewRequest": "View request"
   },
   "newIssue": {
     "openIssueref": "Open {{issueRef}}",

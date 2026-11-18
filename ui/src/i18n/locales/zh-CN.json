@@ -1408,7 +1408,17 @@
     "summaryProblem": "个问题",
     "summaryProblems": "个问题",
     "summaryUpdate": "条更新",
-    "summaryUpdates": "条更新"
+    "summaryUpdates": "条更新",
+    "aTeammate": "一位队友",
+    "fromName": "来自 {{name}}",
+    "whyMe": "为什么是我？{{text}}",
+    "someone": "某人",
+    "claim": "认领",
+    "openToAssign": "打开以分配",
+    "openTask": "打开任务",
+    "viewARequestUpdate": "查看请求更新",
+    "yourRequest": "你的请求",
+    "viewRequest": "查看请求"
   },
   "newIssue": {
     "openIssueref": "打开 {{issueRef}}",
