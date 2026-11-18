@@ -6372,7 +6372,25 @@
     "thatDoesnTLookLike": "这看起来不是 Google 表格链接。",
     "pasteAtLeastOneGoogle": "请至少粘贴一个 Google 表格链接。",
     "serviceMyConnectorOrScl": "service/my-connector 或 scl_…",
-    "customApp": "自定义应用"
+    "customApp": "自定义应用",
+    "paperclipAsksTheServerWhatWalksYouThrough": "Paperclip 会询问服务器需要什么，并引导你完成。",
+    "youllSignInAtTheProvider": "你将在提供方处登录。",
+    "forServersThatNameTheirOwnHeaders": "适用于使用自定义请求头名称的服务器。",
+    "noSignInTheServerIsOpen": "无需登录。任何拥有该地址的人都可以访问此服务器。",
+    "signsInWithAKeyOrToken": "使用密钥或令牌登录。",
+    "signsInWithCustomHeaders": "使用自定义请求头登录。",
+    "signsInWithCountCustomHeader": "使用 {{count}} 个自定义请求头登录。",
+    "signsInWithCountCustomHeaders": "使用 {{count}} 个自定义请求头登录。",
+    "youllSignInAtTheProviderUsingYourOwnClientId": "你将使用自己的客户端 ID 在提供方处登录。",
+    "paperclipAsksTheServerHowToSignIn": "Paperclip 会询问服务器如何登录。",
+    "pasteTheKeyOrToken": "粘贴密钥或令牌",
+    "grantThisKeyAccessToWhat": "授予此密钥对你的员工所需资源的访问权限。Paperclip 无法提升其权限。",
+    "removeHeader": "移除请求头",
+    "valuesAreStoredAsSecretsAndCantBeReadBack": "值会以密钥形式存储，无法读回。",
+    "useYourOwnClientId": "使用你自己的客户端 ID",
+    "paperclipSetsSignInUpOnItsOwnFillTheseIn": "只要服务器允许，Paperclip 会自行完成登录设置。仅当服务器的文档要求你先自行注册 Paperclip 时，才需要填写这些内容。",
+    "howDoesThisServerSignIn": "这台服务器如何登录？",
+    "howThisServerSignsIn": "这台服务器的登录方式"
   },
   "skillStudio": {
     "studio": "工作室",
@@ -8683,7 +8701,9 @@
     "clientIdConfirmHint": "提供方为 Paperclip 客户端显示的 ID。",
     "savedEnterANewOne": "已保存。仅在需要替换时才输入新的。",
     "creatingKey": "创建密钥中…",
-    "createKey": "创建密钥"
+    "createKey": "创建密钥",
+    "machineSignIn": "机器登录",
+    "yourOrganizationsAutomationSignsIn": "你组织的自动化以自己注册的客户端身份登录，无需个人登录。"
   },
   "mcpConnect": {
     "connectYourAssistantToPaperclip": "将你的助手连接到 Paperclip",

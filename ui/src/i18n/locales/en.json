@@ -6372,7 +6372,25 @@
     "thatDoesnTLookLike": "That doesn't look like a Google Sheets link.",
     "pasteAtLeastOneGoogle": "Paste at least one Google Sheets link.",
     "serviceMyConnectorOrScl": "service/my-connector or scl_…",
-    "customApp": "Custom app"
+    "customApp": "Custom app",
+    "paperclipAsksTheServerWhatWalksYouThrough": "Paperclip asks the server what it needs and walks you through it.",
+    "youllSignInAtTheProvider": "You’ll sign in at the provider.",
+    "forServersThatNameTheirOwnHeaders": "For servers that name their own headers.",
+    "noSignInTheServerIsOpen": "No sign-in. The server is open to anyone with the address.",
+    "signsInWithAKeyOrToken": "Signs in with a key or token.",
+    "signsInWithCustomHeaders": "Signs in with custom headers.",
+    "signsInWithCountCustomHeader": "Signs in with {{count}} custom header.",
+    "signsInWithCountCustomHeaders": "Signs in with {{count}} custom headers.",
+    "youllSignInAtTheProviderUsingYourOwnClientId": "You’ll sign in at the provider, using your own client ID.",
+    "paperclipAsksTheServerHowToSignIn": "Paperclip asks the server how to sign in.",
+    "pasteTheKeyOrToken": "Paste the key or token",
+    "grantThisKeyAccessToWhat": "Grant this key access to what your agents need. Paperclip can’t increase its permissions.",
+    "removeHeader": "Remove header",
+    "valuesAreStoredAsSecretsAndCantBeReadBack": "Values are stored as secrets and can’t be read back.",
+    "useYourOwnClientId": "Use your own client ID",
+    "paperclipSetsSignInUpOnItsOwnFillTheseIn": "Paperclip sets sign-in up on its own whenever the server allows it. Fill these in only when the server’s docs tell you to register Paperclip yourself first.",
+    "howDoesThisServerSignIn": "How does this server sign in?",
+    "howThisServerSignsIn": "How this server signs in"
   },
   "skillStudio": {
     "studio": "Studio",
@@ -8683,7 +8701,9 @@
     "clientIdConfirmHint": "The ID the provider shows for the Paperclip client.",
     "savedEnterANewOne": "Saved. Enter a new one only to replace it.",
     "creatingKey": "Creating key…",
-    "createKey": "Create key"
+    "createKey": "Create key",
+    "machineSignIn": "Machine sign-in",
+    "yourOrganizationsAutomationSignsIn": "Your organization’s automation signs in as its own registered client. No person signs in."
   },
   "mcpConnect": {
     "connectYourAssistantToPaperclip": "Connect your assistant to Paperclip",
