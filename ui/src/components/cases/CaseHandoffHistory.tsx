@@ -31,11 +31,11 @@ export function CaseHandoffHistory({ caseId, task, agents }: { caseId: string; t
   const historyView = useQueryView(history);
   const waiting = ["loading", "reconnecting"].includes(historyView.kind);
   const handoffs = history.data?.pages.flatMap(page => page.items) ?? [];
-  return <section className="space-y-3" aria-label="Case handoffs">
-    <h2 className="text-sm font-semibold">Handoffs</h2>
-    {waiting ? <p className="text-sm text-muted-foreground">Loading handoffs…</p> : null}
-    {(historyView.kind === "error") ? <p role="alert" className="text-sm text-destructive">Handoffs couldn’t be loaded.</p> : null}
-    {!waiting && !(historyView.kind === "error") && handoffs.length === 0 ? <p className="text-sm text-muted-foreground">No handoffs yet.</p> : null}
+  return <section className="space-y-3" aria-label={t("caseHandoffHistory.caseHandoffs")}>
+    <h2 className="text-sm font-semibold">{t("caseHandoffHistory.handoffs")}</h2>
+    {waiting ? <p className="text-sm text-muted-foreground">{t("caseHandoffHistory.loadingHandoffs")}</p> : null}
+    {(historyView.kind === "error") ? <p role="alert" className="text-sm text-destructive">{t("caseHandoffHistory.handoffsCouldnTBeLoaded")}</p> : null}
+    {!waiting && !(historyView.kind === "error") && handoffs.length === 0 ? <p className="text-sm text-muted-foreground">{t("caseHandoffHistory.noHandoffsYet")}</p> : null}
     <ol className="divide-y divide-border">{handoffs.map(handoff => <HandoffRow key={handoff.id} handoff={handoff} task={task} agents={agents} />)}</ol>
     {history.hasNextPage ? <Button variant="ghost" size="sm" disabled={history.isFetchingNextPage} onClick={() => void history.fetchNextPage()}>{t("caseHandoffHistory.loadOlderHandoffs")}</Button> : null}
   </section>;
