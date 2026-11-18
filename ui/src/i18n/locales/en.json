@@ -11461,7 +11461,18 @@
     "nameIsReady": "{{name}} is ready.",
     "waitingFor": "Waiting for {{name}}",
     "useYourConnectionFor": "Use your {{provider}} connection for {{agent}}? This replaces the agent’s existing authentication with each responsible person’s own account. The model stays the same.",
-    "youCanContinueHereOnceRestored": "You can continue here once it is restored."
+    "youCanContinueHereOnceRestored": "You can continue here once it is restored.",
+    "toolCountForName_one": "{{count}} tool for {{name}}",
+    "toolCountForName_other": "{{count}} tools for {{name}}",
+    "accessAppliesToNameOnly": "Access applies to {{name}} only",
+    "stillAsksYouFirst_one": " · {{count}} still asks you first",
+    "stillAsksYouFirst_other": " · {{count}} still ask you first",
+    "requestedByName": "Requested by {{name}}.",
+    "authorizing": "Authorizing…",
+    "completeTheHumanSignInStep": "Complete the human sign-in step in the saved setup. Your task continues when the connection is ready.",
+    "newConnectionsDefaultToAll": "New connections default to all agents; you can choose fewer during setup. Reusing an account adds access for this agent.",
+    "continueAuthentication": "Continue authentication",
+    "connectServiceName": "Connect {{serviceName}}"
   },
   "secretBindingPicker": {
     "failedToCreateSecret": "Failed to create secret",

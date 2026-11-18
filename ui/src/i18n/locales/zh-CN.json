@@ -11461,7 +11461,18 @@
     "nameIsReady": "{{name}} 已就绪。",
     "waitingFor": "正在等待 {{name}}",
     "useYourConnectionFor": "要用你的 {{provider}} 连接来处理 {{agent}} 吗？这会用每位负责人自己的账号替换该员工现有的认证方式。模型保持不变。",
-    "youCanContinueHereOnceRestored": "恢复后可以在此继续。"
+    "youCanContinueHereOnceRestored": "恢复后可以在此继续。",
+    "toolCountForName_one": "{{name}} 的 {{count}} 个工具",
+    "toolCountForName_other": "{{name}} 的 {{count}} 个工具",
+    "accessAppliesToNameOnly": "访问仅适用于 {{name}}",
+    "stillAsksYouFirst_one": " · {{count}} 个仍需先审批",
+    "stillAsksYouFirst_other": " · {{count}} 个仍需先审批",
+    "requestedByName": "由 {{name}} 提出。",
+    "authorizing": "授权中…",
+    "completeTheHumanSignInStep": "请在已保存的配置中完成人工登录步骤。连接就绪后任务将继续。",
+    "newConnectionsDefaultToAll": "新连接默认对全体员工可用；你可以在配置过程中选择更少。复用账户会为该员工增加访问权限。",
+    "continueAuthentication": "继续认证",
+    "connectServiceName": "连接 {{serviceName}}"
   },
   "secretBindingPicker": {
     "failedToCreateSecret": "创建密钥失败",
