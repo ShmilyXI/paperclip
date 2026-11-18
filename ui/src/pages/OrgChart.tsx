@@ -1,3 +1,4 @@
+import { localizedRoleLabels } from "@/lib/role-labels";
 import { t } from "@/i18n";
 import { AdapterMark } from "@/components/AdapterMark";
 import { models as claudeModels } from "@paperclipai/adapter-claude-local";
