@@ -21,7 +21,7 @@ RUN set -eu; \
       arm64) digest=e900b0e6e25023a1e504b2c237ce2a32ea0535e006f8c1a1097a490886493b6c ;; \
       *) echo "Unsupported Tailscale architecture: $TARGETARCH" >&2; exit 1 ;; \
     esac; \
-    curl --fail --silent --show-error --location --retry 2 --connect-timeout 15 --max-time 120 --proto '=https' --proto-redir '=https' \
+    curl --fail --silent --show-error --location --retry 5 --retry-delay 3 --connect-timeout 15 --max-time 900 --proto '=https' --proto-redir '=https' \
       "https://pkgs.tailscale.com/stable/tailscale_1.104.5_${TARGETARCH}.tgz" -o tailscale.tgz; \
     printf '%s  tailscale.tgz\n' "$digest" > tailscale.sha256; \
     sha256sum -c tailscale.sha256; \
