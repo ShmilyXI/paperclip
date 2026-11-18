@@ -17774,7 +17774,10 @@
     "placeholderArea": "e.g. Fundraising",
     "nameTheNewArea": "Name the new area",
     "couldntAddTheResponsibility": "Couldn’t add the responsibility.",
-    "addResponsibility": "Add responsibility"
+    "addResponsibility": "Add responsibility",
+    "whatMustBeTrue": "What must be true?",
+    "placeholderWhatMustBeTrue": "e.g. Every customer question gets an answer within a day.",
+    "adding": "Adding…"
   },
   "coordinatorConversationTasksPanel": {
     "tasksFromThisConversation": "Tasks from this conversation",

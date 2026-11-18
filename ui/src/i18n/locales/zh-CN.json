@@ -17774,7 +17774,10 @@
     "placeholderArea": "例如：融资",
     "nameTheNewArea": "为新区域命名",
     "couldntAddTheResponsibility": "无法添加该职责。",
-    "addResponsibility": "添加职责"
+    "addResponsibility": "添加职责",
+    "whatMustBeTrue": "必须满足什么？",
+    "placeholderWhatMustBeTrue": "例如：每个客户问题都在一天内得到答复。",
+    "adding": "正在添加…"
   },
   "coordinatorConversationTasksPanel": {
     "tasksFromThisConversation": "该对话产生的任务",
