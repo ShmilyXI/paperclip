@@ -1168,6 +1168,8 @@
     "resetting": "重置中…",
     "resetToDefaults": "重置为默认值",
     "savingChanges": "保存更改中…",
+    "savedChanges": "更改已保存",
+    "unsavedAgentChanges": "员工未保存的更改",
     "youHaveUnsavedChanges": "有未保存的更改。",
     "latestRun": "最近一次运行",
     "liveRun": "实时运行",

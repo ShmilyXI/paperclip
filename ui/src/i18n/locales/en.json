@@ -1168,6 +1168,8 @@
     "resetting": "Resetting…",
     "resetToDefaults": "Reset to defaults",
     "savingChanges": "Saving changes…",
+    "savedChanges": "Saved changes",
+    "unsavedAgentChanges": "Unsaved agent changes",
     "youHaveUnsavedChanges": "You have unsaved changes.",
     "latestRun": "Latest Run",
     "liveRun": "Live Run",

@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { t } from "@/i18n";
 import { Button } from "@/components/ui/button";
 
 /** Tracks the content viewport so sidebar resizing never covers navigation. */
@@ -55,23 +56,23 @@ export function AgentConfigSaveBar({ dirty, saving, savedVersion = 0, onDiscard,
     return () => { observer?.disconnect(); window.removeEventListener("resize", measure); };
   }, []);
   return <div ref={anchor}>
-    <footer aria-label="Unsaved agent changes" aria-hidden={!visible} inert={!visible}
+    <footer aria-label={t("agentDetail.unsavedAgentChanges")} aria-hidden={!visible} inert={!visible}
       data-visible={visible} style={bounds ?? undefined}
       className="agent-config-save-bar flex flex-wrap items-center justify-between gap-3">
       <p role="status" className="agent-save-status text-xs text-muted-foreground">
         <span aria-hidden={showSuccess} className={showSuccess ? "agent-save-status-out flex items-center gap-2" : "flex items-center gap-2"}>
           <span aria-hidden className="size-2 shrink-0 rounded-full bg-(--agent-save-dot-unsaved)" />
-          {saving ? "Saving changes…" : "Unsaved changes"}
+          {saving ? t("agentDetail.savingChanges") : t("common.unsavedChanges")}
         </span>
         {showSuccess && <span key={savedVersion} className="agent-save-status-in flex items-center gap-2"
           onAnimationEnd={(event) => { if (event.target === event.currentTarget) setSuccess("holding"); }}>
           <span aria-hidden className="size-2 shrink-0 rounded-full bg-(--agent-detail-dot-saved)" />
-          Saved changes
+          {t("agentDetail.savedChanges")}
         </span>}
       </p>
       <div className="flex gap-2">
-        <Button variant="ghost" disabled={!dirty || saving} onClick={onDiscard}>Discard</Button>
-        <Button disabled={!dirty || saving} onClick={onSave}>{saving ? "Saving…" : "Save changes"}</Button>
+        <Button variant="ghost" disabled={!dirty || saving} onClick={onDiscard}>{t("common.discard")}</Button>
+        <Button disabled={!dirty || saving} onClick={onSave}>{saving ? t("common.saving2") : t("common.saveChanges")}</Button>
       </div>
     </footer>
   </div>;
