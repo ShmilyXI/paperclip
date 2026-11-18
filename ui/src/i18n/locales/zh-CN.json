@@ -95,6 +95,7 @@
     "browseAgents": "浏览员工",
     "agentSort": "员工排序",
     "seeAllAgents": "查看全部员工",
+    "updating": "更新中…",
     "openActionsForName": "打开 {{name}} 的操作",
     "agents": "员工",
     "privateProject": "私有项目",

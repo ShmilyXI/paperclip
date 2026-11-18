@@ -148,7 +148,7 @@ function SidebarAgentItem({
   const pauseResumeLabel = isPaused ? t("sidebar.resumeAgent") : t("sidebar.pauseAgent");
   const pauseResumeDisabled = disabled || agent.status === "pending_approval" || isBudgetPaused || (isPaused && hasInvalidOrgChain);
   const pauseResumeDisabledLabel = disabled
-    ? "Updating..."
+    ? t("sidebar.updating")
     : isBudgetPaused
       ? t("sidebar.budgetPaused")
       : isPaused && hasInvalidOrgChain
@@ -657,7 +657,7 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
             className="flex items-center gap-2.5 mx-2 rounded-lg px-2 py-1.5 pointer-coarse:py-1 text-(length:--text-compact) font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
             <Users className="shrink-0 h-4 w-4" />
-            <span>See all agents</span>
+            <span>{t("sidebar.seeAllAgents")}</span>
           </Link>
         );
       })()}

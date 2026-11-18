@@ -95,6 +95,7 @@
     "browseAgents": "Browse agents",
     "agentSort": "Agent sort",
     "seeAllAgents": "See all agents",
+    "updating": "Updating...",
     "openActionsForName": "Open actions for {{name}}",
     "agents": "Agents",
     "privateProject": "Private project",
