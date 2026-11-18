@@ -8846,7 +8846,9 @@
     "clientSecret": "Client Secret",
     "saveOauthConfiguration": "保存 OAuth 配置",
     "loadingSearchAccess": "正在加载搜索权限…",
-    "yourExistingConnectionStillWorks": "你现有的连接仍然可用。在"
+    "yourExistingConnectionStillWorks": "你现有的连接仍然可用。在",
+    "commaSeparator": "、",
+    "andSeparator": " 和 "
   },
   "machineSignIn": {
     "paperclipKeyRecommended": "Paperclip 密钥（推荐）",

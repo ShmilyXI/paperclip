@@ -8846,7 +8846,9 @@
     "clientSecret": "Client Secret",
     "saveOauthConfiguration": "Save OAuth configuration",
     "loadingSearchAccess": "Loading search access…",
-    "yourExistingConnectionStillWorks": "Your existing connection still works. In"
+    "yourExistingConnectionStillWorks": "Your existing connection still works. In",
+    "commaSeparator": ", ",
+    "andSeparator": " and "
   },
   "machineSignIn": {
     "paperclipKeyRecommended": "Paperclip key (recommended)",

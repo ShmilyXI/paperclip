@@ -149,8 +149,8 @@ export function SlackSearchView({
             }}
           >
             <p className="text-sm">
-              {t("slackToolSettings.inSlackAppSettingsAdd")} <code>search:read.public</code>,{" "}
-              <code>search:read.private</code> and{" "}
+              {t("slackToolSettings.inSlackAppSettingsAdd")} <code>search:read.public</code>{t("slackToolSettings.commaSeparator")}
+              <code>search:read.private</code>{t("slackToolSettings.andSeparator")}
               <code>search:read.files</code>{t("slackToolSettings.findClientIdAndClient")}
             </p>
             <p className="text-xs font-mono break-all">
