@@ -3523,7 +3523,16 @@
     "recurringMonthlySpendPoliciesForIndividualAgents": "面向单个员工的每月循环支出策略。",
     "lifetimeSpendPoliciesForExecutionBoundProjects": "面向绑定执行工作区的项目的终身支出策略。",
     "providerApiCostReports": "供应商 API 费用报表：",
-    "reportTotalsOverlapInvoices": "。报表总额与发票、运行预估存在重叠，因此与已记录费用分开显示。"
+    "reportTotalsOverlapInvoices": "。报表总额与发票、运行预估存在重叠，因此与已记录费用分开显示。",
+    "costPeriod": "成本区间",
+    "agentCostsCouldNotBeLoaded": "无法加载 {{name}} 的成本，请稍后重试。",
+    "noCostEventsForInThisPeriod": "此期间没有 {{name}} 的成本事件。",
+    "ledgerEvents": "{{count}} 条账本事件",
+    "inCachedOut": "输入 {{input}}（{{cached}} 缓存）· 输出 {{output}}",
+    "apiSubscription": "{{api}} API · {{subscription}} 订阅",
+    "byModel": "按模型",
+    "noModelBreakdownForThisPeriod": "此期间没有按模型细分。",
+    "tok": "tok"
   },
   "goals": {
     "selectAnOrganizationToView": "选择一个组织以查看目标。",

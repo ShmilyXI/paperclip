@@ -3523,7 +3523,16 @@
     "recurringMonthlySpendPoliciesForIndividualAgents": "Recurring monthly spend policies for individual agents.",
     "lifetimeSpendPoliciesForExecutionBoundProjects": "Lifetime spend policies for execution-bound projects.",
     "providerApiCostReports": "Provider API cost reports:",
-    "reportTotalsOverlapInvoices": ". Report totals overlap invoices and run estimates and are shown separately from recorded charges."
+    "reportTotalsOverlapInvoices": ". Report totals overlap invoices and run estimates and are shown separately from recorded charges.",
+    "costPeriod": "Cost period",
+    "agentCostsCouldNotBeLoaded": "{{name}}'s costs could not be loaded. Please try again shortly.",
+    "noCostEventsForInThisPeriod": "No cost events for {{name}} in this period.",
+    "ledgerEvents": "{{count}} ledger events",
+    "inCachedOut": "in {{input}} ({{cached}} cached) · out {{output}}",
+    "apiSubscription": "{{api}} api · {{subscription}} subscription",
+    "byModel": "By model",
+    "noModelBreakdownForThisPeriod": "No model breakdown for this period.",
+    "tok": "tok"
   },
   "goals": {
     "selectAnOrganizationToView": "Select an organization to view goals.",
