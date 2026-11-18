@@ -13981,7 +13981,8 @@
     "searchAssignees": "Search assignees…",
     "theAgent": "the agent",
     "pendingCount_one": "{{count}} pending",
-    "pendingCount_other": "{{count}} pending"
+    "pendingCount_other": "{{count}} pending",
+    "workWithAgentName": "Work with {{agentName}}"
   },
   "issueContinuationHandoff": {
     "collapseContinuationHandoff": "Collapse continuation handoff",

@@ -321,9 +321,9 @@ function AssigneeIdentityAvatar({
 /** v7 per-mode placeholder copy; `{agent}` is the pending assignee's name. */
 function modePlaceholder(mode: IssueWorkMode, agentName: string, mobile: boolean): string {
   if (mobile) {
-    if (mode === "planning") return `Plan with ${agentName}…`;
-    if (mode === "ask") return `Ask ${agentName}…`;
-    return `Work with ${agentName}`;
+    if (mode === "planning") return t("taskChatComposer.planWithAgentname", { agentName });
+    if (mode === "ask") return t("taskChatComposer.askAgentname", { agentName });
+    return t("taskChatComposer.workWithAgentName", { agentName });
   }
   switch (mode) {
     case "planning":
@@ -331,7 +331,7 @@ function modePlaceholder(mode: IssueWorkMode, agentName: string, mobile: boolean
     case "ask":
       return t("taskChatComposer.askAgentnameAQuestionRead", { agentName });
     default:
-      return `Work with ${agentName}`;
+      return t("taskChatComposer.workWithAgentName", { agentName });
   }
 }
 
@@ -676,9 +676,9 @@ export function TaskChatComposer({
   const assigneeValue = creation || conversationMode ? currentAssigneeValue : pendingAssignee ?? suggestedAssigneeValue ?? currentAssigneeValue;
   const showConversationModel = coordinator && conversationMode && supportsComposerModel(modelAgents?.get(assigneeValue.slice(6)));
   const assigneeLabel =
-    reassignOptions?.find((o) => o.id === assigneeValue)?.label ?? "Unassigned";
+    reassignOptions?.find((o) => o.id === assigneeValue)?.label ?? t("common.unassigned");
   const assigneeName =
-    assigneeLabel === "Unassigned" ? "the agent" : assigneeLabel;
+    assigneeLabel === t("common.unassigned") ? t("taskChatComposer.theAgent") : assigneeLabel;
   const effectivePlaceholder = queuedEdit
     ? t("taskChatComposer.editQueuedMessage")
     : (placeholder ?? modePlaceholder(pendingMode, assigneeName, mobile));
@@ -1511,7 +1511,7 @@ export function TaskChatComposer({
                     <AttachmentActions>
                       {attachment.status === "error" && attachment.file ? (
                         <AttachmentAction
-                          aria-label={`Retry ${attachment.name}`}
+                          aria-label={t("issueChatThread.retryName", { name: attachment.name })}
                           disabled={!!uncertainSubmission}
                           onClick={() => retryUpload(attachment)}
                         >
@@ -1683,8 +1683,8 @@ export function TaskChatComposer({
                     : uploadPending
                       ? t("taskChatComposer.waitingForUploadToFinish")
                       : uploadFailed
-                        ? "Remove the failed attachment to send"
-                        : `${creation?.submitLabel ?? "Send"} (${submitKey === "mod-enter" ? "⌘/Ctrl+Enter" : "Enter"})`
+                        ? t("taskChatComposer.removeTheFailedAttachmentTo")
+                        : `${creation?.submitLabel ?? t("common.send")} (${submitKey === "mod-enter" ? "⌘/Ctrl+Enter" : "Enter"})`
               }
               aria-label={
                 showStop

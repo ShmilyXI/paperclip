@@ -13981,7 +13981,8 @@
     "searchAssignees": "搜索负责人…",
     "theAgent": "该员工",
     "pendingCount_one": "{{count}} 个待处理",
-    "pendingCount_other": "{{count}} 个待处理"
+    "pendingCount_other": "{{count}} 个待处理",
+    "workWithAgentName": "与 {{agentName}} 协作"
   },
   "issueContinuationHandoff": {
     "collapseContinuationHandoff": "收起继续交接信息",
