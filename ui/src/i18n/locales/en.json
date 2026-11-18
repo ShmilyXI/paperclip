@@ -12376,7 +12376,13 @@
     "apiTrigger": "API trigger",
     "webhook": "Webhook",
     "gitHubWebhook": "GitHub webhook",
-    "removed": "removed."
+    "removed": "removed.",
+    "standingCheck": "Standing check",
+    "onEachWakeUpLast": "On each wake-up · Last: {{result}}",
+    "onEachWakeUpNotCheckedYet": "On each wake-up · Not checked yet",
+    "triggerCount_one": "{{count}} trigger",
+    "triggerCount_other": "{{count}} triggers",
+    "standingCheckDescription": "A standing check: the routine’s agent carries out these instructions each time its heartbeat wakes it, and reports what it found. It never creates a task by itself."
   },
   "taskChatTurn": {
     "stopped": "Stopped",

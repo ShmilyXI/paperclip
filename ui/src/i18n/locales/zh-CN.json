@@ -12376,7 +12376,13 @@
     "apiTrigger": "API 触发器",
     "webhook": "Webhook",
     "gitHubWebhook": "GitHub Webhook",
-    "removed": "已移除。"
+    "removed": "已移除。",
+    "standingCheck": "常驻检查",
+    "onEachWakeUpLast": "每次唤醒时 · 上次：{{result}}",
+    "onEachWakeUpNotCheckedYet": "每次唤醒时 · 尚未检查",
+    "triggerCount_one": "{{count}} 个触发器",
+    "triggerCount_other": "{{count}} 个触发器",
+    "standingCheckDescription": "常驻检查：该例行任务的员工会在每次心跳唤醒时执行这些指令并汇报发现。它不会自行创建任务。"
   },
   "taskChatTurn": {
     "stopped": "已停止",

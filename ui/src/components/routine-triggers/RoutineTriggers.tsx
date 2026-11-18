@@ -144,7 +144,7 @@ export function RoutineTriggers() {
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           {routine.triggers.length}{" "}
-          {routine.triggers.length === 1 ? "trigger" : "triggers"}
+          {t("routineTriggers.triggerCount", { count: routine.triggers.length })}
         </p>
         <Button size="sm" onClick={() => startSetup("new")}>
           <Plus className="mr-1.5 h-3.5 w-3.5" />
@@ -166,11 +166,11 @@ export function RoutineTriggers() {
             {trigger.kind === "schedule"
               ? t("routineTriggers.schedule")
               : trigger.kind === "api"
-                ? "API trigger"
+                ? t("routineTriggers.apiTrigger")
                 : trigger.kind === "heartbeat"
-                  ? "Standing check"
-                  : "Webhook"}{" "}
-            removed.
+                  ? t("routineTriggers.standingCheck")
+                  : t("routineTriggers.webhook")}{" "}
+            {t("routineTriggers.removed")}
           </span>
           <Button
             variant="ghost"
@@ -236,12 +236,12 @@ export function RoutineTriggers() {
               trigger.kind === "schedule"
                 ? (describeCron(trigger.cronExpression) ?? t("routineTriggers.schedule"))
                 : trigger.kind === "api"
-                  ? "API trigger"
+                  ? t("routineTriggers.apiTrigger")
                   : trigger.kind === "heartbeat"
-                    ? "Standing check"
+                    ? t("routineTriggers.standingCheck")
                     : trigger.signingMode === "github_hmac"
-                      ? "GitHub webhook"
-                      : "Webhook"
+                      ? t("routineTriggers.gitHubWebhook")
+                      : t("routineTriggers.webhook")
             }
             summary={
               trigger.setupPending
@@ -251,11 +251,11 @@ export function RoutineTriggers() {
                   : trigger.kind === "schedule"
                     ? (trigger.timezone ?? "UTC")
                     : trigger.kind === "api"
-                      ? "Run through the API"
+                      ? t("routineTriggers.runThroughTheApi")
                       : trigger.kind === "heartbeat"
-                        ? trigger.lastResult ? `On each wake-up · Last: ${trigger.lastResult}` : "On each wake-up · Not checked yet"
+                        ? trigger.lastResult ? t("routineTriggers.onEachWakeUpLast", { result: trigger.lastResult }) : t("routineTriggers.onEachWakeUpNotCheckedYet")
                         : trigger.lastWebhookDelivery?.status === "rejected"
-                        ? "Authentication failed · Check the key in your app"
+                        ? t("routineTriggers.authenticationFailedCheckTheKey")
                         : trigger.lastWebhookDelivery?.status === "received" &&
                             !trigger.lastWebhookDelivery.test
                           ? t("routineTriggers.receivingEvents")
@@ -295,7 +295,7 @@ export function RoutineTriggers() {
               </p>
             ) : trigger.kind === "heartbeat" ? (
               <p className="text-sm text-muted-foreground">
-                A standing check: the routine’s agent carries out these instructions each time its heartbeat wakes it, and reports what it found. It never creates a task by itself.
+                {t("routineTriggers.standingCheckDescription")}
               </p>
             ) : (
               <WebhookSettings
