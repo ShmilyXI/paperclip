@@ -250,7 +250,7 @@ export function TaskChatLiveWorkLinks({
     [liveWork],
   );
   const presentationFor = useLiveWorkStatusPresentation(companyId, listedBlockers);
-  const heading = streamlined && placement === "bottom" ? "Still waiting on live work" : "Waiting on live work";
+  const heading = streamlined && placement === "bottom" ? t("taskChatBlockerLinks.stillWaitingOnLiveWork") : t("taskChatBlockerLinks.waitingOnLiveWork");
   return (
     <div
       aria-label={t("taskChatBlockerLinks.tasksWaitingOnLiveWork")}
@@ -284,10 +284,10 @@ export function TaskChatLiveWorkLinks({
         ))}
       </ol>
       {liveWork.nowRunning.map((blocker) => streamlined ? (
-        <LiveWorkLink key={blocker.id} blocker={blocker} presentation={presentationFor(blocker)} label="Now running" />
+        <LiveWorkLink key={blocker.id} blocker={blocker} presentation={presentationFor(blocker)} label={t("taskChatBlockerLinks.nowRunning")} />
       ) : (
         <div key={blocker.id} className="flex min-w-0 items-center gap-1.5 whitespace-nowrap">
-          <span className="shrink-0 font-medium">Now running</span>
+          <span className="shrink-0 font-medium">{t("taskChatBlockerLinks.nowRunning")}</span>
           <LiveWorkGlyph presentation={presentationFor(blocker)} />
           <LiveWorkLink blocker={blocker} presentation={presentationFor(blocker)} />
         </div>
