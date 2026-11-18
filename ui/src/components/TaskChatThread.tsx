@@ -489,15 +489,15 @@ function durableInputLabel(
   if (interaction.kind === "request_item_verdicts")
     return interaction.title ?? t("taskChatThread.reviewItems");
   if (interaction.kind === "connection_intent")
-    return interaction.title ?? "Connect service";
+    return interaction.title ?? t("taskChatThread.connectService");
   if (interaction.kind === "suggest_routine")
-    return interaction.title ?? "Routine offer";
+    return interaction.title ?? t("taskChatCompactInteractionCard.routineOffer");
   if (interaction.kind === "propose_responsibility_bar")
-    return interaction.title ?? "Proposed bar";
+    return interaction.title ?? t("taskChatCompactInteractionCard.proposedBar");
   if (interaction.kind === "propose_automation")
-    return interaction.title ?? "Proposed automation";
+    return interaction.title ?? t("taskChatCompactInteractionCard.proposedAutomation");
   if (interaction.kind === "propose_dashboard_changes")
-    return interaction.title ?? "Proposed dashboard changes";
+    return interaction.title ?? t("taskChatCompactInteractionCard.proposedDashboardChanges");
   if (
     interaction.payload.target?.type === "issue_document" &&
     interaction.payload.target.key === "plan"

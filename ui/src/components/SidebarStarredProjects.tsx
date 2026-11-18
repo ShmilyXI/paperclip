@@ -127,9 +127,9 @@ export function SidebarStarredProjects() {
           >
             <ProjectTile color={project.color ?? null} icon={project.icon ?? null} size="xs" />
             <span className="flex-1 truncate">{project.name}</span>
-            {project.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label="Private project" /> : null}
+            {project.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label={t("sidebar.privateProject")} /> : null}
             {project.pauseReason === "budget" ? (
-              <BudgetSidebarMarker title="Project paused by budget" />
+              <BudgetSidebarMarker title={t("sidebar.projectPausedByBudget")} />
             ) : null}
           </NavLink>
         );
