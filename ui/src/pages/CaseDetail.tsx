@@ -104,7 +104,7 @@ export function CaseDetail() {
       </div>
       <h1 className="text-2xl font-semibold tracking-tight">{caseData.title}</h1>
       {caseData.summary && <p className={cn("max-w-3xl text-sm leading-relaxed text-muted-foreground", ANALYTICS_MASK_CLASS)}>{caseData.summary}</p>}
-      {caseData.labels.length > 0 && <div className="flex flex-wrap gap-1.5" aria-label="Case labels">{caseData.labels.map(label => <Badge key={label.id} variant="secondary" className="font-normal">{label.name}</Badge>)}</div>}
+      {caseData.labels.length > 0 && <div className="flex flex-wrap gap-1.5" aria-label={t("caseDetail.caseLabels")}>{caseData.labels.map(label => <Badge key={label.id} variant="secondary" className="font-normal">{label.name}</Badge>)}</div>}
     </header>
 
     <div className="min-w-0 space-y-8">
@@ -126,7 +126,7 @@ export function CaseDetail() {
       {caseData.attachments.length > 0 && <section className="space-y-3" aria-label={t("caseDetail.caseAttachments")}>
         <h2 className="text-sm font-semibold">{t("common.attachments")}</h2>
         {images.length > 0 && <CaseAttachmentsGallery attachments={images} />}
-        {files.length > 0 && <ul className={cn("space-y-2", ANALYTICS_MASK_CLASS)}>{files.map(attachment => <li key={attachment.id}><a href={caseAttachmentUrl(attachment)} target="_blank" rel="noreferrer" className="inline-flex max-w-full items-center gap-2 text-sm text-primary hover:underline"><FileText aria-hidden className="size-4 shrink-0" /><span className="truncate">{attachment.asset.originalFilename ?? "Download attachment"}</span></a></li>)}</ul>}
+        {files.length > 0 && <ul className={cn("space-y-2", ANALYTICS_MASK_CLASS)}>{files.map(attachment => <li key={attachment.id}><a href={caseAttachmentUrl(attachment)} target="_blank" rel="noreferrer" className="inline-flex max-w-full items-center gap-2 text-sm text-primary hover:underline"><FileText aria-hidden className="size-4 shrink-0" /><span className="truncate">{attachment.asset.originalFilename ?? t("caseDetail.downloadAttachment")}</span></a></li>)}</ul>}
       </section>}
 
       {caseData.workIssueId && <CaseHandoffHistory caseId={caseData.id} task={caseData.workIssue} agents={agents} />}
@@ -139,7 +139,7 @@ export function CaseDetail() {
       {(caseData.parent || children.length > 0 || childrenQuery.isError) && <details className="space-y-3">
         <summary className="w-fit cursor-pointer text-sm font-semibold">{t("caseDetail.relatedCases")}</summary>
         {caseData.parent && <div className="space-y-1"><h3 className="text-xs text-muted-foreground">{t("common.parent")}</h3><CaseRelation item={caseData.parent} search={search} /></div>}
-        {children.length > 0 && <div className="space-y-1"><h3 className="text-xs text-muted-foreground">Children {children.length}</h3>{children.map(child => <CaseRelation key={child.id} item={child} search={search} />)}</div>}
+        {children.length > 0 && <div className="space-y-1"><h3 className="text-xs text-muted-foreground">{t("caseDetail.children")} {children.length}</h3>{children.map(child => <CaseRelation key={child.id} item={child} search={search} />)}</div>}
         {queryViewKind(childrenQuery) === "error" && <p role="alert" className="text-sm text-destructive">{t("caseDetail.childCasesCouldnTBe")}</p>}
       </details>}
 

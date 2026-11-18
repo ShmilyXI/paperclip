@@ -11413,6 +11413,7 @@
     "downloadAttachment": "Download attachment",
     "relatedTasks": "Related tasks",
     "relatedCases": "Related cases",
+    "children": "Children",
     "childCasesCouldnTBe": "Child cases couldn’t be loaded.",
     "noFindingsRecordedYet": "No findings recorded yet.",
     "viewInAudit": "View in Audit"

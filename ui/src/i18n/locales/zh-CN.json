@@ -11413,6 +11413,7 @@
     "downloadAttachment": "下载附件",
     "relatedTasks": "相关任务",
     "relatedCases": "相关案例",
+    "children": "子案例",
     "childCasesCouldnTBe": "子案例无法加载。",
     "noFindingsRecordedYet": "尚未记录发现。",
     "viewInAudit": "在审计中查看"
