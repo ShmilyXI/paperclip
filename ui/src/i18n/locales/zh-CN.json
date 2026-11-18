@@ -10971,7 +10971,11 @@
     "setAsMyPrimary": "设为主员工",
     "settingPrimary": "正在设置主员工…",
     "newPrimaryAgent": "新主员工",
-    "changeYourPrimaryAgent": "更换你的主员工？"
+    "changeYourPrimaryAgent": "更换你的主员工？",
+    "couldntLoadYourPrimaryAgent": "无法加载你的主员工。点击重试。",
+    "loadingYourPrimaryAgent": "正在加载你的主员工…",
+    "avatarLabel": "{{name}} 的头像",
+    "thisWillMakeNameYourPrimaryAgent": "这会让 {{name}} 成为你的主员工，确定要这样做吗？"
   },
   "costByUserTable": {
     "byUser": "按用户",

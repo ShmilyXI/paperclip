@@ -10971,7 +10971,11 @@
     "setAsMyPrimary": "Set as my primary",
     "settingPrimary": "Setting primary…",
     "newPrimaryAgent": "New primary agent",
-    "changeYourPrimaryAgent": "Change your primary agent?"
+    "changeYourPrimaryAgent": "Change your primary agent?",
+    "couldntLoadYourPrimaryAgent": "Couldn't load your primary agent. Select to retry.",
+    "loadingYourPrimaryAgent": "Loading your primary agent…",
+    "avatarLabel": "{{name}} avatar",
+    "thisWillMakeNameYourPrimaryAgent": "This will make {{name}} your primary agent, do you want to do this?"
   },
   "costByUserTable": {
     "byUser": "By user",
