@@ -106,7 +106,7 @@ export function ImageGalleryModal({
             returnFocusRef.current?.focus({ preventScroll: true });
           } : undefined}
         >
-          <DialogPrimitive.Title className="sr-only">Image gallery</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="sr-only">{t("imageGalleryModal.imageGallery")}</DialogPrimitive.Title>
           {/* Top bar */}
           <div className="flex items-center justify-between px-5 py-3 text-white/80 text-sm shrink-0">
             <span className="truncate max-w-(--pct-50) font-medium" title={filename}>
@@ -121,8 +121,8 @@ export function ImageGalleryModal({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/50 hover:text-white transition-colors"
-                title="Open original"
-                aria-label={`Open original ${filename}`}
+                title={t("imageGalleryModal.openOriginal")}
+                aria-label={t("imageGalleryModal.openOriginalFilename", { filename })}
                 onClick={(e) => e.stopPropagation()}
               >
                 <ExternalLink className="h-4.5 w-4.5" />
@@ -132,7 +132,7 @@ export function ImageGalleryModal({
                 download={filename}
                 className="text-white/50 hover:text-white transition-colors"
                 title={t("common.download")}
-                aria-label={`Download ${filename}`}
+                aria-label={t("imageGalleryModal.downloadFilename", { filename })}
                 onClick={(e) => e.stopPropagation()}
               >
                 <Download className="h-4.5 w-4.5" />

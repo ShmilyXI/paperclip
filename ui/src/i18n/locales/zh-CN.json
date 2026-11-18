@@ -15020,7 +15020,23 @@
     "dueNow": "现在到期",
     "checkingMomentarily": "即将检查…",
     "firesOnNextTick": "下次心跳触发",
-    "absoluteYourTime": "{{absolute}}（你的时间）"
+    "absoluteYourTime": "{{absolute}}（你的时间）",
+    "thisTaskIsBlockedYouCan": "此任务被阻止。你可以让员工立即检查。",
+    "resumeThisTaskToContinue": "恢复此任务以继续检查。",
+    "waitingForTheSandboxProvider": "正在等待沙箱供应商",
+    "theSandboxProviderIsUnavailable": "沙箱供应商不可用。恢复后工作会自动继续。",
+    "workContinuesAutomaticallyWhenThe": "沙箱供应商恢复后，工作会自动继续。",
+    "theCheckCanStartAfter": "当前运行完成保存工作后，检查即可开始。",
+    "monitorWaitsForCurrentRun": "监控等待当前运行",
+    "scheduledForAbsoluteYourTime": "计划于 {{absolute}}（你的时间）",
+    "scheduledForAbsolute": "计划于 {{absolute}}",
+    "reviewOnGithubWhileTheCurrent": "在 GitHub 上审查，同时当前运行正在保存其工作。"
+  },
+  "imageGalleryModal": {
+    "imageGallery": "图片画廊",
+    "openOriginal": "打开原图",
+    "openOriginalFilename": "打开原图 {{filename}}",
+    "downloadFilename": "下载 {{filename}}"
   },
   "projectRepositoryInput": {
     "someGithubConnectionsCouldNot": "部分 GitHub 连接无法加载。请在“应用”中重新连接或重试。"

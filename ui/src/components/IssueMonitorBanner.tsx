@@ -93,11 +93,11 @@ export function buildMonitorSurfaceCopy(
   if (derived.source === "monitor" && areAutomaticMonitorChecksPaused({ status: issueStatus })) {
     const canCheckNow = canCheckIssueMonitorNow({ status: issueStatus }, derived.serviceName);
     const hint = canCheckNow
-      ? "This task is blocked. You can ask the agent to check now."
-      : "Resume this task to continue checking.";
+      ? t("issueMonitorBanner.thisTaskIsBlockedYouCan")
+      : t("issueMonitorBanner.resumeThisTaskToContinue");
     return {
-      bannerTitle: "Automatic checks paused",
-      stripTitle: "Automatic checks paused",
+      bannerTitle: t("issueProps.automaticChecksPaused"),
+      stripTitle: t("issueProps.automaticChecksPaused"),
       bannerMeta: [hint],
       stripMeta: [hint],
       tone: "info",
@@ -108,10 +108,10 @@ export function buildMonitorSurfaceCopy(
 
   if (derived.source === "scheduled-retry" && scheduledRetryReason === "environment_provider_wait") {
     return {
-      bannerTitle: "Waiting for the sandbox provider",
-      stripTitle: "Waiting for the sandbox provider",
-      bannerMeta: ["The sandbox provider is unavailable. Work continues automatically when it is back."],
-      stripMeta: ["Work continues automatically when the sandbox provider is back."],
+      bannerTitle: t("issueMonitorBanner.waitingForTheSandboxProvider"),
+      stripTitle: t("issueMonitorBanner.waitingForTheSandboxProvider"),
+      bannerMeta: [t("issueMonitorBanner.theSandboxProviderIsUnavailable")],
+      stripMeta: [t("issueMonitorBanner.workContinuesAutomaticallyWhenThe")],
       tone: "info",
       workspaceWait: true,
     };
@@ -132,12 +132,12 @@ export function buildMonitorSurfaceCopy(
   const absolute = formatMonitorAbsolute(derived.nextCheckAt, {}, now); // local time, e.g. "Today, 4:08 PM"
   const awaitingPullRequestReview = derived.source === "monitor" && derived.serviceName?.toLowerCase() === "github" && pendingPullRequestReviews > 0;
   if (derived.source === "monitor" && hasActiveRun) {
-    const hint = "The check can start after the current run finishes saving its work.";
+    const hint = t("issueMonitorBanner.theCheckCanStartAfter");
     return {
-      bannerTitle: "Monitor waits for current run",
-      stripTitle: "Monitor waits for current run",
-      bannerMeta: [hint, `Scheduled for ${absolute} (your time)`],
-      stripMeta: [hint, `Scheduled for ${absolute}`],
+      bannerTitle: t("issueMonitorBanner.monitorWaitsForCurrentRun"),
+      stripTitle: t("issueMonitorBanner.monitorWaitsForCurrentRun"),
+      bannerMeta: [hint, t("issueMonitorBanner.scheduledForAbsoluteYourTime", { absolute })],
+      stripMeta: [hint, t("issueMonitorBanner.scheduledForAbsolute", { absolute })],
       tone: "info",
       executionWait: true,
       checkUnavailable: true,
@@ -370,12 +370,12 @@ export function IssueMonitorComposerStrip({
       {!copy.automaticChecksPaused ? (
         <p className="mt-1.5 text-xs text-muted-foreground">
           {copy.pullRequestReview && copy.executionWait
-            ? "Review on GitHub while the current run finishes saving its work."
+            ? t("issueMonitorBanner.reviewOnGithubWhileTheCurrent")
             : copy.pullRequestReview
-            ? "Review on GitHub, then check status to have the agent verify the result."
+            ? t("issueMonitorBanner.reviewOnGithubThenCheck")
             : copy.workspaceWait || copy.executionWait
-            ? "You can keep sending instructions while the agent waits."
-            : "Sending a reply wakes the agent now — before the scheduled check."}
+            ? t("issueMonitorBanner.youCanKeepSendingInstructions")
+            : t("issueMonitorBanner.sendingAReplyWakesThe")}
         </p>
       ) : null}
       {checkError ? <p role="alert" className="text-sm text-destructive">{checkError}</p> : null}

@@ -15020,7 +15020,23 @@
     "dueNow": "Due now",
     "checkingMomentarily": "Checking momentarily…",
     "firesOnNextTick": "Fires on next tick",
-    "absoluteYourTime": "{{absolute}} (your time)"
+    "absoluteYourTime": "{{absolute}} (your time)",
+    "thisTaskIsBlockedYouCan": "This task is blocked. You can ask the agent to check now.",
+    "resumeThisTaskToContinue": "Resume this task to continue checking.",
+    "waitingForTheSandboxProvider": "Waiting for the sandbox provider",
+    "theSandboxProviderIsUnavailable": "The sandbox provider is unavailable. Work continues automatically when it is back.",
+    "workContinuesAutomaticallyWhenThe": "Work continues automatically when the sandbox provider is back.",
+    "theCheckCanStartAfter": "The check can start after the current run finishes saving its work.",
+    "monitorWaitsForCurrentRun": "Monitor waits for current run",
+    "scheduledForAbsoluteYourTime": "Scheduled for {{absolute}} (your time)",
+    "scheduledForAbsolute": "Scheduled for {{absolute}}",
+    "reviewOnGithubWhileTheCurrent": "Review on GitHub while the current run finishes saving its work."
+  },
+  "imageGalleryModal": {
+    "imageGallery": "Image gallery",
+    "openOriginal": "Open original",
+    "openOriginalFilename": "Open original {{filename}}",
+    "downloadFilename": "Download {{filename}}"
   },
   "projectRepositoryInput": {
     "someGithubConnectionsCouldNot": "Some GitHub connections could not load. Reconnect them in Apps or try again."
