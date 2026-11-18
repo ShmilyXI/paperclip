@@ -15334,7 +15334,8 @@
     "iCheckedSlackAndNo": "我已检查 Slack，没有创建应用。创建新应用。",
     "continueInSlack": "在 Slack 中继续",
     "reconnectSlack": "重新连接 Slack",
-    "to": "到"
+    "to": "到",
+    "add": "添加"
   },
   "blockedInboxView": {
     "couldnTLoadTheBlocked": "无法加载「已阻塞」标签页。",

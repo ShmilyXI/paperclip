@@ -15334,7 +15334,8 @@
     "iCheckedSlackAndNo": "I checked Slack and no app was created. Create a new app.",
     "continueInSlack": "Continue in Slack",
     "reconnectSlack": "Reconnect Slack",
-    "to": "to"
+    "to": "to",
+    "add": "Add"
   },
   "blockedInboxView": {
     "couldnTLoadTheBlocked": "Couldn't load the Blocked tab.",
