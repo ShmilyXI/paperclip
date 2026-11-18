@@ -2978,7 +2978,9 @@
     "deleteNamedConnection": "删除 {{name}} 连接",
     "namesAndMore": "{{names}} 以及另外 {{count}} 个",
     "thisConnectionPoolPluginIs": "此连接池插件不可用。请在「插件」中启用。",
-    "providerAuthorizationUses": "服务商授权使用 {{broker}}；凭证保留在本实例中。"
+    "providerAuthorizationUses": "服务商授权使用 {{broker}}；凭证保留在本实例中。",
+    "thisConnectorIsUnavailable": "此连接器不可用。请让实例管理员启用其插件。",
+    "backToConnectorsPage": "返回连接器"
   },
   "settings": {
     "archivednameIsArchived": "{{archivedName}} 已归档",

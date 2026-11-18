@@ -2978,7 +2978,9 @@
     "deleteNamedConnection": "Delete {{name}} connection",
     "namesAndMore": "{{names}} and {{count}} more",
     "thisConnectionPoolPluginIs": "This connection pool plugin is unavailable. Enable it in Plugins.",
-    "providerAuthorizationUses": "Provider authorization uses {{broker}}; credentials stay in this instance."
+    "providerAuthorizationUses": "Provider authorization uses {{broker}}; credentials stay in this instance.",
+    "thisConnectorIsUnavailable": "This connector is unavailable. Ask an instance admin to enable its plugin.",
+    "backToConnectorsPage": "Back to Connectors"
   },
   "settings": {
     "archivednameIsArchived": "{{archivedName}} is archived",
