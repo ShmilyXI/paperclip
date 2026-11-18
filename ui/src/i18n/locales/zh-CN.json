@@ -17291,5 +17291,19 @@
     "itMayHaveBeenDeleted": "它可能已被删除，或属于其他人。",
     "backToTheDashboard": "返回仪表盘",
     "thisResponsibilityBelongsToAnotherOrganization": "该职责属于另一个组织"
+  },
+  "addResponsibilityDialog": {
+    "title": "添加职责",
+    "description": "你负责的某件事，配有衡量成功与否的标准，以及显示你是否达标的数字。",
+    "whatDoYouOwn": "你负责什么？",
+    "placeholderTitle": "例如：投资人线索",
+    "nameWhatYouOwn": "为你负责的事项命名",
+    "noArea": "无区域",
+    "newAreaEllipsis": "新建区域…",
+    "newAreaName": "新区域名称",
+    "placeholderArea": "例如：融资",
+    "nameTheNewArea": "为新区域命名",
+    "couldntAddTheResponsibility": "无法添加该职责。",
+    "addResponsibility": "添加职责"
   }
 }

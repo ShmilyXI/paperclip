@@ -17291,5 +17291,19 @@
     "itMayHaveBeenDeleted": "It may have been deleted, or it belongs to someone else.",
     "backToTheDashboard": "Back to the dashboard",
     "thisResponsibilityBelongsToAnotherOrganization": "This responsibility belongs to another organization"
+  },
+  "addResponsibilityDialog": {
+    "title": "Add a responsibility",
+    "description": "Something you own, with a bar for success and a number that shows whether you are meeting it.",
+    "whatDoYouOwn": "What do you own?",
+    "placeholderTitle": "e.g. Investor pipeline",
+    "nameWhatYouOwn": "Name what you own",
+    "noArea": "No area",
+    "newAreaEllipsis": "New area…",
+    "newAreaName": "New area name",
+    "placeholderArea": "e.g. Fundraising",
+    "nameTheNewArea": "Name the new area",
+    "couldntAddTheResponsibility": "Couldn’t add the responsibility.",
+    "addResponsibility": "Add responsibility"
   }
 }
