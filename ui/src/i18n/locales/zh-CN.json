@@ -13606,7 +13606,10 @@
     "sending": "发送中…",
     "sentFromImessage": "来自 iMessage",
     "openName": "打开 {{name}}",
-    "imageN": "图片 {{count}}"
+    "imageN": "图片 {{count}}",
+    "image": "图片",
+    "fromIdentifier": "来自 {{identifier}}",
+    "openMoreScreenshots": "再打开 {{count}} 张截图"
   },
   "newAgentSetup": {
     "enterACursorApiKey": "请输入 Cursor API 密钥。",

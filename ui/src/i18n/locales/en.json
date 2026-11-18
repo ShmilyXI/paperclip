@@ -13606,7 +13606,10 @@
     "sending": "Sending…",
     "sentFromImessage": "Sent from iMessage",
     "openName": "Open {{name}}",
-    "imageN": "image {{count}}"
+    "imageN": "image {{count}}",
+    "image": "image",
+    "fromIdentifier": "From {{identifier}}",
+    "openMoreScreenshots": "Open {{count}} more screenshots"
   },
   "newAgentSetup": {
     "enterACursorApiKey": "Enter a Cursor API key.",

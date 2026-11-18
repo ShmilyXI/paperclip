@@ -256,7 +256,7 @@ function TaskChatBubbleContent({
     >
       {beforeTurn ? <div className="w-full pb-1">{beforeTurn}</div> : null}
       {item.chatMessage && <Link to={`/issues/${item.chatMessage.sourceTaskIdentifier}`} className="px-1 text-xs text-muted-foreground underline underline-offset-4">
-        From {item.chatMessage.sourceTaskIdentifier}
+        {t("taskChatBubble.fromIdentifier", { identifier: item.chatMessage.sourceTaskIdentifier })}
       </Link>}
       {isHuman && !item.isCurrentUser && item.authorName ? (
         <span className="px-1 text-sm font-semibold text-foreground" data-testid="task-chat-human-identity" data-author-user-id={item.authorUserId}>
@@ -310,7 +310,7 @@ function TaskChatBubbleContent({
           data-testid="task-chat-bubble-media"
         >
           <span className="text-xs text-muted-foreground">
-            Images · {imageRefs.length}
+            {t("artifactsToolbar.images")} · {imageRefs.length}
           </span>
           <div className="grid grid-cols-4 gap-2">
             {imageRefs
@@ -335,7 +335,7 @@ function TaskChatBubbleContent({
               <button
                 type="button"
                 className="aspect-video min-w-0 rounded-md bg-muted text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                aria-label={`Open ${imageRefs.length - 3} more screenshots`}
+                aria-label={t("taskChatBubble.openMoreScreenshots", { count: imageRefs.length - 3 })}
                 onClick={() => openImage(imageRefs[3].url)}
               >
                 +{imageRefs.length - 3}
@@ -343,14 +343,14 @@ function TaskChatBubbleContent({
             ) : null}
           </div>
           <span className="truncate text-xs text-muted-foreground">
-            {imageRefs.map((ref) => ref.name || "image").join(" · ")}
+            {imageRefs.map((ref) => ref.name || t("taskChatBubble.image")).join(" · ")}
           </span>
         </div>
       ) : null}
       {!artifactsV1 && attachmentRefs.length > 0 ? (
         <div className="flex max-w-(--pct-85) flex-col gap-2">
           <span className="text-xs text-muted-foreground">
-            Files · {attachmentRefs.length}
+            {t("common.files")} · {attachmentRefs.length}
           </span>
           <AttachmentGroup data-testid="task-chat-bubble-attachments">
             {attachmentRefs.map((ref) => {
@@ -442,7 +442,7 @@ function TaskChatBubbleContent({
             <TaskChatBubbleActions copyText={item.text} />
           </div>
           <span className="px-1 text-(length:--text-micro) text-muted-foreground">
-            {sentFromIMessage ? "Sent from iMessage" : null}
+            {sentFromIMessage ? t("taskChatBubble.sentFromImessage") : null}
             {sentFromIMessage && timestamp ? " · " : null}
             {timestamp}
           </span>
@@ -470,7 +470,7 @@ function TaskChatBubbleContent({
       ) : timestamp || sentFromIMessage ? (
         // Timestamps are always visible (round 9) — no longer hover-revealed.
         <span className="px-1 text-(length:--text-micro) text-muted-foreground">
-          {sentFromIMessage ? "Sent from iMessage" : null}
+          {sentFromIMessage ? t("taskChatBubble.sentFromImessage") : null}
           {sentFromIMessage && timestamp ? " · " : null}
           {timestamp}
         </span>
