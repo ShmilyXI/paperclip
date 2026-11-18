@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { companyProjectsQuery } from "@/lib/company-projects-query";
 import { QueryErrorState, useQueryView } from "@/components/QueryView";
 import { useShowAgentCreatedTasks } from "../hooks/useShowAgentCreatedTasks";
 import { useCoordinatorWorkspaceEnabled } from "../hooks/useCoordinatorWorkspaceEnabled";
@@ -11,7 +12,6 @@ import { useLocation, useNavigate, useSearchParams } from "@/lib/router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { issuesApi } from "../api/issues";
 import { agentsApi } from "../api/agents";
-import { projectsApi } from "../api/projects";
 import { heartbeatsApi } from "../api/heartbeats";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -237,8 +237,7 @@ function OrganizationIssues({
   });
 
   const { data: projects } = useQuery({
-    queryKey: queryKeys.projects.list(selectedCompanyId!, { includeArchived: true }),
-    queryFn: () => projectsApi.list(selectedCompanyId!, { includeArchived: true }),
+    ...companyProjectsQuery(selectedCompanyId!, { includeArchived: true }),
     enabled: !!selectedCompanyId,
   });
 
@@ -346,6 +345,7 @@ function OrganizationIssues({
   return (
     <IssuesList
       issues={issues ?? []}
+      preloadTaskChats
       isLoading={issuesView.kind === "loading" || issuesView.kind === "reconnecting"}
       isLoadingMoreIssues={isFetchingNextPage}
       agents={agents}

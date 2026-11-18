@@ -251,6 +251,7 @@ export function AiConnectionField({
             agentIds={agentId ? [agentId] : []}
             allAgents={allAgents}
             environmentId={environmentId}
+            loginAgentId={agentId}
             onCancel={() => setConnecting(false)}
             onComplete={(result) => {
               setSavedAccount(result);

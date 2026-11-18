@@ -1694,8 +1694,8 @@ export function CompanyImport() {
         const available = nativeHarness ? runnerInstalled : adapterChoice === "openai_dot" ? dotAvailable : adapterChoice === "muse" ? museAvailable : nativeRunnerAvailable;
         if (!available && (availableAdapterTypes || !nativeHarness)) {
           availabilityWarning = nativeHarness
-            ? t("companyImport.paperclipRunnerIsUnavailableHere")
-            : t("companyImport.paperclipRunnerProviderProviderRequires", { provider: String(a.adapterConfig?.provider) });
+            ? "Paperclip Runner is unavailable here. Choose another harness."
+            : `Paperclip Runner provider ${String(a.adapterConfig?.provider)} requires its experimental feature to be enabled. This import keeps its saved harness until you choose another one.`;
         }
       } else if (availableAdapterTypes && !availableAdapterTypes.has(a.adapterType)) {
         // The fallback must itself be installed: the CEO's adapter when it is,

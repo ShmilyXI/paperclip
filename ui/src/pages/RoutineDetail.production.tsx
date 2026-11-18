@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { companyProjectsQuery } from "@/lib/company-projects-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -14,7 +15,6 @@ import { secretsApi } from "../api/secrets";
 import { type RoutineHistoryDirtyFieldDescriptor } from "../components/RoutineHistoryTab";
 import { heartbeatsApi } from "../api/heartbeats";
 import { agentsApi } from "../api/agents";
-import { projectsApi } from "../api/projects";
 import { accessApi } from "../api/access";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -242,8 +242,7 @@ export function RoutineDetail() {
     enabled: !!selectedCompanyId,
   });
   const { data: projects } = useQuery({
-    queryKey: queryKeys.projects.list(selectedCompanyId!, { includeArchived: true }),
-    queryFn: () => projectsApi.list(selectedCompanyId!, { includeArchived: true }),
+    ...companyProjectsQuery(selectedCompanyId!, { includeArchived: true }),
     enabled: !!selectedCompanyId,
   });
   const { data: companyMembers } = useQuery({

@@ -1,9 +1,9 @@
 import { t } from "@/i18n";
+import { companyProjectsQuery } from "@/lib/company-projects-query";
 import { useEffect } from "react";
 import { useParams } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { goalsApi } from "../api/goals";
-import { projectsApi } from "../api/projects";
 import { assetsApi } from "../api/assets";
 import { usePanel } from "../context/PanelContext";
 import { useCompany } from "../context/CompanyContext";
@@ -72,8 +72,7 @@ export function GoalDetail() {
   });
 
   const { data: allProjects } = useQuery({
-    queryKey: queryKeys.projects.list(resolvedCompanyId!, { includeArchived: true }),
-    queryFn: () => projectsApi.list(resolvedCompanyId!, { includeArchived: true }),
+    ...companyProjectsQuery(resolvedCompanyId!, { includeArchived: true }),
     enabled: !!resolvedCompanyId
   });
 

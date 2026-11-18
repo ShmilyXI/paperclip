@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { companyProjectsQuery } from "@/lib/company-projects-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search as SearchIcon, AlertTriangle, FileQuestion, Plus, X } from "lucide-react";
@@ -26,7 +27,6 @@ import { useQueryView } from "../components/QueryView";
 import { agentsApi } from "../api/agents";
 import { authApi } from "../api/auth";
 import { issuesApi } from "../api/issues";
-import { projectsApi } from "../api/projects";
 import { queryKeys } from "../lib/queryKeys";
 import { loadRecentSearches, pushRecentSearch } from "../lib/recent-searches";
 import { PageTabBar, type PageTabItem } from "../components/PageTabBar";
@@ -188,8 +188,7 @@ export function Search() {
   });
 
   const { data: projects = [] } = useQuery({
-    queryKey: queryKeys.projects.list(selectedCompanyId!, { includeArchived: true }),
-    queryFn: () => projectsApi.list(selectedCompanyId!, { includeArchived: true }),
+    ...companyProjectsQuery(selectedCompanyId!, { includeArchived: true }),
     enabled: !!selectedCompanyId,
   });
 

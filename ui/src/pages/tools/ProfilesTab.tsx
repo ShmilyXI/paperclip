@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { companyProjectsQuery } from "@/lib/company-projects-query";
 import { useMemo, useState } from "react";
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, Layers, Plus, Pencil, Trash2, Link2, ShieldCheck } from "lucide-react";
@@ -15,7 +16,6 @@ import type {
   ToolRiskLevel,
 } from "@paperclipai/shared";
 import { agentsApi } from "@/api/agents";
-import { projectsApi } from "@/api/projects";
 import { routinesApi } from "@/api/routines";
 import {
   toolsApi,
@@ -314,8 +314,7 @@ function useLookupData(companyId: string) {
     queryFn: () => agentsApi.list(companyId),
   });
   const projects = useQuery({
-    queryKey: queryKeys.projects.list(companyId, { includeArchived: true }),
-    queryFn: () => projectsApi.list(companyId, { includeArchived: true }),
+    ...companyProjectsQuery(companyId, { includeArchived: true }),
   });
   const routines = useQuery({
     queryKey: queryKeys.routines.list(companyId),

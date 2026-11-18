@@ -6,6 +6,7 @@ import { SidebarAccountMenu } from "./SidebarAccountMenu";
 import { SidebarCompanyMenu } from "./SidebarCompanyMenu";
 import { SidebarNavExpandedProvider, SidebarNavItem } from "./SidebarNavItem";
 import { SidebarSection } from "./SidebarSection";
+import { RecentTaskNavItem, recentTaskPathRef } from "./RecentTaskNavItem";
 import { TruncatedTextMarqueeProvider } from "./TruncatedText";
 import { Button } from "./ui/button";
 import { FlyoutAppearanceProvider } from "./ui/flyout";
@@ -46,9 +47,9 @@ export function DesignSidebar({ onNewTask, recentTasks = [] }: { onNewTask: () =
             <SidebarNavItem className="design-sidebar-item" to={`${root}/activity`} label={t("common.audit")} icon={History} />
           </SidebarSection>
           {companyRecentTasks.length > 0 ? <div className="design-sidebar-recents">
-            <SidebarSection label={t("designSidebar.recentTasks")}>
-              <div onScroll={handleRecentScroll} className="design-sidebar-recent-list scrollbar-while-scrolling" role="region" aria-label={t("designSidebar.recentTasks2")} tabIndex={0}>
-              {companyRecentTasks.map(issue => <SidebarNavItem key={issue.id} className="design-sidebar-item" to={`${root}/issues/${issue.identifier}`} label={issue.title} />)}
+            <SidebarSection label="Recent Tasks">
+              <div onScroll={handleRecentScroll} className="design-sidebar-recent-list scrollbar-while-scrolling" role="region" aria-label="Recent tasks" tabIndex={0}>
+              {companyRecentTasks.map(issue => <RecentTaskNavItem key={issue.id} task={issue} className="design-sidebar-item" to={`${root}/issues/${recentTaskPathRef(issue)}`} label={issue.title} />)}
               </div>
             </SidebarSection>
           </div> : null}

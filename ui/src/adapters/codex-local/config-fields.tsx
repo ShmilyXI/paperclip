@@ -150,14 +150,16 @@ export function CodexLocalConfigFields({
       mark("adapterConfig", key, value);
     }
   };
-  const runnerLifecycleMode = runnerManaged
+  // "automatic" stores no lifecycleMode: the server keeps measured local
+  // harnesses warm for the default idle window and runs others turn by turn.
+  const runnerLifecycleMode: "automatic" | "per_turn" | "warm" = runnerManaged
     ? isCreate
-      ? (values!.paperclipRunnerLifecycleMode ?? "per_turn")
+      ? (values!.paperclipRunnerLifecycleMode ?? "automatic")
       : eff(
           "adapterConfig",
           "lifecycleMode",
-          config.lifecycleMode === "warm" ? "warm" : "per_turn",
-        )
+          config.lifecycleMode === "warm" || config.lifecycleMode === "per_turn" ? config.lifecycleMode : "automatic",
+        ) ?? "automatic"
     : "per_turn";
   const runnerIdleTimeoutMs = runnerManaged
     ? resolvePaperclipRunnerIdleTimeoutMs(
@@ -585,21 +587,22 @@ export function CodexLocalConfigFields({
       )}
       {runnerManaged && !isExternal && !isCursorCloud && (
         <Field configSection="runPolicy"
-          label={t("codexLocal.runnerLifecycle")}
-          hint={t("codexLocal.runnerLifecycleHint")}
+          label="Runner lifecycle"
+          hint="Automatic keeps Codex and OpenCode warm on this computer for 5 minutes after a run, so a follow-up starts faster, and runs other harnesses turn by turn. Turn by turn suspends after each run. Warm keeps the same provider process available between governed runs."
         >
           <SelectPopover
             aria-label={t("codexLocal.runnerLifecycle")}
             value={runnerLifecycleMode}
             onValueChange={(next) => {
-              const value = next === "warm" ? "warm" : "per_turn";
+              const value = next === "warm" || next === "per_turn" ? next : undefined;
               isCreate
                 ? set!({ paperclipRunnerLifecycleMode: value })
                 : mark("adapterConfig", "lifecycleMode", value);
             }}
             options={[
-              { value: "per_turn", label: t("codexLocal.turnByTurn") },
-              { value: "warm", label: t("codexLocal.warmSession") },
+              { value: "automatic", label: "Automatic" },
+              { value: "per_turn", label: "Turn by turn" },
+              { value: "warm", label: "Warm session" },
             ]}
           />
         </Field>

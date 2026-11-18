@@ -8,7 +8,6 @@ import { formatRetryReason } from "@/lib/runRetryState";
 import type { IssueScheduledRetry } from "@paperclipai/shared";
 import { useRetryNowMutation, type RetryNowError } from "../hooks/useRetryNowMutation";
 import { Badge } from "@/components/ui/badge";
-import { InlineBanner } from "@/components/InlineBanner";
 import { describeError } from "@/api/errors";
 
 const MAX_TURN_CONTINUATION = "max_turns_continuation";
@@ -35,13 +34,9 @@ export function IssueScheduledRetryCard({
   if (!scheduledRetry || !issueId) return null;
   if (scheduledRetry.status !== "scheduled_retry") return null;
 
-  if (scheduledRetry.scheduledRetryReason === "workspace_busy") {
-    return (
-      <InlineBanner tone="info" icon={Clock} title={t("issueScheduledRetryCard.waitingForWorkspace")} className="mb-3">
-        {t("issueScheduledRetryCard.anotherTaskIsUsingThis")}
-      </InlineBanner>
-    );
-  }
+  // Workspace contention is a transient wait with nothing for the user to do.
+  // The composer strip and properties row carry the quiet status instead.
+  if (scheduledRetry.scheduledRetryReason === "workspace_busy") return null;
 
   const continuation = isContinuationReason(scheduledRetry.scheduledRetryReason);
   const dueAtIso = scheduledRetry.scheduledRetryAt
@@ -163,9 +158,10 @@ export function IssueScheduledRetryCard({
               ? t("issueScheduledRetryCard.promotingScheduledRetry")
               : isSuccessTransient
                 ? retryNow.data?.outcome === "already_promoted"
-                  ? t("issueScheduledRetryCard.alreadyPromotedRunStarting")
-                  : t("issueScheduledRetryCard.promotedRunStarting")
-                : retryNow.data?.outcome === "waiting" && retryNow.data.scheduledRetry?.runId === scheduledRetry.runId
+                  ? "Already promoted — run starting"
+                  : "Promoted — run starting"
+                : (retryNow.data?.outcome === "waiting" && retryNow.data.scheduledRetry?.runId === scheduledRetry.runId)
+                    || retryNow.data?.outcome === "no_scheduled_retry"
                   ? retryNow.data.message
                   : helperIdle}
           </span>

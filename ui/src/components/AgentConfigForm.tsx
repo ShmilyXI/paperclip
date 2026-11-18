@@ -1,10 +1,12 @@
 import { t } from "@/i18n";
+import { AgentLoginTarget } from "./AgentLoginTarget";
+import { environmentSupportsLoginPty } from "@paperclipai/shared";
+import { useAdapterLoginCancellation } from "./useAdapterLoginCancellation";
 import { ACCOUNT_BOUND_MODEL_DISCOVERY_QUERY_OPTIONS, isAccountBoundAcpxAgent } from "@/lib/native-model-catalog";
 import { useConnectionModels } from "./ai-connections/useConnectionModels";
 import { agentHarnessType, agentRunner, paperclipRunnerProfileForHarness, normalizeClaudeRunnerOptions, type AgentRunnerChoice } from "@paperclipai/shared";
 import { adaptersApi } from "../api/adapters";
 import { canQualifyRunnerEnvironment, qualifyRunnerEnvironment } from "../lib/qualify-claude-setup";
-import { AgentRunnerSelect } from "./AgentRunnerSelect";
 import { aiRoutingHarness } from "@paperclipai/shared";
 import { AiConnectionField } from "./ai-connections/AiConnectionField";
 import { aiConnectionBindingSchema, aiRuntimeConnectionBindingSchema } from "@paperclipai/shared";
@@ -1126,6 +1128,11 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   const [runPolicyAdvancedOpen, setRunPolicyAdvancedOpen] = useState(false);
   const [configurationAdvancedOpen, setConfigurationAdvancedOpen] = useState(false);
   const configSchema = useConfigSchema(adapterType);
+  const hasLocalAdvancedFields = isLocal && (!isRunnerHarness || fieldsAdapterType !== "paperclip_runner");
+  const hasConfigurationAdvancedFields = hasLocalAdvancedFields
+    || adapterType === "process"
+    || (adapterType === "claude_local" && !hideHostPaths && (isCreate ? props.values.claudeEngine : eff("adapterConfig", "engine", config.engine)) === "acp")
+    || (fieldsAdapterType !== "paperclip_runner" && configSchema?.fields.some((field) => schemaFieldSection(field.key) === "advanced"));
   const renderAdapterFields = (section: AdapterConfigSection) => (
     <>
       {adapterType === "claude_local" && <ClaudeLocalAdvancedFields {...adapterFieldProps} section={section} />}
@@ -1323,18 +1330,12 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   // advertises the login pseudo-terminal capability. Read the capability for the
   // effective environment provider. The form reads the adapter login capability,
   // not the adapter name: every adapter login gates on this provider capability.
-  const effectiveLoginProvider =
-    typeof effectiveLoginEnvironment?.config?.provider === "string"
-      ? effectiveLoginEnvironment.config.provider
-      : null;
-  const providerSupportsLoginPty =
-    effectiveLoginProvider != null &&
-    environmentCapabilities?.sandboxProviders?.[effectiveLoginProvider]?.supportsLoginPty === true;
+  const providerSupportsLoginPty = environmentSupportsLoginPty(effectiveLoginEnvironment, environmentCapabilities, isRunnerHarness ? harnessType : adapterType);
   const loginNeedsPty = adapterCaps.login != null;
   const showAdapterLogin =
     (isCreate || !((overlay.runtime.runtimeConfig as Record<string, unknown> | undefined)?.aiConnection ?? runtimeConfig.aiConnection)) &&
     adapterSupportsSandboxLogin &&
-    effectiveLoginEnvironment?.driver === "sandbox" &&
+    (effectiveLoginEnvironment?.driver === "sandbox" || effectiveLoginEnvironment?.driver === "plugin") &&
     Boolean(effectiveLoginEnvironmentId) &&
     Boolean(selectedCompanyId) &&
     Boolean(authMissingCheck) &&
@@ -1886,6 +1887,11 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             </Field>
           )}
 
+          {isRunnerHarness && runnerDiscoveryView.kind === "error" && (
+            <QueryErrorState size="inline" error={runnerDiscoveryView.error}
+              action="load agent setup data" retrying={runnerDiscoveryView.isFetching}
+              onRetry={runnerDiscoveryView.retry} />
+          )}
           {!isExternalRunner && !isCreate && selectedCompanyId && <AiConnectionField companyId={selectedCompanyId} agentId={props.agent.id} agentName={props.agent.name} adapterType={aiRoutingHarness(adapterType, eff("adapterConfig", "provider", config.provider), eff("adapterConfig", "acpxAgent", config.acpxAgent))}
             routerAdapterType={adapterType} value={aiRuntimeConnectionBindingSchema.safeParse((overlay.runtime.runtimeConfig as Record<string, unknown> | undefined)?.aiConnection ?? runtimeConfig.aiConnection).data}
             model={String(eff("adapterConfig", "model", config.model) ?? "")} environmentId={currentDefaultEnvironmentId || undefined} legacy
@@ -1906,6 +1912,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 
           {showInlineAdapterTestEnvironmentFeedback && showAdapterLogin && (
             <AdapterLoginPanel
+              requiresAgent={effectiveLoginEnvironment?.driver === "plugin"}
+              agentId={!isCreate && effectiveLoginEnvironment?.driver === "plugin" ? props.agent.id : undefined}
               key={`${adapterType}:${effectiveLoginEnvironmentId}`}
               companyId={selectedCompanyId!}
               adapterType={isRunnerHarness ? harnessType : adapterType}
@@ -2107,19 +2115,14 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 </>
               )}
               {renderAdapterFields("configuration")}
-              {(isLocal || adapterType === "process" || configSchema?.fields.some((field) => schemaFieldSection(field.key) === "advanced")) && (
+              {hasConfigurationAdvancedFields && (
               <CollapsibleSection
                 title={t("common.advanced")}
                 open={configurationAdvancedOpen}
                 onToggle={() => setConfigurationAdvancedOpen(!configurationAdvancedOpen)}
               >
                 <div className="space-y-3">
-                  {isRunnerHarness && <AgentRunnerSelect value={runner}
-                    pending={runnerDiscovery.isFetching} error={runnerDiscovery.error ? describeError(runnerDiscovery.error).body : undefined} onRetry={() => { void runnerDiscovery.refetch(); }}
-                    defaultRunner={runnerAvailability?.defaultRunner}
-                    supportedRunners={runnerAvailability?.supportedRunners}
-                    onChange={next => isCreate ? set!({ runner: next }) : setOverlay(prev => ({ ...prev, runner: next }))} />}
-                  {isLocal && (!isRunnerHarness || fieldsAdapterType !== "paperclip_runner") && (<>              {/*
+                  {hasLocalAdvancedFields && (<>              {/*
                 The command names a binary on the execution host, so the
                 managed-sandbox-only policy hides it: the platform-managed image
                 owns the binary. Hiding is presentation only. A stored
@@ -2519,6 +2522,7 @@ function AdapterLoginTerminalState({
 // environment for one company. A parent that lifts the test feedback renders
 // the panel from this descriptor.
 export type AdapterLoginDescriptor = {
+  agentId?: string;
   companyId: string;
   adapterType: string;
   environmentId: string;
@@ -2541,6 +2545,8 @@ export type AdapterLoginDescriptor = {
 // correctly, and the first thing to rot would have been the timeout and
 // cleanup paths, which are the ones nobody exercises by hand.
 export type AdapterLoginPanelProps = AdapterLoginDescriptor & {
+  requiresAgent?: boolean;
+  active?: boolean;
   aiConnection?: import("@paperclipai/shared").AiConnectionLoginIntent;
   onStored?: (storedSessionId: string) => void;
   onApplyStored?: () => void;
@@ -2605,11 +2611,13 @@ function adapterLoginTitle(adapterType: string): string {
 
 export function AdapterLoginPanel(props: AdapterLoginPanelProps) {
   const getCapabilities = useAdapterCapabilities();
-  const panelMode = getCapabilities(props.adapterType).login?.panelMode;
-  if (panelMode === "submitted_browser_code") {
-    return <SubmittedBrowserCodeLoginPanel {...props} />;
-  }
-  return <DisplayedCodeLoginPanel {...props} />;
+  const Panel = getCapabilities(props.adapterType).login?.panelMode === "submitted_browser_code"
+    ? SubmittedBrowserCodeLoginPanel : DisplayedCodeLoginPanel;
+  return props.requiresAgent
+    ? <AgentLoginTarget companyId={props.companyId} environmentId={props.environmentId} agentId={props.agentId}>
+        {agentId => <Panel key={agentId} {...props} agentId={agentId} />}
+      </AgentLoginTarget>
+    : <Panel {...props} agentId={undefined} />;
 }
 
 class AdapterLoginConflictError extends Error {
@@ -2619,9 +2627,11 @@ class AdapterLoginConflictError extends Error {
 }
 
 function DisplayedCodeLoginPanel({
+  active: loginActive = true,
   companyId,
   adapterType,
   environmentId,
+  agentId,
   autoStart,
   onConnected,
   onAccountBinding,
@@ -2632,6 +2642,7 @@ function DisplayedCodeLoginPanel({
   onRetryReady,
 }: AdapterLoginPanelProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const cancellation = useAdapterLoginCancellation(loginActive, companyId, adapterType, false, sessionId, { environmentId, aiConnection });
   const [retrying, setRetrying] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   // The server delivers the one-time prompt on the first owner read only. Latch
@@ -2654,8 +2665,9 @@ function DisplayedCodeLoginPanel({
   const resumedRef = useRef(false);
 
   const startLogin = useMutation({
-    mutationFn: () => agentsApi.startAdapterAuthLogin(companyId, adapterType, { environmentId, aiConnection }),
+    mutationFn: () => cancellation.accept(() => agentsApi.startAdapterAuthLogin(companyId, adapterType, { environmentId, ...(agentId ? { agentId } : {}), ...(aiConnection ? { aiConnection } : {}) })),
     onSuccess: (session) => {
+      if (!session || !cancellation.isActive()) return;
       resumedRef.current = false;
       setStartError(null);
       setLatchedPrompt(null);
@@ -2665,6 +2677,7 @@ function DisplayedCodeLoginPanel({
       setSessionId(session.sessionId);
     },
     onError: (error) => {
+      if (!cancellation.isActive()) return;
       setStartError(describeError(error).body);
     },
   });
@@ -2682,6 +2695,7 @@ function DisplayedCodeLoginPanel({
     mutationFn: () => agentsApi.cancelAdapterAuthLogin(companyId, adapterType, sessionId!),
     onSuccess: clearActiveSession,
     onError: (error) => {
+      if (!cancellation.isActive()) return;
       setStartError(describeError(error).body);
     },
   });
@@ -2690,12 +2704,12 @@ function DisplayedCodeLoginPanel({
   // browser rediscovers its own session after a reload with no local state. A
   // 404 means no active session for the caller.
   const activeSessionQuery = useQuery({
-    queryKey: ["adapter-login-active-session", companyId, adapterType],
-    queryFn: async () => {
+    queryKey: ["adapter-login-active-session", companyId, adapterType, environmentId, agentId],
+    queryFn: async ({ signal }) => {
       try {
-        const active = await agentsApi.getActiveAdapterAuthLoginSession(companyId, adapterType);
+        const active = await cancellation.resume(() => agentsApi.getActiveAdapterAuthLoginSession(companyId, adapterType, { signal }));
         if (!active) return null;
-        if ((aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new AdapterLoginConflictError(active.sessionId);
+        if (active.agentId !== agentId || (aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new AdapterLoginConflictError(active.sessionId);
         return active;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
@@ -2709,6 +2723,7 @@ function DisplayedCodeLoginPanel({
     // in flight — which the per-owner cap then rejects.
     gcTime: 0,
     staleTime: 0,
+    enabled: loginActive,
   });
   const activeSessionView = useQueryView(activeSessionQuery);
 
@@ -2719,8 +2734,8 @@ function DisplayedCodeLoginPanel({
 
   const statusQuery = useQuery({
     queryKey: ["adapter-login-status", companyId, adapterType, sessionId],
-    queryFn: () => agentsApi.getAdapterAuthLoginStatus(companyId, adapterType, sessionId!),
-    enabled: Boolean(sessionId) && !releasingResumedSession && !retrying,
+    queryFn: ({ signal }) => agentsApi.getAdapterAuthLoginStatus(companyId, adapterType, sessionId!, { signal }),
+    enabled: loginActive && Boolean(sessionId) && !releasingResumedSession && !retrying,
     // A status 404 is unrecoverable: the server removed the row, so a retry
     // cannot bring it back. The shared retry policy never retries a 4xx, so
     // it stops at once and fails loudly; only transient errors are retried.
@@ -2743,14 +2758,14 @@ function DisplayedCodeLoginPanel({
   const status = session?.status ?? null;
   const prompt = latchedPrompt;
   const isTerminal = status ? ADAPTER_LOGIN_TERMINAL_STATUSES.has(status) : false;
-  const isActive = Boolean(sessionId) && !isTerminal && !retrying;
+  const isActive = loginActive && Boolean(sessionId) && !isTerminal && !retrying;
   // A saving bind also blocks a new Sign in: the bind is an agent-update save,
   // and a second login started while it is in flight could finish its own
   // save first — the older save would then land last and silently revert the
   // agent to the previous account while the panel reports the newer bind.
   // Serializing at the only entry point is the whole fix; the panel has no
   // other way to start a login mid-save.
-  const startDisabled = startLogin.isPending || isActive || accountBindState === "saving";
+  const startDisabled = !loginActive || startLogin.isPending || isActive || accountBindState === "saving";
 
   // Adopt the caller's active session once, on mount. This is what makes a
   // page reload keep the session: with no local state at all, the panel would
@@ -2758,7 +2773,7 @@ function DisplayedCodeLoginPanel({
   // active login for this owner.
   const resumeAttemptedRef = useRef(false);
   useEffect(() => {
-    if (resumeAttemptedRef.current || !activeSessionQuery.isFetched) return;
+    if (!loginActive || resumeAttemptedRef.current || !activeSessionQuery.isFetched) return;
     resumeAttemptedRef.current = true;
     const active = activeSessionQuery.data;
     if (!active) return;
@@ -2766,7 +2781,7 @@ function DisplayedCodeLoginPanel({
     setStartError(null);
     setLatchedPrompt(active.prompt ?? null);
     setSessionId(active.sessionId);
-  }, [activeSessionQuery.isFetched, activeSessionQuery.data]);
+  }, [loginActive, activeSessionQuery.isFetched, activeSessionQuery.data]);
 
   // A resumed session's status poll found the session already gone: the read
   // that discovered it and the poll that tried to use it raced, and the
@@ -2815,7 +2830,7 @@ function DisplayedCodeLoginPanel({
   const startLoginRef = useRef(startLogin.mutate);
   startLoginRef.current = startLogin.mutate;
   useEffect(() => {
-    if (!autoStart || autoStartedRef.current) return;
+    if (!loginActive || !autoStart || autoStartedRef.current) return;
     // A failed lookup is not proof that no session exists: only a successful
     // lookup is. Show the failure to the user instead of starting a second
     // login the server would reject against the per-owner cap.
@@ -2830,6 +2845,7 @@ function DisplayedCodeLoginPanel({
     startLoginRef.current();
   }, [
     autoStart,
+    loginActive,
     activeSessionQuery.isSuccess,
     activeSessionView.kind,
     activeSessionQuery.data,
@@ -2843,10 +2859,10 @@ function DisplayedCodeLoginPanel({
   const onConnectedRef = useRef(onConnected);
   onConnectedRef.current = onConnected;
   useEffect(() => {
-    if (status !== "authenticated" || connectedRef.current) return;
+    if (!loginActive || status !== "authenticated" || connectedRef.current) return;
     connectedRef.current = true;
     onConnectedRef.current?.(sessionId ?? undefined);
-  }, [status]);
+  }, [loginActive, status]);
 
   // Drive the account-binding hand-off as a visible state machine, not a
   // fire-and-forget latch. The bind saves the agent, and the status poll
@@ -2891,8 +2907,8 @@ function DisplayedCodeLoginPanel({
   const onPromptReadyRef = useRef(onPromptReady);
   onPromptReadyRef.current = onPromptReady;
   useEffect(() => {
-    onPromptReadyRef.current?.(prompt?.url ?? null);
-  }, [prompt]);
+    onPromptReadyRef.current?.(loginActive ? prompt?.url ?? null : null);
+  }, [loginActive, prompt]);
 
   const failed = Boolean(isTerminal && status !== "authenticated") || statusQuery.isError;
   const retryingRef = useRef(false);
@@ -3152,9 +3168,11 @@ const CLAUDE_LOGIN_TIMED_OUT_MESSAGE = t("agentConfig.theLoginTimedOut");
 // and submits it. The panel clears the code right after submit. The panel treats
 // only the server `stored` state as success, and it never shows the OAuth token.
 function SubmittedBrowserCodeLoginPanel({
+  active: loginActive = true,
   companyId,
   adapterType,
   environmentId,
+  agentId,
   onStored,
   onApplyStored,
   autoStart,
@@ -3169,6 +3187,7 @@ function SubmittedBrowserCodeLoginPanel({
   onRetryReady,
 }: AdapterLoginPanelProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const cancellation = useAdapterLoginCancellation(loginActive, companyId, adapterType, true, sessionId, { environmentId, aiConnection });
   const [retrying, setRetrying] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   // The server delivers the authorization URL on the guarded prompt read only.
@@ -3249,10 +3268,11 @@ function SubmittedBrowserCodeLoginPanel({
   const storedToken = storedTokenQuery.data ?? null;
 
   const startLogin = useMutation({
-    mutationFn: () =>
+    mutationFn: () => cancellation.accept(() =>
       agentsApi.startClaudeSetupTokenLogin(companyId, {
         environmentId,
-        aiConnection,
+        ...(agentId ? { agentId } : {}),
+        ...(aiConnection ? { aiConnection } : {}),
         // When the owner already has a stored token, the login rotates it under
         // the captured version, so a replacement login never conflicts with an
         // existing value. Without a stored token the login is a first write.
@@ -3264,13 +3284,15 @@ function SubmittedBrowserCodeLoginPanel({
               },
             }
           : {}),
-      }),
+      })),
     onSuccess: (session) => {
+      if (!session || !cancellation.isActive()) return;
       resumedRef.current = false;
       resetLocalState();
       setSessionId(session.sessionId);
     },
     onError: (error) => {
+      if (!cancellation.isActive()) return;
       setStartError(describeError(error).body);
     },
   });
@@ -3327,12 +3349,12 @@ function SubmittedBrowserCodeLoginPanel({
   // session id, so the browser rediscovers its own session after a reload
   // with no local state. A 404 means no active session for the caller.
   const activeSessionQuery = useQuery({
-    queryKey: ["claude-setup-token-active-session", companyId],
-    queryFn: async () => {
+    queryKey: ["claude-setup-token-active-session", companyId, environmentId, agentId],
+    queryFn: async ({ signal }) => {
       try {
-        const active = await agentsApi.getActiveClaudeSetupTokenLoginSession(companyId);
+        const active = await cancellation.resume(() => agentsApi.getActiveClaudeSetupTokenLoginSession(companyId, { signal }));
         if (!active) return null;
-        if ((aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new Error(t("agentConfig.anotherSignInAttemptIs"));
+        if (active.agentId !== agentId || (aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new Error("Another sign-in attempt is active. Finish or cancel it in its original account setup before starting this one.");
         return active;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
@@ -3346,6 +3368,7 @@ function SubmittedBrowserCodeLoginPanel({
     // in flight — which the per-owner cap then rejects.
     gcTime: 0,
     staleTime: 0,
+    enabled: loginActive,
   });
   const activeSessionView = useQueryView(activeSessionQuery);
 
@@ -3359,11 +3382,11 @@ function SubmittedBrowserCodeLoginPanel({
   // status 404 also stops the polls: the server cleaned up the session, so the
   // panel enters a terminal failure state instead.
   const pollingEnabled =
-    Boolean(sessionId) && !timedOut && !statusGone && !releasingResumedSession && !retrying;
+    loginActive && Boolean(sessionId) && !timedOut && !statusGone && !releasingResumedSession && !retrying;
 
   const statusQuery = useQuery({
     queryKey: ["claude-setup-token-status", companyId, sessionId],
-    queryFn: () => agentsApi.getClaudeSetupTokenLoginStatus(companyId, sessionId!),
+    queryFn: ({ signal }) => agentsApi.getClaudeSetupTokenLoginStatus(companyId, sessionId!, { signal }),
     enabled: pollingEnabled,
     // A status 404 is terminal. The server removes a cleaned-up session at once,
     // so a retry cannot recover it. The shared retry policy never retries a
@@ -3416,7 +3439,7 @@ function SubmittedBrowserCodeLoginPanel({
   // active login for this owner.
   const resumeAttemptedRef = useRef(false);
   useEffect(() => {
-    if (resumeAttemptedRef.current || !activeSessionQuery.isFetched) return;
+    if (!loginActive || resumeAttemptedRef.current || !activeSessionQuery.isFetched) return;
     resumeAttemptedRef.current = true;
     const active = activeSessionQuery.data;
     if (!active) return;
@@ -3427,7 +3450,7 @@ function SubmittedBrowserCodeLoginPanel({
       setAuthorizationUrl(active.prompt.authorizationUrl);
       if (active.prompt.transportAdvisory) setTransportInsecure(true);
     }
-  }, [activeSessionQuery.isFetched, activeSessionQuery.data]);
+  }, [loginActive, activeSessionQuery.isFetched, activeSessionQuery.data]);
 
   // Poll the guarded prompt route until it returns the authorization URL. The
   // route returns 404 until the URL is ready, so the panel treats a 404 as
@@ -3435,9 +3458,9 @@ function SubmittedBrowserCodeLoginPanel({
   const promptQuery = useQuery({
     queryKey: ["claude-setup-token-prompt", companyId, sessionId],
     enabled: pollingEnabled && !authorizationUrl,
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       try {
-        return await agentsApi.getClaudeSetupTokenLoginPrompt(companyId, sessionId!);
+        return await agentsApi.getClaudeSetupTokenLoginPrompt(companyId, sessionId!, { signal });
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
         throw error;
@@ -3459,6 +3482,7 @@ function SubmittedBrowserCodeLoginPanel({
     mutationFn: (code: string) =>
       agentsApi.submitClaudeSetupTokenBrowserCode(companyId, sessionId!, code),
     onError: (error) => {
+      if (!cancellation.isActive()) return;
       setStartError(describeError(error).body);
     },
   });
@@ -3466,6 +3490,7 @@ function SubmittedBrowserCodeLoginPanel({
   const completeLogin = useMutation({
     mutationFn: () => agentsApi.completeClaudeSetupTokenLogin(companyId, sessionId!),
     onSuccess: (result) => {
+      if (!cancellation.isActive()) return;
       // The server reached the `stored` state. Hold the non-secret claim and
       // report it to the parent. The response carries no token.
       setStoredSessionId(result.storedSessionId);
@@ -3487,11 +3512,11 @@ function SubmittedBrowserCodeLoginPanel({
   const completeLoginRef = useRef(completeLogin.mutate);
   completeLoginRef.current = completeLogin.mutate;
   useEffect(() => {
-    if (status === "authenticated" && !completionStartedRef.current) {
+    if (loginActive && status === "authenticated" && !completionStartedRef.current) {
       completionStartedRef.current = true;
       completeLoginRef.current();
     }
-  }, [status]);
+  }, [loginActive, status]);
 
   const isStored = storedSessionId !== null;
   const isFailure =
@@ -3499,8 +3524,8 @@ function SubmittedBrowserCodeLoginPanel({
     statusGone ||
     Boolean(status && CLAUDE_LOGIN_FAILURE_STATUSES.has(status));
   const isCompleting = status === "authenticated" && !isStored && !completionFailed;
-  const isActive = Boolean(sessionId) && !isStored && !isFailure && !timedOut && !retrying;
-  const startDisabled = startLogin.isPending || isActive;
+  const isActive = loginActive && Boolean(sessionId) && !isStored && !isFailure && !timedOut && !retrying;
+  const startDisabled = !loginActive || startLogin.isPending || isActive;
 
   // Cap the active login at the server deadline. The timer arms when the login
   // becomes active and clears when the login leaves the active state (a terminal
@@ -3584,7 +3609,7 @@ function SubmittedBrowserCodeLoginPanel({
   const startLoginRef = useRef(startLogin.mutate);
   startLoginRef.current = startLogin.mutate;
   useEffect(() => {
-    if (!autoStart || autoStartedRef.current) return;
+    if (!loginActive || !autoStart || autoStartedRef.current) return;
     // A failed lookup is not proof that no session exists: only a successful
     // lookup is. Show the failure to the user instead of starting a second
     // login the server would reject against the per-owner cap.
@@ -3599,6 +3624,7 @@ function SubmittedBrowserCodeLoginPanel({
     startLoginRef.current();
   }, [
     autoStart,
+    loginActive,
     activeSessionQuery.isSuccess,
     activeSessionView.kind,
     activeSessionQuery.data,
@@ -3652,10 +3678,10 @@ function SubmittedBrowserCodeLoginPanel({
   const onConnectedRef = useRef(onConnected);
   onConnectedRef.current = onConnected;
   useEffect(() => {
-    if (!isStored || connectedRef.current) return;
+    if (!loginActive || !isStored || connectedRef.current) return;
     connectedRef.current = true;
     onConnectedRef.current?.(sessionId ?? undefined);
-  }, [isStored]);
+  }, [loginActive, isStored]);
 
   // The other end of `onCodeSubmitted`. Any of these after a submit means the
   // code is not going to become a stored login, and a caller still showing
@@ -3673,8 +3699,8 @@ function SubmittedBrowserCodeLoginPanel({
   const onPromptReadyRef = useRef(onPromptReady);
   onPromptReadyRef.current = onPromptReady;
   useEffect(() => {
-    onPromptReadyRef.current?.(authorizationUrl);
-  }, [authorizationUrl]);
+    onPromptReadyRef.current?.(loginActive ? authorizationUrl : null);
+  }, [loginActive, authorizationUrl]);
 
   const retryingRef = useRef(false);
   const retryLogin = useMutation({

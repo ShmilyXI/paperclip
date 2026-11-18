@@ -110,7 +110,10 @@ function environmentDeleteBlockMessage(impact: EnvironmentDeleteBlastRadius): st
     return t("environments.cannotDeleteThisEnvironmentWhile");
   }
   if (impact.reusableSandboxLeaseCount > 0) {
-    return t("environments.cannotDeleteThisEnvironmentWhile2");
+    if (impact.reusableSandboxLeaseHolders.some(holder => holder.leasePolicy === "retain_on_failure")) {
+      return "Cannot delete this environment while it keeps a failed run's workspace copy (a stopped sandbox kept for file recovery). Deleting the environment with consent destroys that sandbox and the files only it holds.";
+    }
+    return "Cannot delete this environment while it has a reusable sandbox lease. Remove the associated execution workspace or issue so Paperclip can destroy the sandbox, then retry.";
   }
   return null;
 }
@@ -565,7 +568,7 @@ function EnvironmentCustomImageBrowserTerminal({
       cursorStyle: "bar",
       cursorWidth: 2,
       customGlyphs: true,
-      fontFamily: CUSTOM_IMAGE_TERMINAL_FONT_FAMILY,
+      fontFamily: `${getComputedStyle(element).getPropertyValue("--font-mono").trim()}, ${CUSTOM_IMAGE_TERMINAL_FONT_FAMILY}`,
       fontSize: 12,
       letterSpacing: 0,
       lineHeight: 1.35,
@@ -1931,6 +1934,8 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
   }
   // One row per workspace holding blocking sandbox leases (several leases can
   // share a workspace). A lease whose workspace FK was nulled groups alone.
+  const retainedFailureSourceCount = (deleteBlastRadius?.reusableSandboxLeaseHolders ?? [])
+    .filter(holder => holder.leasePolicy === "retain_on_failure").length;
   const reusableLeaseHolderGroups = (() => {
     const groups = new Map<
       string,
@@ -2551,6 +2556,9 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
                               ? deleteBlastRadius.reusableSandboxLeaseCount === 1
                                 ? t("environments.leaseDestroyNoticeOne")
                                 : t("environments.leaseDestroyNoticeMany", { count: deleteBlastRadius.reusableSandboxLeaseCount })
+                              : null,
+                            reusableLeaseOnlyBlock && retainedFailureSourceCount > 0
+                              ? `${retainedFailureSourceCount === 1 ? "1 of them is" : `${retainedFailureSourceCount} of them are`} a failed run's workspace copy kept for file recovery; destroying it loses the files only it holds.`
                               : null,
                             agentsUsingEnvironment.length > 0
                               ? agentsUsingEnvironment.length === 1

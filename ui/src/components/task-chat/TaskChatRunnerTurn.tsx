@@ -1,4 +1,5 @@
 import { t } from "@/i18n";
+import { groupImageResources } from "./image-resources";
 import { useRef, type ReactNode } from "react";
 import type { ExecutionProjection } from "@paperclipai/shared";
 import { useSecondTick } from "@/hooks/useSecondTick";
@@ -94,7 +95,7 @@ function RunnerTurnStatus({
   const label = terminal ? (failed ? t("taskChatRunnerTurn.stopped") : t("taskChatRunnerTurn.worked")) : waitingLabel ?? t("taskChatRunnerTurn.working");
   const suffix = terminal
     ? elapsed ? ` ${failed ? "after" : "for"} ${elapsed}` : ""
-    : waitingLabel ? elapsed ? ` · ${elapsed}` : "" : ` for ${elapsed ?? "0s"}`;
+    : elapsed ? `${waitingLabel ? " · " : " for "}${elapsed}` : "";
 
   return (
     <span
@@ -135,7 +136,7 @@ function runnerWaitingLabel({ runId, status, execution, preparationLabel }: Runn
   if (isTerminalRunStatus(status)) return null;
   if (execution?.phase === "waiting_for_provider") return execution.label;
   if (!runId && preparationLabel) return preparationLabel;
-  return status === "queued" ? execution?.label ?? "Queued" : null;
+  return status === "queued" && execution?.cause ? execution.label : null;
 }
 
 /** One identity stays mounted while admission discovers the run's renderer. */
@@ -245,10 +246,10 @@ export function TaskChatRunnerTurn({
   const final = finalRef.current.item;
   const timelineItems = paperclipRunnerTimelineItems(turnItems);
   const currentActivityItems = currentActivityStatusItems(timelineItems);
-  const timelineRows = buildTurnTimelineRows(
+  const timelineRows = groupImageResources(buildTurnTimelineRows(
     omitProgressRepeatedByResponse(timelineItems, final?.text),
     !terminal,
-  );
+  ));
 
   return (
     <TaskChatShimmerScope items={items}><div

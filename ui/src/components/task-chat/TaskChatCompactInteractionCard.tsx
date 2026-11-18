@@ -31,6 +31,7 @@ import type {
 } from "@paperclipai/adapter-utils";
 import { InteractionPreparationNotice } from "@/components/InteractionPreparationNotice";
 import { IssueThreadInteractionCard } from "@/components/IssueThreadInteractionCard";
+import { ToolActionAuditHashCopy } from "@/components/ToolActionAuditHashCopy";
 import { ConnectionIntentInteractionBody } from "@/features/connections/ConnectionIntentInteractionBody";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import type { MentionOption } from "@/components/MarkdownEditor";
@@ -306,7 +307,13 @@ function CompactTarget({
   if (!target || !label) return null;
   const href = target.type === "issue_attachment"
     ? `/api/attachments/${encodeURIComponent(target.attachmentId)}/content`
-    : target.href ? normalizeRequestConfirmationTargetHref(target.href) : null;
+    : target.href ? normalizeRequestConfirmationTargetHref(target.href)
+      // A document on this chat opens in its document panel, like a reply's
+      // `#document-<key>` link, so the person can read what they are asked to review.
+      // Plan reviews keep their header chip; their plan preview opens the plan.
+      : target.type === "issue_document" && target.key !== "plan" && (target.issueId ?? interaction.issueId) === interaction.issueId
+        ? `#document-${encodeURIComponent(target.key)}`
+        : null;
   if (href) {
     return (
       <a
@@ -562,11 +569,12 @@ function ReceiptDisclosure({
               <strong>{interaction.payload.toolAction.toolDisplayName}</strong>{" "}
               {t("taskChatCompactInteractionCard.toolRisk", { risk: interaction.payload.toolAction.risk })}
             </p>
-            <p className="mt-1">
-              {t("taskChatCompactInteractionCard.expiresAt", {
-                time: new Date(interaction.payload.toolAction.expiresAt).toLocaleString(),
-              })}
-            </p>
+            {interaction.payload.toolAction.expiresAt ? <p className="mt-1">
+              Expires{" "}
+              {new Date(
+                interaction.payload.toolAction.expiresAt,
+              ).toLocaleString()}
+            </p> : null}
             <div className="mt-2">
               <MarkdownBody externalReferences={externalReferences}>
                 {interaction.payload.toolAction.previewMarkdown}
@@ -575,9 +583,7 @@ function ReceiptDisclosure({
             <pre className="mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs">
               {interaction.payload.toolAction.argumentsSummaryJson}
             </pre>
-            <p className="mt-1 break-all font-mono text-xs text-muted-foreground">
-              {interaction.payload.toolAction.argumentsHash}
-            </p>
+            <ToolActionAuditHashCopy hash={interaction.payload.toolAction.argumentsHash} />
           </div>
         ) : null}
         {interaction.payload.secretProposal ? (
@@ -924,25 +930,24 @@ function ConfirmationCard({
             >
               {t("taskChatCompactInteractionCard.toolRiskBare", { risk: interaction.payload.toolAction.risk })}
             </span>
-            <span className="ml-auto text-xs text-muted-foreground">
-              {t("taskChatCompactInteractionCard.expiresAt", {
-                time: new Date(interaction.payload.toolAction.expiresAt).toLocaleString(),
-              })}
-            </span>
+            {interaction.payload.toolAction.expiresAt ? <span className="ml-auto text-xs text-muted-foreground">
+              Expires{" "}
+              {new Date(
+                interaction.payload.toolAction.expiresAt,
+              ).toLocaleString()}
+            </span> : null}
           </div>
           <MarkdownBody externalReferences={externalReferences}>
             {interaction.payload.toolAction.previewMarkdown}
           </MarkdownBody>
           <details>
             <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-              {t("taskChatCompactInteractionCard.argumentsAndAuditHash")}
+              Arguments
             </summary>
             <pre className="mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground">
               {interaction.payload.toolAction.argumentsSummaryJson}
             </pre>
-            <p className="mt-1 break-all font-mono text-xs text-muted-foreground">
-              {interaction.payload.toolAction.argumentsHash}
-            </p>
+            <ToolActionAuditHashCopy hash={interaction.payload.toolAction.argumentsHash} />
           </details>
         </div>
       ) : null}

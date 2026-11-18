@@ -8,7 +8,6 @@ import { useAgentAppearanceDraft } from "../../hooks/useAgentAppearanceDraft";
 import { AiConnectionField, aiProviderForAdapter } from "../ai-connections/AiConnectionField";
 import type { AiConnectionBinding } from "@paperclipai/shared";
 import type { AgentRunner, AgentRunnerChoice } from "@paperclipai/shared";
-import { AgentRunnerSelect } from "../AgentRunnerSelect";
 import { SelectPopover } from "../ui/select";
 import { DEFAULT_CODEX_LOCAL_MODEL } from "@paperclipai/adapter-codex-local";
 import {
@@ -31,7 +30,7 @@ import type {
   Agent,
   EnvBinding,
 } from "@paperclipai/shared";
-import { ADAPTER_AUTH_MISSING_CHECK_CODE, isAgentStatusInvokable, paperclipRunnerProfileForHarness } from "@paperclipai/shared";
+import { ADAPTER_AUTH_MISSING_CHECK_CODE, isAgentStatusInvokable, paperclipRunnerCreationLifecycle, paperclipRunnerProfileForHarness } from "@paperclipai/shared";
 import { useNavigate, useSearchParams } from "@/lib/router";
 import { agentsApi } from "@/api/agents";
 import { ApiError } from "@/api/client";
@@ -496,7 +495,7 @@ function Setup({
     const config = getUIAdapter(preserveNativeHarness && runner === "paperclip" && brandType !== "pi_local" ? "paperclip_runner" : adapterType).buildAdapterConfig(preserveNativeHarness && runner === "paperclip" ? { ...values, adapterSchemaValues: nativeSchema } : values,
       antigravityCandidate ? { candidateHarnesses: [antigravityCandidate] } : undefined);
     if (preserveNativeHarness && runner === "paperclip" && profile) {
-      Object.assign(config, nativeSchema, profile.provider === "opencode" ? { opencodePermissionMode: "allow" } : profile.provider === "codex" ? { codexPermissionMode: "never" } : {}, { lifecycleMode: "per_turn" });
+      Object.assign(config, nativeSchema, profile.provider === "opencode" ? { opencodePermissionMode: "allow" } : profile.provider === "codex" ? { codexPermissionMode: "never" } : {}, paperclipRunnerCreationLifecycle(profile));
     }
     if (isRunner)
       Object.assign(config, {
@@ -1117,15 +1116,7 @@ function Setup({
                           setScreen("runtime");
                         }).catch(cause => setError(cause instanceof Error ? cause.message : t("newAgent.couldNotSaveAgentSetup")));
                       }}
-                    /></fieldset> : <p role="status" className="text-sm text-muted-foreground">{t("newAgent.loadingConnectionSettings")}</p>}
-                    {["codex_local", "claude_local", "opencode_local", "pi_local"].includes(adapterType) && <details className="mt-5 space-y-3">
-                      <summary className="cursor-pointer text-sm text-muted-foreground">{t("common.advanced")}</summary>
-                      <AgentRunnerSelect value={runner} disabled={busy}
-                        pending={adapters.isFetching} error={adapters.error ? describeError(adapters.error).body : undefined} onRetry={() => { void adapters.refetch(); }}
-                        defaultRunner={adapters.data?.find(item => item.type === adapterType)?.defaultRunner}
-                        supportedRunners={adapters.data?.find(item => item.type === adapterType)?.supportedRunners}
-                        onChange={value => { setRunner(value); resetTest(); }} />
-                    </details>}
+                    /></fieldset> : <p role="status" className="text-sm text-muted-foreground">Loading connection settings…</p>}
                   </OnboardingCard>
                 ) : screen === "saved" && created ? (
                   <div className="space-y-6">
@@ -1478,14 +1469,6 @@ function Setup({
                           </div>
                           </>
                         )}
-                        {["codex_local", "claude_local", "opencode_local", "pi_local", "cursor_cloud"].includes(adapterType) && <details className="space-y-3">
-                          <summary className="cursor-pointer text-sm text-muted-foreground">Advanced</summary>
-                          <AgentRunnerSelect value={runner} disabled={busy}
-                            pending={adapters.isFetching} error={adapters.error ? describeError(adapters.error).body : undefined} onRetry={() => { void adapters.refetch(); }}
-                            defaultRunner={adapters.data?.find(item => item.type === adapterType)?.defaultRunner}
-                            supportedRunners={adapters.data?.find(item => item.type === adapterType)?.supportedRunners}
-                            onChange={value => { setRunner(value); resetTest(); }} />
-                        </details>}
                       </section>
                       {adapterType !== "hermes_gateway" && adapterType !== "cursor_cloud" && (
                         <section className="space-y-5">

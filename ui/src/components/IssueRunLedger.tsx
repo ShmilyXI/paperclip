@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ActivityEvent, Issue, Agent, ProviderTraceMetadata } from "@paperclipai/shared";
 import {
   isResponsibleUserDenialCode,
+  normalizeRunFailureCause,
   responsibleUserLabel,
 } from "@paperclipai/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -330,8 +331,12 @@ function stopReasonLabel(run: RunForIssue) {
   if (stopReason === "paused") return t("issueRunLedger.stopPausedByBoard");
   if (stopReason === "process_lost") return t("issueRunLedger.stopProcessLost");
   if (stopReason === "unmanaged_background_task_stopped")
-    return t("issueRunLedger.stopUnmanagedBackgroundTaskStopped");
-  if (stopReason === "adapter_failed") return t("issueRunLedger.stopAdapterFailed");
+    return "unmanaged background task stopped";
+  if (stopReason === "adapter_failed") {
+    // Older runs have no recorded cause and keep the plain label.
+    const failureCause = normalizeRunFailureCause(run.failureCause);
+    return failureCause ? `adapter failed (${failureCause})` : "adapter failed";
+  }
   if (stopReason === "completed")
     return timeoutText ? t("issueRunLedger.completedWithDetail", { detail: timeoutText }) : t("issueRunLedger.stopCompleted");
   return timeoutText;
