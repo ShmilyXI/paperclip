@@ -208,15 +208,15 @@ export function ComposerRunSettingsPicker({
   };
   const closeButton = mobile ? <DialogClose asChild><button type="button" aria-label={t("composerRunSettingsPicker.closePicker")} className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-accent"><X className="size-4" /></button></DialogClose> : null;
   const Trigger = mobile ? DialogTrigger : PopoverTrigger;
-  const modelTrigger = <button ref={allowAssigneeChange ? undefined : triggerRef} type="button" disabled={disabled} aria-label="Select model and effort" aria-haspopup="dialog" aria-expanded={open && view !== "agents"} onClick={() => { setView("settings"); if (allowAssigneeChange) setOpen(true); }}
+  const modelTrigger = <button ref={allowAssigneeChange ? undefined : triggerRef} type="button" disabled={disabled} aria-label={t("composerRunSettingsPicker.selectModelAndEffort")} aria-haspopup="dialog" aria-expanded={open && view !== "agents"} onClick={() => { setView("settings"); if (allowAssigneeChange) setOpen(true); }}
     className="flex h-8 min-w-0 max-w-full items-center gap-1.5 rounded-full px-2.5 text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
-    <span data-testid="task-chat-composer-model-label" className="min-w-0 truncate text-foreground/70">{open ? "Select model" : modelName || "Default"}</span>
+    <span data-testid="task-chat-composer-model-label" className="min-w-0 truncate text-foreground/70">{open ? t("composerRunSettingsPicker.selectModel") : modelName || t("common.default")}</span>
     {!open && effort ? <span className="hidden shrink-0 sm:inline">{effortLabel}</span> : null}
     <ChevronDown className="size-3 shrink-0" aria-hidden />
   </button>;
   const AssigneeHeader = allowAssigneeChange ? "button" : "div";
   const triggers = <div data-testid="task-chat-composer-selection" className="flex min-w-0 max-w-full items-center rounded-full bg-muted text-xs font-medium">
-    {allowAssigneeChange ? <Trigger asChild><button ref={triggerRef} type="button" disabled={disabled} aria-label="Select assignee" data-testid="task-chat-composer-assignee"
+    {allowAssigneeChange ? <Trigger asChild><button ref={triggerRef} type="button" disabled={disabled} aria-label={t("composerRunSettingsPicker.selectAssignee")} data-testid="task-chat-composer-assignee"
       onClick={() => { setView("agents"); setHighlightedAssignee(0); }}
       className="flex h-8 min-w-0 max-w-full items-center gap-1.5 rounded-full px-2.5 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
       {renderAssigneeIdentity?.(assigneeValue, agent?.name ?? t("common.unassigned"), "trigger")}
@@ -230,18 +230,18 @@ export function ComposerRunSettingsPicker({
 
   const body = view === "settings" ? <div className="min-h-0 overflow-y-auto overscroll-contain touch-pan-y p-3" data-testid="composer-run-settings-view">
     <div className="flex items-center gap-2">
-      <AssigneeHeader type={allowAssigneeChange ? "button" : undefined} aria-label={allowAssigneeChange ? "Choose assignee" : undefined} onClick={allowAssigneeChange ? () => setView("agents") : undefined}
+      <AssigneeHeader type={allowAssigneeChange ? "button" : undefined} aria-label={allowAssigneeChange ? t("composerRunSettingsPicker.chooseAssignee") : undefined} onClick={allowAssigneeChange ? () => setView("agents") : undefined}
         className={cn("flex min-w-0 flex-1 items-center gap-2 rounded-md px-1 py-1 text-left", allowAssigneeChange && "hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring")}>
-        {renderAssigneeIdentity?.(assigneeValue, agent?.name ?? "Unassigned", "option") ?? <span className="grid size-6 shrink-0 place-items-center rounded-md bg-secondary text-xs font-semibold text-secondary-foreground">{agent?.name.slice(0, 1) ?? "?"}</span>}
-        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{agent?.name ?? options.find((item) => item.id === assigneeValue)?.label ?? "Unassigned"}</span><span className="block truncate text-xs text-muted-foreground">{harnessLabel(agent)}</span></span>
+        {renderAssigneeIdentity?.(assigneeValue, agent?.name ?? t("common.unassigned"), "option") ?? <span className="grid size-6 shrink-0 place-items-center rounded-md bg-secondary text-xs font-semibold text-secondary-foreground">{agent?.name.slice(0, 1) ?? "?"}</span>}
+        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{agent?.name ?? options.find((item) => item.id === assigneeValue)?.label ?? t("common.unassigned")}</span><span className="block truncate text-xs text-muted-foreground">{harnessLabel(agent)}</span></span>
         {allowAssigneeChange ? <ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden /> : null}
       </AssigneeHeader>
-      {!choices.length && modelSupported ? <button type="button" aria-label="Reset to agent default" title="Reset to agent default" disabled={!changed} onClick={reset} className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-accent disabled:opacity-40"><RotateCcw className="size-4" /></button> : null}
+      {!choices.length && modelSupported ? <button type="button" aria-label={t("composerRunSettingsPicker.resetToAgentDefault")} title={t("composerRunSettingsPicker.resetToAgentDefault")} disabled={!changed} onClick={reset} className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-accent disabled:opacity-40"><RotateCcw className="size-4" /></button> : null}
       {closeButton}
     </div>
     {modelSupported ? <>
       <button type="button" aria-label={t("composerRunSettingsPicker.chooseExactModel")} onClick={() => setView("models")} className="mt-3 flex w-full items-center gap-2 rounded-md px-1 py-1 text-left hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <span className="min-w-0 flex-1"><span className="block text-xs text-muted-foreground">{t("common.model")}</span><span className="block truncate text-sm font-medium">{modelName || "Default"}</span></span><ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+        <span className="min-w-0 flex-1"><span className="block text-xs text-muted-foreground">{t("common.model")}</span><span className="block truncate text-sm font-medium">{modelName || t("common.default")}</span></span><ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden />
       </button>
       {choices.length ? <div className="mt-3">
         <div className="flex items-center gap-2">
