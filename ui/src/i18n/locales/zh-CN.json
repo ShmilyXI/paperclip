@@ -13846,6 +13846,8 @@
   "agentBasicsDialog": {
     "selectAnOrganizationToCreate": "请选择组织以创建员工。",
     "noAgentAdaptersAreAvailable": "该实例没有可用的员工适配器。",
+    "loadTheAdapterList": "加载适配器列表",
+    "candidate": "候选",
     "couldNotSaveAgentSetup": "无法保存员工设置。",
     "newAgentProgress": "新建员工进度",
     "n1Name": "1. 名称",

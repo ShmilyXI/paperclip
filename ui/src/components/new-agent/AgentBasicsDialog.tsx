@@ -262,7 +262,7 @@ export function AgentBasicsDialog({
               </div>
             ) : (
               <fieldset className="space-y-4">
-                <legend className="sr-only">Adapter</legend>
+                <legend className="sr-only">{t("common.adapter")}</legend>
                 {adaptersView.kind === "loading" || adaptersView.kind === "reconnecting" ? (
                   <p role="status" className="text-sm text-muted-foreground">
                     {t("agentBasicsDialog.loadingAdapters")}
@@ -272,7 +272,7 @@ export function AgentBasicsDialog({
                   <QueryErrorState
                     size="inline"
                     error={adaptersView.error}
-                    action="load the adapter list"
+                    action={t("agentBasicsDialog.loadTheAdapterList")}
                     onRetry={adaptersView.retry}
                     retrying={adaptersView.isFetching}
                   />
@@ -307,7 +307,7 @@ export function AgentBasicsDialog({
                             {display.label}
                           </span>
                           {adapter.type === "antigravity_runtime" && !antigravityQualified && (
-                            <span className="text-xs text-muted-foreground">{antigravityCandidate ? "Candidate" : "Not available yet"}</span>
+                            <span className="text-xs text-muted-foreground">{antigravityCandidate ? t("agentBasicsDialog.candidate") : t("secrets.notAvailableYet")}</span>
                           )}
                           {adapterType === adapter.type && (
                             <Check className="absolute right-2 top-2 size-3.5" />

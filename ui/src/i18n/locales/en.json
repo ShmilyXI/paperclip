@@ -13846,6 +13846,8 @@
   "agentBasicsDialog": {
     "selectAnOrganizationToCreate": "Select an organization to create an agent.",
     "noAgentAdaptersAreAvailable": "No agent adapters are available on this instance.",
+    "loadTheAdapterList": "load the adapter list",
+    "candidate": "Candidate",
     "couldNotSaveAgentSetup": "Could not save agent setup.",
     "newAgentProgress": "New agent progress",
     "n1Name": "1. Name",
