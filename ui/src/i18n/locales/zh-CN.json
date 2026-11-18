@@ -2081,6 +2081,7 @@
     "behind": "落后",
     "atRisk": "有风险",
     "onTrack": "进展正常",
+    "notMeasured": "未衡量",
     "couldNotChangeTheStatus": "无法更改状态。",
     "howIsSuccessMeasuredFor": "如何衡量 {{title}} 的成功？状态会根据所选衡量类型随读数而定。",
     "couldNotSaveTheBar": "无法保存衡量标准。",
@@ -17634,5 +17635,15 @@
     "approveTheConnection": "请在 Tailscale 中批准此连接。完成后本页会自动更新。",
     "continueToTailscale": "继续前往 Tailscale",
     "openTailscaleDevices": "打开 Tailscale 设备"
+  },
+  "responsibilitiesHomeLayout": {
+    "whatYouOwn": "你拥有的内容",
+    "isEachOneMeetingItsBar": "每项都达标了吗？",
+    "hideLetGoResponsibilities": "隐藏已放手的职责",
+    "showLetGoResponsibilities": "显示已放手的职责",
+    "showingOnly": "仅显示 {{label}}。",
+    "noneOfYourResponsibilitiesAre": "你的职责中没有属于 {{label}} 的。",
+    "nothingToShow": "没有可显示的内容。",
+    "youHaveNotLetGo": "你还没有放手任何职责。"
   }
 }

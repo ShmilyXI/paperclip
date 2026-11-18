@@ -2081,6 +2081,7 @@
     "behind": "Behind",
     "atRisk": "At risk",
     "onTrack": "On track",
+    "notMeasured": "Not measured",
     "couldNotChangeTheStatus": "Couldn’t change the status.",
     "howIsSuccessMeasuredFor": "How is success measured for {{title}}? The status follows from the reading, by the kind of measure you choose.",
     "couldNotSaveTheBar": "Couldn’t save the bar.",
@@ -17634,5 +17635,15 @@
     "approveTheConnection": "Approve the connection in Tailscale. This page will update when you finish.",
     "continueToTailscale": "Continue to Tailscale",
     "openTailscaleDevices": "Open Tailscale devices"
+  },
+  "responsibilitiesHomeLayout": {
+    "whatYouOwn": "What you own",
+    "isEachOneMeetingItsBar": "Is each one meeting its bar?",
+    "hideLetGoResponsibilities": "Hide let-go responsibilities",
+    "showLetGoResponsibilities": "Show let-go responsibilities",
+    "showingOnly": "Showing only {{label}}.",
+    "noneOfYourResponsibilitiesAre": "None of your responsibilities are {{label}}.",
+    "nothingToShow": "Nothing to show.",
+    "youHaveNotLetGo": "You have not let go of any responsibilities."
   }
 }

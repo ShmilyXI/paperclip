@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import type { Agent, ResponsibilityHealth, ResponsibilityOverview, ResponsibilityWithRollup } from "@paperclipai/shared";
+import { t } from "@/i18n";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   groupByArea,
   otherActiveAreas,
-  RESPONSIBILITY_HEALTH_LABEL,
   sortByStatus,
   type AttentionItem,
 } from "@/lib/responsibilities";
@@ -16,6 +16,16 @@ import { ProposedResponsibilitiesReview } from "./ProposedResponsibilitiesReview
 import { ResponsibilitiesEmpty } from "./ResponsibilitiesEmpty";
 import { AgentPoweredSummary, ResponsibilityStandingSummary } from "./ResponsibilityMeasures";
 import { ResponsibilityRow } from "./ResponsibilityRow";
+
+function healthLabel(health: ResponsibilityHealth): string {
+  return health === "behind"
+    ? t("responsibilities.behind")
+    : health === "at_risk"
+      ? t("responsibilities.atRisk")
+      : health === "on_track"
+        ? t("responsibilities.onTrack")
+        : t("responsibilities.notMeasured");
+}
 
 /**
  * Everything the home layout needs: the loaded overview and agents, and the
@@ -114,27 +124,27 @@ export function ResponsibilitiesHomeLayout({
             <div className="flex flex-wrap items-end justify-between gap-2">
               <div className="flex flex-col gap-1">
                 <h2 id="responsibilities-owned-heading" className="text-base font-semibold text-foreground">
-                  What you own
+                  {t("responsibilitiesHomeLayout.whatYouOwn")}
                 </h2>
-                <p className="text-sm text-muted-foreground">Is each one meeting its bar?</p>
+                <p className="text-sm text-muted-foreground">{t("responsibilitiesHomeLayout.isEachOneMeetingItsBar")}</p>
               </div>
               <Button size="sm" variant="ghost" onClick={onToggleLetGo} aria-pressed={includeLetGo}>
-                {includeLetGo ? "Hide let-go responsibilities" : "Show let-go responsibilities"}
+                {includeLetGo ? t("responsibilitiesHomeLayout.hideLetGoResponsibilities") : t("responsibilitiesHomeLayout.showLetGoResponsibilities")}
               </Button>
             </div>
             <ResponsibilityStandingSummary counts={overview.totals.byHealth} selected={healthFilter} onSelect={setHealthFilter} />
             <NeedsYouSection companyId={companyId} responsibilities={active} agents={agents} onNewTask={onNewTask} />
             {healthFilter ? (
               <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                <span>Showing only {RESPONSIBILITY_HEALTH_LABEL[healthFilter].toLowerCase()}.</span>
-                <Button size="xs" variant="ghost" onClick={() => setHealthFilter(null)}>Show all</Button>
+                <span>{t("responsibilitiesHomeLayout.showingOnly", { label: healthLabel(healthFilter).toLowerCase() })}</span>
+                <Button size="xs" variant="ghost" onClick={() => setHealthFilter(null)}>{t("dashboardAutomation.showAll")}</Button>
               </div>
             ) : null}
             {groups.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 {healthFilter
-                  ? `None of your responsibilities are ${RESPONSIBILITY_HEALTH_LABEL[healthFilter].toLowerCase()}.`
-                  : "Nothing to show."}
+                  ? t("responsibilitiesHomeLayout.noneOfYourResponsibilitiesAre", { label: healthLabel(healthFilter).toLowerCase() })
+                  : t("responsibilitiesHomeLayout.nothingToShow")}
               </p>
             ) : (
               groups.map((group) => (
@@ -149,11 +159,11 @@ export function ResponsibilitiesHomeLayout({
                       </ul>
                     ) : (
                       <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-4">
-                        <p className="text-sm text-muted-foreground">Nothing you own is filed here yet.</p>
+                        <p className="text-sm text-muted-foreground">{t("responsibilities.nothingYouOwnIsFiledHere")}</p>
                         {group.area ? (
                           <Button size="sm" variant="ghost" onClick={() => onAddResponsibility(group.area!.id)}>
                             <Plus aria-hidden="true" />
-                            Add a responsibility here
+                            {t("responsibilities.addAResponsibilityHere")}
                           </Button>
                         ) : null}
                       </div>
@@ -163,7 +173,7 @@ export function ResponsibilitiesHomeLayout({
               ))
             )}
             {includeLetGo && !hasLetGo ? (
-              <p className="text-xs text-muted-foreground">You have not let go of any responsibilities.</p>
+              <p className="text-xs text-muted-foreground">{t("responsibilitiesHomeLayout.youHaveNotLetGo")}</p>
             ) : null}
             {healthFilter ? null : <OtherAreas areas={otherAreas} actions={areaActions} />}
           </section>
