@@ -338,7 +338,7 @@ export function TaskMessageScroller({ children, contentKey, className, scrolling
         onPointerDown={() => { pendingHashTarget.current = null; }}
         tabIndex={scrollingHistory ? 0 : undefined}
         role={scrollingHistory ? "region" : undefined}
-        aria-label={scrollingHistory ? "Conversation messages" : undefined}
+        aria-label={scrollingHistory ? t("taskMessageScroller.conversationMessages") : undefined}
         onKeyDown={event => {
           if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End"].includes(event.key)) pendingHashTarget.current = null;
           if (["ArrowUp", "PageUp", "Home"].includes(event.key) && ref.current && ref.current.scrollTop <= 192) requestEarlierHistory();
@@ -377,9 +377,9 @@ export function TaskMessageScroller({ children, contentKey, className, scrolling
         {scrollingHistory && (scrollingHistory.hasMore || scrollingHistory.loading || scrollingHistory.error) ? (
           <div role="status" className="flex h-8 items-center justify-center gap-2 text-xs text-muted-foreground" data-testid="chat-history-status">
             {scrollingHistory.error ? <>
-              <span>Earlier messages couldn’t load.</span>
-              <button type="button" className="underline underline-offset-4" onClick={() => scrollingHistory.load()}>Retry</button>
-            </> : scrollingHistory.loading ? "Loading earlier messages…" : "Scroll up for earlier messages"}
+              <span>{t("taskMessageScroller.earlierMessagesCouldntLoad")}</span>
+              <button type="button" className="underline underline-offset-4" onClick={() => scrollingHistory.load()}>{t("common.retry")}</button>
+            </> : scrollingHistory.loading ? t("taskMessageScroller.loadingEarlierMessages") : t("taskMessageScroller.scrollUpForEarlierMessages")}
           </div>
         ) : null}
         {children}

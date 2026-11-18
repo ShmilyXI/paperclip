@@ -13269,7 +13269,11 @@
     "noExistingWorktreesYetChoose": "还没有现有工作树。选择“新建工作树”来创建一个。"
   },
   "taskMessageScroller": {
-    "scrollToLatest": "滚动到最新"
+    "scrollToLatest": "滚动到最新",
+    "conversationMessages": "会话消息",
+    "earlierMessagesCouldntLoad": "无法加载更早的消息。",
+    "loadingEarlierMessages": "正在加载更早的消息…",
+    "scrollUpForEarlierMessages": "向上滚动查看更早的消息"
   },
   "agentSkillRow": {
     "readOnly": "只读"
