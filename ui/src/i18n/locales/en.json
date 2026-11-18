@@ -10822,7 +10822,11 @@
     "asSoonAsAnyoneIn": "As soon as anyone in your organization does something, it shows up here.",
     "loadMore": "Load more",
     "theCase": "the case",
-    "theTask": "the task"
+    "theTask": "the task",
+    "everythingHappeningInYourCompany": "Everything happening in your company, newest first — people, agents, and the system. Each line is one recorded action.",
+    "asSoonAsAnyoneInYourCompany": "As soon as anyone in your company does something, it shows up here.",
+    "agentActions": "Agent actions",
+    "aUser": "a user"
   },
   "proposalReview": {
     "fingerprintCopied": "Fingerprint copied",

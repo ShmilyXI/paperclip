@@ -10822,7 +10822,11 @@
     "asSoonAsAnyoneIn": "组织里任何人一有动作，就会出现在这里。",
     "loadMore": "加载更多",
     "theCase": "该事项",
-    "theTask": "该任务"
+    "theTask": "该任务",
+    "everythingHappeningInYourCompany": "公司内发生的一切，最新的在前 — 包括人、员工和系统。每一行就是一条已记录的动作。",
+    "asSoonAsAnyoneInYourCompany": "公司里任何人一有动作，就会出现在这里。",
+    "agentActions": "员工操作",
+    "aUser": "某位用户"
   },
   "proposalReview": {
     "fingerprintCopied": "指纹已复制",
