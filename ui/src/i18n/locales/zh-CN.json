@@ -11208,6 +11208,20 @@
     "storedIn": "存储于",
     "defaultVault": "默认保管库"
   },
+  "proposedResponsibilitiesReview": {
+    "adjustAria": "调整 {{title}}",
+    "youCanLeaveWhatYouMeasureBlank": "你可以先留空衡量内容，稍后再设置。",
+    "saveAndConfirm": "保存并确认",
+    "needsBeforeYouCanConfirm": "需要 {{fields}} 才能确认。",
+    "why": "原因：",
+    "guideDraftedDescription": "你的引导员根据所学拟定了这些职责。请确认你拥有的每一项，调整其衡量标准或数字，或将其忽略。",
+    "addToConfirmIt": "添加 {{fields}} 以确认。",
+    "couldntSaveYourAnswerFor": "无法保存你对“{{title}}”的回答。",
+    "confirming": "正在确认…",
+    "confirmAll": "确认全部 {{count}} 项",
+    "confirm": "确认",
+    "adjust": "调整"
+  },
   "caseDetail": {
     "case": "案例",
     "cases": "案例",

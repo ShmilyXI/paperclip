@@ -11208,6 +11208,20 @@
     "storedIn": "Stored in",
     "defaultVault": "Default vault"
   },
+  "proposedResponsibilitiesReview": {
+    "adjustAria": "Adjust {{title}}",
+    "youCanLeaveWhatYouMeasureBlank": "You can leave what you measure blank and set it up later.",
+    "saveAndConfirm": "Save and confirm",
+    "needsBeforeYouCanConfirm": "Needs {{fields}} before you can confirm it.",
+    "why": "Why: ",
+    "guideDraftedDescription": "Your guide drafted these from what it learned. Confirm each one you own as it is, adjust its bar or numbers, or dismiss it.",
+    "addToConfirmIt": "Add {{fields}} to confirm it.",
+    "couldntSaveYourAnswerFor": "Couldn’t save your answer for “{{title}}”.",
+    "confirming": "Confirming…",
+    "confirmAll": "Confirm all {{count}}",
+    "confirm": "Confirm",
+    "adjust": "Adjust"
+  },
   "caseDetail": {
     "case": "Case",
     "cases": "Cases",

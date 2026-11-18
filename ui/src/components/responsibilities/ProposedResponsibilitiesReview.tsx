@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState, type FormEvent } from "react";
 import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { t } from "@/i18n";
 import type {
   ResponsibilityArea,
   ResponsibilityOverview,
@@ -170,9 +171,9 @@ function AdjustForm({
   const invalid = new Set<BarField>(showProblems && !checked.ok ? checked.invalid : []);
   const titleMissing = editing.attempted && !editing.title.trim();
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate aria-label={`Adjust ${proposal.title}`}>
+    <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate aria-label={t("proposedResponsibilitiesReview.adjustAria", { title: proposal.title })}>
       <label className="flex flex-col gap-1.5 text-sm">
-        <span className="font-medium text-foreground">What you own</span>
+        <span className="font-medium text-foreground">{t("responsibilitiesHomeLayout.whatYouOwn")}</span>
         <Input
           autoFocus
           value={editing.title}
@@ -180,7 +181,7 @@ function AdjustForm({
           aria-invalid={titleMissing || undefined}
           onChange={(event) => onChange({ ...editing, title: event.target.value })}
         />
-        {titleMissing ? <span className="text-xs text-destructive">Name what you own</span> : null}
+        {titleMissing ? <span className="text-xs text-destructive">{t("addResponsibilityDialog.nameWhatYouOwn")}</span> : null}
       </label>
       <ResponsibilityBarFields
         draft={editing.draft}
@@ -190,14 +191,14 @@ function AdjustForm({
         problems={showProblems && !checked.ok ? checked.problems : undefined}
       />
       {blankMetric && editing.serverMissing.length === 0 ? (
-        <p className="text-xs text-muted-foreground">You can leave what you measure blank and set it up later.</p>
+        <p className="text-xs text-muted-foreground">{t("proposedResponsibilitiesReview.youCanLeaveWhatYouMeasureBlank")}</p>
       ) : null}
       <div className="flex items-center justify-between gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button type="submit" size="sm">
-          Save and confirm
+          {t("proposedResponsibilitiesReview.saveAndConfirm")}
         </Button>
       </div>
     </form>
@@ -216,11 +217,11 @@ function ProposalSummary({ proposal }: { proposal: ResponsibilityWithRollup }) {
         <p className="text-sm tabular-nums text-muted-foreground">{describeMetricReading(metric).summary}</p>
       ) : null}
       {missing.length > 0 ? (
-        <p className="text-xs text-muted-foreground">Needs {joinFieldLabels(missing)} before you can confirm it.</p>
+        <p className="text-xs text-muted-foreground">{t("proposedResponsibilitiesReview.needsBeforeYouCanConfirm", { fields: joinFieldLabels(missing) })}</p>
       ) : null}
       {proposal.evidence ? (
         <p className="text-xs text-muted-foreground">
-          <span className="font-medium">Why: </span>
+          <span className="font-medium">{t("proposedResponsibilitiesReview.why")}</span>
           {proposal.evidence}
         </p>
       ) : null}
@@ -249,8 +250,8 @@ export function ProposedResponsibilitiesReview({
   areas: areasProp,
   ownerUserId,
   onReviewed,
-  heading = "Proposed for you",
-  description = "Your guide drafted these from what it learned. Confirm each one you own as it is, adjust its bar or numbers, or dismiss it.",
+  heading = t("responsibilities.proposedForYou"),
+  description = t("proposedResponsibilitiesReview.guideDraftedDescription"),
   className,
 }: ProposedResponsibilitiesReviewProps) {
   const queryClient = useQueryClient();
@@ -312,10 +313,10 @@ export function ProposedResponsibilitiesReview({
         }
         const missing = missingFieldsFromError(result.reason);
         if (missing.length > 0) {
-          failed.set(item.id, `Add ${joinFieldLabels(missing)} to confirm it.`);
+          failed.set(item.id, t("proposedResponsibilitiesReview.addToConfirmIt", { fields: joinFieldLabels(missing) }));
           reopen ??= { item, missing };
         } else {
-          failed.set(item.id, `Couldn’t save your answer for “${item.title}”. ${describeError(result.reason).body}`);
+          failed.set(item.id, `${t("proposedResponsibilitiesReview.couldntSaveYourAnswerFor", { title: item.title })} ${describeError(result.reason).body}`);
         }
       });
 
@@ -397,7 +398,7 @@ export function ProposedResponsibilitiesReview({
         {complete.length > 1 ? (
           <Button size="sm" onClick={() => void confirmAll()} disabled={confirmingAll}>
             <Check aria-hidden="true" />
-            {confirmingAll ? "Confirming…" : `Confirm all ${complete.length}`}
+            {confirmingAll ? t("proposedResponsibilitiesReview.confirming") : t("proposedResponsibilitiesReview.confirmAll", { count: complete.length })}
           </Button>
         ) : null}
       </div>
@@ -405,7 +406,7 @@ export function ProposedResponsibilitiesReview({
         {groups.map((group) => (
           <div key={group.area?.id ?? "__no_area__"} className="flex flex-col gap-2" data-area-group={group.area?.id ?? "none"}>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {group.area ? group.area.title : "No area"}
+              {group.area ? group.area.title : t("addResponsibilityDialog.noArea")}
             </h3>
             <Card elevation="low" className="gap-0 py-1">
               <ul className="flex flex-col">
@@ -434,15 +435,15 @@ export function ProposedResponsibilitiesReview({
                           <div className="flex flex-wrap items-center gap-2">
                             <Button size="sm" onClick={() => confirm(item)} disabled={!!rowBusy || confirmingAll}>
                               <Check aria-hidden="true" />
-                              Confirm
+                              {t("proposedResponsibilitiesReview.confirm")}
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => startEditing(item)} disabled={!!rowBusy || confirmingAll}>
                               <Pencil aria-hidden="true" />
-                              Adjust
+                              {t("proposedResponsibilitiesReview.adjust")}
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => void dismiss(item)} disabled={!!rowBusy || confirmingAll}>
                               <X aria-hidden="true" />
-                              Dismiss
+                              {t("common.dismiss")}
                             </Button>
                           </div>
                         </>
