@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo } from "react";
 import { Users } from "lucide-react";
 import { deriveInitials } from "@/components/Identity";
@@ -34,11 +35,11 @@ export function DashboardPersonaSwitcher() {
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1" data-dashboard-persona-switcher="">
       <span className="flex items-center gap-1 text-xs text-muted-foreground">
         <Users aria-hidden="true" className="size-3.5" />
-        Whose dashboard
+        {t("dashboardPersonaSwitcher.whoseDashboard")}
       </span>
       <div
         role="radiogroup"
-        aria-label="Whose dashboard"
+        aria-label={t("dashboardPersonaSwitcher.whoseDashboard")}
         className="inline-flex items-center gap-0.5 rounded-full border border-border p-0.5"
       >
         {personas.map((persona) => {

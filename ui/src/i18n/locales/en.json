@@ -2262,6 +2262,8 @@
     "eachStatusAsTheAgentClosest": "Each status as the agent closest to the work wrote it.",
     "newArea": "New area",
     "nothingYouOwnYet": "Nothing you own yet. Review what was proposed for you, or add a new responsibility.",
+    "emptyMessage": "A responsibility is something you own, with a bar for success and a number that shows whether you are meeting it. Group them under the areas you care about, such as Fundraising or Hiring.",
+    "askNameToDraftThem": "Ask {{name}} to draft them",
     "you": "You",
     "responsibilities": "Responsibilities",
     "aSnapshotOfYourWork": "A snapshot of your work",
@@ -11092,6 +11094,20 @@
   "coordinatorAgentSwitcher": {
     "switchAgent": "Switch agent",
     "switchAgentCurrently": "Switch agent. Currently {{name}}"
+  },
+  "coordinatorChat": {
+    "createdTasksCouldntLoad": "Created tasks couldn't load.",
+    "loadEarlierTasks": "Load earlier tasks",
+    "loadingEarlierTasks": "Loading earlier tasks…",
+    "taskQuestionsCouldntLoad": "Task questions couldn't load.",
+    "decisionUpdatesCouldntLoad": "Decision updates couldn't load.",
+    "loadEarlierDecisions": "Load earlier decisions",
+    "loadingEarlierDecisions": "Loading earlier decisions…",
+    "agentNeedsYourInputOn": "{{agent}} needs your input on {{task}}",
+    "thisTask": "this task"
+  },
+  "dashboardPersonaSwitcher": {
+    "whoseDashboard": "Whose dashboard"
   },
   "coordinatorTasks": {
     "someTasksWithPendingDecisions": "Some tasks with pending decisions couldn't load.",

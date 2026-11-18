@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { DecisionHistoryItem, DecisionHistoryPage } from "@paperclipai/shared";
@@ -50,10 +51,10 @@ export function CoordinatorChatDecisionReceipt({ receipt }: { receipt: DecisionH
 export function CoordinatorChatReceiptStatus({ query, scroll = false }: { scroll?: boolean; query: ReturnType<typeof useCoordinatorChatDecisionReceipts> }) {
   if (!query.enabled) return null;
   if (query.isError) return <div role="status" className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-    <span>Decision updates couldn’t load.</span><Button size="sm" variant="ghost" onClick={() => void query.refetch()}>Retry</Button>
+    <span>{t("coordinatorChat.decisionUpdatesCouldntLoad")}</span><Button size="sm" variant="ghost" onClick={() => void query.refetch()}>{t("common.retry")}</Button>
   </div>;
   if (!scroll && query.hasNextPage) return <Button size="sm" variant="ghost" disabled={query.isFetchingNextPage} onClick={() => void query.fetchNextPage()}>
-    {query.isFetchingNextPage ? "Loading earlier decisions…" : "Load earlier decisions"}
+    {query.isFetchingNextPage ? t("coordinatorChat.loadingEarlierDecisions") : t("coordinatorChat.loadEarlierDecisions")}
   </Button>;
   return null;
 }

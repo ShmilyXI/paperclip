@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Bot, Compass } from "lucide-react";
 import { EmptyState } from "@/components/EmptyState";
 import { usePrimaryAgentPresentation } from "@/components/primary-agent/PrimaryAgentPresentation";
@@ -13,16 +14,16 @@ export function ResponsibilitiesEmpty({ companyId, onAdd }: { companyId: string;
     <div className="flex flex-col items-center gap-2">
       <EmptyState
         icon={Compass}
-        title="What do you own?"
-        message="A responsibility is something you own, with a bar for success and a number that shows whether you are meeting it. Group them under the areas you care about, such as Fundraising or Hiring."
-        action="Add a responsibility"
+        title={t("addResponsibilityDialog.whatDoYouOwn")}
+        message={t("responsibilities.emptyMessage")}
+        action={t("addResponsibilityDialog.title")}
         onAction={onAdd}
       />
       {agent ? (
         <Button asChild variant="ghost">
           <Link to={`/chats/${encodeURIComponent(agentRouteRef(agent))}`}>
             <Bot aria-hidden="true" />
-            Ask {agent.name} to draft them
+            {t("responsibilities.askNameToDraftThem", { name: agent.name })}
           </Link>
         </Button>
       ) : null}
