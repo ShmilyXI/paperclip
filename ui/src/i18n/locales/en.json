@@ -2518,6 +2518,7 @@
   "routineOverview": {
     "runsOnIncomingRequests": "Runs on incoming requests",
     "manualRunsOnly": "Manual runs only",
+    "carriedOutOnEachWakeup": "Carried out on each of the agent's wake-ups",
     "noActiveSchedule": "No active schedule",
     "state": "State",
     "triggers": "Triggers",

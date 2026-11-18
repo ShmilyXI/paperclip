@@ -2518,6 +2518,7 @@
   "routineOverview": {
     "runsOnIncomingRequests": "收到请求时运行",
     "manualRunsOnly": "仅手动运行",
+    "carriedOutOnEachWakeup": "在员工每次唤醒时执行",
     "noActiveSchedule": "无生效的计划",
     "state": "状态",
     "triggers": "触发器",
