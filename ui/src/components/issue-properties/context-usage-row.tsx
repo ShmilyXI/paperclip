@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { t } from "@/i18n";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { IssueContextCompaction, IssueContextUsage } from "@paperclipai/shared";
 import { issuesApi } from "../../api/issues";
@@ -37,7 +38,7 @@ export function contextCompactState(
   if (!compaction) return null;
   if (requesting || compaction.status === "pending") return { status: "pending" };
   if (compaction.status === "unavailable") {
-    return { status: "unavailable", reason: compaction.reason ?? "Compaction is unavailable right now." };
+    return { status: "unavailable", reason: compaction.reason ?? t("contextUsageMeter.compactionIsUnavailableRightNow") };
   }
   return { status: "available", onCompact };
 }
@@ -83,8 +84,8 @@ export function IssueContextUsageRow({
     },
     onError: (error) => {
       toast?.pushToast({
-        title: "Could not compact the context",
-        body: error instanceof Error ? error.message : "Try again in a moment.",
+        title: t("contextUsageMeter.couldNotCompactTheContext"),
+        body: error instanceof Error ? error.message : t("connectors.tryAgainInAMoment"),
         tone: "error",
       });
     },
@@ -104,7 +105,7 @@ export function IssueContextUsageRow({
 
   if (view.data) {
     return (
-      <PropertyRow label="Context">
+      <PropertyRow label={t("agentDetail.context")}>
         <ContextUsageMeter
           usage={contextUsageFromIssue(view.data)}
           compact={contextCompactState(view.data.compaction, compact.isPending, () => compact.mutate())}
@@ -114,7 +115,7 @@ export function IssueContextUsageRow({
   }
   if (view.kind !== "error") return null;
   return (
-    <PropertyRow label="Context">
+    <PropertyRow label={t("agentDetail.context")}>
       <QueryErrorState
         error={view.error}
         size="inline"

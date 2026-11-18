@@ -11658,6 +11658,8 @@
     "waitingForCode": "等待验证码",
     "connecting": "正在连接",
     "signInToProvider": "登录 {{provider}}",
+    "waitingForAuth": "等待授权…",
+    "continueToProvider": "继续前往 {{provider}}",
     "useSavedSubscription": "使用已保存的订阅",
     "useSavedApiKey": "使用已保存的 API 密钥",
     "useConnection": "使用连接",
@@ -17867,6 +17869,11 @@
     "updatedCountHarness_one": "已更新 {{count}} 个{{harness}}员工。",
     "updatedCountHarness_other": "已更新 {{count}} 个{{harness}}员工。"
   },
+  "onboardingGatewaySetup": {
+    "useACustomGateway": "使用自定义网关",
+    "customGatewayConnection": "自定义网关连接",
+    "saveTheConnectionThenChoose": "保存连接，然后选择一个模型并与你的员工进行测试。"
+  },
   "contextUsageMeter": {
     "compacting": "正在压缩…",
     "compactNow": "立即压缩",
@@ -17882,7 +17889,9 @@
     "inOut": "输入 {{input}} · 输出 {{output}}",
     "compactions": "压缩次数",
     "contextWindowAria": "上下文窗口：已使用 {{window}} 个 token 中的 {{percent}}%",
-    "ofWindow": "，共 {{window}}"
+    "ofWindow": "，共 {{window}}",
+    "compactionIsUnavailableRightNow": "现在无法压缩。",
+    "couldNotCompactTheContext": "无法压缩上下文"
   },
   "instructionsBundleSettings": {
     "useAnAbsolutePath": "请使用以 / 或 ~ 开头的绝对路径。",

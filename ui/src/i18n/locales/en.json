@@ -11658,6 +11658,8 @@
     "waitingForCode": "Waiting for code",
     "connecting": "Connecting",
     "signInToProvider": "Sign in to {{provider}}",
+    "waitingForAuth": "Waiting for auth…",
+    "continueToProvider": "Continue to {{provider}}",
     "useSavedSubscription": "Use saved subscription",
     "useSavedApiKey": "Use saved API key",
     "useConnection": "Use connection",
@@ -17867,6 +17869,11 @@
     "updatedCountHarness_one": "Updated {{count}} {{harness}} agent.",
     "updatedCountHarness_other": "Updated {{count}} {{harness}} agents."
   },
+  "onboardingGatewaySetup": {
+    "useACustomGateway": "Use a custom gateway",
+    "customGatewayConnection": "Custom gateway connection",
+    "saveTheConnectionThenChoose": "Save the connection, then choose a model and test it with your agent."
+  },
   "contextUsageMeter": {
     "compacting": "Compacting…",
     "compactNow": "Compact now",
@@ -17882,7 +17889,9 @@
     "inOut": "{{input}} in · {{output}} out",
     "compactions": "Compactions",
     "contextWindowAria": "Context window: {{percent}}% of {{window}} tokens used",
-    "ofWindow": " of {{window}}"
+    "ofWindow": " of {{window}}",
+    "compactionIsUnavailableRightNow": "Compaction is unavailable right now.",
+    "couldNotCompactTheContext": "Could not compact the context"
   },
   "instructionsBundleSettings": {
     "useAnAbsolutePath": "Use an absolute path that starts with / or ~.",

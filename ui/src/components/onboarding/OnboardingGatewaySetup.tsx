@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { t } from "@/i18n";
 import type { AiConnectionBinding } from "@paperclipai/shared";
 import { AiProviderSetup } from "../ai-connections/AiProviderSetup";
 import { Button } from "../ui/button";
@@ -24,17 +25,17 @@ export function OnboardingGatewaySetup({
   const [open, setOpen] = useState(false);
   return <>
     <Button type="button" variant="ghost" className={className} disabled={disabled} onClick={() => setOpen(true)}>
-      Use a custom gateway
+      {t("onboardingGatewaySetup.useACustomGateway")}
     </Button>
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-h-(--sz-85vh) overflow-y-auto sm:max-w-2xl" onKeyDown={event => event.stopPropagation()}>
         <DialogHeader>
-          <DialogTitle>Custom gateway connection</DialogTitle>
-          <DialogDescription>Save the connection, then choose a model and test it with your agent.</DialogDescription>
+          <DialogTitle>{t("onboardingGatewaySetup.customGatewayConnection")}</DialogTitle>
+          <DialogDescription>{t("onboardingGatewaySetup.saveTheConnectionThenChoose")}</DialogDescription>
         </DialogHeader>
         <AiProviderSetup companyId={companyId} agentId={agentId} environmentId={environmentId}
           initialProvider="gateway" initialProtocol={adapterType === "codex_local" ? "responses" : "messages"}
-          submitLabel="Save connection" onCancel={() => setOpen(false)}
+          submitLabel={t("skillSourceConnectionRepair.saveConnection")} onCancel={() => setOpen(false)}
           onComplete={binding => { setOpen(false); onComplete(binding); }} />
       </DialogContent>
     </Dialog>

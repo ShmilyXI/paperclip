@@ -442,7 +442,7 @@ export function AgentProviderConnection({
         </p>
       )}
       {localEnvironment && healthView.kind === "error" && (
-        <p role="alert" className="mt-4 text-sm text-destructive">Could not prepare sign-in. Reload this page to try again.</p>
+        <p role="alert" className="mt-4 text-sm text-destructive">{t("agentProviderConnection.couldNotPrepareSignIn")}</p>
       )}
       <FooterNav
         onBack={() => {
@@ -451,9 +451,9 @@ export function AgentProviderConnection({
         }}
         primaryLabel={
           opened && needsLogin
-            ? loginPhase === "waiting" ? adapterType === "codex_local" ? "Waiting for auth…" : "Waiting for code"
-              : loginPhase === "connecting" ? "Connecting"
-              : automaticComputer && authorizationUrl ? `Continue to ${provider}` : `Sign in to ${provider}`
+            ? loginPhase === "waiting" ? adapterType === "codex_local" ? t("agentProviderConnection.waitingForAuth") : t("agentProviderConnection.waitingForCode")
+              : loginPhase === "connecting" ? t("agentProviderConnection.connecting")
+              : automaticComputer && authorizationUrl ? t("agentProviderConnection.continueToProvider", { provider }) : t("agentProviderConnection.signInToProvider", { provider })
             : busy
             ? t("agentProviderConnection.connecting")
             : method === "subscription" &&
