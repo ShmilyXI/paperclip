@@ -253,7 +253,7 @@ export function IssueRow({
             disableIssueQuicklook
             issuePrefetch={issue}
             onClickCapture={() => rememberIssueDetailLocationState(issuePathId, detailState)}
-            aria-label={`Open task ${identifier} (${statusLabel})`}
+            aria-label={t("issueRow.openTask", { identifier, statusLabel })}
             className="task-row-status-link"
             data-slot="task-row-status"
           >
@@ -389,7 +389,7 @@ export function IssueRow({
                   {recoveryIndicator ? (
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <span tabIndex={0} aria-label="Task recovery status" className="relative z-10 inline-flex text-muted-foreground sm:hidden">
+                        <span tabIndex={0} aria-label={t("issueRow.taskRecoveryStatus")} className="relative z-10 inline-flex text-muted-foreground sm:hidden">
                           <CircleAlert className="h-4 w-4" />
                         </span>
                       </TooltipTrigger>

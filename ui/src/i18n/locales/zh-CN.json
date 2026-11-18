@@ -1388,6 +1388,8 @@
     "blockedByParkedWorkAt": "被搁置的工作阻塞 — 至少有一个已指派的阻塞项处于待办列表，不会唤醒其负责人。",
     "blockedByParkedWork": "被搁置的工作阻塞",
     "openIdentifierTitle": "打开 {{identifier}}：{{title}}",
+    "openTask": "打开任务 {{identifier}}（{{statusLabel}}）",
+    "taskRecoveryStatus": "任务恢复状态",
     "labelWithDetailAction": "{{label}} — {{detail}}。打开源任务以继续操作。",
     "labelAction": "{{label}} — 打开源任务以继续操作。"
   },

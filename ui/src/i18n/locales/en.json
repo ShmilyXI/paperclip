@@ -1388,6 +1388,8 @@
     "blockedByParkedWorkAt": "Blocked by parked work — at least one assigned blocker is in backlog and will not wake its assignee.",
     "blockedByParkedWork": "Blocked by parked work",
     "openIdentifierTitle": "Open {{identifier}}: {{title}}",
+    "openTask": "Open task {{identifier}} ({{statusLabel}})",
+    "taskRecoveryStatus": "Task recovery status",
     "labelWithDetailAction": "{{label}} — {{detail}}. Open the source task to act.",
     "labelAction": "{{label}} — open the source task to act."
   },

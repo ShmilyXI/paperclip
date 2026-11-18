@@ -64,13 +64,13 @@ export function IssuePrivacyActions({
   });
   const constraintsView = useQueryView(constraintsQuery);
   const publicBlockedReason = constraintsView.kind === "error"
-    ? "Couldn't check task privacy. Retry before making this task public."
+    ? t("issuePrivacyActions.couldnTCheckTaskPrivacy")
     : constraintsView.kind === "loading" || constraintsView.kind === "reconnecting" || constraintsView.isFetching
-      ? "Checking task privacy…"
+      ? t("issuePrivacyActions.checkingTaskPrivacy")
       : constraintsView.data?.publicBlockedBy === "parent"
-        ? "Move this task out of its private parent before making it public."
+        ? t("issuePrivacyActions.moveThisTaskOutOf")
         : constraintsView.data?.publicBlockedBy === "project"
-          ? "Move this task out of its private project before making it public."
+          ? t("issuePrivacyActions.moveThisTaskOutOf2")
           : null;
 
   const visibilityMutation = useMutation({
@@ -90,7 +90,7 @@ export function IssuePrivacyActions({
       });
     },
     onError: (error) => {
-      pushToast({ title: "Couldn't change visibility", body: describeError(error).body, tone: "error" });
+      pushToast({ title: t("issuePrivacyActions.couldnTChangeVisibility"), body: describeError(error).body, tone: "error" });
     },
   });
 
@@ -140,7 +140,7 @@ export function IssuePrivacyActions({
           {canManage && constraintsView.kind === "error" ? (
             <button type="button" className={MENU_ITEM_CLASS} onClick={() => {
               constraintsView.retry();
-            }}>Retry access check</button>
+            }}>{t("issuePrivacyActions.retryAccessCheck")}</button>
           ) : null}
         </>
       ) : (
