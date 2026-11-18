@@ -15276,6 +15276,24 @@
     "unableToResolveRecoveryAction": "无法处理该恢复操作",
     "workspaceRecovery": "工作区恢复"
   },
+  "runWorkspaceSourceInspection": {
+    "noRecordedSystemRecoveryFailure": "没有记录到系统恢复失败。",
+    "leasePolicyValue": "租约策略 {{policy}}",
+    "inspectingRecovery": "正在检查恢复…",
+    "inspectRecovery": "检查恢复",
+    "recoveryInspectionFailed": "恢复检查失败。请重试检查。",
+    "noRecordedRecoveryAction": "本次运行没有记录到恢复操作。",
+    "recordedFailure": "已记录的失败：",
+    "inspectCurrentSource": "检查当前来源",
+    "currentRecordedSourceIdentity": "当前已记录的来源身份",
+    "actionLabel": "操作 {{id}}",
+    "readOnlyObservationChecks": "此只读观察仅核对已记录的身份。它不确认服务商是否已终止、本地文件是否存在或是否成功保存。",
+    "recordedSourceIdentityVerified": "已记录来源身份已核实。",
+    "sourceNotInspected": "来源未检查：该记录超出检查上限。",
+    "blocked": "已阻止：",
+    "leasePolicyLabel": "· 租约策略",
+    "observedAt": "观察于 {{time}}"
+  },
   "gatewayActivityPanel": {
     "allowed": "允许",
     "askedFirst": "先询问",

@@ -15276,6 +15276,24 @@
     "unableToResolveRecoveryAction": "Unable to resolve recovery action",
     "workspaceRecovery": "Workspace recovery"
   },
+  "runWorkspaceSourceInspection": {
+    "noRecordedSystemRecoveryFailure": "No recorded system recovery failure.",
+    "leasePolicyValue": "lease policy {{policy}}",
+    "inspectingRecovery": "Inspecting recovery…",
+    "inspectRecovery": "Inspect recovery",
+    "recoveryInspectionFailed": "Recovery inspection failed. Try inspecting again.",
+    "noRecordedRecoveryAction": "No recorded recovery action for this run.",
+    "recordedFailure": "Recorded failure:",
+    "inspectCurrentSource": "Inspect current source",
+    "currentRecordedSourceIdentity": "Current recorded-source identity",
+    "actionLabel": "Action {{id}}",
+    "readOnlyObservationChecks": "This read-only observation checks recorded identity. It does not confirm provider termination, local files, or successful preservation.",
+    "recordedSourceIdentityVerified": "Recorded-source identity verified.",
+    "sourceNotInspected": "Source not inspected: this record exceeds the inspection limit.",
+    "blocked": "Blocked:",
+    "leasePolicyLabel": "· lease policy",
+    "observedAt": "Observed {{time}}"
+  },
   "gatewayActivityPanel": {
     "allowed": "Allowed",
     "askedFirst": "Asked first",
