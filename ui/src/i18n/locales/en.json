@@ -11145,11 +11145,11 @@
     "createdTasksCouldntLoad": "Created tasks couldn't load.",
     "loadEarlierTasks": "Load earlier tasks",
     "loadingEarlierTasks": "Loading earlier tasks…",
-    "taskQuestionsCouldntLoad": "Task questions couldn't load.",
+    "taskQuestionsCouldntLoad": "Task questions couldn’t load.",
     "decisionUpdatesCouldntLoad": "Decision updates couldn't load.",
     "loadEarlierDecisions": "Load earlier decisions",
     "loadingEarlierDecisions": "Loading earlier decisions…",
-    "agentNeedsYourInputOn": "{{agent}} needs your input on {{task}}",
+    "agentNeedsYourInputOn": "{{agent}} needs your input on {{task}}.",
     "thisTask": "this task"
   },
   "giveToAgent": {
