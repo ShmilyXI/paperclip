@@ -10039,7 +10039,7 @@
     "yourDefaultFor": "Your default for {{provider}}",
     "reconnectBeforeDefault": "Reconnect this account before making it your default.",
     "setAsDefaultFor": "Set as default for {{provider}}",
-    "couldntChangeDefault": "Couldn't change your {{provider}} default."
+    "couldntChangeDefault": "Couldn’t change your {{provider}} default."
   },
   "auditRuns": {
     "routineRun": "Routine run",
