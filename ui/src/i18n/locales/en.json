@@ -11170,7 +11170,7 @@
   },
   "dashboardChatComposer": {
     "chooseAnAgentToTalkTo": "Choose an agent to talk to.",
-    "couldntStartTheChatWith": "Couldn't start the chat with {{name}}.",
+    "couldntStartTheChatWith": "Couldn’t start the chat with {{name}}.",
     "addAnAgent": "Add an agent",
     "toStartAChatFromHere": "to start a chat from here."
   },
@@ -11178,7 +11178,7 @@
     "whoseDashboard": "Whose dashboard"
   },
   "coordinatorTasks": {
-    "someTasksWithPendingDecisions": "Some tasks with pending decisions couldn't load.",
+    "someTasksWithPendingDecisions": "Some tasks with pending decisions couldn’t load.",
     "unknownAgent": "Unknown agent",
     "noTasksMatchThisView": "No tasks match this view",
     "noTasksNeedADecision": "No tasks need a decision.",
@@ -11186,7 +11186,7 @@
     "clearFilters": "Clear filters",
     "selectAnOrganizationToView": "Select an organization to view tasks.",
     "couldNotLoadTasks": "Could not load tasks",
-    "taskDetailsCouldntLoad": "Task details couldn't load.",
+    "taskDetailsCouldntLoad": "Task details couldn’t load.",
     "loadingTasks": "Loading tasks…",
     "tasksLoaded": "{{loaded}} tasks loaded. Load more to include them in filters.",
     "loadMoreTasks": "Load more tasks",
