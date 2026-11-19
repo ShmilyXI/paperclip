@@ -4153,7 +4153,7 @@
     "providedBy": "Provided by",
     "allSources": "All sources",
     "allProviders": "All providers",
-    "importFromVault": "Import from vault",
+    "importFromVault": "Import from a vault",
     "loadingProviderVaults": "Loading provider vaults",
     "addVault": "Add vault",
     "healthNotChecked": "Health not checked",
