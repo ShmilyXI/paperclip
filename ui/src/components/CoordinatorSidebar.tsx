@@ -181,7 +181,7 @@ export function CoordinatorSidebar({ children }: { children?: ReactNode }) {
             <button type="button" aria-label={t("common.newTask2")} title={t("common.newTask2")} onClick={() => openNewIssue()}
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground opacity-0 transition-opacity group-hover/coordinator-new:opacity-100 group-focus-within/coordinator-new:opacity-100 pointer-coarse:opacity-100 hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring"><Plus className="size-4" /></button>
           </div>
-          <SidebarNavItem className="design-sidebar-item" to="/decisions" label={t("nav.inbox")} icon={Inbox} badge={attentionCount} badgeLabel={t("nav.decisions")} />
+          <SidebarNavItem className="design-sidebar-item" to="/decisions" label={t("nav.inbox")} icon={Inbox} badge={attentionCount} badgeLabel={t("nav.decisions2")} />
           {orderedPins.length > 0 && <PinnedNavigationList key={`${companyId}:${userId}`} items={orderedPins} onReorder={pinnedNavigation.reorder} onUnpin={pinnedNavigation.toggle} />}
         </div>
         <Flyout open={moreOpen} onOpenChange={setMoreOpen}>
