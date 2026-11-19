@@ -6,6 +6,7 @@ import {
   CircleDot,
   Target,
   LayoutDashboard,
+  Rocket,
   DollarSign,
   History,
   Search,
@@ -109,6 +110,8 @@ export function Sidebar() {
   const tasksItem = <SidebarNavItem to="/issues" label={t("nav.tasks")} icon={CircleDot} />;
   // The classic dashboard. With Responsibilities as home that page takes the "Dashboard" name and this row is not shown.
   const dashboardItem = <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />;
+  // 部署控制台：本机独立服务（./opc console start），在 /deploy-console 页面里内嵌打开。上游合并时丢失，11-19 补回。
+  const deployConsoleItem = <SidebarNavItem to="/deploy-console" label={t("nav.deployConsole")} icon={Rocket} />;
 
   const pluginContext = {
     companyId: selectedCompanyId,
@@ -141,9 +144,15 @@ export function Sidebar() {
           {responsibilitiesHome ? (
             <>
               <SidebarNavItem to="/responsibilities" label={t("nav.dashboard")} icon={Compass} />
+              {deployConsoleItem}
               {tasksItem}
             </>
-          ) : dashboardItem}
+          ) : (
+            <>
+              {dashboardItem}
+              {deployConsoleItem}
+            </>
+          )}
           <SidebarNavItem
             to="/inbox"
             label={t("nav.inbox")}

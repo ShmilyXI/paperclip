@@ -156,6 +156,8 @@ function ClassicSidebar({ children }: { children?: ReactNode }) {
   ) : null;
   // The classic dashboard. With Responsibilities as home that page takes the "Dashboard" name and this row is not shown.
   const dashboardItem = <SidebarNavItem to="/dashboard" label={t("nav.dashboard")} icon={LayoutDashboard} liveCount={liveRunCount} />;
+  // 部署控制台：本机独立服务（./opc console start），在 /deploy-console 页面里内嵌打开。上游合并时丢失，11-19 补回。
+  const deployConsoleItem = <SidebarNavItem to="/deploy-console" label={t("nav.deployConsole")} icon={Rocket} />;
 
   const pluginContext = {
     companyId: selectedCompanyId,
@@ -195,6 +197,7 @@ function ClassicSidebar({ children }: { children?: ReactNode }) {
           {responsibilitiesHome ? (
             <>
               <SidebarNavItem to="/responsibilities" label={t("nav.dashboard")} icon={Compass} />
+              {deployConsoleItem}
               {agentChatEnabled ? chatItem : null}
               {tasksItem}
               {inboxItem}
@@ -202,6 +205,7 @@ function ClassicSidebar({ children }: { children?: ReactNode }) {
           ) : (
             <>
               {dashboardItem}
+              {deployConsoleItem}
               {inboxItem}
               {agentChatEnabled && !chatRail ? chatItem : null}
             </>

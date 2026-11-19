@@ -503,9 +503,9 @@ describe("Sidebar", () => {
     expect(labels(workSection)).toEqual(["Chat", "Tasks", "Projects", "Routines", "Artifacts"]);
     expect(labels(orgSection)).toEqual(["Agents", "Skills", "Connectors", "Audit"]);
     const topLabels = [...container.querySelectorAll("nav a")].map((anchor) => anchor.textContent?.trim());
-    expect(topLabels.indexOf("Board")).toBe(topLabels.indexOf("Dashboard") + 1);
-    expect(topLabels.indexOf("Infinite Canvas")).toBe(topLabels.indexOf("Board") + 1);
-    expect(container.querySelector('a[href="/infinite-canvas"]')?.textContent).toBe("Infinite Canvas");
+    // Board / Infinite Canvas / Office live in the dashboard's BoardsHub tabs; Deploy Console stays in the nav.
+    expect(topLabels.indexOf("Deploy Console")).toBe(topLabels.indexOf("Dashboard") + 1);
+    expect(container.querySelector('a[href="/deploy-console"]')?.textContent).toBe("Deploy Console");
     expect(sections.indexOf(workSection!)).toBeLessThan(sections.indexOf(orgSection!));
     expect(
       workSection?.querySelector('a[href="/issues"] svg')?.classList.contains("lucide-circle-check"),
@@ -679,7 +679,7 @@ describe("Sidebar", () => {
       mockInstanceSettingsApi.getExperimental.mockResolvedValue({ enableResponsibilities: true });
       const root = await renderSidebar();
 
-      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Chat", "Tasks", "Inbox"]);
+      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Deploy Console", "Chat", "Tasks", "Inbox"]);
       expect(primaryGroup()?.querySelector('a[href="/responsibilities"] svg')?.classList.contains("lucide-compass")).toBe(true);
       expect(groupLabels(section("Work"))).toEqual(["Projects", "Routines", "Artifacts"]);
       expect(container.querySelector('a[href="/dashboard"]')).toBeNull();
@@ -699,7 +699,7 @@ describe("Sidebar", () => {
       });
       const root = await renderSidebar();
 
-      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Chat", "Tasks4"]);
+      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Deploy Console", "Chat", "Tasks4"]);
       expect(container.querySelector('a[href="/inbox"]')).toBeNull();
 
       flushSync(() => {
@@ -714,7 +714,7 @@ describe("Sidebar", () => {
       });
       const root = await renderSidebar();
 
-      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Chat", "Tasks", "Inbox"]);
+      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Deploy Console", "Chat", "Tasks", "Inbox"]);
       expect(container.querySelector('a[href="/dashboard"]')).toBeNull();
 
       flushSync(() => {
@@ -726,7 +726,7 @@ describe("Sidebar", () => {
       mockInstanceSettingsApi.getExperimental.mockResolvedValue({ enableResponsibilities: false });
       const root = await renderSidebar();
 
-      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Inbox"]);
+      expect(groupLabels(primaryGroup())).toEqual(["Search", "Dashboard", "Deploy Console", "Inbox"]);
       expect(container.querySelector('a[href="/responsibilities"]')).toBeNull();
 
       flushSync(() => {

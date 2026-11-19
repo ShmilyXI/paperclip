@@ -89,7 +89,7 @@ describe("production Sidebar ordering", () => {
     mockInstanceSettingsApi.getExperimental.mockResolvedValue({ enableResponsibilities: false });
     await renderSidebar();
 
-    expect(labels(primaryGroup())).toEqual(["Search", "Dashboard", "Inbox"]);
+    expect(labels(primaryGroup())).toEqual(["Search", "Dashboard", "Deploy Console", "Inbox"]);
     expect(labels(workSection())[0]).toBe("Tasks");
     expect(container.querySelector('a[href="/responsibilities"]')).toBeNull();
   });
@@ -98,7 +98,7 @@ describe("production Sidebar ordering", () => {
     mockInstanceSettingsApi.getExperimental.mockResolvedValue({ enableResponsibilities: true });
     await renderSidebar();
 
-    expect(labels(primaryGroup())).toEqual(["Search", "Dashboard", "Tasks", "Inbox"]);
+    expect(labels(primaryGroup())).toEqual(["Search", "Dashboard", "Deploy Console", "Tasks", "Inbox"]);
     expect(container.querySelector('a[href="/responsibilities"]')?.textContent).toContain("Dashboard");
     expect(container.querySelectorAll('a[href="/issues"]')).toHaveLength(1);
     expect(container.querySelector('a[href="/dashboard"]')).toBeNull();
