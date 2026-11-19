@@ -277,7 +277,7 @@ function StripCard({ to, icon, title, kind }: { to: string; icon: ReactNode; tit
 function moreOf(count: number, one: string, many: string, capped = false): string | null {
   if (count <= 0) return null;
   if (capped) return t("responsibilities.andManyMore", { word: many });
-  return t("responsibilities.andCountMore", { count, word: count === 1 ? one : many });
+  return t("responsibilities.andCountMoreOf", { count, word: count === 1 ? one : many });
 }
 
 function CardsSection({

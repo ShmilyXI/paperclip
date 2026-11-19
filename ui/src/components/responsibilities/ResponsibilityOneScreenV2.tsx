@@ -64,7 +64,7 @@ const SECTION_TITLE: Record<SectionKey, string> = {
   skills: t("nav.skills"),
   projects: t("nav.projects"),
   tasks: t("nav.tasks"),
-  runs: t("routines.recentRuns"),
+  runs: t("routineOverview.recentRuns"),
   artifacts: t("nav.artifacts"),
 };
 const TASK_CAP = 8;
@@ -456,7 +456,7 @@ export function ResponsibilityOneScreenV2({
           add={editable ? picker("task", (
             <AddMenu
               label={t("responsibilities.addATask")}
-              newLabel={t("common.newTask")}
+              newLabel={t("common.newTask2")}
               onNew={isActive ? () => actions.newTask({ defaultTitle: "" }) : undefined}
               existing
               onExisting={() => setPicking("task")}
