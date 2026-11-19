@@ -332,7 +332,7 @@ export function CaseFieldsTable({ fields }: { fields: Record<string, unknown> })
     return <p className="text-sm text-muted-foreground">{t("caseFieldsPanel.noFieldsSet")}</p>;
   }
   return (
-    <table aria-label={t("caseFieldsPanel.caseFields")} className={cn("w-full table-fixed border-collapse font-mono text-xs leading-5", ANALYTICS_MASK_CLASS)}>
+    <table aria-label="Case fields" className={cn("w-full table-fixed border-collapse font-mono text-xs leading-5", ANALYTICS_MASK_CLASS)}>
       <tbody>
         {rows.map(({ id, path, value }) => (
           <tr key={id} className="even:bg-muted/50">

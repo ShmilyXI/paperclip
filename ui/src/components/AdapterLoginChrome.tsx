@@ -538,16 +538,16 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
     setBrowserCode(value);
     void submitBrowserCode(value);
   }
-  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("adapterLoginChrome.preparingSignIn")}</p>;
+  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Preparing sign-in…</p>;
   const ready = login?.status === "ready";
   const awaitingBrowserSignIn = browserLogin && !ready && !login?.authorizationUrl && !login?.error;
   return <div className="min-w-0 max-w-full space-y-3 text-sm text-muted-foreground">
     {ready ? <>
-      <p role="status" className={cn("flex items-center gap-2 text-foreground", ANALYTICS_MASK_CLASS)}><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{t("adapterLoginChrome.signedInClickConnect", { provider: login?.accountLabel ?? provider })}</p>
-      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => browserLogin ? login?.retry() : setShowCommand(true)}>{t("adapterLoginChrome.useADifferentAccount")}</button>}
-    </> : !browserLogin && <p>{isolated ? t("adapterLoginChrome.signInToProviderFor", { provider }) : t("adapterLoginChrome.connectUsesYourLocalProvider", { provider })}</p>}
-    {awaitingBrowserSignIn && <p role="status">{t("adapterLoginChrome.preparingBrowserSignIn")}</p>}
-    {(submitting || codeSubmitted) && !ready && !login?.error && <p role="status">{t("adapterLoginChrome.finishingSignIn")}</p>}
+      <p role="status" className={cn("flex items-center gap-2 text-foreground", ANALYTICS_MASK_CLASS)}><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{login?.accountLabel ?? provider} is signed in. Click Connect to use this account.</p>
+      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => browserLogin ? login?.retry() : setShowCommand(true)}>Use a different account</button>}
+    </> : !browserLogin && <p>{isolated ? `Sign in to ${provider} for this connection on the machine running Paperclip. Your existing terminal login stays separate.` : `Connect uses your local ${provider} account on the machine running Paperclip.`}</p>}
+    {awaitingBrowserSignIn && <p role="status">Preparing browser sign-in…</p>}
+    {(submitting || codeSubmitted) && !ready && !login?.error && <p role="status">Finishing sign-in…</p>}
     {browserLogin && !ready && !submitting && !codeSubmitted && !login?.error && login?.authorizationUrl && <ProviderSubscriptionCard
       providerName={connectSourceName(adapterType)}
       authorizationUrl={login.authorizationUrl}

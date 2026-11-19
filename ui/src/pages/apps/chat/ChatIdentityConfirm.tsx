@@ -102,12 +102,10 @@ export function ChatIdentityConfirm() {
       <main className="mx-auto max-w-lg space-y-5 px-6 py-12">
         <CheckCircle2 className="h-8 w-8" />
         <div>
-          <h1 className="text-xl font-bold">{t("chatIdentityConfirm.identityLinked")}</h1>
+          <h1 className="text-xl font-bold">Identity linked</h1>
           <p className={cn("mt-1 text-sm text-muted-foreground", ANALYTICS_MASK_CLASS)}>
-            {t("chatIdentityConfirm.futureMessagesUseYourPermissions", {
-              label: identity.externalLabel,
-              company: identity.companyName,
-            })}
+            Future messages from {identity.externalLabel} use your current
+            Paperclip permissions in {identity.companyName}.
           </p>
         </div>
         {identity.provider === "slack" && <Button asChild><a href="https://app.slack.com/" target="_blank" rel="noopener noreferrer">{t("chatIdentityConfirm.returnToSlack")}</a></Button>}
