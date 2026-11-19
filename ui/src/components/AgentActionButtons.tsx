@@ -491,7 +491,7 @@ export function AgentActionButtons({
             ))}
             <button type="button" className={item} disabled={duplicateAgent.isPending} onClick={handleDuplicateAgent}>
               {duplicateAgent.isPending ? <Loader2 className={cn(icon, "animate-spin")} /> : <Copy className={icon} />}
-              {t("agentActions.duplicateAgent")}
+              {t("agentActions.duplicateAgentLower")}
             </button>
             <button
               type="button"
@@ -503,11 +503,11 @@ export function AgentActionButtons({
               })}
             >
               <Copy className={icon} />
-              {t("agentActionButtons.copyAgentId")}
+              {t("agentActionButtons.copyAgentIdLower")}
             </button>
             <button type="button" className={item} onClick={select(() => resetTaskSession.mutate())}>
               <RotateCcw className={icon} />
-              {t("agentActionButtons.resetSessions")}
+              {t("agentActionButtons.resetSessionsLower")}
             </button>
             {hideTerminate ? null : (
               <>

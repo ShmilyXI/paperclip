@@ -990,7 +990,8 @@
     "couldNotRefreshAgentLifecycle": "Could not refresh agent lifecycle status.",
     "assignTask": "Assign Task",
     "openActionsFor": "Open actions for {{name}}",
-    "duplicateAgent": "Duplicate Agent"
+    "duplicateAgent": "Duplicate Agent",
+    "duplicateAgentLower": "Duplicate agent"
   },
   "agentProps": {
     "errorReason": "Error reason",
@@ -13214,7 +13215,9 @@
     "rawTracingOn": "Raw tracing on",
     "pauseAnyway": "Pause anyway",
     "copyAgentId": "Copy Agent ID",
+    "copyAgentIdLower": "Copy agent ID",
     "resetSessions": "Reset Sessions",
+    "resetSessionsLower": "Reset sessions",
     "chatWithThisAgent": "Chat with this agent",
     "chatWithName": "Chat with {{name}}"
   },

@@ -990,7 +990,8 @@
     "couldNotRefreshAgentLifecycle": "无法刷新员工生命周期状态。",
     "assignTask": "分配任务",
     "openActionsFor": "打开 {{name}} 的操作",
-    "duplicateAgent": "复制员工"
+    "duplicateAgent": "复制员工",
+    "duplicateAgentLower": "复制员工"
   },
   "agentProps": {
     "errorReason": "错误原因",
@@ -13214,7 +13215,9 @@
     "rawTracingOn": "原始追踪已开启",
     "pauseAnyway": "仍然暂停",
     "copyAgentId": "复制员工 ID",
+    "copyAgentIdLower": "复制员工 ID",
     "resetSessions": "重置会话",
+    "resetSessionsLower": "重置会话",
     "chatWithThisAgent": "与这位员工聊天",
     "chatWithName": "与 {{name}} 聊天"
   },
