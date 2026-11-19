@@ -267,8 +267,8 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
           className="h-9 min-w-0 flex-1 justify-start gap-2 px-4 text-left hover:bg-accent/50 hover:text-foreground has-[>svg]:px-4 dark:hover:bg-accent/50"
           aria-label={
             currentName
-              ? t("sidebar.openOrgSwitcherNamed", { name: currentName })
-              : t("sidebar.openOrgSwitcher")
+              ? t("sidebar.openCompanySwitcherNamed", { name: currentName })
+              : t("sidebar.openCompanySwitcher")
           }
         >
           {/* Customer data: the organization name stays masked in session replay. */}
@@ -282,7 +282,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
               className="min-w-0 truncate text-sm font-bold text-foreground"
               title={currentName ?? undefined}
             >
-              {currentName ?? t("sidebar.selectOrganization")}
+              {currentName ?? t("sidebar.selectCompany")}
             </span>
           </span>
           <ChevronsUpDown className="size-3.5 shrink-0 text-muted-foreground" />
@@ -337,7 +337,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
             // offer the way back.
             companyListUnavailable ? (
               <>
-                <DropdownMenuItem disabled>{t("sidebar.couldnTLoadOrganizations")}</DropdownMenuItem>
+                <DropdownMenuItem disabled>{t("sidebar.couldnTLoadCompanies")}</DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={(event) => {
                     // Keep the menu open so the result of the retry is visible.
@@ -350,7 +350,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
                 </DropdownMenuItem>
               </>
             ) : (
-              <DropdownMenuItem disabled>{t("sidebar.noOrganizations")}</DropdownMenuItem>
+              <DropdownMenuItem disabled>{t("sidebar.noCompanies")}</DropdownMenuItem>
             )
           ) : null}
         </div>
