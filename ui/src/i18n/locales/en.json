@@ -12283,7 +12283,7 @@
     "couldNotRevokeThisAccount": "Could not revoke this account. Retry."
   },
   "toolActionAuditHashCopy": {
-    "couldntCopy": "Couldn't copy",
+    "couldntCopy": "Couldn’t copy",
     "copyAuditHash": "Copy audit hash",
     "copyTheHashTitle": "Copy the hash that identifies these exact arguments",
     "auditHash": "Audit hash"
