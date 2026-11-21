@@ -324,17 +324,17 @@ const OVERVIEW_ACTIVITY_LIMIT = 200;
 function agentViewDescription(view: AgentDetailView, name: string): string | null {
   switch (view) {
     case "runtime":
-      return `How ${name} runs: harness, model and environment.`;
+      return t("agentDetail.viewDescRuntime", { name });
     case "secrets":
-      return "Secrets this agent can reach. Values are never shown here.";
+      return t("agentDetail.viewDescSecrets");
     case "permissions":
-      return `What ${name} may do without asking, and where.`;
+      return t("agentDetail.viewDescPermissions", { name });
     case "activity":
-      return `Everything ${name} did and everything done to ${name}.`;
+      return t("agentDetail.viewDescActivity", { name });
     case "runs":
-      return `Every execution of ${name}, newest first.`;
+      return t("agentDetail.viewDescRuns", { name });
     case "costs":
-      return `What ${name} spent, by model.`;
+      return t("agentDetail.viewDescCosts", { name });
     default:
       return null;
   }
@@ -667,7 +667,7 @@ export function AgentDetail() {
     } else {
       crumbs.push({ label: agentName, href: agentDetailHref(canonicalAgentRef) });
       if (urlRunId) {
-        crumbs.push({ label: "Runs", href: agentDetailHref(canonicalAgentRef, "runs") });
+        crumbs.push({ label: t("auditNav.runs"), href: agentDetailHref(canonicalAgentRef, "runs") });
         crumbs.push({ label: t("agentDetail.runSlice", { slice: urlRunId.slice(0, 8) }) });
       } else {
         crumbs.push({ label: agentDetailViewLabel(activeView === "run-detail" ? "overview" : activeView) });

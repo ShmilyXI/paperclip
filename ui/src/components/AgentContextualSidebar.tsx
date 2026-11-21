@@ -86,7 +86,7 @@ export function AgentContextualSidebar({
       >
         {AGENT_DETAIL_NAVIGATION.map((section) => (
           <div key={section.label} className="contents">
-            {section.label === "Audit" && pluginTabs.length > 0 ? (
+            {section.label === t("auditNav.audit") && pluginTabs.length > 0 ? (
               <div data-slot="contextual-sidebar-section" className={contextualSidebarStyles.section}>
                 <p className={contextualSidebarStyles.sectionLabel}>Apps</p>
                 <div className={contextualSidebarStyles.group}>

@@ -1316,7 +1316,12 @@
     "managedInParens": "(managed)",
     "entryBadge": "entry",
     "languageFile": "{{language}} file",
-    "baseRef": "Base ref:"
+    "viewDescRuntime": "How {{name}} runs: harness, model and environment.",
+    "viewDescSecrets": "Secrets this agent can reach. Values are never shown here.",
+    "viewDescPermissions": "What {{name}} may do without asking, and where.",
+    "viewDescActivity": "Everything {{name}} did and everything done to {{name}}.",
+    "viewDescRuns": "Every execution of {{name}}, newest first.",
+    "viewDescCosts": "What {{name}} spent, by model."
   },
   "agentNav": {
     "agent": "Agent",
@@ -1331,7 +1336,11 @@
     "governance": "Governance",
     "permissionsTrust": "Permissions / Trust",
     "apiKeys": "API Keys",
-    "revisions": "Revisions"
+    "revisions": "Revisions",
+    "identity": "Identity",
+    "secretsVariables": "Secrets & variables",
+    "advanced": "Advanced",
+    "agentHistory": "Agent history"
   },
   "issuesList": {
     "searchTasks": "Search tasks...",
@@ -2071,7 +2080,7 @@
     "area": "Area",
     "newTaskForAnAgent": "New task for an agent",
     "newTaskForAnAgentAria": "New task for an agent: {{title}}",
-    "agentsOnThis": "Agents on this",
+    "agentsOnThis": "Agents on this: {{names}}",
     "acrossTheWork": "Across the work",
     "removeLabelFromResponsibility": "Remove {{label}} from this responsibility",
     "removeFromThisResponsibility": "Remove from this responsibility. It stays wherever else it is filed.",
@@ -2172,7 +2181,6 @@
     "nothingProducedYetDocumentsFiles": "Nothing produced yet. Documents, files and other output from the tasks under this responsibility collect here.",
     "moreForTitle": "More for {{title}}",
     "noAgentsOnThisYet": "No agents on this yet",
-    "agentsOnThis": "Agents on this: {{names}}",
     "noAgentIsWorkingOnThisYet": "No agent is working on this yet. Give one a task, a routine or a project below.",
     "behind": "Behind",
     "atRisk": "At risk",
@@ -9084,7 +9092,7 @@
     "returnToYourAssistantIt": "Return to your assistant. It will finish connecting automatically.",
     "backToPaperclip": "Back to Paperclip",
     "toPaperclip": "to Paperclip",
-    "confirmThisMatchesTheCode": "Confirm this matches the code shown by your assistant:",
+    "confirmThisMatchesTheCode": "Confirm this matches the code shown by your assistant: ",
     "loadingConnectionRequest": "Loading connection request…",
     "enterADifferentCode": "Enter a different code",
     "enterTheOneUseCode": "Enter the one-use code from Paperclip’s agent setup to review this connection’s access. Keep the code out of Bot chat. Access is granted only when you approve the named agent below.",
@@ -9117,20 +9125,13 @@
     "organizationLabel": "Organization: {{name}}",
     "authorizedBySuffix": "· Authorized by {{name}}",
     "yourAssistant": "your assistant",
-    "confirmThisMatchesTheCode": "Confirm this matches the code shown by your assistant: ",
-    "loadingConnectionRequest": "Loading connection request…",
-    "startANewConnectionFrom": "Start a new connection from your assistant.",
-    "enterADifferentCode": "Enter a different code",
     "enterTheOneUseCodeFrom": "Enter the one-use code from Paperclip’s agent setup to review this connection’s access. Keep the code out of Bot chat. Access is granted only when you approve the named agent below.",
     "checkingPairingCode": "Checking pairing code…",
     "allowThisConnectionToWorkAs": "Allow this connection to work as {{agent}} in {{company}}.",
-    "yourRoleInThisOrganization": "Your role in this organization is read-only.",
-    "assistantConnections": "Assistant connections",
-    "revokingAConnectionStops": "Revoking a connection stops its future tool calls. Work already delegated continues under your organization’s normal controls.",
-    "noAssistantConnections": "No assistant connections."
+    "revokingAConnectionStops": "Revoking a connection stops its future tool calls. Work already delegated continues under your organization’s normal controls."
   },
   "decisionModelSettings": {
-    "loadingDecisionModel": "Loading decision model",
+    "loadingDecisionModel": "Loading decision model…",
     "loadDecisionSettings": "load decision settings",
     "chooseAndSaveAConnection": "Choose and save a connection first.",
     "enableAndSaveDecisionsBefore": "Enable and save decisions before running a test.",
@@ -9164,7 +9165,6 @@
     "runsASmallSampleWith": "Runs a small sample with an API charge.",
     "saveChangesBeforeTesting": "Save changes before testing.",
     "saveDecisionModel": "Save decision model",
-    "loadingDecisionModel": "Loading decision model…",
     "couldNotLoadDecisionSettings": "Could not load decision settings.",
     "addADecisionConnection": "Add a decision connection",
     "useASharedApiConnection": "Use a shared API connection for company decisions.",
@@ -18507,5 +18507,14 @@
     "firstCheckActivity": "First check Activity. Discarding this browser record does not cancel an update that was already accepted. It lets you start a new update.",
     "keepRecord": "Keep record",
     "discardRecord": "Discard record"
+  },
+  "auditNav": {
+    "audit": "Audit",
+    "activity": "Activity",
+    "runs": "Runs",
+    "commentary": "Commentary",
+    "costs": "Costs",
+    "budgets": "Budgets",
+    "timeline": "Timeline"
   }
 }
