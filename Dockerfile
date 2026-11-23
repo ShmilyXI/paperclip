@@ -26,14 +26,21 @@ RUN usermod -u $USER_UID --non-unique node \
 FROM base AS tailscale-client
 ARG TARGETARCH
 WORKDIR /out
-RUN set -eu; \
+# Fork: a pre-downloaded tarball in docker/tailscale-cache/ (gitignored) is used
+# instead of downloading; the sha256 check below still applies. pkgs.tailscale.com
+# is too slow from some networks to finish within the download timeout.
+RUN --mount=type=bind,source=docker,target=/ctx-docker set -eu; \
     case "$TARGETARCH" in \
       amd64) digest=720cbbccbfc03d8b55df72afc19e5a72e31b0f65934700aa6fa38074d4ad7bf7 ;; \
       arm64) digest=e900b0e6e25023a1e504b2c237ce2a32ea0535e006f8c1a1097a490886493b6c ;; \
       *) echo "Unsupported Tailscale architecture: $TARGETARCH" >&2; exit 1 ;; \
     esac; \
-    curl --fail --silent --show-error --location --retry 5 --retry-delay 3 --connect-timeout 15 --max-time 900 --proto '=https' --proto-redir '=https' \
-      "https://pkgs.tailscale.com/stable/tailscale_1.104.5_${TARGETARCH}.tgz" -o tailscale.tgz; \
+    if [ -f "/ctx-docker/tailscale-cache/tailscale_1.104.5_${TARGETARCH}.tgz" ]; then \
+      cp "/ctx-docker/tailscale-cache/tailscale_1.104.5_${TARGETARCH}.tgz" tailscale.tgz; \
+    else \
+      curl --fail --silent --show-error --location --retry 5 --retry-delay 3 --connect-timeout 15 --max-time 900 --proto '=https' --proto-redir '=https' \
+        "https://pkgs.tailscale.com/stable/tailscale_1.104.5_${TARGETARCH}.tgz" -o tailscale.tgz; \
+    fi; \
     printf '%s  tailscale.tgz\n' "$digest" > tailscale.sha256; \
     sha256sum -c tailscale.sha256; \
     tar -xzf tailscale.tgz --strip-components=1; \
