@@ -2,7 +2,18 @@
 FROM node:24-trixie-slim AS base
 ARG USER_UID=1000
 ARG USER_GID=1000
-RUN apt-get update \
+# Fork: optional package mirrors for slow links (mainland China). Both default to
+# empty, which keeps the upstream sources. ./opc build-src passes OPC_APT_MIRROR /
+# OPC_NPM_REGISTRY from .env. The npm registry stays set in every stage built
+# FROM base, so pnpm and corepack use it too.
+ARG APT_MIRROR=""
+ARG NPM_REGISTRY=""
+ENV npm_config_registry=${NPM_REGISTRY:-https://registry.npmjs.org/} \
+    COREPACK_NPM_REGISTRY=${NPM_REGISTRY:-https://registry.npmjs.org}
+RUN if [ -n "$APT_MIRROR" ]; then \
+      sed -i "s#http://deb.debian.org#${APT_MIRROR}#g" /etc/apt/sources.list.d/debian.sources; \
+    fi \
+  && apt-get update \
   && apt-get install -y --no-install-recommends ca-certificates gosu curl gh git wget ripgrep python3 tini \
   && rm -rf /var/lib/apt/lists/* \
   && corepack enable
@@ -202,11 +213,15 @@ WORKDIR /workspace
 COPY --from=runner-artifacts-context / ./
 COPY --from=runner-artifacts-identity /runner-image-identity.json /runner-image-identity.json
 # The source revision is provenance, not identity: the commit whose build
-# produced this image. PAPERCLIP_BUILD_COMMIT is the fallback so one argument
-# stamps a whole `docker build`. Without either, the tree has the daemon and
-# the Runner build but no provider pack.
+# produced this image. Without it, the tree has the daemon and the Runner build
+# but no provider pack.
+# Fork: no PAPERCLIP_BUILD_COMMIT fallback. That ARG changes on every commit, so
+# using it here rebuilt this whole stage (~30 min) on every deploy, for a pack
+# that only remote sandboxes need. Self-hosted builds pass
+# PAPERCLIP_RUNNER_SOURCE_REVISION only when they want the pack
+# (OPC_PROVIDER_PACK=1 ./opc build-src); otherwise this stage stays cached until
+# the Runner's own inputs change.
 ARG PAPERCLIP_RUNNER_SOURCE_REVISION=""
-ARG PAPERCLIP_BUILD_COMMIT=""
 # Set to 1 only by .github/workflows/runner-image.yml, which builds the
 # publication form of the image. Only then does the pack record
 # `runnerInputsDigest`, the identity of this image. Another image build that
@@ -236,7 +251,7 @@ ARG PAPERCLIP_RUNNER_IMAGE_PUBLICATION=""
 # stages. `dist` is what the Runner's own build writes: its large files change
 # with the Runner's source, so they stay with the content that does.
 RUN set -eu; \
-    revision="${PAPERCLIP_RUNNER_SOURCE_REVISION:-${PAPERCLIP_BUILD_COMMIT}}"; \
+    revision="${PAPERCLIP_RUNNER_SOURCE_REVISION}"; \
     publication="${PAPERCLIP_RUNNER_IMAGE_PUBLICATION}"; \
     case "$publication" in ""|1) ;; *) echo "ERROR: PAPERCLIP_RUNNER_IMAGE_PUBLICATION must be 1 or unset" >&2; exit 1 ;; esac; \
     if [ -n "$publication" ] && [ -z "$revision" ]; then echo "ERROR: a publication build needs PAPERCLIP_RUNNER_SOURCE_REVISION" >&2; exit 1; fi; \
@@ -270,7 +285,7 @@ RUN set -eu; \
       node scripts/runner-image-layout.mjs check /out --variant full --expect-source-revision "$revision" ${publication:+--expect-inputs-digest "$PAPERCLIP_RUNNER_INPUTS_DIGEST"}; \
       cd / && /out/provider-pack/node_modules/node/bin/node --input-type=module -e 'const transport = await import("/out/bundles/runnerd-codex-transport.mjs"); if (typeof transport.createCapabilityRunnerdCodexTransport !== "function") process.exit(1);'; \
     else \
-      echo "Skipping the provider pack: supply a full PAPERCLIP_RUNNER_SOURCE_REVISION or PAPERCLIP_BUILD_COMMIT to build a complete Runner image"; \
+      echo "Skipping the provider pack: supply a full PAPERCLIP_RUNNER_SOURCE_REVISION to build a complete Runner image"; \
       node scripts/runner-image-layout.mjs write --out /out --workspace /workspace --identity /runner-image-identity.json; \
       chmod -R a+rX /out; \
       node scripts/runner-image-layout.mjs check /out --variant full --allow-unstamped; \
@@ -396,8 +411,13 @@ RUN echo "cli-tools-epoch: ${CLI_TOOLS_CACHE_EPOCH}" \
 # screenshots render, and python3-yaml for modelctl. Kept here, ahead of the
 # app copy, so it stays cached across commits instead of being reinstalled by
 # every downstream image built FROM this one.
+# Fork: also the media tools the opc-platform image needs (python3-pil/numpy for
+# card checks; ffmpeg, extra CJK / mono fonts and scipy for video-kit). The
+# platform Dockerfile skips its apt step when these are present, so they no
+# longer reinstall (~10 min) on every deploy.
 RUN apt-get update \
   && apt-get install -y --no-install-recommends chromium fonts-noto-cjk fonts-noto-color-emoji python3-yaml \
+       python3-pil python3-numpy ffmpeg fonts-noto-cjk-extra fonts-jetbrains-mono python3-scipy \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --from=tailscale-client /out/tailscale /out/tailscaled /usr/local/bin/
