@@ -3109,7 +3109,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
   const historyControl = props.historyControl ?? (
     props.compactHistory && props.onExpandHistory
     && (deferredTranscriptRunIds.size > 0 || logRuns.some((run) => truncatedRunIds?.has(run.id)))
-      ? <Button type="button" variant="ghost" size="sm" onClick={props.onExpandHistory}>More run output</Button>
+      ? <Button type="button" variant="ghost" size="sm" onClick={props.onExpandHistory}>{t("taskChatThread.moreRunOutput")}</Button>
       : null
   );
   const renderBrief = useCallback(

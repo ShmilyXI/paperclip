@@ -128,7 +128,7 @@ export function CoordinatorCreatedTaskLink({ task, createdAt }: {
     & Partial<Pick<IssueSummary, "displayStatus" | "externalConversationState" | "blockerAttention">>;
 }) {
   return <Link to={`/issues/${task.identifier ?? task.issueId}`} className="coordinator-created-task">
-    {task.status ? <StatusIcon {...taskStatusIconProps({ ...task, status: task.status })} size="lg" /> : <FileCheck2 className="size-5 shrink-0 text-muted-foreground" aria-label="Task created" />}
+    {task.status ? <StatusIcon {...taskStatusIconProps({ ...task, status: task.status })} size="lg" /> : <FileCheck2 className="size-5 shrink-0 text-muted-foreground" aria-label={t("routineTriggerCard.taskCreated")} />}
     <span className="min-w-0 flex-1">
       <span className="block truncate text-sm font-medium">{task.title}</span>
       <span className="block truncate text-xs text-muted-foreground"><span className="font-mono">{task.identifier ?? task.issueId}</span> · Created</span>
@@ -147,7 +147,7 @@ function CreatedTaskLinks({ interaction }: { interaction: SuggestTasksInteractio
     queryFn: ({ signal }) => issuesApi.summaries(interaction.companyId, ids, { signal }),
     enabled: ids.length > 0,
     });
-  if (tasks.length === 0) return <p className="p-4 text-sm text-muted-foreground">No tasks were created.</p>;
+  if (tasks.length === 0) return <p className="p-4 text-sm text-muted-foreground">{t("coordinatorTaskCommitment.noTasksWereCreated")}</p>;
   return <div className="divide-y divide-border">
     {tasks.map(task => {
       const summary = query.data?.find(candidate => candidate.id === task.issueId);

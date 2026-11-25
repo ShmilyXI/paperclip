@@ -243,7 +243,7 @@ export function SearchFilterSheetTrigger({
   return (
     <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs font-normal" onClick={onClick}>
       <SlidersHorizontal className="h-3.5 w-3.5" />
-      Filters
+      {t("common.filters")}
       {activeCount > 0 ? (
         <span className="ml-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-(length:--text-nano) font-semibold tabular-nums text-primary-foreground">
           {activeCount}

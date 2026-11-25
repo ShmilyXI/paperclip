@@ -855,7 +855,7 @@ export function IssueAssigneePausedNotice({
             stillPreparing ? undefined : (
               <Button size="sm" variant="outline" asChild>
                 <Link to={agentUrl(agent)} data-testid="issue-assignee-finish-setup">
-                  Finish setup
+                  {t("agentActions.finishSetup")}
                 </Link>
               </Button>
             )

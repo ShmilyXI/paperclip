@@ -27,8 +27,8 @@ export function AiConnectionAccountDetails({ account, grant }: {
   const message = identity.error ? describeError(identity.error).body : identity.data?.message;
   const retryable = identity.isError || identity.data?.status === "error";
   return (
-    <section className="space-y-3" aria-label="Connected account">
-      <h3 className="text-sm font-semibold">Connected account</h3>
+    <section className="space-y-3" aria-label={t("aiConnectionAccountDetails.connectedAccount")}>
+      <h3 className="text-sm font-semibold">{t("aiConnectionAccountDetails.connectedAccount")}</h3>
       <dl className="grid grid-cols-2 gap-3 text-sm">
         <dt className="text-muted-foreground">{AI_PROVIDERS[account.provider].name} account</dt>
         <dd className={cn("break-words", ANALYTICS_MASK_CLASS)}>{accountLabel ?? "Not available"}</dd>
@@ -36,14 +36,14 @@ export function AiConnectionAccountDetails({ account, grant }: {
           <dt className="text-muted-foreground">{isChatGpt ? "ChatGPT workspace" : "Organization"}</dt>
           <dd className={cn("break-words", ANALYTICS_MASK_CLASS)}>{identity.data?.organizationLabel ?? (identity.isPending && canLookUp ? "Checking…" : "Not available")}</dd>
         </>}
-        <dt className="text-muted-foreground">Sign-in method</dt>
+        <dt className="text-muted-foreground">{t("remoteMcpConnectionSetup.signInMethod")}</dt>
         <dd>{aiMethodLabel(account.provider, account.method)}</dd>
-        <dt className="text-muted-foreground">Access</dt>
+        <dt className="text-muted-foreground">{t("settingsNav.access")}</dt>
         <dd>{account.ownership === "shared" ? "Company shared" : `Personal · ${account.ownerName ?? "Account owner"}`}</dd>
       </dl>
-      {canLookUp && identity.isPending && <p role="status" className="text-xs text-muted-foreground">Checking account details…</p>}
+      {canLookUp && identity.isPending && <p role="status" className="text-xs text-muted-foreground">{t("aiConnectionAccountDetails.checkingAccountDetails")}</p>}
       {message && <p role={retryable ? "alert" : undefined} className="text-xs text-muted-foreground">{message}</p>}
-      {retryable && <Button variant="outline" size="sm" disabled={identity.isFetching} onClick={() => void identity.refetch()}>Retry account check</Button>}
+      {retryable && <Button variant="outline" size="sm" disabled={identity.isFetching} onClick={() => void identity.refetch()}>{t("costs.retryAccountCheck")}</Button>}
     </section>
   );
 }

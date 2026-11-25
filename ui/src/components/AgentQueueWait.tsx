@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { ExecutionAgentQueue } from "@paperclipai/shared";
 import { Hourglass } from "lucide-react";
 import { Link } from "@/lib/router";
@@ -42,7 +43,7 @@ export function AgentQueueWait({
             className="text-foreground/80 underline-offset-2 hover:text-foreground hover:underline"
             aria-label={`Configure ${queue.agentName}'s concurrent run limit`}
           >
-            Configure
+            {t("agentDetail.configure")}
           </Link>
         </>
       ) : null}
@@ -61,7 +62,7 @@ export function AgentQueueWaitChip({ queue }: { queue: ExecutionAgentQueue | nul
       data-testid="agent-queue-wait-chip"
     >
       <Hourglass className="size-3" aria-hidden="true" />
-      Waiting
+      {t("grokBotSetupContent.waiting")}
     </span>
   );
 }

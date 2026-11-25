@@ -123,7 +123,7 @@ export function ProposalJustification({
           className,
         )}
       >
-        <span className="sr-only">Reason given by the agent: </span>“{justification}”
+        <span className="sr-only">{t("proposal-review.reasonGivenByTheAgent")} </span>“{justification}”
       </p>
     );
   }
@@ -607,7 +607,7 @@ function BindingApproveBody({
     <div className="space-y-3 text-sm">
       <div className="space-y-2 rounded-md border border-border p-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs text-muted-foreground">Agent</span>
+          <span className="text-xs text-muted-foreground">{t("common.agent")}</span>
           {proposal.target ? (
             <AgentRefChip agent={proposal.target} className="text-sm font-medium" />
           ) : (

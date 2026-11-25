@@ -127,7 +127,7 @@ export function InboxAgentPolicyControl({ companyId }: { companyId: string | nul
   }
 
   if (policyQuery.isLoading || policyView.kind === "reconnecting" || !draft) {
-    return <div className="text-sm text-muted-foreground">Loading inbox agent policy…</div>;
+    return <div className="text-sm text-muted-foreground">{t("inboxAgentPolicyControl.loadingInboxAgentPolicy")}</div>;
   }
 
   return (

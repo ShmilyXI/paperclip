@@ -3053,8 +3053,7 @@ function OnboardingWizardInner({
 
                     {adapterRegistryLoaded && recommendedAdapters.length === 0 && (
                       <p role="status" className="text-sm text-muted-foreground">
-                        Claude and Codex are unavailable on this instance. Ask an administrator to enable one,
-                        or exit setup and choose New Agent on the Agents page to use another provider.
+                        {t("onboardingWizard.claudeAndCodexAreUnavailable")}
                       </p>
                     )}
 
@@ -3280,7 +3279,7 @@ function OnboardingWizardInner({
 
                   {sourceSelected && connectCardLive && connectCardMounted && !connectProgress && credentialMode === "api" && createdCompanyId && (adapterType === "codex_local" || adapterType === "claude_local") && (
                     <details className="space-y-3">
-                      <summary className="cursor-pointer text-sm text-muted-foreground">Advanced</summary>
+                      <summary className="cursor-pointer text-sm text-muted-foreground">{t("common.advanced")}</summary>
                       <OnboardingGatewaySetup
                         companyId={createdCompanyId} agentId={setupAgentId ?? undefined} environmentId={resolvedLoginEnvironmentId ?? undefined}
                         adapterType={adapterType} disabled={loading || adapterEnvLoading}

@@ -1143,9 +1143,9 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
                 onCheckedChange={(checked) => setDeleteStoredContent(checked === true)}
               />
               <span>
-                Also delete data read through this connection
+                {t("browse.alsoDeleteDataReadThrough")}
                 <span className="block text-xs text-muted-foreground">
-                  Permanently removes saved tool results and the transcripts of runs that used it. This cannot be undone.
+                  {t("browse.permanentlyRemovesSavedToolResults")}
                 </span>
               </span>
             </label>

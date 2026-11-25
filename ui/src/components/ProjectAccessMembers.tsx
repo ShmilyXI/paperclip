@@ -161,7 +161,7 @@ export function ProjectAccessMembers({ project, canManage }: { project: Project;
                   </div>
                 );
               })}
-              {membersWaiting ? <p className="py-3 text-sm text-muted-foreground">Loading access…</p> : null}
+              {membersWaiting ? <p className="py-3 text-sm text-muted-foreground">{t("chatDetail.loadingAccess")}</p> : null}
               {membersView.kind === "error" ? (
                 <p className="py-3 text-sm text-destructive">Couldn&apos;t load project access members.</p>
               ) : null}

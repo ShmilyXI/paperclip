@@ -27,7 +27,7 @@ export function AdvancedToolsRoute() {
   const view = useQueryView(boardAccess);
 
   if (boardAccess.isLoading || view.kind === "reconnecting") {
-    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">Loading…</div>;
+    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">{t("common.loading2")}</div>;
   }
   if (view.kind === "error" && view.errorKind !== "forbidden") {
     return (

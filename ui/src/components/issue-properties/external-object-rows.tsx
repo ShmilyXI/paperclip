@@ -179,7 +179,7 @@ export function ExternalObjectRows({
     return (
       <PropertyRow label={t("externalObjectRows.externalObjects")}>
         <span className="text-xs text-muted-foreground">
-          Couldn't load external objects.
+          {t("issueRelatedWorkPanel.couldnTLoadExternalObjects")}
           {onRetryExternalObjects ? (
             <>
               {" "}

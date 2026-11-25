@@ -63,14 +63,14 @@ export function JoinRequestQueue() {
   }
 
   if (requestsQuery.isLoading || requestsView.kind === "reconnecting") {
-    return <div className="text-sm text-muted-foreground">Loading join requests…</div>;
+    return <div className="text-sm text-muted-foreground">{t("joinRequestQueue.loadingJoinRequests")}</div>;
   }
 
   if (requestsView.kind === "error") {
     if (requestsView.errorKind === "forbidden") {
       return (
         <div className="text-sm text-destructive">
-          You do not have permission to review join requests for this organization.
+          {t("joinRequestQueue.youDoNotHavePermission")}
         </div>
       );
     }

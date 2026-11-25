@@ -3030,7 +3030,7 @@ function StreamlinedInbox({
       {listError && (
         <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
           <p>Unable to load the inbox: {describeError(listError).body}</p>
-          <Button variant="outline" size="sm" onClick={() => { retryFailedSources(); if (externalObjectSummariesError) retryExternalObjectSummaries(); }}>Retry</Button>
+          <Button variant="outline" size="sm" onClick={() => { retryFailedSources(); if (externalObjectSummariesError) retryExternalObjectSummaries(); }}>{t("common.retry")}</Button>
         </div>
       )}
       {actionError && <p className="text-sm text-destructive">{actionError}</p>}

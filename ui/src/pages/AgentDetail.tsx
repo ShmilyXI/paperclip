@@ -942,7 +942,7 @@ export function AgentDetail() {
                 <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
               </span>
-              <span className="text-(length:--text-micro) font-medium text-blue-600 dark:text-blue-400">Live</span>
+              <span className="text-(length:--text-micro) font-medium text-blue-600 dark:text-blue-400">{t("agents.live")}</span>
             </Link>
           )}
         </AgentActionButtons>
@@ -951,13 +951,13 @@ export function AgentDetail() {
       <AlertDialog open={pendingLeave !== null} onOpenChange={(open) => (open ? undefined : setPendingLeave(null))}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Discard unsaved changes?</AlertDialogTitle>
+            <AlertDialogTitle>{t("agentDetail.discardUnsavedChanges")}</AlertDialogTitle>
             <AlertDialogDescription>
               You have unsaved changes to {agent.name}&rsquo;s {activeView === "runtime" ? "harness settings" : activeView === "secrets" ? "secrets and variables" : activeView === "advanced" ? "configuration" : "instructions"}. If you continue, they&rsquo;ll be lost.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="sm:justify-between">
-            <AlertDialogCancel>Keep editing</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.keepEditing")}</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white hover:bg-destructive/90"
               onClick={() => {
@@ -973,7 +973,7 @@ export function AgentDetail() {
                 }
               }}
             >
-              Discard changes
+              {t("common.discardChanges")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -1162,7 +1162,7 @@ export function AgentDetail() {
       )}
 
       {activeView === "advanced" && (
-        <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">Loading configuration…</p>}>
+        <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">{t("gitHubBotManagement.loadingConfiguration")}</p>}>
           <AgentAdvancedTab key={agent.id} agent={agent} onDirtyChange={setConfigDirty} onSavingChange={setConfigSaving}
             onSaved={updated => {
               const nextRef = agentRouteRef(updated);
@@ -1471,7 +1471,7 @@ export function AgentOverview({
           <div className="flex flex-col pb-3">
             <AgentReportingManager key={agent.id} agent={agent} />
             {directReports.length > 0 && <div className="flex flex-col gap-1.5 px-(--agent-detail-module-inset) py-1.5 text-sm">
-              <span className="text-muted-foreground">Direct reports:</span>
+              <span className="text-muted-foreground">{t("agentDetail.directReports")}</span>
               <AgentDirectReports reports={directReports} />
             </div>}
 
@@ -1497,13 +1497,13 @@ export function AgentOverview({
           title={t("agentDetail.recentTasks")}
           action={
             <Link to={`/issues?participantAgentId=${agent.id}`} className="text-xs text-muted-foreground no-underline transition-colors hover:text-foreground">
-              See all tasks
+              {t("agentDetail.seeAllTasks")}
             </Link>
           }
         />
         {assignedIssues.length === 0 ? (
           <div className="flex flex-col gap-3">
-            <p className="text-sm text-muted-foreground">Start with a suggested task</p>
+            <p className="text-sm text-muted-foreground">{t("agentDetail.startWithASuggestedTask")}</p>
             <ul className="overflow-hidden rounded-lg border border-border bg-(--agent-detail-tile) divide-y divide-dashed divide-border" aria-label={t("issueThreadInteractionCard.suggestedTasks")}>
               {taskSuggestions.map((title) => (
                 <li key={title}>
@@ -2685,8 +2685,8 @@ export function PromptsTab({
             </div>
           )}
           {candidateRunId && <div role="status" className="space-y-3">
-            <p className="text-sm text-muted-foreground">Reviewing preserved edits. Save to apply your resolved draft and close this preserved edit.</p>
-            <details><summary className="cursor-pointer text-sm text-muted-foreground">Compare current instructions</summary>
+            <p className="text-sm text-muted-foreground">{t("agentDetail.reviewingPreservedEditsSaveTo")}</p>
+            <details><summary className="cursor-pointer text-sm text-muted-foreground">{t("agentDetail.compareCurrentInstructions")}</summary>
               <pre className={cn("whitespace-pre-wrap break-words rounded-md border border-border p-3 font-mono text-sm", ANALYTICS_MASK_CLASS)}>{currentContent}</pre>
             </details>
             {draftBaseRevisionRef.current !== (selectedFileDetail?.revision?.id ?? null) && <p className="text-sm text-destructive">{t("agentDetail.theCurrentInstructionsChangedAfter")}</p>}
@@ -2695,7 +2695,7 @@ export function PromptsTab({
           {(candidates.error || loadCandidate.error || resolveCandidate.error || refreshCandidateBase.error) && <p role="alert" className="text-sm text-destructive">{(candidates.error ?? loadCandidate.error ?? resolveCandidate.error ?? refreshCandidateBase.error)?.message} Your preserved edits remain available.</p>}
           {(fileNameError || (editingFileName && fileNameInvalid)) && <p role="alert" className="text-sm text-destructive">{fileNameError ?? (nameConflict ? "A file with this name already exists." : "Use letters, numbers, hyphens or underscores.")}</p>}
           {(saveFile.error || fileError || updateBundle.error) && <p role="alert" className="text-sm text-destructive">{(saveFile.error ?? fileError ?? updateBundle.error)?.message} Your unsaved edits are retained.</p>}
-          {selectedFileDetail?.receipt?.materialization === "pending" && <p role="status" className="text-sm text-muted-foreground">Revision saved. The instruction file still needs to be rebuilt from the saved revision.</p>}
+          {selectedFileDetail?.receipt?.materialization === "pending" && <p role="status" className="text-sm text-muted-foreground">{t("agentDetail.revisionSavedTheInstructionFile")}</p>}
           {selectedFileDetail?.revision && currentMode === "managed" && bundle?.persistence !== "agent_files" && <InstructionHistory
             key={selectedOrEntryFile} agentId={agent.id} companyId={companyId} path={selectedOrEntryFile}
             currentRevisionId={selectedFileDetail.revision.id} disabled={isDirty || isSaving}
@@ -2710,7 +2710,7 @@ export function PromptsTab({
           </div>
           {selectedFileDetail?.binary ? (
             <div className="space-y-3 px-(--agent-identity-panel-gap) py-5">
-              <p className="text-sm text-muted-foreground">This file is preserved with the agent directory. Download it to view its contents.</p>
+              <p className="text-sm text-muted-foreground">{t("agentDetail.thisFileIsPreservedWith")}</p>
               <a className="text-sm text-primary underline" href={agentsApi.downloadInstructionsFile(agent.id, selectedOrEntryFile, companyId)} download>Download {selectedOrEntryFile}</a>
             </div>
           ) : selectedFileExists && fileLoading && !selectedFileDetail ? (
@@ -2741,7 +2741,7 @@ export function PromptsTab({
               className={cn("block min-h-(--sz-420px) w-full overflow-x-auto p-(--agent-identity-panel-gap) font-mono text-xs leading-5 whitespace-pre-wrap break-words text-muted-foreground", ANALYTICS_MASK_CLASS)}
             >
               {displayValue}
-            </pre> : <p className="min-h-(--sz-420px) p-(--agent-identity-panel-gap) text-sm text-muted-foreground">This instruction file is empty.</p>}
+            </pre> : <p className="min-h-(--sz-420px) p-(--agent-identity-panel-gap) text-sm text-muted-foreground">{t("agentDetail.thisInstructionFileIsEmpty")}</p>}
             </div>
           )}
         </div>

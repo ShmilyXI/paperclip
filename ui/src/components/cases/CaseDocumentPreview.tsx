@@ -44,7 +44,7 @@ export function CaseDocumentPreview({ caseIdentifier, document: documentRef }: {
           {document?.latestRevisionNumber != null ? t("caseDocumentPreview.revisionSuffix", { number: document.latestRevisionNumber }) : ""}
         </DialogDescription>
       </DialogHeader>
-      {current.isLoading ? <p className="text-sm text-muted-foreground">Loading document…</p> : (currentView.kind === "error") ? <p role="alert" className="text-sm text-destructive">This document couldn’t be loaded.</p> : document ? <div className="space-y-6">
+      {current.isLoading ? <p className="text-sm text-muted-foreground">{t("taskDocumentPanel.loadingDocument")}</p> : (currentView.kind === "error") ? <p role="alert" className="text-sm text-destructive">{t("caseDocumentPreview.thisDocumentCouldnTBe")}</p> : document ? <div className="space-y-6">
         <SourceTrustBadge sourceTrust={document.sourceTrust} artifactLabel="document" />
         {document.body ? <MarkdownBody linkIssueReferences linkCaseReferences>{document.body}</MarkdownBody> : <p className="text-sm text-muted-foreground">{t("caseDocumentPreview.thisDocumentIsEmpty")}</p>}
         <details open={historyOpen} onToggle={event => setHistoryOpen(event.currentTarget.open)} className="space-y-3">

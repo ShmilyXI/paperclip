@@ -485,7 +485,7 @@ export function Agents({ initialView = "list" }: { initialView?: AgentsView } = 
                     onClick={() => navigate(`/chats/${agentRouteRef(agent)}`)}
                   >
                     <MessagesSquare className="size-3.5" aria-hidden />
-                    Chat
+                    {t("nav.chat")}
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>chat with this agent</TooltipContent>

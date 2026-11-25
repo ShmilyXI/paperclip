@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -55,11 +56,11 @@ export function PendingSendNotice({
       <div className="flex items-center gap-2">
         {onResendNow ? (
           <Button type="button" size="sm" variant="outline" disabled={resending} onClick={onResendNow}>
-            Resend now
+            {t("externallyConnectedTaskBanner.resendNow")}
           </Button>
         ) : null}
         <Button type="button" size="sm" variant="ghost" disabled={resending} onClick={onCancel}>
-          Cancel
+          {t("common.cancel")}
         </Button>
       </div>
     </div>

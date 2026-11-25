@@ -474,7 +474,7 @@ function WorkspaceChangeFileRow({
             truncated={parsed.truncated || file.diffTruncated === true}
           />
         ) : (
-          <p className="ml-7 mt-1 text-xs text-muted-foreground">This patch is too large to show here.</p>
+          <p className="ml-7 mt-1 text-xs text-muted-foreground">{t("taskChatProtocolCard.thisPatchIsTooLarge")}</p>
         )
       ) : null}
     </div>

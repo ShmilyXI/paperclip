@@ -944,7 +944,7 @@ function SuggestTasksCard({
     return (
       <div className="space-y-4">
         <DecisionPanel>
-          <div role="group" aria-label="Suggested tasks" className="flex flex-col gap-2">
+          <div role="group" aria-label={t("taskChatCompactInteractionCard.suggestedTasks")} className="flex flex-col gap-2">
             {rows.map(({ node, depth }) => {
               const task = node.task;
               const owner = task.assigneeAgentId || task.assigneeUserId
@@ -976,10 +976,10 @@ function SuggestTasksCard({
         </DecisionPanel>
         <DecisionCardFooter leading={footerSlot}>
           <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working !== null} onClick={() => void handleReject()}>
-            {working === "reject" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Declining…</> : "Decline all"}
+            {working === "reject" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{t("issueThreadInteractionCard.declining")}</> : "Decline all"}
           </Button>
           <Button size="sm" disabled={!onAcceptInteraction || working !== null || selectedCount === 0} onClick={() => void handleAccept()}>
-            {working === "accept" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Creating…</> : `Create ${selectedCount} ${selectedCount === 1 ? "task" : "tasks"}`}
+            {working === "accept" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{t("common.creating")}</> : `Create ${selectedCount} ${selectedCount === 1 ? "task" : "tasks"}`}
           </Button>
         </DecisionCardFooter>
         <InteractionActionError message={actionError} />
@@ -1066,7 +1066,7 @@ function SuggestTasksCard({
                     disabled={working !== null}
                     onClick={() => setSelectedClientKeys(new Set(interaction.payload.tasks.map((task) => task.clientKey)))}
                   >
-                    Reset selection
+                    {t("interaction.resetSelection")}
                   </Button>
                 ) : null}
                 <Button
@@ -1075,7 +1075,7 @@ function SuggestTasksCard({
                   disabled={!onRejectInteraction || working !== null}
                   onClick={() => setRejecting((current) => !current)}
                 >
-                  Reject
+                  {t("common.reject")}
                 </Button>
                 <Button
                   size="sm"
@@ -1457,7 +1457,7 @@ function AskUserQuestionsCard({
                   <QuestionOptionButton
                     compact
                     id={`${interaction.id}-${question.id}-other`}
-                    label="Other"
+                    label={t("charts.other")}
                     selected={otherActiveQuestions[question.id] === true}
                     selectionMode={question.selectionMode}
                     onClick={() => toggleOption(question.id, OTHER_ANSWER_ID, question.selectionMode)}
@@ -1470,7 +1470,7 @@ function AskUserQuestionsCard({
                   value={draftOtherAnswers[question.id] ?? ""}
                   onChange={(event) =>
                     setDraftOtherAnswers((current) => ({ ...current, [question.id]: event.target.value }))}
-                  placeholder="Add context for the agent…"
+                  placeholder={t("questionForm.addContextForTheAgent")}
                   className="min-h-16 bg-card text-(length:--text-compact)"
                 />
               ) : null}
@@ -1558,7 +1558,7 @@ function AskUserQuestionsCard({
                   <div className="space-y-2">
                     <QuestionOptionButton
                       id={`${interaction.id}-${question.id}-other`}
-                      label="Other"
+                      label={t("charts.other")}
                       selected={otherActiveQuestions[question.id] === true}
                       selectionMode={question.selectionMode}
                       onClick={() =>
@@ -1588,7 +1588,7 @@ function AskUserQuestionsCard({
           <DecisionCardFooter leading={footerSlot}>
             <div className={compact ? "flex flex-wrap items-center justify-end gap-3" : "flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/75 p-4"}>
               {!compact ? <div className="text-sm text-muted-foreground">
-                Submit once after you finish the full form.
+                {t("interaction.submitOnceAfterYouFinish")}
               </div> : null}
               <div className="flex flex-wrap items-center gap-2">
                 {onCancelInteraction ? (
@@ -1955,8 +1955,8 @@ function ToolActionResolution({
     const connectionId = interaction.payload.toolAction?.connectionId;
     const appName = interaction.payload.toolAction?.appDisplayName || "app";
     return <div role="status" className="space-y-2 text-sm text-muted-foreground">
-      <p className="font-medium text-foreground">Approved · Sign-in needed</p>
-      <p>Your approval is saved. Reconnect the app to continue. Paperclip will check the account and action again before it runs.</p>
+      <p className="font-medium text-foreground">{t("issueThreadInteractionCard.approvedSignInNeeded")}</p>
+      <p>{t("issueThreadInteractionCard.yourApprovalIsSavedReconnect")}</p>
       {connectionId ? <Button asChild size="sm" variant="outline"><Link to={appTabHref(connectionId, "permissions")}>Reconnect {appName}</Link></Button> : null}
     </div>;
   }
@@ -1964,9 +1964,9 @@ function ToolActionResolution({
     const connectionId = interaction.payload.toolAction?.connectionId;
     return <div role="alert" className="space-y-2 rounded-lg bg-destructive/10 p-3 text-sm text-foreground">
       <p className="flex items-center gap-2 font-medium"><AlertTriangle className="size-4 shrink-0 text-destructive" aria-hidden="true" />GitHub access needed</p>
-      <p>This GitHub connection cannot access the requested account or repository. Check the connected account and Paperclip’s repository access, then ask the agent to continue.</p>
-      {connectionId ? <Button asChild size="sm" variant="outline"><Link to={appTabHref(connectionId, "permissions")}>Manage GitHub access</Link></Button> : null}
-      {detail ? <details className="text-xs text-muted-foreground"><summary className="cursor-pointer">Error details</summary><p className="mt-2 break-words">{detail}</p></details> : null}
+      <p>{t("issueThreadInteractionCard.thisGithubConnectionCannotAccess")}</p>
+      {connectionId ? <Button asChild size="sm" variant="outline"><Link to={appTabHref(connectionId, "permissions")}>{t("skillPackagePreview.manageGithubAccess")}</Link></Button> : null}
+      {detail ? <details className="text-xs text-muted-foreground"><summary className="cursor-pointer">{t("issueThreadInteractionCard.errorDetails")}</summary><p className="mt-2 break-words">{detail}</p></details> : null}
     </div>;
   }
   const status = <>
@@ -2075,10 +2075,10 @@ function RequestToolActionCard({
             <NeedsYouPanelRow icon={<Lock />} title={appName ? `${appName} · ${payload.toolDisplayName}` : payload.toolDisplayName} meta={previewIsLine ? preview.replace(/[*_`]/g, "") : toolArgumentsLine(payload.argumentsSummaryJson)} />
             {preview && !previewIsLine ? <DecisionPanelMarkdown markdown={preview} lead={false} externalReferences={externalReferences} /> : null}
             {isPending ? inspectableArguments ? <details>
-              <summary className="cursor-pointer text-xs font-medium text-muted-foreground">Arguments</summary>
+              <summary className="cursor-pointer text-xs font-medium text-muted-foreground">{t("taskChatCompactInteractionCard.arguments")}</summary>
               <pre className={cn("mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>{payload.argumentsSummaryJson}</pre>
               <ToolActionAuditHashCopy hash={payload.argumentsHash} />
-            </details> : <p className="text-xs text-muted-foreground">Request arguments are unavailable.</p> : null}
+            </details> : <p className="text-xs text-muted-foreground">{t("issueThreadInteractionCard.requestArgumentsAreUnavailable")}</p> : null}
             {isPending ? (
               <NeedsYouPanelNote>
                 {payload.risk === "destructive" ? "Destructive action. " : ""}Runs once when you allow it · {payload.expiresAt ? <>Expires {formatShortDate(payload.expiresAt)}</> : null}
@@ -2091,20 +2091,20 @@ function RequestToolActionCard({
             <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working !== null} onClick={() => void decide("reject")}>
               {working === "reject" ? t("issueThreadInteractionCard.denying") : t("actionCard.deny")}
             </Button>
-            <div className="inline-flex" role="group" aria-label="Approve request">
+            <div className="inline-flex" role="group" aria-label={t("interaction.approveRequest")}>
               <Button size="sm" variant={payload.risk === "destructive" ? "destructive" : "default"} className={payload.rememberActionScope ? "rounded-r-none" : undefined} disabled={!onAcceptInteraction || working !== null} onClick={() => void decide("accept")}>
                 {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("common.saving2") : t("issueThreadInteractionCard.allowing")}</> : t("reviewQueueCard.allowOnce")}
               </Button>
               {payload.rememberActionScope ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon-sm" variant={payload.risk === "destructive" ? "destructive" : "default"} className="rounded-l-none border-l border-background/30" aria-label="Approval options" disabled={!onAcceptInteraction || working !== null}>
+                    <Button size="icon-sm" variant={payload.risk === "destructive" ? "destructive" : "default"} className="rounded-l-none border-l border-background/30" aria-label={t("interaction.approvalOptions")} disabled={!onAcceptInteraction || working !== null}>
                       <ChevronDown className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onSelect={() => void decide("always")} title={payload.rememberActionScope} aria-description={payload.rememberActionScope}>
-                      Always allow
+                      {t("settings.alwaysAllow")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -2131,14 +2131,14 @@ function RequestToolActionCard({
       {isPending ? inspectableArguments ? (
         <details className="mt-3">
           <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-            Arguments
+            {t("taskChatCompactInteractionCard.arguments")}
           </summary>
           <pre className={cn("mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground", ANALYTICS_MASK_CLASS)}>
             {payload.argumentsSummaryJson}
           </pre>
           <ToolActionAuditHashCopy hash={payload.argumentsHash} />
         </details>
-      ) : <p className="mt-3 text-xs text-muted-foreground">Request arguments are unavailable.</p> : null}
+      ) : <p className="mt-3 text-xs text-muted-foreground">{t("issueThreadInteractionCard.requestArgumentsAreUnavailable")}</p> : null}
       {isPending ? (
         <DecisionCardFooter leading={footerSlot} className="mt-3">
           <div className={cn(!footerSlot && "mt-3", "flex flex-wrap items-center justify-end gap-2")}>
@@ -2710,7 +2710,7 @@ function ConfirmationActionRow({
                   setAttempted(false);
                 }}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button
                 size="sm"
@@ -3581,7 +3581,7 @@ function RequestCheckboxConfirmationCard({
           {interaction.payload.detailsMarkdown ? (
             <DecisionPanelMarkdown markdown={interaction.payload.detailsMarkdown} lead={false} externalReferences={externalReferences} />
           ) : null}
-          <div role="group" aria-label="Selectable options" className="flex max-h-80 flex-col gap-2 overflow-y-auto">
+          <div role="group" aria-label={t("interaction.selectableOptions")} className="flex max-h-80 flex-col gap-2 overflow-y-auto">
             {options.map((option) => {
               const checked = selectedOptionIds.has(option.id);
               const disabled = working !== null || (!checked && atMax);
@@ -3607,11 +3607,11 @@ function RequestCheckboxConfirmationCard({
             <span>{selectionSummary}{boundsHint ? ` · ${boundsHint}` : ""}</span>
             <button type="button" className="rounded-sm underline-offset-4 hover:text-foreground hover:underline disabled:pointer-events-none disabled:opacity-50"
               disabled={working !== null || selectedCount === totalOptions || (maxSelected != null && selectedCount >= maxSelected)} onClick={handleSelectAll}>
-              Select all
+              {t("common.selectAll")}
             </button>
             <button type="button" className="rounded-sm underline-offset-4 hover:text-foreground hover:underline disabled:pointer-events-none disabled:opacity-50"
               disabled={working !== null || selectedCount === 0} onClick={handleClearSelection}>
-              Clear selection
+              {t("interaction.clearSelection")}
             </button>
           </div>
           {acceptAttempted && validationMessage ? (
@@ -3784,7 +3784,7 @@ function ItemVerdictDeepLink({ item, interaction }: { item: RequestItemVerdictsI
     "inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
   const label = (
     <>
-      Open
+      {t("labels.status.open")}
       {isInternal ? <ArrowUpRight className="h-3 w-3" aria-hidden /> : <ExternalLink className="h-3 w-3" aria-hidden />}
     </>
   );
@@ -4012,7 +4012,7 @@ function RequestItemVerdictsCard({
           {payload.detailsMarkdown ? (
             <DecisionPanelMarkdown markdown={payload.detailsMarkdown} lead={false} externalReferences={externalReferences} />
           ) : null}
-          <ul className="flex flex-col gap-3" aria-label="Items to review">
+          <ul className="flex flex-col gap-3" aria-label={t("interaction.itemsToReview")}>
             {items.map((item) => {
               const resolved = resolvedById.get(item.id);
               const applying = applyingItemIds.has(item.id);
@@ -4029,7 +4029,7 @@ function RequestItemVerdictsCard({
                       {item.description ? <span className="text-xs leading-4.5 text-muted-foreground">{item.description}</span> : null}
                     </span>
                     {resolved ? <VerdictConsequenceChip verdict={resolved.verdict} />
-                      : applying ? <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 motion-safe:animate-spin" aria-hidden />Applying…</span>
+                      : applying ? <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 motion-safe:animate-spin" aria-hidden />{t("interaction.applying")}</span>
                       : <ItemVerdictSegmentedControl compact itemId={item.id} verdicts={enabledVerdicts} value={draft?.verdict ?? null} disabled={working} onSelect={(verdict) => toggleDraft(item.id, verdict)} />}
                   </div>
                   {!resolved && !applying && draft && requireReasonOn.has(draft.verdict) ? (
@@ -4039,7 +4039,7 @@ function RequestItemVerdictsCard({
                         id={`${interaction.id}-${item.id}-reason`}
                         value={draft.reason}
                         onChange={(event) => setDraftReason(item.id, event.target.value)}
-                        placeholder="Give the agent a reason so it can act on this item."
+                        placeholder={t("interaction.giveTheAgentAReason")}
                         aria-invalid={attempted && invalidDraftIds.has(item.id)}
                         className={cn("min-h-16 bg-card text-sm", attempted && invalidDraftIds.has(item.id) && "border-rose-500 focus-visible:ring-rose-500/25")}
                       />
@@ -4060,11 +4060,11 @@ function RequestItemVerdictsCard({
           <DecisionCardFooter leading={footerSlot}>
             {allowBulkApprove ? (
               <Button type="button" size="sm" variant="outline" disabled={working || progress.pendingItemIds.length === 0} onClick={handleApproveAll}>
-                Approve all
+                {t("interaction.approveAll")}
               </Button>
             ) : null}
             <Button type="button" size="sm" aria-disabled={!canApply} disabled={!hasDrafts} onClick={() => void handleApply()}>
-              {working ? <><Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden />Submitting…</> : "Submit verdicts"}
+              {working ? <><Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden />{t("taskChatProtocolCard.submitting")}</> : "Submit verdicts"}
             </Button>
           </DecisionCardFooter>
         ) : null}
@@ -4233,7 +4233,7 @@ function RequestItemVerdictsCard({
                   onClick={handleApproveAll}
                 >
                   <ThumbsUp className="h-4 w-4" aria-hidden />
-                  Approve all
+                  {t("interaction.approveAll")}
                 </Button>
               ) : null}
               <Button
@@ -4247,7 +4247,7 @@ function RequestItemVerdictsCard({
                 {working ? (
                   <>
                     <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden />
-                    Applying…
+                    {t("interaction.applying")}
                   </>
                 ) : (
                   applyLabel

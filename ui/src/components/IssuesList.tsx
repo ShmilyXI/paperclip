@@ -2105,7 +2105,7 @@ function StreamlinedIssuesList({
       {externalObjectFilterError && (
         <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
           <p>Unable to filter tasks by external status: {describeError(externalObjectFilterError).body}</p>
-          <Button variant="outline" size="sm" onClick={retryExternalObjectSummaries}>Retry external statuses</Button>
+          <Button variant="outline" size="sm" onClick={retryExternalObjectSummaries}>{t("issuesList.retryExternalStatuses")}</Button>
         </div>
       )}
       {!searchWithinLoadedIssues && normalizedIssueSearch.length > 0 && searchedIssues.length === ISSUE_SEARCH_RESULT_LIMIT && (
@@ -2118,7 +2118,7 @@ function StreamlinedIssuesList({
           {t("issuesList.someBoardColumnsShowingUpTo", { limit: ISSUE_BOARD_COLUMN_RESULT_LIMIT })}
         </p>
       )}
-      {hierarchy.error ? <div role="alert" className="flex items-center gap-2 text-sm text-destructive"><p>{describeError(hierarchy.error, { action: "load task hierarchy" }).body}</p><Button variant="outline" size="sm" onClick={hierarchy.refetch}>Retry hierarchy</Button></div> : null}
+      {hierarchy.error ? <div role="alert" className="flex items-center gap-2 text-sm text-destructive"><p>{describeError(hierarchy.error, { action: "load task hierarchy" }).body}</p><Button variant="outline" size="sm" onClick={hierarchy.refetch}>{t("issuesList.retryHierarchy")}</Button></div> : null}
       {!collectionLoading && !error && !externalObjectFilterError && visibleListRowCount === 0 && viewState.viewMode === "list" && (
         <EmptyState
           icon={CircleDot}

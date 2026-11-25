@@ -155,7 +155,7 @@ export function ActionTestDialog({
             retrying={testAgentsView.isFetching}
           />
         ) : agents.length === 0 ? (
-          <p className="py-6 text-sm text-muted-foreground">No agents are available to test as.</p>
+          <p className="py-6 text-sm text-muted-foreground">{t("appActionTestDialog.noAgentsAreAvailableTo")}</p>
         ) : accessView.kind === "error" ? (
           <QueryErrorState
             className="my-6"
@@ -669,7 +669,7 @@ function ProviderPendingResult({ pending, appName, connectionId, agent }: { pend
   if (stoppedByUser) return <div role="status" className="space-y-2 rounded-md border border-border bg-muted/40 p-4 text-sm">
     <p className="font-medium">{resumed.action === "decline" ? "Request declined" : "Request cancelled"}</p>
     <p>{resumeMessage}</p>
-    <p className="text-muted-foreground">The original call was not repeated.</p>
+    <p className="text-muted-foreground">{t("appActionTestDialog.theOriginalCallWasNot")}</p>
     {pending.executionId && <p>Execution: <code className="break-all">{pending.executionId}</code></p>}
   </div>;
   if (resumed) return <ResultPanel outcome={resumed.outcome} entry={resumed.entry} appName={appName} connectionId={connectionId} agent={agent} />;

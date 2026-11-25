@@ -574,8 +574,8 @@ export function AuditFeed({
 
       {showModeToggle ? (
         <Tabs data-canonical-toolbar="audit-scope" value={resolvedMode} onValueChange={(value) => onModeChange?.(value as AuditFeedMode)}>
-          <TabsList className="design-view-toggle" aria-label="Activity scope">
-            <TabsTrigger value="all">Activity</TabsTrigger>
+          <TabsList className="design-view-toggle" aria-label={t("routineSections.activityScope")}>
+            <TabsTrigger value="all">{t("nav.activity")}</TabsTrigger>
             <TabsTrigger
               value="agents"
               disabled={accessTier === "basic"}
@@ -599,7 +599,7 @@ export function AuditFeed({
         </div>
       ) : null}
 
-      <div data-canonical-toolbar="audit-activity" role="toolbar" aria-label="Audit filters" className="flex flex-wrap items-end gap-3 border-y border-border py-3">
+      <div data-canonical-toolbar="audit-activity" role="toolbar" aria-label={t("auditRuns.auditFilters")} className="flex flex-wrap items-end gap-3 border-y border-border py-3">
         {canUseAdvancedControls && !lockedAgentId && !lockedRunId ? (
           <label className="grid gap-1 text-(length:--text-micro) font-medium text-muted-foreground">
             <span>{t("common.agent")}</span>

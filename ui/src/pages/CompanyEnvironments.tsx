@@ -2174,7 +2174,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
           />
         ) : (
           <div className="text-sm text-muted-foreground">
-            Loading environment...
+            {t("environments.loadingEnvironment")}
           </div>
         )
       ) : null}
@@ -2306,7 +2306,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
                   onChange={(e) => setEnvironmentForm((current) => ({ ...current, description: e.target.value }))}
                 />
               </Field>
-              <Field label="Driver" hint="Choose where agent tasks run. SSH connects to a machine you own.">
+              <Field label={t("environments.driver")} hint="Choose where agent tasks run. SSH connects to a machine you own.">
                 <select
                   className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                   value={environmentForm.driver}
@@ -2343,17 +2343,17 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
               {environmentForm.driver === "ssh" ? (
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="md:col-span-2">
-                    {environmentForm.sshNetwork === "tailscale" || hasConnectedTailnet ? <Field label="Network" hint="Choose how Paperclip reaches this SSH server.">
-                      <select aria-label="SSH network" className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm" value={environmentForm.sshNetwork}
+                    {environmentForm.sshNetwork === "tailscale" || hasConnectedTailnet ? <Field label={t("companyEnvironments.network")} hint="Choose how Paperclip reaches this SSH server.">
+                      <select aria-label={t("companyEnvironments.sshNetwork")} className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm" value={environmentForm.sshNetwork}
                         onChange={event => setEnvironmentForm(current => ({ ...current, sshNetwork: event.target.value === "tailscale" ? "tailscale" : "direct",
                           tailscaleConnectionId: "", tailscaleDeviceId: "", tailscaleAuthKeySecretId: "", sshHost: "", sshPrivateKey: "", sshPrivateKeySecretId: "", sshKnownHosts: "" }))}>
-                        <option value="direct">Direct connection</option>
+                        <option value="direct">{t("companyEnvironments.directConnection")}</option>
                         <option value="tailscale">Tailscale</option>
                       </select>
                     </Field> : null}
                     {tailscaleConnections.error ? <p role="alert" className="text-sm text-destructive">{describeError(tailscaleConnections.error, { action: "load Tailscale connections" }).body}</p> : null}
                     {tailscaleConnections.data !== undefined && !hasConnectedTailnet && environmentForm.sshNetwork === "direct" ?
-                      <p className="text-sm text-muted-foreground"><Link className="underline" to="/apps/tailscale">Connect Tailscale Network</Link> to choose machines from your tailnet.</p> : null}
+                      <p className="text-sm text-muted-foreground"><Link className="underline" to="/apps/tailscale">{t("tailscale.connectTailscaleNetwork")}</Link> to choose machines from your tailnet.</p> : null}
                   </div>
                   {environmentForm.sshNetwork === "tailscale" && selectedCompanyId ? (
                     <div className="md:col-span-2">
@@ -2365,7 +2365,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
                         onChange={selection => setEnvironmentForm(current => ({ ...current, tailscaleConnectionId: selection.connectionId, tailscaleDeviceId: selection.deviceId, sshHost: selection.host, sshPrivateKey: "", sshPrivateKeySecretId: "", sshKnownHosts: "" }))} />
                     </div>
                   ) : null}
-                  <Field label="Host" hint={environmentForm.sshNetwork === "tailscale" ? "Tailscale IP address or MagicDNS name of your machine." : "DNS name or IP address for the remote machine."}>
+                  <Field label={t("environments.host")} hint={environmentForm.sshNetwork === "tailscale" ? "Tailscale IP address or MagicDNS name of your machine." : "DNS name or IP address for the remote machine."}>
                     <input
                       className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                       type="text"
@@ -2442,7 +2442,7 @@ export function CompanyEnvironments({ mode = "list" }: CompanyEnvironmentsProps)
                     />
                   </Field>
                   <details className="md:col-span-2">
-                    <summary className="cursor-pointer text-sm font-medium">Advanced</summary>
+                    <summary className="cursor-pointer text-sm font-medium">{t("common.advanced")}</summary>
                     <div className="pt-3">
                       <ToggleField
                         label={t("environments.useAuthenticationConfiguredOnTheRemoteMachine")}

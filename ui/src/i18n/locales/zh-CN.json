@@ -973,7 +973,9 @@
     "simulatedRunningTasks_one": "{{count}} 个模拟运行中的任务 · 仅预览",
     "simulatedRunningTasks_other": "{{count}} 个模拟运行中的任务 · 仅预览",
     "simulatedTask": "模拟任务",
-    "working": "工作中"
+    "working": "工作中",
+    "importCompany": "导入公司",
+    "exportCompany": "导出公司"
   },
   "agentActions": {
     "clearErrorAndReturnAgent": "清除错误并让员工回到空闲",
@@ -1321,7 +1323,11 @@
     "viewDescPermissions": "{{name}} 无需询问就能做的事，以及能在哪里做。",
     "viewDescActivity": "{{name}} 做过的所有事，以及对 {{name}} 做过的所有事。",
     "viewDescRuns": "{{name}} 的每一次运行，最新的在前。",
-    "viewDescCosts": "{{name}} 的花费，按模型统计。"
+    "viewDescCosts": "{{name}} 的花费，按模型统计。",
+    "discardUnsavedChanges": "放弃未保存的更改？",
+    "directReports": "直属下属：",
+    "seeAllTasks": "查看全部任务",
+    "startWithASuggestedTask": "从建议的任务开始"
   },
   "agentNav": {
     "agent": "员工",
@@ -1403,7 +1409,9 @@
     "newTaskInGroup": "在 {{group}} 中新建任务",
     "blockedBy": "被 {{label}} 阻塞",
     "stepSuffix": " · 第 {{step}} 步",
-    "andMoreCount": "…另有 {{count}} 个"
+    "andMoreCount": "…另有 {{count}} 个",
+    "retryExternalStatuses": "重试外部状态",
+    "retryHierarchy": "重试层级"
   },
   "needsYou": {
     "openToReview": "打开以查看",
@@ -1724,7 +1732,11 @@
     "pauseReleasedButSomeTasksCouldNotStart_other": "暂停已解除，但有 {{count}} 个任务无法启动。{{message}} 请检查受影响的员工，并尝试重新启动它们。",
     "thisTaskIsInState": "此任务处于{{state}}状态。",
     "baseRefLiveBranch": "- 基础引用（活动分支）：`{{baseRef}}`",
-    "recordedBranch": "- 记录的分支：`{{expectedBranch}}`"
+    "recordedBranch": "- 记录的分支：`{{expectedBranch}}`",
+    "moreMessages": "更多消息",
+    "showTaskActivity": "显示任务活动",
+    "someTaskDetailsCouldNot": "部分任务详情无法加载。",
+    "couldNotLoadCreatedTasks": "无法加载已创建的任务。"
   },
   "comments": {
     "copyCommentAsMarkdown": "将评论复制为 Markdown",
@@ -6891,7 +6903,9 @@
     "discardUnsavedEditsAndLoadLatest": "放弃未保存的修改并加载最新保存的文件？",
     "binaryAsset": "[二进制文件]",
     "executable": "（可执行）",
-    "nameCopy": "{{name}} 副本"
+    "nameCopy": "{{name}} 副本",
+    "thisSkillChangedSinceYou": "该技能在你打开之后已发生变化。你未保存的修改仍保留在这里，请先复制，再加载最新文件进行合并。",
+    "loadLatestSavedFile": "加载最新已保存文件"
   },
   "runnerInspector": {
     "pipeline": "流水线",
@@ -7918,7 +7932,8 @@
     "activeSecretIsNotConfirmed": "当前生效的密钥尚未确认。使用之前的值前，请先检查它的保存状态。",
     "checkSavedSecretStatus": "检查已保存的密钥状态",
     "newWebhookSecret": "新的 Webhook 密钥",
-    "clientSecretHelp": "该 GitHub App 用户认证所用的客户端密钥。保留已保存的私钥即可。"
+    "clientSecretHelp": "该 GitHub App 用户认证所用的客户端密钥。保留已保存的私钥即可。",
+    "appId": "应用 ID"
   },
   "invitesSection": {
     "canViewOrganizationWorkAnd": "可以查看组织内的工作并跟进进展。",
@@ -8385,7 +8400,8 @@
     "requestRevision": "请求修订",
     "revising": "修改…",
     "arguments": "参数",
-    "repeatRoutineSummary": "重复 {{title}}：{{cadenceLabel}}。"
+    "repeatRoutineSummary": "重复 {{title}}：{{cadenceLabel}}。",
+    "suggestedTask": "建议的任务"
   },
   "issueBlockedNotice": {
     "retrying": "正在重试...",
@@ -9954,7 +9970,8 @@
     "workspaceMode": "工作区模式",
     "viewWorkspace": "查看工作区",
     "unarchiving": "正在取消归档…",
-    "allSidebarTabsAreOpen": "所有侧边栏标签页都已打开"
+    "allSidebarTabsAreOpen": "所有侧边栏标签页都已打开",
+    "waitingForTheProvider": "等待服务商"
   },
   "activityFeed": {
     "earlier": "更早",
@@ -10782,7 +10799,8 @@
     "blocksCompletion": "阻塞完成",
     "moreFilesChanged_one": "另有 {{count}} 个文件已更改。",
     "moreFilesChanged_other": "另有 {{count}} 个文件已更改。",
-    "changeSetTooLarge": "此变更集太大，无法在此列出。"
+    "changeSetTooLarge": "此变更集太大，无法在此列出。",
+    "thisPatchIsTooLarge": "该补丁过大，无法在此显示。"
   },
   "taskBrowserFooter": {
     "fitToPane": "适应面板",
@@ -12031,7 +12049,9 @@
     "avatarLabel": "{{name}} 头像",
     "manageChatConnection": "管理 {{agent}} 的 {{connection}} 连接",
     "openAccountPermissions": "打开 {{account}} 的权限",
-    "manageAccountConnection": "管理 {{account}} 的连接"
+    "manageAccountConnection": "管理 {{account}} 的连接",
+    "alsoDeleteDataReadThrough": "同时删除通过此连接读取的数据",
+    "permanentlyRemovesSavedToolResults": "将永久删除已保存的工具结果以及使用该连接的运行记录。此操作无法撤销。"
   },
   "deferredOverlay": {
     "closeThisWindowToKeep": "关闭此窗口即可继续工作。再次尝试前请重新加载页面。",
@@ -13627,7 +13647,11 @@
     "failedToMoveSkills": "移动技能失败",
     "couldntOpenMySkills": "无法打开我的技能",
     "folderCreateFailed": "创建文件夹失败",
-    "updateFailed": "更新失败"
+    "updateFailed": "更新失败",
+    "skillsStore": "技能商店",
+    "skillCatalogControls": "技能目录控制",
+    "installingAddsTheSkillTo": "安装会把该技能加入公司技能库。只有为员工启用后，员工才能使用它。",
+    "removeThisSkillFromThe": "将该技能从公司技能库中移除。如果仍有员工在使用，需先解除关联才能移除。"
   },
   "agentMultiSelect": {
     "filterAgents": "筛选员工",
@@ -14378,7 +14402,8 @@
     "shared": "共享",
     "theCredentialOwnerOrA": "凭据所有者或共享连接的管理者可以配置已保存的配置和成本上限。",
     "freshBrowsersAreTheDefault": "默认使用全新浏览器。选定的配置文件可让员工使用其保存的网站登录信息。在",
-    "couldNotLoadProfiles": "无法加载配置文件。"
+    "couldNotLoadProfiles": "无法加载配置文件。",
+    "couldNotSaveBrowserSettings": "无法保存浏览器设置。请检查凭据访问权限后重试。"
   },
   "statusCardTile": {
     "statusUpdate": "状态更新",
@@ -14580,7 +14605,8 @@
     "queueReorderingIsUnavailable": "队列重排不可用。",
     "steeringIsUnavailable": "插话引导不可用。",
     "discardIsUnavailable": "丢弃不可用。",
-    "responseBoundaryAfterFinalResponse": "，并返回了最终回复"
+    "responseBoundaryAfterFinalResponse": "，并返回了最终回复",
+    "moreRunOutput": "更多运行输出"
   },
   "externallyConnectedTaskBanner": {
     "waitingForFileConsent": "等待文件授权",
@@ -14928,7 +14954,8 @@
   "appErrorBoundary": {
     "paperclipHitAnError": "Paperclip 出错了",
     "somethingWentWrongWhileRunning": "运行应用时出错。重新加载通常能解决。",
-    "reloadPage": "重新加载页面"
+    "reloadPage": "重新加载页面",
+    "reloadingPaperclip": "正在重新加载 Paperclip…"
   },
   "companySwitcher": {
     "selectOrganization": "选择组织",
@@ -15510,7 +15537,9 @@
     "paperclipCouldntLoadTheSecrets": "Paperclip 无法加载此 vault 中的密钥。",
     "fixItInVaults": "在 Vaults 中修复",
     "nothingLeftToImport": "没有可导入的内容了。",
-    "nothingLeftToImportGoBack": "没有可导入的内容了。请返回选择密钥。"
+    "nothingLeftToImportGoBack": "没有可导入的内容了。请返回选择密钥。",
+    "awsPermissionReference": "AWS 权限参考",
+    "keysAndDescriptions": "键与描述"
   },
   "auditTab": {
     "allowed": "已允许",
@@ -16798,7 +16827,8 @@
     "claudeFailedWhile": "Claude 失败，因为",
     "isSetClearItAndRetry": "已设置。你可以在此适配器配置中清除它，然后重试探测。",
     "approvedDuringSetup": "在入门引导的首次员工设置中已批准。",
-    "samplePromptHello": "回复「hello」。"
+    "samplePromptHello": "回复「hello」。",
+    "claudeAndCodexAreUnavailable": "此实例上无法使用 Claude 和 Codex。请联系管理员启用其中之一，或退出设置，到员工页面选择“新建员工”以使用其他服务商。"
   },
   "announcementWell": {
     "dismissedForThisVisit": "本次访问内已忽略",
@@ -17053,7 +17083,11 @@
     "chooseTasksToCreate": "选择要创建的任务",
     "approvedSignInNeeded": "已批准 · 需要登录",
     "denying": "正在拒绝…",
-    "allowing": "正在允许…"
+    "allowing": "正在允许…",
+    "yourApprovalIsSavedReconnect": "你的批准已保存。请重新连接应用以继续。Paperclip 会在执行前再次检查账号和操作。",
+    "thisGithubConnectionCannotAccess": "此 GitHub 连接无法访问所请求的账号或仓库。请检查已连接的账号和 Paperclip 的仓库访问权限，然后让员工继续。",
+    "errorDetails": "错误详情",
+    "requestArgumentsAreUnavailable": "请求参数不可用。"
   },
   "routineActivityRow": {
     "connectionWorkingNoRunOr": "连接正常 · 未创建运行或任务",
@@ -18550,5 +18584,55 @@
     "costs": "成本",
     "budgets": "预算",
     "timeline": "时间线"
+  },
+  "editable-sections": {
+    "newTrigger": "新建触发器",
+    "saveThisNowPaperclipWill": "请立即保存。Paperclip 不会再次显示该密钥值。",
+    "newWebhookUrl": "新的 Webhook 地址"
+  },
+  "allowedProjectsEditor": {
+    "allowedProjects": "允许的项目",
+    "projectsWhoseTasksAndRepositories": "该员工可以访问其任务和仓库的项目。",
+    "addProject": "添加项目",
+    "alreadyAllowed": "已允许",
+    "toAdd": "待添加",
+    "noProjectsAllowedYet": "尚未允许任何项目。",
+    "projectAccessSavedReturnTo": "项目访问权限已保存。请返回任务重试。"
+  },
+  "companyEnvironments": {
+    "network": "网络",
+    "sshNetwork": "SSH 网络",
+    "directConnection": "直接连接"
+  },
+  "proposal-review": {
+    "reasonGivenByTheAgent": "员工给出的理由："
+  },
+  "agentReportingManager": {
+    "reportsTo": "汇报给："
+  },
+  "setupPanel": {
+    "showMoreNewActions": "显示更多新操作"
+  },
+  "accessRetryBanner": {
+    "openInstallationSettingsOnGithub": "在 GitHub 上打开安装设置"
+  },
+  "routineSuggestionCard": {
+    "settingUpTheRoutine": "正在设置例行任务…"
+  },
+  "stalledDependencyNotice": {
+    "reload": "重新加载"
+  },
+  "coordinatorTaskCommitment": {
+    "noTasksWereCreated": "未创建任何任务。"
+  },
+  "mcpAppTurnViews": {
+    "openFullScreen": "全屏打开"
+  },
+  "useAgentChatRead": {
+    "couldnTMarkThisChat": "无法将该对话标为已读。"
+  },
+  "config-fields": {
+    "eGNodePython": "例如 node、python",
+    "eGScriptJsFlag": "例如 script.js、--flag"
   }
 }

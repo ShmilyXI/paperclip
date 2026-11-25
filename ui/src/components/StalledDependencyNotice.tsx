@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type { Issue, IssueBlockerStalledWakeContext } from "@paperclipai/shared";
 import { useQueries } from "@tanstack/react-query";
 import { AlertTriangle, RotateCcw } from "lucide-react";
@@ -79,7 +80,7 @@ function StalledDependencyRow({ entry, child, readError, isFetching, refetch }: 
         <span role="alert" className="flex basis-full items-center gap-2 text-xs text-destructive">
           Could not load this task's state: {describeError(readError).body}
           <Button size="sm" variant="outline" className="h-6 px-2" disabled={isFetching} onClick={refetch}>
-            Reload
+            {t("stalledDependencyNotice.reload")}
           </Button>
         </span>
       ) : null}
@@ -87,7 +88,7 @@ function StalledDependencyRow({ entry, child, readError, isFetching, refetch }: 
         <span role="alert" className="basis-full text-xs text-destructive">{describeError(retry.error).body}</span>
       ) : null}
       {retry.takingLonger ? (
-        <span role="status" className="basis-full text-xs text-muted-foreground">Taking longer than usual…</span>
+        <span role="status" className="basis-full text-xs text-muted-foreground">{t("taskChatThread.takingLongerThanUsual")}</span>
       ) : null}
       {canRetry || failed || retry.takingLonger ? (
         <Button

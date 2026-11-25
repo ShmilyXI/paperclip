@@ -92,8 +92,8 @@ export function GeminiLocalConfigFields({
                   : mark("adapterConfig", "mode", value);
               }}
             >
-              <option value="persistent">Persistent</option>
-              <option value="oneshot">One-shot</option>
+              <option value="persistent">{t("codexLocal.acpSessionPersistent")}</option>
+              <option value="oneshot">{t("codexLocal.acpSessionOneShot")}</option>
             </select>
           </Field>
           <Field
@@ -114,8 +114,8 @@ export function GeminiLocalConfigFields({
                   : mark("adapterConfig", "nonInteractivePermissions", value);
               }}
             >
-              <option value="deny">Deny</option>
-              <option value="fail">Fail</option>
+              <option value="deny">{t("taskChatProtocolCard.deny")}</option>
+              <option value="fail">{t("codexLocal.permissionFail")}</option>
             </select>
           </Field>
           {!managedSandboxOnly && (

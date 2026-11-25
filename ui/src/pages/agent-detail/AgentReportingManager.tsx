@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { Pencil, UserRound } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Agent } from "@paperclipai/shared";
@@ -41,7 +42,7 @@ export function AgentReportingManager({ agent }: { agent: Agent }) {
   const manager = agents.find((candidate) => candidate.id === agent.reportsTo);
   const disabled = !directory.data || directoryView.kind === "error" || update.isPending;
   return <div className="flex flex-col gap-1.5 px-(--agent-detail-module-inset) py-1.5 text-sm">
-    <span className="text-muted-foreground">Reports to:</span>
+    <span className="text-muted-foreground">{t("agentReportingManager.reportsTo")}</span>
     <div className="flex items-center gap-1.5">
       {manager ? <Link to={agentDetailHref(agentRouteRef(manager))} className={`${agentIdentityChipClass} no-underline`}>
         <AgentIdentityChipContent agent={manager} />

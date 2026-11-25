@@ -460,7 +460,7 @@ export function OrgChart({ orgTree: providedOrgTree, agents: providedAgents, mat
   useImperativeHandle(actionsRef, () => cameraActions, [cameraActions]);
   const controls = (
     <OrgChartControls {...cameraActions}>
-      {enableTaskLayer && <Button variant={showTasks ? "secondary" : "outline"} size="sm" aria-pressed={showTasks} onClick={() => setShowTasks(value => !value)}><Layers className="size-4" />Tasks</Button>}
+      {enableTaskLayer && <Button variant={showTasks ? "secondary" : "outline"} size="sm" aria-pressed={showTasks} onClick={() => setShowTasks(value => !value)}><Layers className="size-4" />{t("nav.tasks")}</Button>}
     </OrgChartControls>
   );
   const taskWidth = Math.min(geometry.taskLabelWidth, Math.max(0, viewport.width - geometry.padding * 2));

@@ -2719,8 +2719,8 @@ export function IssueProperties({
             <span className="text-sm text-muted-foreground">{t("issueProps.waitingForWorkspace")}</span>
           </PropertyRow>
         ) : showScheduledRetryRow && scheduledRetry?.scheduledRetryReason === "environment_provider_wait" ? (
-          <PropertyRow label="Sandbox">
-            <span className="text-sm text-muted-foreground">Waiting for the provider</span>
+          <PropertyRow label={t("common.sandbox")}>
+            <span className="text-sm text-muted-foreground">{t("issueProperties.waitingForTheProvider")}</span>
           </PropertyRow>
         ) : showScheduledRetryRow && scheduledRetryContent ? (
           <PropertyPicker
@@ -2777,7 +2777,7 @@ export function IssueProperties({
         </PropertyPicker>
 
         {contextUsage !== undefined
-          ? contextUsage ? <PropertyRow label="Context">{contextUsage}</PropertyRow> : null
+          ? contextUsage ? <PropertyRow label={t("agentDetail.context")}>{contextUsage}</PropertyRow> : null
           : <IssueContextUsageRow issueId={issue.id} assigneeAgentId={issue.assigneeAgentId ?? null} issueStatus={issue.status} hasActiveRun={hasActiveRun} />}
       </PropertySection>
 
