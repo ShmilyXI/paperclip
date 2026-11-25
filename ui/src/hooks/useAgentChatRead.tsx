@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { isUuidLike } from "@paperclipai/shared";
@@ -86,7 +87,7 @@ export function AgentChatReadProvider({ issueId, companyId, userId, children }: 
     if (!scope.busy && scope.retryTimer === null) queueMicrotask(() => { void flush(); });
   }, [issueId, scope, flush]);
   return <ChatReadContext.Provider value={issueId ? seen : null}>
-    {error && <p role="alert" className="text-sm text-destructive">Couldn’t mark this chat read.</p>}
+    {error && <p role="alert" className="text-sm text-destructive">{t("useAgentChatRead.couldnTMarkThisChat")}</p>}
     {children}
   </ChatReadContext.Provider>;
 }

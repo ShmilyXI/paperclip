@@ -156,13 +156,13 @@ export function OverviewSection({
       {/* Assignment row */}
       <div className="overflow-x-auto overscroll-x-contain">
         <div className="inline-flex min-w-full flex-wrap items-center gap-2 text-sm text-muted-foreground sm:min-w-max sm:flex-nowrap">
-          <span>For</span>
+          <span>{t("routines.for")}</span>
           <InlineEntitySelector
             ref={assigneeSelectorRef}
             value={editDraft.assigneeAgentId}
             options={assigneeOptions}
             recentOptionIds={recentAssigneeIds}
-            placeholder="Responsible"
+            placeholder={t("issuesList.responsible")}
             noneLabel="No responsible"
             searchPlaceholder="Search responsible..."
             emptyMessage={t("comments.noResponsibleFound")}
@@ -187,7 +187,7 @@ export function OverviewSection({
                   <span className="truncate">{option.label}</span>
                 )
               ) : (
-                <span className="text-muted-foreground">Responsible</span>
+                <span className="text-muted-foreground">{t("issuesList.responsible")}</span>
               )
             }
             renderOption={(option) => {
@@ -209,7 +209,7 @@ export function OverviewSection({
             value={editDraft.projectId}
             options={projectOptions}
             recentOptionIds={recentProjectIds}
-            placeholder="Project"
+            placeholder={t("common.project")}
             noneLabel="No project"
             searchPlaceholder="Search projects..."
             emptyMessage={t("newIssue.noProjectsFound")}
@@ -225,7 +225,7 @@ export function OverviewSection({
                   <span className="truncate">{option.label}</span>
                 </>
               ) : (
-                <span className="text-muted-foreground">Project</span>
+                <span className="text-muted-foreground">{t("common.project")}</span>
               )
             }
             renderOption={(option) => {
@@ -247,8 +247,7 @@ export function OverviewSection({
 
       {!routine.assigneeAgentId ? (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 text-sm text-amber-900 dark:text-amber-200">
-          Default agent required. This routine can stay as a draft and still run manually, but
-          automation stays paused until you assign a default agent.
+          {t("routineSections.defaultAgentRequiredThisRoutine")}
         </div>
       ) : null}
 
@@ -326,7 +325,7 @@ export function OverviewSection({
       <div className="grid gap-3 sm:grid-cols-3">
         <SummaryCard
           icon={Clock3}
-          label="Triggers"
+          label={t("routineDetail.triggers")}
           value={activeTriggers === 0 ? "None" : `${activeTriggers} active`}
           hint={nextFire ? `Next fire ${nextFire}` : "No schedule"}
           to={() => navigateToSection("triggers")}
@@ -334,7 +333,7 @@ export function OverviewSection({
         />
         <SummaryCard
           icon={KeyRound}
-          label="Secrets"
+          label={t("settingsNav.secrets")}
           value={boundSecrets === 0 ? "None" : `${boundSecrets} bound`}
           hint={t("routineSections.manageBoundSecrets")}
           to={() => navigateToSection("secrets")}
@@ -353,10 +352,10 @@ export function OverviewSection({
       {/* Recent activity */}
       <div className="space-y-2">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Recent activity
+          {t("routineSections.recentActivity")}
         </p>
         {recentActivity.length === 0 ? (
-          <p className="text-xs text-muted-foreground">No activity yet.</p>
+          <p className="text-xs text-muted-foreground">{t("routineSections.noActivityYet")}</p>
         ) : (
           <div className="divide-y divide-border/60">
             {recentActivity.map((event) => (
@@ -453,12 +452,12 @@ export function TriggersSection() {
           {addOpen ? (
             <>
               <X className="mr-1.5 h-3.5 w-3.5" />
-              Cancel
+              {t("common.cancel")}
             </>
           ) : (
             <>
               <Plus className="mr-1.5 h-3.5 w-3.5" />
-              New trigger
+              {t("editable-sections.newTrigger")}
             </>
           )}
         </Button>
@@ -467,10 +466,10 @@ export function TriggersSection() {
       {/* Add trigger form — expand-on-click drawer */}
       {addOpen ? (
       <div className="space-y-3 rounded-lg border border-border p-4">
-        <p className="text-sm font-medium">Add trigger</p>
+        <p className="text-sm font-medium">{t("triggers.addTrigger")}</p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
-            <Label className="text-xs">Kind</Label>
+            <Label className="text-xs">{t("teamCatalog.kind")}</Label>
             <Select
               value={newTrigger.kind}
               onValueChange={(kind) => setNewTrigger((current) => ({ ...current, kind }))}
@@ -489,7 +488,7 @@ export function TriggersSection() {
           </div>
           {newTrigger.kind === "schedule" && (
             <div className="space-y-1.5 md:col-span-2">
-              <Label className="text-xs">Schedule</Label>
+              <Label className="text-xs">{t("issueProperties.schedule")}</Label>
               <ScheduleEditor
                 value={newTrigger.cronExpression}
                 onChange={(cronExpression) =>
@@ -502,7 +501,7 @@ export function TriggersSection() {
           {newTrigger.kind === "webhook" && (
             <>
               <div className="space-y-1.5">
-                <Label className="text-xs">Signing mode</Label>
+                <Label className="text-xs">{t("routineTriggerCard.signingMode")}</Label>
                 <Select
                   value={newTrigger.signingMode}
                   onValueChange={(signingMode) =>
@@ -540,7 +539,7 @@ export function TriggersSection() {
         </div>
         <div className="flex items-center justify-end gap-2">
           <Button size="sm" variant="ghost" onClick={() => setAddOpen(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             size="sm"
@@ -565,28 +564,28 @@ export function TriggersSection() {
           <div>
             <p className="font-medium">{secretMessage.title}</p>
             <p className="text-xs text-muted-foreground">
-              Save this now. Paperclip will not show the secret value again.
+              {t("editable-sections.saveThisNowPaperclipWill")}
             </p>
           </div>
           <div className="space-y-3">
             {secretMessage.entries.map((entry, index) => (
               <div key={`${entry.webhookUrl}-${index}`} className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Input aria-label="New webhook URL" value={entry.webhookUrl} readOnly className="flex-1" />
+                  <Input aria-label={t("editable-sections.newWebhookUrl")} value={entry.webhookUrl} readOnly className="flex-1" />
                   <Button variant="outline" size="sm" onClick={() => copySecretValue("Webhook URL", entry.webhookUrl)}>
                     URL
                   </Button>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Input aria-label="New webhook secret" value={entry.webhookSecret} readOnly className="flex-1" />
+                  <Input aria-label={t("gitHubConnectionRecovery.newWebhookSecret")} value={entry.webhookSecret} readOnly className="flex-1" />
                   <Button variant="outline" size="sm" onClick={() => copySecretValue("Webhook secret", entry.webhookSecret)}>
-                    Secret
+                    {t("secrets.secret")}
                   </Button>
                 </div>
               </div>
             ))}
           </div>
-          <Button variant="outline" size="sm" onClick={() => setSecretMessage(null)}>Done</Button>
+          <Button variant="outline" size="sm" onClick={() => setSecretMessage(null)}>{t("labels.status.done")}</Button>
         </div>
       ) : null}
 
@@ -630,7 +629,7 @@ export function VariablesSection() {
         </span>
         <Button variant="secondary" size="sm" onClick={() => navigateToSection("overview")}>
           <Edit3 className="mr-1.5 h-3.5 w-3.5" />
-          Edit instructions
+          {t("routineSections.editInstructions")}
         </Button>
       </div>
 
@@ -645,7 +644,7 @@ export function VariablesSection() {
         <EmptyState
           icon={Braces}
           message={t("routineSections.noVariablesYetAddA")}
-          action="Edit instructions"
+          action={t("routineSections.editInstructions")}
           onAction={() => navigateToSection("overview")}
         />
       )}
@@ -706,7 +705,7 @@ export function DeliverySection() {
     <div className="space-y-6">
       <div className="space-y-3">
         <p className="text-xs font-medium uppercase tracking-(--tracking-caps) text-muted-foreground">
-          Concurrency
+          {t("common.concurrency")}
         </p>
         <RadioCardGroup
           ariaLabel="Concurrency policy"
@@ -732,7 +731,7 @@ export function DeliverySection() {
       </div>
       <div className="space-y-3">
         <p className="text-xs font-medium uppercase tracking-(--tracking-caps) text-muted-foreground">
-          Advanced run policy
+          {t("routineSections.advancedRunPolicy")}
         </p>
         <RadioCardGroup
           ariaLabel={t("routineSections.advancedRunPolicy")}
@@ -745,12 +744,11 @@ export function DeliverySection() {
         />
         {!hasScheduleTrigger ? (
           <p className="text-xs text-muted-foreground">
-            Add a schedule trigger to gate runs on activity. Webhook, manual, and API fires always
-            run.
+            {t("routineSections.addAScheduleTriggerTo")}
           </p>
         ) : gateEnabled ? (
           <div className="space-y-2 rounded-lg border border-border p-3">
-            <Label className="text-xs font-medium">Activity scope</Label>
+            <Label className="text-xs font-medium">{t("routineSections.activityScope")}</Label>
             <RadioCardGroup
               ariaLabel={t("routineSections.activityGateScope")}
               value={editDraft.activityGateScope}
@@ -810,7 +808,7 @@ function NextFiresPreview({
   return (
     <div className="space-y-3">
       <p className="text-xs font-medium uppercase tracking-(--tracking-caps) text-muted-foreground">
-        Next 5 fires
+        {t("routineSections.next5Fires")}
       </p>
       {preview ? (
         <>
@@ -836,8 +834,7 @@ function NextFiresPreview({
         </>
       ) : (
         <p className="rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
-          No enabled schedule trigger to preview. Add a schedule in Triggers to see how this policy
-          treats upcoming fires.
+          {t("routineSections.noEnabledScheduleTriggerTo")}
         </p>
       )}
     </div>

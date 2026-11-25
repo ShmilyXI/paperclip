@@ -729,7 +729,7 @@ function ExecutionWorkspaceRoutinesList({
         </CardHeader>
         <CardContent>
           {routinesView.kind === "loading" || routinesView.kind === "reconnecting" ? (
-            <p className="text-sm text-muted-foreground">Loading routines...</p>
+            <p className="text-sm text-muted-foreground">{t("execWorkspace.loadingRoutines")}</p>
           ) : routinesView.kind === "error" ? (
             <QueryErrorState
               size="inline"
@@ -1547,7 +1547,7 @@ export function ExecutionWorkspaceDetail() {
             </CardHeader>
             <CardContent>
             {(opsView.kind === "loading" || opsView.kind === "reconnecting") ? (
-              <p className="text-sm text-muted-foreground">Loading workspace operations…</p>
+              <p className="text-sm text-muted-foreground">{t("execWorkspace.loadingWorkspaceOperations")}</p>
             ) : opsView.kind === "error" ? (
               <QueryErrorState
                 size="inline"

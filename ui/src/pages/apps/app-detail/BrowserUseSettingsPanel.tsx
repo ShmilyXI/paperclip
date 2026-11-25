@@ -100,7 +100,7 @@ function CredentialSettings({
           <p className="text-sm text-muted-foreground">{t("browserUseSettingsPanel.noSavedProfiles")}</p>
         )}
         {(profiles.isLoading || profilesView.kind === "reconnecting") && (
-          <p className="text-sm text-muted-foreground">Loading profiles…</p>
+          <p className="text-sm text-muted-foreground">{t("newGatewayDialog.loadingProfiles")}</p>
         )}
         {profilesView.kind === "error" && (
           <QueryErrorState
@@ -122,8 +122,7 @@ function CredentialSettings({
       ) : null}
       {save.error ? (
         <p role="alert" className="text-sm text-destructive">
-          Could not save browser settings. Check your credential access and try
-          again.
+          {t("browserUseSettingsPanel.couldNotSaveBrowserSettings")}
         </p>
       ) : null}
       {save.isSuccess && (

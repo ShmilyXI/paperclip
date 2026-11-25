@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { McpAppViewSummary } from "@paperclipai/shared";
 import { Maximize2 } from "lucide-react";
@@ -32,7 +33,7 @@ function McpAppRunView({ issueId, view }: { issueId: string; view: McpAppViewSum
           aria-label={`Open ${view.applicationName} ${displayName} full screen`}
         >
           <Maximize2 aria-hidden="true" />
-          Open full screen
+          {t("mcpAppTurnViews.openFullScreen")}
         </Button>
       </div>
       <NearViewport placeholderLabel={`${view.applicationName}: ${displayName}`} near={near} onNear={markNear}>

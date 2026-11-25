@@ -92,7 +92,7 @@ export function ActivitySection({
     return Array.from(byDay.entries());
   }, [events]);
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading activity…</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">{t("chatDetail.loadingActivity")}</p>;
   if (error) {
     return (
       <QueryErrorState

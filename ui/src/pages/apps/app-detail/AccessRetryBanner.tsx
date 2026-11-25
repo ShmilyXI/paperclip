@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { ApiError } from "@/api/client";
 import { Button } from "@/components/ui/button";
 
@@ -31,11 +32,11 @@ export function AccessRetryBanner({ message, error, pending, onRetry }: {
       <p>{message || "GitHub access could not be checked. Try again."}</p>
       {recoveryUrl ? (
         <Button asChild variant="outline">
-          <a href={recoveryUrl} target="_blank" rel="noreferrer">Open installation settings on GitHub</a>
+          <a href={recoveryUrl} target="_blank" rel="noreferrer">{t("accessRetryBanner.openInstallationSettingsOnGithub")}</a>
         </Button>
       ) : null}
       <Button variant="outline" disabled={pending} onClick={onRetry}>
-        Retry access
+        {t("connectors.retryAccess")}
       </Button>
     </div>
   );

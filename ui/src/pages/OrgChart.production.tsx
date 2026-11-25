@@ -476,7 +476,7 @@ export function OrgChart() {
           <Link to="/company/import">
             <Button variant="outline" size="sm">
               <Upload className="mr-1.5 h-3.5 w-3.5" />
-              Import company
+              {t("orgChart.importCompany")}
             </Button>
           </Link>
         )}
@@ -484,7 +484,7 @@ export function OrgChart() {
           <Link to="/company/export">
             <Button variant="outline" size="sm">
               <Download className="mr-1.5 h-3.5 w-3.5" />
-              Export company
+              {t("orgChart.exportCompany")}
             </Button>
           </Link>
         )}

@@ -385,7 +385,7 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
             <Input id="email-name" className="min-w-0" value={username} maxLength={64} autoComplete="off" spellCheck={false} disabled={busy}
               aria-invalid={!!addressError} aria-describedby={addressError ? "email-address-error" : "email-address-status"}
               onChange={event => { setUsername(event.target.value.toLowerCase()); setup.reset(); }} />
-            <select id="email-domain" aria-label="Email domain" className={cn(selectClass, "max-w-1/2 shrink-0", ANALYTICS_MASK_CLASS)} value={domain}
+            <select id="email-domain" aria-label={t("emailSetup.emailDomain")} className={cn(selectClass, "max-w-1/2 shrink-0", ANALYTICS_MASK_CLASS)} value={domain}
               disabled={busy || !inspected.data} onChange={event => { setDomainSelected(true); setDomain(event.target.value); setup.reset(); }}>
               {[...new Set([...customDomains, "agentmail.to", domain])]
                 .map(value => <option key={value} value={value}>@{value}</option>)}
@@ -443,7 +443,7 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
         </div>
       </details>
       {setupError}
-      {inspected.isPending && <p role="status" className="text-sm text-muted-foreground">Loading email options…</p>}
+      {inspected.isPending && <p role="status" className="text-sm text-muted-foreground">{t("emailSetup.loadingEmailOptions")}</p>}
       <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
         <Button type="button" variant="ghost" disabled={busy} onClick={() => { setup.reset(); setStep(0); }}><ArrowLeft className="size-4" />{t("common.back")}</Button>
         <Button disabled={!canCreate}>
@@ -737,7 +737,7 @@ export function EmailEndpointSettings({
             </select>
           </div>
           {reconnect.error && <p role="alert" className="text-sm text-destructive">{describeError(reconnect.error).body}</p>}
-          {reconnect.isSuccess && <p role="status" className="text-sm">Inbox reconnected.</p>}
+          {reconnect.isSuccess && <p role="status" className="text-sm">{t("emailSetup.inboxReconnected")}</p>}
           <div className="flex justify-end">
             <Button variant="outline" disabled={!replacementKey || reconnect.isPending} onClick={() => reconnect.mutate()}>
               {reconnect.isPending ? t("emailSetup.reconnecting") : t("emailSetup.reconnectInbox")}

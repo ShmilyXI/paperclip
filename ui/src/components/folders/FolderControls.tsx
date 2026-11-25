@@ -226,8 +226,8 @@ export function FolderRail({
   return (
     <nav aria-label={`${itemLabelPlural} folders`} className="hidden w-(--sz-folder-rail) shrink-0 border-r border-border pr-3 md:block">
       <div className="mb-2 flex items-center justify-between gap-2 px-2">
-        <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">Folders</div>
-        <Button variant="ghost" size="icon-sm" title="New folder" onClick={onCreate}>
+        <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">{t("common.folders")}</div>
+        <Button variant="ghost" size="icon-sm" title={t("routinesToolbar.newFolder")} onClick={onCreate}>
           <Plus className="h-3.5 w-3.5" />
         </Button>
       </div>
@@ -586,7 +586,7 @@ function MoveToMenuItems({
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={() => onMove(null)}>
           <FolderSwatch color={null} />
-          Unfiled
+          {t("routines.unfiled")}
           {currentFolderId == null ? <Check className="ml-auto h-3.5 w-3.5" /> : null}
         </DropdownMenuItem>
         {visibleFolders.map((folder) => (

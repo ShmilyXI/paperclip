@@ -717,7 +717,7 @@ function ConnectedTaskComposer({
           {storageError && (
             <p role="alert" className="text-xs text-destructive">
               {storageError}{" "}
-              <Link className="underline underline-offset-4" to={activityPath}>Open Activity</Link>
+              <Link className="underline underline-offset-4" to={activityPath}>{t("externallyConnectedTaskBanner.openActivity")}</Link>
             </p>
           )}
           {unownedRequest && <LegacyBoardSendNotice onDiscard={() => {

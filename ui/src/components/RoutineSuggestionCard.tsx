@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Repeat } from "lucide-react";
 import type { SuggestRoutineInteraction } from "@paperclipai/shared";
@@ -71,7 +72,7 @@ export function RoutineSuggestionCard({ interaction }: { interaction: SuggestRou
             {" "}· {result.cadenceLabel ?? payload.cadenceLabel}
           </span>
         ) : (
-          <span>Setting up the routine…</span>
+          <span>{t("routineSuggestionCard.settingUpTheRoutine")}</span>
         )}
       </div>
     );
@@ -102,7 +103,7 @@ export function RoutineSuggestionCard({ interaction }: { interaction: SuggestRou
           ) : null}
           <div className="flex flex-wrap items-center justify-end gap-2">
             <Button type="button" variant="ghost" size="sm" disabled={busy} onClick={() => decline.mutate()}>
-              No thanks
+              {t("dashboardAutomation.noThanks")}
             </Button>
             <Button type="button" size="sm" disabled={busy} onClick={() => accept.mutate()}>
               {accept.isPending ? <Loader2 aria-hidden className="h-4 w-4 animate-spin" /> : <Repeat aria-hidden className="h-4 w-4" />}

@@ -51,7 +51,7 @@ export function ProcessConfigFields({
           }
           immediate
           className={inputClass}
-          placeholder="e.g. node, python"
+          placeholder={t("config-fields.eGNodePython")}
         />
       </Field>
       <Field configSection="advanced" label={t("processAdapter.args")} hint={help.args}>
@@ -72,7 +72,7 @@ export function ProcessConfigFields({
           }
           immediate
           className={inputClass}
-          placeholder="e.g. script.js, --flag"
+          placeholder={t("config-fields.eGScriptJsFlag")}
         />
       </Field>
     </>

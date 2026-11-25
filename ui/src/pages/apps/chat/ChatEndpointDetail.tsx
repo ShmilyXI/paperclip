@@ -463,7 +463,7 @@ function EmailAccess({ endpoint }: { endpoint: ChatEndpoint }) {
   });
   const agentsView = useQueryView(agents);
   const connectionView = useQueryView(connection);
-  if (!endpoint.connectionId) return <p role="alert" className="text-sm text-destructive">Connection access could not be loaded.</p>;
+  if (!endpoint.connectionId) return <p role="alert" className="text-sm text-destructive">{t("chatDetail.connectionAccessCouldNotBe")}</p>;
   if (agentsView.kind === "error" || connectionView.kind === "error") return (
     <QueryErrorState
       error={agentsView.kind === "error" ? agents.error : connection.error}
@@ -473,13 +473,13 @@ function EmailAccess({ endpoint }: { endpoint: ChatEndpoint }) {
     />
   );
   if (agents.isPending || connection.isPending || agentsView.kind === "reconnecting" || connectionView.kind === "reconnecting") {
-    return <p role="status" className="text-sm text-muted-foreground">Loading access…</p>;
+    return <p role="status" className="text-sm text-muted-foreground">{t("chatDetail.loadingAccess")}</p>;
   }
   const sourceId = connection.data?.config?.credentialConnectionId;
   const credentialId = typeof sourceId === "string" ? sourceId : endpoint.connectionId;
   return <section className="max-w-3xl space-y-4">
-    <h2 className="text-lg font-semibold">Access</h2>
-    {credentialId !== endpoint.connectionId && <p className="text-sm text-muted-foreground">These settings apply to the saved AgentMail account and all inboxes using it.</p>}
+    <h2 className="text-lg font-semibold">{t("settingsNav.access")}</h2>
+    {credentialId !== endpoint.connectionId && <p className="text-sm text-muted-foreground">{t("chatDetail.theseSettingsApplyToThe")}</p>}
     <EmailConnectionAccess key={credentialId} companyId={endpoint.companyId} connectionId={credentialId} agents={agents.data ?? []} />
   </section>;
 }
@@ -558,7 +558,7 @@ function Settings({
       <div className="space-y-2">
         <h3 className="text-sm font-semibold">{endpoint.provider === "slack" ? "Allowed Channels" : "Destinations"}</h3>
         {resourcesView.kind === "error" ? <QueryErrorState size="inline" error={resourcesQuery.error} action={endpoint.provider === "slack" ? "load the channels" : "load the destinations"} onRetry={resourcesView.retry} retrying={resourcesView.isFetching} /> : resourcesQuery.isLoading || resourcesView.kind === "reconnecting" ? (
-          <p className="text-sm text-muted-foreground">Loading destinations…</p>
+          <p className="text-sm text-muted-foreground">{t("chatDetail.loadingDestinations")}</p>
         ) : destinationResources.length === 0 && endpoint.provider !== "slack" ? (
           <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
             {t("chatDetail.noDestinationsYet")}
@@ -785,7 +785,7 @@ function Access({
       {confirmationUrl && (
         <div className="space-y-2 border-y border-border py-3">
           <p className={cn("text-sm font-medium", ANALYTICS_MASK_CLASS)}>Confirm {confirmationFor ?? "this account"}</p>
-          <p className="text-xs text-muted-foreground">Share only with this person. They must sign in and confirm their own account.</p>
+          <p className="text-xs text-muted-foreground">{t("chatDetail.shareOnlyWithThisPerson")}</p>
           <p className={cn("break-all text-xs text-muted-foreground", ANALYTICS_NO_CAPTURE_CLASS)}>
             {confirmationUrl}
           </p>
@@ -814,7 +814,7 @@ function Access({
         </div>
       )}
       <div className="space-y-2">
-        {linksQuery.isPending || linksView.kind === "reconnecting" ? <p role="status" className="text-sm text-muted-foreground">Loading people…</p> : linksView.kind === "error" ? <QueryErrorState size="inline" error={linksQuery.error} action="load people" onRetry={linksView.retry} retrying={linksView.isFetching} /> : links.length === 0 ? (
+        {linksQuery.isPending || linksView.kind === "reconnecting" ? <p role="status" className="text-sm text-muted-foreground">{t("chatDetail.loadingPeople")}</p> : linksView.kind === "error" ? <QueryErrorState size="inline" error={linksQuery.error} action="load people" onRetry={linksView.retry} retrying={linksView.isFetching} /> : links.length === 0 ? (
           <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
             {t("chatDetail.noLinkedAccountsYetInvite")}
           </p>
@@ -890,7 +890,7 @@ function Conversations({
   const view = useQueryView(query);
   return (
     <section className="space-y-4">
-      {query.isPending || view.kind === "reconnecting" ? <p role="status" className="text-sm text-muted-foreground">Loading conversations…</p> : view.kind === "error" ? (
+      {query.isPending || view.kind === "reconnecting" ? <p role="status" className="text-sm text-muted-foreground">{t("chatDetail.loadingConversations")}</p> : view.kind === "error" ? (
         <QueryErrorState error={query.error} action="load the conversations" onRetry={view.retry} retrying={view.isFetching} />
       ) : <ChatConversationList rows={query.data ?? []} provider={provider} />}
     </section>
@@ -1313,8 +1313,8 @@ function Activity({
       <nav aria-label={t("chatDetail.activityPagination")} className="flex items-center justify-between gap-3">
         <span className="text-xs text-muted-foreground">{t("chatDetail.pageN", { page: cursors.length })}</span>
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" disabled={cursors.length === 1 || query.isFetching} onClick={() => setCursors((pages) => pages.slice(0, -1))}>Previous</Button>
-          <Button size="sm" variant="outline" disabled={!query.data?.nextCursor || query.isFetching || view.kind === "error"} onClick={() => { if (query.data?.nextCursor) setCursors((pages) => [...pages, query.data.nextCursor!]); }}>Next</Button>
+          <Button size="sm" variant="outline" disabled={cursors.length === 1 || query.isFetching} onClick={() => setCursors((pages) => pages.slice(0, -1))}>{t("common.previous")}</Button>
+          <Button size="sm" variant="outline" disabled={!query.data?.nextCursor || query.isFetching || view.kind === "error"} onClick={() => { if (query.data?.nextCursor) setCursors((pages) => [...pages, query.data.nextCursor!]); }}>{t("common.next")}</Button>
         </div>
       </nav>
       <AlertDialog

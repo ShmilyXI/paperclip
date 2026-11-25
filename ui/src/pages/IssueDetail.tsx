@@ -2672,7 +2672,7 @@ const IssueDetailChatTab = memo(function IssueDetailChatTab({
               scrollingHistory,
               historyControl: conversationMode ? null : !historyExpanded && (hasEarlierMessages || hasEarlierRuns) ? (
                 <Button type="button" variant="ghost" size="sm" onClick={onExpandHistory}>
-                  More messages
+                  {t("issueDetail.moreMessages")}
                 </Button>
               ) : null,
             } : {})}
@@ -8060,7 +8060,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                     }}
                   >
                     <ActivityIcon className="h-3 w-3" />
-                    Show task activity
+                    {t("issueDetail.showTaskActivity")}
                   </button>
                 ) : null}
                 {streamlinedTaskDetailEnabled ? (
@@ -8303,7 +8303,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         >
           {error && coreIssueQuery.data && !isTransientError(error) ? (
             <div role="status" className="flex items-center gap-2 text-sm text-muted-foreground">
-              Some task details could not be loaded.
+              {t("issueDetail.someTaskDetailsCouldNot")}
               <Button type="button" variant="ghost" size="sm" onClick={() => void refetchIssueDetail()}>{t("common.retry")}</Button>
             </div>
           ) : null}
@@ -8662,7 +8662,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                   threadHeader={<>{taskChatThreadHeader}<EmailTaskActivity key={issue.id} companyId={issue.companyId} issueId={issue.id} />
                     {(childIssuesError || createdTasksQuery.isError) && (
                       <div role="alert" className="flex items-center gap-2 px-4 text-sm text-destructive">
-                        <span>Could not load created tasks.</span>
+                        <span>{t("issueDetail.couldNotLoadCreatedTasks")}</span>
                         <Button variant="ghost" size="sm" onClick={() => {
                           void refetchChildIssues();
                           void createdTasksQuery.refetch();

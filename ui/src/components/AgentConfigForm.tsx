@@ -2102,8 +2102,8 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       {(
         <div data-config-section="configuration" className={cn(!cards && "border-b border-border")}>
           {cards
-            ? (untitled("configuration") ? null : <h3 className="text-sm font-medium mb-3">Configuration</h3>)
-            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">Configuration</div>
+            ? (untitled("configuration") ? null : <h3 className="text-sm font-medium mb-3">{t("common.configuration")}</h3>)
+            : <div className="px-4 py-2 text-xs font-medium text-muted-foreground">{t("common.configuration")}</div>
           }
           <div data-agent-tile={panels ? "" : undefined} className={cn(cards ? cardBody : "px-4 pb-3 space-y-3")}>
               {!isCreate && typeof config.bootstrapPromptTemplate === "string" && config.bootstrapPromptTemplate && (
@@ -2996,7 +2996,7 @@ function DisplayedCodeLoginPanel({
           activeSessionQuery.error instanceof AdapterLoginConflictError && (
             <Button type="button" variant="outline" disabled={cancelConflictingLogin.isPending}
               onClick={() => cancelConflictingLogin.mutate()}>
-              Cancel previous sign-in and retry
+              {t("agentConfig.cancelPreviousSignInAnd")}
             </Button>
           )
         ) : !retryLogin.isPending && <OnboardingLoginCodeRow code={prompt?.code ?? ""} autoCopy />}

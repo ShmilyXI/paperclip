@@ -320,7 +320,7 @@ export function QuarantinedActionsReview({
       </div>
       {visibleLimit < count ? (
         <Button type="button" variant="outline" size="sm" onClick={() => setVisibleLimit(limit => limit + ACTION_PAGE_SIZE)}>
-          Show more new actions
+          {t("setupPanel.showMoreNewActions")}
         </Button>
       ) : null}
       <div className="flex items-center justify-between gap-3">

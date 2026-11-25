@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { LinkResponsibility } from "@paperclipai/shared";
@@ -175,7 +176,7 @@ export function AddExistingWorkPicker({
                 />
               </div>
             ) : !sourceView.data ? (
-              <p className="px-3 py-4 text-sm text-muted-foreground" role="status">Loading…</p>
+              <p className="px-3 py-4 text-sm text-muted-foreground" role="status">{t("common.loading2")}</p>
             ) : (
               <>
                 <CommandEmpty>

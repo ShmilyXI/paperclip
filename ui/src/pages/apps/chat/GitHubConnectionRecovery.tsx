@@ -155,8 +155,8 @@ export function GitHubAppRecovery({ endpoint, reconnect, credentialFields, requi
         {credentialFields && <p className="text-muted-foreground">{t("sync20261028.connections.requestedCredentials")}</p>}
       </div>
       {needsPrivateKey && <div className="space-y-2">
-        <CredentialLabel id="github-app-id" label="App ID" help={t("gitHubConnectionRecovery.theNumericAppIdOnTheGithubAppSSettingsPageThisIsDifferentFromItsClientIdOrInstallationId")} />
-        <p id="github-app-id-help" className="text-sm text-muted-foreground">{t("common.copy")} <strong>App ID</strong> {t("gitHubConnectionRecovery.fromTheAppSSettingsPage")} {reconnect && t("gitHubConnectionRecovery.theSavedIdIsFilledInWhenAvailable")}</p>
+        <CredentialLabel id="github-app-id" label={t("gitHubConnectionRecovery.appId")} help={t("gitHubConnectionRecovery.theNumericAppIdOnTheGithubAppSSettingsPageThisIsDifferentFromItsClientIdOrInstallationId")} />
+        <p id="github-app-id-help" className="text-sm text-muted-foreground">{t("common.copy")} <strong>{t("gitHubConnectionRecovery.appId")}</strong> {t("gitHubConnectionRecovery.fromTheAppSSettingsPage")} {reconnect && t("gitHubConnectionRecovery.theSavedIdIsFilledInWhenAvailable")}</p>
         <Input id="github-app-id" aria-describedby="github-app-id-help" inputMode="numeric" value={credentials.appId} disabled={pending} aria-invalid={appIdInvalid} onChange={event => setCredentials({ ...credentials, appId: event.target.value })} />
         {appIdInvalid && <p role="alert" className="text-sm text-destructive">{t("gitHubConnectionRecovery.useTheNumericAppId")}</p>}
       </div>}

@@ -707,7 +707,7 @@ export function ImportFromVaultDialog({
         >
           {step === "select" && (
             <Button type="button" variant="ghost" onClick={() => handleClose()}>
-              Cancel
+              {t("common.cancel")}
             </Button>
           )}
           {step === "review" &&
@@ -718,7 +718,7 @@ export function ImportFromVaultDialog({
                 onClick={() => handleClose(true)}
                 disabled={importing}
               >
-                Close
+                {t("common.close")}
               </Button>
             ) : (
               <Button
@@ -750,7 +750,7 @@ export function ImportFromVaultDialog({
           )}
           {step === "result" && (
             <Button type="button" onClick={() => handleClose(true)}>
-              Done
+              {t("labels.status.done")}
             </Button>
           )}
         </footer>
@@ -1044,7 +1044,7 @@ function PreviewError({
               rel="noreferrer"
               className={linkClass}
             >
-              AWS permission reference
+              {t("importFromVaultDialog.awsPermissionReference")}
             </a>
           </>
         ) : (
@@ -1052,7 +1052,7 @@ function PreviewError({
         )}
       </p>
       <Button type="button" variant="outline" size="sm" className="self-start" onClick={onRetry}>
-        Try again
+        {t("common.tryAgain")}
       </Button>
     </div>
   );
@@ -1136,7 +1136,7 @@ function ReviewStep({
               )}
               aria-hidden
             />
-            Keys and descriptions
+            {t("importFromVaultDialog.keysAndDescriptions")}
           </button>
           <ul
             className="flex min-h-0 flex-col divide-y divide-border overflow-y-auto border-y border-border"
@@ -1188,7 +1188,7 @@ function ReviewStep({
                   {showDetails && (
                     <div className="grid gap-2 sm:grid-cols-2">
                       <label className="flex flex-col gap-1 text-xs text-muted-foreground">
-                        Key
+                        {t("common.key")}
                         <Input
                           value={draft.key}
                           onChange={(e) => updateDraft(ref, { key: e.target.value })}

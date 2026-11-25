@@ -59,7 +59,7 @@ export class AppErrorBoundary extends Component<{ children: ReactNode }, AppErro
     if (reloading) {
       return (
         <div role="status" className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
-          Reloading Paperclip…
+          {t("appErrorBoundary.reloadingPaperclip")}
         </div>
       );
     }
