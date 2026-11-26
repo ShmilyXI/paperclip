@@ -434,6 +434,14 @@ RUN gosu node tailscale version && gosu node tailscaled --version
 COPY scripts/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# Fork: pin the Claude CLI. 2.1.332 prints a short `oauth/authorize?<code>` login
+# URL without the standard query keys, which setup-token-parse.ts rejects, so the
+# subscription sign-in hangs on "Preparing browser sign-in". 2.1.226 is the
+# newest version the parser's fixtures cover. Separate layer so the other CLIs
+# above stay cached. Raise this only with a matching parser fixture.
+ARG CLAUDE_CODE_CLI_VERSION=2.1.226
+RUN npm install --global --omit=dev "@anthropic-ai/claude-code@${CLAUDE_CODE_CLI_VERSION}" && claude --version
+
 # Installed dependencies are ~2.9 GB of /app and change only with the lockfile.
 # Copied from the deps stage as their own layer, a commit that leaves the
 # lockfile alone does not push or pull them again. The build stage writes
