@@ -55,7 +55,9 @@ export function startLocalBrowserLogin(provider: "anthropic" | "openai" | "googl
   let child: ChildProcessWithoutNullStreams | null = null;
   const driver = {
     async start(_command: string, onData: (chunk: string) => void): Promise<{ exitCode: number | null }> {
-      let executable = "claude";
+      // Fork: sign-in may use a separately pinned Claude CLI whose setup-token output
+      // the parser understands; runs keep the global `claude` (see Dockerfile).
+      let executable = provider === "anthropic" ? (process.env.PAPERCLIP_CLAUDE_LOGIN_COMMAND || "claude") : "claude";
       if (provider === "openai") {
         const legacyPlatform = !((process.platform === "linux" || process.platform === "darwin")
           && (process.arch === "x64" || process.arch === "arm64"));
